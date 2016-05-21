@@ -1,0 +1,186 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-family: Source Sans Pro, sans-serif;
+    background-color: #eee;
+    color: #293c4b;
+    margin: 0;
+}
+
+a {
+    color: #60b5cc;
+}
+
+code {
+    font-family: Source Code Pro, consolas, inconsolata, monospace;
+}
+
+.searchHeader {
+    padding: 1.5rem 1rem;
+    background-color: #ddd;
+    border-bottom: 1px solid #ccc;
+}
+
+.searchBranding {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.searchLogo {
+    vertical-align: middle;
+    display: inline-block;
+}
+.searchTitle {
+    display: block;
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.searchForm {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.searchForm input {
+    display: block;
+    flex: 1;
+    -webkit-appearance: none;
+    font-size: 16px;
+    font-family: Source Code Pro, consolas, inconsolata, monospace;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+.searchForm label {
+    order: -10;
+    position: relative;
+}
+.searchForm label::after {
+    color: #ea157a;
+    content: '▾';
+    position: absolute;
+    right: 0.5rem;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    pointer-events: none;
+    line-height: 2.25rem;
+}
+.searchForm select {
+    display: block;
+    width: 6rem;
+    margin: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 16px;
+    font-family: Source Sans Pro, sans-serif;
+    padding: 0.5rem 1.5rem 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    color: #ea157a;
+}
+.searchForm button {
+    display: block;
+    width: 6rem;
+    margin: 0;
+    -webkit-appearance: none;
+    font-size: 16px;
+    font-family: Source Sans Pro, sans-serif;
+    padding: 0.5rem 1rem;
+    border: 1px solid #60b5cc;
+    border-radius: 3px;
+    background-color: #60b5cc;
+    color: #fff;
+}
+.searchForm input:disabled,
+.searchForm select:disabled,
+.searchForm button:disabled {
+    background-color: #eee;
+    border-color: #bbb;
+    color: #666;
+}
+.searchFormDisabled label::after {
+    color: #666;
+}
+
+
+.searchStatus {
+    margin: 3rem auto;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.searchResult {
+    padding: 1.5rem 1rem;
+}
+
+.searchChunk {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chunkAnnotation {
+    background-color: #293c4b;
+    padding: 1rem 0 0 0;
+    color: #ddd;
+}
+.chunkAnnotation pre {
+    margin: 0;
+    padding: 0 1rem 1rem 1rem;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+.chunkAnnotation a {
+    color: #60b5cc;
+    text-decoration: none;
+}
+
+.chunkDocumentation {
+    padding: 1rem;
+}
+.chunkDocumentation p {
+    margin: 0;
+}
+.chunkDocumentation code {
+    background-color: #eee;
+    color: #293c4b;
+    font-size: 0.85em;
+    padding: 0.125em 0.5em;
+    border-radius: 2px;
+}
+
+.chunkMeta {
+    border-top: 1px solid #eee;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chunkPath,
+.chunkPath a {
+    color: #99cc99;
+    text-decoration: none;
+}
+
+.chunkVersion {
+    color: #ea157a;
+}
