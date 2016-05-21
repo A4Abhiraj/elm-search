@@ -11138,7 +11138,7 @@ var _klaftertief$elm_search$Web_Update$getPackages = function () {
 			return _klaftertief$elm_search$Web_Model$Load(
 				A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, maybePackages));
 		},
-		A2(_evancz$elm_http$Http$get, decodeSafe, '/all-package-docs.json'));
+		A2(_evancz$elm_http$Http$get, decodeSafe, 'all-package-docs.json'));
 }();
 var _klaftertief$elm_search$Web_Update$update = F2(
 	function (msg, model) {
