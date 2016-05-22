@@ -697,6 +697,13 @@
         ]
     },
     {
+        "name": "aristidesstaffieri/elm-poisson",
+        "summary": "A function for calculating Poisson distributions.",
+        "versions": [
+            "1.0.0"
+        ]
+    },
+    {
         "name": "arturopala/elm-monocle",
         "summary": "Library providing functional tools to manipulate complex records",
         "versions": [
@@ -3453,6 +3460,7 @@
         "name": "stil4m/elm-aui-css",
         "summary": "HTML helper functions to comply to Atlassian AUI css",
         "versions": [
+            "2.0.0",
             "1.1.0",
             "1.0.1",
             "1.0.0"
