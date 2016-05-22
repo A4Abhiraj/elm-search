@@ -8783,164 +8783,54 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
 
-var _klaftertief$elm_search$Logo$toTransform = function (_p0) {
+var _klaftertief$elm_search$Docs_Name$dotToDash = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('.')) ? _elm_lang$core$Native_Utils.chr('-') : $char;
+};
+var _klaftertief$elm_search$Docs_Name$pathTo = function (_p0) {
 	var _p1 = _p0;
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		'translate(',
+		A2(_elm_lang$core$String$map, _klaftertief$elm_search$Docs_Name$dotToDash, _p1.home),
+		A2(_elm_lang$core$Basics_ops['++'], '#', _p1.name));
+};
+var _klaftertief$elm_search$Docs_Name$nameToString = function (_p2) {
+	var _p3 = _p2;
+	return A2(
+		_elm_lang$core$String$join,
+		'.',
 		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(_p1.movementX),
+			_elm_lang$core$List$filter,
+			function (_p4) {
+				return _elm_lang$core$Basics$not(
+					_elm_lang$core$String$isEmpty(_p4));
+			},
+			_elm_lang$core$Native_List.fromArray(
+				[_p3.home, _p3.name])));
+};
+var _klaftertief$elm_search$Docs_Name$Name = F2(
+	function (a, b) {
+		return {home: a, name: b};
+	});
+var _klaftertief$elm_search$Docs_Name$fromString = function (str) {
+	var _p5 = _elm_lang$core$List$reverse(
+		A2(_elm_lang$core$String$split, '.', str));
+	if (_p5.ctor === '::') {
+		return _elm_lang$core$Result$Ok(
 			A2(
-				_elm_lang$core$Basics_ops['++'],
-				' ',
+				_klaftertief$elm_search$Docs_Name$Name,
 				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_p1.movementY),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						') rotate(',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(_p1.rotation),
-							')'))))));
+					_elm_lang$core$String$join,
+					'.',
+					_elm_lang$core$List$reverse(_p5._1)),
+				_p5._0));
+	} else {
+		return _elm_lang$core$Result$Err(
+			A2(_elm_lang$core$Basics_ops['++'], str, ' is not a valid Elm name'));
+	}
 };
-var _klaftertief$elm_search$Logo$grey = '#5A6378';
-var _klaftertief$elm_search$Logo$largeGreyTriangle = function (transformation) {
-	return A2(
-		_elm_lang$svg$Svg$polygon,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$points('0,0 0,128 64,64'),
-				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$grey),
-				_elm_lang$svg$Svg_Attributes$transform(
-				_klaftertief$elm_search$Logo$toTransform(transformation))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
-var _klaftertief$elm_search$Logo$green = '#7FD13B';
-var _klaftertief$elm_search$Logo$greenSquare = function (transformation) {
-	return A2(
-		_elm_lang$svg$Svg$polygon,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$points('0,0 32,-32 64,0 32,32'),
-				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$green),
-				_elm_lang$svg$Svg_Attributes$transform(
-				_klaftertief$elm_search$Logo$toTransform(transformation))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
-var _klaftertief$elm_search$Logo$greenDiamond = F2(
-	function (transformation, flip) {
-		return A2(
-			_elm_lang$svg$Svg$polygon,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$points('0,0 64,0 96,32 32,32'),
-					_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$green),
-					_elm_lang$svg$Svg_Attributes$transform(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_klaftertief$elm_search$Logo$toTransform(transformation),
-						flip ? ' scale(1 -1)' : ''))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _klaftertief$elm_search$Logo$blue = '#60B5CC';
-var _klaftertief$elm_search$Logo$largeBlueTriangle = function (transformation) {
-	return A2(
-		_elm_lang$svg$Svg$polygon,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$points('0,0 0,128 64,64'),
-				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$blue),
-				_elm_lang$svg$Svg_Attributes$transform(
-				_klaftertief$elm_search$Logo$toTransform(transformation))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
-var _klaftertief$elm_search$Logo$mediumBlueTriangle = function (transformation) {
-	return A2(
-		_elm_lang$svg$Svg$polygon,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$points('0,0 0,64 64,0'),
-				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$blue),
-				_elm_lang$svg$Svg_Attributes$transform(
-				_klaftertief$elm_search$Logo$toTransform(transformation))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
-var _klaftertief$elm_search$Logo$orange = '#F0AD00';
-var _klaftertief$elm_search$Logo$smallOrangeTriangle = function (transformation) {
-	return A2(
-		_elm_lang$svg$Svg$polygon,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$points('0,0 0,64 32,32'),
-				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$orange),
-				_elm_lang$svg$Svg_Attributes$transform(
-				_klaftertief$elm_search$Logo$toTransform(transformation))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
-var _klaftertief$elm_search$Logo$quarterHypothenuse = (128 / 2) / _elm_lang$core$Basics$sqrt(2);
-var _klaftertief$elm_search$Logo$halfHypothenuse = 128 / _elm_lang$core$Basics$sqrt(2);
-var _klaftertief$elm_search$Logo$Transformation = F3(
-	function (a, b, c) {
-		return {movementX: a, movementY: b, rotation: c};
-	});
-var _klaftertief$elm_search$Logo$parts = _elm_lang$core$Native_List.fromArray(
-	[
-		_klaftertief$elm_search$Logo$largeBlueTriangle(
-		A3(_klaftertief$elm_search$Logo$Transformation, (3 * _klaftertief$elm_search$Logo$quarterHypothenuse) - 128, 3 * _klaftertief$elm_search$Logo$quarterHypothenuse, -90)),
-		_klaftertief$elm_search$Logo$largeGreyTriangle(
-		A3(_klaftertief$elm_search$Logo$Transformation, 0, 0, 0)),
-		_klaftertief$elm_search$Logo$mediumBlueTriangle(
-		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$quarterHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -135)),
-		_klaftertief$elm_search$Logo$smallOrangeTriangle(
-		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -45)),
-		_klaftertief$elm_search$Logo$smallOrangeTriangle(
-		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, 0, 45)),
-		_klaftertief$elm_search$Logo$greenSquare(
-		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -45)),
-		A2(
-		_klaftertief$elm_search$Logo$greenDiamond,
-		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, 45),
-		false)
-	]);
-var _klaftertief$elm_search$Logo$viewWithSize = function (s) {
-	var size = _elm_lang$core$Basics$toString(s);
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$svg$Svg_Attributes$width(size),
-				_elm_lang$svg$Svg_Attributes$height(size),
-				_elm_lang$svg$Svg_Attributes$viewBox('2 2 132 132'),
-				_elm_lang$svg$Svg_Attributes$style('overflow: visible;')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$svg$Svg$g,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$svg$Svg_Attributes$stroke('#fff'),
-						_elm_lang$svg$Svg_Attributes$strokeWidth('2'),
-						_elm_lang$svg$Svg_Attributes$strokeLinejoin('round')
-					]),
-				_klaftertief$elm_search$Logo$parts)
-			]));
-};
-var _klaftertief$elm_search$Logo$view = _klaftertief$elm_search$Logo$viewWithSize(128);
+var _klaftertief$elm_search$Docs_Name$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Name$fromString);
 
 var _klaftertief$elm_search$Native_Parse = function()
 {
@@ -9076,55 +8966,6 @@ return {
 };
 
 }();
-
-var _klaftertief$elm_search$Package_Module_Name$dotToDash = function ($char) {
-	return _elm_lang$core$Native_Utils.eq(
-		$char,
-		_elm_lang$core$Native_Utils.chr('.')) ? _elm_lang$core$Native_Utils.chr('-') : $char;
-};
-var _klaftertief$elm_search$Package_Module_Name$pathTo = function (_p0) {
-	var _p1 = _p0;
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		A2(_elm_lang$core$String$map, _klaftertief$elm_search$Package_Module_Name$dotToDash, _p1.home),
-		A2(_elm_lang$core$Basics_ops['++'], '#', _p1.name));
-};
-var _klaftertief$elm_search$Package_Module_Name$nameToString = function (_p2) {
-	var _p3 = _p2;
-	return A2(
-		_elm_lang$core$String$join,
-		'.',
-		A2(
-			_elm_lang$core$List$filter,
-			function (_p4) {
-				return _elm_lang$core$Basics$not(
-					_elm_lang$core$String$isEmpty(_p4));
-			},
-			_elm_lang$core$Native_List.fromArray(
-				[_p3.home, _p3.name])));
-};
-var _klaftertief$elm_search$Package_Module_Name$Name = F2(
-	function (a, b) {
-		return {home: a, name: b};
-	});
-var _klaftertief$elm_search$Package_Module_Name$fromString = function (str) {
-	var _p5 = _elm_lang$core$List$reverse(
-		A2(_elm_lang$core$String$split, '.', str));
-	if (_p5.ctor === '::') {
-		return _elm_lang$core$Result$Ok(
-			A2(
-				_klaftertief$elm_search$Package_Module_Name$Name,
-				A2(
-					_elm_lang$core$String$join,
-					'.',
-					_elm_lang$core$List$reverse(_p5._1)),
-				_p5._0));
-	} else {
-		return _elm_lang$core$Result$Err(
-			A2(_elm_lang$core$Basics_ops['++'], str, ' is not a valid Elm name'));
-	}
-};
-var _klaftertief$elm_search$Package_Module_Name$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Package_Module_Name$fromString);
 
 var _klaftertief$elm_search$Parse_Combinators$andThen = _klaftertief$elm_search$Native_Parse.andThen;
 var _klaftertief$elm_search$Parse_Combinators$fail = _klaftertief$elm_search$Native_Parse.fail;
@@ -9362,24 +9203,24 @@ var _klaftertief$elm_search$Utils_Code$keyword = function (kw) {
 			]));
 };
 
-var _klaftertief$elm_search$Package_Module_Type$spaces = A2(
+var _klaftertief$elm_search$Docs_Type$spaces = A2(
 	_klaftertief$elm_search$Parse_Combinators$map,
 	_elm_lang$core$Basics$always(
 		{ctor: '_Tuple0'}),
 	_klaftertief$elm_search$Parse_Combinators$zeroOrMore(
 		_klaftertief$elm_search$Parse_Combinators$char(
 			_elm_lang$core$Native_Utils.chr(' '))));
-var _klaftertief$elm_search$Package_Module_Type$commasLeading = function (parser) {
+var _klaftertief$elm_search$Docs_Type$commasLeading = function (parser) {
 	return _klaftertief$elm_search$Parse_Combinators$zeroOrMore(
 		A4(
 			_klaftertief$elm_search$Parse_Combinators$ignore3,
-			_klaftertief$elm_search$Package_Module_Type$spaces,
+			_klaftertief$elm_search$Docs_Type$spaces,
 			_klaftertief$elm_search$Parse_Combinators$char(
 				_elm_lang$core$Native_Utils.chr(',')),
-			_klaftertief$elm_search$Package_Module_Type$spaces,
+			_klaftertief$elm_search$Docs_Type$spaces,
 			parser));
 };
-var _klaftertief$elm_search$Package_Module_Type$varChar = _klaftertief$elm_search$Parse_Combinators$satisfy(
+var _klaftertief$elm_search$Docs_Type$varChar = _klaftertief$elm_search$Parse_Combinators$satisfy(
 	function (c) {
 		return _elm_lang$core$Char$isLower(c) || (_elm_lang$core$Char$isUpper(c) || (_elm_lang$core$Native_Utils.eq(
 			c,
@@ -9387,7 +9228,7 @@ var _klaftertief$elm_search$Package_Module_Type$varChar = _klaftertief$elm_searc
 			c,
 			_elm_lang$core$Native_Utils.chr('\'')) || _elm_lang$core$Char$isDigit(c))));
 	});
-var _klaftertief$elm_search$Package_Module_Type$elmVarWith = function (starter) {
+var _klaftertief$elm_search$Docs_Type$elmVarWith = function (starter) {
 	return A2(
 		_klaftertief$elm_search$Parse_Combinators$map,
 		_elm_lang$core$String$fromList,
@@ -9398,12 +9239,12 @@ var _klaftertief$elm_search$Package_Module_Type$elmVarWith = function (starter) 
 					return A2(_elm_lang$core$List_ops['::'], x, y);
 				}),
 			starter,
-			_klaftertief$elm_search$Parse_Combinators$zeroOrMore(_klaftertief$elm_search$Package_Module_Type$varChar)));
+			_klaftertief$elm_search$Parse_Combinators$zeroOrMore(_klaftertief$elm_search$Docs_Type$varChar)));
 };
-var _klaftertief$elm_search$Package_Module_Type$nameHelp = function (seen) {
+var _klaftertief$elm_search$Docs_Type$nameHelp = function (seen) {
 	return A2(
 		_klaftertief$elm_search$Parse_Combinators$andThen,
-		_klaftertief$elm_search$Package_Module_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$upper),
+		_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$upper),
 		function (str) {
 			return _klaftertief$elm_search$Parse_Combinators$oneOf(
 				_elm_lang$core$Native_List.fromArray(
@@ -9412,11 +9253,11 @@ var _klaftertief$elm_search$Package_Module_Type$nameHelp = function (seen) {
 						_klaftertief$elm_search$Parse_Combinators$ignore1,
 						_klaftertief$elm_search$Parse_Combinators$char(
 							_elm_lang$core$Native_Utils.chr('.')),
-						_klaftertief$elm_search$Package_Module_Type$nameHelp(
+						_klaftertief$elm_search$Docs_Type$nameHelp(
 							A2(_elm_lang$core$List_ops['::'], str, seen))),
 						_klaftertief$elm_search$Parse_Combinators$succeed(
 						A2(
-							_klaftertief$elm_search$Package_Module_Name$Name,
+							_klaftertief$elm_search$Docs_Name$Name,
 							A2(
 								_elm_lang$core$String$join,
 								'.',
@@ -9425,10 +9266,10 @@ var _klaftertief$elm_search$Package_Module_Type$nameHelp = function (seen) {
 					]));
 		});
 };
-var _klaftertief$elm_search$Package_Module_Type$name = _klaftertief$elm_search$Package_Module_Type$nameHelp(
+var _klaftertief$elm_search$Docs_Type$name = _klaftertief$elm_search$Docs_Type$nameHelp(
 	_elm_lang$core$Native_List.fromArray(
 		[]));
-var _klaftertief$elm_search$Package_Module_Type$reserverdVars = A3(
+var _klaftertief$elm_search$Docs_Type$reserverdVars = A3(
 	_elm_lang$core$Dict$insert,
 	'appendable',
 	_elm_lang$core$Native_List.fromArray(
@@ -9444,15 +9285,15 @@ var _klaftertief$elm_search$Package_Module_Type$reserverdVars = A3(
 			_elm_lang$core$Native_List.fromArray(
 				['Float', 'Int']),
 			_elm_lang$core$Dict$empty)));
-var _klaftertief$elm_search$Package_Module_Type$defaultMapping = _elm_lang$core$Dict$fromList(
+var _klaftertief$elm_search$Docs_Type$defaultMapping = _elm_lang$core$Dict$fromList(
 	A2(
 		_elm_lang$core$List$map,
 		function (v) {
 			return {ctor: '_Tuple2', _0: v, _1: v};
 		},
-		_elm_lang$core$Dict$keys(_klaftertief$elm_search$Package_Module_Type$reserverdVars)));
-var _klaftertief$elm_search$Package_Module_Type$nextMappingValue = function (mapping) {
-	var base = _elm_lang$core$Dict$size(mapping) - _elm_lang$core$Dict$size(_klaftertief$elm_search$Package_Module_Type$defaultMapping);
+		_elm_lang$core$Dict$keys(_klaftertief$elm_search$Docs_Type$reserverdVars)));
+var _klaftertief$elm_search$Docs_Type$nextMappingValue = function (mapping) {
+	var base = _elm_lang$core$Dict$size(mapping) - _elm_lang$core$Dict$size(_klaftertief$elm_search$Docs_Type$defaultMapping);
 	var code = A2(_elm_lang$core$Basics_ops['%'], base, 26) + _elm_lang$core$Char$toCode(
 		_elm_lang$core$Native_Utils.chr('a'));
 	var string = _elm_lang$core$String$fromChar(
@@ -9460,13 +9301,13 @@ var _klaftertief$elm_search$Package_Module_Type$nextMappingValue = function (map
 	var times = ((base / 26) | 0) + 1;
 	return A2(_elm_lang$core$String$repeat, times, string);
 };
-var _klaftertief$elm_search$Package_Module_Type$updateMapping = F2(
+var _klaftertief$elm_search$Docs_Type$updateMapping = F2(
 	function (tipe, mapping) {
 		var updateMappingFor = function (name) {
 			return A2(_elm_lang$core$Dict$member, name, mapping) ? mapping : A3(
 				_elm_lang$core$Dict$insert,
 				name,
-				_klaftertief$elm_search$Package_Module_Type$nextMappingValue(mapping),
+				_klaftertief$elm_search$Docs_Type$nextMappingValue(mapping),
 				mapping);
 		};
 		var _p0 = tipe;
@@ -9474,7 +9315,7 @@ var _klaftertief$elm_search$Package_Module_Type$updateMapping = F2(
 			case 'Function':
 				return A3(
 					_elm_lang$core$List$foldl,
-					_klaftertief$elm_search$Package_Module_Type$updateMapping,
+					_klaftertief$elm_search$Docs_Type$updateMapping,
 					mapping,
 					A2(
 						_elm_lang$core$List$append,
@@ -9484,13 +9325,13 @@ var _klaftertief$elm_search$Package_Module_Type$updateMapping = F2(
 			case 'Var':
 				return updateMappingFor(_p0._0);
 			case 'Apply':
-				return A3(_elm_lang$core$List$foldl, _klaftertief$elm_search$Package_Module_Type$updateMapping, mapping, _p0._1);
+				return A3(_elm_lang$core$List$foldl, _klaftertief$elm_search$Docs_Type$updateMapping, mapping, _p0._1);
 			case 'Tuple':
-				return A3(_elm_lang$core$List$foldl, _klaftertief$elm_search$Package_Module_Type$updateMapping, mapping, _p0._0);
+				return A3(_elm_lang$core$List$foldl, _klaftertief$elm_search$Docs_Type$updateMapping, mapping, _p0._0);
 			default:
 				return A3(
 					_elm_lang$core$List$foldl,
-					_klaftertief$elm_search$Package_Module_Type$updateMapping,
+					_klaftertief$elm_search$Docs_Type$updateMapping,
 					mapping,
 					A2(
 						_elm_lang$core$List$map,
@@ -9501,44 +9342,44 @@ var _klaftertief$elm_search$Package_Module_Type$updateMapping = F2(
 						_p0._0));
 		}
 	});
-var _klaftertief$elm_search$Package_Module_Type$Record = F2(
+var _klaftertief$elm_search$Docs_Type$Record = F2(
 	function (a, b) {
 		return {ctor: 'Record', _0: a, _1: b};
 	});
-var _klaftertief$elm_search$Package_Module_Type$Tuple = function (a) {
+var _klaftertief$elm_search$Docs_Type$Tuple = function (a) {
 	return {ctor: 'Tuple', _0: a};
 };
-var _klaftertief$elm_search$Package_Module_Type$tuplize = function (args) {
+var _klaftertief$elm_search$Docs_Type$tuplize = function (args) {
 	var _p3 = args;
 	if ((_p3.ctor === '::') && (_p3._1.ctor === '[]')) {
 		return _p3._0;
 	} else {
-		return _klaftertief$elm_search$Package_Module_Type$Tuple(args);
+		return _klaftertief$elm_search$Docs_Type$Tuple(args);
 	}
 };
-var _klaftertief$elm_search$Package_Module_Type$Apply = F2(
+var _klaftertief$elm_search$Docs_Type$Apply = F2(
 	function (a, b) {
 		return {ctor: 'Apply', _0: a, _1: b};
 	});
-var _klaftertief$elm_search$Package_Module_Type$Var = function (a) {
+var _klaftertief$elm_search$Docs_Type$Var = function (a) {
 	return {ctor: 'Var', _0: a};
 };
-var _klaftertief$elm_search$Package_Module_Type$var = A2(
+var _klaftertief$elm_search$Docs_Type$var = A2(
 	_klaftertief$elm_search$Parse_Combinators$map,
-	_klaftertief$elm_search$Package_Module_Type$Var,
-	_klaftertief$elm_search$Package_Module_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower));
-var _klaftertief$elm_search$Package_Module_Type$Function = F2(
+	_klaftertief$elm_search$Docs_Type$Var,
+	_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower));
+var _klaftertief$elm_search$Docs_Type$Function = F2(
 	function (a, b) {
 		return {ctor: 'Function', _0: a, _1: b};
 	});
-var _klaftertief$elm_search$Package_Module_Type$normalizeWithMapping = F2(
+var _klaftertief$elm_search$Docs_Type$normalizeWithMapping = F2(
 	function (mapping, tipe) {
-		var normalize$ = _klaftertief$elm_search$Package_Module_Type$normalizeWithMapping(mapping);
+		var normalize$ = _klaftertief$elm_search$Docs_Type$normalizeWithMapping(mapping);
 		var _p4 = tipe;
 		switch (_p4.ctor) {
 			case 'Function':
 				return A2(
-					_klaftertief$elm_search$Package_Module_Type$Function,
+					_klaftertief$elm_search$Docs_Type$Function,
 					A2(_elm_lang$core$List$map, normalize$, _p4._0),
 					normalize$(_p4._1));
 			case 'Var':
@@ -9551,18 +9392,18 @@ var _klaftertief$elm_search$Package_Module_Type$normalizeWithMapping = F2(
 						return _p6;
 					}
 				}();
-				return _klaftertief$elm_search$Package_Module_Type$Var(name$);
+				return _klaftertief$elm_search$Docs_Type$Var(name$);
 			case 'Apply':
 				return A2(
-					_klaftertief$elm_search$Package_Module_Type$Apply,
+					_klaftertief$elm_search$Docs_Type$Apply,
 					_p4._0,
 					A2(_elm_lang$core$List$map, normalize$, _p4._1));
 			case 'Tuple':
-				return _klaftertief$elm_search$Package_Module_Type$Tuple(
+				return _klaftertief$elm_search$Docs_Type$Tuple(
 					A2(_elm_lang$core$List$map, normalize$, _p4._0));
 			default:
 				return A2(
-					_klaftertief$elm_search$Package_Module_Type$Record,
+					_klaftertief$elm_search$Docs_Type$Record,
 					A2(
 						_elm_lang$core$List$map,
 						function (_p7) {
@@ -9577,20 +9418,20 @@ var _klaftertief$elm_search$Package_Module_Type$normalizeWithMapping = F2(
 					_p4._1);
 		}
 	});
-var _klaftertief$elm_search$Package_Module_Type$normalize = function (tipe) {
+var _klaftertief$elm_search$Docs_Type$normalize = function (tipe) {
 	return A2(
-		_klaftertief$elm_search$Package_Module_Type$normalizeWithMapping,
-		A2(_klaftertief$elm_search$Package_Module_Type$updateMapping, tipe, _klaftertief$elm_search$Package_Module_Type$defaultMapping),
+		_klaftertief$elm_search$Docs_Type$normalizeWithMapping,
+		A2(_klaftertief$elm_search$Docs_Type$updateMapping, tipe, _klaftertief$elm_search$Docs_Type$defaultMapping),
 		tipe);
 };
-var _klaftertief$elm_search$Package_Module_Type$buildFunction = F3(
+var _klaftertief$elm_search$Docs_Type$buildFunction = F3(
 	function (args, currentType, remainingTypes) {
 		buildFunction:
 		while (true) {
 			var _p9 = remainingTypes;
 			if (_p9.ctor === '[]') {
 				return _elm_lang$core$List$isEmpty(args) ? currentType : A2(
-					_klaftertief$elm_search$Package_Module_Type$Function,
+					_klaftertief$elm_search$Docs_Type$Function,
 					_elm_lang$core$List$reverse(args),
 					currentType);
 			} else {
@@ -9604,73 +9445,73 @@ var _klaftertief$elm_search$Package_Module_Type$buildFunction = F3(
 			}
 		}
 	});
-var _klaftertief$elm_search$Package_Module_Type$tipe = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$tipe = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p10) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
-			_klaftertief$elm_search$Package_Module_Type$buildFunction(
+			_klaftertief$elm_search$Docs_Type$buildFunction(
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-			_klaftertief$elm_search$Package_Module_Type$tipeTerm,
-			_klaftertief$elm_search$Package_Module_Type$arrowTerms);
+			_klaftertief$elm_search$Docs_Type$tipeTerm,
+			_klaftertief$elm_search$Docs_Type$arrowTerms);
 	});
-var _klaftertief$elm_search$Package_Module_Type$arrowTerms = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$arrowTerms = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p11) {
 		return _klaftertief$elm_search$Parse_Combinators$zeroOrMore(
 			A4(
 				_klaftertief$elm_search$Parse_Combinators$ignore3,
-				_klaftertief$elm_search$Package_Module_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$spaces,
 				_klaftertief$elm_search$Parse_Combinators$string('->'),
-				_klaftertief$elm_search$Package_Module_Type$spaces,
-				_klaftertief$elm_search$Package_Module_Type$tipeTerm));
+				_klaftertief$elm_search$Docs_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$tipeTerm));
 	});
-var _klaftertief$elm_search$Package_Module_Type$tipeTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$tipeTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p12) {
 		return _klaftertief$elm_search$Parse_Combinators$oneOf(
 			_elm_lang$core$Native_List.fromArray(
-				[_klaftertief$elm_search$Package_Module_Type$var, _klaftertief$elm_search$Package_Module_Type$apply, _klaftertief$elm_search$Package_Module_Type$record, _klaftertief$elm_search$Package_Module_Type$parenTipe]));
+				[_klaftertief$elm_search$Docs_Type$var, _klaftertief$elm_search$Docs_Type$apply, _klaftertief$elm_search$Docs_Type$record, _klaftertief$elm_search$Docs_Type$parenTipe]));
 	});
-var _klaftertief$elm_search$Package_Module_Type$apply = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$apply = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p13) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
-			_klaftertief$elm_search$Package_Module_Type$Apply,
-			_klaftertief$elm_search$Package_Module_Type$name,
+			_klaftertief$elm_search$Docs_Type$Apply,
+			_klaftertief$elm_search$Docs_Type$name,
 			_klaftertief$elm_search$Parse_Combinators$zeroOrMore(
-				A2(_klaftertief$elm_search$Parse_Combinators$ignore1, _klaftertief$elm_search$Package_Module_Type$spaces, _klaftertief$elm_search$Package_Module_Type$applyTerm)));
+				A2(_klaftertief$elm_search$Parse_Combinators$ignore1, _klaftertief$elm_search$Docs_Type$spaces, _klaftertief$elm_search$Docs_Type$applyTerm)));
 	});
-var _klaftertief$elm_search$Package_Module_Type$applyTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$applyTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p14) {
 		return _klaftertief$elm_search$Parse_Combinators$oneOf(
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_klaftertief$elm_search$Package_Module_Type$var,
+					_klaftertief$elm_search$Docs_Type$var,
 					A2(
 					_klaftertief$elm_search$Parse_Combinators$map,
 					function (n) {
 						return A2(
-							_klaftertief$elm_search$Package_Module_Type$Apply,
+							_klaftertief$elm_search$Docs_Type$Apply,
 							n,
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					},
-					_klaftertief$elm_search$Package_Module_Type$name),
-					_klaftertief$elm_search$Package_Module_Type$record,
-					_klaftertief$elm_search$Package_Module_Type$parenTipe
+					_klaftertief$elm_search$Docs_Type$name),
+					_klaftertief$elm_search$Docs_Type$record,
+					_klaftertief$elm_search$Docs_Type$parenTipe
 				]));
 	});
-var _klaftertief$elm_search$Package_Module_Type$parenTipe = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$parenTipe = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p15) {
 		return A2(
 			_klaftertief$elm_search$Parse_Combinators$map,
-			_klaftertief$elm_search$Package_Module_Type$tuplize,
+			_klaftertief$elm_search$Docs_Type$tuplize,
 			A3(
 				_klaftertief$elm_search$Parse_Combinators$middle,
 				A2(
 					_klaftertief$elm_search$Parse_Combinators$ignore1,
 					_klaftertief$elm_search$Parse_Combinators$char(
 						_elm_lang$core$Native_Utils.chr('(')),
-					_klaftertief$elm_search$Package_Module_Type$spaces),
+					_klaftertief$elm_search$Docs_Type$spaces),
 				_klaftertief$elm_search$Parse_Combinators$oneOf(
 					_elm_lang$core$Native_List.fromArray(
 						[
@@ -9680,19 +9521,19 @@ var _klaftertief$elm_search$Package_Module_Type$parenTipe = _klaftertief$elm_sea
 								function (x, y) {
 									return A2(_elm_lang$core$List_ops['::'], x, y);
 								}),
-							_klaftertief$elm_search$Package_Module_Type$tipe,
-							_klaftertief$elm_search$Package_Module_Type$commasLeading(_klaftertief$elm_search$Package_Module_Type$tipe)),
+							_klaftertief$elm_search$Docs_Type$tipe,
+							_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$tipe)),
 							_klaftertief$elm_search$Parse_Combinators$succeed(
 							_elm_lang$core$Native_List.fromArray(
 								[]))
 						])),
 				A2(
 					_klaftertief$elm_search$Parse_Combinators$ignore1,
-					_klaftertief$elm_search$Package_Module_Type$spaces,
+					_klaftertief$elm_search$Docs_Type$spaces,
 					_klaftertief$elm_search$Parse_Combinators$char(
 						_elm_lang$core$Native_Utils.chr(')')))));
 	});
-var _klaftertief$elm_search$Package_Module_Type$record = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$record = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p16) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$middle,
@@ -9700,33 +9541,33 @@ var _klaftertief$elm_search$Package_Module_Type$record = _klaftertief$elm_search
 				_klaftertief$elm_search$Parse_Combinators$ignore1,
 				_klaftertief$elm_search$Parse_Combinators$char(
 					_elm_lang$core$Native_Utils.chr('{')),
-				_klaftertief$elm_search$Package_Module_Type$spaces),
+				_klaftertief$elm_search$Docs_Type$spaces),
 			_klaftertief$elm_search$Parse_Combinators$oneOf(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
 						_klaftertief$elm_search$Parse_Combinators$andThen,
-						_klaftertief$elm_search$Package_Module_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower),
-						_klaftertief$elm_search$Package_Module_Type$recordHelp),
+						_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower),
+						_klaftertief$elm_search$Docs_Type$recordHelp),
 						_klaftertief$elm_search$Parse_Combinators$succeed(
 						A2(
-							_klaftertief$elm_search$Package_Module_Type$Record,
+							_klaftertief$elm_search$Docs_Type$Record,
 							_elm_lang$core$Native_List.fromArray(
 								[]),
 							_elm_lang$core$Maybe$Nothing))
 					])),
 			A2(
 				_klaftertief$elm_search$Parse_Combinators$ignore1,
-				_klaftertief$elm_search$Package_Module_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$spaces,
 				_klaftertief$elm_search$Parse_Combinators$char(
 					_elm_lang$core$Native_Utils.chr('}'))));
 	});
-var _klaftertief$elm_search$Package_Module_Type$recordHelp = function (lowerName) {
+var _klaftertief$elm_search$Docs_Type$recordHelp = function (lowerName) {
 	return _klaftertief$elm_search$Parse_Combinators$lazy(
 		function (_p17) {
 			return A2(
 				_klaftertief$elm_search$Parse_Combinators$ignore1,
-				_klaftertief$elm_search$Package_Module_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$spaces,
 				_klaftertief$elm_search$Parse_Combinators$oneOf(
 					_elm_lang$core$Native_List.fromArray(
 						[
@@ -9735,7 +9576,7 @@ var _klaftertief$elm_search$Package_Module_Type$recordHelp = function (lowerName
 							F2(
 								function (t, rest) {
 									return A2(
-										_klaftertief$elm_search$Package_Module_Type$Record,
+										_klaftertief$elm_search$Docs_Type$Record,
 										A2(
 											_elm_lang$core$List_ops['::'],
 											{ctor: '_Tuple2', _0: lowerName, _1: t},
@@ -9746,14 +9587,14 @@ var _klaftertief$elm_search$Package_Module_Type$recordHelp = function (lowerName
 								_klaftertief$elm_search$Parse_Combinators$ignore2,
 								_klaftertief$elm_search$Parse_Combinators$char(
 									_elm_lang$core$Native_Utils.chr(':')),
-								_klaftertief$elm_search$Package_Module_Type$spaces,
-								_klaftertief$elm_search$Package_Module_Type$tipe),
-							_klaftertief$elm_search$Package_Module_Type$commasLeading(_klaftertief$elm_search$Package_Module_Type$field)),
+								_klaftertief$elm_search$Docs_Type$spaces,
+								_klaftertief$elm_search$Docs_Type$tipe),
+							_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$field)),
 							A2(
 							_klaftertief$elm_search$Parse_Combinators$map,
 							function (fields) {
 								return A2(
-									_klaftertief$elm_search$Package_Module_Type$Record,
+									_klaftertief$elm_search$Docs_Type$Record,
 									fields,
 									_elm_lang$core$Maybe$Just(lowerName));
 							},
@@ -9761,19 +9602,19 @@ var _klaftertief$elm_search$Package_Module_Type$recordHelp = function (lowerName
 								_klaftertief$elm_search$Parse_Combinators$ignore2,
 								_klaftertief$elm_search$Parse_Combinators$char(
 									_elm_lang$core$Native_Utils.chr('|')),
-								_klaftertief$elm_search$Package_Module_Type$spaces,
+								_klaftertief$elm_search$Docs_Type$spaces,
 								A3(
 									_klaftertief$elm_search$Parse_Combinators$map2,
 									F2(
 										function (x, y) {
 											return A2(_elm_lang$core$List_ops['::'], x, y);
 										}),
-									_klaftertief$elm_search$Package_Module_Type$field,
-									_klaftertief$elm_search$Package_Module_Type$commasLeading(_klaftertief$elm_search$Package_Module_Type$field))))
+									_klaftertief$elm_search$Docs_Type$field,
+									_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$field))))
 						])));
 		});
 };
-var _klaftertief$elm_search$Package_Module_Type$field = _klaftertief$elm_search$Parse_Combinators$lazy(
+var _klaftertief$elm_search$Docs_Type$field = _klaftertief$elm_search$Parse_Combinators$lazy(
 	function (_p18) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
@@ -9781,23 +9622,23 @@ var _klaftertief$elm_search$Package_Module_Type$field = _klaftertief$elm_search$
 				function (v0, v1) {
 					return {ctor: '_Tuple2', _0: v0, _1: v1};
 				}),
-			_klaftertief$elm_search$Package_Module_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower),
+			_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower),
 			A4(
 				_klaftertief$elm_search$Parse_Combinators$ignore3,
-				_klaftertief$elm_search$Package_Module_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$spaces,
 				_klaftertief$elm_search$Parse_Combinators$char(
 					_elm_lang$core$Native_Utils.chr(':')),
-				_klaftertief$elm_search$Package_Module_Type$spaces,
-				_klaftertief$elm_search$Package_Module_Type$tipe));
+				_klaftertief$elm_search$Docs_Type$spaces,
+				_klaftertief$elm_search$Docs_Type$tipe));
 	});
-var _klaftertief$elm_search$Package_Module_Type$parse = function (tipeString) {
-	return A2(_klaftertief$elm_search$Parse_Combinators$run, _klaftertief$elm_search$Package_Module_Type$tipe, tipeString);
+var _klaftertief$elm_search$Docs_Type$parse = function (tipeString) {
+	return A2(_klaftertief$elm_search$Parse_Combinators$run, _klaftertief$elm_search$Docs_Type$tipe, tipeString);
 };
-var _klaftertief$elm_search$Package_Module_Type$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Package_Module_Type$parse);
-var _klaftertief$elm_search$Package_Module_Type$Other = {ctor: 'Other'};
-var _klaftertief$elm_search$Package_Module_Type$App = {ctor: 'App'};
-var _klaftertief$elm_search$Package_Module_Type$Func = {ctor: 'Func'};
-var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
+var _klaftertief$elm_search$Docs_Type$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Type$parse);
+var _klaftertief$elm_search$Docs_Type$Other = {ctor: 'Other'};
+var _klaftertief$elm_search$Docs_Type$App = {ctor: 'App'};
+var _klaftertief$elm_search$Docs_Type$Func = {ctor: 'Func'};
+var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 	function (context, tipe) {
 		var _p19 = tipe;
 		switch (_p19.ctor) {
@@ -9807,7 +9648,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 					function (arg) {
 						return A2(
 							_elm_lang$core$Basics_ops['++'],
-							A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$Func, arg),
+							A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, arg),
 							_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$arrow));
 					},
 					_p19._0);
@@ -9826,7 +9667,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						argsHtml,
-						A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$Func, _p19._1)));
+						A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, _p19._1)));
 			case 'Var':
 				return _elm_lang$core$Native_List.fromArray(
 					[
@@ -9845,7 +9686,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 							return A2(
 								_elm_lang$core$List_ops['::'],
 								_klaftertief$elm_search$Utils_Code$space,
-								A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$App, arg));
+								A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$App, arg));
 						},
 						_p19._1);
 					var maybeAddParens = function () {
@@ -9876,7 +9717,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 								]),
 							A2(
 								_elm_lang$core$List$map,
-								_klaftertief$elm_search$Package_Module_Type$toHtml(_klaftertief$elm_search$Package_Module_Type$Other),
+								_klaftertief$elm_search$Docs_Type$toHtml(_klaftertief$elm_search$Docs_Type$Other),
 								_p19._0))));
 			default:
 				var fieldsHtml = _elm_lang$core$List$concat(
@@ -9886,7 +9727,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 							[
 								_elm_lang$html$Html$text(', ')
 							]),
-						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Package_Module_Type$fieldToHtml, _p19._0)));
+						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Docs_Type$fieldToHtml, _p19._0)));
 				var recordInsides = function () {
 					var _p22 = _p19._1;
 					if (_p22.ctor === 'Nothing') {
@@ -9913,7 +9754,7 @@ var _klaftertief$elm_search$Package_Module_Type$toHtml = F2(
 							])));
 		}
 	});
-var _klaftertief$elm_search$Package_Module_Type$fieldToHtml = function (_p23) {
+var _klaftertief$elm_search$Docs_Type$fieldToHtml = function (_p23) {
 	var _p24 = _p23;
 	return A2(
 		_elm_lang$core$List_ops['::'],
@@ -9927,9 +9768,9 @@ var _klaftertief$elm_search$Package_Module_Type$fieldToHtml = function (_p23) {
 				A2(
 					_elm_lang$core$List_ops['::'],
 					_klaftertief$elm_search$Utils_Code$space,
-					A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$Other, _p24._1)))));
+					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, _p24._1)))));
 };
-var _klaftertief$elm_search$Package_Module_Type$length = F2(
+var _klaftertief$elm_search$Docs_Type$length = F2(
 	function (context, tipe) {
 		var _p25 = tipe;
 		switch (_p25.ctor) {
@@ -9937,7 +9778,7 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 				var argLengths = A2(
 					_elm_lang$core$List$map,
 					function (t) {
-						return 4 + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$Func, t);
+						return 4 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, t);
 					},
 					_p25._0);
 				var parens = function () {
@@ -9951,7 +9792,7 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 							return 0;
 					}
 				}();
-				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$Func, _p25._1);
+				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, _p25._1);
 			case 'Var':
 				return _elm_lang$core$String$length(_p25._0);
 			case 'Apply':
@@ -9962,7 +9803,7 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 						A2(
 							_elm_lang$core$List$map,
 							function (t) {
-								return 1 + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$App, t);
+								return 1 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$App, t);
 							},
 							_p25._1));
 					var parens = function () {
@@ -9983,7 +9824,7 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 					A2(
 						_elm_lang$core$List$map,
 						function (t) {
-							return 2 + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$Other, t);
+							return 2 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, t);
 						},
 						_p25._0));
 			default:
@@ -9997,7 +9838,7 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 				}();
 				var fieldLength = function (_p29) {
 					var _p30 = _p29;
-					return (_elm_lang$core$String$length(_p30._0) + 3) + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$Other, _p30._1);
+					return (_elm_lang$core$String$length(_p30._0) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, _p30._1);
 				};
 				var recordLength = 2 + _elm_lang$core$List$sum(
 					A2(
@@ -10010,18 +9851,18 @@ var _klaftertief$elm_search$Package_Module_Type$length = F2(
 		}
 	});
 
-var _klaftertief$elm_search$Package_Module_Entry$Entry = F3(
+var _klaftertief$elm_search$Docs_Entry$Entry = F3(
 	function (a, b, c) {
 		return {name: a, docs: b, tipe: c};
 	});
-var _klaftertief$elm_search$Package_Module_Entry$decoder = A4(
+var _klaftertief$elm_search$Docs_Entry$decoder = A4(
 	_elm_lang$core$Json_Decode$object3,
-	_klaftertief$elm_search$Package_Module_Entry$Entry,
+	_klaftertief$elm_search$Docs_Entry$Entry,
 	A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode_ops[':='], 'comment', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'type', _klaftertief$elm_search$Package_Module_Type$decoder));
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'type', _klaftertief$elm_search$Docs_Type$decoder));
 
-var _klaftertief$elm_search$Package_Version$all = function (list) {
+var _klaftertief$elm_search$Docs_Version$all = function (list) {
 	var _p0 = list;
 	if (_p0.ctor === '[]') {
 		return _elm_lang$core$Result$Ok(
@@ -10035,11 +9876,11 @@ var _klaftertief$elm_search$Package_Version$all = function (list) {
 					return A2(_elm_lang$core$List_ops['::'], x, y);
 				}),
 			_p0._0,
-			_klaftertief$elm_search$Package_Version$all(_p0._1));
+			_klaftertief$elm_search$Docs_Version$all(_p0._1));
 	}
 };
-var _klaftertief$elm_search$Package_Version$fromString = function (str) {
-	var _p1 = _klaftertief$elm_search$Package_Version$all(
+var _klaftertief$elm_search$Docs_Version$fromString = function (str) {
+	var _p1 = _klaftertief$elm_search$Docs_Version$all(
 		A2(
 			_elm_lang$core$List$map,
 			_elm_lang$core$String$toInt,
@@ -10052,8 +9893,8 @@ var _klaftertief$elm_search$Package_Version$fromString = function (str) {
 			A2(_elm_lang$core$Basics_ops['++'], str, ' is not a valid Elm version'));
 	}
 };
-var _klaftertief$elm_search$Package_Version$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Package_Version$fromString);
-var _klaftertief$elm_search$Package_Version$vsnToString = function (_p2) {
+var _klaftertief$elm_search$Docs_Version$decoder = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Version$fromString);
+var _klaftertief$elm_search$Docs_Version$vsnToString = function (_p2) {
 	var _p3 = _p2;
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -10070,29 +9911,29 @@ var _klaftertief$elm_search$Package_Version$vsnToString = function (_p2) {
 					_elm_lang$core$Basics$toString(_p3._2)))));
 };
 
-var _klaftertief$elm_search$Package_Module$Module = F3(
+var _klaftertief$elm_search$Docs_Module$Module = F3(
 	function (a, b, c) {
 		return {name: a, entries: b, elmVersion: c};
 	});
-var _klaftertief$elm_search$Package_Module$decoder = A4(
+var _klaftertief$elm_search$Docs_Module$decoder = A4(
 	_elm_lang$core$Json_Decode$object3,
-	_klaftertief$elm_search$Package_Module$Module,
+	_klaftertief$elm_search$Docs_Module$Module,
 	A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
 	A2(
 		_elm_lang$core$Json_Decode_ops[':='],
 		'values',
-		_elm_lang$core$Json_Decode$list(_klaftertief$elm_search$Package_Module_Entry$decoder)),
+		_elm_lang$core$Json_Decode$list(_klaftertief$elm_search$Docs_Entry$decoder)),
 	A2(
 		_elm_lang$core$Json_Decode_ops[':='],
 		'generated-with-elm-version',
 		_elm_lang$core$Json_Decode$oneOf(
 			_elm_lang$core$Native_List.fromArray(
 				[
-					A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _klaftertief$elm_search$Package_Version$decoder),
+					A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _klaftertief$elm_search$Docs_Version$decoder),
 					_elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing)
 				]))));
 
-var _klaftertief$elm_search$Package_Package$identifier = function (_p0) {
+var _klaftertief$elm_search$Docs_Package$identifier = function (_p0) {
 	var _p1 = _p0;
 	return A2(
 		_elm_lang$core$String$join,
@@ -10101,10 +9942,10 @@ var _klaftertief$elm_search$Package_Package$identifier = function (_p0) {
 			[
 				_p1.user,
 				_p1.name,
-				_klaftertief$elm_search$Package_Version$vsnToString(_p1.version)
+				_klaftertief$elm_search$Docs_Version$vsnToString(_p1.version)
 			]));
 };
-var _klaftertief$elm_search$Package_Package$userNameFromString = function (str) {
+var _klaftertief$elm_search$Docs_Package$userNameFromString = function (str) {
 	var _p2 = A2(_elm_lang$core$String$split, '/', str);
 	if (((_p2.ctor === '::') && (_p2._1.ctor === '::')) && (_p2._1._1.ctor === '[]')) {
 		return _elm_lang$core$Result$Ok(
@@ -10117,15 +9958,15 @@ var _klaftertief$elm_search$Package_Package$userNameFromString = function (str) 
 				A2(_elm_lang$core$Basics_ops['++'], str, '` is not a valid package name.')));
 	}
 };
-var _klaftertief$elm_search$Package_Package$Package = F4(
+var _klaftertief$elm_search$Docs_Package$Package = F4(
 	function (a, b, c, d) {
 		return {user: a, name: b, version: c, modules: d};
 	});
-var _klaftertief$elm_search$Package_Package$decoder = function () {
+var _klaftertief$elm_search$Docs_Package$decoder = function () {
 	var make = F3(
 		function (_p3, version, modules) {
 			var _p4 = _p3;
-			return A4(_klaftertief$elm_search$Package_Package$Package, _p4._0, _p4._1, version, modules);
+			return A4(_klaftertief$elm_search$Docs_Package$Package, _p4._0, _p4._1, version, modules);
 		});
 	return A4(
 		_elm_lang$core$Json_Decode$object3,
@@ -10133,13 +9974,172 @@ var _klaftertief$elm_search$Package_Package$decoder = function () {
 		A2(
 			_elm_lang$core$Json_Decode_ops[':='],
 			'name',
-			A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Package_Package$userNameFromString)),
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'version', _klaftertief$elm_search$Package_Version$decoder),
+			A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Package$userNameFromString)),
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'version', _klaftertief$elm_search$Docs_Version$decoder),
 		A2(
 			_elm_lang$core$Json_Decode_ops[':='],
 			'docs',
-			_elm_lang$core$Json_Decode$list(_klaftertief$elm_search$Package_Module$decoder)));
+			_elm_lang$core$Json_Decode$list(_klaftertief$elm_search$Docs_Module$decoder)));
 }();
+
+var _klaftertief$elm_search$Logo$toTransform = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'translate(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(_p1.movementX),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(_p1.movementY),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						') rotate(',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p1.rotation),
+							')'))))));
+};
+var _klaftertief$elm_search$Logo$grey = '#5A6378';
+var _klaftertief$elm_search$Logo$largeGreyTriangle = function (transformation) {
+	return A2(
+		_elm_lang$svg$Svg$polygon,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$points('0,0 0,128 64,64'),
+				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$grey),
+				_elm_lang$svg$Svg_Attributes$transform(
+				_klaftertief$elm_search$Logo$toTransform(transformation))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _klaftertief$elm_search$Logo$green = '#7FD13B';
+var _klaftertief$elm_search$Logo$greenSquare = function (transformation) {
+	return A2(
+		_elm_lang$svg$Svg$polygon,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$points('0,0 32,-32 64,0 32,32'),
+				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$green),
+				_elm_lang$svg$Svg_Attributes$transform(
+				_klaftertief$elm_search$Logo$toTransform(transformation))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _klaftertief$elm_search$Logo$greenDiamond = F2(
+	function (transformation, flip) {
+		return A2(
+			_elm_lang$svg$Svg$polygon,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$points('0,0 64,0 96,32 32,32'),
+					_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$green),
+					_elm_lang$svg$Svg_Attributes$transform(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_klaftertief$elm_search$Logo$toTransform(transformation),
+						flip ? ' scale(1 -1)' : ''))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _klaftertief$elm_search$Logo$blue = '#60B5CC';
+var _klaftertief$elm_search$Logo$largeBlueTriangle = function (transformation) {
+	return A2(
+		_elm_lang$svg$Svg$polygon,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$points('0,0 0,128 64,64'),
+				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$blue),
+				_elm_lang$svg$Svg_Attributes$transform(
+				_klaftertief$elm_search$Logo$toTransform(transformation))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _klaftertief$elm_search$Logo$mediumBlueTriangle = function (transformation) {
+	return A2(
+		_elm_lang$svg$Svg$polygon,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$points('0,0 0,64 64,0'),
+				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$blue),
+				_elm_lang$svg$Svg_Attributes$transform(
+				_klaftertief$elm_search$Logo$toTransform(transformation))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _klaftertief$elm_search$Logo$orange = '#F0AD00';
+var _klaftertief$elm_search$Logo$smallOrangeTriangle = function (transformation) {
+	return A2(
+		_elm_lang$svg$Svg$polygon,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$points('0,0 0,64 32,32'),
+				_elm_lang$svg$Svg_Attributes$fill(_klaftertief$elm_search$Logo$orange),
+				_elm_lang$svg$Svg_Attributes$transform(
+				_klaftertief$elm_search$Logo$toTransform(transformation))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _klaftertief$elm_search$Logo$quarterHypothenuse = (128 / 2) / _elm_lang$core$Basics$sqrt(2);
+var _klaftertief$elm_search$Logo$halfHypothenuse = 128 / _elm_lang$core$Basics$sqrt(2);
+var _klaftertief$elm_search$Logo$Transformation = F3(
+	function (a, b, c) {
+		return {movementX: a, movementY: b, rotation: c};
+	});
+var _klaftertief$elm_search$Logo$parts = _elm_lang$core$Native_List.fromArray(
+	[
+		_klaftertief$elm_search$Logo$largeBlueTriangle(
+		A3(_klaftertief$elm_search$Logo$Transformation, (3 * _klaftertief$elm_search$Logo$quarterHypothenuse) - 128, 3 * _klaftertief$elm_search$Logo$quarterHypothenuse, -90)),
+		_klaftertief$elm_search$Logo$largeGreyTriangle(
+		A3(_klaftertief$elm_search$Logo$Transformation, 0, 0, 0)),
+		_klaftertief$elm_search$Logo$mediumBlueTriangle(
+		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$quarterHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -135)),
+		_klaftertief$elm_search$Logo$smallOrangeTriangle(
+		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -45)),
+		_klaftertief$elm_search$Logo$smallOrangeTriangle(
+		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, 0, 45)),
+		_klaftertief$elm_search$Logo$greenSquare(
+		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, -45)),
+		A2(
+		_klaftertief$elm_search$Logo$greenDiamond,
+		A3(_klaftertief$elm_search$Logo$Transformation, _klaftertief$elm_search$Logo$halfHypothenuse, _klaftertief$elm_search$Logo$quarterHypothenuse, 45),
+		false)
+	]);
+var _klaftertief$elm_search$Logo$viewWithSize = function (s) {
+	var size = _elm_lang$core$Basics$toString(s);
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$svg$Svg_Attributes$width(size),
+				_elm_lang$svg$Svg_Attributes$height(size),
+				_elm_lang$svg$Svg_Attributes$viewBox('2 2 132 132'),
+				_elm_lang$svg$Svg_Attributes$style('overflow: visible;')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$svg$Svg$g,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$svg$Svg_Attributes$stroke('#fff'),
+						_elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+						_elm_lang$svg$Svg_Attributes$strokeLinejoin('round')
+					]),
+				_klaftertief$elm_search$Logo$parts)
+			]));
+};
+var _klaftertief$elm_search$Logo$view = _klaftertief$elm_search$Logo$viewWithSize(128);
 
 var _klaftertief$elm_search$Ports$query = _elm_lang$core$Native_Platform.incomingPort('query', _elm_lang$core$Json_Decode$string);
 var _klaftertief$elm_search$Ports$pushQuery = _elm_lang$core$Native_Platform.outgoingPort(
@@ -10172,7 +10172,7 @@ var _klaftertief$elm_search$Search_Chunk$pathTo = function (_p0) {
 				'packages',
 				_p1.userName,
 				_p1.packageName,
-				_klaftertief$elm_search$Package_Version$vsnToString(_p1.packageVersion),
+				_klaftertief$elm_search$Docs_Version$vsnToString(_p1.packageVersion),
 				A2(_klaftertief$elm_search$Search_Chunk$pathToModule, _p1.moduleName, _p1.name)
 			]));
 };
@@ -10185,15 +10185,15 @@ var _klaftertief$elm_search$Search_Chunk$identifierHome = function (_p2) {
 			[
 				_p3.userName,
 				_p3.packageName,
-				_klaftertief$elm_search$Package_Version$vsnToString(_p3.packageVersion),
+				_klaftertief$elm_search$Docs_Version$vsnToString(_p3.packageVersion),
 				_p3.moduleName
 			]));
 };
 var _klaftertief$elm_search$Search_Chunk$Chunk = F5(
 	function (a, b, c, d, e) {
-		return {name: a, tipe: b, tipeNormalized: c, docs: d, elmVersion: e};
+		return {context: a, tipe: b, tipeNormalized: c, docs: d, elmVersion: e};
 	});
-var _klaftertief$elm_search$Search_Chunk$Name = F5(
+var _klaftertief$elm_search$Search_Chunk$Context = F5(
 	function (a, b, c, d, e) {
 		return {userName: a, packageName: b, packageVersion: c, moduleName: d, name: e};
 	});
@@ -10202,9 +10202,9 @@ var _klaftertief$elm_search$Search_Chunk$toChunk = F4(
 		var _p5 = _p4;
 		var _p7 = _p5.tipe;
 		return {
-			name: A5(_klaftertief$elm_search$Search_Chunk$Name, $package.user, $package.name, $package.version, moduleName, _p5.name),
+			context: A5(_klaftertief$elm_search$Search_Chunk$Context, $package.user, $package.name, $package.version, moduleName, _p5.name),
 			tipe: _p7,
-			tipeNormalized: _klaftertief$elm_search$Package_Module_Type$normalize(_p7),
+			tipeNormalized: _klaftertief$elm_search$Docs_Type$normalize(_p7),
 			docs: _elm_lang$core$List$head(
 				A2(
 					_elm_lang$core$List$filter,
@@ -10251,7 +10251,7 @@ var _klaftertief$elm_search$Search_Distance$lowPenalty = 0.25;
 var _klaftertief$elm_search$Search_Distance$noPenalty = 0;
 var _klaftertief$elm_search$Search_Distance$distanceVarApply = F2(
 	function (varName, applyName) {
-		var maybeReservedVarTypeList = A2(_elm_lang$core$Dict$get, varName, _klaftertief$elm_search$Package_Module_Type$reserverdVars);
+		var maybeReservedVarTypeList = A2(_elm_lang$core$Dict$get, varName, _klaftertief$elm_search$Docs_Type$reserverdVars);
 		var _p0 = maybeReservedVarTypeList;
 		if (_p0.ctor === 'Just') {
 			return A2(
@@ -10355,7 +10355,7 @@ var _klaftertief$elm_search$Search_Distance$distanceApply = F2(
 					_klaftertief$elm_search$Search_Distance$maxPenalty,
 					A2(
 						_klaftertief$elm_search$Search_Distance$distance,
-						A2(_klaftertief$elm_search$Package_Module_Type$Apply, _p13, _p12),
+						A2(_klaftertief$elm_search$Docs_Type$Apply, _p13, _p12),
 						A2(
 							_elm_lang$core$Maybe$withDefault,
 							_p9._1._0,
@@ -10394,13 +10394,13 @@ var _klaftertief$elm_search$Search_Distance$tipe = F2(
 	function (query, chunk) {
 		return A2(
 			_klaftertief$elm_search$Search_Distance$distance,
-			_klaftertief$elm_search$Package_Module_Type$normalize(query),
+			_klaftertief$elm_search$Docs_Type$normalize(query),
 			chunk.tipeNormalized);
 	});
 var _klaftertief$elm_search$Search_Distance$name = F2(
 	function (query, _p14) {
 		var _p15 = _p14;
-		var _p16 = _p15.name;
+		var _p16 = _p15.context;
 		return _elm_lang$core$Native_Utils.eq(query, _p16.name) ? _klaftertief$elm_search$Search_Distance$noPenalty : (A2(_elm_lang$core$String$contains, query, _p16.name) ? (_klaftertief$elm_search$Search_Distance$mediumPenalty * (1 - (_elm_lang$core$Basics$toFloat(
 			_elm_lang$core$String$length(query)) / _elm_lang$core$Basics$toFloat(
 			_elm_lang$core$String$length(_p16.name))))) : _klaftertief$elm_search$Search_Distance$maxPenalty);
@@ -10419,7 +10419,7 @@ var _klaftertief$elm_search$Search_Model$prioritizeChunk = function (_p0) {
 	var _p4 = _p1._0;
 	var _p3 = _p1._1;
 	var priority = _klaftertief$elm_search$Search_Distance$lowPenalty;
-	var _p2 = {ctor: '_Tuple2', _0: _p3.name.userName, _1: _p3.name.packageName};
+	var _p2 = {ctor: '_Tuple2', _0: _p3.context.userName, _1: _p3.context.packageName};
 	var userName = _p2._0;
 	var packageName = _p2._1;
 	return (_elm_lang$core$Native_Utils.eq(userName, 'elm-lang') && _elm_lang$core$Native_Utils.eq(packageName, 'core')) ? {ctor: '_Tuple2', _0: _p4 - (priority / 2), _1: _p3} : (_elm_lang$core$Native_Utils.eq(userName, 'elm-lang') ? {ctor: '_Tuple2', _0: _p4 - (priority / 3), _1: _p3} : (_elm_lang$core$Native_Utils.eq(userName, 'elm-community') ? {ctor: '_Tuple2', _0: _p4 - (priority / 4), _1: _p3} : {ctor: '_Tuple2', _0: _p4, _1: _p3}));
@@ -10496,7 +10496,7 @@ var _klaftertief$elm_search$Search_Model$runFilter = F2(
 						function (_p14) {
 							var _p15 = _p14;
 							var _p16 = _p15._1;
-							return {ctor: '_Tuple4', _0: _p15._0, _1: _p16.name.name, _2: _p16.name.moduleName, _3: _p16.name.packageName};
+							return {ctor: '_Tuple4', _0: _p15._0, _1: _p16.context.name, _2: _p16.context.moduleName, _3: _p16.context.packageName};
 						},
 						_klaftertief$elm_search$Search_Model$prioritizeChunks(
 							A2(
@@ -10542,7 +10542,7 @@ var _klaftertief$elm_search$Search_Model$buildIndex = function (packages) {
 };
 var _klaftertief$elm_search$Search_Model$maybeVersionFromString = function (string) {
 	return _elm_lang$core$Result$toMaybe(
-		_klaftertief$elm_search$Package_Version$fromString(string));
+		_klaftertief$elm_search$Docs_Version$fromString(string));
 };
 var _klaftertief$elm_search$Search_Model$initialResult = {
 	chunks: _elm_lang$core$Native_List.fromArray(
@@ -10579,7 +10579,7 @@ var _klaftertief$elm_search$Search_Model$Name = function (a) {
 var _klaftertief$elm_search$Search_Model$maybeQueryFromString = function (string) {
 	return _elm_lang$core$String$isEmpty(string) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
 		function () {
-			var _p18 = _klaftertief$elm_search$Package_Module_Type$parse(string);
+			var _p18 = _klaftertief$elm_search$Docs_Type$parse(string);
 			if (_p18.ctor === 'Ok') {
 				var _p20 = _p18._0;
 				var _p19 = _p20;
@@ -10706,7 +10706,7 @@ var _klaftertief$elm_search$Search_View$longFunctionAnnotation = F2(
 					])));
 		var tipeHtml = A2(
 			_elm_lang$core$List$map,
-			_klaftertief$elm_search$Package_Module_Type$toHtml(_klaftertief$elm_search$Package_Module_Type$Func),
+			_klaftertief$elm_search$Docs_Type$toHtml(_klaftertief$elm_search$Docs_Type$Func),
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				args,
@@ -10723,7 +10723,7 @@ var _klaftertief$elm_search$Search_View$longFunctionAnnotation = F2(
 	});
 var _klaftertief$elm_search$Search_View$annotationName = function (_p0) {
 	var _p1 = _p0;
-	var _p2 = _p1.name;
+	var _p2 = _p1.context;
 	return A2(
 		_elm_lang$html$Html$a,
 		_elm_lang$core$Native_List.fromArray(
@@ -10740,7 +10740,7 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 	var _p3 = chunk.tipe;
 	if (_p3.ctor === 'Function') {
 		return (_elm_lang$core$Native_Utils.cmp(
-			(_elm_lang$core$String$length(chunk.name.name) + 3) + A2(_klaftertief$elm_search$Package_Module_Type$length, _klaftertief$elm_search$Package_Module_Type$Other, chunk.tipe),
+			(_elm_lang$core$String$length(chunk.context.name) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe),
 			64) > 0) ? A2(
 			_elm_lang$core$List_ops['::'],
 			_elm_lang$core$Native_List.fromArray(
@@ -10755,7 +10755,7 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$colon),
-					A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$Other, chunk.tipe)))
+					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe)))
 			]);
 	} else {
 		return _elm_lang$core$Native_List.fromArray(
@@ -10766,7 +10766,7 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$colon),
-					A2(_klaftertief$elm_search$Package_Module_Type$toHtml, _klaftertief$elm_search$Package_Module_Type$Other, chunk.tipe)))
+					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe)))
 			]);
 	}
 };
@@ -10845,12 +10845,12 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html_Attributes$href(
-										_klaftertief$elm_search$Search_Chunk$pathTo(chunk.name))
+										_klaftertief$elm_search$Search_Chunk$pathTo(chunk.context))
 									]),
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html$text(
-										_klaftertief$elm_search$Search_Chunk$identifierHome(chunk.name))
+										_klaftertief$elm_search$Search_Chunk$identifierHome(chunk.context))
 									]))
 							])),
 						A2(
@@ -10865,7 +10865,7 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 								A2(
 									_elm_lang$core$Maybe$withDefault,
 									'---',
-									A2(_elm_lang$core$Maybe$map, _klaftertief$elm_search$Package_Version$vsnToString, chunk.elmVersion)))
+									A2(_elm_lang$core$Maybe$map, _klaftertief$elm_search$Docs_Version$vsnToString, chunk.elmVersion)))
 							]))
 					]))
 			]));
@@ -10954,7 +10954,7 @@ var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p6) {
 										_elm_lang$core$Native_List.fromArray(
 											[
 												_elm_lang$html$Html$text(
-												_klaftertief$elm_search$Package_Version$vsnToString(vsn))
+												_klaftertief$elm_search$Docs_Version$vsnToString(vsn))
 											]));
 								},
 								_elm_lang$core$List$reverse(
@@ -11083,7 +11083,7 @@ var _klaftertief$elm_search$Web_Model$toQueryString = F2(
 							{
 							ctor: '_Tuple2',
 							_0: 'v',
-							_1: _klaftertief$elm_search$Package_Version$vsnToString(_p4._0)
+							_1: _klaftertief$elm_search$Docs_Version$vsnToString(_p4._0)
 						}
 						]));
 			} else {
@@ -11128,7 +11128,7 @@ var _klaftertief$elm_search$Web_Update$getPackages = function () {
 		_elm_lang$core$Json_Decode$oneOf(
 			_elm_lang$core$Native_List.fromArray(
 				[
-					A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _klaftertief$elm_search$Package_Package$decoder),
+					A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _klaftertief$elm_search$Docs_Package$decoder),
 					_elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing)
 				])));
 	return A3(
