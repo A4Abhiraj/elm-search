@@ -6181,137 +6181,6 @@ var _elm_lang$core$Json_Decode$dict = function (decoder) {
 };
 var _elm_lang$core$Json_Decode$Decoder = {ctor: 'Decoder'};
 
-var _elm_lang$core$Set$foldr = F3(
-	function (f, b, _p0) {
-		var _p1 = _p0;
-		return A3(
-			_elm_lang$core$Dict$foldr,
-			F3(
-				function (k, _p2, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p1._0);
-	});
-var _elm_lang$core$Set$foldl = F3(
-	function (f, b, _p3) {
-		var _p4 = _p3;
-		return A3(
-			_elm_lang$core$Dict$foldl,
-			F3(
-				function (k, _p5, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p4._0);
-	});
-var _elm_lang$core$Set$toList = function (_p6) {
-	var _p7 = _p6;
-	return _elm_lang$core$Dict$keys(_p7._0);
-};
-var _elm_lang$core$Set$size = function (_p8) {
-	var _p9 = _p8;
-	return _elm_lang$core$Dict$size(_p9._0);
-};
-var _elm_lang$core$Set$member = F2(
-	function (k, _p10) {
-		var _p11 = _p10;
-		return A2(_elm_lang$core$Dict$member, k, _p11._0);
-	});
-var _elm_lang$core$Set$isEmpty = function (_p12) {
-	var _p13 = _p12;
-	return _elm_lang$core$Dict$isEmpty(_p13._0);
-};
-var _elm_lang$core$Set$Set_elm_builtin = function (a) {
-	return {ctor: 'Set_elm_builtin', _0: a};
-};
-var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
-var _elm_lang$core$Set$singleton = function (k) {
-	return _elm_lang$core$Set$Set_elm_builtin(
-		A2(
-			_elm_lang$core$Dict$singleton,
-			k,
-			{ctor: '_Tuple0'}));
-};
-var _elm_lang$core$Set$insert = F2(
-	function (k, _p14) {
-		var _p15 = _p14;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A3(
-				_elm_lang$core$Dict$insert,
-				k,
-				{ctor: '_Tuple0'},
-				_p15._0));
-	});
-var _elm_lang$core$Set$fromList = function (xs) {
-	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
-};
-var _elm_lang$core$Set$map = F2(
-	function (f, s) {
-		return _elm_lang$core$Set$fromList(
-			A2(
-				_elm_lang$core$List$map,
-				f,
-				_elm_lang$core$Set$toList(s)));
-	});
-var _elm_lang$core$Set$remove = F2(
-	function (k, _p16) {
-		var _p17 = _p16;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$remove, k, _p17._0));
-	});
-var _elm_lang$core$Set$union = F2(
-	function (_p19, _p18) {
-		var _p20 = _p19;
-		var _p21 = _p18;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
-	});
-var _elm_lang$core$Set$intersect = F2(
-	function (_p23, _p22) {
-		var _p24 = _p23;
-		var _p25 = _p22;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
-	});
-var _elm_lang$core$Set$diff = F2(
-	function (_p27, _p26) {
-		var _p28 = _p27;
-		var _p29 = _p26;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
-	});
-var _elm_lang$core$Set$filter = F2(
-	function (p, _p30) {
-		var _p31 = _p30;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(
-				_elm_lang$core$Dict$filter,
-				F2(
-					function (k, _p32) {
-						return p(k);
-					}),
-				_p31._0));
-	});
-var _elm_lang$core$Set$partition = F2(
-	function (p, _p33) {
-		var _p34 = _p33;
-		var _p35 = A2(
-			_elm_lang$core$Dict$partition,
-			F2(
-				function (k, _p36) {
-					return p(k);
-				}),
-			_p34._0);
-		var p1 = _p35._0;
-		var p2 = _p35._1;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
-			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
-		};
-	});
-
 //import Native.Json //
 
 var _elm_lang$virtual_dom$Native_VirtualDom = function() {
@@ -10153,15 +10022,8 @@ var _klaftertief$elm_search$Search_Chunk$dotToDash = function ($char) {
 		$char,
 		_elm_lang$core$Native_Utils.chr('.')) ? _elm_lang$core$Native_Utils.chr('-') : $char;
 };
-var _klaftertief$elm_search$Search_Chunk$pathToModule = F2(
-	function (moduleName, name) {
-		return A2(
-			_elm_lang$core$Basics_ops['++'],
-			A2(_elm_lang$core$String$map, _klaftertief$elm_search$Search_Chunk$dotToDash, moduleName),
-			A2(_elm_lang$core$Basics_ops['++'], '#', name));
-	});
 var _klaftertief$elm_search$Search_Chunk$rootUrl = 'http://package.elm-lang.org';
-var _klaftertief$elm_search$Search_Chunk$pathTo = function (_p0) {
+var _klaftertief$elm_search$Search_Chunk$pathToPackage = function (_p0) {
 	var _p1 = _p0;
 	return A2(
 		_elm_lang$core$String$join,
@@ -10172,21 +10034,41 @@ var _klaftertief$elm_search$Search_Chunk$pathTo = function (_p0) {
 				'packages',
 				_p1.userName,
 				_p1.packageName,
-				_klaftertief$elm_search$Docs_Version$vsnToString(_p1.packageVersion),
-				A2(_klaftertief$elm_search$Search_Chunk$pathToModule, _p1.moduleName, _p1.name)
+				_klaftertief$elm_search$Docs_Version$vsnToString(_p1.packageVersion)
 			]));
 };
-var _klaftertief$elm_search$Search_Chunk$identifierHome = function (_p2) {
+var _klaftertief$elm_search$Search_Chunk$pathToModule = function (_p2) {
 	var _p3 = _p2;
 	return A2(
 		_elm_lang$core$String$join,
 		'/',
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_p3.userName,
-				_p3.packageName,
-				_klaftertief$elm_search$Docs_Version$vsnToString(_p3.packageVersion),
-				_p3.moduleName
+				_klaftertief$elm_search$Search_Chunk$pathToPackage(_p3),
+				A2(_elm_lang$core$String$map, _klaftertief$elm_search$Search_Chunk$dotToDash, _p3.moduleName)
+			]));
+};
+var _klaftertief$elm_search$Search_Chunk$pathToValue = function (_p4) {
+	var _p5 = _p4;
+	return A2(
+		_elm_lang$core$String$join,
+		'#',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_klaftertief$elm_search$Search_Chunk$pathToModule(_p5),
+				_p5.name
+			]));
+};
+var _klaftertief$elm_search$Search_Chunk$identifierHome = function (_p6) {
+	var _p7 = _p6;
+	return A2(
+		_elm_lang$core$String$join,
+		'/',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_p7.userName,
+				_p7.packageName,
+				_klaftertief$elm_search$Docs_Version$vsnToString(_p7.packageVersion)
 			]));
 };
 var _klaftertief$elm_search$Search_Chunk$Chunk = F5(
@@ -10198,38 +10080,38 @@ var _klaftertief$elm_search$Search_Chunk$Context = F5(
 		return {userName: a, packageName: b, packageVersion: c, moduleName: d, name: e};
 	});
 var _klaftertief$elm_search$Search_Chunk$toChunk = F4(
-	function ($package, moduleName, elmVersion, _p4) {
-		var _p5 = _p4;
-		var _p7 = _p5.tipe;
+	function ($package, moduleName, elmVersion, _p8) {
+		var _p9 = _p8;
+		var _p11 = _p9.tipe;
 		return {
-			context: A5(_klaftertief$elm_search$Search_Chunk$Context, $package.user, $package.name, $package.version, moduleName, _p5.name),
-			tipe: _p7,
-			tipeNormalized: _klaftertief$elm_search$Docs_Type$normalize(_p7),
+			context: A5(_klaftertief$elm_search$Search_Chunk$Context, $package.user, $package.name, $package.version, moduleName, _p9.name),
+			tipe: _p11,
+			tipeNormalized: _klaftertief$elm_search$Docs_Type$normalize(_p11),
 			docs: _elm_lang$core$List$head(
 				A2(
 					_elm_lang$core$List$filter,
-					function (_p6) {
+					function (_p10) {
 						return _elm_lang$core$Basics$not(
-							_elm_lang$core$String$isEmpty(_p6));
+							_elm_lang$core$String$isEmpty(_p10));
 					},
 					A2(
 						_elm_lang$core$String$split,
 						'\n\n',
-						_elm_lang$core$String$trim(_p5.docs)))),
+						_elm_lang$core$String$trim(_p9.docs)))),
 			elmVersion: elmVersion
 		};
 	});
 var _klaftertief$elm_search$Search_Chunk$packageChunks = function ($package) {
 	return A2(
 		_elm_lang$core$List$map,
-		function (_p8) {
-			var _p9 = _p8;
-			return A4(_klaftertief$elm_search$Search_Chunk$toChunk, $package, _p9._0, _p9._1, _p9._2);
+		function (_p12) {
+			var _p13 = _p12;
+			return A4(_klaftertief$elm_search$Search_Chunk$toChunk, $package, _p13._0, _p13._1, _p13._2);
 		},
 		A2(
 			_elm_lang$core$List$concatMap,
-			function (_p10) {
-				var _p11 = _p10;
+			function (_p14) {
+				var _p15 = _p14;
 				return A2(
 					_elm_lang$core$List$map,
 					A2(
@@ -10237,9 +10119,9 @@ var _klaftertief$elm_search$Search_Chunk$packageChunks = function ($package) {
 							function (v0, v1, v2) {
 								return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
 							}),
-						_p11.name,
-						_p11.elmVersion),
-					_p11.entries);
+						_p15.name,
+						_p15.elmVersion),
+					_p15.entries);
 			},
 			$package.modules));
 };
@@ -10455,57 +10337,28 @@ var _klaftertief$elm_search$Search_Model$distanceByQuery = F2(
 			}());
 		return A2(_elm_lang$core$List$map, distance, chunks);
 	});
-var _klaftertief$elm_search$Search_Model$filterByVersion = F2(
-	function (version, chunks) {
-		return A2(
-			_elm_lang$core$List$filter,
-			function (_p7) {
-				return A2(
-					F2(
-						function (x, y) {
-							return _elm_lang$core$Native_Utils.eq(x, y);
-						}),
-					_elm_lang$core$Maybe$Just(version),
-					function (_) {
-						return _.elmVersion;
-					}(_p7));
-			},
-			chunks);
-	});
-var _klaftertief$elm_search$Search_Model$filterByMaybeVersion = F2(
-	function (maybeVersion, chunks) {
-		var _p8 = maybeVersion;
-		if (_p8.ctor === 'Just') {
-			return A2(_klaftertief$elm_search$Search_Model$filterByVersion, _p8._0, chunks);
-		} else {
-			return chunks;
-		}
-	});
 var _klaftertief$elm_search$Search_Model$runFilter = F2(
-	function (_p10, _p9) {
-		var _p11 = _p10;
-		var _p12 = _p9;
+	function (_p8, _p7) {
+		var _p9 = _p8;
+		var _p10 = _p7;
 		var resultChunks = function () {
-			var _p13 = _p11.query;
-			if (_p13.ctor === 'Just') {
+			var _p11 = _p9.query;
+			if (_p11.ctor === 'Just') {
 				return A2(
 					_elm_lang$core$List$map,
 					_elm_lang$core$Basics$snd,
 					A2(
 						_elm_lang$core$List$sortBy,
-						function (_p14) {
-							var _p15 = _p14;
-							var _p16 = _p15._1;
-							return {ctor: '_Tuple4', _0: _p15._0, _1: _p16.context.name, _2: _p16.context.moduleName, _3: _p16.context.packageName};
+						function (_p12) {
+							var _p13 = _p12;
+							var _p14 = _p13._1;
+							return {ctor: '_Tuple4', _0: _p13._0, _1: _p14.context.name, _2: _p14.context.moduleName, _3: _p14.context.packageName};
 						},
 						_klaftertief$elm_search$Search_Model$prioritizeChunks(
 							A2(
 								_klaftertief$elm_search$Search_Model$filterByDistance,
 								_klaftertief$elm_search$Search_Distance$lowPenalty,
-								A2(
-									_klaftertief$elm_search$Search_Model$distanceByQuery,
-									_p13._0,
-									A2(_klaftertief$elm_search$Search_Model$filterByMaybeVersion, _p11.elmVersion, _p12.chunks))))));
+								A2(_klaftertief$elm_search$Search_Model$distanceByQuery, _p11._0, _p10.chunks)))));
 			} else {
 				return _elm_lang$core$Native_List.fromArray(
 					[]);
@@ -10514,58 +10367,30 @@ var _klaftertief$elm_search$Search_Model$runFilter = F2(
 		return {chunks: resultChunks};
 	});
 var _klaftertief$elm_search$Search_Model$buildIndex = function (packages) {
-	var chunks = A2(
-		_elm_lang$core$List$filter,
-		function (_p17) {
-			return A2(
-				F2(
-					function (x, y) {
-						return !_elm_lang$core$Native_Utils.eq(x, y);
-					}),
-				_elm_lang$core$Maybe$Nothing,
-				function (_) {
-					return _.elmVersion;
-				}(_p17));
-		},
-		A2(_elm_lang$core$List$concatMap, _klaftertief$elm_search$Search_Chunk$packageChunks, packages));
-	var elmVersions = _elm_lang$core$Set$fromList(
-		A2(
-			_elm_lang$core$List$filterMap,
-			_elm_lang$core$Basics$identity,
-			A2(
-				_elm_lang$core$List$map,
-				function (_) {
-					return _.elmVersion;
-				},
-				chunks)));
-	return {chunks: chunks, elmVersions: elmVersions};
-};
-var _klaftertief$elm_search$Search_Model$maybeVersionFromString = function (string) {
-	return _elm_lang$core$Result$toMaybe(
-		_klaftertief$elm_search$Docs_Version$fromString(string));
+	return {
+		chunks: A2(_elm_lang$core$List$concatMap, _klaftertief$elm_search$Search_Chunk$packageChunks, packages)
+	};
 };
 var _klaftertief$elm_search$Search_Model$initialResult = {
 	chunks: _elm_lang$core$Native_List.fromArray(
 		[])
 };
-var _klaftertief$elm_search$Search_Model$initialFilter = {queryString: '', query: _elm_lang$core$Maybe$Nothing, elmVersion: _elm_lang$core$Maybe$Nothing};
+var _klaftertief$elm_search$Search_Model$initialFilter = {queryString: '', query: _elm_lang$core$Maybe$Nothing};
 var _klaftertief$elm_search$Search_Model$initialIndex = {
 	chunks: _elm_lang$core$Native_List.fromArray(
-		[]),
-	elmVersions: _elm_lang$core$Set$empty
+		[])
 };
 var _klaftertief$elm_search$Search_Model$initialModel = {index: _klaftertief$elm_search$Search_Model$initialIndex, filter: _klaftertief$elm_search$Search_Model$initialFilter, result: _klaftertief$elm_search$Search_Model$initialResult};
 var _klaftertief$elm_search$Search_Model$Model = F3(
 	function (a, b, c) {
 		return {index: a, filter: b, result: c};
 	});
-var _klaftertief$elm_search$Search_Model$Index = F2(
+var _klaftertief$elm_search$Search_Model$Index = function (a) {
+	return {chunks: a};
+};
+var _klaftertief$elm_search$Search_Model$Filter = F2(
 	function (a, b) {
-		return {chunks: a, elmVersions: b};
-	});
-var _klaftertief$elm_search$Search_Model$Filter = F3(
-	function (a, b, c) {
-		return {queryString: a, query: b, elmVersion: c};
+		return {queryString: a, query: b};
 	});
 var _klaftertief$elm_search$Search_Model$Result = function (a) {
 	return {chunks: a};
@@ -10579,14 +10404,14 @@ var _klaftertief$elm_search$Search_Model$Name = function (a) {
 var _klaftertief$elm_search$Search_Model$maybeQueryFromString = function (string) {
 	return _elm_lang$core$String$isEmpty(string) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
 		function () {
-			var _p18 = _klaftertief$elm_search$Docs_Type$parse(string);
-			if (_p18.ctor === 'Ok') {
-				var _p20 = _p18._0;
-				var _p19 = _p20;
-				if (_p19.ctor === 'Var') {
+			var _p15 = _klaftertief$elm_search$Docs_Type$parse(string);
+			if (_p15.ctor === 'Ok') {
+				var _p17 = _p15._0;
+				var _p16 = _p17;
+				if (_p16.ctor === 'Var') {
 					return _klaftertief$elm_search$Search_Model$Name(string);
 				} else {
-					return _klaftertief$elm_search$Search_Model$Type(_p20);
+					return _klaftertief$elm_search$Search_Model$Type(_p17);
 				}
 			} else {
 				return _klaftertief$elm_search$Search_Model$Name(string);
@@ -10594,9 +10419,6 @@ var _klaftertief$elm_search$Search_Model$maybeQueryFromString = function (string
 		}());
 };
 var _klaftertief$elm_search$Search_Model$RunFilter = {ctor: 'RunFilter'};
-var _klaftertief$elm_search$Search_Model$SetFilterVersionFrom = function (a) {
-	return {ctor: 'SetFilterVersionFrom', _0: a};
-};
 var _klaftertief$elm_search$Search_Model$SetFilterQueryFrom = function (a) {
 	return {ctor: 'SetFilterQueryFrom', _0: a};
 };
@@ -10629,16 +10451,6 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 					{
 						queryString: _p1,
 						query: _klaftertief$elm_search$Search_Model$maybeQueryFromString(_p1)
-					});
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{filter: filter});
-			case 'SetFilterVersionFrom':
-				var filterFacts = model.filter;
-				var filter = _elm_lang$core$Native_Utils.update(
-					filterFacts,
-					{
-						elmVersion: _klaftertief$elm_search$Search_Model$maybeVersionFromString(_p0._0)
 					});
 				return _elm_lang$core$Native_Utils.update(
 					model,
@@ -10729,7 +10541,7 @@ var _klaftertief$elm_search$Search_View$annotationName = function (_p0) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$href(
-				_klaftertief$elm_search$Search_Chunk$pathTo(_p2))
+				_klaftertief$elm_search$Search_Chunk$pathToValue(_p2))
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -10845,7 +10657,7 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_elm_lang$html$Html_Attributes$href(
-										_klaftertief$elm_search$Search_Chunk$pathTo(chunk.context))
+										_klaftertief$elm_search$Search_Chunk$pathToPackage(chunk.context))
 									]),
 								_elm_lang$core$Native_List.fromArray(
 									[
@@ -10857,15 +10669,21 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$class('chunkVersion')
+								_elm_lang$html$Html_Attributes$class('chunkModule')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html$text(
 								A2(
-									_elm_lang$core$Maybe$withDefault,
-									'---',
-									A2(_elm_lang$core$Maybe$map, _klaftertief$elm_search$Docs_Version$vsnToString, chunk.elmVersion)))
+								_elm_lang$html$Html$a,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$href(
+										_klaftertief$elm_search$Search_Chunk$pathToModule(chunk.context))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(chunk.context.moduleName)
+									]))
 							]))
 					]))
 			]));
@@ -10882,9 +10700,7 @@ var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p4) {
 };
 var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p6) {
 	var _p7 = _p6;
-	var _p9 = _p7.index;
-	var _p8 = _p7.filter;
-	var isDisabled = _elm_lang$core$List$isEmpty(_p9.chunks);
+	var isDisabled = _elm_lang$core$List$isEmpty(_p7.index.chunks);
 	return A2(
 		_elm_lang$html$Html$form,
 		_elm_lang$core$Native_List.fromArray(
@@ -10907,59 +10723,11 @@ var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p6) {
 						_elm_lang$html$Html_Attributes$name('q'),
 						_elm_lang$html$Html_Attributes$type$('search'),
 						_elm_lang$html$Html_Events$onInput(_klaftertief$elm_search$Search_Model$SetFilterQueryFrom),
-						_elm_lang$html$Html_Attributes$value(_p8.queryString),
+						_elm_lang$html$Html_Attributes$value(_p7.filter.queryString),
 						_elm_lang$html$Html_Attributes$disabled(isDisabled)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-				A2(
-				_elm_lang$html$Html$label,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$select,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$name('v'),
-								A2(
-								_elm_lang$html$Html_Events$on,
-								'change',
-								A2(_elm_lang$core$Json_Decode$map, _klaftertief$elm_search$Search_Model$SetFilterVersionFrom, _elm_lang$html$Html_Events$targetValue)),
-								_elm_lang$html$Html_Attributes$disabled(isDisabled)
-							]),
-						A2(
-							_elm_lang$core$List_ops['::'],
-							A2(
-								_elm_lang$html$Html$option,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text('any')
-									])),
-							A2(
-								_elm_lang$core$List$map,
-								function (vsn) {
-									return A2(
-										_elm_lang$html$Html$option,
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html_Attributes$selected(
-												_elm_lang$core$Native_Utils.eq(
-													_elm_lang$core$Maybe$Just(vsn),
-													_p8.elmVersion))
-											]),
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html$text(
-												_klaftertief$elm_search$Docs_Version$vsnToString(vsn))
-											]));
-								},
-								_elm_lang$core$List$reverse(
-									_elm_lang$core$Set$toList(_p9.elmVersions)))))
-					])),
 				A2(
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
@@ -11045,12 +10813,7 @@ var _klaftertief$elm_search$Web_Model$parseSearchString = function (searchString
 			'',
 			A2(_elm_lang$core$Dict$get, 'q', parts));
 		var query = _klaftertief$elm_search$Search_Model$maybeQueryFromString(queryString);
-		var elmVersion = _klaftertief$elm_search$Search_Model$maybeVersionFromString(
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				'',
-				A2(_elm_lang$core$Dict$get, 'v', parts)));
-		return {queryString: queryString, query: query, elmVersion: elmVersion};
+		return {queryString: queryString, query: query};
 	} else {
 		return _klaftertief$elm_search$Search_Model$initialFilter;
 	}
@@ -11065,42 +10828,26 @@ var _klaftertief$elm_search$Web_Model$queryPair = function (_p2) {
 			'=',
 			_evancz$elm_http$Http$uriEncode(_p3._1)));
 };
-var _klaftertief$elm_search$Web_Model$toQueryString = F2(
-	function (maybeVersionsFilter, query) {
-		var start = _elm_lang$core$String$isEmpty(query) ? _elm_lang$core$Native_List.fromArray(
-			[]) : _elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: 'q', _1: query}
-			]);
-		var queries = function () {
-			var _p4 = maybeVersionsFilter;
-			if (_p4.ctor === 'Just') {
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					start,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							{
-							ctor: '_Tuple2',
-							_0: 'v',
-							_1: _klaftertief$elm_search$Docs_Version$vsnToString(_p4._0)
-						}
-						]));
-			} else {
-				return start;
-			}
-		}();
-		return A2(
-			_elm_lang$core$Basics_ops['++'],
-			'?',
-			A2(
-				_elm_lang$core$String$join,
-				'&',
-				A2(_elm_lang$core$List$map, _klaftertief$elm_search$Web_Model$queryPair, queries)));
-	});
-var _klaftertief$elm_search$Web_Model$Flags = function (a) {
-	return {search: a};
+var _klaftertief$elm_search$Web_Model$toQueryString = function (_p4) {
+	var _p5 = _p4;
+	var _p6 = _p5.queryString;
+	var pairs = _elm_lang$core$String$isEmpty(_p6) ? _elm_lang$core$Native_List.fromArray(
+		[]) : _elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'q', _1: _p6}
+		]);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'?',
+		A2(
+			_elm_lang$core$String$join,
+			'&',
+			A2(_elm_lang$core$List$map, _klaftertief$elm_search$Web_Model$queryPair, pairs)));
 };
+var _klaftertief$elm_search$Web_Model$Flags = F2(
+	function (a, b) {
+		return {index: a, search: b};
+	});
 var _klaftertief$elm_search$Web_Model$Ready = function (a) {
 	return {ctor: 'Ready', _0: a};
 };
@@ -11123,7 +10870,7 @@ var _klaftertief$elm_search$Web_Model$Fail = function (a) {
 	return {ctor: 'Fail', _0: a};
 };
 
-var _klaftertief$elm_search$Web_Update$getPackages = function () {
+var _klaftertief$elm_search$Web_Update$getPackages = function (url) {
 	var decodeSafe = _elm_lang$core$Json_Decode$list(
 		_elm_lang$core$Json_Decode$oneOf(
 			_elm_lang$core$Native_List.fromArray(
@@ -11138,8 +10885,8 @@ var _klaftertief$elm_search$Web_Update$getPackages = function () {
 			return _klaftertief$elm_search$Web_Model$Load(
 				A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, maybePackages));
 		},
-		A2(_evancz$elm_http$Http$get, decodeSafe, 'all-package-docs.json'));
-}();
+		A2(_evancz$elm_http$Http$get, decodeSafe, url));
+};
 var _klaftertief$elm_search$Web_Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -11174,7 +10921,7 @@ var _klaftertief$elm_search$Web_Update$update = F2(
 						var _p3 = _p5;
 						if (_p3.ctor === 'RunFilter') {
 							return _klaftertief$elm_search$Ports$pushQuery(
-								A2(_klaftertief$elm_search$Web_Model$toQueryString, _p4.filter.elmVersion, _p4.filter.queryString));
+								_klaftertief$elm_search$Web_Model$toQueryString(_p4.filter));
 						} else {
 							return _elm_lang$core$Platform_Cmd$none;
 						}
@@ -11216,7 +10963,7 @@ var _klaftertief$elm_search$Web_Update$init = function (_p8) {
 	return {
 		ctor: '_Tuple2',
 		_0: _klaftertief$elm_search$Web_Model$Loading(filter),
-		_1: _klaftertief$elm_search$Web_Update$getPackages
+		_1: _klaftertief$elm_search$Web_Update$getPackages(_p9.index)
 	};
 };
 
@@ -11309,10 +11056,15 @@ var _klaftertief$elm_search$Web$main = {
 		}),
 	flags: A2(
 		_elm_lang$core$Json_Decode$andThen,
-		A2(_elm_lang$core$Json_Decode_ops[':='], 'search', _elm_lang$core$Json_Decode$string),
-		function (search) {
-			return _elm_lang$core$Json_Decode$succeed(
-				{search: search});
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'index', _elm_lang$core$Json_Decode$string),
+		function (index) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				A2(_elm_lang$core$Json_Decode_ops[':='], 'search', _elm_lang$core$Json_Decode$string),
+				function (search) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{index: index, search: search});
+				});
 		})
 };
 
