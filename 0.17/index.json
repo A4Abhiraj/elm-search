@@ -38447,6 +38447,96 @@
     ]
   },
   {
+    "name": "szabba/elm-animations",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Animation",
+        "comment": "\n\n@docs Animation, State\n\n# Running\n@docs run, runState, isDone\n\n# Sampling\n@docs sample, sampleState\n\n# Building\n@docs interval, map, immediately, append\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Animation",
+            "comment": " An animation describes how a value changes over a finite period of time.\n\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "State",
+            "comment": " A state is the result of running an animation for some time. An animation\nends eventually so we need a case for it's final state. It can also not be done\nafter the time we've run it for - then we'll just keep it going next time we get\nto.\n\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Done",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Continuing",
+                [
+                  "Animation.Animation a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "append",
+            "comment": " Glues two animations together.\n\n",
+            "type": "Animation.Animation a -> Animation.Animation a -> Animation.Animation a"
+          },
+          {
+            "name": "immediately",
+            "comment": " Creates an animation that takes no time and assumes the specified value.\n\n",
+            "type": "a -> Animation.Animation a"
+          },
+          {
+            "name": "interval",
+            "comment": " Builds an animation spanning from zero to the time specified, and whose\nvalue is the time that's passed since it's start.\n\nFor negative values you'll get the zero interval.\n\n",
+            "type": "Time.Time -> Animation.Animation Time.Time"
+          },
+          {
+            "name": "isDone",
+            "comment": " True when the animation is over. It can make code clearer when you want to\ndo things that don't depend on the final/current value.\n\n",
+            "type": "Animation.State a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Builds an animation with the values transformed by a function.\n\n",
+            "type": "(a -> b) -> Animation.Animation a -> Animation.Animation b"
+          },
+          {
+            "name": "run",
+            "comment": " Runs an animation for some time and returns a state.\n\n",
+            "type": "Time.Time -> Animation.Animation a -> Animation.State a"
+          },
+          {
+            "name": "runState",
+            "comment": " Like [`run`](#run) but accepts an animation state instead of an animation.\n\n",
+            "type": "Time.Time -> Animation.State a -> Animation.State a"
+          },
+          {
+            "name": "sample",
+            "comment": " Gets the current value of the animation.\n\n",
+            "type": "Animation.Animation a -> a"
+          },
+          {
+            "name": "sampleState",
+            "comment": " Like [`sample`](#sample) for animation states instead of animations. If the\nstate [`isDone`](#isDone), then this is the final state the animation has\nreached.\n\n",
+            "type": "Animation.State a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "szabba/elm-laws",
     "version": "1.0.0",
     "docs": [
@@ -38485,6 +38575,682 @@
             "name": "true",
             "comment": " Helps test that a property is true.\n\n    import Laws exposing (claim, true)\n    import Check.Producer exposing (list, unit)\n\n    halfAListIsNoMoreThanTheWhole =\n        claim \"half of a list is no longer than the entire list\"\n            (true <| \\l -> List.length l >= List.length // 2)\n            (list unit)\n\n",
             "type": "(a -> Bool) -> ( a -> Bool, a -> Bool )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "szabba/elm-timestamp",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Time.Timestamp",
+        "comment": " This module lets you wrap your component such, that incoming messages will\nbe transparently decorated with timestamps.\n\n@docs Model, Message, update, subscriptions, view\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Wraps the essential parts of another component.\n\n",
+            "args": [
+              "msg",
+              "model"
+            ],
+            "type": "{ model : model , update : ( msg, Time.Time ) -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Message",
+            "comment": " A wrapper for messages that might carry a timestamp. If it doesn't a command\nis issued to get one that does and carries the same inner message.\n\n",
+            "args": [
+              "msg"
+            ],
+            "cases": [
+              [
+                "Timed",
+                [
+                  "Time.Time",
+                  "msg"
+                ]
+              ],
+              [
+                "Untimed",
+                [
+                  "msg"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "subscriptions",
+            "comment": " The subscription for the wrapped component.\n\n",
+            "type": "Time.Timestamp.Model msg model -> Platform.Sub.Sub (Time.Timestamp.Message msg)"
+          },
+          {
+            "name": "update",
+            "comment": " Updates the inner model given a wrapped message.\n\n",
+            "type": "Time.Timestamp.Message msg -> Time.Timestamp.Model msg model -> ( Time.Timestamp.Model msg model , Platform.Cmd.Cmd (Time.Timestamp.Message msg) )"
+          },
+          {
+            "name": "view",
+            "comment": " Render the component.\n\n",
+            "type": "Time.Timestamp.Model msg model -> Html.Html (Time.Timestamp.Message msg)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "thebritican/elm-autocomplete",
+    "version": "3.0.1",
+    "docs": [
+      {
+        "name": "Autocomplete",
+        "comment": " A customizable Autocomplete component.\n\nThe Autocomplete consists of a menu, a list, the list's many items, and an input.\nAll of these views are styleable via css classes.\nSee the Styling module.\n\nThe currently selected item is preserved and styled with the aforementioned module.\n\nThis selection is modified by keyboard arrow input, mouse clicks, and API consumer defined keyCodes.\n\nCheck out how easy it is to plug into a simple program:\n```\nmain =\n  let\n    updateAutocomplete msg autocomplete =\n      let\n        ( updatedAutocomplete, status ) = Autocomplete.update msg autocomplete\n        -- status communicates extra information the parent on every update\n        -- e.g. when the selection changes, the value changes, or the user has triggered a completion\n      in\n        updatedAutocomplete\n  in\n    Html.beginnerProgram\n      { model = Autocomplete.init [ \"elm\", \"makes\", \"coding\", \"life\", \"easy\" ]\n      , update = updateAutocomplete\n      , view = Autocomplete.view\n      }\n```\n\n# Definition\n@docs Autocomplete, Status\n\n# Initialize\n@docs init, initWithConfig\n\n# Update\n@docs Msg, update\n\n# Views\n@docs view\n\n# Helpers\n@docs getSelectedItem, getCurrentValue\n\n# Controlling Behavior\n\nIf you want the autocomplete to be completely controlled, with no `input` field, use the Config\nmodule's `isValueControlled` function to designate that the API consumer will control the autocomplete.\nThis is useful for mentions and other autocomplete examples inside textareas, contenteditable, etc.\n\nDefined below are functions to control:\n  the autocomplete's menu navigation, set its value, items, and whether its menu should be shown.\n\n@docs showMenu, setValue, setItems, setLoading, MenuNavigation, navigateMenu\n\n# Defaults\n@docs defaultStatus\n\n",
+        "aliases": [
+          {
+            "name": "Status",
+            "comment": " Information for parent components about the update of the Autocomplete ",
+            "args": [],
+            "type": "{ completed : Autocomplete.Config.Completed , valueChanged : Autocomplete.Config.ValueChanged , selectionChanged : Autocomplete.Config.SelectionChanged }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Autocomplete",
+            "comment": " The Autocomplete model.\n    It assumes filtering is based upon strings.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "MenuNavigation",
+            "comment": " The possible actions to navigate the autocomplete menu\n",
+            "args": [],
+            "cases": [
+              [
+                "Previous",
+                []
+              ],
+              [
+                "Next",
+                []
+              ],
+              [
+                "Select",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Msg",
+            "comment": " A description of a state change\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultStatus",
+            "comment": " A status record where everything is False\n",
+            "type": "Autocomplete.Status"
+          },
+          {
+            "name": "getCurrentValue",
+            "comment": " Get the string currently entered by the user in the Autocomplete\n",
+            "type": "Autocomplete.Autocomplete -> String"
+          },
+          {
+            "name": "getSelectedItem",
+            "comment": " Get the text of the currently selected item\n",
+            "type": "Autocomplete.Autocomplete -> Autocomplete.Config.Text"
+          },
+          {
+            "name": "init",
+            "comment": " Creates an Autocomplete from a list of items with a default `String.startsWith` filter\n",
+            "type": "List String -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "initWithConfig",
+            "comment": " Creates an Autocomplete with a custom configuration\n",
+            "type": "List String -> Autocomplete.Config.Config Autocomplete.Msg -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "navigateMenu",
+            "comment": " When controlling the Autocomplete value, use this function\n    to provide a message for updating the menu selection.\n",
+            "type": "Autocomplete.MenuNavigation -> Autocomplete.Autocomplete -> Autocomplete.Msg"
+          },
+          {
+            "name": "setItems",
+            "comment": " Sets the Autocomplete's list of items ",
+            "type": "List String -> Autocomplete.Autocomplete -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "setLoading",
+            "comment": " Sets whether the Autocomplete shows its loading display or not. Useful for remote updates. ",
+            "type": "Bool -> Autocomplete.Autocomplete -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "setValue",
+            "comment": " Set current autocomplete value\n",
+            "type": "String -> Autocomplete.Autocomplete -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "showMenu",
+            "comment": " Set whether the menu should be shown\n",
+            "type": "Bool -> Autocomplete.Autocomplete -> Autocomplete.Autocomplete"
+          },
+          {
+            "name": "update",
+            "comment": " The quintessential Elm Architecture reducer.\n",
+            "type": "Autocomplete.Msg -> Autocomplete.Autocomplete -> ( Autocomplete.Autocomplete, Autocomplete.Status )"
+          },
+          {
+            "name": "view",
+            "comment": " The full Autocomplete view, with menu and input.\n",
+            "type": "Autocomplete.Autocomplete -> Html.Html Autocomplete.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Autocomplete.Config",
+        "comment": " Configuration module for the Autocomplete component.\n\n# Definition\n@docs Config, ItemHtmlFn, Text, InputValue, Index, Completed, ValueChanged, SelectionChanged\n\n# Defaults\n@docs defaultConfig\n\n# Modifiers\n@docs isValueControlled, setClassesFn, setCompletionKeyCodes, setItemHtml, setMaxListSize, setFilterFn, setCompareFn, setNoMatchesDisplay, setLoadingDisplay\n\n\n",
+        "aliases": [
+          {
+            "name": "Completed",
+            "comment": " True if an update completed the autocomplete\n",
+            "args": [],
+            "type": "Bool"
+          },
+          {
+            "name": "Config",
+            "comment": " The configuration record for an Autocomplete component.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Autocomplete.Config.Model msg"
+          },
+          {
+            "name": "Index",
+            "comment": " Positive integer index of selected item in list\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "InputValue",
+            "comment": " The value of the input\n",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "ItemHtmlFn",
+            "comment": " Given the text of an item, produce some HTML\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Autocomplete.Config.Text -> Html.Html msg"
+          },
+          {
+            "name": "SelectionChanged",
+            "comment": " True if an update changed the autocomplete's selection\n",
+            "args": [],
+            "type": "Bool"
+          },
+          {
+            "name": "Text",
+            "comment": " The text of an item\n",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "ValueChanged",
+            "comment": " True if an update changed the autocomplete's value\n",
+            "args": [],
+            "type": "Bool"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultConfig",
+            "comment": " A simple Autocomplete configuration\n",
+            "type": "Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "isValueControlled",
+            "comment": " Provide True to control the autocomplete value,\n    False to let the component control the value via a stylable `input` field.\n\n    The default config provides False.\n",
+            "type": "Bool -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setClassesFn",
+            "comment": " Provide a function that produces an list of classes to style a particular View\n",
+            "type": "(Autocomplete.Styling.View -> Autocomplete.Styling.Classes) -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setCompareFn",
+            "comment": " Provide a custom comparison function to order the Autocomplete matches.\n",
+            "type": "(Autocomplete.Config.Text -> Autocomplete.Config.Text -> Basics.Order) -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setCompletionKeyCodes",
+            "comment": " Provide keycodes for autocompletion. By default, completion happens on tab press.\n",
+            "type": "List Char.KeyCode -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setFilterFn",
+            "comment": " Provide a custom filter function used to filter Autocomplete items.\n",
+            "type": "(Autocomplete.Config.Text -> Autocomplete.Config.InputValue -> Bool) -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setItemHtml",
+            "comment": " Provide a custom HTML view for an Autocomplete item's text\n",
+            "type": "Autocomplete.Config.ItemHtmlFn msg -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setLoadingDisplay",
+            "comment": " Provide a custom loading display for the case when more items are being fetched\n",
+            "type": "Html.Html msg -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setMaxListSize",
+            "comment": " Provide a maximum list size for the Autocomplete menu\n",
+            "type": "Int -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "setNoMatchesDisplay",
+            "comment": " Provide a custom HTML display for the case that nothing matches.\n",
+            "type": "Html.Html msg -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Autocomplete.Styling",
+        "comment": " Styling module for the Autocomplete component.\n\nThe autocomplete consists of a menu, a list, list items, and an input.\nThis module includes functions to provide css class names for styling those\nchild views.\n\nStyling is easy as:\n```\ntestData : List String\ntestData =\n  [ \"elm\"\n  , \"makes\"\n  , \"coding\"\n  , \"life\"\n  , \"easy\"\n  ]\n\ngetClasses : Styling.View -> Styling.Classes\ngetClasses view =\n  case view of\n    Styling.Menu ->\n      [ ( \"autocomplete-menu\", True ) ]\n\n    Styling.List ->\n      [ ( \"autocomplete-list\", True ) ]\n\n    Styling.Item ->\n      [ ( \"autocomplete-item\", True ) ]\n\n    Styling.SelectedItem ->\n      [ ( \"autocomplete-selected-item\", True ) ]\n\n    Styling.Input ->\n      [ ( \"autocomplete-input\", True ) ]\n\n\nmain : Program Never\nmain =\n  let\n    config =\n      Autocomplete.Config.defaultConfig\n        |> Autocomplete.Config.setClassesFn getClasses\n  in\n    Html.beginnerProgram\n      { model = initWithConfig testData config\n      , update = (\\act model -> fst (update act model))\n      , view = view\n      }\n```\n\n# Child Views\n@docs View\n\n# Definition\n@docs Classes\n\n",
+        "aliases": [
+          {
+            "name": "Classes",
+            "comment": " A list of class names and their associated status (added/removed) as a boolean value.\n",
+            "args": [],
+            "type": "List ( String, Bool )"
+          }
+        ],
+        "types": [
+          {
+            "name": "View",
+            "comment": " The stylable views of the Autocomplete component.\n",
+            "args": [],
+            "cases": [
+              [
+                "Menu",
+                []
+              ],
+              [
+                "List",
+                []
+              ],
+              [
+                "Item",
+                []
+              ],
+              [
+                "SelectedItem",
+                []
+              ],
+              [
+                "Input",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "truqu/elm-base64",
+    "version": "1.0.4",
+    "docs": [
+      {
+        "name": "Base64",
+        "comment": " Library for base64 encoding and decoding of Ascii strings.\nFor the moment only works with the characters :\n\n\" !\\\"#$%&\\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\"\n\n# Method\n@docs encode, decode\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "decode",
+            "comment": " base64 decodes an ascii string. If the input is not a valid base64 string returns a Result.Err,\notherwise a Result.Ok String\n    decode(\"RWxtIGlzIENvb2w=\") == Result.Ok \"Elm is Cool\"\n",
+            "type": "String -> Result.Result String String"
+          },
+          {
+            "name": "encode",
+            "comment": " base64 encodes an ascii string. If the input is not valid returns a Result.Err,\notherwise a Result.Ok String\n    encode(\"Elm is Cool\") == Result.Ok \"RWxtIGlzIENvb2w=\"\n",
+            "type": "String -> Result.Result String String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "vito/elm-ansi",
+    "version": "8.0.1",
+    "docs": [
+      {
+        "name": "Ansi.Log",
+        "comment": " Log interprets a stream of text and ANSI escape codes.\n\n@docs init, update, view\n\n@docs Model, LineDiscipline, Line, Chunk, CursorPosition, Style\n",
+        "aliases": [
+          {
+            "name": "Chunk",
+            "comment": " A blob of text paired with the style that was configured at the time.\n",
+            "args": [],
+            "type": "{ text : String, style : Ansi.Log.Style }"
+          },
+          {
+            "name": "CursorPosition",
+            "comment": " The coordinate in the window where text will be printed.\n",
+            "args": [],
+            "type": "{ row : Int, column : Int }"
+          },
+          {
+            "name": "Line",
+            "comment": " A list of arbitrarily-sized chunks of output.\n",
+            "args": [],
+            "type": "( List Ansi.Log.Chunk, Int )"
+          },
+          {
+            "name": "Model",
+            "comment": " Model is populated by parsing ANSI character sequences and escape codes\nvia `update`.\n\n* `lines` contains all of the output that's been parsed\n* `position` is the current position of the cursor\n* `style` is the style to be applied to any text that's printed\n* `remainder` is a partial ANSI escape sequence left around from an incomplete\n  segment from the stream\n",
+            "args": [],
+            "type": "{ lineDiscipline : Ansi.Log.LineDiscipline , lines : Array.Array Ansi.Log.Line , position : Ansi.Log.CursorPosition , savedPosition : Maybe.Maybe Ansi.Log.CursorPosition , style : Ansi.Log.Style , remainder : String }"
+          },
+          {
+            "name": "Style",
+            "comment": " The current presentation state for any text that's printed.\n",
+            "args": [],
+            "type": "{ foreground : Maybe.Maybe Ansi.Color , background : Maybe.Maybe Ansi.Color , bold : Bool , faint : Bool , italic : Bool , underline : Bool , blink : Bool , inverted : Bool }"
+          }
+        ],
+        "types": [
+          {
+            "name": "LineDiscipline",
+            "comment": " How to interpret linebreaks.\n\n* `Raw`: interpret `\\n` as just `\\n`, i.e. move down a line, retaining the\n  cursor column\n* `Cooked`: interpret `\\n` as `\\r\\n`, i.e. move down a line and go to the first\n  column\n",
+            "args": [],
+            "cases": [
+              [
+                "Raw",
+                []
+              ],
+              [
+                "Cooked",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Construct an empty model.\n",
+            "type": "Ansi.Log.LineDiscipline -> Ansi.Log.Model"
+          },
+          {
+            "name": "update",
+            "comment": " Parse and interpret a chunk of ANSI output.\n\nTrailing partial ANSI escape codes will be prepended to the chunk in the next\ncall to `update`.\n",
+            "type": "String -> Ansi.Log.Model -> Ansi.Log.Model"
+          },
+          {
+            "name": "view",
+            "comment": " Render the model's logs as HTML.\n\nWraps everything in <pre>, with a <div> for each Line, and <span> with styling\nand classes for each Chunk.\n\nThe `span` elements will have the following attributes:\n\n* `style=\"font-weight: bold|normal\"`\n* `class=\"ansi-COLOR-fg ansi-COLOR-bg ansi-bold\"`\n\n...where each class is optional, and `COLOR` is one of:\n\n* `black`\n* `red`\n* `green`\n* `yellow`\n* `blue`\n* `magenta`\n* `cyan`\n* `white`\n* `bright-black`\n* `bright-red`\n* `bright-green`\n* `bright-yellow`\n* `bright-blue`\n* `bright-magenta`\n* `bright-cyan`\n* `bright-white`\n\nIf the chunk is inverted, the `-fg` and `-bg` classes will have their colors\nswapped. If the chunk is bold, the `ansi-bold` class will be present.\n",
+            "type": "Ansi.Log.Model -> Html.Html x"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Ansi",
+        "comment": " This library primarily exposes the `parse` function and the types that it\nwill yield.\n\n@docs parse, parseInto\n\n@docs Action, Color, EraseMode\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Action",
+            "comment": " The events relevant to interpreting the stream.\n\n* `Print` is a chunk of text which should be interpreted with the style implied\n  by the preceding actions (i.e. `[SetBold True, Print \"foo\"]`) should yield a\n  bold `foo`\n* `Remainder` is a partial ANSI escape sequence, returned at the end of the\n  actions if it was cut off. The next string passed to `parse` should have this\n  prepended to it.\n* The rest are derived from their respective ANSI escape sequences.\n",
+            "args": [],
+            "cases": [
+              [
+                "Print",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Remainder",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "SetForeground",
+                [
+                  "Maybe.Maybe Ansi.Color"
+                ]
+              ],
+              [
+                "SetBackground",
+                [
+                  "Maybe.Maybe Ansi.Color"
+                ]
+              ],
+              [
+                "SetBold",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetFaint",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetItalic",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetUnderline",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetBlink",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetInverted",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "Linebreak",
+                []
+              ],
+              [
+                "CarriageReturn",
+                []
+              ],
+              [
+                "CursorUp",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorDown",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorForward",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorBack",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorPosition",
+                [
+                  "Int",
+                  "Int"
+                ]
+              ],
+              [
+                "CursorColumn",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "EraseDisplay",
+                [
+                  "Ansi.EraseMode"
+                ]
+              ],
+              [
+                "EraseLine",
+                [
+                  "Ansi.EraseMode"
+                ]
+              ],
+              [
+                "SaveCursorPosition",
+                []
+              ],
+              [
+                "RestoreCursorPosition",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Color",
+            "comment": " The colors applied to the foreground/background.\n",
+            "args": [],
+            "cases": [
+              [
+                "Black",
+                []
+              ],
+              [
+                "Red",
+                []
+              ],
+              [
+                "Green",
+                []
+              ],
+              [
+                "Yellow",
+                []
+              ],
+              [
+                "Blue",
+                []
+              ],
+              [
+                "Magenta",
+                []
+              ],
+              [
+                "Cyan",
+                []
+              ],
+              [
+                "White",
+                []
+              ],
+              [
+                "BrightBlack",
+                []
+              ],
+              [
+                "BrightRed",
+                []
+              ],
+              [
+                "BrightGreen",
+                []
+              ],
+              [
+                "BrightYellow",
+                []
+              ],
+              [
+                "BrightBlue",
+                []
+              ],
+              [
+                "BrightMagenta",
+                []
+              ],
+              [
+                "BrightCyan",
+                []
+              ],
+              [
+                "BrightWhite",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "EraseMode",
+            "comment": " Method to erase the display or line.\n",
+            "args": [],
+            "cases": [
+              [
+                "EraseToBeginning",
+                []
+              ],
+              [
+                "EraseToEnd",
+                []
+              ],
+              [
+                "EraseAll",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "parse",
+            "comment": " Convert an arbitrary String of text into a sequence of actions.\n\nIf the input string ends with a partial ANSI escape sequence, it will be\nyielded as a `Remainder` action, which should then be prepended to the next\ncall to `parse`.\n",
+            "type": "String -> List Ansi.Action"
+          },
+          {
+            "name": "parseInto",
+            "comment": " Update a structure with actions parsed out of the given string.\n",
+            "type": "a -> (Ansi.Action -> a -> a) -> String -> a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
