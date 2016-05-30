@@ -30995,11 +30995,11 @@
   },
   {
     "name": "ohanhi/keyboard-extra",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Keyboard.Extra",
-        "comment": " Convenience helpers for working with keyboard inputs.\n\n# Model\n@docs Model\n\n# Helpers\n@docs isPressed, arrows, wasd, pressedDown\n\n# Wiring\n@docs Msg, subscriptions, init, update\n\n# Keyboard keys\n@docs Key\n",
+        "comment": " Convenience helpers for working with keyboard inputs.\n\n# Helpers\n@docs isPressed, pressedDown\n\n# Directions\n@docs arrows, wasd, Direction, arrowsDirection, wasdDirection\n\n# Wiring\n@docs Model, Msg, subscriptions, init, update\n\n# Keyboard keys\n@docs Key\n",
         "aliases": [
           {
             "name": "Model",
@@ -31009,6 +31009,49 @@
           }
         ],
         "types": [
+          {
+            "name": "Direction",
+            "comment": " Type representation of the arrows.\n",
+            "args": [],
+            "cases": [
+              [
+                "North",
+                []
+              ],
+              [
+                "NorthEast",
+                []
+              ],
+              [
+                "East",
+                []
+              ],
+              [
+                "SouthEast",
+                []
+              ],
+              [
+                "South",
+                []
+              ],
+              [
+                "SouthWest",
+                []
+              ],
+              [
+                "West",
+                []
+              ],
+              [
+                "NorthWest",
+                []
+              ],
+              [
+                "NoDirection",
+                []
+              ]
+            ]
+          },
           {
             "name": "Key",
             "comment": " These are all the keys that have names in `Keyboard.Extra`.\n",
@@ -31634,6 +31677,11 @@
             "type": "Keyboard.Extra.Model -> Keyboard.Arrows.Arrows"
           },
           {
+            "name": "arrowsDirection",
+            "comment": " Gives the arrow keys' pressed down state as follows:\n\n- `None` when pressing no arrows.\n- `West` when pressing the left arrow.\n- `NorthEast` when pressing the up and right arrows.\n- `South` when pressing the down, left, and right arrows (left and right cancel out).\n",
+            "type": "Keyboard.Extra.Model -> Keyboard.Extra.Direction"
+          },
+          {
             "name": "init",
             "comment": " Use this to initialize the component.\n",
             "type": "( Keyboard.Extra.Model, Platform.Cmd.Cmd Keyboard.Extra.Msg )"
@@ -31662,6 +31710,11 @@
             "name": "wasd",
             "comment": " Similar to `arrows`, gives the W, A, S and D keys' pressed down state.\n\n- `{ x = 0, y = 0 }` when pressing none of W, A, S and D.\n- `{ x =-1, y = 0 }` when pressing A.\n- `{ x = 1, y = 1 }` when pressing W and D.\n- `{ x = 0, y =-1 }` when pressing A, S and D (A and D cancel out).\n",
             "type": "Keyboard.Extra.Model -> Keyboard.Arrows.Arrows"
+          },
+          {
+            "name": "wasdDirection",
+            "comment": " Similar to `arrows`, gives the W, A, S and D keys' pressed down state.\n\n- `None` when pressing none of W, A, S and D.\n- `West` when pressing A.\n- `NorthEast` when pressing W and D.\n- `South` when pressing A, S and D (A and D cancel out).\n",
+            "type": "Keyboard.Extra.Model -> Keyboard.Extra.Direction"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -31817,7 +31870,7 @@
   },
   {
     "name": "pukkamustard/elm-identicon",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Identicon",
@@ -37080,6 +37133,164 @@
     ]
   },
   {
+    "name": "sporto/hop",
+    "version": "5.0.0",
+    "docs": [
+      {
+        "name": "Hop",
+        "comment": " Navigation and routing utilities for single page applications. See [readme](https://github.com/sporto/hop) for usage.\n\n# Create URLs\n@docs makeUrl, makeUrlFromLocation\n\n# Match current URL\n@docs matchUrl\n\n# Reverse Routing\n@docs matcherToPath\n\n# Change query string\n@docs addQuery, setQuery, removeQuery, clearQuery\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "addQuery",
+            "comment": "\nAdd query string values (patches any existing values) to a location record.\n\n    addQuery query location\n\n    addQuery (Dict.Singleton \"b\" \"2\") { path = [], query = Dict.fromList [(\"a\", \"1\")] }\n\n    ==\n\n    { path = [], query = Dict.fromList [(\"a\", \"1\"), (\"b\", \"2\")] }\n\n- query is a dictionary with keys to add\n- location is a record representing the current location\n\nTo remove a value set the value to \"\"\n",
+            "type": "Hop.Types.Query -> Hop.Types.Location -> Hop.Types.Location"
+          },
+          {
+            "name": "clearQuery",
+            "comment": " Clear all query string values\n\n    clearQuery location\n",
+            "type": "Hop.Types.Location -> Hop.Types.Location"
+          },
+          {
+            "name": "makeUrl",
+            "comment": "\nMake a URL from a string, this will add # or the base path as necessary.\n\n    makeUrl config \"/users\"\n\n    ==\n\n    \"#/users\"\n",
+            "type": "Hop.Types.Config route -> String -> String"
+          },
+          {
+            "name": "makeUrlFromLocation",
+            "comment": "\nMake a URL from a location record.\n\n    makeUrlFromLocation config { path = [\"users\", \"1\"], query = Dict.empty }\n\n    ==\n\n    \"#/users/1\"\n\n",
+            "type": "Hop.Types.Config route -> Hop.Types.Location -> String"
+          },
+          {
+            "name": "matchUrl",
+            "comment": "\nMatch a URL.\nThis function returns a tuple with the first element being the matched route and the second a location record.\nConfig is the router Config record.\n\n    matchUrl config \"/users/1\"\n\n    ==\n\n    (User 1, { path = [\"users\", \"1\"], query = Dict.fromList [] })\n\n",
+            "type": "Hop.Types.Config route -> String -> ( route, Hop.Types.Location )"
+          },
+          {
+            "name": "matcherToPath",
+            "comment": "\nGenerates a path from a matcher. Use this for reverse routing.\n\nThe last parameters is a list of strings. You need to pass one string for each dynamic parameter that this route takes.\n\n    matcherToPath bookReviewMatcher [\"1\", \"2\"]\n\n    ==\n\n    \"/books/1/reviews/2\"\n",
+            "type": "Hop.Types.PathMatcher a -> List String -> String"
+          },
+          {
+            "name": "removeQuery",
+            "comment": "\nRemove one key from the query string\n\n    removeQuery key location\n",
+            "type": "String -> Hop.Types.Location -> Hop.Types.Location"
+          },
+          {
+            "name": "setQuery",
+            "comment": "\nSet query string values (removes existing values).\n\n    setQuery query location\n",
+            "type": "Hop.Types.Query -> Hop.Types.Location -> Hop.Types.Location"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Hop.Matchers",
+        "comment": "\nFunctions for building matchers\n\n# Building matchers\n@docs match1, match2, match3, match4, nested1, nested2, int, str\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "int",
+            "comment": " Parameter matcher that matches an integer\n\n    match2 User \"/users/\" int\n",
+            "type": "Combine.Parser Int"
+          },
+          {
+            "name": "match1",
+            "comment": "\nCreate a matcher with one static segment.\n\n    type Route = Books\n\n    match1 Books \"/books\"\n\nThis will match exactly\n\n    \"/books\"\n",
+            "type": "route -> String -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "match2",
+            "comment": "\nCreate a matcher with one static segment and one dynamic parameter.\n\n    type Route = Book Str\n\n    match2 Book \"/books/\" str\n\nThis will match a path like\n\n    \"/books/abc\"\n",
+            "type": "(param1 -> route) -> String -> Combine.Parser param1 -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "match3",
+            "comment": " Create a matcher with three segments.\n\n    type Route = BookReviews Int\n\n    match3 BookReviews \"/books/\" int \"/reviews\"\n\nThis will match a path like\n\n    \"/books/1/reviews\"\n",
+            "type": "(param1 -> route) -> String -> Combine.Parser param1 -> String -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "match4",
+            "comment": " Create a matcher with four segments.\n\n    type Route = BookChapter Int String\n\n    match4 BookChapter \"/books/\" int \"/chapters/\" str\n\nThis will match a path like\n\n    \"/books/1/chapters/abc\"\n\n",
+            "type": "(param1 -> param2 -> route) -> String -> Combine.Parser param1 -> String -> Combine.Parser param2 -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "nested1",
+            "comment": " Create a matcher with two segments and nested routes\n\n    type CategoriesRoute = Games | Business | Product Int\n    type Route = ShopCategories CategoriesRoute\n\n    nested1 ShopCategories \"/shop\" categoriesRoutes\n\nThis could match paths like (depending on the nested routes)\n\n    \"/shop/games\"\n    \"/shop/business\"\n    \"/shop/product/1\"\n\n",
+            "type": "(subRoute -> route) -> String -> List (Hop.Types.PathMatcher subRoute) -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "nested2",
+            "comment": " Create a matcher with two segments and nested routes\n\n    type ReviewsRoutes = Reviews | Review Int\n    type Route = BookReviews ReviewsRoutes\n\n    nested2 BookReviews \"/books/\" int reviewsRoutes\n\nThis could match paths like (depending on the nested routes)\n\n    \"/books/1/reviews\"\n    \"/books/1/reviews/3\"\n\n",
+            "type": "(param1 -> subRoute -> route) -> String -> Combine.Parser param1 -> List (Hop.Types.PathMatcher subRoute) -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "str",
+            "comment": " Parameter matcher that matches a string, except /\n\n    match2 Token \"/token/\" str\n",
+            "type": "Combine.Parser String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Hop.Types",
+        "comment": "\n\n# Types\n@docs Config, Router, PathMatcher, Query, Location\n\n# Create\n@docs newLocation, newQuery\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Configuration input for Hop.new\n\n- basePath: Only for pushState routing (not hash). e.g. \"/app\". All routing and matching is done after this basepath.\n- hash: True for hash routing, False for pushState routing.\n- matchers: A List of route matchers.\n- notFound: Route that will match when a location is not found.\n\n",
+            "args": [
+              "route"
+            ],
+            "type": "{ basePath : String , hash : Bool , matchers : List (Hop.Types.PathMatcher route) , notFound : route }"
+          },
+          {
+            "name": "Location",
+            "comment": " A Record that represents the current location\nIncludes a `path` and a `query`\n\n    {\n      path: String,\n      query: Query\n    }\n",
+            "args": [],
+            "type": "{ path : List String, query : Hop.Types.Query }"
+          },
+          {
+            "name": "PathMatcher",
+            "comment": " A path matcher\n",
+            "args": [
+              "action"
+            ],
+            "type": "{ parser : Combine.Parser action, segments : List String }"
+          },
+          {
+            "name": "Query",
+            "comment": " A Dict that holds query parameters\n\n    Dict.Dict String String\n",
+            "args": [],
+            "type": "Dict.Dict String String"
+          },
+          {
+            "name": "Router",
+            "comment": " Router record created by Hop.new\n",
+            "args": [],
+            "type": "{ run : Task.Task () () }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "newLocation",
+            "comment": "\nCreate a empty Location record\n",
+            "type": "Hop.Types.Location"
+          },
+          {
+            "name": "newQuery",
+            "comment": "\nCreate an empty Query record\n",
+            "type": "Hop.Types.Query"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "stil4m/elm-aui-css",
     "version": "2.0.0",
     "docs": [
@@ -38805,11 +39016,11 @@
   },
   {
     "name": "szabba/elm-animations",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Animation",
-        "comment": "\n\n@docs Animation, State\n\n# Running\n@docs run, runState, isDone\n\n# Sampling and querying\n@docs sample, sampleState\n\n# Building\n@docs interval, map, immediately, append\n\n",
+        "comment": "\n\n@docs Animation\n\n# Running\n@docs State, run, runState, isDone\n\n# Sampling and querying\n@docs sample, sampleState\n\n# Building\n@docs interval, map, immediately, append\n\n",
         "aliases": [],
         "types": [
           {
@@ -39289,6 +39500,116 @@
             "name": "encode",
             "comment": " base64 encodes an ascii string. If the input is not valid returns a Result.Err,\notherwise a Result.Ok String\n    encode(\"Elm is Cool\") == Result.Ok \"RWxtIGlzIENvb2w=\"\n",
             "type": "String -> Result.Result String String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "truqu/elm-dictset",
+    "version": "1.0.4",
+    "docs": [
+      {
+        "name": "DictSet",
+        "comment": " A set of unique values. The values can be any type, and the comparison is\ndone using a function `compare : value -> comparable`.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Sets\n@docs DictSet\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
+        "aliases": [
+          {
+            "name": "DictSet",
+            "comment": " Represents a set of unique values together with the compare function\n",
+            "args": [
+              "comparable",
+              "a"
+            ],
+            "type": "DictSet.Internal.DictSet comparable a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Get the difference between the first set and the second. Keeps values that do not appear in the second set.\n",
+            "type": "DictSet.DictSet comparable a -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty set\n",
+            "type": "(a -> comparable) -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "filter",
+            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
+            "type": "(a -> Bool) -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the values in a set, in order from lowest to highest.\n",
+            "type": "(a -> b -> b) -> b -> DictSet.DictSet comparable a -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the values in a set, in order from highest to lowest.\n",
+            "type": "(a -> b -> b) -> b -> DictSet.DictSet comparable a -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list into a set, removing any duplicates.\n",
+            "type": "(a -> comparable) -> List a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a new value into a set\n",
+            "type": "a -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "intersect",
+            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\n",
+            "type": "DictSet.DictSet comparable a -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a set is empty\n",
+            "type": "DictSet.DictSet comparable a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function onto a set, creating a new set with no duplicates.\n",
+            "type": "(b -> comparable) -> (a -> b) -> DictSet.DictSet comparable a -> DictSet.DictSet comparable b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a value is in a set\n",
+            "type": "a -> DictSet.DictSet comparable a -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Create two new sets; the first consisting of elements which satisfy a\n",
+            "type": "(a -> Bool) -> DictSet.DictSet comparable a -> ( DictSet.DictSet comparable a, DictSet.DictSet comparable a )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a value from a set\n",
+            "type": "a -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a set with one value\n",
+            "type": "(a -> comparable) -> a -> DictSet.DictSet comparable a"
+          },
+          {
+            "name": "size",
+            "comment": " Determine the number of elements in a set\n",
+            "type": "DictSet.DictSet comparable a -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into a list.\n",
+            "type": "DictSet.DictSet comparable a -> List a"
+          },
+          {
+            "name": "union",
+            "comment": " Get the union of two sets. Keep all values.\n",
+            "type": "DictSet.DictSet comparable a -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
