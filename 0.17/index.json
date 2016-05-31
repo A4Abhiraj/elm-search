@@ -787,6 +787,35 @@
     ]
   },
   {
+    "name": "Fresheyeball/elm-guards",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Guards",
+        "comment": "\n\nBasically under the covers, this is just more interesting tuple properties.\n\n@docs (|=), (=>)\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "=>",
+            "comment": " infix for expression ",
+            "type": "Bool -> a -> ( Bool, a )",
+            "associativity": "right",
+            "precedence": 3
+          },
+          {
+            "name": "|=",
+            "comment": " infix for new line ",
+            "type": "( Bool, a ) -> a -> a",
+            "associativity": "right",
+            "precedence": 0
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "Fresheyeball/elm-nearly-eq",
     "version": "1.1.0",
     "docs": [
@@ -1047,11 +1076,11 @@
   },
   {
     "name": "Fresheyeball/elm-tuple-extra",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Tuple2",
-        "comment": "\n\n# Map\n@docs map, mapFst, mapSnd, mapEach, mapBoth\n\n# Swap\n@docs swap\n\n# Transform\n@docs toList\n\n",
+        "comment": "\n\n# Map\n@docs map, mapFst, mapSnd, mapEach, mapBoth\n\n# Swap\n@docs swap\n\n# Sorting\n@docs sort, sortBy, sortWith\n\n# Transform\n@docs toList\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -1081,6 +1110,21 @@
             "type": "(b -> x) -> ( a, b ) -> ( a, x )"
           },
           {
+            "name": "sort",
+            "comment": " ",
+            "type": "( comparable, comparable ) -> ( comparable, comparable )"
+          },
+          {
+            "name": "sortBy",
+            "comment": " ",
+            "type": "(a -> comparable) -> ( a, a ) -> ( a, a )"
+          },
+          {
+            "name": "sortWith",
+            "comment": " ",
+            "type": "(a -> a -> Basics.Order) -> ( a, a ) -> ( a, a )"
+          },
+          {
             "name": "swap",
             "comment": " ",
             "type": "( a, b ) -> ( b, a )"
@@ -1095,7 +1139,7 @@
       },
       {
         "name": "Tuple3",
-        "comment": "\n# Getters\n@docs fst, snd, trd, tail, init\n\n# Maps\n@docs map, mapFst, mapSnd, mapTrd, mapEach, mapAll\n\n# Swap\n@docs swirlr, swirll\n\n# Transform\n@docs toList\n",
+        "comment": "\n# Getters\n@docs fst, snd, trd, tail, init\n\n# Maps\n@docs map, mapFst, mapSnd, mapTrd, mapEach, mapAll\n\n# Swap\n@docs swirlr, swirll\n\n# Sorting\n@docs sort, sortBy, sortWith\n\n# Transform\n@docs toList\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -1143,6 +1187,21 @@
             "name": "snd",
             "comment": " ",
             "type": "( a, b, c ) -> b"
+          },
+          {
+            "name": "sort",
+            "comment": " ",
+            "type": "( comparable, comparable, comparable ) -> ( comparable, comparable, comparable )"
+          },
+          {
+            "name": "sortBy",
+            "comment": " ",
+            "type": "(a -> comparable) -> ( a, a, a ) -> ( a, a, a )"
+          },
+          {
+            "name": "sortWith",
+            "comment": " ",
+            "type": "(a -> a -> Basics.Order) -> ( a, a, a ) -> ( a, a, a )"
           },
           {
             "name": "swirll",
@@ -1854,6 +1913,261 @@
             "name": "toIntHex",
             "comment": " Convert Hex to IntCubeHex coordinate systems \n\n    toIntHex (FloatCubeHex (2.5, 3.5, -6.0)) === IntCubeHex (2, 4, -6)\n",
             "type": "Hexagons.Hex.Hex -> Hexagons.Hex.Hex"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "abadi199/elm-creditcard",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "CreditCard.View",
+        "comment": " View related functions\n\n# Form View\n@docs form\n\n# Individual Fields View\n@docs numberInput, nameInput, monthInput, yearInput, ccvInput\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "ccvInput",
+            "comment": " A view function that will render the input field for credit card CCV/CVC number.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum length of 4.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.ccvInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
+            "name": "form",
+            "comment": " A view function that will render the whole form fields including the card.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.form model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
+            "name": "monthInput",
+            "comment": " A view function that will render the input field for credit card expiration month.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum value of 12.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.monthInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
+            "name": "nameInput",
+            "comment": " A view function that will render the input field for full name.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.nameInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "String -> List (Html.Attribute CreditCard.Components.StringInput.Msg) -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
+            "name": "numberInput",
+            "comment": " A view function that will render the input field for credit card number.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.numberInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
+            "name": "yearInput",
+            "comment": " A view function that will render the input field for credit card expiration year.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.yearInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "CreditCard.Components.Card",
+        "comment": " Card component that will renders the credit card information such as the number, full name, expiration month/year, ccv, and the card logo.\nThis component also provide a card flipping animation for flipping back and forth between the front and back side of the card when displaying CCV number.\nSome type of card has CCV printed on the front side of the card, in this case, the flipping animation will not be performed.\n\n# View\n@docs cardView\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "cardView",
+            "comment": " A view function that will render the credit card.\n\nTo use this view, just include this function as part of your view function. This will render the card as svg element.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.Components.Card.cardView model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "CreditCard.Update",
+        "comment": " Update functions and Msg.\n\n# Message\n@docs Msg\n\n# Update functions\n@docs update\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " A union type representing The Elm Architect's `Msg`\n",
+            "args": [],
+            "cases": [
+              [
+                "NoOp",
+                []
+              ],
+              [
+                "UpdateNumber",
+                [
+                  "CreditCard.Components.NumberInput.Msg"
+                ]
+              ],
+              [
+                "UpdateName",
+                [
+                  "CreditCard.Components.StringInput.Msg"
+                ]
+              ],
+              [
+                "UpdateExpirationMonth",
+                [
+                  "CreditCard.Components.NumberInput.Msg"
+                ]
+              ],
+              [
+                "UpdateExpirationYear",
+                [
+                  "CreditCard.Components.NumberInput.Msg"
+                ]
+              ],
+              [
+                "UpdateCCV",
+                [
+                  "CreditCard.Components.NumberInput.Msg"
+                ]
+              ],
+              [
+                "Flip",
+                [
+                  "Bool"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "update",
+            "comment": " The Elm Architect's update function.\n",
+            "type": "CreditCard.Update.Msg -> CreditCard.Model.Model CreditCard.Update.Msg -> ( CreditCard.Model.Model CreditCard.Update.Msg , Platform.Cmd.Cmd CreditCard.Update.Msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "CreditCard.Model",
+        "comment": " Model types and all related helper functions\n\n# Model\n@docs Model, Field, Styles,  CardInfo,  CardType\n\n# Styling and Formatting\n@docs Options, CardStyle, CCVPosition, NumberFormat\n\n# Helper Functions\n@docs init\n",
+        "aliases": [
+          {
+            "name": "CardInfo",
+            "comment": " A type representing the card information.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ cardType : CreditCard.Model.CardType , validLength : List Int , numberFormat : CreditCard.Model.NumberFormat , cardStyle : CreditCard.Model.CardStyle msg , ccvPosition : CreditCard.Model.CCVPosition }"
+          },
+          {
+            "name": "CardStyle",
+            "comment": " A type representing the card style.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ background : { attributes : List (Svg.Attribute msg) , svg : List (Svg.Svg msg) , defs : List (Svg.Svg msg) } , textColor : String , lightTextColor : String , darkTextColor : String }"
+          },
+          {
+            "name": "Field",
+            "comment": " A type representing an input field with specific type.\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ id : String , label : Maybe.Maybe String , value : Maybe.Maybe a , hasFocus : Bool }"
+          },
+          {
+            "name": "Model",
+            "comment": " A type representing the Credit Card model.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ options : CreditCard.Model.Options , number : CreditCard.Model.Field Int , name : CreditCard.Model.Field String , expirationMonth : CreditCard.Model.Field Int , expirationYear : CreditCard.Model.Field Int , ccv : CreditCard.Model.Field Int , cardInfo : Maybe.Maybe (CreditCard.Model.CardInfo msg) , flipped : Maybe.Maybe Bool }"
+          },
+          {
+            "name": "NumberFormat",
+            "comment": " A type representing the format of the number by specifying the size of each group.\ne.g: `[4, 4, 5]` will format the number to be XXXX XXXX XXXXX\n",
+            "args": [],
+            "type": "List Int"
+          },
+          {
+            "name": "Options",
+            "comment": " A type representing the configurable options for the form.\n",
+            "args": [],
+            "type": "{ showLabel : Bool, blankChar : Char }"
+          },
+          {
+            "name": "Styles",
+            "comment": " A type representing the form style.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ cardStyle : CreditCard.Model.CardStyle msg }"
+          }
+        ],
+        "types": [
+          {
+            "name": "CCVPosition",
+            "comment": " A union type representing the position of the CCV\n",
+            "args": [],
+            "cases": [
+              [
+                "Front",
+                []
+              ],
+              [
+                "Back",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "CardType",
+            "comment": " A union type representing the credit card type.\n",
+            "args": [],
+            "cases": [
+              [
+                "Unknown",
+                []
+              ],
+              [
+                "Visa",
+                []
+              ],
+              [
+                "Mastercard",
+                []
+              ],
+              [
+                "Amex",
+                []
+              ],
+              [
+                "Discover",
+                []
+              ],
+              [
+                "DinersClubCarteBlanche",
+                []
+              ],
+              [
+                "DinersClubInternational",
+                []
+              ],
+              [
+                "JCB",
+                []
+              ],
+              [
+                "Laser",
+                []
+              ],
+              [
+                "Maestro",
+                []
+              ],
+              [
+                "VisaElectron",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " init function\n",
+            "type": "CreditCard.Model.Model msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -11450,7 +11764,7 @@
   },
   {
     "name": "elm-community/elm-random-extra",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Random.String",
@@ -11502,6 +11816,45 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Random.Set",
+        "comment": " List of Random Set Generators\n\n# Generators\n@docs empty, singleton, set, notInSet\n\n# Combinators\n@docs select, selectWithDefault\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Generator that always returns the empty set\n",
+            "type": "Random.Generator (Set.Set comparable)"
+          },
+          {
+            "name": "notInSet",
+            "comment": " Filter a generator of all values not in a given set.\n",
+            "type": "Set.Set comparable -> Random.Generator comparable -> Random.Generator comparable"
+          },
+          {
+            "name": "select",
+            "comment": " Select a value from a set uniformly at random, or `Nothing` for an empty set.\nAnalogous to `Random.Extra.select` but with sets.\n",
+            "type": "Set.Set comparable -> Random.Generator (Maybe.Maybe comparable)"
+          },
+          {
+            "name": "selectWithDefault",
+            "comment": " Select a value from a set uniformly at random, with a default.\nAnalogous to `Random.Extra.selectWithDefault` but with sets.\n",
+            "type": "comparable -> Set.Set comparable -> Random.Generator comparable"
+          },
+          {
+            "name": "set",
+            "comment": " Generate a set of at most the given size from a generator.\n\nThe size of a generated set is limited both by the integer provided and the\nnumber of unique values the generator can produce. It is very likely, but not\nguaranteed, that generated sets will be as big as the smaller of these two limits.\n",
+            "type": "Int -> Random.Generator comparable -> Random.Generator (Set.Set comparable)"
+          },
+          {
+            "name": "singleton",
+            "comment": " Generator that creates a singleton set from a generator\n",
+            "type": "Random.Generator comparable -> Random.Generator (Set.Set comparable)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Random.Maybe",
         "comment": " List of Maybe Generators\n\n# Generators\n@docs maybe, withDefault, withDefaultGenerator\n\n",
         "aliases": [],
@@ -11521,6 +11874,63 @@
             "name": "withDefaultGenerator",
             "comment": " Generate values from a maybe generator or a default generator.\n",
             "type": "Random.Generator a -> Random.Generator (Maybe.Maybe a) -> Random.Generator a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.List",
+        "comment": " List of List Generators\n\n# Generators\n@docs emptyList, rangeLengthList\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "emptyList",
+            "comment": " Generator that always returns the empty list.\n",
+            "type": "Random.Generator (List a)"
+          },
+          {
+            "name": "rangeLengthList",
+            "comment": " Generate a random list of random length given a minimum length and\na maximum length.\n",
+            "type": "Int -> Int -> Random.Generator a -> Random.Generator (List a)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Order",
+        "comment": " List of Order Generators\n\n# Generators\n@docs order\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "order",
+            "comment": " Generate a random order with equal probability.\n",
+            "type": "Random.Generator Basics.Order"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Result",
+        "comment": " List of Result Generators\n\n# Generators\n@docs ok, error, result\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "error",
+            "comment": " Generate an error result from a random generator of errors\n",
+            "type": "Random.Generator error -> Random.Generator (Result.Result error value)"
+          },
+          {
+            "name": "ok",
+            "comment": " Generate an ok result from a random generator of values\n",
+            "type": "Random.Generator value -> Random.Generator (Result.Result error value)"
+          },
+          {
+            "name": "result",
+            "comment": " Generate an ok result or an error result with 50-50 chance\n\nThis is simply implemented as follows:\n\n    result errorGenerator okGenerator =\n      frequency\n        [ (1, error errorGenerator)\n        , (1, ok okGenerator)\n        ] (ok okGenerator)\n\nIf you want to generate results with a different frequency, tweak those\nnumbers to your bidding in your own custom generators.\n",
+            "type": "Random.Generator error -> Random.Generator value -> Random.Generator (Result.Result error value)"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -12670,44 +13080,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Random.Result",
-        "comment": " List of Result Generators\n\n# Generators\n@docs ok, error, result\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "error",
-            "comment": " Generate an error result from a random generator of errors\n",
-            "type": "Random.Generator error -> Random.Generator (Result.Result error value)"
-          },
-          {
-            "name": "ok",
-            "comment": " Generate an ok result from a random generator of values\n",
-            "type": "Random.Generator value -> Random.Generator (Result.Result error value)"
-          },
-          {
-            "name": "result",
-            "comment": " Generate an ok result or an error result with 50-50 chance\n\nThis is simply implemented as follows:\n\n    result errorGenerator okGenerator =\n      frequency\n        [ (1, error errorGenerator)\n        , (1, ok okGenerator)\n        ] (ok okGenerator)\n\nIf you want to generate results with a different frequency, tweak those\nnumbers to your bidding in your own custom generators.\n",
-            "type": "Random.Generator error -> Random.Generator value -> Random.Generator (Result.Result error value)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random.Order",
-        "comment": " List of Order Generators\n\n# Generators\n@docs order\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "order",
-            "comment": " Generate a random order with equal probability.\n",
-            "type": "Random.Generator Basics.Order"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Random.Array",
         "comment": " List of Array Generators\n\n# Generate an Array\n@docs array, emptyArray, rangeLengthArray\n\n# Random Operations on an Array\n@docs sample, choose, shuffle\n\n",
         "aliases": [],
@@ -12742,69 +13114,6 @@
             "name": "shuffle",
             "comment": " Shuffle the array using the Fisher-Yates algorithm. Takes O(_n_ log _n_)\ntime and O(_n_) additional space.\n",
             "type": "Array.Array a -> Random.Generator (Array.Array a)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random.Set",
-        "comment": " List of Random Set Generators\n\n# Generators\n@docs empty, singleton, set, notInSet\n\n# Combinators\n@docs select, selectWithDefault\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "empty",
-            "comment": " Generator that always returns the empty set\n",
-            "type": "Random.Generator (Set.Set comparable)"
-          },
-          {
-            "name": "notInSet",
-            "comment": " Filter a generator of all values not in a given set.\n",
-            "type": "Set.Set comparable -> Random.Generator comparable -> Random.Generator comparable"
-          },
-          {
-            "name": "select",
-            "comment": " Select a value from a set uniformly at random, or `Nothing` for an empty set.\nAnalogous to `Random.Extra.select` but with sets.\n",
-            "type": "Set.Set comparable -> Random.Generator (Maybe.Maybe comparable)"
-          },
-          {
-            "name": "selectWithDefault",
-            "comment": " Select a value from a set uniformly at random, with a default.\nAnalogous to `Random.Extra.selectWithDefault` but with sets.\n",
-            "type": "comparable -> Set.Set comparable -> Random.Generator comparable"
-          },
-          {
-            "name": "set",
-            "comment": " Generate a set of at most the given size from a generator.\n\nThe size of a generated set is limited both by the integer provided and the\nnumber of unique values the generator can produce. It is very likely, but not\nguaranteed, that generated sets will be as big as the smaller of these two limits.\n",
-            "type": "Int -> Random.Generator comparable -> Random.Generator (Set.Set comparable)"
-          },
-          {
-            "name": "singleton",
-            "comment": " Generator that creates a singleton set from a generator\n",
-            "type": "Random.Generator comparable -> Random.Generator (Set.Set comparable)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random.Dict",
-        "comment": " List of Dict Generators\n\n# Generators\n@docs dict, emptyDict, rangeLengthDict\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dict",
-            "comment": " Generate a random dict with given length, key generator, and value generator\n\n    randomLength10StringIntDict = dict 10 (englishWord 10) (int 0 100)\n",
-            "type": "Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
-          },
-          {
-            "name": "emptyDict",
-            "comment": " Generator that always generates the empty dict\n",
-            "type": "Random.Generator (Dict.Dict comparable value)"
-          },
-          {
-            "name": "rangeLengthDict",
-            "comment": " Generate a random dict of random length given a minimum length and\na maximum length.\n",
-            "type": "Int -> Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -12864,20 +13173,123 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Random.List",
-        "comment": " List of List Generators\n\n# Generators\n@docs emptyList, rangeLengthList\n\n",
+        "name": "Random.Dict",
+        "comment": " List of Dict Generators\n\n# Generators\n@docs dict, emptyDict, rangeLengthDict\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "emptyList",
-            "comment": " Generator that always returns the empty list.\n",
-            "type": "Random.Generator (List a)"
+            "name": "dict",
+            "comment": " Generate a random dict with given length, key generator, and value generator\n\n    randomLength10StringIntDict = dict 10 (englishWord 10) (int 0 100)\n",
+            "type": "Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
           },
           {
-            "name": "rangeLengthList",
-            "comment": " Generate a random list of random length given a minimum length and\na maximum length.\n",
-            "type": "Int -> Int -> Random.Generator a -> Random.Generator (List a)"
+            "name": "emptyDict",
+            "comment": " Generator that always generates the empty dict\n",
+            "type": "Random.Generator (Dict.Dict comparable value)"
+          },
+          {
+            "name": "rangeLengthDict",
+            "comment": " Generate a random dict of random length given a minimum length and\na maximum length.\n",
+            "type": "Int -> Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Int",
+        "comment": " List of Int Generators\n\n# Generators\n@docs anyInt, positiveInt, negativeInt, intGreaterThan, intLessThan\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "anyInt",
+            "comment": " Generator that generates any int that can be generate by the\nrandom generator algorithm.\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "intGreaterThan",
+            "comment": " Generator that generates an int greater than a given int\n",
+            "type": "Int -> Random.Generator Int"
+          },
+          {
+            "name": "intLessThan",
+            "comment": " Generator that generates an int less than a given int\n",
+            "type": "Int -> Random.Generator Int"
+          },
+          {
+            "name": "negativeInt",
+            "comment": " Generator that generates a negative int\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "positiveInt",
+            "comment": " Generator that generates a positive int\n",
+            "type": "Random.Generator Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Float",
+        "comment": " List of Float Generators\n\n# Generators\n@docs anyFloat, positiveFloat, negativeFloat, floatGreaterThan, floatLessThan, probability, negativeProbability, unitRange\n\n# Gaussian Generators\n@docs normal, standardNormal, gaussian\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "anyFloat",
+            "comment": " Generator that generates any float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "floatGreaterThan",
+            "comment": " Generator that generates a float greater than a given float\n",
+            "type": "Float -> Random.Generator Float"
+          },
+          {
+            "name": "floatLessThan",
+            "comment": " Generator that generates a float less than a given float\n",
+            "type": "Float -> Random.Generator Float"
+          },
+          {
+            "name": "gaussian",
+            "comment": " Alias for `normal`.\n",
+            "type": "Float -> Float -> Float -> Random.Generator Float"
+          },
+          {
+            "name": "negativeFloat",
+            "comment": " Generator that generates any negative float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "negativeProbability",
+            "comment": " Generator that generates a float between -1 and 0\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "normal",
+            "comment": " Create a generator of floats that is normally distributed with\ngiven minimum, maximum, and standard deviation.\n",
+            "type": "Float -> Float -> Float -> Random.Generator Float"
+          },
+          {
+            "name": "positiveFloat",
+            "comment": " Generator that generates any positive float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "probability",
+            "comment": " Generator that generates a float between 0 and 1\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "standardNormal",
+            "comment": " Generator that follows a standard normal distribution (as opposed to\na uniform distribution)\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "unitRange",
+            "comment": " Generator that generates a float between - 1 and 1\n",
+            "type": "Random.Generator Float"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -13096,104 +13508,6 @@
             "name": "rgba",
             "comment": " Generate a random transparent color by random RGBA values.\n",
             "type": "Random.Generator Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random.Float",
-        "comment": " List of Float Generators\n\n# Generators\n@docs anyFloat, positiveFloat, negativeFloat, floatGreaterThan, floatLessThan, probability, negativeProbability, unitRange\n\n# Gaussian Generators\n@docs normal, standardNormal, gaussian\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "anyFloat",
-            "comment": " Generator that generates any float\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "floatGreaterThan",
-            "comment": " Generator that generates a float greater than a given float\n",
-            "type": "Float -> Random.Generator Float"
-          },
-          {
-            "name": "floatLessThan",
-            "comment": " Generator that generates a float less than a given float\n",
-            "type": "Float -> Random.Generator Float"
-          },
-          {
-            "name": "gaussian",
-            "comment": " Alias for `normal`.\n",
-            "type": "Float -> Float -> Float -> Random.Generator Float"
-          },
-          {
-            "name": "negativeFloat",
-            "comment": " Generator that generates any negative float\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "negativeProbability",
-            "comment": " Generator that generates a float between -1 and 0\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "normal",
-            "comment": " Create a generator of floats that is normally distributed with\ngiven minimum, maximum, and standard deviation.\n",
-            "type": "Float -> Float -> Float -> Random.Generator Float"
-          },
-          {
-            "name": "positiveFloat",
-            "comment": " Generator that generates any positive float\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "probability",
-            "comment": " Generator that generates a float between 0 and 1\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "standardNormal",
-            "comment": " Generator that follows a standard normal distribution (as opposed to\na uniform distribution)\n",
-            "type": "Random.Generator Float"
-          },
-          {
-            "name": "unitRange",
-            "comment": " Generator that generates a float between - 1 and 1\n",
-            "type": "Random.Generator Float"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random.Int",
-        "comment": " List of Int Generators\n\n# Generators\n@docs anyInt, positiveInt, negativeInt, intGreaterThan, intLessThan\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "anyInt",
-            "comment": " Generator that generates any int that can be generate by the\nrandom generator algorithm.\n",
-            "type": "Random.Generator Int"
-          },
-          {
-            "name": "intGreaterThan",
-            "comment": " Generator that generates an int greater than a given int\n",
-            "type": "Int -> Random.Generator Int"
-          },
-          {
-            "name": "intLessThan",
-            "comment": " Generator that generates an int less than a given int\n",
-            "type": "Int -> Random.Generator Int"
-          },
-          {
-            "name": "negativeInt",
-            "comment": " Generator that generates a negative int\n",
-            "type": "Random.Generator Int"
-          },
-          {
-            "name": "positiveInt",
-            "comment": " Generator that generates a positive int\n",
-            "type": "Random.Generator Int"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -14440,6 +14754,1556 @@
             "name": "traverseArray",
             "comment": " ",
             "type": "(a -> Maybe.Maybe b) -> Array.Array a -> Maybe.Maybe (Array.Array b)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "elm-community/random-extra",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Random.Order",
+        "comment": " An extra random generator for the `Order` type.\n\n@docs order\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "order",
+            "comment": " Generate a random order with equal probability.\n",
+            "type": "Random.Generator Basics.Order"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.String",
+        "comment": " Extra randomized functions on strings.\n\n# Create a String\n@docs string, rangeLengthString\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "rangeLengthString",
+            "comment": " Generates a random string of random length given the minimum length\nand maximum length and a given character generator.\n",
+            "type": "Int -> Int -> Random.Generator Char -> Random.Generator String"
+          },
+          {
+            "name": "string",
+            "comment": " Generate a random string of a given length with a given character generator\n\n    fiveLetterEnglishWord = string 5 Random.Char.english\n",
+            "type": "Int -> Random.Generator Char -> Random.Generator String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Array",
+        "comment": " Extra randomized functions on arrays.\n\n# Create an Array\n@docs array, rangeLengthArray\n\n# Work with an Array\n@docs sample, choose, shuffle\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "array",
+            "comment": " Generate a random array of given size given a random generator\n\n    randomLength5IntArray = array 5 (int 0 100)\n",
+            "type": "Int -> Random.Generator a -> Random.Generator (Array.Array a)"
+          },
+          {
+            "name": "choose",
+            "comment": " Sample without replacement: produce a randomly selected element of the\narray, and the array with that element omitted (shifting all later elements\ndown). If the array is empty, the selected element will be `Nothing`.\n",
+            "type": "Array.Array a -> Random.Generator ( Maybe.Maybe a, Array.Array a )"
+          },
+          {
+            "name": "rangeLengthArray",
+            "comment": " Generate a random array of random length given a minimum length and\na maximum length.\n",
+            "type": "Int -> Int -> Random.Generator a -> Random.Generator (Array.Array a)"
+          },
+          {
+            "name": "sample",
+            "comment": " Sample with replacement: produce a randomly selected element of the\narray, or `Nothing` for an empty array. Takes O(1) time.\n",
+            "type": "Array.Array a -> Random.Generator (Maybe.Maybe a)"
+          },
+          {
+            "name": "shuffle",
+            "comment": " Shuffle the array using the Fisher-Yates algorithm. Takes O(_n_ log _n_)\ntime and O(_n_) additional space.\n",
+            "type": "Array.Array a -> Random.Generator (Array.Array a)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Set",
+        "comment": " Extra randomized functions on sets.\n\n# Create a Set\n@docs set\n\n# Create a Generator\n@docs sample\n\n# Modify a Generator\n@docs notInSet\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "notInSet",
+            "comment": " Filter a generator of all values not in a given set.\n",
+            "type": "Set.Set comparable -> Random.Generator comparable -> Random.Generator comparable"
+          },
+          {
+            "name": "sample",
+            "comment": " Select a value from a set uniformly at random, or `Nothing` for an empty set.\nAnalogous to `Random.Extra.sample` but with sets.\n",
+            "type": "Set.Set comparable -> Random.Generator (Maybe.Maybe comparable)"
+          },
+          {
+            "name": "set",
+            "comment": " Generate a set of at most the given size from a generator.\n\nThe size of a generated set is limited both by the integer provided and the\nnumber of unique values the generator can produce. It is very likely, but not\nguaranteed, that generated sets will be as big as the smaller of these two limits.\n",
+            "type": "Int -> Random.Generator comparable -> Random.Generator (Set.Set comparable)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Date",
+        "comment": " Extra randomized functions on dates.\n\n# Generators\n@docs date, day, month, year, hour, hour24, hour12, minute, second\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "date",
+            "comment": " Generate a random date given a start date and an end date.\n",
+            "type": "Date.Date -> Date.Date -> Random.Generator Date.Date"
+          },
+          {
+            "name": "day",
+            "comment": " Generate a random day of the week.\n",
+            "type": "Random.Generator Date.Day"
+          },
+          {
+            "name": "hour",
+            "comment": " Generate a random hour (random int between 0 and 23 inclusive)\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "hour12",
+            "comment": " Generate a random 12-hour day hour (random int between 0 and 11 inclusive)\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "hour24",
+            "comment": " Generate a random 24-hour day hour (random int between 0 and 23 inclusive)\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "minute",
+            "comment": " Generate a random minute (random int between 0 and 59 inclusive)\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "month",
+            "comment": " Generate a random month of the year.\n",
+            "type": "Random.Generator Date.Month"
+          },
+          {
+            "name": "second",
+            "comment": " Generate a random second (random int between 0 and 59 inclusive)\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "year",
+            "comment": " Generate a random year given a start year and end year (alias for `int`)\n",
+            "type": "Int -> Int -> Random.Generator Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Dict",
+        "comment": " Extra randomized functions on dicts.\n\n# Generators\n@docs dict, rangeLengthDict\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dict",
+            "comment": " Generate a random dict with given length, key generator, and value generator\n\n    randomLength10StringIntDict = dict 10 (englishWord 10) (int 0 100)\n",
+            "type": "Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
+          },
+          {
+            "name": "rangeLengthDict",
+            "comment": " Generate a random dict of random length given a minimum length and\na maximum length.\n",
+            "type": "Int -> Int -> Random.Generator comparable -> Random.Generator value -> Random.Generator (Dict.Dict comparable value)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Char",
+        "comment": " Extra randomized functions on characters.\n\n# Basic Generators\n@docs char, lowerCaseLatin, upperCaseLatin, latin, english, ascii, unicode\n\n# Unicode Generators (UTF-8)\n@docs basicLatin, latin1Supplement, latinExtendedA, latinExtendedB, ipaExtensions, spacingModifier, combiningDiacriticalMarks, greekAndCoptic, cyrillic, cyrillicSupplement, armenian, hebrew, arabic, syriac, arabicSupplement, thaana, nko, samaritan, mandaic, arabicExtendedA, devanagari, bengali, gurmukhi, gujarati, oriya, tamil, telugu, kannada, malayalam, sinhala, thai, lao, tibetan, myanmar, georgian, hangulJamo, ethiopic, ethiopicSupplement, cherokee, unifiedCanadianAboriginalSyllabic, ogham, runic, tagalog, hanunoo, buhid, tagbanwa, khmer, mongolian, unifiedCanadianAboriginalSyllabicExtended, limbu, taiLe, newTaiLue, khmerSymbol, buginese, taiTham, balinese, sundanese, batak, lepcha, olChiki, sundaneseSupplement, vedicExtensions, phoneticExtensions, phoneticExtensionsSupplement, combiningDiacriticalMarksSupplement, latinExtendedAdditional, greekExtended, generalPunctuation, superscriptOrSubscript, currencySymbol, combiningDiacriticalMarksForSymbols, letterlikeSymbol, numberForm, arrow, mathematicalOperator, miscellaneousTechnical, controlPicture, opticalCharacterRecognition, enclosedAlphanumeric, boxDrawing, blockElement, geometricShape, miscellaneousSymbol, dingbat, miscellaneousMathematicalSymbolA, supplementalArrowA, braillePattern, supplementalArrowB, miscellaneousMathematicalSymbolB, supplementalMathematicalOperator, miscellaneousSymbolOrArrow, glagolitic, latinExtendedC, coptic, georgianSupplement, tifinagh, ethiopicExtended, cyrillicExtendedA, supplementalPunctuation, cjkRadicalSupplement, kangxiRadical, ideographicDescription, cjkSymbolOrPunctuation, hiragana, katakana, bopomofo, hangulCompatibilityJamo, kanbun, bopomofoExtended, cjkStroke, katakanaPhoneticExtension, enclosedCJKLetterOrMonth, cjkCompatibility, cjkUnifiedIdeographExtensionA, yijingHexagramSymbol, cjkUnifiedIdeograph, yiSyllable, yiRadical, lisu, vai, cyrillicExtendedB, bamum, modifierToneLetter, latinExtendedD, sylotiNagri, commonIndicNumberForm, phagsPa, saurashtra, devanagariExtended, kayahLi, rejang, hangulJamoExtendedA, javanese, cham, myanmarExtendedA, taiViet, meeteiMayekExtension, ethiopicExtendedA, meeteiMayek, hangulSyllable, hangulJamoExtendedB, highSurrogate, highPrivateUseSurrogate, lowSurrogate, privateUseArea, cjkCompatibilityIdeograph, alphabeticPresentationForm, arabicPresentationFormA, variationSelector, verticalForm, combiningHalfMark, cjkCompatibilityForm, smallFormVariant, arabicPresentationFormB, halfwidthOrFullwidthForm, special, linearBSyllable, linearBIdeogram, aegeanNumber, ancientGreekNumber, ancientSymbol, phaistosDisc, lycian, carian, oldItalic, gothic, ugaritic, oldPersian, deseret, shavian, osmanya, cypriotSyllable, imperialAramaic, phoenician, lydian, meroiticHieroglyph, meroiticCursive, kharoshthi, oldSouthArabian, avestan, inscriptionalParthian, inscriptionalPahlavi, oldTurkic, rumiNumericalSymbol, brahmi, kaithi, soraSompeng, chakma, sharada, takri, cuneiform, cuneiformNumberOrPunctuation, egyptianHieroglyph, bamumSupplement, miao, kanaSupplement, byzantineMusicalSymbol, musicalSymbol, ancientGreekMusicalNotationSymbol, taiXuanJingSymbol, countingRodNumeral, mathematicalAlphanumericSymbol, arabicMathematicalAlphabeticSymbol, mahjongTile, dominoTile, playingCard, enclosedAlphanumericSupplement, enclosedIdeographicSupplement, miscellaneousSymbolOrPictograph, emoticon, transportOrMapSymbol, alchemicalSymbol, cjkUnifiedIdeographExtensionB, cjkUnifiedIdeographExtensionC, cjkUnifiedIdeographExtensionD, cjkCompatibilityIdeographSupplement, tag, variationSelectorSupplement, supplementaryPrivateUseAreaA, supplementaryPrivateUseAreaB\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "aegeanNumber",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "alchemicalSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "alphabeticPresentationForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ancientGreekMusicalNotationSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ancientGreekNumber",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ancientSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabicExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabicMathematicalAlphabeticSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabicPresentationFormA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabicPresentationFormB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arabicSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "armenian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "arrow",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ascii",
+            "comment": " Generate a random ASCII Character\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "avestan",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "balinese",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "bamum",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "bamumSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "basicLatin",
+            "comment": " UTF-8\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "batak",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "bengali",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "blockElement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "bopomofo",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "bopomofoExtended",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "boxDrawing",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "brahmi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "braillePattern",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "buginese",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "buhid",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "byzantineMusicalSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "carian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "chakma",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cham",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "char",
+            "comment": " Generate a random character within a certain keyCode range\n\n    lowerCaseLetter = char 65 90\n",
+            "type": "Int -> Int -> Random.Generator Char"
+          },
+          {
+            "name": "cherokee",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkCompatibility",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkCompatibilityForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkCompatibilityIdeograph",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkCompatibilityIdeographSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkRadicalSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkStroke",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkSymbolOrPunctuation",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkUnifiedIdeograph",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkUnifiedIdeographExtensionA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkUnifiedIdeographExtensionB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkUnifiedIdeographExtensionC",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cjkUnifiedIdeographExtensionD",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "combiningDiacriticalMarks",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "combiningDiacriticalMarksForSymbols",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "combiningDiacriticalMarksSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "combiningHalfMark",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "commonIndicNumberForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "controlPicture",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "coptic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "countingRodNumeral",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cuneiform",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cuneiformNumberOrPunctuation",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "currencySymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cypriotSyllable",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cyrillic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cyrillicExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cyrillicExtendedB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "cyrillicSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "deseret",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "devanagari",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "devanagariExtended",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "dingbat",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "dominoTile",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "egyptianHieroglyph",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "emoticon",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "enclosedAlphanumeric",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "enclosedAlphanumericSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "enclosedCJKLetterOrMonth",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "enclosedIdeographicSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "english",
+            "comment": " Generate a random English Letter (alias for `latin`)\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ethiopic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ethiopicExtended",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ethiopicExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ethiopicSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "generalPunctuation",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "geometricShape",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "georgian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "georgianSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "glagolitic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "gothic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "greekAndCoptic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "greekExtended",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "gujarati",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "gurmukhi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "halfwidthOrFullwidthForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hangulCompatibilityJamo",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hangulJamo",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hangulJamoExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hangulJamoExtendedB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hangulSyllable",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hanunoo",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hebrew",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "highPrivateUseSurrogate",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "highSurrogate",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "hiragana",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ideographicDescription",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "imperialAramaic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "inscriptionalPahlavi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "inscriptionalParthian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ipaExtensions",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "javanese",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kaithi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kanaSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kanbun",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kangxiRadical",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kannada",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "katakana",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "katakanaPhoneticExtension",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kayahLi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "kharoshthi",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "khmer",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "khmerSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lao",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latin",
+            "comment": " Generate a random Latin Letter\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latin1Supplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latinExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latinExtendedAdditional",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latinExtendedB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latinExtendedC",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "latinExtendedD",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lepcha",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "letterlikeSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "limbu",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "linearBIdeogram",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "linearBSyllable",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lisu",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lowSurrogate",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lowerCaseLatin",
+            "comment": " Generate a random lower-case Latin Letter\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lycian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "lydian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "mahjongTile",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "malayalam",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "mandaic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "mathematicalAlphanumericSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "mathematicalOperator",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "meeteiMayek",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "meeteiMayekExtension",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "meroiticCursive",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "meroiticHieroglyph",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miao",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousMathematicalSymbolA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousMathematicalSymbolB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousSymbolOrArrow",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousSymbolOrPictograph",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "miscellaneousTechnical",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "modifierToneLetter",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "mongolian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "musicalSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "myanmar",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "myanmarExtendedA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "newTaiLue",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "nko",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "numberForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ogham",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "olChiki",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "oldItalic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "oldPersian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "oldSouthArabian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "oldTurkic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "opticalCharacterRecognition",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "oriya",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "osmanya",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "phagsPa",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "phaistosDisc",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "phoenician",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "phoneticExtensions",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "phoneticExtensionsSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "playingCard",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "privateUseArea",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "rejang",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "rumiNumericalSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "runic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "samaritan",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "saurashtra",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "sharada",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "shavian",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "sinhala",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "smallFormVariant",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "soraSompeng",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "spacingModifier",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "special",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "sundanese",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "sundaneseSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "superscriptOrSubscript",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementalArrowA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementalArrowB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementalMathematicalOperator",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementalPunctuation",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementaryPrivateUseAreaA",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "supplementaryPrivateUseAreaB",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "sylotiNagri",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "syriac",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tag",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tagalog",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tagbanwa",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "taiLe",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "taiTham",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "taiViet",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "taiXuanJingSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "takri",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tamil",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "telugu",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "thaana",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "thai",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tibetan",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "tifinagh",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "transportOrMapSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "ugaritic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "unicode",
+            "comment": " Generate a random Character in the valid unicode range.\nNote: This can produce garbage values as unicode doesn't use all valid values.\nTo test for specific languages and character sets, use the appropriate one\nfrom the list.\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "unifiedCanadianAboriginalSyllabic",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "unifiedCanadianAboriginalSyllabicExtended",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "upperCaseLatin",
+            "comment": " Generate a random upper-case Latin Letter\n",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "vai",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "variationSelector",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "variationSelectorSupplement",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "vedicExtensions",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "verticalForm",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "yiRadical",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "yiSyllable",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          },
+          {
+            "name": "yijingHexagramSymbol",
+            "comment": " ",
+            "type": "Random.Generator Char"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Int",
+        "comment": " Extra randomized functions on ints.\n\n# Generators\n@docs anyInt, positiveInt, negativeInt, intGreaterThan, intLessThan\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "anyInt",
+            "comment": " A generator that generates any int that can be generated by the\nrandom generator algorithm.\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "intGreaterThan",
+            "comment": " A generator that generates an int greater than a given int\n",
+            "type": "Int -> Random.Generator Int"
+          },
+          {
+            "name": "intLessThan",
+            "comment": " A generator that generates an int less than a given int\n",
+            "type": "Int -> Random.Generator Int"
+          },
+          {
+            "name": "negativeInt",
+            "comment": " A generator that generates a negative int\n",
+            "type": "Random.Generator Int"
+          },
+          {
+            "name": "positiveInt",
+            "comment": " A generator that generates a positive int\n",
+            "type": "Random.Generator Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Float",
+        "comment": " Extra randomized functions on floats.\n\n# Arithmetic Generators\n@docs anyFloat, positiveFloat, negativeFloat, floatGreaterThan, floatLessThan\n\n# Gaussian Generators\n@docs normal, standardNormal\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "anyFloat",
+            "comment": " A generator that generates any float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "floatGreaterThan",
+            "comment": " A generator that generates a float greater than a given float\n",
+            "type": "Float -> Random.Generator Float"
+          },
+          {
+            "name": "floatLessThan",
+            "comment": " A generator that generates a float less than a given float\n",
+            "type": "Float -> Random.Generator Float"
+          },
+          {
+            "name": "negativeFloat",
+            "comment": " A generator that generates any negative float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "normal",
+            "comment": " Create a generator of floats that is normally distributed with\ngiven minimum, maximum, and standard deviation.\n",
+            "type": "Float -> Float -> Float -> Random.Generator Float"
+          },
+          {
+            "name": "positiveFloat",
+            "comment": " A generator that generates any positive float\n",
+            "type": "Random.Generator Float"
+          },
+          {
+            "name": "standardNormal",
+            "comment": " A generator that follows a standard normal distribution (as opposed to\na uniform distribution)\n",
+            "type": "Random.Generator Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Extra",
+        "comment": " This module provides many common and general-purpose helper functions for\ncore's Random library. You can find even more useful functions for a particular\ntype in the other modules.\n\n# Constant Generators\n@docs constant\n\n# Maps\nFor `map` and `mapN` up through N=5, use the core library.\n@docs map6, andMap\n\n# New Generators\n@docs oneIn, maybe, result, choice\n\n# Working with Lists\n@docs choices, frequency, sample, together, rangeLengthList\n\n# Filtered Generators\n@docs filter\n\n# Flat Maps\nThese functions are like `mapN` except the function you pass in does not return\nan exact value, but instead another generator. That means you can take in several\nrandom arguments to drive more randomness.\n@docs flatMap, flatMap2, flatMap3, flatMap4, flatMap5, flatMap6\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "andMap",
+            "comment": " Map over any number of generators.\n\n    randomPerson : Generator Person\n    randomPerson =\n      person `map` genFirstName\n          `andMap` genLastName\n          `andMap` genBirthday\n          `andMap` genPhoneNumber\n          `andMap` genAddress\n          `andMap` genEmail\n",
+            "type": "Random.Generator (a -> b) -> Random.Generator a -> Random.Generator b"
+          },
+          {
+            "name": "choice",
+            "comment": " Choose between two values with equal probability.\n\n    type Flip = Heads | Tails\n\n    coinFlip : Generator Flip\n    coinFlip =\n      choice Heads Tails\n\nNote that this function takes values, not generators. That's because it's meant\nto be a lightweight helper for a specific use. If you need to choose between two\ngenerators, use `choices [gen1, gen2]`.\n",
+            "type": "a -> a -> Random.Generator a"
+          },
+          {
+            "name": "choices",
+            "comment": " Create a generator that chooses a generator from a list of generators\nwith equal probability.\n\n**Warning:** Do not pass an empty list or your program will crash! In practice\nthis is usually not a problem since you pass a list literal.\n",
+            "type": "List (Random.Generator a) -> Random.Generator a"
+          },
+          {
+            "name": "constant",
+            "comment": " Create a generator that always produces the value provided. This is useful\nwhen creating complicated chained generators and you need to handle a simple\ncase. It's also useful for the base case of recursive generators.\n",
+            "type": "a -> Random.Generator a"
+          },
+          {
+            "name": "filter",
+            "comment": " Filter a generator so that all generated values satisfy the given predicate.\n\n    evens : Generator Int\n    evens =\n      filter (\\i -> i % 2 == 0) (int minInt maxInt)\n\n**Warning:** If the predicate is unsatisfiable, the generator will not\nterminate, your application will crash with a stack overflow, and you will be\nsad. You should also avoid predicates that are merely very difficult to satisfy.\n\n    badCrashingGenerator =\n      filter (\\_ -> False) anotherGenerator\n\n    likelyCrashingGenerator =\n      filter (\\i -> i % 2000 == 0) (int minInt maxInt)\n",
+            "type": "(a -> Bool) -> Random.Generator a -> Random.Generator a"
+          },
+          {
+            "name": "flatMap",
+            "comment": " ",
+            "type": "(a -> Random.Generator b) -> Random.Generator a -> Random.Generator b"
+          },
+          {
+            "name": "flatMap2",
+            "comment": " ",
+            "type": "(a -> b -> Random.Generator c) -> Random.Generator a -> Random.Generator b -> Random.Generator c"
+          },
+          {
+            "name": "flatMap3",
+            "comment": " ",
+            "type": "(a -> b -> c -> Random.Generator d) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d"
+          },
+          {
+            "name": "flatMap4",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> Random.Generator e) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e"
+          },
+          {
+            "name": "flatMap5",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e -> Random.Generator f) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e -> Random.Generator f"
+          },
+          {
+            "name": "flatMap6",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e -> f -> Random.Generator g) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e -> Random.Generator f -> Random.Generator g"
+          },
+          {
+            "name": "frequency",
+            "comment": " Create a generator that chooses a generator from a list of generators\nbased on the provided weight. The likelihood of a given generator being\nchosen is its weight divided by the total weight (which doesn't have to equal 1).\n\n**Warning:** Do not pass an empty list or your program will crash! In practice\nthis is usually not a problem since you pass a list literal.\n",
+            "type": "List ( Float, Random.Generator a ) -> Random.Generator a"
+          },
+          {
+            "name": "map6",
+            "comment": " Map a function of six arguments over six generators.\n",
+            "type": "(a -> b -> c -> d -> e -> f -> g) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e -> Random.Generator f -> Random.Generator g"
+          },
+          {
+            "name": "maybe",
+            "comment": " Produce `Just` a value on `True`, and `Nothing` on `False`.\n\nYou can use `bool` or `oneIn n` for the first argument.\n",
+            "type": "Random.Generator Bool -> Random.Generator a -> Random.Generator (Maybe.Maybe a)"
+          },
+          {
+            "name": "oneIn",
+            "comment": " Produce `True` one-in-n times on average.\n\nDo not pass a value less then one to this function.\n\n    flippedHeads = oneIn 2\n    rolled6 = oneIn 6\n",
+            "type": "Int -> Random.Generator Bool"
+          },
+          {
+            "name": "rangeLengthList",
+            "comment": " Generate a random list of random length given a minimum length and\na maximum length.\n",
+            "type": "Int -> Int -> Random.Generator a -> Random.Generator (List a)"
+          },
+          {
+            "name": "result",
+            "comment": " Produce an `Ok` a value on `True`, and an `Err` value on `False`.\n\nYou can use `bool` or `oneIn n` for the first argument.\n",
+            "type": "Random.Generator Bool -> Random.Generator err -> Random.Generator val -> Random.Generator (Result.Result err val)"
+          },
+          {
+            "name": "sample",
+            "comment": " Given a list, choose an element uniformly at random. `Nothing` is only\nproduced if the list is empty.\n\n    type Direction = North | South | East | West\n\n    direction : Generator Direction\n    direction =\n      sample [North, South, East, West]\n        |> map (Maybe.withDefault North)\n\n",
+            "type": "List a -> Random.Generator (Maybe.Maybe a)"
+          },
+          {
+            "name": "together",
+            "comment": " Turn a list of generators into a generator of lists.\n",
+            "type": "List (Random.Generator a) -> Random.Generator (List a)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Random.Color",
+        "comment": " Extra randomized functions on colors.\n\n# Random Colors by Components\n@docs rgb, rgba, hsl, hsla\n\n# Random Colors by Shade\n@docs greyscale, grayscale, red, green, blue\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "blue",
+            "comment": " Generate a random shade of blue.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "grayscale",
+            "comment": " Alias for greyscale.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "green",
+            "comment": " Generate a random shade of green.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "greyscale",
+            "comment": " Generate a random shade of grey\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "hsl",
+            "comment": " Generate a random non-transparent color by random HSL values.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "hsla",
+            "comment": " Generate a random transparent color by random HSLA values.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "red",
+            "comment": " Generate a random shade of red.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "rgb",
+            "comment": " Generate a random non-transparent color by random RGB values.\n",
+            "type": "Random.Generator Color.Color"
+          },
+          {
+            "name": "rgba",
+            "comment": " Generate a random transparent color by random RGBA values.\n",
+            "type": "Random.Generator Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -23690,7 +25554,7 @@
   },
   {
     "name": "fbonetti/elm-phoenix-socket",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "Phoenix.Socket",
@@ -23760,44 +25624,6 @@
             "name": "withDebug",
             "comment": " When enabled, prints all incoming Phoenix messages to the console\n",
             "type": "Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Phoenix.Push",
-        "comment": "\n\n@docs Push, init, withPayload, onError, onOk\n\n",
-        "aliases": [
-          {
-            "name": "Push",
-            "comment": " Represents a message being pushed to the server\n",
-            "args": [
-              "msg"
-            ],
-            "type": "{ event : String , channel : String , payload : Json.Encode.Value , onOk : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "init",
-            "comment": " Initializes a push with the given event and channel\n\n    init \"new:msg\" \"rooms:lobby\"\n\n",
-            "type": "String -> String -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "onError",
-            "comment": " Attaches an error handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onError HandlePushError\n\n",
-            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "onOk",
-            "comment": " Attaches a success handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onOk HandlePushOk\n\n",
-            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "withPayload",
-            "comment": " Attaches a payload\n\n    payload = JE.object [ (\"body\", JE.string \"Hello World!\") ]\n    init \"new:msg\" \"rooms:lobby\"\n      |> withPayload payload\n\n",
-            "type": "Json.Encode.Value -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -23879,6 +25705,44 @@
             "name": "withPayload",
             "comment": " Attaches a payload that's used for authentication\n\n    payload = JE.object [ (\"user_id\", JE.string \"123\") ]\n    init \"rooms:lobby\"\n      |> withPayload payload\n\n",
             "type": "Json.Encode.Value -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Phoenix.Push",
+        "comment": "\n\n@docs Push, init, withPayload, onError, onOk\n\n",
+        "aliases": [
+          {
+            "name": "Push",
+            "comment": " Represents a message being pushed to the server\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ event : String , channel : String , payload : Json.Encode.Value , onOk : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initializes a push with the given event and channel\n\n    init \"new:msg\" \"rooms:lobby\"\n\n",
+            "type": "String -> String -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onError",
+            "comment": " Attaches an error handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onError HandlePushError\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onOk",
+            "comment": " Attaches a success handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onOk HandlePushOk\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "withPayload",
+            "comment": " Attaches a payload\n\n    payload = JE.object [ (\"body\", JE.string \"Hello World!\") ]\n    init \"new:msg\" \"rooms:lobby\"\n      |> withPayload payload\n\n",
+            "type": "Json.Encode.Value -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -30395,7 +32259,7 @@
   },
   {
     "name": "mgold/elm-random-pcg",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Random.Pcg.Interop",
@@ -30413,7 +32277,7 @@
       },
       {
         "name": "Random.Pcg",
-        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model. If\nyou have many separate models, you can give them all [independent\nseeds](#independentSeed).\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed2, step\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, initialSeed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
+        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model. If\nyou have many separate models, you can give them all [independent\nseeds](#independentSeed).\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed2, step\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice, choices, frequency\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, initialSeed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
         "aliases": [],
         "types": [
           {
@@ -30453,6 +32317,11 @@
             "type": "a -> a -> Random.Pcg.Generator a"
           },
           {
+            "name": "choices",
+            "comment": " Create a generator that chooses a generator from a list of generators\nwith equal probability.\n\n**Warning:** Do not pass an empty list or your program will crash! In practice\nthis is usually not a problem since you pass a list literal.\n",
+            "type": "List (Random.Pcg.Generator a) -> Random.Pcg.Generator a"
+          },
+          {
             "name": "constant",
             "comment": " Create a generator that always produces the value provided. This is useful\nwhen creating complicated chained generators and you need to handle a simple\ncase. It's also useful for the base case of recursive generators.\n",
             "type": "a -> Random.Pcg.Generator a"
@@ -30464,13 +32333,18 @@
           },
           {
             "name": "filter",
-            "comment": " Filter a generator so that all generated values satisfy the given predicate.\n\n    evens : Generator Int\n    evens =\n      filter (\\i -> i % 2 == 0) (int minInt maxInt)\n\nIf the predicate is unsatisfiable, the generator will not terminate, your\napplication will crash with a stack overflow, and you will be sad. You should\nalso avoid predicates that are merely very difficult to satisfy.\n\n    badCrashingGenerator =\n      filter (\\_ -> False) anotherGenerator\n\n    likelyCrashingGenerator =\n      filter (\\i -> i % 2000 == 0) (int minInt maxInt)\n",
+            "comment": " Filter a generator so that all generated values satisfy the given predicate.\n\n    evens : Generator Int\n    evens =\n      filter (\\i -> i % 2 == 0) (int minInt maxInt)\n\n**Warning:** If the predicate is unsatisfiable, the generator will not terminate, your\napplication will crash with a stack overflow, and you will be sad. You should\nalso avoid predicates that are merely very difficult to satisfy.\n\n    badCrashingGenerator =\n      filter (\\_ -> False) anotherGenerator\n\n    likelyCrashingGenerator =\n      filter (\\i -> i % 2000 == 0) (int minInt maxInt)\n",
             "type": "(a -> Bool) -> Random.Pcg.Generator a -> Random.Pcg.Generator a"
           },
           {
             "name": "float",
             "comment": " Generate floats in a given range. The following example is a generator\nthat produces numbers between 0 and 1.\n\n    probability : Generator Float\n    probability =\n      float 0 1\n",
             "type": "Float -> Float -> Random.Pcg.Generator Float"
+          },
+          {
+            "name": "frequency",
+            "comment": " Create a generator that chooses a generator from a list of generators\nbased on the provided weight. The likelihood of a given generator being\nchosen is its weight divided by the total weight (which doesn't have to equal 1).\n\n**Warning:** Do not pass an empty list or your program will crash! In practice\nthis is usually not a problem since you pass a list literal.\n",
+            "type": "List ( Float, Random.Pcg.Generator a ) -> Random.Pcg.Generator a"
           },
           {
             "name": "fromJson",
@@ -36748,6 +38622,215 @@
             "name": "zIndex",
             "comment": " z-index ",
             "type": "String -> Style.Style"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "sgraf812/elm-intdict",
+    "version": "1.4.3",
+    "docs": [
+      {
+        "name": "IntDict.Safe",
+        "comment": " Safe API wrappers for `IntDict`s build and query operators \nto prevent integer overflows with JavaScripts number type.\n\nPrior to delegating to their 'unsafe' equivalent, these functions verify\nthe validity of the key via `IntDict.isValidKey`.\n\n# Return type\n@docs InvalidKey, SafeKeyResult\n# Build\n@docs safeInsert, safeUpdate, safeRemove\n# Query\n@docs safeMember, safeGet\n\n",
+        "aliases": [
+          {
+            "name": "SafeKeyResult",
+            "comment": " A value of this type is returned by all functions in this module. \nSee the core libraries' `Result` documentation for how to cope with it. ",
+            "args": [
+              "a"
+            ],
+            "type": "Result.Result IntDict.Safe.InvalidKey a"
+          }
+        ],
+        "types": [
+          {
+            "name": "InvalidKey",
+            "comment": " An error type signaling an invalid key. ",
+            "args": [],
+            "cases": [
+              [
+                "InvalidKey",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "safeGet",
+            "comment": " Version of `IntDict.get` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (Maybe.Maybe v)"
+          },
+          {
+            "name": "safeInsert",
+            "comment": " Version of `IntDict.insert` that validates the key. ",
+            "type": "Int -> v -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          },
+          {
+            "name": "safeMember",
+            "comment": " Version of `IntDict.member` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult Bool"
+          },
+          {
+            "name": "safeRemove",
+            "comment": " Version of `IntDict.remove` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          },
+          {
+            "name": "safeUpdate",
+            "comment": " Version of `IntDict.update` that validates the key. ",
+            "type": "Int -> (Maybe.Maybe v -> Maybe.Maybe v) -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "IntDict",
+        "comment": " # IntDict\n\nThis module exposes the same API as `Dict`.\n\n# Technicalities\n\nSince JavaScript's number type is kind of messed up, Elm's `Int` is not particularly\nwell-behaved wrt. bitwise operations. Currently, JS supports 32 bit integers, so there is\nprobably enough room for key picks. **However, when sanitizing user input, it is mandatory\nthat a prior `isValidKey` or one of the safe versions in `IntDict.Safe` is used!** This is\nto prevent the overflow behavior.\n\nThis library is inspired by Haskells [IntMap](http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-IntMap.html),\nwhich in turn implements Okasaki and Gill's [Fast mergable integer maps](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf).\n\nAs noted in the [references](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf), here are some runtimes:\n\n*O(min(n, W))*: `insert`, `update`, `remove`, `get`, `member`\n\n*O(n + m)*: `uniteWith`, `union`, `intersection`, `diff`\n\nwhere *n* and *m* are the sizes of the first and second dictionary respectively and *W*\nis the number of bits in `Int` (so a constant with current value 32).\n\n# Data\n@docs IntDict, isValidKey\n# Build\n@docs empty, singleton, insert, update, remove\n# Query\n@docs isEmpty, size, member, get, findMin, findMax\n# Combine\n@docs uniteWith, union, intersect, diff\n# Lists\n@docs keys, values, toList, fromList\n# Transform\n@docs map, foldl, foldr, filter, partition\n# String representation\n@docs toString'\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "IntDict",
+            "comment": " A dictionary mapping `Int`s to values of a type `v`. Analogous to\n`Dict Int v`.\n",
+            "args": [
+              "v"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Keep a key-value pair when its key does not appear in the second dictionary.\nPreference is given to the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty dictionary. ",
+            "type": "IntDict.IntDict v"
+          },
+          {
+            "name": "filter",
+            "comment": " Keep a key-value pair when it satisfies a predicate. ",
+            "type": "(Int -> v -> Bool) -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "findMax",
+            "comment": " Find the maximum key and value in the dictionary. ",
+            "type": "IntDict.IntDict v -> Maybe.Maybe ( Int, v )"
+          },
+          {
+            "name": "findMin",
+            "comment": " Find the minimum key and value in the dictionary. ",
+            "type": "IntDict.IntDict v -> Maybe.Maybe ( Int, v )"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from lowest\nkey to highest key. ",
+            "type": "(Int -> v -> a -> a) -> a -> IntDict.IntDict v -> a"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from highest\nkey to lowest key. ",
+            "type": "(Int -> v -> a -> a) -> a -> IntDict.IntDict v -> a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert an association list into a dictionary. ",
+            "type": "List ( Int, v ) -> IntDict.IntDict v"
+          },
+          {
+            "name": "get",
+            "comment": " Get the value associated with a key. If the key is not found, return\n`Nothing`. This is useful when you are not sure if a key will be in the\ndictionary. ",
+            "type": "Int -> IntDict.IntDict v -> Maybe.Maybe v"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a key-value pair into a dictionary. Replaces value when there is\na collision. ",
+            "type": "Int -> v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "intersect",
+            "comment": " Keep a key-value pair when its key appears in the second dictionary.\nPreference is given to values in the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Check if the dictionary contains no items. ",
+            "type": "IntDict.IntDict v -> Bool"
+          },
+          {
+            "name": "isValidKey",
+            "comment": " Validates that a given integer is usable as a key.\nThis is necessary due to JavaScript's weird number type.\nBasically this assures that we can use the functions\nfrom `Bitwise` without risking integer overflow.\n\n**This function is a necessity for sanitizing user input!** Alternatively,\nuse the safe functions from `IntDict.Safe` which perform the check for you.\n\nAs with the current version of JavaScript (2015), only 32 bit signed integers are supported.\nIf this ever changes, contact me! Certain parts of the implementation depend on this! ",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get all of the keys in a dictionary. ",
+            "type": "IntDict.IntDict v -> List Int"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in a dictionary. ",
+            "type": "(Int -> a -> b) -> IntDict.IntDict a -> IntDict.IntDict b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a key is in a dictionary. ",
+            "type": "Int -> IntDict.IntDict v -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest. ",
+            "type": "(Int -> v -> Bool) -> IntDict.IntDict v -> ( IntDict.IntDict v, IntDict.IntDict v )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a key-value pair from a dictionary. If the key is not found,\nno changes are made. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a dictionary with one key-value pair. ",
+            "type": "Int -> v -> IntDict.IntDict v"
+          },
+          {
+            "name": "size",
+            "comment": " The number of items in the dictionary. `O(1)`.",
+            "type": "IntDict.IntDict v -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a dictionary into an association list of key-value pairs. ",
+            "type": "IntDict.IntDict v -> List ( Int, v )"
+          },
+          {
+            "name": "toString'",
+            "comment": " Generates a string representation similar to what `toString`\ngenerates for `Dict`. ",
+            "type": "IntDict.IntDict v -> String"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two dictionaries. If there is a collision, preference is given\nto the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "uniteWith",
+            "comment": " `uniteWith merger d1 d2` combines two dictionaries. If there is a collision, `merger`\nis called with the conflicting key, the value from `d1` and that from `d2`. ",
+            "type": "(Int -> v -> v -> v) -> IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "update",
+            "comment": " Update the value of a dictionary for a specific key with a given function. ",
+            "type": "Int -> (Maybe.Maybe v -> Maybe.Maybe v) -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "values",
+            "comment": " Get all of the values in a dictionary. ",
+            "type": "IntDict.IntDict v -> List v"
           }
         ],
         "generated-with-elm-version": "0.17.0"

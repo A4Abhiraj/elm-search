@@ -10279,13 +10279,17 @@ var _klaftertief$elm_search$Search_Distance$tipe = F2(
 			_klaftertief$elm_search$Docs_Type$normalize(query),
 			chunk.tipeNormalized);
 	});
-var _klaftertief$elm_search$Search_Distance$name = F2(
-	function (query, _p14) {
-		var _p15 = _p14;
-		var _p16 = _p15.context;
-		return _elm_lang$core$Native_Utils.eq(query, _p16.name) ? _klaftertief$elm_search$Search_Distance$noPenalty : (A2(_elm_lang$core$String$contains, query, _p16.name) ? (_klaftertief$elm_search$Search_Distance$mediumPenalty * (1 - (_elm_lang$core$Basics$toFloat(
+var _klaftertief$elm_search$Search_Distance$simple = F3(
+	function (extract, query, chunk) {
+		return _elm_lang$core$Native_Utils.eq(
+			query,
+			extract(chunk)) ? _klaftertief$elm_search$Search_Distance$noPenalty : (A2(
+			_elm_lang$core$String$contains,
+			query,
+			extract(chunk)) ? (_klaftertief$elm_search$Search_Distance$mediumPenalty * (1 - (_elm_lang$core$Basics$toFloat(
 			_elm_lang$core$String$length(query)) / _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$String$length(_p16.name))))) : _klaftertief$elm_search$Search_Distance$maxPenalty);
+			_elm_lang$core$String$length(
+				extract(chunk)))))) : _klaftertief$elm_search$Search_Distance$maxPenalty);
 	});
 
 var _klaftertief$elm_search$Search_Model$indexedPair = F2(
@@ -10326,42 +10330,120 @@ var _klaftertief$elm_search$Search_Model$filterByDistance = F2(
 	});
 var _klaftertief$elm_search$Search_Model$distanceByQuery = F2(
 	function (query, chunks) {
-		var distance = _klaftertief$elm_search$Search_Model$indexedPair(
-			function () {
-				var _p6 = query;
-				if (_p6.ctor === 'Name') {
-					return _klaftertief$elm_search$Search_Distance$name(_p6._0);
-				} else {
+		var distance = function () {
+			var _p6 = query;
+			switch (_p6.ctor) {
+				case 'Name':
+					return A2(
+						_klaftertief$elm_search$Search_Distance$simple,
+						function (_p7) {
+							return function (_) {
+								return _.name;
+							}(
+								function (_) {
+									return _.context;
+								}(_p7));
+						},
+						_p6._0);
+				case 'Type':
 					return _klaftertief$elm_search$Search_Distance$tipe(_p6._0);
-				}
-			}());
-		return A2(_elm_lang$core$List$map, distance, chunks);
+				case 'User':
+					return A2(
+						_klaftertief$elm_search$Search_Distance$simple,
+						function (_p8) {
+							return function (_) {
+								return _.userName;
+							}(
+								function (_) {
+									return _.context;
+								}(_p8));
+						},
+						_p6._0);
+				case 'Package':
+					return A2(
+						_klaftertief$elm_search$Search_Distance$simple,
+						function (_p9) {
+							return function (_) {
+								return _.packageName;
+							}(
+								function (_) {
+									return _.context;
+								}(_p9));
+						},
+						_p6._0);
+				default:
+					return A2(
+						_klaftertief$elm_search$Search_Distance$simple,
+						function (_p10) {
+							return function (_) {
+								return _.moduleName;
+							}(
+								function (_) {
+									return _.context;
+								}(_p10));
+						},
+						_p6._0);
+			}
+		}();
+		return A2(
+			_elm_lang$core$List$map,
+			function (_p11) {
+				var _p12 = _p11;
+				var _p13 = _p12._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _p12._0 + distance(_p13),
+					_1: _p13
+				};
+			},
+			chunks);
 	});
 var _klaftertief$elm_search$Search_Model$runFilter = F2(
-	function (_p8, _p7) {
-		var _p9 = _p8;
-		var _p10 = _p7;
+	function (_p15, _p14) {
+		var _p16 = _p15;
+		var _p24 = _p16.query;
+		var _p17 = _p14;
 		var resultChunks = function () {
-			var _p11 = _p9.query;
-			if (_p11.ctor === 'Just') {
+			var _p18 = _p24;
+			if (_p18.ctor === '[]') {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
 				return A2(
 					_elm_lang$core$List$map,
 					_elm_lang$core$Basics$snd,
 					A2(
 						_elm_lang$core$List$sortBy,
-						function (_p12) {
-							var _p13 = _p12;
-							var _p14 = _p13._1;
-							return {ctor: '_Tuple4', _0: _p13._0, _1: _p14.context.name, _2: _p14.context.moduleName, _3: _p14.context.packageName};
+						function (_p19) {
+							var _p20 = _p19;
+							var _p21 = _p20._1;
+							return {ctor: '_Tuple4', _0: _p20._0, _1: _p21.context.name, _2: _p21.context.moduleName, _3: _p21.context.packageName};
 						},
 						_klaftertief$elm_search$Search_Model$prioritizeChunks(
 							A2(
 								_klaftertief$elm_search$Search_Model$filterByDistance,
 								_klaftertief$elm_search$Search_Distance$lowPenalty,
-								A2(_klaftertief$elm_search$Search_Model$distanceByQuery, _p11._0, _p10.chunks)))));
-			} else {
-				return _elm_lang$core$Native_List.fromArray(
-					[]);
+								A2(
+									_elm_lang$core$List$map,
+									function (_p22) {
+										var _p23 = _p22;
+										return {
+											ctor: '_Tuple2',
+											_0: _p23._0 / _elm_lang$core$Basics$toFloat(
+												_elm_lang$core$List$length(_p24)),
+											_1: _p23._1
+										};
+									},
+									A3(
+										_elm_lang$core$List$foldl,
+										_klaftertief$elm_search$Search_Model$distanceByQuery,
+										A2(
+											_elm_lang$core$List$map,
+											function (c) {
+												return {ctor: '_Tuple2', _0: 0, _1: c};
+											},
+											_p17.chunks),
+										_p24))))));
 			}
 		}();
 		return {chunks: resultChunks};
@@ -10375,7 +10457,11 @@ var _klaftertief$elm_search$Search_Model$initialResult = {
 	chunks: _elm_lang$core$Native_List.fromArray(
 		[])
 };
-var _klaftertief$elm_search$Search_Model$initialFilter = {queryString: '', query: _elm_lang$core$Maybe$Nothing};
+var _klaftertief$elm_search$Search_Model$initialFilter = {
+	queryString: '',
+	query: _elm_lang$core$Native_List.fromArray(
+		[])
+};
 var _klaftertief$elm_search$Search_Model$initialIndex = {
 	chunks: _elm_lang$core$Native_List.fromArray(
 		[])
@@ -10395,28 +10481,55 @@ var _klaftertief$elm_search$Search_Model$Filter = F2(
 var _klaftertief$elm_search$Search_Model$Result = function (a) {
 	return {chunks: a};
 };
+var _klaftertief$elm_search$Search_Model$Module = function (a) {
+	return {ctor: 'Module', _0: a};
+};
+var _klaftertief$elm_search$Search_Model$Package = function (a) {
+	return {ctor: 'Package', _0: a};
+};
+var _klaftertief$elm_search$Search_Model$User = function (a) {
+	return {ctor: 'User', _0: a};
+};
 var _klaftertief$elm_search$Search_Model$Type = function (a) {
 	return {ctor: 'Type', _0: a};
 };
 var _klaftertief$elm_search$Search_Model$Name = function (a) {
 	return {ctor: 'Name', _0: a};
 };
-var _klaftertief$elm_search$Search_Model$maybeQueryFromString = function (string) {
-	return _elm_lang$core$String$isEmpty(string) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
-		function () {
-			var _p15 = _klaftertief$elm_search$Docs_Type$parse(string);
-			if (_p15.ctor === 'Ok') {
-				var _p17 = _p15._0;
-				var _p16 = _p17;
-				if (_p16.ctor === 'Var') {
-					return _klaftertief$elm_search$Search_Model$Name(string);
-				} else {
-					return _klaftertief$elm_search$Search_Model$Type(_p17);
-				}
+var _klaftertief$elm_search$Search_Model$queryListFromString = function (string) {
+	return _elm_lang$core$String$isEmpty(string) ? _elm_lang$core$Native_List.fromArray(
+		[]) : _elm_lang$core$Native_List.fromArray(
+		[
+			function () {
+			if (A2(_elm_lang$core$String$startsWith, 'user:', string)) {
+				return _klaftertief$elm_search$Search_Model$User(
+					A2(_elm_lang$core$String$dropLeft, 5, string));
 			} else {
-				return _klaftertief$elm_search$Search_Model$Name(string);
+				if (A2(_elm_lang$core$String$startsWith, 'package:', string)) {
+					return _klaftertief$elm_search$Search_Model$Package(
+						A2(_elm_lang$core$String$dropLeft, 8, string));
+				} else {
+					if (A2(_elm_lang$core$String$startsWith, 'module:', string)) {
+						return _klaftertief$elm_search$Search_Model$Module(
+							A2(_elm_lang$core$String$dropLeft, 7, string));
+					} else {
+						var _p25 = _klaftertief$elm_search$Docs_Type$parse(string);
+						if (_p25.ctor === 'Ok') {
+							var _p27 = _p25._0;
+							var _p26 = _p27;
+							if (_p26.ctor === 'Var') {
+								return _klaftertief$elm_search$Search_Model$Name(string);
+							} else {
+								return _klaftertief$elm_search$Search_Model$Type(_p27);
+							}
+						} else {
+							return _klaftertief$elm_search$Search_Model$Name(string);
+						}
+					}
+				}
 			}
-		}());
+		}()
+		]);
 };
 var _klaftertief$elm_search$Search_Model$RunFilter = {ctor: 'RunFilter'};
 var _klaftertief$elm_search$Search_Model$SetFilterQueryFrom = function (a) {
@@ -10450,7 +10563,7 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 					filterFacts,
 					{
 						queryString: _p1,
-						query: _klaftertief$elm_search$Search_Model$maybeQueryFromString(_p1)
+						query: _klaftertief$elm_search$Search_Model$queryListFromString(_p1)
 					});
 				return _elm_lang$core$Native_Utils.update(
 					model,
@@ -10473,7 +10586,7 @@ var _klaftertief$elm_search$Search_Update$init = F2(
 				{filter: filter}));
 		var _p2 = _elm_lang$core$List$length(model.index.chunks);
 		var _p3 = filter.query;
-		if (_p3.ctor === 'Just') {
+		if ((_p3.ctor === '::') && (_p3._1.ctor === '[]')) {
 			return A2(_klaftertief$elm_search$Search_Update$update, _klaftertief$elm_search$Search_Model$RunFilter, model);
 		} else {
 			return model;
@@ -10812,7 +10925,7 @@ var _klaftertief$elm_search$Web_Model$parseSearchString = function (searchString
 			_elm_lang$core$Maybe$withDefault,
 			'',
 			A2(_elm_lang$core$Dict$get, 'q', parts));
-		var query = _klaftertief$elm_search$Search_Model$maybeQueryFromString(queryString);
+		var query = _klaftertief$elm_search$Search_Model$queryListFromString(queryString);
 		return {queryString: queryString, query: query};
 	} else {
 		return _klaftertief$elm_search$Search_Model$initialFilter;
