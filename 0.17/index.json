@@ -1976,17 +1976,22 @@
   },
   {
     "name": "abadi199/elm-creditcard",
-    "version": "1.0.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "CreditCard.View",
-        "comment": " View related functions\n\n# Form View\n@docs form\n\n# Individual Fields View\n@docs numberInput, nameInput, monthInput, yearInput, ccvInput\n",
+        "comment": " View related functions\n\n# Form View\n@docs form\n\n# Card View\n@docs cardView\n\n# Individual Fields View\n@docs numberInput, nameInput, monthInput, yearInput, ccvInput\n",
         "aliases": [],
         "types": [],
         "values": [
           {
+            "name": "cardView",
+            "comment": " A view function that will render the credit card.\n\nThis view will renders the credit card information such as the number, full name, expiration month/year, ccv, and the card logo.\n\nThis component also provide a card flipping animation for flipping back and forth between the front and back side of the card when displaying CCV number.\nSome type of card has CCV printed on the front side of the card, in this case, the flipping animation will not be performed.\n\nTo use this view, just include this function as part of your view function. This will render the card as svg element.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.Components.Card.cardView model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "type": "CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+          },
+          {
             "name": "ccvInput",
-            "comment": " A view function that will render the input field for credit card CCV/CVC number.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum length of 4.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.ccvInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for credit card CCV/CVC number.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum length of 4.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.ccvInput \"CCVInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
@@ -1996,37 +2001,23 @@
           },
           {
             "name": "monthInput",
-            "comment": " A view function that will render the input field for credit card expiration month.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum value of 12.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.monthInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for credit card expiration month.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input with maximum value of 12.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.monthInput \"MonthInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
             "name": "nameInput",
-            "comment": " A view function that will render the input field for full name.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.nameInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for full name.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.nameInput \"NameInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> List (Html.Attribute CreditCard.Components.StringInput.Msg) -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
             "name": "numberInput",
-            "comment": " A view function that will render the input field for credit card number.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.numberInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for credit card number.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.numberInput \"NumberInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
             "name": "yearInput",
-            "comment": " A view function that will render the input field for credit card expiration year.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.yearInput model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for credit card expiration year.\n\nTo use this view, just include this function as part of your view function. The input field will only accept numeric input.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.yearInput \"YearInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "CreditCard.Components.Card",
-        "comment": " Card component that will renders the credit card information such as the number, full name, expiration month/year, ccv, and the card logo.\nThis component also provide a card flipping animation for flipping back and forth between the front and back side of the card when displaying CCV number.\nSome type of card has CCV printed on the front side of the card, in this case, the flipping animation will not be performed.\n\n# View\n@docs cardView\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "cardView",
-            "comment": " A view function that will render the credit card.\n\nTo use this view, just include this function as part of your view function. This will render the card as svg element.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.Components.Card.cardView model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
-            "type": "CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -2095,7 +2086,7 @@
       },
       {
         "name": "CreditCard.Model",
-        "comment": " Model types and all related helper functions\n\n# Model\n@docs Model, Field, Styles,  CardInfo,  CardType\n\n# Styling and Formatting\n@docs Options, CardStyle, CCVPosition, NumberFormat\n\n# Helper Functions\n@docs init\n",
+        "comment": " Model types and all related helper functions\n\n# Model\n@docs Model, Field, Styles,  CardInfo,  CardType\n\n# Styling and Formatting\n@docs Options, CardStyle, CCVPosition, NumberFormat\n\n# Helper Functions\n@docs init, defaultOptions\n",
         "aliases": [
           {
             "name": "CardInfo",
@@ -2220,9 +2211,14 @@
         ],
         "values": [
           {
+            "name": "defaultOptions",
+            "comment": " The default `Options` value\n",
+            "type": "CreditCard.Model.Options"
+          },
+          {
             "name": "init",
-            "comment": " init function\n",
-            "type": "CreditCard.Model.Model msg"
+            "comment": " Initalize the model by passing in the `Options`\n",
+            "type": "CreditCard.Model.Options -> CreditCard.Model.Model msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
