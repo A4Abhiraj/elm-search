@@ -373,6 +373,61 @@
     ]
   },
   {
+    "name": "Bogdanp/elm-datepicker",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "DatePicker",
+        "comment": " A customizable date picker component.\n\n# Tea ☕\n@docs Msg, DatePicker\n@docs init, update, view\n\n# Settings\n@docs Settings, defaultSettings\n",
+        "aliases": [
+          {
+            "name": "Settings",
+            "comment": " The type of date picker settings.\n",
+            "args": [],
+            "type": "{ placeholder : String , classNamespace : String , isDisabled : Date.Date -> Bool , dateFormatter : Date.Date -> String , dayFormatter : Date.Day -> String , monthFormatter : Date.Month -> String , pickedDate : Maybe.Maybe Date.Date }"
+          }
+        ],
+        "types": [
+          {
+            "name": "DatePicker",
+            "comment": " The DatePicker model.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " An opaque type representing messages that are passed inside the DatePicker.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultSettings",
+            "comment": " A record of default settings for the date picker.  Extend this if\nyou want to customize your date picker.\n\n\n    import DatePicker exposing (defaultSettings)\n\n    DatePicker.init { defaultSettings | placeholder = \"Pick a date\" }\n\n\nTo disable certain dates:\n\n\n    import Date exposing (Day(..), dayOfWeek)\n    import DatePicker exposing (defaultSettings)\n\n    DatePicker.init { defaultSettings | isDisabled = \\d -> dayOfWeek d `List.member` [ Sat, Sun ] }\n\n",
+            "type": "DatePicker.Settings"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize a DatePicker given a Settings record.  You must execute\nthe returned command for the date picker to behave correctly.\n\n\n    init =\n      let\n         (datePicker, datePickerFx) =\n           DatePicker.init defaultSettings\n      in\n         { picker = datePicker } ! [ Cmd.map ToDatePicker datePickerfx ]\n\n",
+            "type": "DatePicker.Settings -> ( DatePicker.DatePicker, Platform.Cmd.Cmd DatePicker.Msg )"
+          },
+          {
+            "name": "update",
+            "comment": " The date picker reducer.\n",
+            "type": "DatePicker.Msg -> DatePicker.DatePicker -> ( DatePicker.DatePicker , Platform.Cmd.Cmd DatePicker.Msg , Maybe.Maybe Date.Date )"
+          },
+          {
+            "name": "view",
+            "comment": " The date picker view.\n",
+            "type": "DatePicker.DatePicker -> Html.Html DatePicker.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "Bogdanp/elm-route",
     "version": "2.0.3",
     "docs": [
@@ -3084,6 +3139,143 @@
             "name": "transduceSet",
             "comment": " Apply a Transducer to a Set, producing a Set.\n\n    transduceSet t xs = transduce Set.foldr Set.insert Set.empty t xs\n",
             "type": "Transducer.Transducer comparable comparable' (Set.Set comparable'') s -> Set.Set comparable -> Set.Set comparable''"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "bardt/elm-rosetree",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "RoseTree",
+        "comment": " RoseTree implementation in Elm using Lazy Lists.\n\n# Definition\n@docs RoseTree\n\n# Constructors\n@docs singleton\n\n# Query a rosetree\n@docs root, children, hasChildren\n\n# Common operations\n@docs addChild\n\n# Map-reduce et al.\n@docs map, map2, andMap, map3, map4, map5, zip, zip3, zip4, zip5, flatten, flatMap, andThen, reduce, sum, product\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "RoseTree",
+            "comment": " RoseTree type.\nA rosetree is a tree with a root whose children are themselves\nrosetrees.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Rose",
+                [
+                  "a",
+                  "Lazy.List.LazyList (RoseTree.RoseTree a)"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "addChild",
+            "comment": " Add a child to the rosetree.\n",
+            "type": "RoseTree.RoseTree a -> RoseTree.RoseTree a -> RoseTree.RoseTree a"
+          },
+          {
+            "name": "andMap",
+            "comment": " Chain mapping operations.\n",
+            "type": "RoseTree.RoseTree (a -> b) -> RoseTree.RoseTree a -> RoseTree.RoseTree b"
+          },
+          {
+            "name": "andThen",
+            "comment": " ",
+            "type": "RoseTree.RoseTree a -> (a -> RoseTree.RoseTree b) -> RoseTree.RoseTree b"
+          },
+          {
+            "name": "children",
+            "comment": " Get the children of a rosetree\n",
+            "type": "RoseTree.RoseTree a -> Lazy.List.LazyList (RoseTree.RoseTree a)"
+          },
+          {
+            "name": "flatMap",
+            "comment": " ",
+            "type": "(a -> RoseTree.RoseTree b) -> RoseTree.RoseTree a -> RoseTree.RoseTree b"
+          },
+          {
+            "name": "flatten",
+            "comment": " Flatten a rosetree of rosetrees.\n",
+            "type": "RoseTree.RoseTree (RoseTree.RoseTree a) -> RoseTree.RoseTree a"
+          },
+          {
+            "name": "hasChildren",
+            "comment": " Does the tree have children?\n",
+            "type": "RoseTree.RoseTree a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function over a rosetree\n",
+            "type": "(a -> b) -> RoseTree.RoseTree a -> RoseTree.RoseTree b"
+          },
+          {
+            "name": "map2",
+            "comment": " ",
+            "type": "(a -> b -> c) -> RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c"
+          },
+          {
+            "name": "map3",
+            "comment": " ",
+            "type": "(a -> b -> c -> d) -> RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree d"
+          },
+          {
+            "name": "map4",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e) -> RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree d -> RoseTree.RoseTree e"
+          },
+          {
+            "name": "map5",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e -> f) -> RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree d -> RoseTree.RoseTree e -> RoseTree.RoseTree f"
+          },
+          {
+            "name": "product",
+            "comment": " ",
+            "type": "RoseTree.RoseTree number -> number"
+          },
+          {
+            "name": "reduce",
+            "comment": " ",
+            "type": "(a -> b -> b) -> b -> RoseTree.RoseTree a -> b"
+          },
+          {
+            "name": "root",
+            "comment": " Get the root of a rosetree\n",
+            "type": "RoseTree.RoseTree a -> a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Make a singleton rosetree\n",
+            "type": "a -> RoseTree.RoseTree a"
+          },
+          {
+            "name": "sum",
+            "comment": " ",
+            "type": "RoseTree.RoseTree number -> number"
+          },
+          {
+            "name": "zip",
+            "comment": " ",
+            "type": "RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree ( a, b )"
+          },
+          {
+            "name": "zip3",
+            "comment": " ",
+            "type": "RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree ( a, b, c )"
+          },
+          {
+            "name": "zip4",
+            "comment": " ",
+            "type": "RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree d -> RoseTree.RoseTree ( a, b, c, d )"
+          },
+          {
+            "name": "zip5",
+            "comment": " ",
+            "type": "RoseTree.RoseTree a -> RoseTree.RoseTree b -> RoseTree.RoseTree c -> RoseTree.RoseTree d -> RoseTree.RoseTree e -> RoseTree.RoseTree ( a, b, c, d, e )"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -26090,6 +26282,90 @@
     ]
   },
   {
+    "name": "imeckler/queue",
+    "version": "1.1.3",
+    "docs": [
+      {
+        "name": "Queue",
+        "comment": " Just a simple queue data type.\n\n# Type\n@docs Queue\n\n# Construction\n@docs empty, push\n\n# Inspection\n@docs pop\n\n# Utilities\n@docs isEmpty, length, map, toList\n",
+        "aliases": [
+          {
+            "name": "Queue",
+            "comment": " A queue is a sequence supporting O(1) appending (`push`) of a new\n    element to the back and amortizsed O(1) removal of the element at the\n    front (`pop`). ",
+            "args": [
+              "a"
+            ],
+            "type": "Queue.Internal.Queue a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " An empty queue, ready for pushin'. ",
+            "type": "Queue.Queue a"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " ",
+            "type": "Queue.Queue a -> Bool"
+          },
+          {
+            "name": "length",
+            "comment": " ",
+            "type": "Queue.Queue a -> Int"
+          },
+          {
+            "name": "map",
+            "comment": " ",
+            "type": "(a -> b) -> Queue.Queue a -> Queue.Queue b"
+          },
+          {
+            "name": "pop",
+            "comment": " Get the first element of the queue and the queue with the first element\n    removed. Returns nothing if the queue is empty. Amortized O(1). ",
+            "type": "Queue.Queue a -> Maybe.Maybe ( a, Queue.Queue a )"
+          },
+          {
+            "name": "push",
+            "comment": " Put the given element at the back of the given queue. O(1). ",
+            "type": "a -> Queue.Queue a -> Queue.Queue a"
+          },
+          {
+            "name": "toList",
+            "comment": " A list consisting of the elements in the order in which they were put into the\n    queue (i.e., \"front to back\"). ",
+            "type": "Queue.Queue a -> List a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Queue.Internal",
+        "comment": " Internal representation of the queue type.\n\n@docs Queue\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Queue",
+            "comment": " See [this blog post](http://parametricity.com/posts/2015-02-19-animating.html). ",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Queue",
+                [
+                  "List a",
+                  "List a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "imeckler/ratio",
     "version": "2.0.1",
     "docs": [
@@ -30193,6 +30469,81 @@
             "name": "toList",
             "comment": " Convert to a regular Elm `List` by applying the underlying function\n    representation. ",
             "type": "DList.DList a -> List a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "league/unique-id",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Unique",
+        "comment": "\nPure generation of unique identifiers in Elm.\n\n# Types\n@docs Id, Unique\n\n# Run\n@docs run\n\n# Introduction\n@docs return, unique\n\n# Sequencing\n@docs andThen, map, map2, map3, replicate, sequence\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Id",
+            "comment": " The type of an identifier. Identifiers are integers, but this is an opaque\ntype so that we cannot introduce them by accident. Equality and toString are\nsupported on `Id` values.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Unique",
+            "comment": " A calculation that consumes unique identifiers and produces a value of type\n`a`.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " TODO ",
+            "type": "Unique.Unique a -> (a -> Unique.Unique b) -> Unique.Unique b"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to the result of a `Unique` computation. ",
+            "type": "(a -> b) -> Unique.Unique a -> Unique.Unique b"
+          },
+          {
+            "name": "map2",
+            "comment": " Apply a function to the result of two `Unique` computations. ",
+            "type": "(a -> b -> c) -> Unique.Unique a -> Unique.Unique b -> Unique.Unique c"
+          },
+          {
+            "name": "map3",
+            "comment": " Apply a function to the result of three `Unique` computations. ",
+            "type": "(a -> b -> c -> d) -> Unique.Unique a -> Unique.Unique b -> Unique.Unique c -> Unique.Unique d"
+          },
+          {
+            "name": "replicate",
+            "comment": " Repeatedly invoke a `Unique` computation, generating a list of results. ",
+            "type": "Int -> Unique.Unique a -> Unique.Unique (List a)"
+          },
+          {
+            "name": "return",
+            "comment": " Return a constant value without consuming any IDs. ",
+            "type": "a -> Unique.Unique a"
+          },
+          {
+            "name": "run",
+            "comment": " Run a computation that consumes unique IDs. Within one invocation of `run`,\nthe generated `Id` values are guaranteed to be unique. However, multiple\ninvocations of `run` will generate conflicting `Id`s. ",
+            "type": "Unique.Unique a -> a"
+          },
+          {
+            "name": "sequence",
+            "comment": " Execute a list of `Unique` computations in order. ",
+            "type": "List (Unique.Unique a) -> Unique.Unique (List a)"
+          },
+          {
+            "name": "unique",
+            "comment": " Generate a unique ID. ",
+            "type": "Unique.Unique Unique.Id"
           }
         ],
         "generated-with-elm-version": "0.17.0"
