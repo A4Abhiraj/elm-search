@@ -8350,7 +8350,7 @@
   },
   {
     "name": "abadi199/elm-creditcard",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "docs": [
       {
         "name": "CreditCard.View",
@@ -8381,11 +8381,11 @@
           {
             "name": "nameInput",
             "comment": " A view function that will render the input field for full name.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.nameInput \"NameInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
-            "type": "String -> List (Html.Attribute CreditCard.Components.StringInput.Msg) -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
+            "type": "String -> List (Html.Attribute Input.Text.Msg) -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
             "name": "numberInput",
-            "comment": " A view function that will render the input field for credit card number.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.numberInput \"NumberInput\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
+            "comment": " A view function that will render the input field for credit card number.\n\nTo use this view, just include this function as part of your view function.\n\nExample:\n\n    form []\n        [ Html.App.map CreditCardMsg (CreditCard.View.numberInput \"Number\" model.creditCardModel)\n        , button [] [ text \"Checkout \"]\n        ]\n\n",
             "type": "String -> CreditCard.Model.Model CreditCard.Update.Msg -> Html.Html CreditCard.Update.Msg"
           },
           {
@@ -8413,31 +8413,31 @@
               [
                 "UpdateNumber",
                 [
-                  "CreditCard.Components.NumberInput.Msg"
+                  "Input.Number.Msg"
                 ]
               ],
               [
                 "UpdateName",
                 [
-                  "CreditCard.Components.StringInput.Msg"
+                  "Input.Text.Msg"
                 ]
               ],
               [
                 "UpdateExpirationMonth",
                 [
-                  "CreditCard.Components.NumberInput.Msg"
+                  "Input.Number.Msg"
                 ]
               ],
               [
                 "UpdateExpirationYear",
                 [
-                  "CreditCard.Components.NumberInput.Msg"
+                  "Input.Number.Msg"
                 ]
               ],
               [
                 "UpdateCCV",
                 [
-                  "CreditCard.Components.NumberInput.Msg"
+                  "Input.Number.Msg"
                 ]
               ],
               [
@@ -8601,15 +8601,64 @@
   },
   {
     "name": "abadi199/elm-input-extra",
-    "version": "1.0.0",
+    "version": "2.0.2",
     "docs": [
       {
-        "name": "Number",
-        "comment": " Number input\n\n# Model\n@docs Model, init\n\n# View\n@docs input, Options\n\n# Update\n@docs update\n",
+        "name": "Input.Text",
+        "comment": " Text input\n\n# Model\n@docs Model, init\n\n# View\n@docs input, Options, defaultOptions\n\n# Update\n@docs update\n\n# Msg\n@docs Msg\n",
         "aliases": [
           {
             "name": "Model",
-            "comment": " (TEA) Model record\n",
+            "comment": " (TEA) Model record\nFields:\n * `value` : current value of the input element.\n * `hasFocus` : flag whether the input element has focus or not.\n",
+            "args": [],
+            "type": "{ value : String, hasFocus : Bool }"
+          },
+          {
+            "name": "Options",
+            "comment": " Options of the input component.\n\n * `id` is the id of the HTML element.\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n",
+            "args": [],
+            "type": "{ id : String, maxLength : Maybe.Maybe Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " (TEA) Opaque Msg types\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Default value for `Options`.\nParams:\n * `id` (type: `String`) : The `id` of the number input element.\n\nValue:\n\n    { id = id\n    , maxLength = Nothing\n    }\n\n",
+            "type": "String -> Input.Text.Options"
+          },
+          {
+            "name": "init",
+            "comment": " (TEA) Initial model constant\n\nValue:\n\n    { value = \"\"\n    , hasFocus = False\n    }\n\n",
+            "type": "Input.Text.Model"
+          },
+          {
+            "name": "input",
+            "comment": " (TEA) View function\n\nExample:\n\n    Input.Text.input\n        { id = \"TextInput\"\n        , maxLength = Just 4\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.textModel\n\n",
+            "type": "Input.Text.Options -> List (Html.Attribute Input.Text.Msg) -> Input.Text.Model -> Html.Html Input.Text.Msg"
+          },
+          {
+            "name": "update",
+            "comment": " (TEA) Update function\n\nExample:\n\n    type Msg = UpdateText Input.Text.Msg\n\n    update msg model =\n        case msg of\n            UpdateText textMsg ->\n                { model | textModel = Input.Text.update textMsg model.textModel }\n\n",
+            "type": "Input.Text.Msg -> Input.Text.Model -> Input.Text.Model"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Input.Number",
+        "comment": " Number input\n\n# Model\n@docs Model, init\n\n# View\n@docs input, Options, defaultOptions\n\n# Update\n@docs update\n\n# Msg\n@docs Msg\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " (TEA) Model record\nFields:\n * `value` : current value of the input element.\n * `hasFocus` : flag whether the input element has focus or not.\n",
             "args": [],
             "type": "{ value : String, hasFocus : Bool }"
           },
@@ -8620,22 +8669,34 @@
             "type": "{ id : String , maxLength : Maybe.Maybe Int , maxValue : Maybe.Maybe Int , minValue : Maybe.Maybe Int }"
           }
         ],
-        "types": [],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " (TEA) Opaque Msg types\n",
+            "args": [],
+            "cases": []
+          }
+        ],
         "values": [
           {
+            "name": "defaultOptions",
+            "comment": " Default value for `Options`.\nParams:\n * `id` (type: `String`) : The `id` of the number input element.\n\nValue:\n\n    { id = id\n    , maxLength = Nothing\n    , maxValue = Nothing\n    , minValue = Nothing\n    }\n\n",
+            "type": "String -> Input.Number.Options"
+          },
+          {
             "name": "init",
-            "comment": " (TEA) Initial model constant\n",
-            "type": "Number.Model"
+            "comment": " (TEA) Initial model constant\n\nValue:\n\n    { value = \"\"\n    , hasFocus = False\n    }\n\n",
+            "type": "Input.Number.Model"
           },
           {
             "name": "input",
-            "comment": " (TEA) View function\n",
-            "type": "Number.Options -> List (Html.Attribute Number.Msg) -> Number.Model -> Html.Html Number.Msg"
+            "comment": " (TEA) View function\n\nExample:\n\n    Input.Number.input\n        { id = \"NumberInput\"\n        , maxLength = Just 4\n        , maxValue = Nothing\n        , minValue = Nothing\n        }\n        [ class \"numberInput\"\n        ...\n        ]\n        model.numberModel\n\n",
+            "type": "Input.Number.Options -> List (Html.Attribute Input.Number.Msg) -> Input.Number.Model -> Html.Html Input.Number.Msg"
           },
           {
             "name": "update",
-            "comment": " (TEA) Update function\n",
-            "type": "Number.Msg -> Number.Model -> Number.Model"
+            "comment": " (TEA) Update function\n\nExample:\n\n    type Msg = UpdateNumber Input.Number.Msg\n\n    update msg model =\n        case msg of\n            UpdateNumber numberMsg ->\n                { model | numberModel = Input.Number.update numberMsg model.numberModel }\n\n",
+            "type": "Input.Number.Msg -> Input.Number.Model -> Input.Number.Model"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -41266,7 +41327,7 @@
   },
   {
     "name": "mgold/elm-random-pcg",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "docs": [
       {
         "name": "Random.Pcg.Interop",
@@ -41280,7 +41341,7 @@
             "type": "Random.Seed -> ( Random.Pcg.Seed, Random.Seed )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Random.Pcg",
@@ -41365,12 +41426,12 @@
           },
           {
             "name": "initialSeed",
-            "comment": " Like `initialSeed2`, but takes only one integer. Mostly for compatibility\nwith core.\n",
+            "comment": " Like `initialSeed2`, but takes only one integer. Mostly for compatibility\nwith core. The integer provided becomes the high bits of the seed.\n",
             "type": "Int -> Random.Pcg.Seed"
           },
           {
             "name": "initialSeed2",
-            "comment": " Take two integers to fully initialize the 64-bit state of the random\nnumber generator. Only the least significant 32 bits of each integer matter, and\nthose bits should be as random as possible.\n\nYou can generate and copy random integers to create a reproducible psuedo-random\ngenerator.\n\n    $ node\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    227852860\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    1498709020\n\n    -- Elm\n    seed0 : Seed\n    seed0 = initialSeed2 227852860 1498709020\n\nAlternatively, you can generate the random integers on page load and pass them\nthrough a port. The program will be different every time.\n\n    -- Elm\n    port randomSeed : (Int, Int)\n\n    seed0 : Seed\n    seed0 = (uncurry initialSeed2) randomSeed\n\n    -- JS\n    Elm.fullscreen(Elm.ModuleName,\n      {randomSeed: [Math.floor(Math.random()*0xFFFFFFFF),\n                    Math.floor(Math.random()*0xFFFFFFFF)] })\n\nEither way, you should initialize a random seed only once. After that, whenever\nyou use a seed, you'll get another one back.\n",
+            "comment": " Take two integers to fully initialize the 64-bit state of the random\nnumber generator. Only the least significant 32 bits of each integer matter, and\nthose bits should be as random as possible. The first argument is the high bits,\nbut if you're pulling from a random data source, it shouldn't matter.\n\nYou can generate and copy random integers to create a reproducible psuedo-random\ngenerator.\n\n    $ node\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    227852860\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    1498709020\n\n    -- Elm\n    seed0 : Seed\n    seed0 = initialSeed2 227852860 1498709020\n\nAlternatively, you can generate the random integers on page load and pass them\nthrough a port. The program will be different every time.\n\n    -- Elm\n    port randomSeed : (Int, Int)\n\n    seed0 : Seed\n    seed0 = (uncurry initialSeed2) randomSeed\n\n    -- JS\n    Elm.fullscreen(Elm.ModuleName,\n      {randomSeed: [Math.floor(Math.random()*0xFFFFFFFF),\n                    Math.floor(Math.random()*0xFFFFFFFF)] })\n\nEither way, you should initialize a random seed only once. After that, whenever\nyou use a seed, you'll get another one back.\n",
             "type": "Int -> Int -> Random.Pcg.Seed"
           },
           {
@@ -41449,7 +41510,7 @@
             "type": "Random.Pcg.Seed -> Json.Encode.Value"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -42603,6 +42664,166 @@
     ]
   },
   {
+    "name": "ondras/elm-irc",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Irc.App",
+        "comment": " elm-irc client library, the Elm Architecture wrapper\n@docs program\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " A specilized version of `Html.App.program` that features the extra `onIrc` callback ",
+            "type": "{ cfg : Irc.Types.Config , init : model , onIrc : Irc.Types.Message -> model -> Irc.Commands.CommandSet a -> ( model, Platform.Cmd.Cmd (Irc.App.Msg x) ) , update : x -> model -> Irc.Commands.CommandSet a -> ( model, Platform.Cmd.Cmd (Irc.App.Msg x) ) , view : model -> Html.Html x } -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Irc",
+        "comment": " elm-irc library, the core component\n@docs process, listen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "listen",
+            "comment": " subscribe to IRC events ",
+            "type": "Irc.Types.Config -> Platform.Sub.Sub Irc.Types.Message"
+          },
+          {
+            "name": "process",
+            "comment": " let the IRC client itself react to a particular message ",
+            "type": "Irc.Types.Config -> Irc.Types.Message -> Platform.Cmd.Cmd msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Irc.Commands",
+        "comment": " elm-irc library, commands to be sent to the IRC server\n@docs commands, stringify, CommandSet\n",
+        "aliases": [
+          {
+            "name": "CommandSet",
+            "comment": " a set of commands for a particular server ",
+            "args": [
+              "msg"
+            ],
+            "type": "{ join : String -> Platform.Cmd.Cmd msg , nick : String -> Platform.Cmd.Cmd msg , raw : String -> List String -> Platform.Cmd.Cmd msg , kick : String -> String -> Maybe.Maybe String -> Platform.Cmd.Cmd msg , register : Irc.Types.User -> Platform.Cmd.Cmd msg , query : String -> String -> Platform.Cmd.Cmd msg , message : String -> String -> Platform.Cmd.Cmd msg , part : String -> Maybe.Maybe String -> Platform.Cmd.Cmd msg , pong : String -> Platform.Cmd.Cmd msg , topic : String -> Maybe.Maybe String -> Platform.Cmd.Cmd msg }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "commands",
+            "comment": " generate command variants for a particular server configuration ",
+            "type": "Irc.Types.Config -> Irc.Commands.CommandSet x"
+          },
+          {
+            "name": "stringify",
+            "comment": " serialize individual IRC data to a raw string ",
+            "type": "String -> List String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Irc.Types",
+        "comment": " elm-irc library, types and definitions\n@docs Config, User, Message\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Server configuration: nickname, username, fullname ",
+            "args": [],
+            "type": "{ proxy : String, server : String, user : Irc.Types.User }"
+          },
+          {
+            "name": "User",
+            "comment": " User record: nickname, username, fullname ",
+            "args": [],
+            "type": "{ nick : String, username : String, fullname : String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Message",
+            "comment": " IRC message type ",
+            "args": [],
+            "cases": [
+              [
+                "Unknown",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Ping",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Notice",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Query",
+                [
+                  "{ from : Irc.Types.User, to : String, text : String }"
+                ]
+              ],
+              [
+                "Message",
+                [
+                  "{ from : Irc.Types.User, channel : String, text : String }"
+                ]
+              ],
+              [
+                "Registered",
+                []
+              ],
+              [
+                "Joined",
+                [
+                  "{ who : Irc.Types.User, channel : String }"
+                ]
+              ],
+              [
+                "Parted",
+                [
+                  "{ who : Irc.Types.User , channel : String , reason : Maybe.Maybe String }"
+                ]
+              ],
+              [
+                "Topic",
+                [
+                  "{ who : Irc.Types.User, channel : String, text : Maybe.Maybe String }"
+                ]
+              ],
+              [
+                "Nick",
+                [
+                  "{ who : Irc.Types.User, nick : String }"
+                ]
+              ],
+              [
+                "Kicked",
+                [
+                  "{ who : Irc.Types.User , whom : String , channel : String , reason : Maybe.Maybe String }"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "pdamoc/elm-hashids",
     "version": "1.0.2",
     "docs": [
@@ -42875,7 +43096,7 @@
   },
   {
     "name": "rluiten/elm-date-extra",
-    "version": "6.0.1",
+    "version": "6.1.0",
     "docs": [
       {
         "name": "Date.Extra.Utils",
@@ -43213,6 +43434,20 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-us. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Date.Extra.Config.Config_en_au",
         "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
@@ -43227,14 +43462,14 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_us",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Config.Config_fr_fr",
+        "comment": " This is the French config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "config",
-            "comment": " Config for en-us. ",
+            "comment": " Config for fr-fr. ",
             "type": "Date.Extra.Config.Config"
           }
         ],
@@ -43414,21 +43649,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config",
-        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [
-          {
-            "name": "Config",
-            "comment": " Configuration for formatting dates. ",
-            "args": [],
-            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
-          }
-        ],
-        "types": [],
-        "values": [],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.Core",
         "comment": " Date core.\n\n## Info\n@docs monthToInt\n@docs intToMonth\n@docs daysInMonth\n@docs monthList\n@docs daysInNextMonth\n@docs daysInPrevMonth\n@docs daysInMonthDate\n@docs isLeapYear\n@docs isLeapYearDate\n@docs yearToDayLength\n@docs isoDayOfWeek\n\n## Utility\n@docs toFirstOfMonth\n@docs firstOfNextMonthDate\n@docs lastOfMonthDate\n@docs lastOfPrevMonthDate\n@docs daysBackToStartOfWeek\n\n## Conversion\n@docs fromTime\n@docs toTime\n\n## Iteration Utility\n@docs nextDay\n@docs prevDay\n@docs nextMonth\n@docs prevMonth\n\n## Date constants\n@docs epochDateStr\n\n## Date constants\n@docs ticksAMillisecond\n@docs ticksASecond\n@docs ticksAMinute\n@docs ticksAnHour\n@docs ticksADay\n@docs ticksAWeek\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
@@ -43580,6 +43800,21 @@
             "type": "Int -> Int"
           }
         ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config",
+        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Configuration for formatting dates. ",
+            "args": [],
+            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
+          }
+        ],
+        "types": [],
+        "values": [],
         "generated-with-elm-version": "0.17.0"
       }
     ]
@@ -51061,7 +51296,7 @@
   },
   {
     "name": "thebritican/elm-autocomplete",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "docs": [
       {
         "name": "Autocomplete",
@@ -51173,8 +51408,14 @@
       },
       {
         "name": "Autocomplete.Config",
-        "comment": " Configuration module for the Autocomplete component.\n\n# Definition\n@docs Config, ItemHtmlFn, Text, InputValue, Index, Completed, ValueChanged, SelectionChanged\n\n# Defaults\n@docs defaultConfig\n\n# Modifiers\n@docs isValueControlled, setClassesFn, setCompletionKeyCodes, setItemHtml, setMaxListSize, setFilterFn, setCompareFn, setNoMatchesDisplay, setLoadingDisplay, setAccessibilityProperties\n\n\n",
+        "comment": " Configuration module for the Autocomplete component.\n\n# Definition\n@docs Config, ItemHtmlFn, Text, InputValue, Index, Completed, ValueChanged, SelectionChanged, Accessibility\n\n# Defaults\n@docs defaultConfig\n\n# Modifiers\n@docs isValueControlled, setClassesFn, setCompletionKeyCodes, setItemHtml, setMaxListSize, setFilterFn, setCompareFn, setNoMatchesDisplay, setLoadingDisplay, setAccessibilityProperties\n\n\n",
         "aliases": [
+          {
+            "name": "Accessibility",
+            "comment": " Information needed for better screen reader accessibility.\n    `owneeID` will differentiate multiple instances of the autocomplete.\n",
+            "args": [],
+            "type": "{ owneeID : String }"
+          },
           {
             "name": "Completed",
             "comment": " True if an update completed the autocomplete\n",
