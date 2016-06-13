@@ -7504,6 +7504,144 @@
     ]
   },
   {
+    "name": "Fresheyeball/elm-return",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Return",
+        "comment": "\n## Type\nModeling the `update` tuple as a Monad\n@docs Return\n\n## Basics\n@docs map, map2, map3, map4, map5, andMap, singleton, andThen, (|<), (>|), (>>|), (|<<)\n\n## Write `Cmd`s\n@docs writer, tell, listen, pass, censor\n\n## Read `Cmd`s\n@docs reader, ask\n\n## State\n@docs get, put\n",
+        "aliases": [
+          {
+            "name": "Return",
+            "comment": " ",
+            "args": [
+              "msg",
+              "model"
+            ],
+            "type": "( model, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": ">>|",
+            "comment": " ",
+            "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": ">|",
+            "comment": " ",
+            "type": "Return.Return msg model -> Return.Return msg model' -> Return.Return msg model'",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "andMap",
+            "comment": " ",
+            "type": "Return.Return msg (a -> b) -> Return.Return msg a -> Return.Return msg b"
+          },
+          {
+            "name": "andThen",
+            "comment": " ",
+            "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b"
+          },
+          {
+            "name": "ask",
+            "comment": " ",
+            "type": "Return.Return msg model -> Return.Return msg (Platform.Cmd.Cmd msg)"
+          },
+          {
+            "name": "censor",
+            "comment": " ",
+            "type": "(Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg') -> Return.Return msg model -> Return.Return msg' model"
+          },
+          {
+            "name": "get",
+            "comment": " ",
+            "type": "Platform.Cmd.Cmd msg -> Return.Return msg (Platform.Cmd.Cmd msg)"
+          },
+          {
+            "name": "listen",
+            "comment": " ",
+            "type": "Return.Return msg a -> Return.Return msg (Return.Return msg a)"
+          },
+          {
+            "name": "map",
+            "comment": " ",
+            "type": "(a -> b) -> Return.Return msg a -> Return.Return msg b"
+          },
+          {
+            "name": "map2",
+            "comment": " ",
+            "type": "(a -> b -> c) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c"
+          },
+          {
+            "name": "map3",
+            "comment": " ",
+            "type": "(a -> b -> c -> d) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c -> Return.Return msg d"
+          },
+          {
+            "name": "map4",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c -> Return.Return msg d -> Return.Return msg e"
+          },
+          {
+            "name": "map5",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e -> f) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c -> Return.Return msg d -> Return.Return msg e -> Return.Return msg f"
+          },
+          {
+            "name": "pass",
+            "comment": " ",
+            "type": "Return.Return msg ( model, Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg' ) -> Return.Return msg' model"
+          },
+          {
+            "name": "put",
+            "comment": " ",
+            "type": "Platform.Cmd.Cmd msg -> model -> Return.Return msg ()"
+          },
+          {
+            "name": "reader",
+            "comment": " ",
+            "type": "(Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg') -> Return.Return msg model -> Return.Return msg' model"
+          },
+          {
+            "name": "singleton",
+            "comment": " ",
+            "type": "model -> Return.Return msg model"
+          },
+          {
+            "name": "tell",
+            "comment": " ",
+            "type": "Platform.Cmd.Cmd msg -> Return.Return msg ()"
+          },
+          {
+            "name": "writer",
+            "comment": " ",
+            "type": "( model, Platform.Cmd.Cmd msg ) -> Return.Return msg model"
+          },
+          {
+            "name": "|<",
+            "comment": " ",
+            "type": "Return.Return msg model' -> Return.Return msg model -> Return.Return msg model'",
+            "associativity": "right",
+            "precedence": 7
+          },
+          {
+            "name": "|<<",
+            "comment": " ",
+            "type": "(a -> Return.Return msg b) -> Return.Return msg a -> Return.Return msg b",
+            "associativity": "right",
+            "precedence": 6
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "Fresheyeball/elm-tuple-extra",
     "version": "2.1.0",
     "docs": [
@@ -8350,7 +8488,7 @@
   },
   {
     "name": "abadi199/elm-creditcard",
-    "version": "5.0.0",
+    "version": "5.0.1",
     "docs": [
       {
         "name": "CreditCard.View",
@@ -8601,7 +8739,7 @@
   },
   {
     "name": "abadi199/elm-input-extra",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "docs": [
       {
         "name": "Input.Text",
@@ -30705,7 +30843,7 @@
   },
   {
     "name": "eskimoblood/elm-color-extra",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "docs": [
       {
         "name": "Color.Gradient",
@@ -30780,104 +30918,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Color.Convert",
-        "comment": "\n#Convert\nConvert colors to differnt string formats and hexadecimal strings to colors.\n\n@docs colorToCssRgb, colorToCssRgba, colorToCssHsl, colorToCssHsla, colorToHex, hexToColor, colorToLab, labToColor\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "colorToCssHsl",
-            "comment": "\nConverts a color to an css hsl string.\n\n    colorToCssRgb (hsl 1 1 0.5) -- \"hsl(1, 1, 0.5)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssHsla",
-            "comment": "\nConverts a color to an css hsla string.\n\n    colorToCssRgb (hsla 1 1 0.5 1) -- \"hsla(56, 100%, 50%, 1)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssRgb",
-            "comment": "\nConverts a color to an css rgb string.\n\n    colorToCssRgb (rgb 255 0 0 ) -- \"rgb(255, 0, 0)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssRgba",
-            "comment": "\nConverts a color to an css rgba string.\n\n    colorToCssRgb (rgba 255 0 0 0.5) -- \"rgb(255, 0, 0, 0.5)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToHex",
-            "comment": "\nConverts a color to a hexadecimal string.\n\n    hexToColor (rgb 255 0 0) -- \"#ff0000\"\n\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToLab",
-            "comment": " Convert color to CIELAB- color space\n",
-            "type": "Color.Color -> { l : Float, a : Float, b : Float }"
-          },
-          {
-            "name": "hexToColor",
-            "comment": "\nConverts a string to `Maybe` of color.\n\n    hexToColor \"#ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"1234\" -- \"Nothing\"\n\n",
-            "type": "String -> Maybe.Maybe Color.Color"
-          },
-          {
-            "name": "labToColor",
-            "comment": " Convert a color in CIELAB- color space to Elm `Color`\n",
-            "type": "{ l : Float, a : Float, b : Float } -> Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Color.Manipulate",
-        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "darken",
-            "comment": " Decrease the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "desaturate",
-            "comment": " Decrease the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeIn",
-            "comment": " Increase the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeOut",
-            "comment": " Decrease the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "grayscale",
-            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
-            "type": "Color.Color -> Color.Color"
-          },
-          {
-            "name": "lighten",
-            "comment": " Increase the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "rotateHue",
-            "comment": " Change the hue of a color. The angle value must be in degrees\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "saturate",
-            "comment": " Increase the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Color.Blending",
         "comment": "\n# Blending\nBased on the [Compositing and Blending Level 1](https://www.w3.org/TR/compositing-1/#blending)\n\n@docs multiply, screen, overlay, difference, exclusion, hardlight, softlight, colorBurn, colorDodge, lighten, darken\n",
         "aliases": [],
@@ -30937,6 +30977,104 @@
             "name": "softlight",
             "comment": "\nDarkens or lightens the colors, depending on the source color value.\nThe effect is similar to shining a diffused spotlight on the backdrop.\n",
             "type": "Color.Color -> Color.Color -> Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Color.Manipulate",
+        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "darken",
+            "comment": " Decrease the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "desaturate",
+            "comment": " Decrease the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeIn",
+            "comment": " Increase the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeOut",
+            "comment": " Decrease the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "grayscale",
+            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
+            "type": "Color.Color -> Color.Color"
+          },
+          {
+            "name": "lighten",
+            "comment": " Increase the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "rotateHue",
+            "comment": " Change the hue of a color. The angle value must be in degrees\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "saturate",
+            "comment": " Increase the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Color.Convert",
+        "comment": "\n#Convert\nConvert colors to differnt string formats and hexadecimal strings to colors.\n\n@docs colorToCssRgb, colorToCssRgba, colorToCssHsl, colorToCssHsla, colorToHex, hexToColor, colorToLab, labToColor\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "colorToCssHsl",
+            "comment": "\nConverts a color to an css hsl string.\n\n    colorToCssRgb (hsl 1 1 0.5) -- \"hsl(1, 1, 0.5)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssHsla",
+            "comment": "\nConverts a color to an css hsla string.\n\n    colorToCssRgb (hsla 1 1 0.5 1) -- \"hsla(56, 100%, 50%, 1)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssRgb",
+            "comment": "\nConverts a color to an css rgb string.\n\n    colorToCssRgb (rgb 255 0 0 ) -- \"rgb(255, 0, 0)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssRgba",
+            "comment": "\nConverts a color to an css rgba string.\n\n    colorToCssRgb (rgba 255 0 0 0.5) -- \"rgb(255, 0, 0, 0.5)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToHex",
+            "comment": "\nConverts a color to a hexadecimal string.\n\n    hexToColor (rgb 255 0 0) -- \"#ff0000\"\n\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToLab",
+            "comment": " Convert color to CIELAB- color space\n",
+            "type": "Color.Color -> { l : Float, a : Float, b : Float }"
+          },
+          {
+            "name": "hexToColor",
+            "comment": "\nConverts a string to `Maybe` of color.\n\n    hexToColor \"#ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"1234\" -- \"Nothing\"\n\n",
+            "type": "String -> Maybe.Maybe Color.Color"
+          },
+          {
+            "name": "labToColor",
+            "comment": " Convert a color in CIELAB- color space to Elm `Color`\n",
+            "type": "{ l : Float, a : Float, b : Float } -> Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -34334,7 +34472,7 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "TimeTravel.Navigation",
@@ -34383,7 +34521,7 @@
   },
   {
     "name": "joneshf/elm-constraint",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Constraint.Monoid",
@@ -34410,32 +34548,52 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Constraint.Semigroup",
-        "comment": "\n@docs Semigroup\n@docs (++)\n",
+        "name": "Constraint.Ord",
+        "comment": "\n@docs Ord\n@docs ordEither, ordList, ordMaybe\n@docs max, min\n",
         "aliases": [
           {
-            "name": "Semigroup",
-            "comment": "\nGeneralized concatenation.\n",
+            "name": "Ord",
+            "comment": "\nGeneralized ordering.\n",
             "args": [
               "a",
               "r"
             ],
-            "type": "{ r | concat : a -> a -> a }"
+            "type": "{ r | compare : a -> a -> Basics.Order }"
           }
         ],
         "types": [],
         "values": [
           {
-            "name": "++",
-            "comment": "\nOperator alias for `concat`.\n",
-            "type": "a -> a -> Constraint.Constraint (Constraint.Semigroup.Semigroup a r) a"
+            "name": "max",
+            "comment": "\nFind the larger of two values.\n",
+            "type": "a -> a -> Constraint.Constraint (Constraint.Ord.Ord a r) a"
+          },
+          {
+            "name": "min",
+            "comment": "\nFind the smaller of two values.\n",
+            "type": "a -> a -> Constraint.Constraint (Constraint.Ord.Ord a r) a"
+          },
+          {
+            "name": "ordEither",
+            "comment": "\nIf we have an `Ord a r` and an `Ord b r`, then we can make an `Ord (Result a b) r`.\n",
+            "type": "Constraint.Ord.Ord a r -> Constraint.Ord.Ord b r -> Constraint.Ord.Ord (Result.Result a b) r"
+          },
+          {
+            "name": "ordList",
+            "comment": "\nIf we have an `Ord a r`, then we can make an `Ord (List a) r`.\n",
+            "type": "Constraint.Ord.Ord a r -> Constraint.Ord.Ord (List a) r"
+          },
+          {
+            "name": "ordMaybe",
+            "comment": "\nIf we have an `Ord a r`, then we can make an `Ord (Maybe a) r`.\n",
+            "type": "Constraint.Ord.Ord a r -> Constraint.Ord.Ord (Maybe.Maybe a) r"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
         "name": "Constraint.Eq",
-        "comment": "\n@docs Eq\n@docs (===), (=/=)\n",
+        "comment": "\n@docs Eq\n@docs eqEither, eqList, eqMaybe\n@docs (===), (=/=)\n",
         "aliases": [
           {
             "name": "Eq",
@@ -34458,6 +34616,45 @@
             "name": "===",
             "comment": "\nOperator alias for `eq`.\n",
             "type": "a -> a -> Constraint.Constraint (Constraint.Eq.Eq a r) Bool"
+          },
+          {
+            "name": "eqEither",
+            "comment": "\nIf we have an `Eq a r` and an `Eq b r`, then we can make an `Eq (Result a b) r`.\n",
+            "type": "Constraint.Eq.Eq a r -> Constraint.Eq.Eq b r -> Constraint.Eq.Eq (Result.Result a b) r"
+          },
+          {
+            "name": "eqList",
+            "comment": "\nIf we have an `Eq a r`, then we can make an `Eq (List a) r`.\n",
+            "type": "Constraint.Eq.Eq a r -> Constraint.Eq.Eq (List a) r"
+          },
+          {
+            "name": "eqMaybe",
+            "comment": "\nIf we have an `Eq a r`, then we can make an `Eq (Maybe a) r`.\n",
+            "type": "Constraint.Eq.Eq a r -> Constraint.Eq.Eq (Maybe.Maybe a) r"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Constraint.Semigroup",
+        "comment": "\n@docs Semigroup\n@docs (++)\n",
+        "aliases": [
+          {
+            "name": "Semigroup",
+            "comment": "\nGeneralized concatenation.\n",
+            "args": [
+              "a",
+              "r"
+            ],
+            "type": "{ r | concat : a -> a -> a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "++",
+            "comment": "\nOperator alias for `concat`.\n",
+            "type": "a -> a -> Constraint.Constraint (Constraint.Semigroup.Semigroup a r) a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -34547,23 +34744,271 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
-      },
+      }
+    ]
+  },
+  {
+    "name": "joneshf/elm-mom",
+    "version": "1.0.0",
+    "docs": [
       {
-        "name": "Constraint.Ord",
-        "comment": "\n@docs Ord\n",
+        "name": "Mom.Option",
+        "comment": "\n@docs Option\n@docs none, run, some\n",
         "aliases": [
           {
-            "name": "Ord",
-            "comment": "\nGeneralized ordering.\n",
+            "name": "Option",
+            "comment": "\nA computation that may fail with no information about the failure.\n",
             "args": [
-              "a",
-              "r"
+              "a"
             ],
-            "type": "{ r | compare : a -> a -> Basics.Order }"
+            "type": "Mom.Mom (Maybe.Maybe a) a"
           }
         ],
         "types": [],
-        "values": [],
+        "values": [
+          {
+            "name": "none",
+            "comment": "\nA failed computation.\n",
+            "type": "Mom.Option.Option a"
+          },
+          {
+            "name": "run",
+            "comment": "\nRun the computation extracting the value to `Maybe a`.\n",
+            "type": "Mom.Option.Option a -> Maybe.Maybe a"
+          },
+          {
+            "name": "some",
+            "comment": "\nA successful computation.\n",
+            "type": "a -> Mom.Option.Option a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Mom.Identity",
+        "comment": "\n@docs Identity\n@docs identity, run\n",
+        "aliases": [
+          {
+            "name": "Identity",
+            "comment": "\nA computation with no effects.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Mom.Mom a a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "identity",
+            "comment": "\nAlias for `pure`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "a -> Mom.Identity.Identity a"
+          },
+          {
+            "name": "run",
+            "comment": "\nRemove the value the computation.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Identity.Identity a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Mom.Either",
+        "comment": "\n@docs Either\n@docs left, right, run\n",
+        "aliases": [
+          {
+            "name": "Either",
+            "comment": "\nA computation that may fail with additional information about the failure.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "Mom.Mom (Result.Result a b) b"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "left",
+            "comment": "\nA failed computation.\n",
+            "type": "a -> Mom.Either.Either a b"
+          },
+          {
+            "name": "right",
+            "comment": "\nA successful computation.\n",
+            "type": "b -> Mom.Either.Either a b"
+          },
+          {
+            "name": "run",
+            "comment": "\nRun the computation extracting the value to `Result a b`.\n",
+            "type": "Mom.Either.Either a b -> Result.Result a b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Mom.Always",
+        "comment": "\n@docs Always\n@docs always, run\n",
+        "aliases": [
+          {
+            "name": "Always",
+            "comment": "\nA computation that never changes its value.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "Mom.Mom a b"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "always",
+            "comment": "\nA value that never changes in the computation.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "a -> Mom.Always.Always a b"
+          },
+          {
+            "name": "run",
+            "comment": "\nRemove the value the computation.\n",
+            "type": "Mom.Always.Always a b -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Mom",
+        "comment": "\n@docs Mom\n@docs (#>), (*>), (<#>), (<$), (<$>), (<*), (<*>), (<=<), (=<<), (>=>), (>>=)\n@docs ap, bind, callCC, forever, join, map, pure, run, unless, when, with\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Mom",
+            "comment": "\nGeneralizes most computational effects.\n\nBased on ideas from http://blog.sigfpe.com/2008/12/mother-of-all-monads.html and http://fplab.bitbucket.org/posts/2007-12-09-continuations-and-classic.html\n",
+            "args": [
+              "r",
+              "a"
+            ],
+            "cases": [
+              [
+                "Mom",
+                [
+                  "(a -> r) -> r"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "#>",
+            "comment": "\nFlipped version of `(<$)`.\nPun with \"dollar\" and \"pound\".\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r a -> b -> Mom.Mom r b"
+          },
+          {
+            "name": "*>",
+            "comment": "\nExecutes both computational effects ignoring the value of the first.\n",
+            "type": "Mom.Mom r a -> Mom.Mom r b -> Mom.Mom r b"
+          },
+          {
+            "name": "<#>",
+            "comment": "\nFlipped version of `(<$>)`.\nPun with \"dollar\" and \"pound\".\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r a -> (a -> b) -> Mom.Mom r b"
+          },
+          {
+            "name": "<$",
+            "comment": "\nReplaces values of a computational effect by the given function.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "b -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "<$>",
+            "comment": "\nAn operator alias for `map`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "<*",
+            "comment": "\nExecutes both computational effects ignoring the value of the second.\n",
+            "type": "Mom.Mom r a -> Mom.Mom r b -> Mom.Mom r a"
+          },
+          {
+            "name": "<*>",
+            "comment": "\nAn operator alias for `ap`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r (a -> b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "<=<",
+            "comment": "\nFlipped version of `(>=>)`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(b -> Mom.Mom r c) -> (a -> Mom.Mom r b) -> a -> Mom.Mom r c"
+          },
+          {
+            "name": "=<<",
+            "comment": "\nAn operator alias for `bind`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> Mom.Mom r b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": ">=>",
+            "comment": "\nSequences two computational effect substitutions.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> Mom.Mom r b) -> (b -> Mom.Mom r c) -> a -> Mom.Mom r c"
+          },
+          {
+            "name": ">>=",
+            "comment": "\nFlipped version of `(=<<)`.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r a -> (a -> Mom.Mom r b) -> Mom.Mom r b"
+          },
+          {
+            "name": "ap",
+            "comment": "\nTransforms values of a computational effect by the given function in the computational effect.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r (a -> b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "bind",
+            "comment": "\nSubstitues a value in an effectful computation.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> Mom.Mom r b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "callCC",
+            "comment": "\nControl flow primitive for effectful computations.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "((a -> Mom.Mom r b) -> Mom.Mom r a) -> Mom.Mom r a"
+          },
+          {
+            "name": "forever",
+            "comment": "\nExecutes the effectful computation forever.\n",
+            "type": "Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "join",
+            "comment": "\nRemoves a layer of computational effects.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r (Mom.Mom r a) -> Mom.Mom r a"
+          },
+          {
+            "name": "map",
+            "comment": "\nTransforms values of a computational effect by the given function.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> b) -> Mom.Mom r a -> Mom.Mom r b"
+          },
+          {
+            "name": "pure",
+            "comment": "\nEmbeds a pure value into an effectful computation.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "a -> Mom.Mom r a"
+          },
+          {
+            "name": "run",
+            "comment": "\nExtracts the computational effects to the elm level.\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "Mom.Mom r a -> (a -> r) -> r"
+          },
+          {
+            "name": "unless",
+            "comment": "\nExecutes the effectful computation only when the `Bool` is false.\n",
+            "type": "Bool -> Mom.Mom r () -> Mom.Mom r ()"
+          },
+          {
+            "name": "when",
+            "comment": "\nExecutes the effectful computation only when the `Bool` is true.\n",
+            "type": "Bool -> Mom.Mom r () -> Mom.Mom r ()"
+          },
+          {
+            "name": "with",
+            "comment": "\nFlipped version of `run`\n\nDue to parametricity, this documentation is worthless,\nas there is exactly one implementation of this function.\n",
+            "type": "(a -> r) -> Mom.Mom r a -> r"
+          }
+        ],
         "generated-with-elm-version": "0.17.0"
       }
     ]
@@ -49369,6 +49814,78 @@
     ]
   },
   {
+    "name": "stasdavydov/elm-cart",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Cart",
+        "comment": " A tiny library for shopping carts. It supports any Product types to add into a cart.\nThe ```price``` function is required for cart and item subtotal calculation.\n\n# Types\n@docs Item, Cart\n\n# Cart operations\n@docs cart, add, inc, dec, remove, subtotal, qty\n\n# Cart Item operations\n@docs itemSubtotal\n\n",
+        "aliases": [
+          {
+            "name": "Cart",
+            "comment": " Cart is a list of Items.\n",
+            "args": [
+              "a"
+            ],
+            "type": "List (Cart.Item a)"
+          },
+          {
+            "name": "Item",
+            "comment": " Item record is a counter of added products into the cart.\n\n    type alias Product = { id : Int, price : Float }\n    item = { product = { id = 1, price = 10.0 }, qty = 1 }\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ product : a, qty : Int, date_added : Date.Date }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add the product to the cart. Time of adding is specified as a parameter.\n\n    type alias Product = { id : Int, price : Float }\n\n    add (Product 1 10.0) cart 12345 ==\n      [{ product = { id = 1, price = 10.0 }, qty = 1, date_added = 12345 }]\n",
+            "type": "a -> Cart.Cart a -> Time.Time -> Cart.Cart a"
+          },
+          {
+            "name": "cart",
+            "comment": " Return an empty cart.\n\n    cart == []\n",
+            "type": "List (Cart.Item a)"
+          },
+          {
+            "name": "dec",
+            "comment": " Decrease quantity of the product in the cart.\n\n    type alias Product = { id : Int, price : Float }\n    p = Product 1 10.0\n    c = inc p (add p cart 12345)\n\n    c == [{ product = { id = 1, price = 10.0 }, qty = 2, date_added = 12345 }]\n\n    dec p c == [{ product = { id = 1, price = 10.0 }, qty = 1 }]\n    dec p (dec p c) == []\n",
+            "type": "a -> Cart.Cart a -> Cart.Cart a"
+          },
+          {
+            "name": "inc",
+            "comment": " Increase quantity of the product in the cart.\n\n    type alias Product = { id : Int, price : Float }\n    p = Product 1 10.0\n\n    c = add p cart 12345\n    c == [{ product = { id = 1, price = 10.0 }, qty = 1, date_added = 12345 }]\n\n    inc p c == [{ product = { id = 1, price = 10.0 }, qty = 2, date_added = 12345 }]\n",
+            "type": "a -> Cart.Cart a -> Cart.Cart a"
+          },
+          {
+            "name": "itemSubtotal",
+            "comment": " Get the item subtotal with the given price function required for getting price of the product.\n\n    type alias Product = { id : Int, price : Float }\n\n    itemSubtotal .price (item <| Product 1 10.0) == 10.0\n",
+            "type": "(a -> Float) -> Cart.Item a -> Float"
+          },
+          {
+            "name": "qty",
+            "comment": " Get a quantity of all products in the cart.\n\n    type alias Product = { id : Int, price : Float }\n\n    qty (cart add <| Product 1 10.0 ) == 1\n",
+            "type": "Cart.Cart a -> Int"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove the product from the cart.\n\n    type alias Product = { id : Int, price : Float }\n    p = Product 1 10.0\n    c = add p cart 12345\n    c == [{ product = { id = 1, price = 10.0 }, qty = 1, date_added = 12345 }]\n    remove p c == []\n",
+            "type": "a -> Cart.Cart a -> Cart.Cart a"
+          },
+          {
+            "name": "subtotal",
+            "comment": " Get subtotal of the cart with the given price function for getting price of stored products in the cart.\n\n    type alias Product = { id : Int, price : Float }\n    p = Product 1 10.0\n    subtotal .price (inc p (add p cart 12345)) == 20.0\n\n",
+            "type": "(a -> Float) -> Cart.Cart a -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "stil4m/elm-aui-css",
     "version": "2.0.0",
     "docs": [
@@ -51296,7 +51813,7 @@
   },
   {
     "name": "thebritican/elm-autocomplete",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "docs": [
       {
         "name": "Autocomplete",
@@ -51408,7 +51925,7 @@
       },
       {
         "name": "Autocomplete.Config",
-        "comment": " Configuration module for the Autocomplete component.\n\n# Definition\n@docs Config, ItemHtmlFn, Text, InputValue, Index, Completed, ValueChanged, SelectionChanged, Accessibility\n\n# Defaults\n@docs defaultConfig\n\n# Modifiers\n@docs isValueControlled, setClassesFn, setCompletionKeyCodes, setItemHtml, setMaxListSize, setFilterFn, setCompareFn, setNoMatchesDisplay, setLoadingDisplay, setAccessibilityProperties\n\n\n",
+        "comment": " Configuration module for the Autocomplete component.\n\n# Definition\n@docs Config, ItemHtmlFn, Text, InputValue, Index, Completed, ValueChanged, SelectionChanged, Accessibility\n\n# Defaults\n@docs defaultConfig\n\n# Modifiers\n@docs hideMenuIfEmpty, isValueControlled, setClassesFn, setCompletionKeyCodes, setItemHtml, setMaxListSize, setFilterFn, setCompareFn, setNoMatchesDisplay, setLoadingDisplay, setAccessibilityProperties\n\n\n",
         "aliases": [
           {
             "name": "Accessibility",
@@ -51475,6 +51992,11 @@
             "name": "defaultConfig",
             "comment": " A simple Autocomplete configuration\n",
             "type": "Autocomplete.Config.Config msg"
+          },
+          {
+            "name": "hideMenuIfEmpty",
+            "comment": " Provide True to hide the autocomplete menu if the input field is empty.\n    False to show the autocomplete menu whenever the input field has focus.\n    The default config provides False.\n",
+            "type": "Bool -> Autocomplete.Config.Config msg -> Autocomplete.Config.Config msg"
           },
           {
             "name": "isValueControlled",
