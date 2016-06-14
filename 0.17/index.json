@@ -7505,11 +7505,11 @@
   },
   {
     "name": "Fresheyeball/elm-return",
-    "version": "1.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Return",
-        "comment": "\n## Type\nModeling the `update` tuple as a Monad\n@docs Return\n\n## Basics\n@docs map, map2, map3, map4, map5, andMap, singleton, andThen, (|<), (>|), (>>|), (|<<)\n\n## Write `Cmd`s\n@docs writer, tell, listen, pass, censor\n\n## Read `Cmd`s\n@docs reader, ask\n\n## State\n@docs get, put\n",
+        "comment": "\n## Type\nModeling the `update` tuple as a Monad similar to `Writer`\n@docs Return, ReturnF\n\n## Mapping\n@docs map, map2, map3, map4, map5, andMap, mapWith, mapCmd\n\n## Basics\n@docs singleton, andThen, (|<), (>|), (>>|), (|<<), (>>>), (<<<)\n\n## Write `Cmd`s\n@docs return, command, tell, pass, effect\n\n## Read `Cmd`s\n@docs ask, listen\n\n## Fancy non-sense\n@docs sequence, flatten\n",
         "aliases": [
           {
             "name": "Return",
@@ -7519,10 +7519,29 @@
               "model"
             ],
             "type": "( model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "ReturnF",
+            "comment": " ",
+            "args": [
+              "msg",
+              "model"
+            ],
+            "type": "Return.Return msg model -> Return.Return msg model"
           }
         ],
         "types": [],
         "values": [
+          {
+            "name": "<<<",
+            "comment": "\n\nGo point free with `andThen` chaining. Looking at the example from `andThen`\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn `andThen` foo\n           `andThen` foo\n           `andThen` foo\n```\n\nthis code roughly becomes:\n\n```elm\ndoFoo3Times : { model | bar : Int } -> Return msg { model | bar : Int }\ndoFoo3Times =\n  foo >>> foo >>> foo\n```\n",
+            "type": "(b -> Return.Return msg c) -> (a -> Return.Return msg b) -> a -> Return.Return msg c"
+          },
+          {
+            "name": ">>>",
+            "comment": " ",
+            "type": "(a -> Return.Return msg b) -> (b -> Return.Return msg c) -> a -> Return.Return msg c"
+          },
           {
             "name": ">>|",
             "comment": " ",
@@ -7532,49 +7551,54 @@
           },
           {
             "name": ">|",
-            "comment": " ",
+            "comment": "\nSame as `>>|` but the left hand `Model` is dropped\n",
             "type": "Return.Return msg model -> Return.Return msg model' -> Return.Return msg model'",
             "associativity": "left",
             "precedence": 7
           },
           {
             "name": "andMap",
-            "comment": " ",
+            "comment": "\nMap an `Return` into a `Return` containing a `Model` function\n",
             "type": "Return.Return msg (a -> b) -> Return.Return msg a -> Return.Return msg b"
           },
           {
             "name": "andThen",
-            "comment": " ",
+            "comment": "\nChain together expressions from `Model` to `Return`.\n\n```elm\n-- arbitrary function to demonstrate\nfoo : Model -> Return Msg Model\nfoo ({bar} as model) =\n  -- forking logic\n  if bar < 10\n  -- that side effects may be added\n  then (model, getAjaxThing)\n  -- that the model may be updated\n  else ({model | bar = model.bar - 2 }, Cmd.none)\n```\n\nThey are now chainable with `andThen`...\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn `andThen` foo\n           `andThen` foo\n           `andThen` foo\n```\n\nHere we changed up `foo` three times, but we can use any function of\ntype `(a -> Return msg b)`.\n\nCommands will be accumulated automatically as is the case with all\nfunctions in this library.\n",
             "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b"
           },
           {
             "name": "ask",
-            "comment": " ",
+            "comment": "\n",
             "type": "Return.Return msg model -> Return.Return msg (Platform.Cmd.Cmd msg)"
           },
           {
-            "name": "censor",
-            "comment": " ",
-            "type": "(Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg') -> Return.Return msg model -> Return.Return msg' model"
+            "name": "command",
+            "comment": "\nAdd a `Cmd` to a `Return`, the `Model` is uneffected\n",
+            "type": "Platform.Cmd.Cmd msg -> Return.Return msg model -> Return.Return msg model"
           },
           {
-            "name": "get",
+            "name": "effect",
+            "comment": "\nAdd a `Cmd` to a `Return` based on its `Model`, the `Model` will not be effected\n",
+            "type": "(model -> Platform.Cmd.Cmd msg) -> Return.Return msg model -> Return.Return msg model"
+          },
+          {
+            "name": "flatten",
             "comment": " ",
-            "type": "Platform.Cmd.Cmd msg -> Return.Return msg (Platform.Cmd.Cmd msg)"
+            "type": "Return.Return msg (Return.Return msg model) -> Return.Return msg model"
           },
           {
             "name": "listen",
-            "comment": " ",
+            "comment": "\n",
             "type": "Return.Return msg a -> Return.Return msg (Return.Return msg a)"
           },
           {
             "name": "map",
-            "comment": " ",
+            "comment": "\nTransform the `Model` the `Cmd` will be left untouched\n",
             "type": "(a -> b) -> Return.Return msg a -> Return.Return msg b"
           },
           {
             "name": "map2",
-            "comment": " ",
+            "comment": "\nCombine 2 `Return`s with a function\n\n```elm\nmap2\n  (\\modelA modelB -> { modelA | foo = modelB.foo })\n  retA\n  retB\n```\n",
             "type": "(a -> b -> c) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c"
           },
           {
@@ -7593,38 +7617,43 @@
             "type": "(a -> b -> c -> d -> e -> f) -> Return.Return msg a -> Return.Return msg b -> Return.Return msg c -> Return.Return msg d -> Return.Return msg e -> Return.Return msg f"
           },
           {
+            "name": "mapCmd",
+            "comment": "\nMap on the `Cmd`.\n",
+            "type": "(Platform.Cmd.Cmd a -> Platform.Cmd.Cmd b) -> Return.Return a model -> Return.Return b model"
+          },
+          {
+            "name": "mapWith",
+            "comment": "\nTransform the `Model` of and add a new `Cmd` to the queue\n",
+            "type": "(a -> b) -> Platform.Cmd.Cmd msg -> Return.Return msg a -> Return.Return msg b"
+          },
+          {
             "name": "pass",
-            "comment": " ",
+            "comment": "\n",
             "type": "Return.Return msg ( model, Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg' ) -> Return.Return msg' model"
           },
           {
-            "name": "put",
-            "comment": " ",
-            "type": "Platform.Cmd.Cmd msg -> model -> Return.Return msg ()"
+            "name": "return",
+            "comment": "\nConstruct a new `Return` from parts\n",
+            "type": "model -> Platform.Cmd.Cmd msg -> Return.Return msg model"
           },
           {
-            "name": "reader",
+            "name": "sequence",
             "comment": " ",
-            "type": "(Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg') -> Return.Return msg model -> Return.Return msg' model"
+            "type": "List (Return.Return msg model) -> Return.Return msg (List model)"
           },
           {
             "name": "singleton",
-            "comment": " ",
+            "comment": "\nCreate a `Return` from a given `Model`\n",
             "type": "model -> Return.Return msg model"
           },
           {
             "name": "tell",
-            "comment": " ",
+            "comment": "\nConstruct a `Return` from a `Cmd`\n",
             "type": "Platform.Cmd.Cmd msg -> Return.Return msg ()"
           },
           {
-            "name": "writer",
-            "comment": " ",
-            "type": "( model, Platform.Cmd.Cmd msg ) -> Return.Return msg model"
-          },
-          {
             "name": "|<",
-            "comment": " ",
+            "comment": "\nSame as `>>|` but the right hand `Model` is dropped\n",
             "type": "Return.Return msg model' -> Return.Return msg model -> Return.Return msg model'",
             "associativity": "right",
             "precedence": 7
@@ -8940,15 +8969,15 @@
   },
   {
     "name": "akbiggs/elm-effects",
-    "version": "2.0.1",
+    "version": "2.0.3",
     "docs": [
       {
         "name": "Effects",
-        "comment": " This package contains several useful functions for operating on pairs\nof a value and a list of side-effects. Side-effects do not have to be external\nElm events - they can be internal app events, such as a message indicating that\nthe score of your game should increase, or that you want to navigate the app\nback to the home page.\n\nMore documentation coming soon!\n\n# Aliases\n@docs Effects, None\n\n# Constructors\n@docs init, return\n\n# Getters\n@docs getValue, getEffects\n\n# Adding Effects\n@docs add, addIf\n\n# Mapping\n@docs mapOverValue, mapOverEffects\n\n# Handling Effects\n@docs Handler, handle, ignoreUnused\n\n# Chaining Operations\n@docs andThen\n\n# Combining\n@docs batch\n\n# Conversion\n@docs toCmd\n",
+        "comment": " This package contains several useful functions for operating on pairs\nof a value and a list of side-effects. Side-effects do not have to be external\nElm events such as I/O and randomness - they can be internal app events, such as a message indicating that\nthe score of your game should increase or that you want to navigate back to the home page.\n\nFor example, having the player jump might update the state of the player and have a\nside-effect of playing a sound and spawning some dust particles if the player\njumped off the ground. In that case, your player component might look like this:\n\n    type Msg\n      = Jump\n\n    type Effect\n      = SpawnDustParticles\n      | PlaySound String\n\n    update : Msg -> Model -> Effects Model Effect\n    update msg model =\n        case msg of\n            Jump ->\n                Effects.return { model | velocity = jumpVelocity }\n                    |> Effects.add [PlaySound \"jumpSound.wav\"]\n                    |> Effects.addIf model.isGrounded [SpawnDustParticles]\n\n# Aliases\n@docs Effects, None\n\n# Constructors\n@docs init, return\n\n# Getters\n@docs getValue, getEffects\n\n# Adding Effects\n@docs add, addIf\n\n# Mapping\n@docs mapOverValue, mapOverEffects\n\n# Handling Effects\n@docs Handler, handle, ignoreUnused\n\n# Chaining Operations\n@docs andThen\n\n# Combining\n@docs batch\n\n# Conversion\n@docs toCmd\n",
         "aliases": [
           {
             "name": "Effects",
-            "comment": " A value combining a value and a list of effects associated with that current\nvalue, e.g. resulting from an update or initialization.\n\nFor example, having the player jump might update the state of the player and have a\nside-effect of adding some dust particles into the scene.\n",
+            "comment": " `Effects a effect` combines a value of type `a` and a list of effects of\ntype `effect` into a single data structure.\n",
             "args": [
               "a",
               "effect"
@@ -8957,7 +8986,7 @@
           },
           {
             "name": "Handler",
-            "comment": " A `Handler` is a function that takes an effect and applies it to an object,\ngiving back the new state of that object and any resulting effects. This is useful\nwhen you want to take a child's side-effect and have the parent react to it. For example,\nif updating the child has an effect of `IncreaseScore 100`, the parent might update its\n`score` value by that amount and return an additional side-effect of `PlaySound \"scoreIncreased.wav\"`.\n",
+            "comment": " A `Handler` is a function that takes an effect and applies it to an object,\ngiving back the new state of that object and any resulting effects.\n",
             "args": [
               "effectA",
               "a",
@@ -8967,7 +8996,7 @@
           },
           {
             "name": "None",
-            "comment": " `None` is useful when updating a component shouldn't have any side effects on\nthe world. This way, you can still keep the structure of your component the same,\nmaking your code consistent and flexible.\n",
+            "comment": " `None` is useful when updating a component shouldn't have any side effects on\nthe world. This way, you can still keep the structure of your component the same,\nmaking your code consistent and flexible if you want to introduce side-effects later\non. For example, a cloud in the background might not have any side-effects on the world:\n\n    type Msg = Tick Time\n\n    type alias Effect = Effects.None\n\n    update : Msg -> Model -> Effects Model Effect\n    update msg model =\n        -- implementation details\n",
             "args": [],
             "type": "()"
           }
@@ -8976,7 +9005,7 @@
         "values": [
           {
             "name": "add",
-            "comment": " Add some additional side-effects to your value-and-effects result.\n",
+            "comment": " Add some additional side-effects to your value-and-effects result. This is\nnice when you want to take the result from another function and dump some extra\neffects into it without destructuring.\n",
             "type": "List effect -> Effects.Effects a effect -> Effects.Effects a effect"
           },
           {
@@ -8986,12 +9015,12 @@
           },
           {
             "name": "andThen",
-            "comment": " If you have a bunch of operations that take a value and return a value-and-effects\npair, e.g. a value and a list of `Cmd`s to batch together, chaining them together\ncan be really annoying, because you constantly have to destructure the result\nand grab the value, bringing it into the next statement.\n`andThen` lets you take the value out of a value-and-effects pair, run a function\non it that returns a new value-and-effects pair, and batches the old effects together\nwith the new ones. For example, here are a bunch of actions chained together that\nmight generate sound effects and particles:\n\n    Effects.return newEnemy\n        `andThen` Enemy.move {x = 0, y = 1}\n        `andThen` Enemy.makeYelpingNoiseOccasionally\n",
+            "comment": " If you have a bunch of operations that take a value and return a value-and-effects\npair, e.g. a value and a list of `Cmd`s to batch together, chaining them together\ncan be really annoying, because you constantly have to destructure the result\nand grab the value, bringing it into the next statement.\n\n`andThen` lets you take the value out of a value-and-effects pair, run a function\non it that returns a new value-and-effects pair, and batches the old effects together\nwith the new ones. For example, here are a bunch of actions chained together that\nmight generate sound effects and particles:\n\n    -- returns Effects Enemy.Model Enemy.Effect\n    Effects.return newEnemy\n        `andThen` Enemy.move {x = 0, y = 1}\n        `andThen` Enemy.makeYelpingNoiseOccasionally\n",
             "type": "Effects.Effects a effect -> (a -> Effects.Effects b effect) -> Effects.Effects b effect"
           },
           {
             "name": "batch",
-            "comment": " Takes a list of results with the same type of effects and brings their\neffects together into one list. This is useful when you map a function that\nreturns a value and effects over a list of objects, e.g.\n\n    List.map (Enemy.update Enemy.TakeDamage) enemies\n",
+            "comment": " Takes a list of results with the same type of effects and brings their\neffects together into one list. This is useful when you map a function that\nreturns a value and effects over a list of objects, e.g.\n\n    List.map (Enemy.update Enemy.TakeDamage) enemies\n        |> Effects.batch -- equivalent to |> \\(x, effectLists) -> (x, List.concat effectsLists)\n",
             "type": "List (Effects.Effects a effect) -> Effects.Effects (List a) effect"
           },
           {
@@ -9006,22 +9035,22 @@
           },
           {
             "name": "handle",
-            "comment": " Perform a list of effects on an object, returning the new state of that\nobject and any side-effects that resulted from those effects occurring.\n",
+            "comment": " Perform a list of effects sequentially on an object, returning the new state of that\nobject and any side-effects that resulted from those effects occurring. This is similar\nto a `foldl`.\n\nThis is useful when you want to take a child's side-effect and have the parent react to it.\nFor example, if a child component gets updated and returns an effect saying to increase the score,\nthe parent should update the score and play a sound:\n\n    -- in the parent component's update function\n\n    let\n        (updatedEnemies, enemyEffects) =\n            List.map (Enemy.update Enemy.TakeDamage) model.enemies\n                |> Effects.batch -- the score might increase if the enemy died\n    in\n        Effects.return { model | enemies = updatedEnemies }\n            `Effects.andThen` Effects.handle handleEnemyEffect enemyEffects\n\n    -- in the parent component's helper functions\n\n    handleEnemyEffect : Effects.Handler Enemy.Effect Model Effect\n    handleEnemyEffect enemyEffect model =\n        case enemyEffect of\n            Enemy.IncreaseScore amount ->\n                Effects.return { model | score = model.score + amount }\n                    |> Effects.add [PlaySound \"scoreIncreased.wav\"]\n",
             "type": "Effects.Handler effectA a effectB -> List effectA -> a -> Effects.Effects a effectB"
           },
           {
             "name": "ignoreUnused",
-            "comment": " If an object returned no side-effect, this function allows you to ignore it\nin a way that will fail to compile if the object's code is modified to return\nside-effects in the future.\n",
+            "comment": " If an object returned no side-effect, this function allows you to ignore it\nin a way that will fail to compile if the object's code is modified to return\nside-effects in the future.\n\n    Effects.return { model | clouds = updatedClouds }\n        `Effects.andThen` Effects.handle handleCloudEffect cloudEffects\n\n    handleCloudEffect : Effects.Handler Cloud.Effect Model Effect\n    handleCloudEffect =\n      Effects.ignoreUnused\n",
             "type": "Effects.Handler Effects.None a effect"
           },
           {
             "name": "init",
-            "comment": " Initialize an `Effects` wrapper from a value and a list of effects.\n",
+            "comment": " Initialize an `Effects` wrapper from a value and a list of effects. For now,\nthis is pretty useless compared to just wrapping the value and effects\nin parentheses -- however, later on the implementation of `Effects`\nmight change to become a dictionary with `value` and `effects` keys, so using\nthis function makes your code more future-proof. It's also a bit nicer stylistically\ncompared to wrapping your code in parentheses when the value is more complicated: compare\n`elm-format`'s output of\n\n    ( { x = 0\n      , y = 0\n      }\n    , [ PlaySound \"hello.wav\", IncreaseScore 100 ]\n    )\n\nwith\n\n    Effects.init\n        { x = 0\n        , y = 0\n        }\n        [ PlaySound \"hello.wav\", IncreaseScore 100 ]\n\n",
             "type": "a -> List effect -> Effects.Effects a effect"
           },
           {
             "name": "mapOverEffects",
-            "comment": " Modify the effects of a value-and-effects pair, while still keeping the value\nthe same.\n",
+            "comment": " Map a function over the list of effects of a value-and-effects pair,\nwhile still keeping the value the same.\n",
             "type": "(effectA -> effectB) -> Effects.Effects a effectA -> Effects.Effects a effectB"
           },
           {
@@ -9031,12 +9060,12 @@
           },
           {
             "name": "return",
-            "comment": " Take a value and wrap it with no `Effects`.\nThis is useful when you don't want to surround your value in parentheses because\nit will look messy, e.g. with updates to larger data structures.\n",
+            "comment": " Take a value and wrap it with no effects.\nThis is useful when you don't want to make a tuple with a more complicated value and an empty\nlist because it will look messy, e.g.\n\n    Effects.return\n        { model\n            | isGrounded = true\n            , velocity = (0, 0)\n        }\n",
             "type": "a -> Effects.Effects a effect"
           },
           {
             "name": "toCmd",
-            "comment": " Takes a pair of a value and a list of commands,\nand turns it into a pair of a value and a single command by batching the commands\ntogether.\n",
+            "comment": " Takes a pair of a value and a list of commands,\nand turns it into a pair of a value and a single command by batching the commands\ntogether.\n\n    runRequests : Model -> (Model, Cmd Msg)\n    runRequests model =\n        (Effects.return model\n            `Effects.andThen` fetchGifs\n            `Effects.andThen` attachRandomId\n        )\n            |> Effects.toCmd\n",
             "type": "Effects.Effects a (Platform.Cmd.Cmd msg) -> ( a, Platform.Cmd.Cmd msg )"
           }
         ],
@@ -34059,6 +34088,50 @@
     ]
   },
   {
+    "name": "hoelzro/elm-drag",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Drag",
+        "comment": " This module listens for mouse events and creates drag events that\ncontain the delta x and y of the mouse's movement when the button is\npressed down.\n\n# TEA Data Structures\n@docs Model, Msg\n\n# TEA Functions\n@docs initialModel, subscriptions, update\n\n    import Html.App as App\n    import Html exposing (Html, text)\n\n    import Drag\n\n    type alias Model = {\n        dragModel : Drag.Model,\n        dragDistance : Int\n      }\n\n    type Msg =\n      DragMsg Drag.Msg |\n      Drag (Int, Int)\n\n    init : (Model, Cmd Msg)\n    init =\n      let initialModel = {\n        dragModel = Drag.initialModel,\n        dragDistance = 0\n      } in (initialModel, Cmd.none)\n\n    subscriptions : Model -> Sub Msg\n    subscriptions model = Drag.subscriptions DragMsg model.dragModel\n\n    update : Msg -> Model -> (Model, Cmd Msg)\n    update msg model =\n      case msg of\n        DragMsg msg ->\n          let (newDragModel, dragCmd) = Drag.update Drag msg model.dragModel\n          in ({model | dragModel = newDragModel}, dragCmd)\n        Drag (dx, dy) -> ({ model | dragDistance = model.dragDistance + (abs dx) + (abs dy) }, Cmd.none)\n\n    view : Model -> Html Msg\n    view model = text <| toString model\n\n    main : Program Never\n    main = App.program {\n        init = init,\n        update = update,\n        subscriptions = subscriptions,\n        view = view\n      }\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " The internal state of the drag module.  You don't need to poke into this\nat all; you just need to make sure it's present in your application's model\nand that you update it when Drag events occur.\n",
+            "args": [],
+            "type": "{ isDown : Bool, currPosition : ( Int, Int ) }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Internal messages for the drag module.  You need to make sure a\nconstructor for your application's Msg type exists that wraps this,\nand that you handle it by calling Drag.update to update the drag\nmodel in your application's update function.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "initialModel",
+            "comment": " The initial state for the drag module.  Use in your application's\ninit function to initialize the drag model part of your model.\n",
+            "type": "Drag.Model"
+          },
+          {
+            "name": "subscriptions",
+            "comment": " Returns a subscription for the events that elm-drag needs to function.\nThe first argument is a constructor that converts elm-drag messages into\nyour application's messages; usually you'll have a `type Msg = DragMsg Drag.Msg`\nconstructor, so this argument would just be `DragMsg`.  The second argument\nis the drag model.\n",
+            "type": "(Drag.Msg -> msg) -> Drag.Model -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "update",
+            "comment": " Updates the drag model.  The first argument is a function that\nconverts an `(Int, Int)` to your application's message type; if you\nhave a `type Msg = Drag (Int, Int)`, this would just be `Drag`.\nThe second and third arguments are the drag message and model that\nyou're currently processing.\n",
+            "type": "(( Int, Int ) -> msg) -> Drag.Msg -> Drag.Model -> ( Drag.Model, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "imeckler/either",
     "version": "1.0.2",
     "docs": [
@@ -38701,6 +38774,36 @@
             "name": "youtube_square",
             "comment": "",
             "type": "Color.Color -> Int -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "krisajenkins/elm-cdn",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "CDN",
+        "comment": " CDN provides handly links to the web CSS frameworks you want at-hand.\n\nTo use, just put the stylesheet you want in your top-level view function, like so:\n\n    rootView : Model -> Html Msg\n    rootView model =\n        div []\n            [ CDN.bootstrap.css\n            , ...\n            ]\n\n@docs bootstrap, skeleton, reset\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bootstrap",
+            "comment": " Bootstrap 3.\n",
+            "type": "{ css : Html.Html msg, theme : Html.Html msg, js : Html.Html msg }"
+          },
+          {
+            "name": "reset",
+            "comment": " Eric Meyer's CSS reset.\n",
+            "type": "{ css : Html.Html msg }"
+          },
+          {
+            "name": "skeleton",
+            "comment": " Skeleton 2.\n",
+            "type": "{ css : Html.Html msg }"
           }
         ],
         "generated-with-elm-version": "0.17.0"
