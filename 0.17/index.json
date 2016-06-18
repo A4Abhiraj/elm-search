@@ -7830,6 +7830,129 @@
     ]
   },
   {
+    "name": "NoRedInk/elm-api-components",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Component.Filter.View",
+        "comment": " A view display for a filter\n@docs view, viewFilterCheckbox\n\n## Css stuff\n@docs CssClasses, filterNamespace\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "CssClasses",
+            "comment": " The CSS classes used in this view\n",
+            "args": [],
+            "cases": [
+              [
+                "FilterGroup",
+                []
+              ],
+              [
+                "FilterEntry",
+                []
+              ],
+              [
+                "Checkbox",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "filterNamespace",
+            "comment": " Our namespace for these filters\n",
+            "type": "Html.CssHelpers.Namespace String a b Component.Filter.Update.Action"
+          },
+          {
+            "name": "view",
+            "comment": " Displays all filters in the model side-by-side\n",
+            "type": "Component.Filter.Model.Model b c -> Html.Html Component.Filter.Update.Action"
+          },
+          {
+            "name": "viewFilterCheckbox",
+            "comment": " Displays a single filter field\n",
+            "type": "Component.Filter.Model.FilterField a -> Html.Html Component.Filter.Update.Action"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Component.Filter.Update",
+        "comment": " Our API for a filtering component\n@docs Action, update\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Action",
+            "comment": " The actions defined here can be considered our external API\nThe top level component will be able to trigger these actions,\nas well as the local component\n",
+            "args": [],
+            "cases": [
+              [
+                "NoOp",
+                []
+              ],
+              [
+                "SetFilterDisabled",
+                [
+                  "String",
+                  "Bool"
+                ]
+              ],
+              [
+                "SetFilterChecked",
+                [
+                  "String",
+                  "Bool"
+                ]
+              ],
+              [
+                "SetFilterVisible",
+                [
+                  "String",
+                  "Bool"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "update",
+            "comment": " Takes the addresses record, the action, and the model\nRuns the defined action on the model\n",
+            "type": "Component.Filter.Update.Action -> Component.Filter.Model.Model b c -> ( Component.Filter.Model.Model b c , Platform.Cmd.Cmd Component.Filter.Update.Action )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Component.Filter.Model",
+        "comment": " Our filter API\n\n@docs Model, FilterField\n\n",
+        "aliases": [
+          {
+            "name": "FilterField",
+            "comment": "\nEach filter field has a bunch of properties useful for displaying data\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ name : String , isDisabled : Bool , isChecked : Bool , isVisible : Bool , value : String , text : String , type' : a }"
+          },
+          {
+            "name": "Model",
+            "comment": " Demand that the model has a filter property. This means you can either use\na top level model like\n```\ntype alias Model = { filters : [] }\n```\nor\n```\ntype alias Model = { filterA : { filters [] } }\n```\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "{ a | filters : List (Component.Filter.Model.FilterField b) }"
+          }
+        ],
+        "types": [],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "NoRedInk/elm-decode-pipeline",
     "version": "1.1.2",
     "docs": [
@@ -7997,6 +8120,101 @@
     ]
   },
   {
+    "name": "NoRedInk/elm-rails",
+    "version": "4.0.2",
+    "docs": [
+      {
+        "name": "Rails.Decode",
+        "comment": "\n\nTypes\n@docs ErrorList\n\n# Decoding\n@docs errors\n\n",
+        "aliases": [
+          {
+            "name": "ErrorList",
+            "comment": " ErrorList is a type alias for\na list of fields to String, where `field` is expected to be a type for matching\nerrors to\n```\n\ntype Field = Name | Password\n\ndecode : ErrorList Field\n\n```\n",
+            "args": [
+              "field"
+            ],
+            "type": "List ( field, String )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "errors",
+            "comment": " Decodes errors passed from rails formatted as\n\n`{ errors: {errorName: [\"Error String\"] } }`.\n\nThis function takes a Dict that is a map of all the fields you need decoded. It should be formatted\nnest\n\nDict.fromList\n    [ ( \"school\", School )\n    , ( \"school.name\", SchoolName )\n    , ( \"school.address\", SchoolAddress )\n    , ( \"school.city\", City )\n    , ( \"school.state\", State )\n    , ( \"school.zip\", Zip )\n    , ( \"school.country\", Country )\n    ]\n\n",
+            "type": "Dict.Dict String field -> Json.Decode.Decoder (Rails.Decode.ErrorList field)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Rails",
+        "comment": "\n\n# Http\n@docs Error, get, post, send, fromJson, always, decoder\n\n# Tokens\n@docs csrfToken\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Error",
+            "comment": " The kinds of errors a Rails server may return.\n",
+            "args": [
+              "error"
+            ],
+            "cases": [
+              [
+                "HttpError",
+                [
+                  "Http.Error"
+                ]
+              ],
+              [
+                "RailsError",
+                [
+                  "error"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "always",
+            "comment": " Returns a decoder suitable for passing to `fromJson`, which uses the same decoder for both success and failure responses.\n",
+            "type": "Json.Decode.Decoder value -> Rails.ResponseDecoder value value"
+          },
+          {
+            "name": "csrfToken",
+            "comment": " If there was a `<meta name=\"csrf-token\">` tag in the page's `<head>` when\n    elm-rails loaded, returns the value its `content` attribute had at that time.\n\n    Rails expects this value in the `X-CSRF-Token` header for non-`GET` requests as\n    a [CSRF countermeasure](http://guides.rubyonrails.org/security.html#csrf-countermeasures).\n",
+            "type": "Maybe.Maybe String"
+          },
+          {
+            "name": "decoder",
+            "comment": " Returns a decoder suitable for passing to `fromJson`.\n",
+            "type": "Json.Decode.Decoder value -> Json.Decode.Decoder error -> Rails.ResponseDecoder error value"
+          },
+          {
+            "name": "fromJson",
+            "comment": " Think `Http.fromJson`, but with additional effort to parse a non-20x response as JSON.\n\n  * If the status code is in the 200 range, try to parse with the given `decoder.success`.\n    * If parsing fails, return an `Http.UnexpectedPayload` wrapped in `HttpError`\n  * If the status code is outside the 200 range, try to parse with the given `decoder.success`.\n    * If parsing fails, return an `Http.BadResponse` wrapped in `HttpError`\n",
+            "type": "Rails.ResponseDecoder error value -> Task.Task Http.RawError Http.Response -> Task.Task (Rails.Error error) value"
+          },
+          {
+            "name": "get",
+            "comment": " Send a GET request to the given URL. You also specify how to decode the response.\n\n    import Json.Decode (list, string)\n\n    hats : Task (Error (List String)) (List String)\n    hats =\n      get (decoder (list string) (succeed ())) \"http://example.com/hat-categories.json\"\n\n",
+            "type": "Rails.ResponseDecoder error value -> String -> Task.Task (Rails.Error error) value"
+          },
+          {
+            "name": "post",
+            "comment": " Send a POST request to the given URL. You also specify how to decode the response.\n\n  import Json.Decode (list, string)\n  import Http\n\n  hats : Task (Error (List String)) (List String)\n  hats =\n    post (decoder (list string) (succeed ())) \"http://example.com/hat-categories.json\" Http.empty\n\n",
+            "type": "Rails.ResponseDecoder error value -> String -> Http.Body -> Task.Task (Rails.Error error) value"
+          },
+          {
+            "name": "send",
+            "comment": " Utility for working with Rails. Wraps Http.send, passing an Authenticity Token along with the type of request. Suitable for use with `fromJson`:\n\n    import Dict\n    import Json.Decode (list, string)\n    import Json.Encode as Encode\n    import Http\n\n    hats : HatStyle -> Task (Error (List String)) (List String)\n    hats style =\n\n      let\n        payload =\n          Encode.object\n            [ ( \"style\", encodeHatStyle style ) ]\n\n        body =\n          Http.string (Encode.encode 0 payload)\n\n        success =\n          list string\n\n        failure =\n          Dict.fromList [ (\"style\", HatStyle) ]\n            |> Rails.Decode.errors\n      in\n        send \"POST\" url body\n          |> fromJson (decoder success failure)\n",
+            "type": "String -> String -> Http.Body -> Task.Task Http.RawError Http.Response"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "NoRedInk/elm-task-extra",
     "version": "2.0.0",
     "docs": [
@@ -8030,6 +8248,191 @@
             "name": "performFailproof",
             "comment": " Command the runtime system to perform a task that is guaranteed to\nnot fail. The most important argument is the\n[`Task`](http://package.elm-lang.org/packages/elm-lang/core/latest/Task#Task)\nwhich describes what you want to happen. But you also need to provide\na function to tag the success outcome, so as to have a message to feed\nback into your application. Unlike with the standard\n[`perform`](http://package.elm-lang.org/packages/elm-lang/core/latest/Task#perform),\nyou need not provide a function to tag a failing outcome, because the\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\nin the type `Task Never a` expresses that no possibly failing task is\nallowed in that place anyway.\n\nA typical use of the function is `Date.now |> performFailproof CurrentDate`.\n",
             "type": "(a -> msg) -> Task.Task Basics.Never a -> Platform.Cmd.Cmd msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "NoRedInk/nri-elm-css",
+    "version": "1.1.1",
+    "docs": [
+      {
+        "name": "Nri.Stylers",
+        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "makeFont",
+            "comment": "\ntakes a size and a color and creates a font\n",
+            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Nri.Colors",
+        "comment": " Helper module for working with colors\n@docs grayDarker\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "grayDarker",
+            "comment": " Darkest gray\n",
+            "type": "Css.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Nri",
+        "comment": " A collection of helpers for working with NoRedInk projects\n@docs name\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "name",
+            "comment": " NoRedInk's name!\n",
+            "type": "String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "SamirTalwar/arborist",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Arborist.Framework",
+        "comment": " Arborist is a test framework for asynchronous code.\n\nIt is intended for use mostly with Tasks. Tests are defined as assertions on\ntasks, which are executed in parallel and reported on the command line.\n\n# Declaring tests\n@docs Test, Tests, Name, test\n\n# Assertions\n@docs assert\n\n# Running tests\n@docs run\n",
+        "aliases": [
+          {
+            "name": "Name",
+            "comment": " The name of a test. ",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "Tests",
+            "comment": " A list of `Test` cases. ",
+            "args": [],
+            "type": "List Arborist.Framework.Test"
+          }
+        ],
+        "types": [
+          {
+            "name": "Test",
+            "comment": " A test case, usually constructed with the `test` function. ",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "assert",
+            "comment": " `assert` runs a matcher against a value. All values are generally wrapped in tasks.\n\n    let\n      a = Task.succeed 7\n      b = Task.succeed 3\n      c = Task.map2 (+) a b\n    in\n      assert c (equals (Task.succeed 10))\n",
+            "type": "Task.Task a b -> Arborist.Matchers.Matcher a b -> Arborist.Framework.Assertion"
+          },
+          {
+            "name": "run",
+            "comment": " Runs test cases in parallel, and prints the output to the command line. ",
+            "type": "List Arborist.Framework.Test -> (String -> Platform.Cmd.Cmd String) -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "test",
+            "comment": " Defines a test case.\n\n    test \"One plus one is most definitely two\" (\n      assert (Task.succeed (1 + 1)) (equals (Task.succeed 2))\n    )\n",
+            "type": "Arborist.Framework.Name -> Arborist.Framework.Assertion -> Arborist.Framework.Test"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Arborist.Matchers",
+        "comment": " Provides a set of matchers used for assertions.\n\n# Types\n@docs Matcher\n\n# Matchers\n@docs equals, isIntBetween\n@docs not'\n\n# Helpers\n\nThe helpers are generally only to be used when constructing your own matchers.\n\n@docs fails, failsWith\n@docs onFailure, sequenceMessages\n\n",
+        "aliases": [
+          {
+            "name": "Matcher",
+            "comment": " A matcher is a function that accepts a value and asserts some property about it.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "Task.Task a b -> Arborist.Assertions.Assertion"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "equals",
+            "comment": " Asserts that two values are equal.\n\n    assert (Task.succeed \"Hello!\") (equals (Task.succeed \"Hello!\"))\n",
+            "type": "Task.Task a b -> Arborist.Matchers.Matcher a b"
+          },
+          {
+            "name": "fails",
+            "comment": " Asserts that another assertion fails.\n\n    assert (assert (Task.succeed 1) (equals (Task.succeed 2))) fails\n",
+            "type": "Arborist.Matchers.Matcher Arborist.Assertions.FailureMessages ( Bool, Arborist.Assertions.FailureMessages )"
+          },
+          {
+            "name": "failsWith",
+            "comment": " Asserts that another assertion fails with specific failure messages.\n\n    assert (assert (Task.succeed True) (equals (Task.succeed False))) failsWith [\n      (\"Expected\", False),\n      (\"Actual\", True)\n    ]\n",
+            "type": "Arborist.Assertions.FailureMessages -> Arborist.Matchers.Matcher Arborist.Assertions.FailureMessages ( Bool, Arborist.Assertions.FailureMessages )"
+          },
+          {
+            "name": "isIntBetween",
+            "comment": " Asserts an integer is between two others, inclusive.\n\n    assert (Task.succeed 24) (isIntBetween (Task.succeed 12) (Task.succeed 36))\n",
+            "type": "Task.Task a Int -> Task.Task a Int -> Arborist.Matchers.Matcher a Int"
+          },
+          {
+            "name": "not'",
+            "comment": " Negates another matcher.\n\n    assert (Task.succeed 3) (not' (equals (Task.succeed 4)))\n",
+            "type": "Arborist.Matchers.Matcher a b -> Arborist.Matchers.Matcher a b"
+          },
+          {
+            "name": "onFailure",
+            "comment": " When constructing a matcher, adds failure messages.\n\nIf the matching operation results in an error, the error message is included in\nthe failure messages as the first item, with a name of \"Error\".\n\nThis function is often used with `sequenceMessages`.\n\n    equals : Task a b -> Matcher a b\n    equals expected actual =\n      Task.map2 (==) expected actual |> onFailure (sequenceMessages [\n        (\"Expected\", expected),\n        (\"Actual\", actual)\n      ])\n",
+            "type": "Task.Task a Arborist.Assertions.FailureMessages -> Task.Task a Bool -> Arborist.Assertions.Assertion"
+          },
+          {
+            "name": "sequenceMessages",
+            "comment": " Converts a list of failure messages which have value tasks into a task of failure messages.\n\n    let\n      a = Task.succeed 1\n      b = Task.succeed 2\n    in\n      assert (sequenceMessages [(\"A\", a), (\"B\", b)]) (equals (Task.succeed [(\"A\", 1), (\"B\", 2)]))\n",
+            "type": "List ( String, Task.Task a b ) -> Task.Task never Arborist.Assertions.FailureMessages"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Arborist.Assertions",
+        "comment": " Provide a mechanism for asserting that a value (wrapped in a task)\nsuccessfully matches the behaviour outlined by the matcher.\n\n# Assertions\n\n@docs assert\n\n# Types\n\nThe types provided are generally to be used when constructing your own matchers.\n\n@docs Assertion, FailureMessage, FailureMessages\n",
+        "aliases": [
+          {
+            "name": "Assertion",
+            "comment": " `Assertion` is a task representing either success, failure or error.  ",
+            "args": [],
+            "type": "Task.Task Arborist.Assertions.FailureMessages ( Bool, Arborist.Assertions.FailureMessages )"
+          },
+          {
+            "name": "FailureMessage",
+            "comment": " A `FailureMessage` consists of a name and a value to be displayed on failure.  ",
+            "args": [],
+            "type": "( String, String )"
+          },
+          {
+            "name": "FailureMessages",
+            "comment": " `FailureMessages` is a list of `FailureMessage` values.  ",
+            "args": [],
+            "type": "List Arborist.Assertions.FailureMessage"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "assert",
+            "comment": " `assert` runs a matcher against a value. All values are generally wrapped in tasks.\n\n    let\n      a = Task.succeed 7\n      b = Task.succeed 3\n      c = Task.map2 (+) a b\n    in\n      assert c (equals (Task.succeed 10))\n",
+            "type": "Task.Task a b -> (Task.Task a b -> Arborist.Assertions.Assertion) -> Arborist.Assertions.Assertion"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -16757,7 +17160,7 @@
   },
   {
     "name": "elm-community/elm-json-extra",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Json.Decode.Extra",
@@ -37100,6 +37503,280 @@
     ]
   },
   {
+    "name": "hrldcpr/elm-cons",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Cons",
+        "comment": " This library provides a type for non-empty lists, called `Cons`.\n\nBeing able to encode non-emptiness in the type system can lead to simpler, clearer code.\n\nFor example, to find the largest element in a List, you have to account for the empty list, which complicates things:\n\n    maximum : List comparable -> Maybe comparable\n    maximum l =\n      case l of\n        [] -> Nothing\n        first::rest -> Just <| List.foldl max first rest\n\nUsing Cons, on the other hand, the type system knows the list will never be empty, leading to much simpler code:\n\n    maximum : Cons comparable -> comparable\n    maximum = foldl1 max\n\n\n# Basics\n\n@docs Cons, cons, uncons, singleton, toList\n\n\n# Avoiding Maybe\n\nSome functions on Lists are forced to use Maybe to handle the empty list. The following functions are quivalent to their List counterparts, but with no need for Maybe.\n\n@docs head, tail, minimum, maximum\n\n\n# Convenient Folding\n\nFolds over Lists require a start value, but the following fold functions take the start value from the cons.\n\n@docs foldl1, foldr1, scanl1\n\n\n# List May Be Cons\n\nA cons can't be empty, but a `Maybe (Cons a)` can be, if we treat Nothing as empty.\n\nThus `List a` and `Maybe (Cons a)` are completely equivalent, and the following functions let you go back and forth between them.\n\nThis is useful for recursion on Cons. For example, to recursively find the maximum element of a cons:\n\n    maximum : Cons comparable -> comparable\n    maximum c =\n      case uncons' c of\n        (first, Nothing) -> first\n        (first, Just rest) -> max first <| maximum rest\n\n@docs fromList, cons', uncons', tail', toList', forList\n\n\n# Preserving Non-Emptiness\n\nThe following functions preserve non-emptiness, so given a cons they return a cons.\n\n@docs reverse, append, appendList, appendToList, concat, intersperse, unzip, map, map2, map3, map4, map5, concatMap, indexedMap, scanl, scanlList, sort, sortBy, sortWith\n\n\n# List Functions\n\nEvery function from the List library has been adapted to Cons.\n\nThe following are just convenience functions which convert the cons to a list and then apply the corresponding list function. For example, the definition of `sum` is:\n\n    sum = toList >> List.sum\n\n@docs isEmpty, length, member, filter, take, drop, partition, filterMap, foldl, foldr, sum, product, all, any\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Cons",
+            "comment": " A non-empty list of elements of type `a`.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "all",
+            "comment": " True if and only if all elements of the cons satisfy the given predicate.\n\n    c = cons 1 [2, 3]\n    all (\\x -> x > 2) == False\n    all (\\x -> x > 0) == True\n",
+            "type": "(a -> Bool) -> Cons.Cons a -> Bool"
+          },
+          {
+            "name": "any",
+            "comment": " True if and only if any elements of the cons satisfy the given predicate.\n\n    c = cons 1 [2, 3]\n    any (\\x -> x > 5) == False\n    any (\\x -> x > 2) == True\n",
+            "type": "(a -> Bool) -> Cons.Cons a -> Bool"
+          },
+          {
+            "name": "append",
+            "comment": " Append the second cons to the first.\n\n    c = cons 1 [2, 3]\n    d = cons 4 [5, 6]\n    append c d == cons 1 [2, 3, 4, 5, 6]\n",
+            "type": "Cons.Cons a -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "appendList",
+            "comment": " Append a list to a cons.\n\n    c = cons 1 [2, 3]\n    l = [4, 5, 6]\n    appendList c l == cons 1 [2, 3, 4, 5, 6]\n",
+            "type": "Cons.Cons a -> List a -> Cons.Cons a"
+          },
+          {
+            "name": "appendToList",
+            "comment": " Append a cons to a list.\n\n    l = [1, 2, 3]\n    c = cons 4 [5, 6]\n    appendToList l c == cons 1 [2, 3, 4, 5, 6]\n",
+            "type": "List a -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "concat",
+            "comment": " Concatenate a non-empty list of non-empty lists.\n\n    c = cons 1 [2, 3]\n    d = singleton 4\n    e = cons 5 [6]\n    cs = cons c [d, e]\n    concat cs == cons 1 [2, 3, 4, 5, 6]\n\n    concat == foldr1 append\n",
+            "type": "Cons.Cons (Cons.Cons a) -> Cons.Cons a"
+          },
+          {
+            "name": "concatMap",
+            "comment": " Also known as \"flat map\", map each element of the cons to a cons, and then concatenate them together.\n\n    f : number -> Cons number\n    f x = cons x [-x]\n\n    c = cons 1 [2, 3]\n    concatMap f c == cons 1 [-1, 2, -2, 3, -3]\n\n    concatMap f == concat << map f\n",
+            "type": "(a -> Cons.Cons b) -> Cons.Cons a -> Cons.Cons b"
+          },
+          {
+            "name": "cons",
+            "comment": " A cons with the given head and tail. Equivalent to ::\n\n    c = cons 1 [2, 3]\n    head c == 1\n    tail c == [2, 3]\n\n",
+            "type": "a -> List a -> Cons.Cons a"
+          },
+          {
+            "name": "cons'",
+            "comment": " A cons with the given head and tail.\n\n    c = cons' \"a\" Nothing\n    toList c == [\"a\"]\n\n    d = cons' 1 <| Just <| cons' 2 <| Just <| cons' 3 Nothing\n    toList d = [1, 2, 3]\n",
+            "type": "a -> Maybe.Maybe (Cons.Cons a) -> Cons.Cons a"
+          },
+          {
+            "name": "drop",
+            "comment": " The cons without its first *n* elements. This can't generally be a cons itself, because it might be empty.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    drop 2 c == [\"c\"]\n    drop 100 c == []\n    drop -10 c == toList c\n",
+            "type": "Int -> Cons.Cons a -> List a"
+          },
+          {
+            "name": "filter",
+            "comment": " The list of elements from the cons which satisfy the given predicate. This can't generally be a cons itself, because it might be empty.\n\n    c = cons 1 [2, 3]\n    filter (\\x -> x > 10) c == []\n    filter (\\x -> x > 1) c == [2, 3]\n",
+            "type": "(a -> Bool) -> Cons.Cons a -> List a"
+          },
+          {
+            "name": "filterMap",
+            "comment": " Map the given Maybe function over the cons, discarding every Nothing. This can't generally be a cons itself, because it might be empty.\n\n    String.toInt : String -> Maybe Int\n\n    c = cons \"1\" [\"a\", \"2\", \"b\"]\n    filterMap String.toInt c == [1, 2]\n",
+            "type": "(a -> Maybe.Maybe b) -> Cons.Cons a -> List b"
+          },
+          {
+            "name": "foldl",
+            "comment": " Reduce the cons from the left, starting with the given value. To start with the first value in the cons, use [foldl1](#foldl1).\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    foldl1 step \"x\" c == \"xabc\"\n",
+            "type": "(a -> b -> b) -> b -> Cons.Cons a -> b"
+          },
+          {
+            "name": "foldl1",
+            "comment": " Reduce the cons from the left.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    foldl1 step c == \"abc\"\n",
+            "type": "(a -> a -> a) -> Cons.Cons a -> a"
+          },
+          {
+            "name": "foldr",
+            "comment": " Reduce the cons from the right, starting with the given value. To start with the last value in the cons, use [foldr1](#foldr1).\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    foldr1 step \"x\" c == \"xcba\"\n",
+            "type": "(a -> b -> b) -> b -> Cons.Cons a -> b"
+          },
+          {
+            "name": "foldr1",
+            "comment": " Reduce the cons from the right.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    foldr1 step c == \"cba\"\n",
+            "type": "(a -> a -> a) -> Cons.Cons a -> a"
+          },
+          {
+            "name": "forList",
+            "comment": " Convert a function that operates on Cons to a function that operates on List, where the empty list results in Nothing.\n\n    maximum : Cons comparable -> comparable\n    maximum = foldl1 max\n\n    listMaximum : List comparable -> Maybe comparable\n    listMaximum = forList maximum\n\n    listMaximum [] == Nothing\n    listMaximum [1, 2, 3] == Just 3\n",
+            "type": "(Cons.Cons a -> b) -> List a -> Maybe.Maybe b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert the list to the equivalent cons, or Nothing for the empty list.\n\n    fromList [] == Nothing\n    fromList [1, 2, 3] == Just <| cons 1 [2, 3]\n",
+            "type": "List a -> Maybe.Maybe (Cons.Cons a)"
+          },
+          {
+            "name": "head",
+            "comment": " The first element of the cons.\n\n    c = cons 1 [2, 3]\n    head c == 1\n",
+            "type": "Cons.Cons a -> a"
+          },
+          {
+            "name": "indexedMap",
+            "comment": " Apply a function to each element of the cons, as well as the index.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    indexedMap (,) c == cons (0, \"a\") [(1, \"b\"), (2, \"c\")]\n",
+            "type": "(Int -> a -> b) -> Cons.Cons a -> Cons.Cons b"
+          },
+          {
+            "name": "intersperse",
+            "comment": " Intersperse the value between each element of the cons.\n\n    c = cons \"first\" [\"second\", \"third\"]\n    intersperse \"and\" c == cons \"first\" [\"and\", \"second\", \"and\", \"third\"]\n",
+            "type": "a -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Always false for a cons, only here to make porting List code easier.\n\n    isEmpty == always False\n",
+            "type": "Cons.Cons a -> Bool"
+          },
+          {
+            "name": "length",
+            "comment": " The number of elements in the cons.\n\n    c = cons 1 [2, 3]\n    length c == 3\n",
+            "type": "Cons.Cons a -> Int"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to each element of the cons.\n\n    c = cons 1 [4, 9]\n    map sqrt c == cons 1 [2, 3]\n",
+            "type": "(a -> b) -> Cons.Cons a -> Cons.Cons b"
+          },
+          {
+            "name": "map2",
+            "comment": " Apply a function to each pair of elements, limited by the shortest cons.\n\n    zip : Cons a -> Cons b -> Cons (a, b)\n    zip = map2 (,)\n    c = cons 1 [2, 3]\n    d = cons \"a\" [\"b\", \"c\", \"d\", \"e\"]\n    zip c d = cons (1, \"a\") [(2, \"b\"), (3, \"c\")]\n",
+            "type": "(a -> b -> c) -> Cons.Cons a -> Cons.Cons b -> Cons.Cons c"
+          },
+          {
+            "name": "map3",
+            "comment": "",
+            "type": "(a -> b -> c -> d) -> Cons.Cons a -> Cons.Cons b -> Cons.Cons c -> Cons.Cons d"
+          },
+          {
+            "name": "map4",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e) -> Cons.Cons a -> Cons.Cons b -> Cons.Cons c -> Cons.Cons d -> Cons.Cons e"
+          },
+          {
+            "name": "map5",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> f) -> Cons.Cons a -> Cons.Cons b -> Cons.Cons c -> Cons.Cons d -> Cons.Cons e -> Cons.Cons f"
+          },
+          {
+            "name": "maximum",
+            "comment": " The largest element of the cons.\n\n    c = cons 1 [2, 3]\n    maximum c == 3\n\n    maximum == foldl1 max\n",
+            "type": "Cons.Cons comparable -> comparable"
+          },
+          {
+            "name": "member",
+            "comment": " True if and only if the given element is in the given cons.\n\n    c = cons 1 [2, 3]\n    member 5 c == False\n    member 2 c == True\n",
+            "type": "a -> Cons.Cons a -> Bool"
+          },
+          {
+            "name": "minimum",
+            "comment": " The smallest element of the cons.\n\n    c = cons 1 [2, 3]\n    minimum c == 1\n\n    minimum == foldl1 min\n",
+            "type": "Cons.Cons comparable -> comparable"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition the cons into two lists, the first containing the elements which satisfy the given predicate, the second containing the elements which don't. These can't generally be a cons themselves, since one might be empty.\n\n    c = cons 1 [2, 3]\n    partition (\\x -> x > 1) c == ([2, 3], [1])\n",
+            "type": "(a -> Bool) -> Cons.Cons a -> ( List a, List a )"
+          },
+          {
+            "name": "product",
+            "comment": " The product of the elements of the cons.\n\n    c = cons 2 [3, 4]\n    product c == 24\n",
+            "type": "Cons.Cons number -> number"
+          },
+          {
+            "name": "reverse",
+            "comment": " Reverse the cons.\n\n    c = cons 1 [2, 3]\n    reverse c == cons 3 [2, 1]\n",
+            "type": "Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "scanl",
+            "comment": " Reduce the cons from the left, producing a cons of all intermediate results.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    scanl step \"\" c == cons \"\" [\"a\", \"ab\", \"abc\"]\n",
+            "type": "(a -> b -> b) -> b -> Cons.Cons a -> Cons.Cons b"
+          },
+          {
+            "name": "scanl1",
+            "comment": " Reduce the cons from the left, producing a cons of all intermediate results.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    step value result = result ++ value\n    scanl1 step c == cons \"a\" [\"ab\", \"abc\"]\n",
+            "type": "(a -> a -> a) -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "scanlList",
+            "comment": " Reduce the list from the left, producing a cons of all intermediate results, since even for the empty list there is one intermediate result.\n\nEquivalent to List.scanl, but with a more specific return type.\n\n    step value result = result ++ value\n    scanlList step \"\" [] == cons \"\" []\n    scanlList step \"\" [\"a\", \"b\", \"c\"] == cons \"\" [\"a\", \"ab\", \"abc\"]\n",
+            "type": "(a -> b -> b) -> b -> List a -> Cons.Cons b"
+          },
+          {
+            "name": "singleton",
+            "comment": " A cons containing only the given element.\n\n    c = singleton \"a\"\n    toList c == [\"a\"]\n",
+            "type": "a -> Cons.Cons a"
+          },
+          {
+            "name": "sort",
+            "comment": " Sort the cons in ascending order.\n\n    c = cons 2 [3, 1]\n    sort c == cons 1 [2, 3]\n",
+            "type": "Cons.Cons comparable -> Cons.Cons comparable"
+          },
+          {
+            "name": "sortBy",
+            "comment": " Sort the cons in ascending order, by applying the given function to each value.\n\n    alice = {name=\"Alice\", age=30}\n    bob = {name=\"Bob\", age=20}\n    charlie = {name=\"Charlie\", age=40}\n\n    c = cons alice [bob, charlie]\n    sortBy .age c == cons bob [alice, charlie]\n",
+            "type": "(a -> comparable) -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "sortWith",
+            "comment": " Sort the cons in ascending order, based on the given comparison function.\n\n    reverseCompare : comparable -> comparable -> Order\n    reverseCompare x y =\n      case compare x y of\n        LT -> GT\n        EQ -> EQ\n        GT -> LT\n\n    c = cons \"b\" [\"a\", \"c\"]\n    sortWith reverseCompare c == cons \"c\" [\"b\", \"a\"]\n\n    sortWith compare == sort\n",
+            "type": "(a -> a -> Basics.Order) -> Cons.Cons a -> Cons.Cons a"
+          },
+          {
+            "name": "sum",
+            "comment": " The sum of the elements of the cons.\n\n    c = cons 2 [3, 4]\n    sum c == 9\n",
+            "type": "Cons.Cons number -> number"
+          },
+          {
+            "name": "tail",
+            "comment": " The list of all elements after the first element of the cons.\n\n    c = cons 1 [2, 3]\n    tail c == [2, 3]\n",
+            "type": "Cons.Cons a -> List a"
+          },
+          {
+            "name": "tail'",
+            "comment": " The tail of the cons.\n\n    c = cons' \"a\" Nothing\n    tail' c == Nothing\n\n    d = cons' 1 <| Just <| cons' 2 <| Just <| cons' 3 Nothing\n    tail' d == Just <| cons' 2 <| Just <| cons' 3 Nothing\n\n    length : Cons a -> Int\n    length c =\n      case tail' c of\n        Nothing -> 1\n        Just rest -> 1 + length rest\n",
+            "type": "Cons.Cons a -> Maybe.Maybe (Cons.Cons a)"
+          },
+          {
+            "name": "take",
+            "comment": " The first *n* elements of the cons, up to the length of the cons. This can't generally be a cons itself, since *n* might not be positive.\n\n    c = cons \"a\" [\"b\", \"c\"]\n    take 2 c == [\"a\", \"b\"]\n    take 100 c == toList c\n    take -10 c == []\n",
+            "type": "Int -> Cons.Cons a -> List a"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert the cons to the equivalent list.\n\n    c = cons 1 [2, 3]\n    toList c == [1, 2, 3]\n",
+            "type": "Cons.Cons a -> List a"
+          },
+          {
+            "name": "toList'",
+            "comment": " Convert the cons to the equivalent list, or the empty list for Nothing.\n\nThis is the inverse of fromList.\n\n    c = fromList []\n    c == Nothing\n    toList' c == []\n\n    c = fromList [1, 2, 3]\n    c == Just <| cons 1 [2, 3]\n    toList' c == [1, 2, 3]\n",
+            "type": "Maybe.Maybe (Cons.Cons a) -> List a"
+          },
+          {
+            "name": "uncons",
+            "comment": " The head and tail of the cons.\n\n    c = cons 1 [2, 3]\n    uncons c == (1, [2, 3])\n",
+            "type": "Cons.Cons a -> ( a, List a )"
+          },
+          {
+            "name": "uncons'",
+            "comment": " The head and tail of the cons.\n\n    c = cons' \"a\" Nothing\n    uncons' c == (\"a\", Nothing)\n\n    d = cons' 1 <| Just <| cons' 2 <| Just <| cons' 3 Nothing\n    uncons' d == (1, Just <| cons' 2 <| Just <| cons' 3 Nothing)\n\n    maximum : Cons comparable -> comparable\n    maximum c =\n      case uncons' c of\n        (first, Nothing) -> first\n        (first, Just rest) -> max first <| maximum rest\n",
+            "type": "Cons.Cons a -> ( a, Maybe.Maybe (Cons.Cons a) )"
+          },
+          {
+            "name": "unzip",
+            "comment": " A tuple of each cons, corresponding to a cons of tuples.\n\n    c = cons (1, \"a\") [(2, \"b\"), (3, \"c\")]\n    unzip c == (cons 1 [2, 3], cons \"a\" [\"b\", \"c\"])\n",
+            "type": "Cons.Cons ( a, b ) -> ( Cons.Cons a, Cons.Cons b )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "imeckler/either",
     "version": "1.0.2",
     "docs": [
@@ -37619,7 +38296,7 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.4",
+    "version": "1.0.6",
     "docs": [
       {
         "name": "TimeTravel.Html.App",
@@ -46452,11 +47129,11 @@
   },
   {
     "name": "pdamoc/elm-css",
-    "version": "2.1.0",
+    "version": "3.0.2",
     "docs": [
       {
         "name": "Css",
-        "comment": " This module provides functions to help you write your CSS in Elm.\n\n# Types\n\n@docs Rule, Declaration, Namespace\n\n# Integration functions\n\n@docs styledNode, render, prettyPrint, withNamespace, namespace, importUrl\n\n\n# Selector combinators\n@docs descendant, child, sibling, adjacent, (&)\n\n# Pseudo Selectors\n@docs pAny, pDefault, pLink, pVisited, pHover, pActive, pFocus, pTarget, pEnabled, pDisabled, pChecked, pIndeterminate, pInvalid, pValid, pFullscreen, pRoot, pScope, pFirstChild, pLastChild, pNthChild, pNthLastChild, pNthOfType, pNthLastOfType, pFirstOfType, pLastOfType, pOnlyOfType, pLang, pDir, pEmpty, pLeft, pRight, pFirstLetter, pFirstLine, pBefore, pAfter, pSelection, pBackdrop\n\n# Basic Selectors\n@docs (.), (#), everything\n\n# Type Selectors\n@docs h1, h2, h3, h4, h5, h6, div, p, hr, pre, blockquote, span, a, code, em', strong, i, b, u, sub, sup, br, ol, ul, li, dl, dt, dd, img, iframe, canvas, svg, math, form, input, textarea, button, select, option, section, nav, article, aside, header, footer, address, main', body, figure, figcaption, table, caption, colgroup, col, tbody, thead, tfoot, tr, td, th, fieldset, legend, label, datalist, optgroup, keygen, output, progress, meter, audio, video, source, track, embed, object, param, ins, del, small, cite, dfn, abbr, time, var, samp, kbd, s, q, mark, ruby, rt, rp, bdi, bdo, wbr, details, summary, menuitem, menu\n\n# Declarations\n\n# Units\n@docs px, pc, pct, em, rem, vw, vh, deg, rad, just\n\n\n# Properties\n@docs alignContent, alignItems, alignSelf, all, animation, animationDelay, animationDirection, animationDuration, animationFillMode, animationIterationCount, animationName, animationPlayState, animationTimingFunction, backfaceVisibility, background, backgroundAttachment, backgroundBlendMode, backgroundClip, backgroundColor, backgroundImage, backgroundOrigin, backgroundPosition, backgroundRepeat, backgroundSize, border, borderAll, borderBottom, borderBottomColor, borderBottomLeftRadius, borderBottomRightRadius, borderBottomStyle, borderBottomWidth, borderCollapse, borderColor, borderImage, borderImageOutset, borderImageRepeat, borderImageSlice, borderImageSource, borderImageWidth, borderLeft, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRight, borderRightColor, borderRightStyle, borderRightWidth, borderSpacing, borderStyle, borderTop, borderTopColor, borderTopLeftRadius, borderTopRightRadius, borderTopStyle, borderTopWidth, borderWidth, bottom, boxShadow, boxSizing, captionSide, clear, clip, color, columnCount, columnFill, columnGap, columnRule, columnRuleColor, columnRuleStyle, columnRuleWidth, columnSpan, columnWidth, columns, content, counterIncrement, counterReset, cursor, direction, display, displayFlex, emptyCells, filter, flex, flexBasis, flexDirection, flexFlow, flexGrow, flexShrink, flexWrap, float, font, fontFamily, fontFamilies, fontSize, fontSizeAdjust, fontStretch, fontStyle, fontVariant, fontWeight, hangingPunctuation, height, justifyContent, left, letterSpacing, lineHeight, listStyle, listStyleImage, listStylePosition, listStyleType, margin, marginAll, marginBottom, marginLeft, marginRight, marginTop, maxHeight, maxWidth, minHeight, minWidth, navDown, navIndex, navLeft, navRight, navUp, opacity, order, outline, outlineColor, outlineOffset, outlineStyle, outlineWidth, overflow, overflowX, overflowY, padding, paddingAll, paddingBottom, paddingLeft, paddingRight, paddingTop, pageBreakAfter, pageBreakBefore, pageBreakInside, perspective, perspectiveOrigin, position, quotes, resize, right, tabSize, tableLayout, textAlign, textAlignLast, textDecoration, textDecorationColor, textDecorationLine, textDecorationStyle, textIndent, textJustify, textOverflow, textShadow, textTransform, top, transform, transformOrigin, transformStyle, transition, transitionDelay, transitionDuration, transitionProperty, transitionTimingFunction, unicodeBidi, verticalAlign, visibility, whiteSpace, width, wordBreak, wordSpacing, wordWrap, zIndex\n\n# Transform Values\n@docs matrix, translate, translateX, translateY , scale, scaleX , scaleY , rotate , skew , skewX, skewY\n\n# Values\n@docs init, inherit, absolute, relative, static, auto, inline, block, inlineBlock, flex', inlineFlex, listItem, runIn, table', inlineTable, tableCaption, tableColumnGroup, tableHeaderGroup, tableFooterGroup, tableRowGroup, tableCell, tableColumn, tableRow, baseline, center, flexStart, flexEnd, spaceBetween, spaceAround, column, columnReverse, row, rowReverse, wrap, nowrap, wrapReverse, none, left', right', both, normal, italic, oblique, smallCaps, repeat, repeatX, repeatY, noRepeat, scroll, visible, fixed, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset, inside, outside, rtl, justify, underline, overline, lineThrough, embed', bidiOverride, pre', preLine, preWrap, borderBox, pointer, middle, collapse, uppercase, lowercase, capitalize\n\n",
+        "comment": " This module provides functions to help you write your CSS in Elm.\n\nThe names of some of the functions/values clash. Here are the resolutions:\n1. for values add a prime mark as in `left'`, `right'` or `flex'`\n2. `em` is used for the unit measurement. For the type selector use `em'`\n3. for pseudoselectors `:left` and `:right` use `leftP` and `rightP`\n\n# Types\n\n@docs Rule, Declaration, Namespace\n\n# Integration functions\n\n@docs styledNode, render, prettyPrint, withNamespace, namespace, importUrl\n\n\n# Selector combinators\n@docs descendant, child, sibling, adjacent\n\n# Pseudo Selectors\n\n\n\n@docs any, default, link, visited, hover, active, focus, target, enabled, disabled, checked, indeterminate, invalid, valid, fullscreen, root, scope, firstChild, lastChild, nthChild, nthLastChild, nthOfType, nthLastOfType, firstOfType, lastOfType, onlyOfType, lang, dir, empty, leftP, rightP, firstLetter, firstLine, before, after, selection, backdrop\n\n# Basic Selectors\n@docs (.), (#), (.:), (#:), (!:), everything\n\n# Type Selectors\n@docs h1, h2, h3, h4, h5, h6, div, p, hr, pre, blockquote, span, a, code, em', strong, i, b, u, sub, sup, br, ol, ul, li, dl, dt, dd, img, iframe, canvas, svg, math, form, input, textarea, button, select, option, section, nav, article, aside, header, footer, address, main', body, figure, figcaption, table, caption, colgroup, col, tbody, thead, tfoot, tr, td, th, fieldset, legend, label, datalist, optgroup, keygen, output, progress, meter, audio, video, source, track, embed, object, param, ins, del, small, cite, dfn, abbr, time, var, samp, kbd, s, q, mark, ruby, rt, rp, bdi, bdo, wbr, details, summary, menuitem, menu\n\n# Declarations\n\n# Units\n@docs px, pc, pct, em, rem, vw, vh, deg, rad, just, color'\n\n\n# Properties\n@docs alignContent, alignItems, alignSelf, all, animation, animationDelay, animationDirection, animationDuration, animationFillMode, animationIterationCount, animationName, animationPlayState, animationTimingFunction, backfaceVisibility, background, backgroundAttachment, backgroundBlendMode, backgroundClip, backgroundColor, backgroundImage, backgroundOrigin, backgroundPosition, backgroundRepeat, backgroundSize, border, borderAll, borderBottom, borderBottomColor, borderBottomLeftRadius, borderBottomRightRadius, borderBottomStyle, borderBottomWidth, borderCollapse, borderColor, borderImage, borderImageOutset, borderImageRepeat, borderImageSlice, borderImageSource, borderImageWidth, borderLeft, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRight, borderRightColor, borderRightStyle, borderRightWidth, borderSpacing, borderStyle, borderTop, borderTopColor, borderTopLeftRadius, borderTopRightRadius, borderTopStyle, borderTopWidth, borderWidth, bottom, boxShadow, boxSizing, captionSide, clear, clip, color, columnCount, columnFill, columnGap, columnRule, columnRuleColor, columnRuleStyle, columnRuleWidth, columnSpan, columnWidth, columns, content, counterIncrement, counterReset, cursor, direction, display, displayFlex, emptyCells, filter, flex, flexBasis, flexDirection, flexFlow, flexGrow, flexShrink, flexWrap, float, font, fontFamily, fontFamilies, fontSize, fontSizeAdjust, fontStretch, fontStyle, fontVariant, fontWeight, hangingPunctuation, height, justifyContent, left, letterSpacing, lineHeight, listStyle, listStyleImage, listStylePosition, listStyleType, margin, marginAll, marginBottom, marginLeft, marginRight, marginTop, maxHeight, maxWidth, minHeight, minWidth, navDown, navIndex, navLeft, navRight, navUp, opacity, order, outline, outlineColor, outlineOffset, outlineStyle, outlineWidth, overflow, overflowX, overflowY, padding, paddingAll, paddingBottom, paddingLeft, paddingRight, paddingTop, pageBreakAfter, pageBreakBefore, pageBreakInside, perspective, perspectiveOrigin, position, quotes, resize, right, tabSize, tableLayout, textAlign, textAlignLast, textDecoration, textDecorationColor, textDecorationLine, textDecorationStyle, textIndent, textJustify, textOverflow, textShadow, textTransform, top, transform, transformOrigin, transformStyle, transition, transitionDelay, transitionDuration, transitionProperty, transitionTimingFunction, unicodeBidi, verticalAlign, visibility, whiteSpace, width, wordBreak, wordSpacing, wordWrap, zIndex\n\n# Transform Values\n@docs matrix, translate, translateX, translateY , scale, scaleX , scaleY , rotate , skew , skewX, skewY\n\n# Values\n\n@docs init, inherit, absolute, relative, static, auto, inline, block, inlineBlock, flex', inlineFlex, listItem, runIn, table', inlineTable, tableCaption, tableColumnGroup, tableHeaderGroup, tableFooterGroup, tableRowGroup, tableCell, tableColumn, tableRow, baseline, center, flexStart, flexEnd, spaceBetween, spaceAround, column, columnReverse, row, rowReverse, wrap, nowrap, wrapReverse, none, left', right', both, normal, italic, oblique, smallCaps, repeat, repeatX, repeatY, noRepeat, scroll, visible, fixed, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset, inside, outside, rtl, justify, underline, overline, lineThrough, embed', bidiOverride, pre', preLine, preWrap, borderBox, pointer, middle, collapse, uppercase, lowercase, capitalize\n\n",
         "aliases": [
           {
             "name": "Declaration",
@@ -46484,19 +47161,29 @@
         "types": [],
         "values": [
           {
+            "name": "!:",
+            "comment": " Combines an type selector with a pseudo selector\n",
+            "type": "(List Css.Declaration -> Css.Rule) -> String -> List Css.Declaration -> Css.Rule"
+          },
+          {
             "name": "#",
             "comment": " Creates a rule with an id selector\n",
             "type": "a -> List Css.Declaration -> Css.Rule"
           },
           {
-            "name": "&",
-            "comment": " Combines a selector with a pseudo selector\n",
-            "type": "(List Css.Declaration -> Css.Rule) -> String -> List Css.Declaration -> Css.Rule"
+            "name": "#:",
+            "comment": " Combines an id selector with a pseudo selector\n",
+            "type": "a -> String -> List Css.Declaration -> Css.Rule"
           },
           {
             "name": ".",
             "comment": " Creates a rule with a class selector\n",
             "type": "a -> List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": ".:",
+            "comment": " Combines a class selector with a pseudo selector\n",
+            "type": "a -> String -> List Css.Declaration -> Css.Rule"
           },
           {
             "name": "a",
@@ -46514,6 +47201,11 @@
             "type": "String"
           },
           {
+            "name": "active",
+            "comment": " :active\n",
+            "type": "String"
+          },
+          {
             "name": "address",
             "comment": " Selector for type address\n",
             "type": "List Css.Declaration -> Css.Rule"
@@ -46522,6 +47214,11 @@
             "name": "adjacent",
             "comment": " Adjacent combination of selectors\n",
             "type": "List (List Css.Declaration -> Css.Rule) -> List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "after",
+            "comment": " ::after\n",
+            "type": "String"
           },
           {
             "name": "alignContent",
@@ -46589,6 +47286,11 @@
             "type": "String -> Css.Declaration"
           },
           {
+            "name": "any",
+            "comment": " :any\n",
+            "type": "String"
+          },
+          {
             "name": "article",
             "comment": " Selector for type article\n",
             "type": "List Css.Declaration -> Css.Rule"
@@ -46612,6 +47314,11 @@
             "name": "b",
             "comment": " Selector for type b\n",
             "type": "List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "backdrop",
+            "comment": " ::backdrop\n",
+            "type": "String"
           },
           {
             "name": "backfaceVisibility",
@@ -46682,6 +47389,11 @@
             "name": "bdo",
             "comment": " Selector for type bdo\n",
             "type": "List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "before",
+            "comment": " ::before\n",
+            "type": "String"
           },
           {
             "name": "bidiOverride",
@@ -46934,6 +47646,11 @@
             "type": "String"
           },
           {
+            "name": "checked",
+            "comment": " :checked\n",
+            "type": "String"
+          },
+          {
             "name": "child",
             "comment": " Child combination of selectors\n",
             "type": "List (List Css.Declaration -> Css.Rule) -> List Css.Declaration -> Css.Rule"
@@ -46977,6 +47694,11 @@
             "name": "color",
             "comment": " color\n",
             "type": "String -> Css.Declaration"
+          },
+          {
+            "name": "color'",
+            "comment": " Color to webcolor\n",
+            "type": "Color.Color -> String"
           },
           {
             "name": "column",
@@ -47074,6 +47796,11 @@
             "type": "List Css.Declaration -> Css.Rule"
           },
           {
+            "name": "default",
+            "comment": " :default\n",
+            "type": "String"
+          },
+          {
             "name": "deg",
             "comment": " deg\n",
             "type": "number -> String"
@@ -47099,9 +47826,19 @@
             "type": "List Css.Declaration -> Css.Rule"
           },
           {
+            "name": "dir",
+            "comment": " :dir(\n",
+            "type": "String -> String"
+          },
+          {
             "name": "direction",
             "comment": " direction\n",
             "type": "String -> Css.Declaration"
+          },
+          {
+            "name": "disabled",
+            "comment": " :disabled\n",
+            "type": "String"
           },
           {
             "name": "display",
@@ -47159,9 +47896,19 @@
             "type": "String"
           },
           {
+            "name": "empty",
+            "comment": " :empty\n",
+            "type": "String"
+          },
+          {
             "name": "emptyCells",
             "comment": " empty-cells\n",
             "type": "String -> Css.Declaration"
+          },
+          {
+            "name": "enabled",
+            "comment": " :enabled\n",
+            "type": "String"
           },
           {
             "name": "everything",
@@ -47187,6 +47934,26 @@
             "name": "filter",
             "comment": " filter\n",
             "type": "String -> Css.Declaration"
+          },
+          {
+            "name": "firstChild",
+            "comment": " :first-child\n",
+            "type": "String"
+          },
+          {
+            "name": "firstLetter",
+            "comment": " ::first-letter\n",
+            "type": "String"
+          },
+          {
+            "name": "firstLine",
+            "comment": " ::first-line\n",
+            "type": "String"
+          },
+          {
+            "name": "firstOfType",
+            "comment": " :first-of-type\n",
+            "type": "String"
           },
           {
             "name": "fixed",
@@ -47249,6 +48016,11 @@
             "type": "String -> Css.Declaration"
           },
           {
+            "name": "focus",
+            "comment": " :focus\n",
+            "type": "String"
+          },
+          {
             "name": "font",
             "comment": " font\n",
             "type": "String -> Css.Declaration"
@@ -47302,6 +48074,11 @@
             "name": "form",
             "comment": " Selector for type form\n",
             "type": "List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "fullscreen",
+            "comment": " :fullscreen\n",
+            "type": "String"
           },
           {
             "name": "groove",
@@ -47359,6 +48136,11 @@
             "type": "String"
           },
           {
+            "name": "hover",
+            "comment": " :hover\n",
+            "type": "String"
+          },
+          {
             "name": "hr",
             "comment": " Selector for type hr\n",
             "type": "List Css.Declaration -> Css.Rule"
@@ -47382,6 +48164,11 @@
             "name": "importUrl",
             "comment": " Render a url to an @import directive.\n",
             "type": "String -> String"
+          },
+          {
+            "name": "indeterminate",
+            "comment": " :indeterminate\n",
+            "type": "String"
           },
           {
             "name": "inherit",
@@ -47434,6 +48221,11 @@
             "type": "String"
           },
           {
+            "name": "invalid",
+            "comment": " :invalid\n",
+            "type": "String"
+          },
+          {
             "name": "italic",
             "comment": " italic\n",
             "type": "String"
@@ -47469,6 +48261,21 @@
             "type": "List Css.Declaration -> Css.Rule"
           },
           {
+            "name": "lang",
+            "comment": " :lang(\n",
+            "type": "String -> String"
+          },
+          {
+            "name": "lastChild",
+            "comment": " :last-child\n",
+            "type": "String"
+          },
+          {
+            "name": "lastOfType",
+            "comment": " :last-of-type\n",
+            "type": "String"
+          },
+          {
             "name": "left",
             "comment": " left\n",
             "type": "String -> Css.Declaration"
@@ -47476,6 +48283,11 @@
           {
             "name": "left'",
             "comment": " left'\n",
+            "type": "String"
+          },
+          {
+            "name": "leftP",
+            "comment": " :left\n",
             "type": "String"
           },
           {
@@ -47501,6 +48313,11 @@
           {
             "name": "lineThrough",
             "comment": " line-through\n",
+            "type": "String"
+          },
+          {
+            "name": "link",
+            "comment": " :link\n",
             "type": "String"
           },
           {
@@ -47679,6 +48496,26 @@
             "type": "String"
           },
           {
+            "name": "nthChild",
+            "comment": " :nth-child(\n",
+            "type": "Int -> String"
+          },
+          {
+            "name": "nthLastChild",
+            "comment": " :nth-last-child(\n",
+            "type": "Int -> String"
+          },
+          {
+            "name": "nthLastOfType",
+            "comment": " :nth-last-of-type(\n",
+            "type": "String -> String"
+          },
+          {
+            "name": "nthOfType",
+            "comment": " :nth-of-type(\n",
+            "type": "String -> String"
+          },
+          {
             "name": "object",
             "comment": " Selector for type object\n",
             "type": "List Css.Declaration -> Css.Rule"
@@ -47692,6 +48529,11 @@
             "name": "ol",
             "comment": " Selector for type ol\n",
             "type": "List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "onlyOfType",
+            "comment": " :only-of-type\n",
+            "type": "String"
           },
           {
             "name": "opacity",
@@ -47777,191 +48619,6 @@
             "name": "p",
             "comment": " Selector for type p\n",
             "type": "List Css.Declaration -> Css.Rule"
-          },
-          {
-            "name": "pActive",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pAfter",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pAny",
-            "comment": " :any\n",
-            "type": "String"
-          },
-          {
-            "name": "pBackdrop",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pBefore",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pChecked",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pDefault",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pDir",
-            "comment": " ",
-            "type": "String -> String"
-          },
-          {
-            "name": "pDisabled",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pEmpty",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pEnabled",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFirstChild",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFirstLetter",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFirstLine",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFirstOfType",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFocus",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pFullscreen",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pHover",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pIndeterminate",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pInvalid",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pLang",
-            "comment": " ",
-            "type": "String -> String"
-          },
-          {
-            "name": "pLastChild",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pLastOfType",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pLeft",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pLink",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pNthChild",
-            "comment": " ",
-            "type": "Int -> String"
-          },
-          {
-            "name": "pNthLastChild",
-            "comment": " ",
-            "type": "Int -> String"
-          },
-          {
-            "name": "pNthLastOfType",
-            "comment": " ",
-            "type": "String -> String"
-          },
-          {
-            "name": "pNthOfType",
-            "comment": " ",
-            "type": "String -> String"
-          },
-          {
-            "name": "pOnlyOfType",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pRight",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pRoot",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pScope",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pSelection",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pTarget",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pValid",
-            "comment": " ",
-            "type": "String"
-          },
-          {
-            "name": "pVisited",
-            "comment": " ",
-            "type": "String"
           },
           {
             "name": "padding",
@@ -48144,6 +48801,16 @@
             "type": "String"
           },
           {
+            "name": "rightP",
+            "comment": " :right\n",
+            "type": "String"
+          },
+          {
+            "name": "root",
+            "comment": " :root\n",
+            "type": "String"
+          },
+          {
             "name": "rotate",
             "comment": " rotate transform (in deg)\n",
             "type": "number -> String"
@@ -48209,6 +48876,11 @@
             "type": "number -> String"
           },
           {
+            "name": "scope",
+            "comment": " :scope\n",
+            "type": "String"
+          },
+          {
             "name": "scroll",
             "comment": " scroll\n",
             "type": "String"
@@ -48222,6 +48894,11 @@
             "name": "select",
             "comment": " Selector for type select\n",
             "type": "List Css.Declaration -> Css.Rule"
+          },
+          {
+            "name": "selection",
+            "comment": " ::selection\n",
+            "type": "String"
           },
           {
             "name": "sibling",
@@ -48290,7 +48967,7 @@
           },
           {
             "name": "styledNode",
-            "comment": " A Html div to be user at the top most level in order to render the CSS.\n",
+            "comment": " A Html div to be used at the top most level in order to render the CSS.\n",
             "type": "List String -> List Css.Rule -> List (Html.Html a) -> Html.Html a"
           },
           {
@@ -48371,6 +49048,11 @@
           {
             "name": "tableRowGroup",
             "comment": " table-row-group\n",
+            "type": "String"
+          },
+          {
+            "name": "target",
+            "comment": " :target\n",
             "type": "String"
           },
           {
@@ -48559,6 +49241,11 @@
             "type": "String"
           },
           {
+            "name": "valid",
+            "comment": " :valid\n",
+            "type": "String"
+          },
+          {
             "name": "var",
             "comment": " Selector for type var\n",
             "type": "List Css.Declaration -> Css.Rule"
@@ -48586,6 +49273,11 @@
           {
             "name": "visible",
             "comment": " visible\n",
+            "type": "String"
+          },
+          {
+            "name": "visited",
+            "comment": " :visited\n",
             "type": "String"
           },
           {
@@ -48803,6 +49495,444 @@
             "name": "match",
             "comment": "\n```elm\ncase match router NotFound \"/article/3\" of\n  Article id -> show id\n  NotFound -> show \"NotFound\"\n```\n",
             "type": "Router.Router a -> a -> String -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "project-fuzzball/node",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Node",
+        "comment": " # Node Runner\n\nRuns a test and outputs its results to the console. Exit code is 0 if tests\npassed and 1 if any failed.\n\n@docs run, runWithOptions\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
+            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
+            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "project-fuzzball/test",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Log",
+        "comment": " # Log Runner\n\nRuns a test and outputs its results using `Debug.log`, then calls `Debug.crash`\nif there are any failures.\n\nThis is not the prettiest runner, but it is simple and cross-platform. For\nexample, you can use it as a crude Node runner like so:\n\n    $ elm-make LogRunnerExample.elm --output=elm.js\n    $ node elm.js\n\nThis will log the test results to the console, then exit with exit code 0\nif the tests all passed, and 1 if any failed.\n\n@docs run, runWithOptions\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test using the default `Test.Runner.String` options.\n",
+            "type": "Test.Test -> a -> a"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options.\n",
+            "type": "Int -> Random.Pcg.Seed -> Test.Test -> a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Test.Runner.String",
+        "comment": " # String Runner\n\nRun a test and present its results as a nicely-formatted String, along with\na count of how many tests passed and failed.\n\nThis is a quick way to get decent test outputs which can then be presented in\nvarious different environments. See `Test.Runner.Log` for an example.\n\n@docs Summary, run, runWithOptions\n",
+        "aliases": [
+          {
+            "name": "Summary",
+            "comment": " The output string, the number of passed tests,\nand the number of failed tests.\n",
+            "args": [],
+            "type": "{ output : String, passed : Int, failed : Int }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run a test and return a tuple of the output message and the number of\ntests that failed.\n\nFuzz tests use a default run count of 100, and a fixed initial seed.\n",
+            "type": "Test.Test -> Test.Runner.String.Summary"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run a test and return a tuple of the output message and the number of\ntests that failed.\n",
+            "type": "Int -> Random.Pcg.Seed -> Test.Test -> Test.Runner.String.Summary"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Test.Runner",
+        "comment": " Running tests.\n\n## Runner\n\n@docs Runner, fromTest\n\n## Runnable\n\n@docs Runnable, run\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Runnable",
+            "comment": " An unevaluated test. Run it with [`run`](#run) to evaluate it into a\nlist of `Assertion`s.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Runner",
+            "comment": " A structured test runner, incorporating:\n\n* The assertions to run\n* The hierarchy of description strings that describe the results\n",
+            "args": [],
+            "cases": [
+              [
+                "Runnable",
+                [
+                  "Test.Runner.Runnable"
+                ]
+              ],
+              [
+                "Labeled",
+                [
+                  "String",
+                  "Test.Runner.Runner"
+                ]
+              ],
+              [
+                "Batch",
+                [
+                  "List Test.Runner.Runner"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "fromTest",
+            "comment": " Convert a `Test` into a `Runner`. It requires a default run count as well\nas an initial `Random.Seed` in order to run any fuzz tests that the `Test` may\nhave.\n\nIt's customary to use `100` as the initial run count and the current system time\nto generate the initial seed.\n",
+            "type": "Int -> Random.Pcg.Seed -> Test.Test -> Test.Runner.Runner"
+          },
+          {
+            "name": "run",
+            "comment": " Evaluate a [`Runnable`](#Runnable) to get a list of `Assertion`s.\n",
+            "type": "Test.Runner.Runnable -> List Assert.Assertion"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Test",
+        "comment": " Writing tests.\n\n@docs Test, test\n\n## Grouping Tests\n\n@docs describe, batch\n\n## Fuzz Testing\n\n@docs fuzz, fuzz2, fuzz3, fuzz4, fuzz5, fuzzWith, FuzzOptions\n",
+        "aliases": [
+          {
+            "name": "FuzzOptions",
+            "comment": " Options [`fuzzWith`](#fuzzWith) accepts.\n\n### `runs`\n\nThe number of times to run each fuzz test. (Default is 100.)\n\n    import Test exposing (fuzzWith)\n    import Fuzz exposing (list, int)\n    import Assert\n\n\n    fuzzWith { runs = 350 } (list int) \"List.length should always be positive\" <|\n        -- This anonymous function will be run 350 times, each time with a\n        -- randomly-generated fuzzList value. (It will always be a list of ints\n        -- because of (list int) above.)\n        \\fuzzList ->\n            fuzzList\n                |> List.length\n                |> Assert.atLeast 0\n",
+            "args": [],
+            "type": "{ runs : Int }"
+          },
+          {
+            "name": "Test",
+            "comment": " A test which has yet to be evaluated. When evaluated, it produces one\nor more [`Assertion`](../Assert#Assertion)s.\n\nSee [`test`](#test) and [`fuzz`](#fuzz) for some ways to create a `Test`.\n",
+            "args": [],
+            "type": "Test.Test.Test"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "batch",
+            "comment": " Run all the given tests. (Execution order is not guaranteed.)\n\n    import Test exposing (batch)\n\n\n    batch [ testDecoder, testSorting ]\n",
+            "type": "List Test.Test -> Test.Test"
+          },
+          {
+            "name": "describe",
+            "comment": " Apply a description to a [`batch`](#batch) of tests.\n\n    import Test exposing (describe, test, fuzz)\n    import Fuzz expoing (int)\n    import Assert\n\n\n    describe \"List\"\n        [ describe \"reverse\"\n            [ test \"has no effect on an empty list\" <|\n                \\_ ->\n                    List.reverse []\n                        |> Assert.equal []\n            , fuzz int \"has no effect on a one-item list\" <|\n                \\num ->\n                     List.reverse [ num ]\n                        |> Assert.equal [ num ]\n            ]\n        ]\n",
+            "type": "String -> List Test.Test -> Test.Test"
+          },
+          {
+            "name": "fuzz",
+            "comment": " Run the given test several times, using a randomly-generated input from a\n`Fuzzer` each time. By default, runs the test 100 times with different inputs,\nbut you can configure the run count using [`withRuns`](#withRuns).\n\nThese are called \"[fuzz tests](https://en.wikipedia.org/wiki/Fuzz_testing)\" because of the randomness.\nYou may find them elsewhere called [property-based tests](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html),\n[generative tests](http://www.pivotaltracker.com/community/tracker-blog/generative-testing), or\n[QuickCheck-style tests](https://en.wikipedia.org/wiki/QuickCheck).\n\n    import Test exposing (fuzz)\n    import Fuzz exposing (list, int)\n    import Assert\n\n\n    fuzz (list int) \"List.length should always be positive\" <|\n        -- This anonymous function will be run 100 times, each time with a\n        -- randomly-generated fuzzList value. (You can configure the run count\n        -- using Fuzz.fuzzWith, or by giving your test runner a different default.)\n        \\fuzzList ->\n            fuzzList\n                |> List.length\n                |> Assert.atLeast 0\n",
+            "type": "Fuzz.Fuzzer a -> String -> (a -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "fuzz2",
+            "comment": " Run a [fuzz test](#fuzz) using two random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple`](../Fuzz#tuple).\n\nSee [`fuzzWith`](#fuzzWith) for an example of writing this in tuple style.\n\n    import Test exposing (fuzz2)\n    import Fuzz exposing (list, int)\n\n\n    fuzz2 (list int) int \"List.reverse never influences List.member\" <|\n        \\nums target ->\n            List.member target (List.reverse nums)\n                |> Assert.equal (List.member target nums)\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> String -> (a -> b -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "fuzz3",
+            "comment": " Run a [fuzz test](#fuzz) using three random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple3`](../Fuzz#tuple3).\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> String -> (a -> b -> c -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "fuzz4",
+            "comment": " Run a [fuzz test](#fuzz) using four random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple4`](../Fuzz#tuple4).\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> String -> (a -> b -> c -> d -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "fuzz5",
+            "comment": " Run a [fuzz test](#fuzz) using four random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple5`](../Fuzz#tuple5).\n",
+            "type": "String -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> Fuzz.Fuzzer e -> (a -> b -> c -> d -> e -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "fuzzWith",
+            "comment": " Run a [`fuzz`](#fuzz) test with the given [`FuzzOptions`](#FuzzOptions).\n\nNote that there is no `fuzzWith2`, but you can always pass more fuzz values in\nusing [`Fuzz.tuple`](../Fuzz#tuple), [`Fuzz.tuple3`](../Fuzz#tuple3),\nfor example like this:\n\n    import Test exposing (fuzzWith)\n    import Fuzz exposing (tuple, list, int)\n    import Assert\n\n\n    fuzzWith { runs = 4200 }\n        (tuple ( list int, int ))\n        \"List.reverse never influences List.member\" <|\n            \\(nums, target) ->\n                List.member target (List.reverse nums)\n                    |> Assert.equal (List.member target nums)\n",
+            "type": "Test.FuzzOptions -> Fuzz.Fuzzer a -> String -> (a -> Assert.Assertion) -> Test.Test"
+          },
+          {
+            "name": "test",
+            "comment": " Return a [`Test`](#Test) that evaluates a single\n[`Assertion`](../Assert#Assertion).\n\n    import Test exposing (fuzz)\n    import Assert\n\n\n    test \"the empty list has 0 length\" <|\n        \\_ ->\n            List.length []\n                |> Assert.equal 0\n",
+            "type": "String -> (() -> Assert.Assertion) -> Test.Test"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Assert",
+        "comment": " Determining whether tests pass or fail.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n\n## Basic Assertions\n\n@docs Assertion, equal, notEqual, all\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
+        "aliases": [
+          {
+            "name": "Assertion",
+            "comment": " The result of a single test run: either a [`pass`](#pass) or a\n[`fail`](#fail).\n",
+            "args": [],
+            "type": "Test.Assertion.Assertion"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "all",
+            "comment": " Translate each element in a list into an [`Assertion`](#Assertion). If\nthey all pass, return a pass. If any fail, return a fail whose message includes\nall the other failure messages.\n\n    [ 0, 1, 2, 3, 4, 5 ]\n        |> Assert.all (Assert.lessThan 3)\n\n    {-\n\n    Expected 3 to be less than 3\n\n    Expected 4 to be less than 3\n\n    Expected 5 to be less than 3\n\n    -}\n",
+            "type": "(a -> Assert.Assertion) -> List a -> Assert.Assertion"
+          },
+          {
+            "name": "atLeast",
+            "comment": " Passes if the second argument is greater than or equal to the first.\n\n    Assert.atLeast 3 (List.length [])\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (0 >= 3) is False\n    List.length []\n        |> Assert.atLeast 3\n\n    {-\n\n    Expected 0 to be at least 3.\n\n    -}\n",
+            "type": "comparable -> comparable -> Assert.Assertion"
+          },
+          {
+            "name": "atMost",
+            "comment": " Passes if the second argument is less than or equal to the first.\n\n    Assert.atMost -3 (List.length [])\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (0 <= -3) is False\n    List.length []\n        |> Assert.atMost -3\n\n    {-\n\n    Expected 0 to be at most -3.\n\n    -}\n",
+            "type": "comparable -> comparable -> Assert.Assertion"
+          },
+          {
+            "name": "equal",
+            "comment": " Passes if the arguments are equal.\n\n    Assert.equal 5 (List.length [])\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (0 == 5) is False\n    List.length []\n        |> Assert.equal 5\n\n\n    {-\n\n    Expected 0\n    to equal 5\n\n    -}\n",
+            "type": "a -> a -> Assert.Assertion"
+          },
+          {
+            "name": "fail",
+            "comment": " Fails with the given message.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Assert\n\n\n    test \"Jon.Decode.int can decode the number 42.\" <|\n        \\_ ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Assert.pass\n\n                Err err ->\n                    Assert.fail err\n",
+            "type": "String -> Assert.Assertion"
+          },
+          {
+            "name": "getFailure",
+            "comment": " Return `Nothing` if the given [`Assertion`](#Assertion) is a [`pass`](#pass),\nand `Just` the error message if it is a [`fail`](#fail).\n\n    getFailure (Assert.fail \"this assertion failed\")\n    -- Just \"this assertion failed\"\n\n    getFailure (Assert.pass)\n    -- Nothing\n",
+            "type": "Assert.Assertion -> Maybe.Maybe String"
+          },
+          {
+            "name": "greaterThan",
+            "comment": " Passes if the second argument is greater than the first.\n\n    Assert.greaterThan 1 List.length []\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (0 > 1) is False\n    List.length []\n        |> Assert.greaterThan 1\n\n    {-\n\n    Expected 0 to be greater than 1.\n\n    -}\n",
+            "type": "comparable -> comparable -> Assert.Assertion"
+          },
+          {
+            "name": "lessThan",
+            "comment": " Passes if the second argument is less than the first.\n\n    Assert.lessThan -1 (List.length [])\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (0 < -1) is False\n    List.length []\n        |> Assert.lessThan -1\n\n\n    {-\n\n    Expected 0 to be less than -1.\n\n    -}\n",
+            "type": "comparable -> comparable -> Assert.Assertion"
+          },
+          {
+            "name": "notEqual",
+            "comment": " Passes if the arguments are not equal.\n\n    Assert.notEqual 100 (90 + 10)\n\nFailure messages line up nicely with assertions written in pipeline style:\n\n    -- Fails because (100 /= 100) is False\n    (90 + 10)\n        |> Assert.notEqual 100\n\n\n    {-\n\n    Expected different values, but both were:\n\n    100\n\n    -}\n",
+            "type": "a -> a -> Assert.Assertion"
+          },
+          {
+            "name": "onFail",
+            "comment": " If the given assertion fails, replace its failure message with a custom one.\n\n    \"something\"\n        |> Assert.equal \"something else\"\n        |> Assert.onFail \"thought those two strings would be the same\"\n",
+            "type": "String -> Assert.Assertion -> Assert.Assertion"
+          },
+          {
+            "name": "pass",
+            "comment": " Always passes.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Assert\n\n\n    test \"Jon.Decode.int can decode the number 42.\" <|\n        \\_ ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Assert.pass\n\n                Err err ->\n                    Assert.fail err\n",
+            "type": "Assert.Assertion"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Fuzz",
+        "comment": " This is a library of `Fuzzer`s you can use to supply values to your fuzz tests.\nYou can typically pick out which ones you need according to their types.\n\nA `Fuzzer a` knows how to create values of type `a`. It can create them\nrandomly, and it can shrink them to more minimal values. Fuzzers can be\nfiltered and mapped over.\n\n## Common Fuzzers\n@docs bool, int, intRange, float, floatRange, percentage, string, maybe, result, list, array\n\n## Working with Fuzzers\n@docs Fuzzer, filter, convert, map, frequency, frequencyOrCrash\n\n## Tuple Fuzzers\nInstead of using a tuple, consider using `fuzzN`.\n@docs tuple, tuple3, tuple4, tuple5\n\n## Uncommon Fuzzers\n@docs char, unit, order\n\n",
+        "aliases": [
+          {
+            "name": "Fuzzer",
+            "comment": " A Fuzzer is a\n[Random](http://package.elm-lang.org/packages/elm-lang/core/latest/Random)\n`Generator` paired with a shrinking strategy, or `Shrinker`. Shrinkers are defined\nin [`elm-community/shrink`](http://package.elm-lang.org/packages/elm-community/shrink/latest/).\nYou will need to be familiar with both libraries to write custom fuzzers for your own types.\nHere is an example for a record:\n\n    type alias Position =\n        { x : Int, y : Int }\n\n\n    position : Fuzzer Position\n    position =\n        Fuzzer\n            (Random.map2 Position (Random.int 0 1919) (Random.int 0 1079))\n            (\\{ x, y } -> Shrink.map Position (Shrink.int x) `Shrink.andMap` (Shrink.int y))\n\nHere is an example for a union type:\n\n    type Question\n        = Name String\n        | Age Int\n\n\n    question =\n        let\n            generator =\n                Random.bool `Random.andThen` (\\b ->\n                    if b then\n                        Random.map Name string.generator\n                    else\n                        Random.map Age (Random.int 0 120)\n                 )\n\n            shrinker question =\n                case question of\n                    Name n ->\n                        Shrink.string n |> Shrink.map Name\n\n                    Age i ->\n                        Shrink.int i |> Shrink.map Age\n        in\n            Fuzzer generator shrinker\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ generator : Random.Pcg.Generator a, shrinker : Shrink.Shrinker a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "array",
+            "comment": " Given a fuzzer of a type, create a fuzzer of an array of that type.\nGenerates random arrays of varying length, favoring shorter arrays.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Array.Array a)"
+          },
+          {
+            "name": "bool",
+            "comment": " A fuzzer for bool values.\n",
+            "type": "Fuzz.Fuzzer Bool"
+          },
+          {
+            "name": "char",
+            "comment": " A fuzzer for char values. Generates random ascii chars disregarding the control\ncharacters.\n",
+            "type": "Fuzz.Fuzzer Char"
+          },
+          {
+            "name": "convert",
+            "comment": " Convert the output of one fuzzer to another type. This is useful if\nyou're testing a function that expects a large model record, but you only need\nto randomize a few fields. You might do this several different ways for a single\nmodel, so you generate and shrink only the fields relevant to each test.\n\n    type alias Person =\n      { first : String, last : String, age : String }\n\n    spy : Fuzzer Person\n    spy = convert (\\age -> Person \"James\" \"Bond\" age) .age (intRange 0 120)\n\nIn order for shrinking to work, you need to pass an inverse function of the\nfunction being mapped.\n",
+            "type": "(a -> b) -> (b -> a) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "filter",
+            "comment": " Filter the values from a fuzzer. The resulting Fuzzer will only generate\nrandom test values or shrunken values that satisfy the predicate. The predicate\nmust be satisfiable.\n",
+            "type": "(a -> Bool) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "float",
+            "comment": " A fuzzer for float values. It will never fuzzuce `NaN`, `Infinity`, or `-Infinity`.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "floatRange",
+            "comment": " A fuzzer for float values within between a given minimum and maximum\nvalue, inclusive. Shrunken values will also be within the range.\n",
+            "type": "Float -> Float -> Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "frequency",
+            "comment": " Create a new `Fuzzer` by providing a list of probabilistic weights to use\nwith other fuzzers.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.freuqency\n        [ (1, Fuzz.intRange (-100, -1))\n        , (3, Fuzz.intRange (1, 100))\n        ]\n\nThis returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to a result of `Err`, with a `String` explaining what\nwent wrong.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Result.Result String (Fuzz.Fuzzer a)"
+          },
+          {
+            "name": "frequencyOrCrash",
+            "comment": " Calls `frequency` and handles `Err` results by crashing with the given\nerror message.\n\nThis is useful in tests, where a crash will simply cause the test run to fail.\nThere is no danger to a production system there.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "int",
+            "comment": " A fuzzer for int values.\n",
+            "type": "Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "intRange",
+            "comment": " A fuzzer for int values within between a given minimum and maximum value,\ninclusive. Shrunken values will also be within the range.\n",
+            "type": "Int -> Int -> Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "list",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a list of that type.\nGenerates random lists of varying length, favoring shorter lists.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (List a)"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function over a fuzzer. This works exactly like `convert`,\nexcept it does not require an inverse function, and consequently does no\nshrinking.\n",
+            "type": "(a -> b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "maybe",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a maybe for that type.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Maybe.Maybe a)"
+          },
+          {
+            "name": "order",
+            "comment": " A fuzzer for order values.\n",
+            "type": "Fuzz.Fuzzer Basics.Order"
+          },
+          {
+            "name": "percentage",
+            "comment": " A fuzzer for percentage values. Generates random floats between `0.0` and\n`1.0`.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "result",
+            "comment": " Given fuzzers for an error type and a success type, create a fuzzer for\na result.\n",
+            "type": "Fuzz.Fuzzer error -> Fuzz.Fuzzer value -> Fuzz.Fuzzer (Result.Result error value)"
+          },
+          {
+            "name": "string",
+            "comment": " A fuzzer for string values. Generates random printable ascii strings whose\nlength is between 0 and 10.\n",
+            "type": "Fuzz.Fuzzer String"
+          },
+          {
+            "name": "tuple",
+            "comment": " Turn a tuple of fuzzers into a fuzzer of tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b ) -> Fuzz.Fuzzer ( a, b )"
+          },
+          {
+            "name": "tuple3",
+            "comment": " Turn a 3-tuple of fuzzers into a fuzzer of 3-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c ) -> Fuzz.Fuzzer ( a, b, c )"
+          },
+          {
+            "name": "tuple4",
+            "comment": " Turn a 4-tuple of fuzzers into a fuzzer of 4-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c, Fuzz.Fuzzer d ) -> Fuzz.Fuzzer ( a, b, c, d )"
+          },
+          {
+            "name": "tuple5",
+            "comment": " Turn a 5-tuple of fuzzers into a fuzzer of 5-tuples.\n",
+            "type": "( Fuzz.Fuzzer a , Fuzz.Fuzzer b , Fuzz.Fuzzer c , Fuzz.Fuzzer d , Fuzz.Fuzzer e ) -> Fuzz.Fuzzer ( a, b, c, d, e )"
+          },
+          {
+            "name": "unit",
+            "comment": " A fuzzer for the unit value. Unit is a type with only one value, commonly\nused as a placeholder.\n",
+            "type": "Fuzz.Fuzzer ()"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "project-fuzzball/test-runner",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Html",
+        "comment": " HTML Runner\n\nRuns tests in a browser and reports the results in the DOM. You can bring up\none of these tests in elm-reactor to have it run and show outputs.\n\n@docs run, runWithOptions\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
+            "type": "Test.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
+            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Test.Runner.Html.App",
+        "comment": " Test runner for a Html.App\n\n@docs run\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " TODO document\n",
+            "type": "Test.Runner.Html.App.RunnerOptions -> Test.Runner.Html.App.AppOptions msg model -> Test.Test -> Platform.Program Basics.Never"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -53364,6 +54494,118 @@
     ]
   },
   {
+    "name": "rtfeldman/legacy-elm-test",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Legacy.Check.Test",
+        "comment": " An implementation of the legacy `Check.Test` module for backwards compatibility.\n\nIf you are currently using `Check.Test` and want to upgrade your version of\n`elm-test` to access the improved test runners, but still want your existing\ncode to compile, just replace your current `import Check.Test` with this:\n\n    import Legacy.Check.Test as CheckTest\n\nThat's it! (Well, you may also need to find/replace `Check.Test` with `CheckTest`.)\n\nThis module provides integration with\n[`elm-test`](http://package.elm-lang.org/packages/elm-community/elm-test/latest/).\n\n# Convert to Tests\n@docs evidenceToTest\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "evidenceToTest",
+            "comment": " Convert elm-check's Evidence into an elm-test Test. You can use elm-test's\nrunners to view the results of your property-based tests, alongside the results\nof unit tests.\n",
+            "type": "Check.Evidence -> Legacy.ElmTest.Test"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Legacy.ElmTest",
+        "comment": " An implementation of the legacy `ElmTest` module for backwards compatibility.\n\nIf you are currently using `ElmTest` and want to upgrade your version of\n`elm-test` to access the improved test runners, but still want your existing\ncode to compile, just replace your current `import ElmTest` with this:\n\n    import Legacy.ElmTest as ElmTest\n\nThat's it!\n\nThis implementation of the old `ElmTest` API has been done entirely\nin terms of the new API. All of the logic should work the same way, although\nfailure reports will be formatted differently. They are most different for\n`stringRunner` and `defaultTest`, so take a look at the docs for those to see\nwhat's changed.\n\nNote that unlike `elm-test`, this API is synchronous, meaning tests cannot be\nrun in parallel. (That was a big part of the motivation for changing the API!)\nUnfortunately, there is no workaround for this. Upgrading is the only way.\n\n# Tests\n@docs Test, test, defaultTest, equals, suite\n\n# Assertions\n@docs Assertion, assert, assertEqual, assertNotEqual, lazyAssert, assertionList, pass, fail\n\n# Run tests in-program\n@docs stringRunner\n\n# Run tests as an app\n@docs runSuite, runSuiteHtml\n",
+        "aliases": [
+          {
+            "name": "Assertion",
+            "comment": " The basic unit of testability.\n",
+            "args": [],
+            "type": "Assert.Assertion"
+          },
+          {
+            "name": "Test",
+            "comment": " The core unit representing a runnable test, or a group of tests called a\nsuite.\n",
+            "args": [],
+            "type": "Test.Test"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "assert",
+            "comment": " Basic function to assert that some expression is True\n",
+            "type": "Bool -> Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "assertEqual",
+            "comment": " Basic function to assert that two expressions are equal in value.\n",
+            "type": "a -> a -> Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "assertNotEqual",
+            "comment": " Basic function to assser that two expressions are not equal.\n",
+            "type": "a -> a -> Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "assertionList",
+            "comment": " Given a list of values and another list of expected values, generates a\nlist of assertions that these values are equal.\n",
+            "type": "List a -> List a -> List Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "defaultTest",
+            "comment": " In the original elm-test API, this would create a `Test` with a default name automatically chosen based on the inputs.\nFor example, `defaultTest (assertEqual 5 5)` would have be named \"5 == 5\".\n\nIn this version, it creates a `Test` with no name instead.\n",
+            "type": "Legacy.ElmTest.Assertion -> Legacy.ElmTest.Test"
+          },
+          {
+            "name": "equals",
+            "comment": " Create a `Test` which asserts equality between two expressions.\nFor example, `(7 + 10) `equals` (1 + 16)` will create a `Test` which tests for\nequality between the statements `(7 + 10)` and `(1 + 16)`.\n",
+            "type": "a -> a -> Legacy.ElmTest.Test"
+          },
+          {
+            "name": "fail",
+            "comment": " Create an assertion that always fails, for reasons described by the given\nstring.\n",
+            "type": "String -> Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "lazyAssert",
+            "comment": " A lazy version of `assert`. Delays execution of the expression until tests\nare run.\n",
+            "type": "(() -> Bool) -> Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "pass",
+            "comment": " An assertion that always passes. This is useful when you have test results\nfrom another library but want to use ElmTest runners.\n",
+            "type": "Legacy.ElmTest.Assertion"
+          },
+          {
+            "name": "runSuite",
+            "comment": " Run a suite as a program. Useful for tests run from the command line:\n    module Tests exposing (..)\n    import ElmTest exposing (..)\n\n    tests : Test\n    tests =\n        suite \"A Test Suite\"\n            [ test \"Addition\" (assertEqual (3 + 7) 10)\n            , test \"Subtraction\" (assertEqual (7 - 3) 4)\n            , test \"This test should fail\" (assert False)\n            ]\n\n    main : Program Never\n    main =\n        runSuite tests\nAnd then:\n    $ elm-make Tests.elm --output tests.js\n    $ node tests.js\n",
+            "type": "Legacy.ElmTest.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runSuiteHtml",
+            "comment": " Run a suite as program with Html output.\n",
+            "type": "Legacy.ElmTest.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "stringRunner",
+            "comment": " Run a test or a test suite and return the results as a `String`. Mostly\nuseful if you want to implement a different type of output for your test\nresults. If you aren't sure whether or not to use this function, you should\nprobably use `elementRunner`.\n",
+            "type": "Legacy.ElmTest.Test -> String"
+          },
+          {
+            "name": "suite",
+            "comment": " Convert a list of `Test`s to a test suite. Test suites are used to group\ntests into logical units, simplifying the management and running of many tests.\nTakes a name and a list of `Test`s. Since suites are also of type `Test`, they\ncan contain other suites, allowing for a more complex tree structure.\n",
+            "type": "String -> List Legacy.ElmTest.Test -> Legacy.ElmTest.Test"
+          },
+          {
+            "name": "test",
+            "comment": " A basic function to create a `Test`. Takes a name and an `Assertion`.\n",
+            "type": "String -> Legacy.ElmTest.Assertion -> Legacy.ElmTest.Test"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "seanhess/elm-style",
     "version": "1.0.1",
     "docs": [
@@ -55504,11 +56746,11 @@
   },
   {
     "name": "stasdavydov/elm-cart",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Cart",
-        "comment": " A tiny library for shopping carts. It supports any Product types to add into a cart.\nThe ```price``` function is required for cart and item subtotal calculation.\n\n# Types\n@docs Item, Cart\n\n# Cart operations\n@docs cart, add, inc, dec, remove, subtotal, qty\n\n# Cart Item operations\n@docs itemSubtotal\n\n",
+        "comment": " A tiny library for shopping carts. It supports any Product types to add into a cart.\nThe ```price``` function is required for cart and item subtotal calculation.\n\n# Types\n@docs Item, Cart\n\n# Modifying Cart contents\n@docs add, inc, dec, remove, changeQty\n\n# Cart operations\n@docs cart, subtotal, qty\n\n# Cart Item operations\n@docs itemSubtotal\n\n",
         "aliases": [
           {
             "name": "Cart",
@@ -55538,6 +56780,11 @@
             "name": "cart",
             "comment": " Return an empty cart.\n\n    cart == []\n",
             "type": "List (Cart.Item a)"
+          },
+          {
+            "name": "changeQty",
+            "comment": " Change the product quantity in the cart. Returns new Cart Ok result or Err.\n\n    type alias Product = { id : Int, price : Float }\n    p = Product 1 10.0\n    c = inc p (add p cart 12345)\n\n    changeQty p 10 cart == Ok [{ product = { id = 1, price = 10.0 }, qty = 10, date_added = 12345 }]\n    changeQty p 0 cart == Ok []\n    changeQty p -1 cart == Error \"Wrong negative quantuty used\"\n",
+            "type": "a -> Int -> Cart.Cart a -> Result.Result String (Cart.Cart a)"
           },
           {
             "name": "dec",
