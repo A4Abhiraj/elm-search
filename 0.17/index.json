@@ -59136,11 +59136,11 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
-        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goRight\n\n# Update API\n@docs updateDatum, replaceDatum\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
+        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext\n\n# Update API\n@docs updateDatum, replaceDatum\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
         "aliases": [
           {
             "name": "Breadcrumbs",
@@ -59185,6 +59185,11 @@
             "type": "MultiwayTreeZipper.Zipper a -> a"
           },
           {
+            "name": "goLeft",
+            "comment": " Move left relative to the current Zipper focus. This allows navigation from\na child to it's previous sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goLeft\n",
+            "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
             "name": "goRight",
             "comment": " Move right relative to the current Zipper focus. This allows navigation from\na child to it's next sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goRight\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
@@ -59193,6 +59198,11 @@
             "name": "goToChild",
             "comment": " Move down relative to the current Zipper focus. This allows navigation from\na parent to it's children.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n",
             "type": "Int -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
+            "name": "goToNext",
+            "comment": " Moves to the next node in the hierarchy, depth-first.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToNext\n        &> goToNext\n",
+            "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToRoot",
