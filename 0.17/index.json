@@ -11485,11 +11485,11 @@
   },
   {
     "name": "ccapndave/elm-update-extra",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Update.Extra",
-        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs addCmd\n@docs sequence\n",
+        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs addCmd\n@docs sequence\n@docs identity\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -11507,6 +11507,11 @@
             "name": "filter",
             "comment": " Allows you to conditionally trigger updates based on a predicate. Can be\nused with the pipeline operator.\n\nFor example:\n\n    update msg model =\n      case msg of\n        SomeMessage i ->\n          model ! []\n            |> filter (i > 10)\n                (    andThen update BiggerThanTen\n                  >> andThen update AnotherMessage\n                  >> andThen update EvenMoreMessages\n                )\n            |> andThen (update AlwaysTriggeredAfterPredicate)\n\nIf you want use to the pipeline operator in the nested pipeline, consider a\nlambda:\n\n    |> filter (i > 10)\n      ( \\state -> state\n          |> andThen update BiggerThanTen\n          |> andThen update AnotherMessage\n          |> andThen update EvenMoreMessages\n      )\n    |> andThen (update AlwaysTriggeredAfterPredicate)\n",
             "type": "Bool -> (( model, Platform.Cmd.Cmd msg ) -> ( model, Platform.Cmd.Cmd msg )) -> ( model, Platform.Cmd.Cmd msg ) -> ( model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "identity",
+            "comment": " This implements the identity function with regards to update pipelines.  This is designed to be used\nwith the :> operator, allowing you to write elements in the pipeline that do nothing at all.\n\n    import Update.Extra as Update\n    import Update.Extra.Infix exposing ((:>))\n\n    update msg model =\n      model ! []\n        :> Update.identity\n\nThis can be useful when you want to implement paths through the update pipeline without having to create\na `Noop` Msg.  Its especially when working with `Maybe`s, where it can be awkward to use the `filter`\nfunction in a type-safe way.\n\n    import Update.Extra as Update\n    import Update.Extra.Infix exposing ((:>))\n    import Maybe.Extra exposing ((?))\n\n    type Msg\n      = UpdateName (Maybe String)\n      | SetupUser User\n\n    update msg model =\n      case msg of\n        UpdateName maybeAName ->\n          let\n            user : Maybe User\n            user =\n              Maybe.map createUser maybeAName\n          in\n          { model | user = user }\n              :> Maybe.map (update << SetupUser) user ? Update.identity\n",
+            "type": "model -> ( model, Platform.Cmd.Cmd msg )"
           },
           {
             "name": "sequence",
@@ -42506,11 +42511,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "2.0.0",
+    "version": "2.1.2",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. Fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format, (<>), print, s, string, int, float\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format, (<>), print, html, s, string, int, float\n",
         "aliases": [],
         "types": [
           {
@@ -42533,8 +42538,13 @@
           },
           {
             "name": "float",
-            "comment": " A placeholder for an `Float` argument.\n",
+            "comment": " A placeholder for a `Float` argument.\n",
             "type": "Formatting.Format r (Float -> r)"
+          },
+          {
+            "name": "html",
+            "comment": " Convenience function. Like `print`, but returns an `Html.text`\nnode as its final result, instead of a `String`.\n",
+            "type": "Formatting.Format (Html.Html msg) a -> a"
           },
           {
             "name": "int",
@@ -42543,13 +42553,13 @@
           },
           {
             "name": "print",
-            "comment": " Turn your formatter into a function that's just waiting for its arguments.\n\nFor example:\n\n    order =\n        let\n            format = s \"FREE: \" <> int <> s \" x \" <> string  <> s \"!\"\n        in\n            print format 2 \"Ice Cream\"\n\n    --> \"FREE: 2 x Ice Cream!\"\n",
+            "comment": " Turn your formatter into a function that's just waiting for its arguments.\n\nGiven this format:\n\n\n    orderFormat =\n        s \"FREE: \" <> int <> s \" x \" <> string  <> s \"!\"\n\n\n...we can either use it immediately:\n\n\n    order : String\n    order = print orderFormat 2 \"Ice Cream\"\n\n    --> \"FREE: 2 x Ice Cream!\"\n\n\n...or turn it into an ordinary function to be used later:\n\n\n    orderFormatter : Int -> String -> String\n    orderFormatter =\n        print orderFormat\n\n\n    ...elsewhere...\n\n\n    order : String\n    order = orderFormatter 2 \"Ice Cream\"\n\n    --> \"FREE: 2 x Ice Cream!\"\n",
             "type": "Formatting.Format String a -> a"
           },
           {
             "name": "s",
             "comment": " A boilerplate string.\n",
-            "type": "String -> Formatting.Format a a"
+            "type": "String -> Formatting.Format r r"
           },
           {
             "name": "string",
@@ -49590,7 +49600,7 @@
   },
   {
     "name": "project-fuzzball/test",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Test.Runner.Log",
@@ -49758,7 +49768,7 @@
       },
       {
         "name": "Assert",
-        "comment": " Determining whether tests pass or fail.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n\n## Basic Assertions\n\n@docs Assertion, equal, notEqual, all\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
+        "comment": " Determining whether tests pass or fail.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Assertions\n\n@docs Assertion, equal, notEqual, all\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
         "aliases": [
           {
             "name": "Assertion",
@@ -49795,6 +49805,11 @@
             "type": "String -> Assert.Assertion"
           },
           {
+            "name": "false",
+            "comment": " Passes if the argument is 'False', and otherwise fails with the given message.\n\n    -- Fails because the list is empty, but we expect False.\n    List.isEmpty []\n        |> Assert.false \"List shouldn't have been empty\"\n\n    {-\n\n    List shouldn't have been empty\n\n    -}\n",
+            "type": "String -> Bool -> Assert.Assertion"
+          },
+          {
             "name": "getFailure",
             "comment": " Return `Nothing` if the given [`Assertion`](#Assertion) is a [`pass`](#pass),\nand `Just` the error message if it is a [`fail`](#fail).\n\n    getFailure (Assert.fail \"this assertion failed\")\n    -- Just \"this assertion failed\"\n\n    getFailure (Assert.pass)\n    -- Nothing\n",
             "type": "Assert.Assertion -> Maybe.Maybe String"
@@ -49823,6 +49838,11 @@
             "name": "pass",
             "comment": " Always passes.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Assert\n\n\n    test \"Jon.Decode.int can decode the number 42.\" <|\n        \\_ ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Assert.pass\n\n                Err err ->\n                    Assert.fail err\n",
             "type": "Assert.Assertion"
+          },
+          {
+            "name": "true",
+            "comment": " Passes if the argument is 'True', and otherwise fails with the given message.\n\n    -- Fails because the list is not empty, but we expect True.\n    List.isEmpty [ 42 ]\n        |> Assert.true \"List should have been empty\"\n\n    {-\n\n    List should have been empty\n\n    -}\n",
+            "type": "String -> Bool -> Assert.Assertion"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -59116,15 +59136,15 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.1.1",
+    "version": "1.2.1",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
-        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot\n\n# Update API\n@docs updateDatum, replaceDatum\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
+        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goRight\n\n# Update API\n@docs updateDatum, replaceDatum\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
         "aliases": [
           {
             "name": "Breadcrumbs",
-            "comment": " A list of Contexts that is contructed as a MultiwayTree is navigated.\nBreadcrumbs are used to retain information about parts of the tree that move out\nof focus. As the tree is navigated, the needed Context is pushed onto the list\nBreadcrumbs, and they are maintained in the reverse order in which they are\nvisited ",
+            "comment": " A list of Contexts that is contructed as a MultiwayTree is navigated.\nBreadcrumbs are used to retain information about parts of the tree that move out\nof focus. As the tree is navigated, the needed Context is pushed onto the list\nBreadcrumbs, and they are maintained in the reverse order in which they are\nvisited\n",
             "args": [
               "a"
             ],
@@ -59165,6 +59185,11 @@
             "type": "MultiwayTreeZipper.Zipper a -> a"
           },
           {
+            "name": "goRight",
+            "comment": " Move right relative to the current Zipper focus. This allows navigation from\na child to it's next sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goRight\n",
+            "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
             "name": "goToChild",
             "comment": " Move down relative to the current Zipper focus. This allows navigation from\na parent to it's children.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n",
             "type": "Int -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
@@ -59199,7 +59224,7 @@
       },
       {
         "name": "MultiwayTree",
-        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children\n\n# Mapping\n@docs map\n",
+        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children, foldl, foldr, flatten\n\n# Mapping\n@docs map\n",
         "aliases": [
           {
             "name": "Forest",
@@ -59238,6 +59263,21 @@
             "name": "datum",
             "comment": " Access the datum of the current tree\n",
             "type": "MultiwayTree.Tree a -> a"
+          },
+          {
+            "name": "flatten",
+            "comment": " Flattens a Tree into a List where the root is the first element of that list.\n",
+            "type": "MultiwayTree.Tree a -> List a"
+          },
+          {
+            "name": "foldl",
+            "comment": " Reduce a Tree from the left.\n",
+            "type": "(a -> b -> b) -> b -> MultiwayTree.Tree a -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Reduce a Tree from the right.\n",
+            "type": "(a -> b -> b) -> b -> MultiwayTree.Tree a -> b"
           },
           {
             "name": "map",
