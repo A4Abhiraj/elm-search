@@ -60708,11 +60708,11 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
-        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild\n\n# Update API\n@docs updateDatum, replaceDatum\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
+        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild\n\n# Update API\n@docs updateDatum, replaceDatum, insertChild, appendChild\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
         "aliases": [
           {
             "name": "Breadcrumbs",
@@ -60752,6 +60752,11 @@
         ],
         "values": [
           {
+            "name": "appendChild",
+            "comment": " Inserts a Tree as the last child of the Tree at the current focus. Does not move the focus.\n",
+            "type": "MultiwayTree.Tree a -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
             "name": "datum",
             "comment": " Access the datum at the current Zipper focus.\n",
             "type": "MultiwayTreeZipper.Zipper a -> a"
@@ -60783,7 +60788,7 @@
           },
           {
             "name": "goToRightMostChild",
-            "comment": " Move down and as far right as possible relative to the current Zipper focus. \nThis allows navigation from a parent to it's last child.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToRightMostChild\n",
+            "comment": " Move down and as far right as possible relative to the current Zipper focus.\nThis allows navigation from a parent to it's last child.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToRightMostChild\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
@@ -60795,6 +60800,11 @@
             "name": "goUp",
             "comment": " Move up relative to the current Zipper focus. This allows navigation from a\nchild to it's parent.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> goUp\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
+            "name": "insertChild",
+            "comment": " Inserts a Tree as the first child of the Tree at the current focus. Does not move the focus.\n",
+            "type": "MultiwayTree.Tree a -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "maybeDatum",
@@ -60816,7 +60826,7 @@
       },
       {
         "name": "MultiwayTree",
-        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children, foldl, foldr, flatten, filter, filterWithChildPrecedence\n\n# Mapping\n@docs map\n",
+        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children, foldl, foldr, flatten, filter, filterWithChildPrecedence, insertChild, appendChild\n\n# Mapping\n@docs map\n",
         "aliases": [
           {
             "name": "Forest",
@@ -60846,6 +60856,11 @@
           }
         ],
         "values": [
+          {
+            "name": "appendChild",
+            "comment": " Inserts a Tree as the last child of a Tree\n",
+            "type": "MultiwayTree.Tree a -> MultiwayTree.Tree a -> MultiwayTree.Tree a"
+          },
           {
             "name": "children",
             "comment": " Access the children of the current tree\n",
@@ -60880,6 +60895,11 @@
             "name": "foldr",
             "comment": " Reduce a Tree from the right.\n",
             "type": "(a -> b -> b) -> b -> MultiwayTree.Tree a -> b"
+          },
+          {
+            "name": "insertChild",
+            "comment": " Inserts a Tree as the first child of a Tree\n",
+            "type": "MultiwayTree.Tree a -> MultiwayTree.Tree a -> MultiwayTree.Tree a"
           },
           {
             "name": "map",
