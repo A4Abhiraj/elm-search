@@ -46035,11 +46035,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "2.3.0",
+    "version": "2.4.1",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format, (<>), map, premap, print, html, s, string, int, float, any\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format, (<>), map, premap, print, html, s, string, int, float, any, pad, padLeft, padRight\n",
         "aliases": [],
         "types": [
           {
@@ -46062,7 +46062,7 @@
           },
           {
             "name": "any",
-            "comment": " A placeholder for any value that we can call `toString` on.\n\n\nEagle-eyed source readers will notice that we use this to define `int`\nand `float`, since `toString` gives us the right result for both of\nthose types.\nThe only difference is, those versions have more restrictive type\nsignatures.\n",
+            "comment": " A placeholder for any value that we can call `toString` on.\n\n\nEagle-eyed readers of the source will notice that we use this same\nfunction to define `int` and `float`, since `toString` gives us the\nright result for both of those types.\n\nThe sole difference is, `int` and `float` have more restrictive type\nsignatures.\n",
             "type": "Formatting.Format r (a -> r)"
           },
           {
@@ -46072,7 +46072,7 @@
           },
           {
             "name": "html",
-            "comment": " Convenience function. Like `print`, but returns an `Html.text`\nnode as its final result, instead of a `String`.\n",
+            "comment": " Convenience function. Like `print`, but returns an `Html.text`\nnode as its final result, instead of a `String`.\n\nHint: If you're using any formatters where whitespace is sigificant,\nyou might well need one or both of these CSS rules:\n\n    font-family: monospace;\n    white-space: pre;\n",
             "type": "Formatting.Format (Html.Html msg) a -> a"
           },
           {
@@ -46082,12 +46082,27 @@
           },
           {
             "name": "map",
-            "comment": " Create a new function by applying a function to the results of this formatter.\n\nFor example:\n\n    import String exposing (toUpper)\n\n    format = s \"Name: \" <> map toUpper string\n\n...produces a formatter that uppercases the name:\n\n    print format \"Kris\"\n\n    --> \"Name: KRIS\"\n\n",
+            "comment": " Create a new formatter by applying a function to the output of this formatter.\n\nFor example:\n\n    import String exposing (toUpper)\n\n    format = s \"Name: \" <> map toUpper string\n\n...produces a formatter that uppercases the name:\n\n    print format \"Kris\"\n\n    --> \"Name: KRIS\"\n\n",
             "type": "(String -> String) -> Formatting.Format r a -> Formatting.Format r a"
           },
           {
+            "name": "pad",
+            "comment": " `String.pad` lifted into the world of Formatters.\n\nFor example:\n\n    print (pad 10 '-' string) \"KRIS\"\n\n    --> \"---KRIS---\"\n\n",
+            "type": "Int -> Char -> Formatting.Format r a -> Formatting.Format r a"
+          },
+          {
+            "name": "padLeft",
+            "comment": " `String.padLeft` lifted into the world of Formatters.\n\nFor example:\n\n    print (padLeft 10 '_' float) 1.72\n\n    --> \"______1.72\"\n\n",
+            "type": "Int -> Char -> Formatting.Format r a -> Formatting.Format r a"
+          },
+          {
+            "name": "padRight",
+            "comment": " `String.padRight` lifted into the world of Formatters.\n\nFor example:\n\n    print (padRight 10 '.' int) 789\n\n    --> \"789.......\"\n\n",
+            "type": "Int -> Char -> Formatting.Format r a -> Formatting.Format r a"
+          },
+          {
             "name": "premap",
-            "comment": " Create a new function by applying a function to the input of this\nformatter. The dual of `map`.\n\nFor example:\n\n    format = s \"Height: \" <> premap .height float\n\n...produces a formatter that accesses a `.height` record field:\n\n    print format { height: 1.72 }\n\n    --> \"Height: 1.72\"\n\n",
+            "comment": " Create a new formatter by applying a function to the input of this\nformatter. The dual of `map`.\n\nFor example:\n\n    format = s \"Height: \" <> premap .height float\n\n...produces a formatter that accesses a `.height` record field:\n\n    print format { height: 1.72 }\n\n    --> \"Height: 1.72\"\n\n",
             "type": "(a -> b) -> Formatting.Format r (b -> v) -> Formatting.Format r (a -> v)"
           },
           {
@@ -55323,7 +55338,7 @@
   },
   {
     "name": "rluiten/elm-date-extra",
-    "version": "6.1.0",
+    "version": "7.0.0",
     "docs": [
       {
         "name": "Date.Extra.Utils",
@@ -55486,8 +55501,15 @@
       },
       {
         "name": "Date.Extra.Duration",
-        "comment": " A Duration is a length of time that may vary with with calendar date\nand time. It can be used to modify a date.\n\nWhen modify dates using Durations (Day | Month | Week | Year) this module\ncompensates for day light saving hour variations to minimise the scenarios\nthat cause the Hour field in the result to be different to the input date.\nIt can't completely avoid the hour changing as some hours are not a real\nworld date and hence will modify the hour more than the Duration modified.\n\nThis behaviour is modelled on momentjs so any observed behaviour that is\nnot the same as momentjs should be raised as in issue.\n\nNote adding or subtracting 24 * Hour units from a date may produce a\ndifferent answer to adding or subtracting a Day if day light saving\ntransitions occur as part of the date change.\n\n@docs add\n@docs Duration\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
+        "comment": " A Duration is a length of time that may vary with with calendar date\nand time. It can be used to modify a date.\n\nWhen modify dates using Durations (Day | Month | Week | Year) this module\ncompensates for day light saving hour variations to minimise the scenarios\nthat cause the Hour field in the result to be different to the input date.\nIt can't completely avoid the hour changing as some hours are not a real\nworld date and hence will modify the hour more than the Duration modified.\n\nThis behaviour is modelled on momentjs so any observed behaviour that is\nnot the same as momentjs should be raised as in issue.\n\nNote adding or subtracting 24 * Hour units from a date may produce a\ndifferent answer to adding or subtracting a Day if day light saving\ntransitions occur as part of the date change.\n\n**Warning**\n\nBe careful if you add Duration Delta to a Date as Duration contains months\nand Years which are not fixed elapsed times like Period Delta, however if\nyou really need a relative number of months or years then it may meet\nyour needs.\n\n@docs add\n@docs Duration\n@docs DeltaRecord\n@docs zeroDelta\n@docs diff\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "DeltaRecord",
+            "comment": " A multi granularity duration delta.\n\nThis does not contain week like Period.DeltaRecord.\nIt does contain month and year.\n",
+            "args": [],
+            "type": "{ year : Int , month : Int , day : Int , hour : Int , minute : Int , second : Int , millisecond : Int }"
+          }
+        ],
         "types": [
           {
             "name": "Duration",
@@ -55525,6 +55547,12 @@
               [
                 "Year",
                 []
+              ],
+              [
+                "Delta",
+                [
+                  "Date.Extra.Duration.DeltaRecord"
+                ]
               ]
             ]
           }
@@ -55534,6 +55562,16 @@
             "name": "add",
             "comment": " Add duration * count to date. ",
             "type": "Date.Extra.Duration.Duration -> Int -> Date.Date -> Date.Date"
+          },
+          {
+            "name": "diff",
+            "comment": " Return a Period representing date difference. date1 - date2.\n\nIf  you add the result of this function to date2 with addend of 1\nwill return date1.\n\n**Differences to Period.diff**\n\n* Duration DeltaRecord excludes week field\n* Duration DeltaRecord includes month field\n* Duration DeltaRecord includes year field\n* Day is number of days difference between months.\n\nWhen adding a Duration DeltaRecord to a date.\nThe larger granularity fields are added before lower granularity fields\nso Years are added before Months before Days etc.\n\n* Very different behaviour to Period diff\n * If date1 > date2 then all fields in DeltaRecord will be positive or zero.\n * If date1 < date2 then all fields in DeltaRecord will be negative or zero.\n* Because it deals with non fixed length periods of time\n\nExample 1.\n  days in 2016/05 (May) = 31\n  days in 2016/04 (Apr) = 30\n  days in 2016/03 (Mar) = 31\n\n  days in 2015/03 (Mar) = 31\n\n  diff of \"2016/05/15\" \"2015/03/20\"\n  result naive field diff.\n    year 1, month 2, day -5\n\n  days \"2015/03/20\" to \"2015/04/01\" (31 - 20) = 11 days (12). still in march with 11.\n  days \"2015/04/01\" to \"2016/04/15\" (15 - 1) = 14 days\n  months \"2016/04/15\" to \"2016/05/15\" 1 months\n  result field diff\n    year 1, month 1, day 26\n\n  This logic applies all the way down to milliseconds.\n\n\n\n ",
+            "type": "Date.Date -> Date.Date -> Date.Extra.Duration.DeltaRecord"
+          },
+          {
+            "name": "zeroDelta",
+            "comment": " All zero delta.\nUseful as a starting point if you want to set a few fields only.\n",
+            "type": "Date.Extra.Duration.DeltaRecord"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -55661,34 +55699,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_us",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-us. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config.Config_en_au",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-au. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.Config.Config_fr_fr",
         "comment": " This is the French config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
         "aliases": [],
@@ -55698,6 +55708,76 @@
             "name": "config",
             "comment": " Config for fr-fr. ",
             "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Compare",
+        "comment": " Compare dates.\n\n@docs is\n@docs is3\n@docs Compare2\n@docs Compare3\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Compare2",
+            "comment": " Date comparison type for 2 dates.\n\n* After\n * Return True if date1 is after date2.\n* Before\n * Return True if date1 is before date2.\n* Same\n * Return True if date1 is same as date2.\n* SameOrAfter\n * Return True if date1 is same or after date2.\n* SameOrBefore\n * Return True if date1 is same or before date2.\n",
+            "args": [],
+            "cases": [
+              [
+                "After",
+                []
+              ],
+              [
+                "Before",
+                []
+              ],
+              [
+                "Same",
+                []
+              ],
+              [
+                "SameOrAfter",
+                []
+              ],
+              [
+                "SameOrBefore",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Compare3",
+            "comment": " Date comparison type for 3 dates.\n\nBetween does not care if date2 > date3 or date2 < date3.\n\n* Between\n * Return True if date1 is After date2 and Before date3\n * Return True if date1 is After date3 and Before date2\n* BetweenOpenStart\n * Return True if date1 is SameOrAfter date2 and Before date3\n* BetweenOpenEnd\n * Return True if date1 is After date2 and SameOrBefore date3\n* BetweenOpen\n * Return True if date1 is SameOrAfter date2 and SameOrBefore date3\n",
+            "args": [],
+            "cases": [
+              [
+                "Between",
+                []
+              ],
+              [
+                "BetweenOpenStart",
+                []
+              ],
+              [
+                "BetweenOpenEnd",
+                []
+              ],
+              [
+                "BetweenOpen",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "is",
+            "comment": " Compare two dates.\n",
+            "type": "Date.Extra.Compare.Compare2 -> Date.Date -> Date.Date -> Bool"
+          },
+          {
+            "name": "is3",
+            "comment": " Compare three dates.\n\nThis figures out the low and high bounds from date2\nand date3 using minimum and maximum of them respectively.\n",
+            "type": "Date.Extra.Compare.Compare3 -> Date.Date -> Date.Date -> Date.Date -> Bool"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -55777,100 +55857,29 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Compare",
-        "comment": " Compare dates.\n\n@docs is\n@docs is3\n@docs Compare2\n@docs Compare3\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
-        "types": [
-          {
-            "name": "Compare2",
-            "comment": " Date comparison type for 2 dates.\n\n* After\n * Return True if date1 is after date2.\n* Before\n * Return True if date1 is before date2.\n* Same\n * Return True if date1 is same as date2.\n* SameOrAfter\n * Return True if date1 is same or after date2.\n* SameOrBefore\n * Return True if date1 is same or before date2.\n",
-            "args": [],
-            "cases": [
-              [
-                "After",
-                []
-              ],
-              [
-                "Before",
-                []
-              ],
-              [
-                "Same",
-                []
-              ],
-              [
-                "SameOrAfter",
-                []
-              ],
-              [
-                "SameOrBefore",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Compare3",
-            "comment": " Date comparison type for 3 dates.\n\nBetween does not care if date2 > date3 or date2 < date3.\n\n* Between\n * Return True if date1 is After date2 and Before date3\n * Return True if date1 is After date3 and Before date2\n* BetweenOpenStart\n * Return True if date1 is SameOrAfter date2 and Before date3\n* BetweenOpenEnd\n * Return True if date1 is After date2 and SameOrBefore date3\n* BetweenOpen\n * Return True if date1 is SameOrAfter date2 and SameOrBefore date3\n",
-            "args": [],
-            "cases": [
-              [
-                "Between",
-                []
-              ],
-              [
-                "BetweenOpenStart",
-                []
-              ],
-              [
-                "BetweenOpenEnd",
-                []
-              ],
-              [
-                "BetweenOpen",
-                []
-              ]
-            ]
-          }
-        ],
+        "types": [],
         "values": [
           {
-            "name": "is",
-            "comment": " Compare two dates.\n",
-            "type": "Date.Extra.Compare.Compare2 -> Date.Date -> Date.Date -> Bool"
-          },
-          {
-            "name": "is3",
-            "comment": " Compare three dates.\n\nThis figures out the low and high bounds from date2\nand date3 using minimum and maximum of them respectively.\n",
-            "type": "Date.Extra.Compare.Compare3 -> Date.Date -> Date.Date -> Date.Date -> Bool"
+            "name": "config",
+            "comment": " Config for en-us. ",
+            "type": "Date.Extra.Config.Config"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_en_us",
-        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Config.Config_en_au",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "dayName",
-            "comment": " Day full name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "dayShort",
-            "comment": " Day short name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "monthName",
-            "comment": " Month full name. ",
-            "type": "Date.Month -> String"
-          },
-          {
-            "name": "monthShort",
-            "comment": " Month short name. ",
-            "type": "Date.Month -> String"
+            "name": "config",
+            "comment": " Config for en-au. ",
+            "type": "Date.Extra.Config.Config"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -56025,6 +56034,35 @@
             "name": "yearToDayLength",
             "comment": " Return number of days in a year. ",
             "type": "Int -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_en_us",
+        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
