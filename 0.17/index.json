@@ -39871,9 +39871,48 @@
     ]
   },
   {
-    "name": "jinjor/elm-time-travel",
-    "version": "1.0.6",
+    "name": "jinjor/elm-inline-hover",
+    "version": "1.0.0",
     "docs": [
+      {
+        "name": "InlineHover",
+        "comment": " Wrap any elements defined in [Html](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html)\n# Make Special Elements\n@docs hover\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "hover",
+            "comment": " Make a special element that can notice hover state.\n```\nmain =\n  ul []\n    [ hover styles li [] [ text \"Hello\" ]\n    , hover styles li [] [ text \"World\" ]\n    ]\n\nstyles =\n  [(\"background\", \"#abd\")]\n```\n",
+            "type": "List ( String, String ) -> (List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg) -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "jinjor/elm-time-travel",
+    "version": "1.0.7",
+    "docs": [
+      {
+        "name": "TimeTravel.Navigation",
+        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
+            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
+            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
       {
         "name": "TimeTravel.Html.App",
         "comment": " Each functions in this module has the same interface as [Html.App](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App)\n\n# Start your Program\n@docs beginnerProgram, program, programWithFlags\n\n",
@@ -39894,25 +39933,6 @@
             "name": "programWithFlags",
             "comment": " See [Html.App.programWithFlags](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App#programWithFlags)\n",
             "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "TimeTravel.Navigation",
-        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "program",
-            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
-            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "programWithFlags",
-            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
-            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -64139,11 +64159,11 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
-        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild\n\n# Update API\n@docs updateDatum, replaceDatum, insertChild, appendChild\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
+        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild, goTo\n\n# Update API\n@docs updateDatum, replaceDatum, insertChild, appendChild\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
         "aliases": [
           {
             "name": "Breadcrumbs",
@@ -64201,6 +64221,11 @@
             "name": "goRight",
             "comment": " Move right relative to the current Zipper focus. This allows navigation from\na child to it's next sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goRight\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
+            "name": "goTo",
+            "comment": " Move the focus to the first element for which the predicate is True. If no\nsuch element exists returns Nothing. Starts searching at the root of the tree.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goTo (\\elem -> elem == \"e\")\n",
+            "type": "(a -> Bool) -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToChild",
