@@ -33454,31 +33454,171 @@
   },
   {
     "name": "elm-lang/html",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "docs": [
       {
-        "name": "Html.Lazy",
-        "comment": " Since all Elm functions are pure we have a guarantee that the same input\nwill always result in the same output. This module gives us tools to be lazy\nabout building `Html` that utilize this fact.\n\nRather than immediately applying functions to their arguments, the `lazy`\nfunctions just bundle the function and arguments up for later. When diffing\nthe old and new virtual DOM, it checks to see if all the arguments are equal.\nIf so, it skips calling the function!\n\nThis is a really cheap test and often makes things a lot faster, but definitely\nbenchmark to be sure!\n\n@docs lazy, lazy2, lazy3\n",
+        "name": "Html.Keyed",
+        "comment": " A keyed node helps optimize cases where children are getting added, moved,\nremoved, etc. Common examples include:\n\n  - The user can delete items from a list.\n  - The user can create new items in a list.\n  - You can sort a list based on name or date or whatever.\n\nWhen you use a keyed node, every child is paired with a string identifier. This\nmakes it possible for the underlying diffing algorithm to reuse nodes more\nefficiently.\n\n# Keyed Nodes\n@docs node\n\n# Commonly Keyed Nodes\n@docs ol, ul\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "lazy",
-            "comment": " A performance optimization that delays the building of virtual DOM nodes.\n\nCalling `(view model)` will definitely build some virtual DOM, perhaps a lot of\nit. Calling `(lazy view model)` delays the call until later. During diffing, we\ncan check to see if `model` is referentially equal to the previous value used,\nand if so, we just stop. No need to build up the tree structure and diff it,\nwe know if the input to `view` is the same, the output must be the same!\n",
-            "type": "(a -> Html.Html msg) -> a -> Html.Html msg"
+            "name": "node",
+            "comment": " Works just like `Html.node`, but you add a unique identifier to each child\nnode. You want this when you have a list of nodes that is changing: adding\nnodes, removing nodes, etc. In these cases, the unique identifiers help make\nthe DOM modifications more efficient.\n",
+            "type": "String -> List (Html.Attribute msg) -> List ( String, Html.Html msg ) -> Html.Html msg"
           },
           {
-            "name": "lazy2",
-            "comment": " Same as `lazy` but checks on two arguments.\n",
-            "type": "(a -> b -> Html.Html msg) -> a -> b -> Html.Html msg"
+            "name": "ol",
+            "comment": "",
+            "type": "List (Html.Attribute msg) -> List ( String, Html.Html msg ) -> Html.Html msg"
           },
           {
-            "name": "lazy3",
-            "comment": " Same as `lazy` but checks on three arguments.\n",
-            "type": "(a -> b -> c -> Html.Html msg) -> a -> b -> c -> Html.Html msg"
+            "name": "ul",
+            "comment": "",
+            "type": "List (Html.Attribute msg) -> List ( String, Html.Html msg ) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Html.App",
+        "comment": " These functions will help you set up an Elm program that follows [the Elm\nArchitecture][arch], a pattern for creating great code that *stays* great as\nyour project grows.\n\nIf you are totally new to Elm, you should only worry about the `beginnerProgram`\nfunction. As you progress through [the tutorial][arch], more advanced functions\nlike `program` and `map` will be introduced gradually. The hope is that every\ntime Elm needs you to learn something, the usage path will clearly motivate and\nexplain the new concept!\n\n[arch]: https://github.com/evancz/elm-architecture-tutorial/\n\n# Nesting Views\n@docs map\n\n# Create a Program\n\nEvery Elm app needs to define a `main` value. That is what we are going to\nshow on screen. The following functions help you define `main`, so your first\nElm program will likely contain a definition like:\n\n    main =\n      Html.beginnerProgram\n        { model = model\n        , view = view\n        , update = update\n        }\n\nIf you are using `elm-reactor` you will just see everything on screen. If you\nare using `elm-make` it will be generating HTML files that you can open in any\nbrowser.\n\n@docs beginnerProgram, program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "beginnerProgram",
+            "comment": " Create a [`Program`][program] that specifies how your whole app should\nwork. The essense of every Elm program is:\n\n  * **Model** &mdash; a nice representation of your application state.\n  * **View** &mdash; a function that turns models into HTML.\n  * **Update** &mdash; given a user-input messages and the model, produce a new model.\n\nBetween these three things, you have everything you need! When the user clicks\non a button, it produces a message. That message is piped into the `update`\nfunction, producing a new model. We use the `view` function to show the new\nmodel on screen. And then we just repeat this forever!\n\nCheck out [the Elm Architecture Tutorial][tutorial] for a a more complete\nexplanation along with some examples!\n\n[program]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform#Program\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial\n\n",
+            "type": "{ model : model , view : model -> Html.Html msg , update : msg -> model -> model } -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "map",
+            "comment": " This function is useful when nesting components with [the Elm\nArchitecture](https://github.com/evancz/elm-architecture-tutorial/). It lets\nyou transform the messages produced by a subtree.\n\nSay you have a node named `button` that produces `()` values when it is\nclicked. To get your model updating properly, you will probably want to tag\nthis `()` value like this:\n\n    type Msg = Click | ...\n\n    update msg model =\n      case msg of\n        Click ->\n          ...\n\n    view model =\n      map (\\_ -> Click) button\n\nSo now all the events produced by `button` will be transformed to be of type\n`Msg` so they can be handled by your update function!\n",
+            "type": "(a -> msg) -> Html.Html a -> Html.Html msg"
+          },
+          {
+            "name": "program",
+            "comment": " Create a [`Program`][program] that specifies how your whole app should\nwork. Here we extend the basic model/view/update pattern we saw in\n`beginnerProgram` with a few things.\n\n> I would very highly recommend reading [the Elm Architecture Tutorial][tutorial]\nfor a proper introduction to all the new pieces here.\n\n[program]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform#Program\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial\n\nFirst we augment the `model` and `update` functions to return a pair of\n`model` and `Cmd msg`. A [command][cmd] is a way of saying “Hey Elm, I need\nyou to perform all these tasks.” This lets us update our model *and* make HTTP\nrequests or whatever else.\n\nSecond we add a `subscriptions` function. Similar to `view` it is always\napplied to the latest model, but instead of HTML it gives us a list of\n*subscriptions*. A [subscription][sub] is a way of saying “Hey Elm, I need\nyou to listen for any updates about these various things.” Now when you get\na geolocation change or a websocket message, it will be given to your update\nfunction.\n\n[cmd]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform-Cmd\n[sub]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform-Sub\n\nNow again, it is very important that you read [the Elm Architecture Tutorial][tutorial]\nbecause it describes how these building blocks work and how you can put them\ntogether into a nice modular architecture. I swear it will be faster to read\nthrough than to muddle around and try to sort it out by trial-and-error.\n",
+            "type": "{ init : ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg } -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " Same as `program` but it lets you demand flags on initialization. So the\nJavaScript code to start a program with flags might look like this:\n\n```javascript\n// Program { userID : String, token : String }\n\nvar app = Elm.MyApp.fullscreen({\n    userID: 'Tom',\n    token: '12345'\n});\n```\n",
+            "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg } -> Platform.Program flags"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Html.Events",
+        "comment": "\nIt is often helpful to create an [Union Type][] so you can have many different kinds\nof events as seen in the [TodoMVC][] example.\n\n[Union Type]: http://elm-lang.org/learn/Union-Types.elm\n[TodoMVC]: https://github.com/evancz/elm-todomvc/blob/master/Todo.elm\n\n# Mouse Helpers\n@docs onClick, onDoubleClick,\n      onMouseDown, onMouseUp,\n      onMouseEnter, onMouseLeave,\n      onMouseOver, onMouseOut\n\n# Form Helpers\n@docs onInput, onCheck, onSubmit\n\n# Focus Helpers\n@docs onBlur, onFocus\n\n# Custom Event Handlers\n@docs on, onWithOptions, Options, defaultOptions\n\n# Custom Decoders\n@docs targetValue, targetChecked, keyCode\n",
+        "aliases": [
+          {
+            "name": "Options",
+            "comment": " Options for an event listener. If `stopPropagation` is true, it means the\nevent stops traveling through the DOM so it will not trigger any other event\nlisteners. If `preventDefault` is true, any built-in browser behavior related\nto the event is prevented. For example, this is used with touch events when you\nwant to treat them as gestures of your own, not as scrolls.\n",
+            "args": [],
+            "type": "{ stopPropagation : Bool, preventDefault : Bool }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Everything is `False` by default.\n\n    defaultOptions =\n        { stopPropagation = False\n        , preventDefault = False\n        }\n",
+            "type": "Html.Events.Options"
+          },
+          {
+            "name": "keyCode",
+            "comment": " A `Json.Decoder` for grabbing `event.keyCode`. This helps you define\nkeyboard listeners like this:\n\n    import Json.Decode as Json\n\n    onKeyUp : (Int -> msg) -> Attribute msg\n    onKeyUp tagger =\n      on \"keyup\" (Json.map tagger keyCode)\n\n**Note:** It looks like the spec is moving away from `event.keyCode` and\ntowards `event.key`. Once this is supported in more browsers, we may add\nhelpers here for `onKeyUp`, `onKeyDown`, `onKeyPress`, etc.\n",
+            "type": "Json.Decode.Decoder Int"
+          },
+          {
+            "name": "on",
+            "comment": " Create a custom event listener. Normally this will not be necessary, but\nyou have the power! Here is how `onClick` is defined for example:\n\n    import Json.Decode as Json\n\n    onClick : msg -> Attribute msg\n    onClick message =\n      on \"click\" (Json.succeed message)\n\nThe first argument is the event name in the same format as with JavaScript's\n[`addEventListener`][aEL] function.\n\nThe second argument is a JSON decoder. Read more about these [here][decoder].\nWhen an event occurs, the decoder tries to turn the event object into an Elm\nvalue. If successful, the value is routed to your `update` function. In the\ncase of `onClick` we always just succeed with the given `message`.\n\nIf this is confusing, work through the [Elm Architecture Tutorial][tutorial].\nIt really does help!\n\n[aEL]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener\n[decoder]: http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Decode\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial/\n",
+            "type": "String -> Json.Decode.Decoder msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onBlur",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onCheck",
+            "comment": " Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)\nevents on checkboxes. It will grab the boolean value from `event.target.checked`\non any input event.\n\nCheck out [targetChecked](#targetChecked) for more details on how this works.\n",
+            "type": "(Bool -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onClick",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onDoubleClick",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onFocus",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onInput",
+            "comment": " Capture [input](https://developer.mozilla.org/en-US/docs/Web/Events/input)\nevents for things like text fields or text areas.\n\nIt grabs the **string** value at `event.target.value`, so it will not work if\nneed some other type of information. For example, if you want to track inputs\non a range slider, make a custom handler with [`on`](#on).\n\nFor more details on how `onInput` works, check out [targetValue](#targetValue).\n",
+            "type": "(String -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseDown",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseEnter",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseLeave",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseOut",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseOver",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onMouseUp",
+            "comment": "",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onSubmit",
+            "comment": " Capture a [submit](https://developer.mozilla.org/en-US/docs/Web/Events/submit)\nevent with [`preventDefault`](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)\nin order to prevent the form from changing the page’s location. If you need\ndifferent behavior, use `onWithOptions` to create a customized version of\n`onSubmit`.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onWithOptions",
+            "comment": " Same as `on` but you can set a few options.\n",
+            "type": "String -> Html.Events.Options -> Json.Decode.Decoder msg -> Html.Attribute msg"
+          },
+          {
+            "name": "targetChecked",
+            "comment": " A `Json.Decoder` for grabbing `event.target.checked`. We use this to define\n`onCheck` as follows:\n\n    import Json.Decode as Json\n\n    onCheck : (Bool -> msg) -> Attribute msg\n    onCheck tagger =\n      on \"input\" (Json.map tagger targetChecked)\n",
+            "type": "Json.Decode.Decoder Bool"
+          },
+          {
+            "name": "targetValue",
+            "comment": " A `Json.Decoder` for grabbing `event.target.value`. We use this to define\n`onInput` as follows:\n\n    import Json.Decode as Json\n\n    onInput : (String -> msg) -> Attribute msg\n    onInput tagger =\n      on \"input\" (Json.map tagger targetValue)\n\nYou probably will never need this, but hopefully it gives some insights into\nhow to make custom event handlers.\n",
+            "type": "Json.Decode.Decoder String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Html.Attributes",
@@ -33938,7 +34078,7 @@
           },
           {
             "name": "style",
-            "comment": " Specify a list of styles.\n\n    myStyle : Attribute msg\n    myStyle =\n      style\n        [ (\"backgroundColor\", \"red\")\n        , (\"height\", \"90px\")\n        , (\"width\", \"100%\")\n        ]\n\n    greeting : Html\n    greeting =\n      div [ myStyle ] [ text \"Hello!\" ]\n\nThere is no `Html.Styles` module because best practices for working with HTML\nsuggest that this should primarily be specified in CSS files. So the general\nrecommendation is to use this function lightly.\n",
+            "comment": " Specify a list of styles.\n\n    myStyle : Attribute msg\n    myStyle =\n      style\n        [ (\"backgroundColor\", \"red\")\n        , (\"height\", \"90px\")\n        , (\"width\", \"100%\")\n        ]\n\n    greeting : Html msg\n    greeting =\n      div [ myStyle ] [ text \"Hello!\" ]\n\nThere is no `Html.Styles` module because best practices for working with HTML\nsuggest that this should primarily be specified in CSS files. So the general\nrecommendation is to use this function lightly.\n",
             "type": "List ( String, String ) -> Html.Attribute msg"
           },
           {
@@ -33982,147 +34122,31 @@
             "type": "String -> Html.Attribute msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Html.App",
-        "comment": " These functions will help you set up an Elm program that follows [the Elm\nArchitecture][arch], a pattern for creating great code that *stays* great as\nyour project grows.\n\nIf you are totally new to Elm, you should only worry about the `beginnerProgram`\nfunction. As you progress through [the tutorial][arch], more advanced functions\nlike `program` and `map` will be introduced gradually. The hope is that every\ntime Elm needs you to learn something, the usage path will clearly motivate and\nexplain the new concept!\n\n[arch]: https://github.com/evancz/elm-architecture-tutorial/\n\n# Nesting Views\n@docs map\n\n# Create a Program\n\nEvery Elm app needs to define a `main` value. That is what we are going to\nshow on screen. The following functions help you define `main`, so your first\nElm program will likely contain a definition like:\n\n    main =\n      Html.beginnerProgram\n        { model = model\n        , view = view\n        , update = update\n        }\n\nIf you are using `elm-reactor` you will just see everything on screen. If you\nare using `elm-make` it will be generating HTML files that you can open in any\nbrowser.\n\n@docs beginnerProgram, program, programWithFlags\n\n",
+        "name": "Html.Lazy",
+        "comment": " Since all Elm functions are pure we have a guarantee that the same input\nwill always result in the same output. This module gives us tools to be lazy\nabout building `Html` that utilize this fact.\n\nRather than immediately applying functions to their arguments, the `lazy`\nfunctions just bundle the function and arguments up for later. When diffing\nthe old and new virtual DOM, it checks to see if all the arguments are equal.\nIf so, it skips calling the function!\n\nThis is a really cheap test and often makes things a lot faster, but definitely\nbenchmark to be sure!\n\n@docs lazy, lazy2, lazy3\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "beginnerProgram",
-            "comment": " Create a [`Program`][program] that specifies how your whole app should\nwork. The essense of every Elm program is:\n\n  * **Model** &mdash; a nice representation of your application state.\n  * **View** &mdash; a function that turns models into HTML.\n  * **Update** &mdash; given a user-input messages and the model, produce a new model.\n\nBetween these three things, you have everything you need! When the user clicks\non a button, it produces a message. That message is piped into the `update`\nfunction, producing a new model. We use the `view` function to show the new\nmodel on screen. And then we just repeat this forever!\n\nCheck out [the Elm Architecture Tutorial][tutorial] for a a more complete\nexplanation along with some examples!\n\n[program]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform#Program\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial\n```\n\n",
-            "type": "{ model : model , view : model -> Html.Html msg , update : msg -> model -> model } -> Platform.Program Basics.Never"
+            "name": "lazy",
+            "comment": " A performance optimization that delays the building of virtual DOM nodes.\n\nCalling `(view model)` will definitely build some virtual DOM, perhaps a lot of\nit. Calling `(lazy view model)` delays the call until later. During diffing, we\ncan check to see if `model` is referentially equal to the previous value used,\nand if so, we just stop. No need to build up the tree structure and diff it,\nwe know if the input to `view` is the same, the output must be the same!\n",
+            "type": "(a -> Html.Html msg) -> a -> Html.Html msg"
           },
           {
-            "name": "map",
-            "comment": " This function is useful when nesting components with [the Elm\nArchitecture](https://github.com/evancz/elm-architecture-tutorial/). It lets\nyou transform the messages produced by a subtree.\n\nSay you have a node named `button` that produces `()` values when it is\nclicked. To get your model updating properly, you will probably want to tag\nthis `()` value like this:\n\n    type Msg = Click | ...\n\n    update msg model =\n      case msg of\n        Click ->\n          ...\n\n    view model =\n      map (\\_ -> Click) button\n\nSo now all the events produced by `button` will be transformed to be of type\n`Msg` so they can be handled by your update function!\n",
-            "type": "(a -> msg) -> Html.Html a -> Html.Html msg"
+            "name": "lazy2",
+            "comment": " Same as `lazy` but checks on two arguments.\n",
+            "type": "(a -> b -> Html.Html msg) -> a -> b -> Html.Html msg"
           },
           {
-            "name": "program",
-            "comment": " Create a [`Program`][program] that specifies how your whole app should\nwork. Here we extend the basic model/view/update pattern we saw in\n`beginnerProgram` with a few things.\n\n> I would very highly recommend reading [the Elm Architecture Tutorial][tutorial]\nfor a proper introduction to all the new pieces here.\n\n[program]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform#Program\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial\n\nFirst we augment the `model` and `update` functions to return a pair of\n`model` and `Cmd msg`. A [command][cmd] is a way of saying “Hey Elm, I need\nyou to perform all these tasks.” This lets us update our model *and* make HTTP\nrequests or whatever else.\n\nSecond we add a `subscriptions` function. Similar to `view` it is always\napplied to the latest model, but instead of HTML it gives us a list of\n*subscriptions*. A [subscription][sub] is a way of saying “Hey Elm, I need\nyou to listen for any updates about these various things.” Now when you get\na geolocation change or a websocket message, it will be given to your update\nfunction.\n\n[cmd]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform-Cmd\n[sub]: http://package.elm-lang.org/packages/elm-lang/core/latest/Platform-Sub\n\nNow again, it is very important that you read [the Elm Architecture Tutorial][tutorial]\nbecause it describes how these building blocks work and how you can put them\ntogether into a nice modular architecture. I swear it will be faster to read\nthrough than to muddle around and try to sort it out by trial-and-error.\n",
-            "type": "{ init : ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg } -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "programWithFlags",
-            "comment": " Same as `program` but it lets you demand flags on initialization. So the\nJavaScript code to start a program with flags might look like this:\n\n```javascript\n// Program { userID : String, token : String }\n\nvar app = Elm.MyApp.fullscreen({\n    userID: 'Tom',\n    token: '12345'\n});\n",
-            "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg } -> Platform.Program flags"
+            "name": "lazy3",
+            "comment": " Same as `lazy` but checks on three arguments.\n",
+            "type": "(a -> b -> c -> Html.Html msg) -> a -> b -> c -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Html.Events",
-        "comment": "\nIt is often helpful to create an [Union Type][] so you can have many different kinds\nof events as seen in the [TodoMVC][] example.\n\n[Union Type]: http://elm-lang.org/learn/Union-Types.elm\n[TodoMVC]: https://github.com/evancz/elm-todomvc/blob/master/Todo.elm\n\n# Mouse Helpers\n@docs onClick, onDoubleClick,\n      onMouseDown, onMouseUp,\n      onMouseEnter, onMouseLeave,\n      onMouseOver, onMouseOut\n\n# Form Helpers\n@docs onInput, onCheck, onSubmit\n\n# Focus Helpers\n@docs onBlur, onFocus\n\n# Custom Event Handlers\n@docs on, onWithOptions, Options, defaultOptions\n\n# Custom Decoders\n@docs targetValue, targetChecked, keyCode\n",
-        "aliases": [
-          {
-            "name": "Options",
-            "comment": " Options for an event listener. If `stopPropagation` is true, it means the\nevent stops traveling through the DOM so it will not trigger any other event\nlisteners. If `preventDefault` is true, any built-in browser behavior related\nto the event is prevented. For example, this is used with touch events when you\nwant to treat them as gestures of your own, not as scrolls.\n",
-            "args": [],
-            "type": "{ stopPropagation : Bool, preventDefault : Bool }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultOptions",
-            "comment": " Everything is `False` by default.\n\n    defaultOptions =\n        { stopPropagation = False\n        , preventDefault = False\n        }\n",
-            "type": "Html.Events.Options"
-          },
-          {
-            "name": "keyCode",
-            "comment": " A `Json.Decoder` for grabbing `event.keyCode`. This helps you define\nkeyboard listeners like this:\n\n    import Json.Decoder as Json\n\n    onKeyUp : (Int -> msg) -> Attribute msg\n    onKeyUp tagger =\n      on \"keyup\" (Json.map tagger keyCode)\n\n**Note:** It looks like the spec is moving away from `event.keyCode` and\ntowards `event.key`. Once this is supported in more browsers, we may add\nhelpers here for `onKeyUp`, `onKeyDown`, `onKeyPress`, etc.\n",
-            "type": "Json.Decode.Decoder Int"
-          },
-          {
-            "name": "on",
-            "comment": " Create a custom event listener. Normally this will not be necessary, but\nyou have the power! Here is how `onClick` is defined for example:\n\n    import Json.Decode as Json\n\n    onClick : msg -> Attribute msg\n    onClick message =\n      on \"click\" (Json.succeed message)\n\nThe first argument is the event name in the same format as with JavaScript's\n[`addEventListener`][aEL] function.\n\nThe second argument is a JSON decoder. Read more about these [here][decoder].\nWhen an event occurs, the decoder tries to turn the event object into an Elm\nvalue. If successful, the value is routed to your `update` function. In the\ncase of `onClick` we always just succeed with the given `message`.\n\nIf this is confusing, work through the [Elm Architecture Tutorial][tutorial].\nIt really does help!\n\n[aEL]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener\n[decoder]: http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Decode\n[tutorial]: https://github.com/evancz/elm-architecture-tutorial/\n",
-            "type": "String -> Json.Decode.Decoder msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onBlur",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onCheck",
-            "comment": " Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)\nevents on checkboxes. It will grab the boolean value from `event.target.checked`\non any input event.\n\nCheck out [targetChecked](#targetChecked) for more details on how this works.\n",
-            "type": "(Bool -> msg) -> Html.Attribute msg"
-          },
-          {
-            "name": "onClick",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onDoubleClick",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onFocus",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onInput",
-            "comment": " Capture [input](https://developer.mozilla.org/en-US/docs/Web/Events/input)\nevents for things like text fields or text areas.\n\nIt grabs the **string** value at `event.target.value`, so it will not work if\nneed some other type of information. For example, if you want to track inputs\non a range slider, make a custom handler with [`on`](#on).\n\nFor more details on how `onInput` works, check out [targetValue](#targetValue).\n",
-            "type": "(String -> msg) -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseDown",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseEnter",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseLeave",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseOut",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseOver",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onMouseUp",
-            "comment": "",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onSubmit",
-            "comment": " Capture a [submit](https://developer.mozilla.org/en-US/docs/Web/Events/submit)\nevent with [`preventDefault`](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)\nin order to prevent the form from changing the page’s location. If you need\ndifferent behavior, use `onWithOptions` to create a customized version of\n`onSubmit`.\n",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onWithOptions",
-            "comment": " Same as `on` but you can set a few options.\n",
-            "type": "String -> Html.Events.Options -> Json.Decode.Decoder msg -> Html.Attribute msg"
-          },
-          {
-            "name": "targetChecked",
-            "comment": " A `Json.Decoder` for grabbing `event.target.checked`. We use this to define\n`onCheck` as follows:\n\n    import Json.Decoder as Json\n\n    onCheck : (Bool -> msg) -> Attribute msg\n    onCheck tagger =\n      on \"input\" (Json.map tagger targetChecked)\n",
-            "type": "Json.Decode.Decoder Bool"
-          },
-          {
-            "name": "targetValue",
-            "comment": " A `Json.Decoder` for grabbing `event.target.value`. We use this to define\n`onInput` as follows:\n\n    import Json.Decoder as Json\n\n    onInput : (String -> msg) -> Attribute msg\n    onInput tagger =\n      on \"input\" (Json.map tagger targetValue)\n\nYou probably will never need this, but hopefully it gives some insights into\nhow to make custom event handlers.\n",
-            "type": "Json.Decode.Decoder String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Html",
@@ -34653,7 +34677,7 @@
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -34934,8 +34958,155 @@
   },
   {
     "name": "elm-lang/svg",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "docs": [
+      {
+        "name": "Svg.Keyed",
+        "comment": " A keyed node helps optimize cases where children are getting added, moved,\nremoved, etc. Common examples include:\n\n  - The user can delete items from a list.\n  - The user can create new items in a list.\n  - You can sort a list based on name or date or whatever.\n\nWhen you use a keyed node, every child is paired with a string identifier. This\nmakes it possible for the underlying diffing algorithm to reuse nodes more\nefficiently.\n\n# Keyed Nodes\n@docs node\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "node",
+            "comment": " Works just like `Svg.node`, but you add a unique identifier to each child\nnode. You want this when you have a list of nodes that is changing: adding\nnodes, removing nodes, etc. In these cases, the unique identifiers help make\nthe DOM modifications more efficient.\n",
+            "type": "String -> List (Svg.Attribute msg) -> List ( String, Svg.Svg msg ) -> Svg.Svg msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Svg.Lazy",
+        "comment": " Since all Elm functions are pure we have a guarantee that the same input\nwill always result in the same output. This module gives us tools to be lazy\nabout building `Svg` that utilize this fact.\n\nRather than immediately applying functions to their arguments, the `lazy`\nfunctions just bundle the function and arguments up for later. When diffing\nthe old and new virtual DOM, it checks to see if all the arguments are equal.\nIf so, it skips calling the function!\n\nThis is a really cheap test and often makes things a lot faster, but definitely\nbenchmark to be sure!\n\n@docs lazy, lazy2, lazy3\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lazy",
+            "comment": " A performance optimization that delays the building of virtual DOM nodes.\n\nCalling `(view model)` will definitely build some virtual DOM, perhaps a lot of\nit. Calling `(lazy view model)` delays the call until later. During diffing, we\ncan check to see if `model` is referentially equal to the previous value used,\nand if so, we just stop. No need to build up the tree structure and diff it,\nwe know if the input to `view` is the same, the output must be the same!\n",
+            "type": "(a -> Svg.Svg msg) -> a -> Svg.Svg msg"
+          },
+          {
+            "name": "lazy2",
+            "comment": " Same as `lazy` but checks on two arguments.\n",
+            "type": "(a -> b -> Svg.Svg msg) -> a -> b -> Svg.Svg msg"
+          },
+          {
+            "name": "lazy3",
+            "comment": " Same as `lazy` but checks on three arguments.\n",
+            "type": "(a -> b -> c -> Svg.Svg msg) -> a -> b -> c -> Svg.Svg msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Svg.Events",
+        "comment": "\n\n# Animation event attributes\n@docs onBegin, onEnd, onRepeat\n\n# Document event attributes\n@docs onAbort, onError, onResize, onScroll, onLoad, onUnload, onZoom\n\n# Graphical event attributes\n@docs onActivate, onClick, onFocusIn, onFocusOut, onMouseDown, onMouseMove,\n  onMouseOut, onMouseOver, onMouseUp\n\n# Custom Events\n@docs on\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "on",
+            "comment": " Create a custom event listener.\n\n    import Json.Decode as Json\n\n    onClick : msg -> Attribute msg\n    onClick msg =\n      on \"click\" (Json.succeed msg)\n\nYou first specify the name of the event in the same format as with JavaScript’s\n`addEventListener`. Next you give a JSON decoder, which lets you pull\ninformation out of the event object. If the decoder succeeds, it will produce\na message and route it to your `update` function.\n",
+            "type": "String -> Json.Decode.Decoder msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onAbort",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onActivate",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onBegin",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onClick",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onEnd",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onError",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onFocusIn",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onFocusOut",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onLoad",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onMouseDown",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onMouseMove",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onMouseOut",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onMouseOver",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onMouseUp",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onRepeat",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onResize",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onScroll",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onUnload",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          },
+          {
+            "name": "onZoom",
+            "comment": "",
+            "type": "msg -> Svg.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
       {
         "name": "Svg.Attributes",
         "comment": "\n\n# Regular attributes\n@docs accentHeight, accelerate, accumulate, additive, alphabetic, allowReorder,\n  amplitude, arabicForm, ascent, attributeName, attributeType, autoReverse,\n  azimuth, baseFrequency, baseProfile, bbox, begin, bias, by, calcMode,\n  capHeight, class, clipPathUnits, contentScriptType, contentStyleType, cx, cy,\n  d, decelerate, descent, diffuseConstant, divisor, dur, dx, dy, edgeMode,\n  elevation, end, exponent, externalResourcesRequired, filterRes, filterUnits,\n  format, from, fx, fy, g1, g2, glyphName, glyphRef, gradientTransform,\n  gradientUnits, hanging, height, horizAdvX, horizOriginX, horizOriginY, id,\n  ideographic, in', in2, intercept, k, k1, k2, k3, k4, kernelMatrix,\n  kernelUnitLength, keyPoints, keySplines, keyTimes, lang, lengthAdjust,\n  limitingConeAngle, local, markerHeight, markerUnits, markerWidth,\n  maskContentUnits, maskUnits, mathematical, max, media, method, min, mode,\n  name, numOctaves, offset, operator, order, orient, orientation, origin,\n  overlinePosition, overlineThickness, panose1, path, pathLength,\n  patternContentUnits, patternTransform, patternUnits, pointOrder, points,\n  pointsAtX, pointsAtY, pointsAtZ, preserveAlpha, preserveAspectRatio,\n  primitiveUnits, r, radius, refX, refY, renderingIntent, repeatCount,\n  repeatDur, requiredExtensions, requiredFeatures, restart, result, rotate,\n  rx, ry, scale, seed, slope, spacing, specularConstant, specularExponent,\n  speed, spreadMethod, startOffset, stdDeviation, stemh, stemv, stitchTiles,\n  strikethroughPosition, strikethroughThickness, string, style, surfaceScale,\n  systemLanguage, tableValues, target, targetX, targetY, textLength, title, to,\n  transform, type', u1, u2, underlinePosition, underlineThickness, unicode,\n  unicodeRange, unitsPerEm, vAlphabetic, vHanging, vIdeographic, vMathematical,\n  values, version, vertAdvY, vertOriginX, vertOriginY, viewBox, viewTarget,\n  width, widths, x, xHeight, x1, x2, xChannelSelector, xlinkActuate,\n  xlinkArcrole, xlinkHref, xlinkRole, xlinkShow, xlinkTitle, xlinkType,\n  xmlBase, xmlLang, xmlSpace, y, y1, y2, yChannelSelector, z, zoomAndPan\n\n# Presentation attributes\n@docs alignmentBaseline, baselineShift, clipPath, clipRule, clip,\n  colorInterpolationFilters, colorInterpolation, colorProfile, colorRendering,\n  color, cursor, direction, display, dominantBaseline, enableBackground,\n  fillOpacity, fillRule, fill, filter, floodColor, floodOpacity, fontFamily,\n  fontSizeAdjust, fontSize, fontStretch, fontStyle, fontVariant, fontWeight,\n  glyphOrientationHorizontal, glyphOrientationVertical, imageRendering,\n  kerning, letterSpacing, lightingColor, markerEnd, markerMid, markerStart,\n  mask, opacity, overflow, pointerEvents, shapeRendering, stopColor,\n  stopOpacity, strokeDasharray, strokeDashoffset, strokeLinecap,\n  strokeLinejoin, strokeMiterlimit, strokeOpacity, strokeWidth, stroke,\n  textAnchor, textDecoration, textRendering, unicodeBidi, visibility,\n  wordSpacing, writingMode\n\n",
@@ -36208,135 +36379,7 @@
             "type": "String -> Svg.Attribute msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Svg.Events",
-        "comment": "\n\n# Animation event attributes\n@docs onBegin, onEnd, onRepeat\n\n# Document event attributes\n@docs onAbort, onError, onResize, onScroll, onLoad, onUnload, onZoom\n\n# Graphical event attributes\n@docs onActivate, onClick, onFocusIn, onFocusOut, onMouseDown, onMouseMove,\n  onMouseOut, onMouseOver, onMouseUp\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "onAbort",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onActivate",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onBegin",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onClick",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onEnd",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onError",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onFocusIn",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onFocusOut",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onLoad",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onMouseDown",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onMouseMove",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onMouseOut",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onMouseOver",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onMouseUp",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onRepeat",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onResize",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onScroll",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onUnload",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          },
-          {
-            "name": "onZoom",
-            "comment": "",
-            "type": "msg -> Svg.Attribute msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Svg.Lazy",
-        "comment": " Since all Elm functions are pure we have a guarantee that the same input\nwill always result in the same output. This module gives us tools to be lazy\nabout building `Svg` that utilize this fact.\n\nRather than immediately applying functions to their arguments, the `lazy`\nfunctions just bundle the function and arguments up for later. When diffing\nthe old and new virtual DOM, it checks to see if all the arguments are equal.\nIf so, it skips calling the function!\n\nThis is a really cheap test and often makes things a lot faster, but definitely\nbenchmark to be sure!\n\n@docs lazy, lazy2, lazy3\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lazy",
-            "comment": " A performance optimization that delays the building of virtual DOM nodes.\n\nCalling `(view model)` will definitely build some virtual DOM, perhaps a lot of\nit. Calling `(lazy view model)` delays the call until later. During diffing, we\ncan check to see if `model` is referentially equal to the previous value used,\nand if so, we just stop. No need to build up the tree structure and diff it,\nwe know if the input to `view` is the same, the output must be the same!\n",
-            "type": "(a -> Svg.Svg msg) -> a -> Svg.Svg msg"
-          },
-          {
-            "name": "lazy2",
-            "comment": " Same as `lazy` but checks on two arguments.\n",
-            "type": "(a -> b -> Svg.Svg msg) -> a -> b -> Svg.Svg msg"
-          },
-          {
-            "name": "lazy3",
-            "comment": " Same as `lazy` but checks on three arguments.\n",
-            "type": "(a -> b -> c -> Svg.Svg msg) -> a -> b -> c -> Svg.Svg msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Svg",
@@ -36772,7 +36815,7 @@
             "type": "List (Svg.Attribute msg) -> List (Svg.Svg msg) -> Svg.Svg msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -36817,11 +36860,11 @@
   },
   {
     "name": "elm-lang/virtual-dom",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "VirtualDom",
-        "comment": " API to the core diffing algorithm. Can serve as a foundation for libraries\nthat expose more helper functions for HTML or SVG.\n\n# Create\n@docs Node, text, node\n\n# Declare Properties and Attributes\n@docs Property, property, attribute, attributeNS\n\n# Styles\n@docs style\n\n# Events\n@docs on, onWithOptions, Options, defaultOptions\n\n# Routing Messages\n@docs map\n\n# Optimizations\n@docs lazy, lazy2, lazy3\n\n# Programs\n@docs programWithFlags\n\n",
+        "comment": " API to the core diffing algorithm. Can serve as a foundation for libraries\nthat expose more helper functions for HTML or SVG.\n\n# Create\n@docs Node, text, node\n\n# Declare Properties and Attributes\n@docs Property, property, attribute, attributeNS\n\n# Styles\n@docs style\n\n# Events\n@docs on, onWithOptions, Options, defaultOptions\n\n# Routing Messages\n@docs map\n\n# Optimizations\n@docs lazy, lazy2, lazy3, keyedNode\n\n# Programs\n@docs programWithFlags\n\n",
         "aliases": [
           {
             "name": "Options",
@@ -36863,6 +36906,11 @@
             "name": "defaultOptions",
             "comment": " Everything is `False` by default.\n\n    defaultOptions =\n        { stopPropagation = False\n        , preventDefault = False\n        }\n",
             "type": "VirtualDom.Options"
+          },
+          {
+            "name": "keyedNode",
+            "comment": " Works just like `node`, but you add a unique identifier to each child\nnode. You want this when you have a list of nodes that is changing: adding\nnodes, removing nodes, etc. In these cases, the unique identifiers help make\nthe DOM modifications more efficient.\n",
+            "type": "String -> List (VirtualDom.Property msg) -> List ( String, VirtualDom.Node msg ) -> VirtualDom.Node msg"
           },
           {
             "name": "lazy",
@@ -36920,7 +36968,7 @@
             "type": "String -> VirtualDom.Node msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -47376,11 +47424,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "2.4.1",
+    "version": "2.5.0",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format, (<>), map, premap, print, html, s, string, int, float, any, pad, padLeft, padRight\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n",
         "aliases": [],
         "types": [
           {
@@ -47405,6 +47453,11 @@
             "name": "any",
             "comment": " A placeholder for any value that we can call `toString` on.\n\n\nEagle-eyed readers of the source will notice that we use this same\nfunction to define `int` and `float`, since `toString` gives us the\nright result for both of those types.\n\nThe sole difference is, `int` and `float` have more restrictive type\nsignatures.\n",
             "type": "Formatting.Format r (a -> r)"
+          },
+          {
+            "name": "dp",
+            "comment": " Round to `n` decimal places.\n",
+            "type": "Int -> Formatting.Format r (Float -> a) -> Formatting.Format r (Float -> a)"
           },
           {
             "name": "float",
