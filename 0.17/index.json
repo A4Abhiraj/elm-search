@@ -16301,7 +16301,7 @@
   },
   {
     "name": "debois/elm-mdl",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "docs": [
       {
         "name": "Material",
@@ -16311,7 +16311,7 @@
             "name": "Model",
             "comment": " Model encompassing all Material components. Since some components store\nuser actions in their model (notably Snackbar), the model is generic in the \ntype of such \"observations\". \n",
             "args": [],
-            "type": "{ button : Parts.Indexed Material.Button.Model , textfield : Parts.Indexed Material.Textfield.Model , menu : Parts.Indexed Material.Menu.Model , snackbar : Maybe.Maybe (Material.Snackbar.Model Int) , layout : Material.Layout.Model , toggles : Parts.Indexed Material.Toggles.Model }"
+            "type": "{ button : Parts.Indexed Material.Button.Model , textfield : Parts.Indexed Material.Textfield.Model , menu : Parts.Indexed Material.Menu.Model , snackbar : Maybe.Maybe (Material.Snackbar.Model Int) , layout : Material.Layout.Model , toggles : Parts.Indexed Material.Toggles.Model , tooltip : Parts.Indexed Material.Tooltip.Model }"
           },
           {
             "name": "Msg",
@@ -16336,8 +16336,97 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Material.Menu",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#menus-section):\n\n> The Material Design Lite (MDL) menu component is a user interface element\n> that allows users to select one of a number of options. The selection\n> typically results in an action initiation, a setting change, or other\n> observable effect. Menu options are always presented in sets of two or\n> more, and options may be programmatically enabled or disabled as required.\n> The menu appears when the user is asked to choose among a series of\n> options, and is usually dismissed after the choice is made.\n\n> Menus are an established but non-standardized feature in user interfaces,\n> and allow users to make choices that direct the activity, progress, or\n> characteristics of software. Their design and use is an important factor in\n> the overall user experience. See the menu component's Material Design\n> specifications page for details.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/menus.html).\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#/menus)\nfor a live demo.\n\n# Render\n@docs Item, render\n\n# Options\n@docs Property\n\n## Alignment\n@docs bottomLeft, bottomRight, topLeft, topRight\n\n## Appearance\n@docs ripple, icon\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update, view\n\n\n",
+        "aliases": [
+          {
+            "name": "Item",
+            "comment": " Item model.\n",
+            "args": [
+              "m"
+            ],
+            "type": "{ divider : Bool, enabled : Bool, html : Html.Html m }"
+          },
+          {
+            "name": "Model",
+            "comment": " TODO.\n",
+            "args": [],
+            "type": "{ items : Dict.Dict Int Material.Ripple.Model , animationState : Material.Menu.AnimationState , geometry : Maybe.Maybe Material.Menu.Geometry.Geometry }"
+          },
+          {
+            "name": "Property",
+            "comment": " Type of Menu options\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property Material.Menu.Config m"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Component action.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "bottomLeft",
+            "comment": " Menu extends from the bottom-left of the icon.\n(Suitable for the menu-icon sitting in a top-left corner)\n",
+            "type": "Material.Menu.Property m"
+          },
+          {
+            "name": "bottomRight",
+            "comment": " Menu extends from the bottom-right of the icon.\n(Suitable for the menu-icon sitting in a top-right corner)\n",
+            "type": "Material.Menu.Property m"
+          },
+          {
+            "name": "defaultModel",
+            "comment": " TODO.\n",
+            "type": "Material.Menu.Model"
+          },
+          {
+            "name": "icon",
+            "comment": " Set the menu icon\n",
+            "type": "String -> Material.Menu.Property m"
+          },
+          {
+            "name": "render",
+            "comment": " Component render. Below is an example, assuming boilerplate setup as\nindicated in `Material`, and a user message `Select String`.\n\n    item : String -> Html Msg\n    item str =\n      Html.div\n        [ Html.Events.onClick (Select str) ]\n        [ Html.text str ]\n\n    Menu.render Mdl [idx] model.mdl\n      [ Menu.topLeft\n      , Menu.ripple\n      ]\n      [ Menu.Item False True  <| item \"Some item\"\n      , Menu.Item True  True  <| item \"Another item\"\n      , Menu.Item False False <| item \"Disabled item\"\n      , Menu.Item False True  <| item \"Yet another item\"\n      ]\n",
+            "type": "(Parts.Msg (Material.Menu.Container c) -> m) -> Parts.Index -> Material.Menu.Container c -> List (Material.Menu.Property m) -> List (Material.Menu.Item m) -> Html.Html m"
+          },
+          {
+            "name": "ripple",
+            "comment": " Menu items ripple when clicked\n",
+            "type": "Material.Menu.Property m"
+          },
+          {
+            "name": "topLeft",
+            "comment": " Menu extends from the top-left of the icon.\n(Suitable for the menu-icon sitting in a lower-left corner)\n",
+            "type": "Material.Menu.Property m"
+          },
+          {
+            "name": "topRight",
+            "comment": " Menu extends from the rop-right of the icon.\n(Suitable for the menu-icon sitting in a lower-right corner)\n",
+            "type": "Material.Menu.Property m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\n",
+            "type": "Material.Menu.Msg -> Material.Menu.Model -> ( Material.Menu.Model, Platform.Cmd.Cmd Material.Menu.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " Component view\n",
+            "type": "Material.Menu.Model -> List (Material.Menu.Property Material.Menu.Msg) -> List (Material.Menu.Item Material.Menu.Msg) -> Html.Html Material.Menu.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Material.Layout",
-        "comment": " From the\n[Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):\n\n> The Material Design Lite (MDL) layout component is a comprehensive approach to\n> page layout that uses MDL development tenets, allows for efficient use of MDL\n> components, and automatically adapts to different browsers, screen sizes, and\n> devices.\n>\n> Appropriate and accessible layout is a critical feature of all user interfaces,\n> regardless of a site's content or function. Page design and presentation is\n> therefore an important factor in the overall user experience. See the layout\n> component's\n> [Material Design specifications page](https://www.google.com/design/spec/layout/structure.html#structure-system-bars)\n> for details.\n>\n> Use of MDL layout principles simplifies the creation of scalable pages by\n> providing reusable components and encourages consistency across environments by\n> establishing recognizable visual elements, adhering to logical structural\n> grids, and maintaining appropriate spacing across multiple platforms and screen\n> sizes. MDL layout is extremely powerful and dynamic, allowing for great\n> consistency in outward appearance and behavior while maintaining development\n> flexibility and ease of use.\n\n# Subscriptions\n@docs sub0, subs\n\n# Render\n@docs Contents, render, toggleDrawer\n\n# Options\n@docs Property\n\n## Tabs\n@docs fixedTabs, rippleTabs\n\n## Header\n@docs fixedHeader, fixedDrawer\n@docs waterfall, seamed, scrolling, selectedTab\n\n## Events\n@docs onSelectTab\n\n# Sub-views\n@docs row, spacer, title, navigation, link\n\n# Elm architecture\n@docs view, Msg, Model, defaultModel, update, init, subscriptions\n\n\n",
+        "comment": " From the\n[Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):\n\n> The Material Design Lite (MDL) layout component is a comprehensive approach to\n> page layout that uses MDL development tenets, allows for efficient use of MDL\n> components, and automatically adapts to different browsers, screen sizes, and\n> devices.\n>\n> Appropriate and accessible layout is a critical feature of all user interfaces,\n> regardless of a site's content or function. Page design and presentation is\n> therefore an important factor in the overall user experience. See the layout\n> component's\n> [Material Design specifications page](https://www.google.com/design/spec/layout/structure.html#structure-system-bars)\n> for details.\n>\n> Use of MDL layout principles simplifies the creation of scalable pages by\n> providing reusable components and encourages consistency across environments by\n> establishing recognizable visual elements, adhering to logical structural\n> grids, and maintaining appropriate spacing across multiple platforms and screen\n> sizes. MDL layout is extremely powerful and dynamic, allowing for great\n> consistency in outward appearance and behavior while maintaining development\n> flexibility and ease of use.\n\n# Subscriptions\n\nThe layout needs to be initialised with and subscribe to changes in viewport\nsizes. Example initialisation of containing app: \n\n    import Material.Layout as Layout\n    import Material\n\n    type Msg = \n      ...\n      | Mdl Material.Msg -- Boilerplate\n\n    ...\n\n    App.program \n      { init = ( model, Layout.sub0 Mdl )\n      , view = view\n      , subscriptions = Layout.subs Mdl\n      , update = update\n      }\n\n## Tabs width \n\nTabs display chevrons when the viewport is too small to show all tabs\nsimultaneously. Unfortunately, Elm currently does not give us a way to\nautomatically detect the width of the tabs at app launch. If you have tabs, \nto make the chevron display correctly at app lauch, you must set \n`model.tabScrollState.width` manually in `init`. If you're using parts, \nuse `setTabScrollState` to accomplish this. Initialisation would in this case\nbe (assuming a tab width of 1384 pixels):\n\n    App.program \n      { init = \n          ( { model | mdl = Layout.setTabsWidth 1384 model.mdl }\n            , Layout.sub0 Mdl \n          )\n      , view = view\n      , subscriptions = .mdl >> Layout.subs Mdl\n      , update = update\n      }\n\n\n@docs sub0, subs\n\n# Render\n@docs Contents, render, toggleDrawer\n\n# Options\n@docs Property\n\n## Tabs\n@docs fixedTabs, rippleTabs\n@docs selectedTab, setTabsWidth \n\n## Header\n@docs fixedHeader, fixedDrawer\n@docs waterfall, seamed, scrolling\n@docs transparentHeader\n\n## Events\n@docs onSelectTab\n\n# Sub-views\n@docs row, spacer, title, navigation, link, onClick, href\n\n# Elm architecture\n@docs view, Msg, Model, defaultModel, update, init, subscriptions\n\n\n",
         "aliases": [
           {
             "name": "Contents",
@@ -16349,9 +16438,9 @@
           },
           {
             "name": "Model",
-            "comment": " Component mode. \n",
+            "comment": " Component model. \n",
             "args": [],
-            "type": "{ ripples : Dict.Dict Int Material.Ripple.Model , isSmallScreen : Bool , isCompact : Bool , isAnimating : Bool , isScrolled : Bool , isDrawerOpen : Bool }"
+            "type": "{ ripples : Dict.Dict Int Material.Ripple.Model , isSmallScreen : Bool , isCompact : Bool , isAnimating : Bool , isScrolled : Bool , isDrawerOpen : Bool , tabScrollState : Material.Layout.TabScrollState }"
           },
           {
             "name": "Property",
@@ -16397,6 +16486,11 @@
             "type": "Material.Layout.Property m"
           },
           {
+            "name": "href",
+            "comment": " href for Links.\n",
+            "type": "String -> Material.Layout.LinkProperty m"
+          },
+          {
             "name": "init",
             "comment": " Layout needs initial viewport size\n",
             "type": "( Material.Layout.Model, Platform.Cmd.Cmd Material.Layout.Msg )"
@@ -16404,12 +16498,17 @@
           {
             "name": "link",
             "comment": " Link.\n",
-            "type": "List (Material.Layout.Property m) -> List (Html.Html m) -> Html.Html m"
+            "type": "List (Material.Layout.LinkProperty m) -> List (Html.Html m) -> Html.Html m"
           },
           {
             "name": "navigation",
             "comment": " Container for links.\n",
             "type": "List (Material.Options.Style m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "onClick",
+            "comment": " onClick for Links.\n",
+            "type": "m -> Material.Layout.LinkProperty m"
           },
           {
             "name": "onSelectTab",
@@ -16447,24 +16546,29 @@
             "type": "Int -> Material.Layout.Property m"
           },
           {
+            "name": "setTabsWidth",
+            "comment": " Set tabsWidth\n\nThis function is for use with parts typing. For plain TEA, simply set the\n`tabsWidth` field in Model. \n",
+            "type": "Int -> Material.Layout.Container b -> Material.Layout.Container b"
+          },
+          {
             "name": "spacer",
             "comment": " Push subsequent elements in header row or drawer column to the right/bottom.\n",
             "type": "Html.Html m"
           },
           {
             "name": "sub0",
-            "comment": " Component subscription initialiser.\n",
+            "comment": " Component subscription initialiser. Either this or \n`init` must be connected for the Layout to be responsive under\nviewport size changes. Example use: \n",
             "type": "(Parts.Msg (Material.Layout.Container b) -> c) -> Platform.Cmd.Cmd c"
           },
           {
             "name": "subs",
-            "comment": " Component subscriptions (type compatible with render).\n",
-            "type": "(Parts.Msg (Material.Layout.Container b) -> c) -> x -> Platform.Sub.Sub c"
+            "comment": " Component subscriptions (type compatible with render). Either this or \n`subscriptions` must be connected for the Layout to be responsive under\nviewport size changes. \n",
+            "type": "(Parts.Msg (Material.Layout.Container b) -> c) -> Material.Layout.Container b -> Platform.Sub.Sub c"
           },
           {
             "name": "subscriptions",
             "comment": " Layout subscribes to changes in viewport size. \n",
-            "type": "x -> Platform.Sub.Sub Material.Layout.Msg"
+            "type": "Material.Layout.Model -> Platform.Sub.Sub Material.Layout.Msg"
           },
           {
             "name": "title",
@@ -16475,6 +16579,11 @@
             "name": "toggleDrawer",
             "comment": " Toggle drawer. \n\nThis function is for use with parts typing. For plain TEA, simply issue \nan update for the exposed Msg `ToggleDrawer`. \n",
             "type": "(Parts.Msg (Material.Layout.Container b) -> c) -> c"
+          },
+          {
+            "name": "transparentHeader",
+            "comment": " Header is transparent: It draws on top of the layout's background\n",
+            "type": "Material.Layout.Property m"
           },
           {
             "name": "update",
@@ -16509,6 +16618,94 @@
             "name": "topWithScheme",
             "comment": " Top-level container for Material components. This will force loading of\nMaterial Design Lite CSS files by inserting an appropriate `style` element.\n\nSupply primary and accent colors as parameters. Refer to the Material Design\nLite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)\nto preview combinations.  Please be aware that Grey, Blue Grey, and Brown\ncannot be secondary colors. If you choose them as such anyway, you will get the\ndefault theme.\n\n**NB!** Using this top-level container is not recommended, as most browsers\nwill load CSS requested from `style` elements concurrently with rendering the\ninitial page, which will produce a flicker on page load. The container is\nincluded only to provide an option to get started quickly and for use with\nelm-reactor.\n\nExample use: \n\n  view : Model -> Html Msg\n  view = \n    div \n      []\n      [ Scheme.topWithScheme Color.Teal Color.Red contents\n      , ...\n      ]\n",
             "type": "Material.Color.Hue -> Material.Color.Hue -> Html.Html a -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Toggles",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):\n\n> The Material Design Lite (MDL) checkbox component is an enhanced version of the\n> standard HTML `<input type=\"checkbox\">` element. A checkbox consists of a small\n> square and, typically, text that clearly communicates a binary condition that\n> will be set or unset when the user clicks or touches it. Checkboxes typically,\n> but not necessarily, appear in groups, and can be selected and deselected\n> individually. The MDL checkbox component allows you to add display and click\n>     effects.\n> \n> Checkboxes are a common feature of most user interfaces, regardless of a site's\n> content or function. Their design and use is therefore an important factor in\n> the overall user experience. [...]\n> \n> The enhanced checkbox component has a more vivid visual look than a standard\n> checkbox, and may be initially or programmatically disabled.\n\nSee also the\n[Material Design Specification](https://www.google.com/design/spec/components/selection-controls.html#).\n\nRefer to [this site](http://debois.github.io/elm-mdl#/toggles)\nfor a live demo.\n\n# Render\n@docs checkbox, switch, radio\n\n# Options\n@docs onClick, ripple, disabled, value, group\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update\n@docs viewSwitch, viewCheckbox, viewRadio\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Component model.\n",
+            "args": [],
+            "type": "{ ripple : Material.Ripple.Model, isFocused : Bool }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Component action.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "checkbox",
+            "comment": " Component render (checkbox)\n",
+            "type": "(Parts.Msg (Material.Toggles.Container c) -> m) -> Parts.Index -> Material.Toggles.Container c -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "defaultModel",
+            "comment": " Default component model.\n",
+            "type": "Material.Toggles.Model"
+          },
+          {
+            "name": "disabled",
+            "comment": " Set toggle to \"disabled\".\n",
+            "type": "Material.Toggles.Property m"
+          },
+          {
+            "name": "group",
+            "comment": " Set radio-button group id. Only one button in the same group can be checked\nat a time. \n",
+            "type": "String -> Material.Toggles.Property m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Add an `on \"click\"` handler to a toggle. Argument is the \nnew value of the toggle (that is, the negation of the current value).\n",
+            "type": "m -> Material.Toggles.Property m"
+          },
+          {
+            "name": "radio",
+            "comment": " Component render (radio button) \n",
+            "type": "(Parts.Msg (Material.Toggles.Container c) -> m) -> Parts.Index -> Material.Toggles.Container c -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "ripple",
+            "comment": " Set toggle to ripple when clicked.\n",
+            "type": "Material.Toggles.Property m"
+          },
+          {
+            "name": "switch",
+            "comment": " Component render (switch) \n",
+            "type": "(Parts.Msg (Material.Toggles.Container c) -> m) -> Parts.Index -> Material.Toggles.Container c -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\n",
+            "type": "Material.Toggles.Msg -> Material.Toggles.Model -> ( Material.Toggles.Model, Platform.Cmd.Cmd Material.Toggles.Msg )"
+          },
+          {
+            "name": "value",
+            "comment": " Set toggle value\n",
+            "type": "Bool -> Material.Toggles.Property m"
+          },
+          {
+            "name": "viewCheckbox",
+            "comment": " Component view (checkbox).\n",
+            "type": "(Material.Toggles.Msg -> m) -> Material.Toggles.Model -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "viewRadio",
+            "comment": " Component view (radio button)\n",
+            "type": "(Material.Toggles.Msg -> m) -> Material.Toggles.Model -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "viewSwitch",
+            "comment": " Component view (switch)\n",
+            "type": "(Material.Toggles.Msg -> m) -> Material.Toggles.Model -> List (Material.Toggles.Property m) -> List (Html.Html m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -16624,79 +16821,411 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Material.Elevation",
-        "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)\n\n> The Material Design Lite (MDL) shadow is not a component in the same sense as\n> an MDL card, menu, or textbox; it is a visual effect that can be assigned to a\n> user interface element. The effect simulates a three-dimensional positioning of\n> the element, as though it is slightly raised above the surface it rests upon —\n> a positive z-axis value, in user interface terms. The shadow starts at the\n> edges of the element and gradually fades outward, providing a realistic 3-D\n> effect.\n> \n> Shadows are a convenient and intuitive means of distinguishing an element from\n> its surroundings. A shadow can draw the user's eye to an object and emphasize\n> the object's importance, uniqueness, or immediacy.\n> \n> Shadows are a well-established feature in user interfaces, and provide users\n> with a visual clue to an object's intended use or value. Their design and use\n> is an important factor in the overall user experience.)\n\nThe [Material Design Specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html#elevation-shadows-elevation-android-)\npre-defines appropriate elevation for most UI elements; you need to manually\nassign shadows only to your own elements. \n\nYou are encouraged to visit the\n[Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)\nfor details about appropriate use of shadows. \n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/elevation)\nfor a live demo. \n  \n\n# Elevations\nEach of the values below denote an elevation of a certain heigh, e.g., \n`e4` will cast a shadow indicating an elevation of 4dp. \n@docs e2, e3, e4, e6, e8, e16, e24\n@docs elevations\n\n# Transitions\n@docs transition\n\n",
-        "aliases": [],
-        "types": [],
+        "name": "Material.Tooltip",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):\r\n\r\n> The Material Design Lite (MDL) tooltip component is an enhanced version of the\r\n> standard HTML tooltip as produced by the `title` attribute. A tooltip consists\r\n> of text and/or an image that clearly communicates additional information about\r\n> an element when the user hovers over or, in a touch-based UI, touches the\r\n> element. The MDL tooltip component is pre-styled (colors, fonts, and other\r\n> settings are contained in material.min.css) to provide a vivid, attractive\r\n> visual element that displays related but typically non-essential content,\r\n> e.g., a definition, clarification, or brief instruction.\r\n>\r\n> Tooltips are a ubiquitous feature of most user interfaces, regardless of a\r\n> site's content or function. Their design and use is an important factor in the\r\n> overall user experience. See the tooltip component's Material Design\r\n> specifications page for details.\r\n\r\nSee also the\r\n[Material Design Specification](https://material.google.com/components/tooltips.html).\r\n\r\nRefer to [this site](http://debois.github.io/elm-mdl#/tooltips)\r\nfor a live demo.\r\n\r\nTo use a `tooltip` you have to (a) attach the mouse event listeners to the target\r\nby calling `attach`, and (b) create a tooltip with element `Tooltip.render`\r\nas a sibling of the target. Here is an example: \r\n\r\n```elm\r\nimport Material.Tooltip as Tooltip\r\nimport Material.Icon as Icon\r\n\r\ntooltip : Model -> Html Msg\r\ntooltip model =\r\n  div []\r\n    [ Icon.view \"add\" [ Tooltip.attach Mdl [0] ]\r\n    , Tooltip.render Mdl [0] model.mdl\r\n        [Tooltip.default]\r\n        [text \"Default tooltip\"]\r\n    ]\r\n```\r\n\r\n# Render\r\n@docs attach, render\r\n\r\n# Options\r\n@docs Property\r\n@docs left, right, top, bottom\r\n@docs large\r\n@docs container\r\n\r\n# Elm architecture\r\nIf you do not use parts, you should not use `attach`, but instead add the\r\n`onEnter` and `onLeave` attributes to the target element. \r\n\r\n@docs onEnter, onLeave\r\n@docs Model, defaultModel, Msg, update, view\r\n\r\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Component model.\r\n",
+            "args": [],
+            "type": "{ isActive : Bool, domState : Material.Tooltip.DOMState }"
+          },
+          {
+            "name": "Property",
+            "comment": " Properties for Tooltip options.\r\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Tooltip.Config m) m"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Component message.\r\n",
+            "args": [],
+            "cases": [
+              [
+                "Enter",
+                [
+                  "Material.Tooltip.DOMState"
+                ]
+              ],
+              [
+                "Leave",
+                []
+              ]
+            ]
+          }
+        ],
         "values": [
           {
-            "name": "e16",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "attach",
+            "comment": " Attach event handlers for Parts version\r\n",
+            "type": "(Parts.Msg (Material.Tooltip.Container a) -> b) -> Parts.Index -> Material.Options.Property c b"
           },
           {
-            "name": "e2",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "bottom",
+            "comment": " Position the tooltip below the target element\r\n",
+            "type": "Material.Tooltip.Property m"
           },
           {
-            "name": "e24",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "container",
+            "comment": " Set the tooltip container element. You are unlikely to need this. \r\n\r\nThis option simply sets the  container element for the tooltip itself, which\r\nyou might want to control for layout purposes. It does not set the element\r\nhovering on which triggers the tooltip; use `attach` to set that. \r\n",
+            "type": "Material.Tooltip.HtmlElement m -> Material.Tooltip.Property m"
           },
           {
-            "name": "e3",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "defaultModel",
+            "comment": " Default component model constructor.\r\n",
+            "type": "Material.Tooltip.Model"
           },
           {
-            "name": "e4",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "large",
+            "comment": " Large tooltip\r\n",
+            "type": "Material.Tooltip.Property m"
           },
           {
-            "name": "e6",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "left",
+            "comment": " Position the tooltip on the left of the target element\r\n",
+            "type": "Material.Tooltip.Property m"
           },
           {
-            "name": "e8",
-            "comment": "\n",
-            "type": "Material.Options.Style m"
+            "name": "onEnter",
+            "comment": " Mouse enter event handler for non-parts version\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
           },
           {
-            "name": "elevations",
-            "comment": " List of all elevations and their depth in dp. \n",
-            "type": "List ( Material.Options.Style m, Int )"
+            "name": "onLeave",
+            "comment": " Mouse leave event handler for non-parts version\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
           },
           {
-            "name": "transition",
-            "comment": " Add a CSS-transition to changes in elevation. Supply a transition\nduration in milliseconds as argument. \n\nNB! This Style m is dictated by neither MDL nor the Material Design\nSpecification. \n",
-            "type": "String -> Material.Options.Style m"
+            "name": "render",
+            "comment": " Component render.\r\n",
+            "type": "(Parts.Msg (Material.Tooltip.Container c) -> m) -> Parts.Index -> Material.Tooltip.Container c -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "right",
+            "comment": " Position the tooltip on the right of the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "top",
+            "comment": " Position the tooltip above the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\r\n",
+            "type": "Material.Tooltip.Msg -> Material.Tooltip.Model -> ( Material.Tooltip.Model, Platform.Cmd.Cmd Material.Tooltip.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " Component view.\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Material.Tooltip.Model -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Material.Badge",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):\n\n> The Material Design Lite (MDL) badge component is an onscreen notification element.\n> A badge consists of a small circle, typically containing a number or other characters,\n> that appears in proximity to another object. A badge can be both a notifier that there\n> are additional items associated with an object and an indicator of how many items there are.\n>\n> You can use a badge to unobtrusively draw the user's attention to items they might not\n> otherwise notice, or to emphasize that items may need their attention. For example:\n>\n> A \"New messages\" notification might be followed by a badge containing the number of unread messages.\n> A \"You have unpurchased items in your shopping cart\" reminder might include a badge\n> showing the number of items in the cart.\n> A \"Join the discussion!\" button might have an accompanying badge indicating the number of\n> users currently participating in the discussion.\n> A badge is almost always positioned near a link so that the user has a convenient way to access \n> the additional information indicated by the badge. However, depending on the intent, the \n> badge itself may or may not be part of the link.\n>\n> Badges are a new feature in user interfaces, and provide users with a visual clue to help them\n> discover additional relevant content. Their design and use is therefore an important\n> factor in the overall user experience.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/badges) \nfor a live demo. \n\n@docs add, noBackground, overlap\n",
+        "name": "Material.Textfield",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):\n\n> The Material Design Lite (MDL) text field component is an enhanced version of\n> the standard HTML `<input type=\"text\">` and `<input type=\"textarea\">` elements.\n> A text field consists of a horizontal line indicating where keyboard input\n> can occur and, typically, text that clearly communicates the intended\n> contents of the text field. The MDL text field component provides various\n> types of text fields, and allows you to add both display and click effects.\n>\n> Text fields are a common feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the text field component's\n> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)\n> for details.\n>\n> The enhanced text field component has a more vivid visual look than a standard\n> text field, and may be initially or programmatically disabled. There are three\n> main types of text fields in the text field component, each with its own basic\n> coding requirements. The types are single-line, multi-line, and expandable.\n\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/textfields)\nfor a live demo.\n \nThis implementation provides only single-line and password.\n\n# Component render\n@docs render\n\n# Options\n@docs Property, value\n  \n# Appearance\n@docs label, floatingLabel, error, disabled, rows, cols\n\n# Type \n@docs password, textarea, text', onInput\n\n# Elm Architecture\n@docs Msg, Model, defaultModel, update, view\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Model. The textfield is in its error-container if `error` is not `Nothing`.\nThe contents of the field is `value`.\n",
+            "args": [],
+            "type": "{ isFocused : Bool, value : String }"
+          },
+          {
+            "name": "Property",
+            "comment": " Type of Textfield options\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Textfield.Config m) m"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Component actions. `Input` carries the new value of the field.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "cols",
+            "comment": " Number of columns in a multi-line input\n",
+            "type": "Int -> Material.Textfield.Property m"
+          },
+          {
+            "name": "defaultModel",
+            "comment": " Default model. No label, error, or value.\n",
+            "type": "Material.Textfield.Model"
+          },
+          {
+            "name": "disabled",
+            "comment": " Disable the textfield input\n",
+            "type": "Material.Textfield.Property m"
+          },
+          {
+            "name": "error",
+            "comment": " Error message\n",
+            "type": "String -> Material.Textfield.Property m"
+          },
+          {
+            "name": "floatingLabel",
+            "comment": " Label of textfield animates away from the input area on input\n",
+            "type": "Material.Textfield.Property m"
+          },
+          {
+            "name": "label",
+            "comment": " Label of the textfield\n",
+            "type": "String -> Material.Textfield.Property m"
+          },
+          {
+            "name": "onInput",
+            "comment": " Message to dispatch on input\n",
+            "type": "(String -> m) -> Material.Textfield.Property m"
+          },
+          {
+            "name": "password",
+            "comment": " Sets the type of input to 'password'.\n",
+            "type": "Material.Textfield.Property m"
+          },
+          {
+            "name": "render",
+            "comment": " Component render. Below is an example, assuming boilerplate setup as indicated \n  in `Material`, and a user message `ChangeAgeMsg Int`.\n\n    Textfield.render Mdl [0] model.mdl\n      [ Textfield.label \"Your age?\"\n      , Textfield.floatingLabel\n      , Textfield.value model.age\n      , Textfield.onInput (String.toInt >> ChangeAgeMsg)\n      ]\n",
+            "type": "(Parts.Msg (Material.Textfield.Container c) -> m) -> Parts.Index -> Material.Textfield.Container c -> List (Material.Textfield.Property m) -> Html.Html m"
+          },
+          {
+            "name": "rows",
+            "comment": " Number of rows in a multi-line input\n",
+            "type": "Int -> Material.Textfield.Property m"
+          },
+          {
+            "name": "text'",
+            "comment": " Sets the type of input to 'text'. (Name chosen to avoid clashing with Html.text)\n",
+            "type": "Material.Textfield.Property m"
+          },
+          {
+            "name": "textarea",
+            "comment": " Creates a multiline textarea using 'textarea' element\n",
+            "type": "Material.Textfield.Property m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\n",
+            "type": "Material.Textfield.Msg -> Material.Textfield.Model -> Material.Textfield.Model"
+          },
+          {
+            "name": "value",
+            "comment": " Current value of the textfield. \n",
+            "type": "String -> Material.Textfield.Property m"
+          },
+          {
+            "name": "view",
+            "comment": " Component view\n",
+            "type": "(Material.Textfield.Msg -> m) -> Material.Textfield.Model -> List (Material.Textfield.Property m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Progress",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section):\n\n> The Material Design Lite (MDL) progress component is a visual indicator of\n> background activity in a web page or application. A progress indicator\n> consists of a (typically) horizontal bar containing some animation that\n> conveys a sense of motion. While some progress devices indicate an\n> approximate or specific percentage of completion, the MDL progress component\n> simply communicates the fact that an activity is ongoing and is not yet\n> complete.\n\n> Progress indicators are an established but non-standardized feature in user\n> interfaces, and provide users with a visual clue to an application's status.\n> Their design and use is therefore an important factor in the overall user\n> experience. See the progress component's Material Design specifications page\n> for details.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#/loading)\nfor a live demo.\n\n# Render\n@docs indeterminate, progress, buffered\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "add",
-            "comment": " Add a badge to the containing element.\n",
-            "type": "String -> Material.Options.Property c m"
+            "name": "buffered",
+            "comment": " A buffered progress bar. First argument is completion in percent (0-100),\nsecond argument indicates buffer completion in percent (0-100). \n",
+            "type": "Float -> Float -> Html.Html m"
           },
           {
-            "name": "noBackground",
-            "comment": " No background for badge.\n",
-            "type": "Material.Options.Property c m"
+            "name": "indeterminate",
+            "comment": " An indeterminate progress bar.\n",
+            "type": "Html.Html m"
           },
           {
-            "name": "overlap",
-            "comment": " Badge overlaps text/contents. \n",
-            "type": "Material.Options.Property c m"
+            "name": "progress",
+            "comment": " A progress bar. First argument is completion in percent (0–100).\n",
+            "type": "Float -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Spinner",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):\n\n> The Material Design Lite (MDL) spinner component is an enhanced replacement\n> for the classic \"wait cursor\" (which varies significantly among hardware and\n> software versions) and indicates that there is an ongoing process, the\n> results of which are not yet available. A spinner consists of an open circle\n> that changes colors as it animates in a clockwise direction, and clearly\n> communicates that a process has been started but not completed.\n\n> A spinner performs no action itself, either by its display nor when the user\n> clicks or touches it, and does not indicate a process's specific progress or\n> degree of completion. The MDL spinner component provides various types of\n> spinners, and allows you to add display effects.\n\n> Spinners are a fairly new feature of most user interfaces, and provide users\n> with a consistent visual cue about ongoing activity, regardless of hardware\n> device, operating system, or browser environment. Their design and use is an\n> important factor in the overall user experience.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#/loading)\nfor a live demo.\n\n@docs spinner, active, singleColor\n@docs Property, Config, defaultConfig\n\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Spinner config\n",
+            "args": [],
+            "type": "{ active : Bool, singleColor : Bool }"
+          },
+          {
+            "name": "Property",
+            "comment": " A spinner's property.\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property Material.Spinner.Config m"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "active",
+            "comment": " Make a spinner visible\n",
+            "type": "Bool -> Material.Spinner.Property m"
+          },
+          {
+            "name": "defaultConfig",
+            "comment": " Spinner default config is not `active`, not `singleColor`.\n",
+            "type": "Material.Spinner.Config"
+          },
+          {
+            "name": "singleColor",
+            "comment": " Make a spinner a single color (the active color) of the stylesheet.\n",
+            "type": "Bool -> Material.Spinner.Property m"
+          },
+          {
+            "name": "spinner",
+            "comment": " A spinner is a loading indicator that by default changes color and is\ninvisible. Example use: \n\n    spinner [ active ] []\n",
+            "type": "List (Material.Spinner.Property m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Table",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#tables-section):\n\n> The Material Design Lite (MDL) data-table component is an enhanced version of\n> the standard HTML <table>. A data-table consists of rows and columns of\n> well-formatted data, presented with appropriate user interaction\n> capabilities.\n\n> Tables are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the data-table component's\n> Material Design specifications page for details.\n\n> The available row/column/cell types in a data-table are mostly\n> self-formatting; that is, once the data-table is defined, the individual\n> cells require very little specific attention. For example, the rows exhibit\n> shading behavior on mouseover and selection, numeric values are automatically\n> formatted by default, and the addition of a single class makes the table rows\n> individually or collectively selectable. This makes the data-table component\n> convenient and easy to code for the developer, as well as attractive and\n> intuitive for the user.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/data-tables.html).\n\nRefer to\n[this this](https://debois.github.io/elm-mdl/#/tables\nfor a live demo.\n\n# HTML\n@docs table, thead, tbody, tfoot\n@docs tr, th, td\n\n# Options\n@docs onClick\n\n## Sorting options. \nThe following options have effect only when applied in the header row. \n@docs ascending, descending, numeric, Order, sorted\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Order",
+            "comment": " Possible orderings \n",
+            "args": [],
+            "cases": [
+              [
+                "Ascending",
+                []
+              ],
+              [
+                "Descending",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "ascending",
+            "comment": " Containing column should be sorted ascendingly\n",
+            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+          },
+          {
+            "name": "descending",
+            "comment": " Containing column should be sorted descendingly\n",
+            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+          },
+          {
+            "name": "numeric",
+            "comment": " Containing column is interpreted as numeric when used as sorting key\n",
+            "type": "Material.Options.Property { a | numeric : Bool } m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Dispatch given message when cell is clicked. \n",
+            "type": "m -> Material.Options.Property { a | onClick : Maybe.Maybe (Html.Attribute m) } m"
+          },
+          {
+            "name": "sorted",
+            "comment": " Containing column should be sorted by given order\n",
+            "type": "Material.Table.Order -> Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+          },
+          {
+            "name": "table",
+            "comment": " Main table constructor. Example use: \n\n    table []\n      [ thead []\n          [ tr []\n              [ th [ ascending ] [ text \"Material\" ]\n              , th [ numeric ] [ text \"Quantity\" ]\n              , th [ numeric ] [ text \"Unit Price\" ]\n              ]\n          ]\n      , tbody []\n          [ tr []\n              [ td [] [ text \"Acrylic (Transparent)\" ]\n              , td [ numeric ] [ text \"25\" ]\n              , td [ numeric ] [ text \"$2.90\" ]\n              ]\n          {- ... -}\n          ]\n      ]\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "tbody",
+            "comment": " Define table body\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "td",
+            "comment": " Define table cell \n",
+            "type": "List (Material.Options.Property Material.Table.Cell m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "tfoot",
+            "comment": " Define table footer row(s)\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "th",
+            "comment": " Define cell in table header \n",
+            "type": "List (Material.Options.Property (Material.Table.Header m) m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "thead",
+            "comment": " Define table header row(s) \n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "tr",
+            "comment": " Table row \n",
+            "type": "List (Material.Options.Property Material.Table.Row m) -> List (Html.Html m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Icon",
+        "comment": " Convenience functions for producing Material Design Icons. Refer to\n[the Material Design Icons page](https://google.github.io/material-design-icons),\nor skip straight to the [Material Icons Library](https://design.google.com/icons/).\n\nThis implementation assumes that you have\n\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\"\n      rel=\"stylesheet\">\n\nor an equivalent means of loading the icons in your HTML header. \n(`Material.top` will do this for you.)\n\n@docs i, view, size18, size24, size36, size48, onClick\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "i",
+            "comment": " Render a default-sized icon with no behaviour. The\n`String` argument must be the name of a [Material Icon](https://design.google.com/icons/)\n(replace spaces with underscores).\n\nI.e., to produce a default size (24xp) \"trending flat\" icon:\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.i \"trending_flat\"\n",
+            "type": "String -> Html.Html m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Add an `on \"click\"` handler to an Icon. (You may want to use a `Button`\nwith `Button.icon` instead.)\n",
+            "type": "m -> Material.Icon.Property m"
+          },
+          {
+            "name": "size18",
+            "comment": " Set icon to have size 18px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size24",
+            "comment": " Set icon to have size 24px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size36",
+            "comment": " Set icon to have size 36px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size48",
+            "comment": " Set icon to have size 48px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "view",
+            "comment": " View function for icons. Supply the\n[Material Icons Library](https://design.google.com/icons/) name as\nthe first argument (replace spaces with underscores). Set the size of the\nicon with the `size..` Styles (default is 24px).  Do not use this function to\nproduce clickable icons; use icon buttons in Material.Button.icon for that.\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.view \"trending_flat\" [Icon.size48] []\n",
+            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -16807,138 +17336,252 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Material.Textfield",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):\n\n> The Material Design Lite (MDL) text field component is an enhanced version of\n> the standard HTML `<input type=\"text\">` and `<input type=\"textarea\">` elements.\n> A text field consists of a horizontal line indicating where keyboard input\n> can occur and, typically, text that clearly communicates the intended\n> contents of the text field. The MDL text field component provides various\n> types of text fields, and allows you to add both display and click effects.\n>\n> Text fields are a common feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the text field component's\n> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)\n> for details.\n>\n> The enhanced text field component has a more vivid visual look than a standard\n> text field, and may be initially or programmatically disabled. There are three\n> main types of text fields in the text field component, each with its own basic\n> coding requirements. The types are single-line, multi-line, and expandable.\n\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/textfields)\nfor a live demo.\n \nThis implementation provides only single-line and password.\n\n# Component render\n@docs render\n\n# Options\n@docs Property, value\n  \n# Appearance\n@docs label, floatingLabel, error, disabled\n\n# Type \n@docs password, onInput\n\n# Elm Architecture\n@docs Msg, Model, defaultModel, update, view\n\n",
+        "name": "Material.Footer",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):\n\n> The Material Design Lite (MDL) footer component is a comprehensive container\n> intended to present a substantial amount of related content in a visually\n> attractive and logically intuitive area. Although it is called \"footer\", it\n> may be placed at any appropriate location on a device screen, either before or\n> after other content.\n>\n> An MDL footer component takes two basic forms: mega-footer and mini-footer. As\n> the names imply, mega-footers contain more (and more complex) content than\n> mini-footers. A mega-footer presents multiple sections of content separated by\n> horizontal rules, while a mini-footer presents a single section of content. Both\n> footer forms have their own internal structures, including required and optional\n> elements, and typically include both informational and clickable content, such\n> as links.\n>\n> Footers, as represented by this component, are a fairly new feature in user\n> interfaces, and allow users to view discrete blocks of content in a coherent and\n> consistently organized way. Their design and use is an important factor in the\n> overall user experience.\n\nSee also the\n[Material Design Specification](https://material.google.com/layout/structure.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl#/footer)\nfor a live demo.\n\n# Types\n\n@docs Content\n@docs FooterProperty\n@docs Property\n\n@docs MegaFooter, MiniFooter\n\n@docs Section\n@docs TopSection, MiddleSection, BottomSection\n\n# Helpers\n\n@docs html\n@docs link, onClick, href\n\n# Appearance\n\n@docs mini, mega\n\n# Sections\n\n@docs left, right, top, bottom, middle\n\n# Content\n\n@docs links, logo, socialButton, dropdown, heading, linkItem\n\n",
         "aliases": [
           {
-            "name": "Model",
-            "comment": " Model. The textfield is in its error-container if `error` is not `Nothing`.\nThe contents of the field is `value`.\n",
-            "args": [],
-            "type": "{ isFocused : Bool, value : String }"
+            "name": "MegaFooter",
+            "comment": " MegaFooter consists of three sections\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ top : Maybe.Maybe (Material.Footer.TopSection a) , bottom : Maybe.Maybe (Material.Footer.BottomSection a) , middle : Maybe.Maybe (Material.Footer.MiddleSection a) }"
+          },
+          {
+            "name": "MiniFooter",
+            "comment": " MiniFooter consists of two sections\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ left : Maybe.Maybe (Material.Footer.Section a) , right : Maybe.Maybe (Material.Footer.Section a) }"
           },
           {
             "name": "Property",
-            "comment": "\n  TODO\n",
+            "comment": " Properties for footers\n",
             "args": [
               "m"
             ],
-            "type": "Material.Options.Property (Material.Textfield.Config m) m"
+            "type": "Material.Options.Property Material.Footer.FooterProperty m"
           }
         ],
         "types": [
           {
-            "name": "Msg",
-            "comment": " Component actions. `Input` carries the new value of the field.\n",
+            "name": "BottomSection",
+            "comment": " Strongly typed `BottomSection` in a footer\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Content",
+            "comment": " Opaque Footer content\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "FooterProperty",
+            "comment": " `FooterProperty`\n",
             "args": [],
+            "cases": []
+          },
+          {
+            "name": "MiddleSection",
+            "comment": " Strongly typed `MiddleSection` in a footer\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Section",
+            "comment": " Strongly typed `Section` in a footer\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "TopSection",
+            "comment": " Strongly typed `TopSection` in a footer\n",
+            "args": [
+              "a"
+            ],
             "cases": []
           }
         ],
         "values": [
           {
-            "name": "defaultModel",
-            "comment": " Default model. No label, error, or value.\n",
-            "type": "Material.Textfield.Model"
+            "name": "bottom",
+            "comment": " Creates a footer `bottom-section`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Maybe.Maybe (Material.Footer.BottomSection m)"
           },
           {
-            "name": "disabled",
-            "comment": " \n  TODO\n",
-            "type": "Material.Textfield.Property m"
+            "name": "dropdown",
+            "comment": " Creates a footer `dropdown` section\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
           },
           {
-            "name": "error",
-            "comment": "\n  TODO\n",
-            "type": "String -> Material.Textfield.Property m"
+            "name": "heading",
+            "comment": " Creates a footer `heading` element\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
           },
           {
-            "name": "floatingLabel",
-            "comment": " \n  TODO\n",
-            "type": "Material.Textfield.Property m"
+            "name": "href",
+            "comment": " href for Links.\n",
+            "type": "String -> Material.Footer.Property m"
           },
           {
-            "name": "label",
-            "comment": "\n  TODO\n",
-            "type": "String -> Material.Textfield.Property m"
+            "name": "html",
+            "comment": " Wraps a normal HTML value into `Content`\n",
+            "type": "Html.Html m -> Material.Footer.Content m"
           },
           {
-            "name": "onInput",
-            "comment": "\n  TODO\n",
-            "type": "(String -> m) -> Material.Textfield.Property m"
+            "name": "left",
+            "comment": " Creates a footer `left-section`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Maybe.Maybe (Material.Footer.Section m)"
           },
           {
-            "name": "password",
-            "comment": "\n",
-            "type": "Material.Textfield.Property m"
+            "name": "link",
+            "comment": " Creates a link\n",
+            "type": "List (Material.Footer.Property m) -> List (Html.Html m) -> Material.Footer.Content m"
           },
           {
-            "name": "render",
-            "comment": " Component render. Below is an example, assuming boilerplate setup as indicated \n  in `Material`, and a user message `ChangeAgeMsg Int`.\n\n    Textfield.render Mdl [0] model.mdl\n      [ Textfield.label \"Your age?\"\n      , Textfield.floatingLabel\n      , Textfield.value model.age\n      , Textfield.onInput (String.toInt >> ChangeAgeMsg)\n      ]\n",
-            "type": "(Parts.Msg (Material.Textfield.Container c) -> m) -> Parts.Index -> Material.Textfield.Container c -> List (Material.Textfield.Property m) -> Html.Html m"
+            "name": "linkItem",
+            "comment": " Creates a link wrapped in a `li`-element\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
           },
           {
-            "name": "update",
-            "comment": " Component update.\n",
-            "type": "Material.Textfield.Msg -> Material.Textfield.Model -> Material.Textfield.Model"
+            "name": "links",
+            "comment": " Creates a `link-list`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
           },
           {
-            "name": "value",
-            "comment": " \n  TODO\n",
-            "type": "String -> Material.Textfield.Property m"
+            "name": "logo",
+            "comment": " Creates a footer logo\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
           },
           {
-            "name": "view",
-            "comment": "\n",
-            "type": "Material.Textfield.Model -> List (Material.Textfield.Property Material.Textfield.Msg) -> Html.Html Material.Textfield.Msg"
+            "name": "mega",
+            "comment": " Creates a footer of `Type` `Mega`\n",
+            "type": "List (Material.Footer.Property m) -> Material.Footer.MegaFooter m -> Html.Html m"
+          },
+          {
+            "name": "middle",
+            "comment": " Creates a footer `middle-section`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Maybe.Maybe (Material.Footer.MiddleSection m)"
+          },
+          {
+            "name": "mini",
+            "comment": " Creates a footer of `Type` `Mini`\n",
+            "type": "List (Material.Footer.Property m) -> Material.Footer.MiniFooter m -> Html.Html m"
+          },
+          {
+            "name": "onClick",
+            "comment": " onClick for Links and Buttons.\n",
+            "type": "m -> Material.Footer.Property m"
+          },
+          {
+            "name": "right",
+            "comment": " Creates a footer `right-section`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Maybe.Maybe (Material.Footer.Section m)"
+          },
+          {
+            "name": "socialButton",
+            "comment": " Creates a `social-button` with the proper prefix based on the `Type`\n",
+            "type": "List (Material.Footer.Property m) -> List (Material.Footer.Content m) -> Material.Footer.Content m"
+          },
+          {
+            "name": "top",
+            "comment": " Creates a footer `top-section`\n",
+            "type": "List (Material.Footer.Property m) -> Material.Footer.MiniFooter m -> Maybe.Maybe (Material.Footer.TopSection m)"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Material.Icon",
-        "comment": " Convenience functions for producing Material Design Icons. Refer to\n[the Material Design Icons page](https://google.github.io/material-design-icons),\nor skip straight to the [Material Icons Library](https://design.google.com/icons/).\n\nThis implementation assumes that you have\n\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\"\n      rel=\"stylesheet\">\n\nor an equivalent means of loading the icons in your HTML header. \n(`Material.top` will do this for you.)\n\n@docs i, view, size18, size24, size36, size48, onClick\n",
+        "name": "Material.Elevation",
+        "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)\n\n> The Material Design Lite (MDL) shadow is not a component in the same sense as\n> an MDL card, menu, or textbox; it is a visual effect that can be assigned to a\n> user interface element. The effect simulates a three-dimensional positioning of\n> the element, as though it is slightly raised above the surface it rests upon —\n> a positive z-axis value, in user interface terms. The shadow starts at the\n> edges of the element and gradually fades outward, providing a realistic 3-D\n> effect.\n> \n> Shadows are a convenient and intuitive means of distinguishing an element from\n> its surroundings. A shadow can draw the user's eye to an object and emphasize\n> the object's importance, uniqueness, or immediacy.\n> \n> Shadows are a well-established feature in user interfaces, and provide users\n> with a visual clue to an object's intended use or value. Their design and use\n> is an important factor in the overall user experience.)\n\nThe [Material Design Specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html#elevation-shadows-elevation-android-)\npre-defines appropriate elevation for most UI elements; you need to manually\nassign shadows only to your own elements. \n\nYou are encouraged to visit the\n[Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)\nfor details about appropriate use of shadows. \n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/elevation)\nfor a live demo. \n  \n\n# Elevations\nEach of the values below denote an elevation of a certain heigh, e.g., \n`e4` will cast a shadow indicating an elevation of 4dp. \n@docs e2, e3, e4, e6, e8, e16, e24\n@docs elevations\n\n# Transitions\n@docs transition\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "i",
-            "comment": " Render a default-sized icon with no behaviour. The\n`String` argument must be the name of a [Material Icon](https://design.google.com/icons/)\n(replace spaces with underscores).\n\nI.e., to produce a default size (24xp) \"trending flat\" icon:\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.i \"trending_flat\"\n",
-            "type": "String -> Html.Html m"
+            "name": "e16",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "onClick",
-            "comment": " Add an `on \"click\"` handler to an Icon. (You may want to use a `Button`\nwith `Button.icon` instead.)\n",
-            "type": "m -> Material.Icon.Property m"
+            "name": "e2",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "size18",
-            "comment": " Set icon to have size 18px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "e24",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "size24",
-            "comment": " Set icon to have size 24px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "e3",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "size36",
-            "comment": " Set icon to have size 36px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "e4",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "size48",
-            "comment": " Set icon to have size 48px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "e6",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "view",
-            "comment": " View function for icons. Supply the\n[Material Icons Library](https://design.google.com/icons/) name as\nthe first argument (replace spaces with underscores). Set the size of the\nicon with the `size..` Styles (default is 24px).  Do not use this function to\nproduce clickable icons; use icon buttons in Material.Button.icon for that.\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.view \"trending_flat\" [Icon.size48] []\n",
-            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
+            "name": "e8",
+            "comment": "\n",
+            "type": "Material.Options.Property a m"
+          },
+          {
+            "name": "elevations",
+            "comment": " List of all elevations and their depth in dp. \n",
+            "type": "List ( Material.Options.Property a m, Int )"
+          },
+          {
+            "name": "transition",
+            "comment": " Add a CSS-transition to changes in elevation. Supply a transition\nduration in milliseconds as argument. \n\nNB! This Property a m is dictated by neither MDL nor the Material Design\nSpecification. \n",
+            "type": "Float -> Material.Options.Property a m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Material.Badge",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):\n\n> The Material Design Lite (MDL) badge component is an onscreen notification element.\n> A badge consists of a small circle, typically containing a number or other characters,\n> that appears in proximity to another object. A badge can be both a notifier that there\n> are additional items associated with an object and an indicator of how many items there are.\n>\n> You can use a badge to unobtrusively draw the user's attention to items they might not\n> otherwise notice, or to emphasize that items may need their attention. For example:\n>\n> A \"New messages\" notification might be followed by a badge containing the number of unread messages.\n> A \"You have unpurchased items in your shopping cart\" reminder might include a badge\n> showing the number of items in the cart.\n> A \"Join the discussion!\" button might have an accompanying badge indicating the number of\n> users currently participating in the discussion.\n> A badge is almost always positioned near a link so that the user has a convenient way to access \n> the additional information indicated by the badge. However, depending on the intent, the \n> badge itself may or may not be part of the link.\n>\n> Badges are a new feature in user interfaces, and provide users with a visual clue to help them\n> discover additional relevant content. Their design and use is therefore an important\n> factor in the overall user experience.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#/badges) \nfor a live demo. \n\n@docs add, noBackground, overlap\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add a badge to the containing element.\n",
+            "type": "String -> Material.Options.Property c m"
+          },
+          {
+            "name": "noBackground",
+            "comment": " No background for badge.\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "overlap",
+            "comment": " Badge overlaps text/contents. \n",
+            "type": "Material.Options.Property c m"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
         "name": "Material.Color",
-        "comment": " Material Design color palette.\n\n# Palette\n\nFrom the\n[Material Design Specification](https://www.google.com/design/spec/style/color.html#color-color-palette):\n\n> The color palette starts with primary colors and fills in the spectrum to\n> create a complete and usable palette for Android, Web, and iOS. Google suggests\n> using the 500 colors as the primary colors in your app and the other colors as\n> accents colors.\n\n@docs Color, white, black, Hue, Shade, color\n\n# Color Schemes\n\nFrom the\n[Material Design Specification](https://www.google.com/design/spec/style/color.html#color-color-palette):\n\n> [The Material Design] palette comprises primary and accent colors that can be\n> used for illustration or to develop your brand colors. They’ve been designed\n> to work harmoniously with each other.  [...] Apps that don’t have existing\n> color schemes may select colors from the material design color palette. Limit\n> your selection of colors to three hues from the primary palette and one\n> accent color from the secondary palette.\n\nThe Material Design Lite CSS supports this selection; you choose your primary\nand accent colors when loading MDL css; see\n`Material.top`. Many components can be instructed to take on one of the four hues\nmentioned above; below you'll find `Options` for constructing these scheme-dependent\ncolors.\n\n@docs primary, primaryDark, primaryContrast, accent, accentContrast\n\n# Options\n@docs background, text\n\n# Misc\n@docs hues, shades, scheme\n",
+        "comment": " Material Design color palette.\n\n# Palette\n\nFrom the\n[Material Design Specification](https://www.google.com/design/spec/style/color.html#color-color-palette):\n\n> The color palette starts with primary colors and fills in the spectrum to\n> create a complete and usable palette for Android, Web, and iOS. Google suggests\n> using the 500 colors as the primary colors in your app and the other colors as\n> accents colors.\n\n@docs Color, white, black, Hue, Shade, color\n\n# Color Schemes\n\nFrom the\n[Material Design Specification](https://www.google.com/design/spec/style/color.html#color-color-palette):\n\n> [The Material Design] palette comprises primary and accent colors that can be\n> used for illustration or to develop your brand colors. They’ve been designed\n> to work harmoniously with each other.  [...] Apps that don’t have existing\n> color schemes may select colors from the material design color palette. Limit\n> your selection of colors to three hues from the primary palette and one\n> accent color from the secondary palette.\n\nThe Material Design Lite CSS supports this selection; you choose your primary\nand accent colors when loading MDL css; see\n`Material.top`. Many components can be instructed to take on one of the four hues\nmentioned above; below you'll find `Options` for constructing these scheme-dependent\ncolors.\n\n@docs primary, primaryDark, primaryContrast, accent, accentContrast\n\n# Options\n@docs background, text\n\n# Misc\n@docs hues, hueName, accentHues, shades, scheme\n",
         "aliases": [],
         "types": [
           {
@@ -17106,6 +17749,11 @@
             "type": "Material.Color.Color"
           },
           {
+            "name": "accentHues",
+            "comment": " Primary hues as array. Mostly useful for demos.\n",
+            "type": "Array.Array Material.Color.Hue"
+          },
+          {
             "name": "background",
             "comment": " Background color.\n",
             "type": "Material.Color.Color -> Material.Options.Property c m"
@@ -17119,6 +17767,11 @@
             "name": "color",
             "comment": " Construct a specific color given a palette base hue and a shade.\n",
             "type": "Material.Color.Hue -> Material.Color.Shade -> Material.Color.Color"
+          },
+          {
+            "name": "hueName",
+            "comment": " Give the MDL CSS name of a color. (Can reasonably be used also for human consumption.)\n",
+            "type": "Material.Color.Hue -> String"
           },
           {
             "name": "hues",
@@ -17249,8 +17902,17 @@
       },
       {
         "name": "Material.Options",
-        "comment": " Setting options for Material components. Refer to the `Material` module\nfor intended use. \n\n@docs Property\n\n# Constructors\n@docs cs, cs', css, data, many, nop\n\n# Html\n@docs Style, styled, styled', div, span, onHover\n\n# Convenience\n@docs stylesheet\n\n# Internal\nThe following types and values are used internally in the library. \n@docs Summary, apply, collect, set\n\n",
+        "comment": " Setting options for Material components. Refer to the `Material` module\nfor intended use. \n\n@docs Property\n\n# Constructors\n@docs cs, css, data, many, nop, when\n\n# Html\n@docs Style, styled, styled', div, span, onHover\n\n# Convenience\n@docs stylesheet\n\n# Internal\nThe following types and values are used internally in the library. \n@docs Summary, apply, collect, set\n\n",
         "aliases": [
+          {
+            "name": "Property",
+            "comment": " Type of elm-mdl properties. (Do not confuse these with Html properties or\n`Html.Attributes.property`.)\nThe type variable `c` identifies the component the property is for. You never have to set it yourself. The type variable `d` by the type of your `Msg`s; you should \nset this yourself. \n",
+            "args": [
+              "c",
+              "m"
+            ],
+            "type": "Material.Options.Internal.Property c m"
+          },
           {
             "name": "Style",
             "comment": " Options for situations where there is no configuration, i.e., \nstyling a `div`.\n",
@@ -17269,17 +17931,7 @@
             "type": "{ classes : List String , css : List ( String, String ) , attrs : List (Html.Attribute m) , config : c }"
           }
         ],
-        "types": [
-          {
-            "name": "Property",
-            "comment": " Type of elm-mdl properties. (Do not confuse these with Html properties or\n`Html.Attributes.property`.)\nThe type variable `c` identifies the component the property is for. You never have to set it yourself. The type variable `d` by the type of your `Msg`s; you should \nset this yourself. \n",
-            "args": [
-              "c",
-              "m"
-            ],
-            "cases": []
-          }
-        ],
+        "types": [],
         "values": [
           {
             "name": "apply",
@@ -17295,11 +17947,6 @@
             "name": "cs",
             "comment": " Add an HTML class to a component. (Name chosen to avoid clashing with\nHtml.Attributes.class.)\n",
             "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "cs'",
-            "comment": " Conditionally add an HTML class to a component. (Name chosen to avoid\nclashing with Html.Attributes.class.)\n",
-            "type": "String -> Bool -> Material.Options.Property c m"
           },
           {
             "name": "css",
@@ -17355,6 +18002,11 @@
             "name": "stylesheet",
             "comment": " Construct an Html element contributing to the global stylesheet.\nThe resulting Html is a `<style>` element.  Remember to insert the resulting Html\nsomewhere. \n",
             "type": "String -> Html.Html m"
+          },
+          {
+            "name": "when",
+            "comment": " Conditional option. When the guard evaluates to `true`, the option is\napplied; otherwise it is ignored. Use like this: \n\n    Button.disabled `when` not model.isRunning\n",
+            "type": "Material.Options.Property c m -> Bool -> Material.Options.Property c m"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -17452,11 +18104,11 @@
   },
   {
     "name": "debois/elm-parts",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Parts",
-        "comment": " \n\nGiven a TEA component with model type `model` and message type `msg`, we construct\na variant component which knows how to extract its model from a c model\n`c` and produces generic messages `Msg c`. The consuming component is assumed\nto have message type `obs` (for \"observation\"). \n\n# Elm Architecture types\n@docs Update, View\n\n# Model embeddings \n@docs Get, Set, embedView, embedUpdate\n@docs accessors, Accessors\n\n## Indexed model embeddings\n@docs Index, Indexed, indexed\n\n# Message embeddings\n@docs Msg, update, pack\n\n# Part construction\n@docs create, create1\n\n",
+        "comment": " \n\nGiven a TEA component with model type `model` and message type `msg`, we construct\na variant component which knows how to extract its model from a c model\n`c` and produces generic messages `Msg c`. The consuming component is assumed\nto have message type `obs` (for \"observation\"). \n\n# Elm Architecture types\n@docs Update, View\n\n# Model embeddings \n@docs Get, Set, embedView, embedUpdate\n@docs accessors, Accessors\n\n## Indexed model embeddings\n@docs Index, Indexed, indexed\n\n# Message embeddings\n@docs Msg, update, pack\n\n# Part construction\n@docs create, create1\n\n# Lazyness\n\nRecall that `Html.Lazy` avoids re-computing views when the model doesn't change\nacross updates. However, \"doesn't change\" does not mean `model == model'` but rather\nthe stricter `model === model'` (in Javascript terms). That is, the old and new model\nmust not only be structurally the same, they must be literally the same\ndata-structure in memory.  \n\nParts generally do not achieve referential equality of no-op updates, since we\nare wrapping updates conceptually like this: \n\n    let (submodel, submsgs) = SubComponent.update msg model.submodel \n        model' = { model | submodel = submodel }\n    in \n        ...\nIn the second line, even if `submodel == model.submodel` and so `model ==\nmodel'`, we won't have (in Javascript terms) `model === model'`. \n\nIf you need lazy and thus referential equality of no-op updates, use \n`update'` below instead of the regular `update`, and create your parts with \n`create1'`, `pack'` etc. These functions all require that your base `update`\nfunction has the type of `Update'`, that is, wraps the resulting model in \n`Maybe` and explicitly signals a no-op by returning a `Nothing` model. \n\n@docs Update', update', create1', pack', embedUpdate'\n\n",
         "aliases": [
           {
             "name": "Accessors",
@@ -17509,6 +18161,15 @@
             "type": "msg -> model -> ( model, Platform.Cmd.Cmd msg )"
           },
           {
+            "name": "Update'",
+            "comment": " TEA update function with explicit no-op. You should have:\n\n    fst (update msg model) == Nothing       -- No change to model\n    fst (update msg model) == Just model'   -- Change to model'\n\n",
+            "args": [
+              "model",
+              "msg"
+            ],
+            "type": "msg -> model -> ( Maybe.Maybe model, Platform.Cmd.Cmd msg )"
+          },
+          {
             "name": "View",
             "comment": " Standard TEA view function type. \n",
             "args": [
@@ -17545,9 +18206,19 @@
             "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c -> obs) -> Parts.View c a"
           },
           {
+            "name": "create1'",
+            "comment": " Like `create1`, but for explicit no-op update functions. \n",
+            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update' model msg -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c -> obs) -> Parts.View c a"
+          },
+          {
             "name": "embedUpdate",
-            "comment": " Lift an `update` from operating on `model` to a c model `c`. \n",
+            "comment": " Lift an `Update` from operating on `model` to a c model `c`. \n",
             "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update model msg -> Parts.Update c msg"
+          },
+          {
+            "name": "embedUpdate'",
+            "comment": " Lift an explicit no-op `Update'` from operating on `model` to a c model `c`. \n",
+            "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update' model msg -> Parts.Update' c msg"
           },
           {
             "name": "embedView",
@@ -17557,17 +18228,27 @@
           {
             "name": "indexed",
             "comment": " Fix a getter and setter for an `Indexed model` to a particular `Index`.\n",
-            "type": "Parts.Get (Parts.Indexed model) c -> Parts.Set (Parts.Indexed model) c -> model -> Parts.Index -> ( Parts.Get model c, Parts.Set model c )"
+            "type": "Parts.Get (Parts.Indexed model) c -> Parts.Set (Parts.Indexed model) c -> model -> ( Parts.Index -> Parts.Get model c , Parts.Index -> Parts.Set model c )"
           },
           {
             "name": "pack",
-            "comment": " Partially apply an `update` function to a `msg`, producing a generic Msg.\n",
+            "comment": " Partially apply an `Update` function to a `msg`, producing a generic Msg.\n",
             "type": "Parts.Update c msg -> msg -> Parts.Msg c"
           },
           {
+            "name": "pack'",
+            "comment": " Partially apply an explicit no-op `Update'` function to a `msg`, producing\na generic Msg.\n",
+            "type": "(a -> b -> ( Maybe.Maybe b, Platform.Cmd.Cmd a )) -> a -> Parts.Msg b"
+          },
+          {
             "name": "update",
-            "comment": " Generic update function for Msg. \n",
+            "comment": " Generic update function for `Msg`. \n",
             "type": "(Parts.Msg c -> m) -> Parts.Msg c -> c -> ( c, Platform.Cmd.Cmd m )"
+          },
+          {
+            "name": "update'",
+            "comment": " Generic explict no-op update function for `Msg`. \n",
+            "type": "(Parts.Msg c -> m) -> Parts.Msg c -> c -> ( Maybe.Maybe c, Platform.Cmd.Cmd m )"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -18231,22 +18912,32 @@
   },
   {
     "name": "elm-community/dict-extra",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Dict.Extra",
-        "comment": " Convenience functions for working with Dict\n\n# List operations\n@docs groupBy\n\n# Manipulation\n@docs removeWhen\n",
+        "comment": " Convenience functions for working with `Dict`\n\n# List operations\n@docs groupBy\n\n# Manipulation\n@docs removeWhen, removeMany, keepOnly\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "groupBy",
-            "comment": " Takes a key-fn and a list, creates a Dict which maps the key returned from key-fn, to a list of matching elements.\n\n    mary = {groupId: 1, name: \"Mary\"}\n    jack = {groupId: 2, name: \"Jack\"}\n    jill = {groupId: 1, name: \"Jill\"}\n    groupBy .groupId [mary, jack, jill] == Dict.fromList [(1, [jill, mary]), (2, [jack])]\n",
+            "comment": " Takes a key-fn and a list, creates a `Dict` which maps the key returned from key-fn, to a list of matching elements.\n\n    mary = {groupId: 1, name: \"Mary\"}\n    jack = {groupId: 2, name: \"Jack\"}\n    jill = {groupId: 1, name: \"Jill\"}\n    groupBy .groupId [mary, jack, jill] == Dict.fromList [(1, [jill, mary]), (2, [jack])]\n",
             "type": "(a -> comparable) -> List a -> Dict.Dict comparable (List a)"
           },
           {
+            "name": "keepOnly",
+            "comment": " Keep a key-value pair exactly if its key appears in the set.\n",
+            "type": "Set.Set comparable -> Dict.Dict comparable v -> Dict.Dict comparable v"
+          },
+          {
+            "name": "removeMany",
+            "comment": " Keep a key-value pair exactly if its key does not appear in the set.\n",
+            "type": "Set.Set comparable -> Dict.Dict comparable v -> Dict.Dict comparable v"
+          },
+          {
             "name": "removeWhen",
-            "comment": " Keep elements which fails to satisfy the predicate.\n    This is functionaly equivalent to `Dict.filter (not << predicate) dict`.\n\n    removeWhen (\\c v -> v == 1) Dict.fromList [(\"Mary\", 1), (\"Jack\", 2), (\"Jill\", 1)] == Dict.fromList [(\"Jack\", 2)]\n",
+            "comment": " Keep elements which fail to satisfy the predicate.\n    This is functionally equivalent to `Dict.filter (not << predicate) dict`.\n\n    removeWhen (\\c v -> v == 1) Dict.fromList [(\"Mary\", 1), (\"Jack\", 2), (\"Jill\", 1)] == Dict.fromList [(\"Jack\", 2)]\n",
             "type": "(comparable -> v -> Bool) -> Dict.Dict comparable v -> Dict.Dict comparable v"
           }
         ],
@@ -26670,6 +27361,437 @@
     ]
   },
   {
+    "name": "elm-community/graph",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Graph",
+        "comment": " This module contains the primitives to build, update and traverse graphs.\nIf you find that this module is hard to use or the documentation\nis insufficient, consider opening an issue for that (and possibly even a\npull request :)).\n\nInternally, we use the `elm-intdict` package for efficient dynamic graph\nrepresentation.\n\n# Data\n@docs NodeId, Node, Edge, Adjacency, NodeContext, Graph\n\n# Building\n@docs empty, update, insert, remove, inducedSubgraph\n\n# Query\n@docs isEmpty, size, member, get, nodeIdRange\n\n# List representations\n@docs nodeIds, nodes, edges, fromNodesAndEdges, fromNodeLabelsAndEdgePairs\n\n# Foci\n@docs id, label, from, to, node, incoming, outgoing, nodeById, anyNode\n\n# Transforms\n@docs fold, mapContexts, mapNodes, mapEdges, reverseEdges, symmetricClosure\n\n# Characterization\n\n# Traversals\n## Neighbor selectors and node visitors\n@docs NeighborSelector, alongOutgoingEdges, alongIncomingEdges, SimpleNodeVisitor\n## Depth-first\n@docs DfsNodeVisitor, onDiscovery, onFinish, dfs, dfsTree, dfsForest, guidedDfs\n## Breadth-first\n@docs BfsNodeVisitor, ignorePath, bfs, guidedBfs\n\n# Topological Sort\n@docs topologicalSort, heightLevels\n\n# Strongly Connected Components\n@docs stronglyConnectedComponents\n\n# String representation\n@docs toString'\n\n",
+        "aliases": [
+          {
+            "name": "Adjacency",
+            "comment": " Adjacency is represented as an ordered dictionary\nrather than as an ordered list. This enables more dynamic\ngraphs with efficient edge removal and insertion on the run.\n",
+            "args": [
+              "e"
+            ],
+            "type": "IntDict.IntDict e"
+          },
+          {
+            "name": "BfsNodeVisitor",
+            "comment": " A specialized node visitor for breadth-first traversal. Compared to a\n`SimpleNodeVisitor`, the path of contexts from the root to the current\nnode is passed instead of just the current node's context. Additionally, the\ndistance from the root is passed as an `Int` (the root has distance 0 and it\nholds always that `length path == distance - 1`).\n\nIf you don't need the additional information, you can turn a `SimpleNodeVisitor`\ninto a `BfsNodeVisitor` by calling `ignorePath`.\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "List (Graph.NodeContext n e) -> Int -> acc -> acc"
+          },
+          {
+            "name": "DfsNodeVisitor",
+            "comment": " A node visitor specialized for depth-first traversal. Along with the node\ncontext of the currently visited node, the current accumulated value is passed.\nThe visitor then has the chance to both modify the value at discovery of the\nnode through the first return value and also provide a finishing\ntransformation which is called with the value after all children were processed\nand the node is about to be finished.\n\nIn the cases where you don't need access to the value both at dicovery and at\nfinish, look into `onDiscovery` and `onFinish`.\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "Graph.NodeContext n e -> acc -> ( acc, acc -> acc )"
+          },
+          {
+            "name": "Edge",
+            "comment": " Represents a directd edge in the graph. In addition\nto start and end node identifiers, a label value can\nbe attached to an edge.\n",
+            "args": [
+              "e"
+            ],
+            "type": "{ from : Graph.NodeId, to : Graph.NodeId, label : e }"
+          },
+          {
+            "name": "NeighborSelector",
+            "comment": " Selects the next neighbors for the currently visited node in the traversal.\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "type": "Graph.NodeContext n e -> List Graph.NodeId"
+          },
+          {
+            "name": "Node",
+            "comment": " The type representing a node: An identifier with\na label.\n",
+            "args": [
+              "n"
+            ],
+            "type": "{ id : Graph.NodeId, label : n }"
+          },
+          {
+            "name": "NodeContext",
+            "comment": " Represents a node with its incoming and outgoing edges\n(predecessors and successors).\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "type": "{ node : Graph.Node n , incoming : Graph.Adjacency e , outgoing : Graph.Adjacency e }"
+          },
+          {
+            "name": "NodeId",
+            "comment": " The type used for identifying nodes, an integer.\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "SimpleNodeVisitor",
+            "comment": " A generic node visitor just like that in the ordinary `fold` function.\nThere are combinators that make these usable for both depth-first traversal\n(`onDiscovery`, `onFinish`) and breadth-first traversal (`ignorePath`).\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "Graph.NodeContext n e -> acc -> acc"
+          }
+        ],
+        "types": [
+          {
+            "name": "Graph",
+            "comment": " The central graph type. It is parameterized both over the node label type `n`\nand the edge label type `e`.\n\nOne can build such a graph with the primitives under *Build*. Most of the time\n`fromNodesAndEdges` works fairly well.\n\nFor simplicity, this library just uses a patricia trie based graph representation, which means\nit is just an efficient version of `Dict NodeId (NodeContext n e)`. This allows efficient insertion and\nremoval of nodes of the graph after building.\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "alongIncomingEdges",
+            "comment": " A less common way for selecting neighbors is to follow incoming edges:\n\n    alongIncomingEdges ctx =\n      IntDict.keys (ctx.incoming)\n",
+            "type": "Graph.NeighborSelector n e"
+          },
+          {
+            "name": "alongOutgoingEdges",
+            "comment": " A good default for selecting neighbors is to just go along outgoing edges:\n\n    alongOutgoingEdges ctx =\n      IntDict.keys (ctx.outgoing)\n\n`dfs`/`bfs` use this as their selecting strategy.\n",
+            "type": "Graph.NeighborSelector n e"
+          },
+          {
+            "name": "anyNode",
+            "comment": " Focuses on an arbitrary `NodeContext` of a `Graph`.\nThis exists for the same purposes as `nodeById`, but this focuses on an\narbitrary node rather than on a node with a specific id.\n",
+            "type": "Focus.Focus (Graph.Graph n e) (Maybe.Maybe (Graph.NodeContext n e))"
+          },
+          {
+            "name": "bfs",
+            "comment": " An off-the-shelf breadth-first traversal. It will visit all components of the\ngraph in no guaranteed order, discovering nodes `alongOutgoingEdges`.\nSee the docs of `BfsNodeVisitor` on how to supply such a beast. There are also\nexamples on how to use `bfs`.\n",
+            "type": "Graph.BfsNodeVisitor n e acc -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "dfs",
+            "comment": " An off-the-shelf depth-first traversal. It will visit all components of the\ngraph in no guaranteed order, discovering nodes `alongOutgoingEdges`.\nSee the docs of `DfsNodeVisitor` on how to supply such a beast. There are also\nexamples on how to use `dfs`.\n",
+            "type": "Graph.DfsNodeVisitor n e acc -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "dfsForest",
+            "comment": " `dfsForest seeds graph` computes a depth-first spanning `Forest` of the\ncomponents in `graph` spanned by `seeds` `alongOutgoingEdges`.\n\nA traversal over this forest would be equivalent to a depth-first traversal\nover the original graph.\n",
+            "type": "List Graph.NodeId -> Graph.Graph n e -> Graph.Tree.Forest (Graph.NodeContext n e)"
+          },
+          {
+            "name": "dfsTree",
+            "comment": " `dfsTree seed graph` computes a depth-first [spanning tree](https://en.wikipedia.org/wiki/Spanning_tree) of the component\nin `graph` starting from `seed` `alongOutgoingEdges`. This function is exemplary for needing to\nutilize the whole power of `DfsNodeVisitor`.\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Graph.Tree.Tree (Graph.NodeContext n e)"
+          },
+          {
+            "name": "edges",
+            "comment": " `edges graph` returns a list of all `Edge`s (e.g. a record of `from` and `to` ids\nand a `label`) in `graph`.\n\n    edges empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    edges graph == [Edge 1 2 \"->\"]\n",
+            "type": "Graph.Graph n e -> List (Graph.Edge e)"
+          },
+          {
+            "name": "empty",
+            "comment": " An empty graph.\n\n    size empty == 0\n",
+            "type": "Graph.Graph n e"
+          },
+          {
+            "name": "fold",
+            "comment": " A fold over all node contexts. The accumulated value is computed lazily,\nso that the fold can exit early when the suspended accumulator is not forced.\n\n    hasLoop ctx = IntDict.member ctx.node.id ctx.incoming\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    -- The graph should not have any loop.\n    fold (\\ctx acc -> acc || hasLoop ctx) False graph == False\n",
+            "type": "(Graph.NodeContext n e -> acc -> acc) -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "from",
+            "comment": " Focus for the `from` field of `Edge`.\n",
+            "type": "Focus.Focus { record | from : field } field"
+          },
+          {
+            "name": "fromNodeLabelsAndEdgePairs",
+            "comment": " A more convenient version of `fromNodesAndEdges`, when edges are unlabeled\nand there are no special requirements on node ids.\n\n`fromNodeLabelsAndEdgePairs labels edges` implicitly assigns node ids according\nto the label's index in `labels` and the list of edge pairs is converted to\nunlabeled `Edge`s.\n\n    graph = fromNodeLabelsAndEdgePairs ['a', 'b'] [(0, 1)]\n",
+            "type": "List n -> List ( Graph.NodeId, Graph.NodeId ) -> Graph.Graph n ()"
+          },
+          {
+            "name": "fromNodesAndEdges",
+            "comment": " `fromNodesAndEdges nodes edges` constructs a graph from the supplied `nodes`\nand `edges`. This is the most comfortable way to construct a graph as a whole.\nOftentimes it is even more convenient to use `fromNodeLabelsAndEdgePairs` when\nedges are unlabeled anyway and auto incremented node ids are OK.\n\nThe following constructs a graph with 2 nodes with a string label, connected\nby an edge labeled \"->\".\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n",
+            "type": "List (Graph.Node n) -> List (Graph.Edge e) -> Graph.Graph n e"
+          },
+          {
+            "name": "get",
+            "comment": " Analogous to `Dict.get`, `get nodeId graph` returns the `Just` the node\ncontext with id `nodeId` in `graph` if there is one and `Nothing` otherwise.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    get 42 graph == Nothing\n    get 1 graph == Just <node context of node 1>\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Maybe.Maybe (Graph.NodeContext n e)"
+          },
+          {
+            "name": "guidedBfs",
+            "comment": " The `bfs` function is not powerful enough? Go for this beast.\n\n`guidedBfs selectNeighbors visitNode seeds acc graph` will perform a breadth-first\ntraversal on `graph` starting with a queue of `seeds`. The children of each node\nwill be selected with `selectNeighbors` (see `NeighborSelector`), the visiting\nof nodes is handled by `visitNode` (c.f. `BfsNodeVisitor`), folding `acc` over\nthe graph.\n\nWhen there are not any more nodes to be visited, the function will return the\naccumulated value together with the unvisited rest of `graph`.\n\n    bfsLevelOrder graph =\n      -- NodeId 1 is just a wild guess here\n      guidedBfs alongOutgoingEdges (ignorePath (::)) [1] [] graph\n",
+            "type": "Graph.NeighborSelector n e -> Graph.BfsNodeVisitor n e acc -> List Graph.NodeId -> acc -> Graph.Graph n e -> ( acc, Graph.Graph n e )"
+          },
+          {
+            "name": "guidedDfs",
+            "comment": " The `dfs*` functions are not powerful enough? Go for this beast.\n\n`guidedDfs selectNeighbors visitNode seeds acc graph` will perform a depth-first\ntraversal on `graph` starting with a stack of `seeds`. The children of each node\nwill be selected with `selectNeighbors` (see `NeighborSelector`), the visiting\nof nodes is handled by `visitNode` (c.f. `DfsNodeVisitor`), folding `acc` over\nthe graph.\n\nWhen there are not any more nodes to be visited, the function will return the\naccumulated value together with the unvisited rest of `graph`.\n\n    dfsPreOrder graph =\n      -- NodeId 1 is just a wild guess here\n      guidedDfs alongOutgoingEdges (onDiscovery (::)) [1] [] graph\n",
+            "type": "Graph.NeighborSelector n e -> Graph.DfsNodeVisitor n e acc -> List Graph.NodeId -> acc -> Graph.Graph n e -> ( acc, Graph.Graph n e )"
+          },
+          {
+            "name": "heightLevels",
+            "comment": " Computes the height function of a given graph. This is a more general\n[topological sort](https://en.wikipedia.org/wiki/Topological_sorting),\nwhere independent nodes are in the same height level (e.g. the same list\nindex). A valid topological sort is trivially obtained by flattening the\nresult of this function.\n\nThe height function is useful for solving the maximal clique problem for\ncertain [perfect graphs](https://en.wikipedia.org/wiki/Perfect_graph)\n([comparability graphs](https://en.wikipedia.org/wiki/Comparability_graph)).\nThere is the excellent reference\n[Algorithmic Graph Theory and Perfect Graphs](http://dl.acm.org/citation.cfm?id=984029).\n",
+            "type": "Graph.Graph n e -> List (List (Graph.NodeContext n e))"
+          },
+          {
+            "name": "id",
+            "comment": " Focus for the `id` field of `Node`.\n",
+            "type": "Focus.Focus { record | id : field } field"
+          },
+          {
+            "name": "ignorePath",
+            "comment": " Turns a `SimpleNodeVisitor` into a `BfsNodeVisitor` by ignoring the path\nand distance parameters.\nThis is useful for when the visitor should be agnostic of the\ntraversal (breadth-first or depth-first or even just `fold`).\n\n    bfsLevelOrder : List (NodeContext n e)\n    bfsLevelOrder graph =\n      graph\n        |> bfs (ignorePath (::)) []\n        |> List.reverse\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.BfsNodeVisitor n e acc"
+          },
+          {
+            "name": "incoming",
+            "comment": " Focus for the `incoming` field of `NodeContext`.\n",
+            "type": "Focus.Focus { record | incoming : field } field"
+          },
+          {
+            "name": "inducedSubgraph",
+            "comment": " The [induced subgraph](http://mathworld.wolfram.com/Edge-InducedSubgraph.html)\nof a number of node ids.\n",
+            "type": "List Graph.NodeId -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "insert",
+            "comment": " Analogous to `Dict.insert`, `insert nodeContext graph` inserts a fresh node\nwith its context (label, id and edges) into `graph`. If there was already a node\nwith the same id, it will be replaced by the new node context.\n\n    graph1 = fromNodesAndEdges [Node 1 \"1\"] []\n    newNode =\n      { node = Node 2 \"2\"\n      , incoming = IntDict.singleton 1 () -- so there will be an edge from 1 to 2\n      , outgoing = IntDict.empty\n      }\n    graph2 = insert newNode graph1\n    size graph2 == 2\n\nIt's possible to build up whole graphs this way, but a lot less tedious way would\nbe simply to use `fromNodesAndEdges`.\n",
+            "type": "Graph.NodeContext n e -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " `isEmpty graph` is true if and only if there are no nodes in the graph.\nSome properties to reason about in code, which hold for any `graph`:\n\n    isEmpty graph =\n      graph == empty\n    isEmpty graph =\n      size graph == 0\n",
+            "type": "Graph.Graph n e -> Bool"
+          },
+          {
+            "name": "label",
+            "comment": " Focus for the `label` field of `Node` and `Edge`.\n",
+            "type": "Focus.Focus { record | label : field } field"
+          },
+          {
+            "name": "mapContexts",
+            "comment": " Maps each node context to another one. This may change edge and node labels\n(including their types), possibly the node ids and also add or remove edges\nentirely through modifying the adjacency lists.\n\nThe following is a specification for reverseEdges:\n\n    flipEdges ctx = { ctx | incoming = ctx.outgoing, outgoing = ctx.incoming }\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    reverseEdges graph == mapContexts flipEdges graph\n",
+            "type": "(Graph.NodeContext n1 e1 -> Graph.NodeContext n2 e2) -> Graph.Graph n1 e1 -> Graph.Graph n2 e2"
+          },
+          {
+            "name": "mapEdges",
+            "comment": " Maps over edge labels, possibly chaing their types. Leaves the graph\ntopology intact.\n",
+            "type": "(e1 -> e2) -> Graph.Graph n e1 -> Graph.Graph n e2"
+          },
+          {
+            "name": "mapNodes",
+            "comment": " Maps over node labels, possibly changing their types. Leaves the graph\ntopology intact.\n",
+            "type": "(n1 -> n2) -> Graph.Graph n1 e -> Graph.Graph n2 e"
+          },
+          {
+            "name": "member",
+            "comment": " Analogous to `Dict.member`, `member nodeId graph` is true, if and only if\nthere is a node with id `nodeId` in `graph`.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    member 42 graph == False\n    member 1 graph == True\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Bool"
+          },
+          {
+            "name": "node",
+            "comment": " Focus for the `node` field of `NodeContext`.\n",
+            "type": "Focus.Focus { record | node : field } field"
+          },
+          {
+            "name": "nodeById",
+            "comment": "  `nodeById nodeId` focuses on the node with id `nodeId` with a `Graph`.\nSince the node might or might not exist, the small part on which we focus wraps\nthe `NodeContext` in a `Maybe`.\n\nThis is a combination of the `get` and `update` functions which is handy for\ncomposition of foci deep into a graph. Unfortunately, we need a combinator which\nwould get rid of the `Maybe` wrapping (that would be the task of a prism I think),\nbut suppose we have something like `Focus.withDefault : a -> Focus (Maybe a) a`,\nthen we could define\n\n    ctx = NodeContext (Node 2 \"2\") IntDict.empty IntDict.empty\n    focus = nodeById 2 => Focus.withDefault ctx => node => label\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    graph1 = Focus.set focus graph \"=\"\n    Focus.get focus graph1 == \"=\"\n\nWell, I hope I could bring over the point.\n",
+            "type": "Graph.NodeId -> Focus.Focus (Graph.Graph n e) (Maybe.Maybe (Graph.NodeContext n e))"
+          },
+          {
+            "name": "nodeIdRange",
+            "comment": " `nodeIdRange graph` returns `Just (minNodeId, maxNodeId)` if `graph` is not empty and `Nothing`\notherwise.\n\nThis is useful for finding unoccupied node ids without trial and error.\n\n    nodeIdRange empty == Nothing\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodeIdRange graph == Just (1, 2)\n",
+            "type": "Graph.Graph n e -> Maybe.Maybe ( Graph.NodeId, Graph.NodeId )"
+          },
+          {
+            "name": "nodeIds",
+            "comment": " `nodeIds graph` returns a list of all nodes' ids in `graph`.\n\n    nodeIds empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodeIds graph == [1, 2]\n",
+            "type": "Graph.Graph n e -> List Graph.NodeId"
+          },
+          {
+            "name": "nodes",
+            "comment": " `nodes graph` returns a list of all `Node`s (e.g. `id` and `label`) in\n`graph`.\n\n    nodes empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodes graph == [Node 1 \"1\", Node 2 \"2\"]\n",
+            "type": "Graph.Graph n e -> List (Graph.Node n)"
+          },
+          {
+            "name": "onDiscovery",
+            "comment": " Transform a `SimpleNodeVisitor` into an equivalent `DfsNodeVisitor`, which\nwill be called upon node discovery. This eases providing `DfsNodeVisitor`s in\nthe default case:\n\n    dfsPostOrder : Graph n e  -> List (NodeContext n e)\n    dfsPostOrder graph =\n      dfs (onDiscovery (::)) [] graph\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.DfsNodeVisitor n e acc"
+          },
+          {
+            "name": "onFinish",
+            "comment": " Transform a `SimpleNodeVisitor` into an equivalent `DfsNodeVisitor`, which\nwill be called upon node finish. This eases providing `DfsNodeVisitor`s in\nthe default case:\n\n    dfsPreOrder : Graph n e  -> List (NodeContext n e)\n    dfsPreOrder graph =\n      dfs (onFinish (::)) [] graph\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.DfsNodeVisitor n e acc"
+          },
+          {
+            "name": "outgoing",
+            "comment": " Focus for the `outgoing` field of `NodeContext`.\n",
+            "type": "Focus.Focus { record | outgoing : field } field"
+          },
+          {
+            "name": "remove",
+            "comment": " Analogous to `Dict.remove`, `remove nodeId graph` returns a version of `graph`\nwithout a node with id `nodeId`. If there was no node with that id, then remove\nis a no-op:\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 ()]\n    graph == remove 42 graph\n    graph |> remove 2 |> size == 1\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "reverseEdges",
+            "comment": " Reverses the direction of every edge in the graph.\n",
+            "type": "Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "size",
+            "comment": " `size graph` returns the number of nodes in `graph`.\n\n    size empty == 0\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    size graph == 2\n",
+            "type": "Graph.Graph n e -> Int"
+          },
+          {
+            "name": "stronglyConnectedComponents",
+            "comment": " Decomposes a graph into its strongly connected components. The resulting\nlist is a topological ordering of the component graph.\n",
+            "type": "Graph.Graph n e -> List (Graph.Graph n e)"
+          },
+          {
+            "name": "symmetricClosure",
+            "comment": " `symmetricClosure edgeMerger graph` is the\n[symmetric closure](https://en.wikipedia.org/wiki/Symmetric_closure) of `graph`,\ne.g. the undirected equivalent, where for every edge in `graph` there is also\na corresponding reverse edge. This implies that `ctx.incoming` == `ctx.outgoing`\nfor each node context `ctx`.\n\n`edgeMerger` resolves conflicts for when there are already edges in both\ndirections, e.g. the graph isn't truly directed. It is guaranteed that\n`edgeMerger` will only be called with the smaller node id passed in first\nto enforce consitency of merging decisions.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    onlyUndirectedEdges ctx =\n      ctx.incoming == ctx.outgoing\n    merger from to outgoingLabel incomingLabel =\n      outgoingLabel -- quite arbitrary, will not be called for the above graph\n    fold\n      (\\ctx acc -> acc && onlyUndirectedEdges ctx)\n      True\n      (symmetricClosure merger graph)\n      == True\n",
+            "type": "(Graph.NodeId -> Graph.NodeId -> e -> e -> e) -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "to",
+            "comment": " Focus for the `to` field of `Edge`.\n",
+            "type": "Focus.Focus { record | to : field } field"
+          },
+          {
+            "name": "toString'",
+            "comment": " Returns a string representation of the graph in the format of\n`Graph.fromNodesAndEdges [<nodes>] [<edges>]`.\n",
+            "type": "Graph.Graph n e -> String"
+          },
+          {
+            "name": "topologicalSort",
+            "comment": " Computes a\n[topological ordering](https://en.wikipedia.org/wiki/Topological_sorting) of the\ngiven graph.\n",
+            "type": "Graph.Graph n e -> List (Graph.NodeContext n e)"
+          },
+          {
+            "name": "update",
+            "comment": " Analogous to `Dict.update`, `update nodeId updater graph` will find\nthe node context of the node with id `nodeId` in `graph`. It will then call `updater`\nwith `Just` that node context if that node was found and `Nothing`\notherwise. `updater` can then return `Just` an updated node context\n(modifying edges is also permitted!) or delete the node by returning\n`Nothing`. The updated `graph` is returned.\n\nThis is the most powerful building function since all possible per-node\noperations are possible (node removal, insertion and updating of context\nproperties).\n\nThe other operations can be implemented in terms of `update` like this:\n\n    remove nodeId graph =\n      update nodeId (always Nothing) graph\n    insert nodeContext graph =\n      update nodeContext.node.id (always (Just nodeContext)) graph\n",
+            "type": "Graph.NodeId -> (Maybe.Maybe (Graph.NodeContext n e) -> Maybe.Maybe (Graph.NodeContext n e)) -> Graph.Graph n e -> Graph.Graph n e"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Graph.Tree",
+        "comment": " This module provides a simple tree data type of arbitrary arity (a rose tree).\nThere are primitives for building and traversing such a tree.\n\n# Data\n@docs Tree, Forest\n\n# Building\n@docs empty, leaf, inner, unfoldTree, unfoldForest\n\n# Query\n@docs isEmpty, root, size, height\n\n# Traversal\n\nIt is instructory to read the article on [tree traversals on Wikipedia](https://en.wikipedia.org/wiki/Tree_traversal) first if you are not familiar with the concept.\n\n@docs levelOrder, levelOrderList, preOrder, preOrderList, postOrder, postOrderList\n\n",
+        "aliases": [
+          {
+            "name": "Forest",
+            "comment": " This is just an alias for a list of trees, called a forest in the\nliterature.\n",
+            "args": [
+              "label"
+            ],
+            "type": "List (Graph.Tree.Tree label)"
+          }
+        ],
+        "types": [
+          {
+            "name": "Tree",
+            "comment": " Data type representing an n-ary tree with node labels of type `a`\nBuilding such a tree is done with the `empty`, `leaf` and `inner` smart\nconstructors. An example for a tree with three leafs and a root node:\n\n    tree = inner 1 [leaf 2, leaf 3, leaf 4]\n",
+            "args": [
+              "label"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Construct an empty tree with no nodes. ",
+            "type": "Graph.Tree.Tree label"
+          },
+          {
+            "name": "height",
+            "comment": " Computes the height of the tree in O(n) time.\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    height tree == 3\n",
+            "type": "Graph.Tree.Tree label -> Int"
+          },
+          {
+            "name": "inner",
+            "comment": " Construct a new tree by `inner label children`, combining a number of\nsubtrees `children` with a `label` for the new inner node which will be\nthe root of the tree. Empty subtrees are filtered out. An example:\n\n    tree1 = inner 1 [leaf 2, leaf 3, leaf 4]\n    tree2 = inner 1 [leaf 2, leaf 3, leaf 4, empty]\n    tree1 == tree2\n",
+            "type": "label -> List (Graph.Tree.Tree label) -> Graph.Tree.Tree label"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " `isEmpty tree` returns true if and only if `tree` is `empty`.\n\n    isEmpty empty == True\n    isEmpty (leaf 42) == False\n",
+            "type": "Graph.Tree.Tree label -> Bool"
+          },
+          {
+            "name": "leaf",
+            "comment": " Construct a tree with a single node from a value for the node's label.\n\n    tree : Tree Int\n    tree = leaf 42\n ",
+            "type": "label -> Graph.Tree.Tree label"
+          },
+          {
+            "name": "levelOrder",
+            "comment": " `levelOrder visit acc tree` is a breadth-first fold over `tree`,\nvisiting each node and accumulating results with `visit`. Nodes are visited\nin level-order, e.g. for a tree like\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n\nnodes would be visited in order `[0, 1, 4, 2, 3, 5, 6]`. This is in fact the\nlist produced by `levelOrderList`, but through `levelOrder` you also get access\nto the children of the current node via the second parameter of visit.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "levelOrderList",
+            "comment": " See the documentation on `levelOrder`. `levelOrderList tree` produces\na list of the nodes of the tree visited in level-order, e.g. breadth-first.\nSo:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    levelOrderList tree == [0, 1, 4, 2, 3, 5, 6]\n\nIf you also need information on child trees instead of just the node labels,\nuse `levelOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "postOrder",
+            "comment": " `postOrder visit acc tree` is a (depth-first) post-order traversal (fold)\nover `tree` where `visit` is called with the label and the child sub-forest of\nthe current node in addition to a supplied accumulator value.\n\nWhen `visit` is called for some node, `acc` already contains the value of all\nsub-trees, so post-order traversal is a kind of bottom-up traversal, where\nall children are visited prior to their parent.\nSee `postOrderList` for an example on the order in which nodes are visited.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "postOrderList",
+            "comment": " See `postOrder` for an explanation of how post-order traversals work.\nHere is an example on visit order:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    postOrderList tree == [2, 3, 1, 5, 6, 4, 0]\n\nIf you also need information on child trees instead of just the node labels,\nuse `postOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "preOrder",
+            "comment": " `preOrder visit acc tree` is a (depth-first) pre-order traversal (fold)\nover `tree` where `visit` is called with the label and the child sub-forest of\nthe current node in addition to a supplied accumulator value.\n\nPost-order traversals work top-down: When `visit` is called for some node,\n`acc` already contains the value of all ancestral nodes.\nSee `preOrderList` for an example on the order in which nodes are visited.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "preOrderList",
+            "comment": " See `preOrder` for an explanation of how post-order traversals work.\nHere is an example on visit order:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    preOrderList tree == [0, 1, 2, 3, 4, 5, 6]\n\nIf you also need information on child trees instead of just the node labels,\nuse `preOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "root",
+            "comment": " `root tree` returns `Nothing` if `tree` is `empty`, otherwise\nit returns `Just (label, childForest)` of the root node.\n\n    tree = inner 1 [leaf 2, leaf 3, leaf 4]\n    root tree == Just (1, [leaf 2, leaf 3, leaf 4])\n    root empty == Nothing\n",
+            "type": "Graph.Tree.Tree label -> Maybe.Maybe ( label, Graph.Tree.Forest label )"
+          },
+          {
+            "name": "size",
+            "comment": " The size of the tree, e.g. the number of nodes.\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    size tree == 7\n",
+            "type": "Graph.Tree.Tree label -> Int"
+          },
+          {
+            "name": "unfoldForest",
+            "comment": " Construct a new forest with `unfoldForest next seeds` by `unfoldTree next seed`\nfor each `seed` in `seeds`. A simple specification would be\n\n    unfoldForest next seeds = List.map (unfoldTree next) seeds\n",
+            "type": "(seed -> ( label, List seed )) -> List seed -> Graph.Tree.Forest label"
+          },
+          {
+            "name": "unfoldTree",
+            "comment": " Construct a new tree with `unfoldTree next seed`, top to bottom. `next` will be\ncalled repeatedly with seeds, from which it should construct a label for\nthe current tree node but also a list of seeds from which to unfold\nchild nodes. This sort of works top to bottom compared to creating a\ntree bottom up by using the other primitives.\n\n    tree1 = inner 1 [leaf 2, leaf 3, leaf 4]\n    next seed = (seed, if seed == 1 then [2, 3, 4] else [])\n    tree2 = unfoldTree next 1\n    tree1 == tree2\n",
+            "type": "(seed -> ( label, List seed )) -> seed -> Graph.Tree.Tree label"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "elm-community/html-extra",
     "version": "2.0.0",
     "docs": [
@@ -26811,6 +27933,215 @@
             "name": "static",
             "comment": " Embedding static html.\n\nThe type argument\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\nin `Html Never` tells us that the html has no event handlers attached,\nit will not generate any messages. We may want to embed such static\nhtml into arbitrary views, while using types to enforce the\nstaticness. That is what this function provides.\n\n*Note:* To call this function, the argument need not be literally of type\n`Html Never`. It suffices if it is a fully polymorphic (in the message type)\n`Html` value. For example, this works: `static (Html.text \"abcdef\")`.\n",
             "type": "Html.Html Basics.Never -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "elm-community/intdict",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "IntDict.Safe",
+        "comment": " Safe API wrappers for `IntDict`s build and query operators \nto prevent integer overflows with JavaScripts number type.\n\nPrior to delegating to their 'unsafe' equivalent, these functions verify\nthe validity of the key via `IntDict.isValidKey`.\n\n# Return type\n@docs InvalidKey, SafeKeyResult\n# Build\n@docs safeInsert, safeUpdate, safeRemove\n# Query\n@docs safeMember, safeGet\n\n",
+        "aliases": [
+          {
+            "name": "SafeKeyResult",
+            "comment": " A value of this type is returned by all functions in this module. \nSee the core libraries' `Result` documentation for how to cope with it. ",
+            "args": [
+              "a"
+            ],
+            "type": "Result.Result IntDict.Safe.InvalidKey a"
+          }
+        ],
+        "types": [
+          {
+            "name": "InvalidKey",
+            "comment": " An error type signaling an invalid key. ",
+            "args": [],
+            "cases": [
+              [
+                "InvalidKey",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "safeGet",
+            "comment": " Version of `IntDict.get` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (Maybe.Maybe v)"
+          },
+          {
+            "name": "safeInsert",
+            "comment": " Version of `IntDict.insert` that validates the key. ",
+            "type": "Int -> v -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          },
+          {
+            "name": "safeMember",
+            "comment": " Version of `IntDict.member` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult Bool"
+          },
+          {
+            "name": "safeRemove",
+            "comment": " Version of `IntDict.remove` that validates the key. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          },
+          {
+            "name": "safeUpdate",
+            "comment": " Version of `IntDict.update` that validates the key. ",
+            "type": "Int -> (Maybe.Maybe v -> Maybe.Maybe v) -> IntDict.IntDict v -> IntDict.Safe.SafeKeyResult (IntDict.IntDict v)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "IntDict",
+        "comment": " # IntDict\n\nThis module exposes the same API as `Dict`.\n\n# Technicalities\n\nSince JavaScript's number type is kind of messed up, Elm's `Int` is not particularly\nwell-behaved wrt. bitwise operations. Currently, JS supports 32 bit integers, so there is\nprobably enough room for key picks. **However, when sanitizing user input, it is mandatory\nthat a prior `isValidKey` or one of the safe versions in `IntDict.Safe` is used!** This is\nto prevent the overflow behavior.\n\nThis library is inspired by Haskells [IntMap](http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-IntMap.html),\nwhich in turn implements Okasaki and Gill's [Fast mergable integer maps](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf).\n\nAs noted in the [references](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf), here are some runtimes:\n\n*O(min(n, W))*: `insert`, `update`, `remove`, `get`, `member`\n\n*O(n + m)*: `uniteWith`, `union`, `intersection`, `diff`\n\nwhere *n* and *m* are the sizes of the first and second dictionary respectively and *W*\nis the number of bits in `Int` (so a constant with current value 32).\n\n# Data\n@docs IntDict, isValidKey\n# Build\n@docs empty, singleton, insert, update, remove\n# Query\n@docs isEmpty, size, member, get, findMin, findMax\n# Combine\n@docs uniteWith, union, intersect, diff\n# Lists\n@docs keys, values, toList, fromList\n# Transform\n@docs map, foldl, foldr, filter, partition\n# String representation\n@docs toString'\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "IntDict",
+            "comment": " A dictionary mapping `Int`s to values of a type `v`. Analogous to\n`Dict Int v`.\n",
+            "args": [
+              "v"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Keep a key-value pair when its key does not appear in the second dictionary.\nPreference is given to the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty dictionary. ",
+            "type": "IntDict.IntDict v"
+          },
+          {
+            "name": "filter",
+            "comment": " Keep a key-value pair when it satisfies a predicate. ",
+            "type": "(Int -> v -> Bool) -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "findMax",
+            "comment": " Find the maximum key and value in the dictionary. ",
+            "type": "IntDict.IntDict v -> Maybe.Maybe ( Int, v )"
+          },
+          {
+            "name": "findMin",
+            "comment": " Find the minimum key and value in the dictionary. ",
+            "type": "IntDict.IntDict v -> Maybe.Maybe ( Int, v )"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from lowest\nkey to highest key. ",
+            "type": "(Int -> v -> a -> a) -> a -> IntDict.IntDict v -> a"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from highest\nkey to lowest key. ",
+            "type": "(Int -> v -> a -> a) -> a -> IntDict.IntDict v -> a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert an association list into a dictionary. ",
+            "type": "List ( Int, v ) -> IntDict.IntDict v"
+          },
+          {
+            "name": "get",
+            "comment": " Get the value associated with a key. If the key is not found, return\n`Nothing`. This is useful when you are not sure if a key will be in the\ndictionary. ",
+            "type": "Int -> IntDict.IntDict v -> Maybe.Maybe v"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a key-value pair into a dictionary. Replaces value when there is\na collision. ",
+            "type": "Int -> v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "intersect",
+            "comment": " Keep a key-value pair when its key appears in the second dictionary.\nPreference is given to values in the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Check if the dictionary contains no items. ",
+            "type": "IntDict.IntDict v -> Bool"
+          },
+          {
+            "name": "isValidKey",
+            "comment": " Validates that a given integer is usable as a key.\nThis is necessary due to JavaScript's weird number type.\nBasically this assures that we can use the functions\nfrom `Bitwise` without risking integer overflow.\n\n**This function is a necessity for sanitizing user input!** Alternatively,\nuse the safe functions from `IntDict.Safe` which perform the check for you.\n\nAs with the current version of JavaScript (2015), only 32 bit signed integers are supported.\nIf this ever changes, contact me! Certain parts of the implementation depend on this! ",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get all of the keys in a dictionary. ",
+            "type": "IntDict.IntDict v -> List Int"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in a dictionary. ",
+            "type": "(Int -> a -> b) -> IntDict.IntDict a -> IntDict.IntDict b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a key is in a dictionary. ",
+            "type": "Int -> IntDict.IntDict v -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest. ",
+            "type": "(Int -> v -> Bool) -> IntDict.IntDict v -> ( IntDict.IntDict v, IntDict.IntDict v )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a key-value pair from a dictionary. If the key is not found,\nno changes are made. ",
+            "type": "Int -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a dictionary with one key-value pair. ",
+            "type": "Int -> v -> IntDict.IntDict v"
+          },
+          {
+            "name": "size",
+            "comment": " The number of items in the dictionary. `O(1)`.",
+            "type": "IntDict.IntDict v -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a dictionary into an association list of key-value pairs. ",
+            "type": "IntDict.IntDict v -> List ( Int, v )"
+          },
+          {
+            "name": "toString'",
+            "comment": " Generates a string representation similar to what `toString`\ngenerates for `Dict`. ",
+            "type": "IntDict.IntDict v -> String"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two dictionaries. If there is a collision, preference is given\nto the first dictionary. ",
+            "type": "IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "uniteWith",
+            "comment": " `uniteWith merger d1 d2` combines two dictionaries. If there is a collision, `merger`\nis called with the conflicting key, the value from `d1` and that from `d2`. ",
+            "type": "(Int -> v -> v -> v) -> IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "update",
+            "comment": " Update the value of a dictionary for a specific key with a given function. ",
+            "type": "Int -> (Maybe.Maybe v -> Maybe.Maybe v) -> IntDict.IntDict v -> IntDict.IntDict v"
+          },
+          {
+            "name": "values",
+            "comment": " Get all of the values in a dictionary. ",
+            "type": "IntDict.IntDict v -> List v"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -36647,7 +37978,7 @@
   },
   {
     "name": "etaque/elm-simple-form",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Form.Input",
@@ -39892,27 +41223,8 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "docs": [
-      {
-        "name": "TimeTravel.Navigation",
-        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "program",
-            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
-            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "programWithFlags",
-            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
-            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
       {
         "name": "TimeTravel.Html.App",
         "comment": " Each functions in this module has the same interface as [Html.App](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App)\n\n# Start your Program\n@docs beginnerProgram, program, programWithFlags\n\n",
@@ -39933,6 +41245,25 @@
             "name": "programWithFlags",
             "comment": " See [Html.App.programWithFlags](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App#programWithFlags)\n",
             "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "TimeTravel.Navigation",
+        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
+            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
+            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -44097,7 +45428,7 @@
   },
   {
     "name": "krisajenkins/elm-exts",
-    "version": "25.6.2",
+    "version": "25.7.0",
     "docs": [
       {
         "name": "Exts.Html",
@@ -44133,15 +45464,54 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Exts.Date",
-        "comment": " Extensions to the core `Date` library.\n\n@docs toISOString\n",
+        "name": "Exts.Tuple",
+        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "toISOString",
-            "comment": " Format a Date as an ISO-standard string.\n",
-            "type": "Date.Date -> String"
+            "name": "both",
+            "comment": " Update both components of a pair with a single function.\n",
+            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
+          },
+          {
+            "name": "first",
+            "comment": " Update the first component of a pair.\n",
+            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
+          },
+          {
+            "name": "fork",
+            "comment": " Generate a pair from a single value and a left & right function.\n",
+            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
+          },
+          {
+            "name": "indexedPair",
+            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
+            "type": "(a -> b) -> a -> ( b, a )"
+          },
+          {
+            "name": "pair",
+            "comment": " Update both components of a pair with two functions.\n",
+            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
+          },
+          {
+            "name": "second",
+            "comment": " Update the second component of a pair.\n",
+            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.String",
+        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "removePrefix",
+            "comment": " Strip a leading string from a `String`.\n",
+            "type": "String -> String -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -44156,30 +45526,6 @@
             "name": "delay",
             "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
             "type": "Time.Time -> Task.Task e a -> Task.Task e a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Set",
-        "comment": " Extensions to the core `Set` library.\n\n@docs select, uniqueItems, toggle\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "select",
-            "comment": " Pull any items from a list where (f x) is in the given set.\n",
-            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
-          },
-          {
-            "name": "toggle",
-            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "uniqueItems",
-            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
-            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -44235,6 +45581,458 @@
             "name": "|:",
             "comment": " Convenient synonym for `apply`.\n",
             "type": "Result.Result e (a -> b) -> Result.Result e a -> Result.Result e b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Maybe",
+        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust, isNothing, maybe, mappend, catMaybes, join, maybeDefault, matches, validate, when\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "catMaybes",
+            "comment": " Extract all the `Just` values from a List of Maybes.\n",
+            "type": "List (Maybe.Maybe a) -> List a"
+          },
+          {
+            "name": "isJust",
+            "comment": " Boolean checks.\n",
+            "type": "Maybe.Maybe a -> Bool"
+          },
+          {
+            "name": "isNothing",
+            "comment": " ",
+            "type": "Maybe.Maybe a -> Bool"
+          },
+          {
+            "name": "join",
+            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
+            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
+          },
+          {
+            "name": "mappend",
+            "comment": " Join two `Maybe`s together as though they were one.\n",
+            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
+          },
+          {
+            "name": "matches",
+            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
+            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maybe",
+            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
+            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
+          },
+          {
+            "name": "maybeDefault",
+            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
+            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "validate",
+            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
+            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
+          },
+          {
+            "name": "when",
+            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
+            "type": "Bool -> a -> Maybe.Maybe a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Result",
+        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "fromErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Maybe.Maybe e"
+          },
+          {
+            "name": "fromOk",
+            "comment": " Convert a `Result` to a `Maybe`.\n",
+            "type": "Result.Result e a -> Maybe.Maybe a"
+          },
+          {
+            "name": "isErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "isOk",
+            "comment": " Boolean checks for success/failure.\n",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
+            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
+          },
+          {
+            "name": "mappend",
+            "comment": " Monoidal append - join two Results together as though they were one.\n",
+            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.RemoteData",
+        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\n@docs RemoteData, WebData, map, mapFailure, mapBoth, andThen, withDefault, fromResult, asCmd, fromTask, append, mappend, isSuccess, update\n\n",
+        "aliases": [
+          {
+            "name": "WebData",
+            "comment": " While `RemoteData` can model any type of error, the most common\none you'll actually encounter is when you fetch data from a REST\ninterface, and get back `RemoteData Http.Error a`. Because that case\nis so common, `WebData` is provided as a useful alias.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Exts.RemoteData.RemoteData Http.Error a"
+          }
+        ],
+        "types": [
+          {
+            "name": "RemoteData",
+            "comment": " Frequently when you're fetching data from an API, you want to represent four different states:\n  * `NotAsked` - We haven't asked for the data yet.\n  * `Loading` - We've asked, but haven't got an answer yet.\n  * `Failure` - We asked, but something went wrong. Here's the error.\n  * `Success` - Everything worked, and here's the data.\n",
+            "args": [
+              "e",
+              "a"
+            ],
+            "cases": [
+              [
+                "NotAsked",
+                []
+              ],
+              [
+                "Loading",
+                []
+              ],
+              [
+                "Failure",
+                [
+                  "e"
+                ]
+              ],
+              [
+                "Success",
+                [
+                  "a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Chain together RemoteData function calls.\n",
+            "type": "Exts.RemoteData.RemoteData e a -> (a -> Exts.RemoteData.RemoteData e b) -> Exts.RemoteData.RemoteData e b"
+          },
+          {
+            "name": "append",
+            "comment": " Append - join two `RemoteData` values together as though\nthey were one.\n\nIf their value is `NotAsked`, the result is `NotAsked`.\nIf their value is `Loading`, the result is `Loading`.\nIf both values are `Failure`, the left one wins.\n",
+            "type": "Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b -> Exts.RemoteData.RemoteData e ( a, b )"
+          },
+          {
+            "name": "asCmd",
+            "comment": " Convert a web `Task`, probably produced from elm-http, to a `Cmd (RemoteData e a)`.\n",
+            "type": "Task.Task e a -> Platform.Cmd.Cmd (Exts.RemoteData.RemoteData e a)"
+          },
+          {
+            "name": "fromResult",
+            "comment": " Convert a `Result Error`, probably produced from elm-http, to a RemoteData value.\n",
+            "type": "Result.Result e a -> Exts.RemoteData.RemoteData e a"
+          },
+          {
+            "name": "fromTask",
+            "comment": " Convert from a `Task` that may succeed or fail, to one that always\nsucceeds with the `RemoteData` that captures any errors.\n",
+            "type": "Task.Task e a -> Task.Task Basics.Never (Exts.RemoteData.RemoteData e a)"
+          },
+          {
+            "name": "isSuccess",
+            "comment": " State-checking predicate. Returns true if we've successfully loaded some data.\n",
+            "type": "Exts.RemoteData.RemoteData e a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function into the `Success` value.\n",
+            "type": "(a -> b) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Map function into both the `Success` and `Failure` value.\n",
+            "type": "(a -> b) -> (e -> f) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData f b"
+          },
+          {
+            "name": "mapFailure",
+            "comment": " Map a function into the `Failure` value.\n",
+            "type": "(e -> f) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData f a"
+          },
+          {
+            "name": "mappend",
+            "comment": " DEPRECATED: Old, incorrect name for `append`.\n",
+            "type": "Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b -> Exts.RemoteData.RemoteData e ( a, b )"
+          },
+          {
+            "name": "update",
+            "comment": " Apply an Elm update function - `Model -> (Model, Cmd Msg)` - to any `Successful`-ly loaded data.\n\nIt's quite common in Elm to want to run a model-update function, over\nsome remote data, but only once it's actually been loaded.\n\nFor example, we might want to handle UI messages changing the users\nsettings, but that only makes sense once those settings have been\nreturned from the server.\n\nThis function makes it more convenient to reach inside a\n`RemoteData.Success` value and apply an update. If the data in not\n`Success a`, it is return unchanged with a `Cmd.none`.\n\n",
+            "type": "(a -> ( a, Platform.Cmd.Cmd b )) -> Exts.RemoteData.RemoteData e a -> ( Exts.RemoteData.RemoteData e a, Platform.Cmd.Cmd b )"
+          },
+          {
+            "name": "withDefault",
+            "comment": " Return the `Success` value, or the default.\n",
+            "type": "a -> Exts.RemoteData.RemoteData e a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Set",
+        "comment": " Extensions to the core `Set` library.\n\n@docs select, uniqueItems, toggle\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "select",
+            "comment": " Pull any items from a list where (f x) is in the given set.\n",
+            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
+          },
+          {
+            "name": "toggle",
+            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "uniqueItems",
+            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
+            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Json.Decode",
+        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "stringIgnoringBlanks",
+            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Json.Encode",
+        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dict",
+            "comment": " Encode a `Dict` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
+          },
+          {
+            "name": "set",
+            "comment": " Encode a `Set` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
+          },
+          {
+            "name": "tuple2",
+            "comment": " Encode a pair to a JSON array .\n",
+            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.LatLng",
+        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bearingTo",
+            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          },
+          {
+            "name": "distanceBetween",
+            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.List",
+        "comment": " Extensions to the core `List` library.\n\n@docs chunk, mergeBy, singleton, maybeSingleton, firstMatch, rest, unique\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "chunk",
+            "comment": " Split a list into chunks of length `n`.\n\n  Be aware that the last sub-list may be smaller than `n`-items long.\n\n  For example `chunk 3 [1..10] => [[1,2,3], [4,5,6], [7,8,9], [10]]`\n",
+            "type": "Int -> List a -> List (List a)"
+          },
+          {
+            "name": "firstMatch",
+            "comment": " Find the first element in the `List` that matches the given predicate.\n",
+            "type": "(a -> Bool) -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maybeSingleton",
+            "comment": " Wrap a maybe item into a `List`. If the item is `Nothing`, the `List` is empty.\n",
+            "type": "Maybe.Maybe a -> List a"
+          },
+          {
+            "name": "mergeBy",
+            "comment": " Merge two lists. The first argument is a function which returns\nthe unique ID of each element. Where an element appears more than\nonce, the last won wins.\n",
+            "type": "(a -> comparable) -> List a -> List a -> List a"
+          },
+          {
+            "name": "rest",
+            "comment": " Like List.tail, but if the list is empty it returns an empty list rather than `Nothing`.\n",
+            "type": "List a -> List a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Wrap a single item into a `List`.\n",
+            "type": "a -> List a"
+          },
+          {
+            "name": "unique",
+            "comment": " Return a new list with duplicates removed. Order is preserved.\n",
+            "type": "List comparable -> List comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Html.Events",
+        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter, onSelect\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "onEnter",
+            "comment": " Send a message when the user hits enter.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onSelect",
+            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
+            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Http",
+        "comment": " Extensions to the `Http` library.\n\n@docs handleError, put, postContent, postForm, postJson, cgiParameters\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "cgiParameters",
+            "comment": " Encode a CGI parameter list.\n",
+            "type": "List ( String, String ) -> String"
+          },
+          {
+            "name": "handleError",
+            "comment": " Lift a raw Http response into a `Task Error Response`, using the same rules `Http` uses internally.\n",
+            "type": "Task.Task Http.RawError Http.Response -> Task.Task Http.Error Http.Response"
+          },
+          {
+            "name": "postContent",
+            "comment": " Send a `POST` request with the given content-type.\n",
+            "type": "String -> Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "postForm",
+            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "postJson",
+            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "put",
+            "comment": " Send a simple `PUT` request.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Html.Table",
+        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef, TableDef, simpleTable, simpleTableRow, titleGroup, valueGroup\n",
+        "aliases": [
+          {
+            "name": "CellDef",
+            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "( Html.Html msg, a -> Html.Html msg )"
+          },
+          {
+            "name": "TableDef",
+            "comment": " ",
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "List (Exts.Html.Table.CellDef a msg)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "simpleTable",
+            "comment": " Given a table definition, render a list of elements as HTML.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
+          },
+          {
+            "name": "simpleTableRow",
+            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
+          },
+          {
+            "name": "titleGroup",
+            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
+            "type": "List String -> Html.Html msg"
+          },
+          {
+            "name": "valueGroup",
+            "comment": " ",
+            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Exts.Int",
+        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "floorBy",
+            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
+            "type": "Int -> Int -> Maybe.Maybe Int"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -44353,443 +46151,49 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Exts.List",
-        "comment": " Extensions to the core `List` library.\n\n@docs chunk, mergeBy, singleton, maybeSingleton, firstMatch, rest, unique\n",
+        "name": "Exts.Float",
+        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "chunk",
-            "comment": " Split a list into chunks of length `n`.\n\n  Be aware that the last sub-list may be smaller than `n`-items long.\n\n  For example `chunk 3 [1..10] => [[1,2,3], [4,5,6], [7,8,9], [10]]`\n",
-            "type": "Int -> List a -> List (List a)"
-          },
-          {
-            "name": "firstMatch",
-            "comment": " Find the first element in the `List` that matches the given predicate.\n",
-            "type": "(a -> Bool) -> List a -> Maybe.Maybe a"
-          },
-          {
-            "name": "maybeSingleton",
-            "comment": " Wrap a maybe item into a `List`. If the item is `Nothing`, the `List` is empty.\n",
-            "type": "Maybe.Maybe a -> List a"
-          },
-          {
-            "name": "mergeBy",
-            "comment": " Merge two lists. The first argument is a function which returns\nthe unique ID of each element. Where an element appears more than\nonce, the last won wins.\n",
-            "type": "(a -> comparable) -> List a -> List a -> List a"
-          },
-          {
-            "name": "rest",
-            "comment": " Like List.tail, but if the list is empty it returns an empty list rather than `Nothing`.\n",
-            "type": "List a -> List a"
-          },
-          {
-            "name": "singleton",
-            "comment": " Wrap a single item into a `List`.\n",
-            "type": "a -> List a"
-          },
-          {
-            "name": "unique",
-            "comment": " Return a new list with duplicates removed. Order is preserved.\n",
-            "type": "List comparable -> List comparable"
+            "name": "roundTo",
+            "comment": " Round a `Float` to a given number of decimal places.\n",
+            "type": "Int -> Float -> Float"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Exts.Tuple",
-        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
+        "name": "Exts.Html.Attributes",
+        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "both",
-            "comment": " Update both components of a pair with a single function.\n",
-            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
+            "name": "defaultFloat",
+            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
+            "type": "Float -> Html.Attribute msg"
           },
           {
-            "name": "first",
-            "comment": " Update the first component of a pair.\n",
-            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
+            "name": "defaultInt",
+            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
+            "type": "Int -> Html.Attribute msg"
           },
           {
-            "name": "fork",
-            "comment": " Generate a pair from a single value and a left & right function.\n",
-            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
+            "name": "defaultString",
+            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
+            "type": "String -> Html.Attribute msg"
           },
           {
-            "name": "indexedPair",
-            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
-            "type": "(a -> b) -> a -> ( b, a )"
+            "name": "defaultValue",
+            "comment": " Set a default value for an input field.\n",
+            "type": "Json.Encode.Value -> Html.Attribute msg"
           },
           {
-            "name": "pair",
-            "comment": " Update both components of a pair with two functions.\n",
-            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
-          },
-          {
-            "name": "second",
-            "comment": " Update the second component of a pair.\n",
-            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.String",
-        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "removePrefix",
-            "comment": " Strip a leading string from a `String`.\n",
-            "type": "String -> String -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.RemoteData",
-        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\nAnd last, we'll render it, correctly handling the various states a web\nrequest can be in:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\n@docs RemoteData, WebData, map, mapFailure, mapBoth, andThen, withDefault, fromResult, asCmd, fromTask, append, mappend, isSuccess, update\n\n",
-        "aliases": [
-          {
-            "name": "WebData",
-            "comment": " While `RemoteData` can model any type of error, the most common\none you'll actually encounter is when you fetch data from a REST\ninterface, and get back `RemoteData Http.Error a`. Because that case\nis so common, `WebData` is provided as a useful alias.\n",
-            "args": [
-              "a"
-            ],
-            "type": "Exts.RemoteData.RemoteData Http.Error a"
-          }
-        ],
-        "types": [
-          {
-            "name": "RemoteData",
-            "comment": " Frequently when you're fetching data from an API, you want to represent four different states:\n  * `NotAsked` - We haven't asked for the data yet.\n  * `Loading` - We've asked, but haven't got an answer yet.\n  * `Failure` - We asked, but something went wrong. Here's the error.\n  * `Success` - Everything worked, and here's the data.\n",
-            "args": [
-              "e",
-              "a"
-            ],
-            "cases": [
-              [
-                "NotAsked",
-                []
-              ],
-              [
-                "Loading",
-                []
-              ],
-              [
-                "Failure",
-                [
-                  "e"
-                ]
-              ],
-              [
-                "Success",
-                [
-                  "a"
-                ]
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "andThen",
-            "comment": " Chain together RemoteData function calls.\n",
-            "type": "Exts.RemoteData.RemoteData e a -> (a -> Exts.RemoteData.RemoteData e b) -> Exts.RemoteData.RemoteData e b"
-          },
-          {
-            "name": "append",
-            "comment": " Append - join two `RemoteData` values together as though\nthey were one.\n\nIf their value is `NotAsked`, the result is `NotAsked`.\nIf their value is `Loading`, the result is `Loading`.\nIf both values are `Failure`, the left one wins.\n",
-            "type": "Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b -> Exts.RemoteData.RemoteData e ( a, b )"
-          },
-          {
-            "name": "asCmd",
-            "comment": " Convert a web `Task`, probably produced from elm-http, to a `Cmd (RemoteData e a)`.\n",
-            "type": "Task.Task e a -> Platform.Cmd.Cmd (Exts.RemoteData.RemoteData e a)"
-          },
-          {
-            "name": "fromResult",
-            "comment": " Convert a `Result Error`, probably produced from elm-http, to a RemoteData value.\n",
-            "type": "Result.Result e a -> Exts.RemoteData.RemoteData e a"
-          },
-          {
-            "name": "fromTask",
-            "comment": " Convert from a `Task` that may succeed or fail, to one that always\nsucceeds with the `RemoteData` that captures any errors.\n",
-            "type": "Task.Task e a -> Task.Task Basics.Never (Exts.RemoteData.RemoteData e a)"
-          },
-          {
-            "name": "isSuccess",
-            "comment": " State-checking predicate. Returns true if we've successfully loaded some data.\n",
-            "type": "Exts.RemoteData.RemoteData e a -> Bool"
-          },
-          {
-            "name": "map",
-            "comment": " Map a function into the `Success` value.\n",
-            "type": "(a -> b) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Map function into both the `Success` and `Failure` value.\n",
-            "type": "(a -> b) -> (e -> f) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData f b"
-          },
-          {
-            "name": "mapFailure",
-            "comment": " Map a function into the `Failure` value.\n",
-            "type": "(e -> f) -> Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData f a"
-          },
-          {
-            "name": "mappend",
-            "comment": " DEPRECATED: Old, incorrect name for `append`.\n",
-            "type": "Exts.RemoteData.RemoteData e a -> Exts.RemoteData.RemoteData e b -> Exts.RemoteData.RemoteData e ( a, b )"
-          },
-          {
-            "name": "update",
-            "comment": " Apply an Elm update function - `Model -> (Model, Cmd Msg)` - to any `Successful`-ly loaded data.\n\nIt's quite common in Elm to want to run a model-update function, over\nsome remote data, but only once it's actually been loaded.\n\nFor example, we might want to handle UI messages changing the users\nsettings, but that only makes sense once those settings have been\nreturned from the server.\n\nThis function makes it more convenient to reach inside a\n`RemoteData.Success` value and apply an update. If the data in not\n`Success a`, it is return unchanged with a `Cmd.none`.\n\n",
-            "type": "(a -> ( a, Platform.Cmd.Cmd b )) -> Exts.RemoteData.RemoteData e a -> ( Exts.RemoteData.RemoteData e a, Platform.Cmd.Cmd b )"
-          },
-          {
-            "name": "withDefault",
-            "comment": " Return the `Success` value, or the default.\n",
-            "type": "a -> Exts.RemoteData.RemoteData e a -> a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Result",
-        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "fromErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Maybe.Maybe e"
-          },
-          {
-            "name": "fromOk",
-            "comment": " Convert a `Result` to a `Maybe`.\n",
-            "type": "Result.Result e a -> Maybe.Maybe a"
-          },
-          {
-            "name": "isErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "isOk",
-            "comment": " Boolean checks for success/failure.\n",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
-            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
-          },
-          {
-            "name": "mappend",
-            "comment": " Monoidal append - join two Results together as though they were one.\n",
-            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Maybe",
-        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust, isNothing, maybe, mappend, catMaybes, join, maybeDefault, matches, validate, when\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "catMaybes",
-            "comment": " Extract all the `Just` values from a List of Maybes.\n",
-            "type": "List (Maybe.Maybe a) -> List a"
-          },
-          {
-            "name": "isJust",
-            "comment": " Boolean checks.\n",
-            "type": "Maybe.Maybe a -> Bool"
-          },
-          {
-            "name": "isNothing",
-            "comment": " ",
-            "type": "Maybe.Maybe a -> Bool"
-          },
-          {
-            "name": "join",
-            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
-            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
-          },
-          {
-            "name": "mappend",
-            "comment": " Join two `Maybe`s together as though they were one.\n",
-            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
-          },
-          {
-            "name": "matches",
-            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
-            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "maybe",
-            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
-            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
-          },
-          {
-            "name": "maybeDefault",
-            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
-            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "validate",
-            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
-            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
-          },
-          {
-            "name": "when",
-            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
-            "type": "Bool -> a -> Maybe.Maybe a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Json.Encode",
-        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dict",
-            "comment": " Encode a `Dict` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
-          },
-          {
-            "name": "set",
-            "comment": " Encode a `Set` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
-          },
-          {
-            "name": "tuple2",
-            "comment": " Encode a pair to a JSON array .\n",
-            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Int",
-        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "floorBy",
-            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
-            "type": "Int -> Int -> Maybe.Maybe Int"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.LatLng",
-        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "bearingTo",
-            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
-          },
-          {
-            "name": "distanceBetween",
-            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Json.Decode",
-        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "stringIgnoringBlanks",
-            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Html.Table",
-        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef, TableDef, simpleTable, simpleTableRow, titleGroup, valueGroup\n",
-        "aliases": [
-          {
-            "name": "CellDef",
-            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "( Html.Html msg, a -> Html.Html msg )"
-          },
-          {
-            "name": "TableDef",
-            "comment": " ",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "List (Exts.Html.Table.CellDef a msg)"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "simpleTable",
-            "comment": " Given a table definition, render a list of elements as HTML.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
-          },
-          {
-            "name": "simpleTableRow",
-            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
-          },
-          {
-            "name": "titleGroup",
-            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
-            "type": "List String -> Html.Html msg"
-          },
-          {
-            "name": "valueGroup",
-            "comment": " ",
-            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Html.Events",
-        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter, onSelect\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "onEnter",
-            "comment": " Send a message when the user hits enter.\n",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onSelect",
-            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
-            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
+            "name": "styleList",
+            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
+            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -45869,88 +47273,15 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Exts.Http",
-        "comment": " Extensions to the `Http` library.\n\n@docs handleError, put, postContent, postForm, postJson, cgiParameters\n",
+        "name": "Exts.Basics",
+        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "cgiParameters",
-            "comment": " Encode a CGI parameter list.\n",
-            "type": "List ( String, String ) -> String"
-          },
-          {
-            "name": "handleError",
-            "comment": " Lift a raw Http response into a `Task Error Response`, using the same rules `Http` uses internally.\n",
-            "type": "Task.Task Http.RawError Http.Response -> Task.Task Http.Error Http.Response"
-          },
-          {
-            "name": "postContent",
-            "comment": " Send a `POST` request with the given content-type.\n",
-            "type": "String -> Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "postForm",
-            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "postJson",
-            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "put",
-            "comment": " Send a simple `PUT` request.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Html.Attributes",
-        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultFloat",
-            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
-            "type": "Float -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultInt",
-            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
-            "type": "Int -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultString",
-            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
-            "type": "String -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultValue",
-            "comment": " Set a default value for an input field.\n",
-            "type": "Json.Encode.Value -> Html.Attribute msg"
-          },
-          {
-            "name": "styleList",
-            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
-            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Float",
-        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "roundTo",
-            "comment": " Round a `Float` to a given number of decimal places.\n",
-            "type": "Int -> Float -> Float"
+            "name": "compareBy",
+            "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
+            "type": "(a -> comparable) -> a -> a -> Basics.Order"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -46018,15 +47349,25 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Exts.Basics",
-        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n\n",
+        "name": "Exts.Date",
+        "comment": " Extensions to the core `Date` library.\n\n@docs toISOString\n@docs toRFC3339\n@docs monthNumber\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "compareBy",
-            "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
-            "type": "(a -> comparable) -> a -> a -> Basics.Order"
+            "name": "monthNumber",
+            "comment": " Extract the month of a given date as an `Int`. January is 1.\n",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "toISOString",
+            "comment": " Format a `Date` as an ISO-standard string.\n",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "toRFC3339",
+            "comment": " Format a `Date` as an RFC-3339 standard string\n\n  This is useful for passing a `Date` as a value to an HTML input. (See [the W3 spec](https://www.w3.org/TR/html-markup/input.date.html#input.date.attrs.value) for details.)\n",
+            "type": "Date.Date -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -54471,7 +55812,7 @@
   },
   {
     "name": "project-fuzzball/node",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "docs": [
       {
         "name": "Test.Runner.Node",
@@ -54496,7 +55837,7 @@
   },
   {
     "name": "project-fuzzball/test",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "Test.Runner.Log",
@@ -54545,7 +55886,7 @@
       },
       {
         "name": "Test.Runner",
-        "comment": " Running tests.\n\n## Runner\n\n@docs Runner, fromTest\n\n## Runnable\n\n@docs Runnable, run\n",
+        "comment": " Running tests.\n\n## Runner\n\n@docs Runner, fromTest\n\n## Runnable\n\n@docs Runnable, run\n\n## Formatting\n\n@docs formatLabels\n",
         "aliases": [],
         "types": [
           {
@@ -54582,6 +55923,11 @@
           }
         ],
         "values": [
+          {
+            "name": "formatLabels",
+            "comment": " A standard way to format descriptiona and test labels, to keep things\nconsistent across test runner implementations.\n\nThe HTML, Node, String, and Log runners all use this.\n\nWhat it does:\n\n* drop any labels that are empty strings\n* format the first label differently from the others\n* reverse the resulting list\n\n    [ \"the actual test that failed\"\n    , \"nested description failure\"\n    , \"top-level description failure\"\n    ]\n        |> formatLabels ((++) \"↓ \") ((++) \"✗ \")\n\n    {-\n        [ \"↓ top-level description failure\"\n        , \"↓ nested description failure\"\n        , \"✗ the actual test that failed\"\n        ]\n    -}\n\n",
+            "type": "(String -> format) -> (String -> format) -> List String -> List format"
+          },
           {
             "name": "fromTest",
             "comment": " Convert a `Test` into a `Runner`. It requires a default run count as well\nas an initial `Random.Seed` in order to run any fuzz tests that the `Test` may\nhave.\n\nIt's customary to use `100` as the initial run count and the current system time\nto generate the initial seed.\n",
@@ -54880,7 +56226,7 @@
   },
   {
     "name": "project-fuzzball/test-runner",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "docs": [
       {
         "name": "Test.Runner.Html",
