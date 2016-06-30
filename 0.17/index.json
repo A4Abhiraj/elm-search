@@ -41230,6 +41230,158 @@
     ]
   },
   {
+    "name": "javcasas/elm-decimal",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Data.Decimal",
+        "comment": "\n\n# The datatype\n@docs Decimal\n\n# From stuff\n@docs fromInt\n@docs fromIntWithExponent\n@docs fromString\n@docs fromFloat\n@docs unsafeFromString\n\n# To stuff\n@docs toString\n@docs toFloat\n\n# Arithmetic operations\n@docs add\n@docs sub\n@docs negate\n@docs mul\n@docs fastdiv\n\n# Rounding\n@docs truncate\n@docs round\n\n# Comparing\n@docs gt\n@docs gte\n@docs eq\n@docs neq\n@docs lt\n@docs lte\n@docs compare\n\n# Misc operations\n@docs abs\n@docs getDigit\n\n# Common numbers\n@docs zero\n@docs one\n@docs minusOne\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Decimal",
+            "comment": "\nThe Decimal data type\nIt is represented as mantissa * 10 ^ exponent\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "abs",
+            "comment": "\nAbsolute value (sets the sign as positive)\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "add",
+            "comment": "\nAddition\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "compare",
+            "comment": "\nCompares two Decimals\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Basics.Order"
+          },
+          {
+            "name": "eq",
+            "comment": "\nEquals\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "fastdiv",
+            "comment": "\nFast and dirty division. Don't expect too much precision from this division. Dividing by zero is bad, and Nothing will be returned.\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Maybe.Maybe Data.Decimal.Decimal"
+          },
+          {
+            "name": "fromFloat",
+            "comment": "\nConverts a Float to a Decimal\n",
+            "type": "Float -> Maybe.Maybe Data.Decimal.Decimal"
+          },
+          {
+            "name": "fromInt",
+            "comment": "\nConverts an Int to a Decimal\n",
+            "type": "Int -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "fromIntWithExponent",
+            "comment": "\nConverts an Int to a Decimal, but specifying the exponent\n",
+            "type": "Int -> Int -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "fromString",
+            "comment": "\nConverts a String to a Maybe Decimal. The string shall be in the format [<sign>]<numbers>[.<numbers>][e<numbers>]\n",
+            "type": "String -> Maybe.Maybe Data.Decimal.Decimal"
+          },
+          {
+            "name": "getDigit",
+            "comment": "\nGets the specified digit from a Decimal. The digits are:\n0 -> units\n1 -> tens\n2 -> hundreds\nand so on\n-1 -> tenths\n-2 -> hundredths\nand so on\n",
+            "type": "Int -> Data.Decimal.Decimal -> Int"
+          },
+          {
+            "name": "gt",
+            "comment": "\nGreater than\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "gte",
+            "comment": "\nGreater than or equals\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "lt",
+            "comment": "\nLess than\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "lte",
+            "comment": "\nLess than or equals\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "minusOne",
+            "comment": "\nThe number -1\n",
+            "type": "Data.Decimal.Decimal"
+          },
+          {
+            "name": "mul",
+            "comment": "\nMultiplication\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "negate",
+            "comment": "\nChanges the sign of a Decimal\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "neq",
+            "comment": "\nNot equals\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Bool"
+          },
+          {
+            "name": "one",
+            "comment": "\nThe number 1\n",
+            "type": "Data.Decimal.Decimal"
+          },
+          {
+            "name": "round",
+            "comment": "\nRounds the Decimal to the specified decimal places\n",
+            "type": "Int -> Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "sub",
+            "comment": "\nSubstraction\n",
+            "type": "Data.Decimal.Decimal -> Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "toFloat",
+            "comment": "\nConverts a Decimal to a Float\n",
+            "type": "Data.Decimal.Decimal -> Float"
+          },
+          {
+            "name": "toString",
+            "comment": "\nConverts a Decimal to a String\n",
+            "type": "Data.Decimal.Decimal -> String"
+          },
+          {
+            "name": "truncate",
+            "comment": "\nTruncates the Decimal to the specified decimal places\n",
+            "type": "Int -> Data.Decimal.Decimal -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "unsafeFromString",
+            "comment": "\nConverts a String to a Decimal,\nbut if the string does not represent\na valid Decimal, it crashes.\nUseful for Decimal constants.\n",
+            "type": "String -> Data.Decimal.Decimal"
+          },
+          {
+            "name": "zero",
+            "comment": "\nThe number 0\n",
+            "type": "Data.Decimal.Decimal"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "javcasas/elm-integer",
     "version": "2.0.2",
     "docs": [
@@ -41428,7 +41580,7 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "docs": [
       {
         "name": "TimeTravel.Html.App",
@@ -47581,11 +47733,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "2.5.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n@docs roundTo\n",
         "aliases": [],
         "types": [
           {
@@ -47595,7 +47747,14 @@
               "r",
               "a"
             ],
-            "cases": []
+            "cases": [
+              [
+                "Format",
+                [
+                  "(String -> r) -> a"
+                ]
+              ]
+            ]
           }
         ],
         "values": [
@@ -47613,8 +47772,8 @@
           },
           {
             "name": "dp",
-            "comment": " Round to `n` decimal places.\n",
-            "type": "Int -> Formatting.Format r (Float -> a) -> Formatting.Format r (Float -> a)"
+            "comment": " *DEPRECATED*: Use `roundTo` instead.\n",
+            "type": "number -> Formatting.Format a (Float -> a)"
           },
           {
             "name": "float",
@@ -47660,6 +47819,11 @@
             "name": "print",
             "comment": " Turn your formatter into a function that's just waiting for its arguments.\n\nGiven this format:\n\n\n    orderFormat =\n        s \"FREE: \" <> int <> s \" x \" <> string  <> s \"!\"\n\n\n...we can either use it immediately:\n\n\n    order : String\n    order = print orderFormat 2 \"Ice Cream\"\n\n    --> \"FREE: 2 x Ice Cream!\"\n\n\n...or turn it into an ordinary function to be used later:\n\n\n    orderFormatter : Int -> String -> String\n    orderFormatter =\n        print orderFormat\n\n\n    ...elsewhere...\n\n\n    order : String\n    order = orderFormatter 2 \"Ice Cream\"\n\n    --> \"FREE: 2 x Ice Cream!\"\n",
             "type": "Formatting.Format String a -> a"
+          },
+          {
+            "name": "roundTo",
+            "comment": " A float rounded to `n` decimal places.\n",
+            "type": "number -> Formatting.Format a (Float -> a)"
           },
           {
             "name": "s",
@@ -56022,7 +56186,7 @@
   },
   {
     "name": "project-fuzzball/node",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "docs": [
       {
         "name": "Test.Runner.Node",
@@ -56041,13 +56205,13 @@
             "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
   {
     "name": "project-fuzzball/test",
-    "version": "3.1.0",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "Test.Runner.Log",
@@ -56066,7 +56230,7 @@
             "type": "Int -> Random.Pcg.Seed -> Test.Test -> a -> a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Test.Runner.String",
@@ -56092,7 +56256,7 @@
             "type": "Int -> Random.Pcg.Seed -> Test.Test -> Test.Runner.String.Summary"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Test.Runner",
@@ -56149,7 +56313,7 @@
             "type": "Test.Runner.Runnable -> List Expect.Expectation"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Test",
@@ -56216,7 +56380,83 @@
             "type": "String -> (() -> Expect.Expectation) -> Test.Test"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Expect",
+        "comment": " Determining whether tests pass or fail.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
+        "aliases": [
+          {
+            "name": "Expectation",
+            "comment": " The result of a single test run: either a [`pass`](#pass) or a\n[`fail`](#fail).\n",
+            "args": [],
+            "type": "Test.Expectation.Expectation"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "atLeast",
+            "comment": " Passes if the second argument is greater than or equal to the first.\n\n    Expect.atLeast -2 (List.length [])\n\n    -- Passes because (0 >= -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 >= 3) is False\n    List.length []\n        |> Expect.atLeast 3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atLeast\n    ╵\n    3\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "atMost",
+            "comment": " Passes if the second argument is less than or equal to the first.\n\n    Expect.atMost 1 (List.length [])\n\n    -- Passes because (0 <= 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 <= -3) is False\n    List.length []\n        |> Expect.atMost -3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atMost\n    ╵\n    -3\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "equal",
+            "comment": " Passes if the arguments are equal.\n\n    Expect.equal 0 (List.length [])\n\n    -- Passes because (0 == 0) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 == 5) is False\n    List.length []\n        |> Expect.equal 5\n\n\n    {-\n\n    0\n    ╷\n    │ Expect.equal\n    ╵\n    5\n\n    -}\n",
+            "type": "a -> a -> Expect.Expectation"
+          },
+          {
+            "name": "fail",
+            "comment": " Fails with the given message.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
+            "type": "String -> Expect.Expectation"
+          },
+          {
+            "name": "false",
+            "comment": " Passes if the argument is 'False', and otherwise fails with the given message.\n\n    Expect.false \"Expected the list not to be empty.\" (List.isEmpty [ 42 ])\n\n    -- Passes because (List.isEmpty [ 42 ]) is False\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (List.isEmpty []) is True\n    List.isEmpty []\n        |> Expect.false \"Expected the list not to be empty.\"\n\n    {-\n\n    Expected the list not to be empty.\n\n    -}\n",
+            "type": "String -> Bool -> Expect.Expectation"
+          },
+          {
+            "name": "getFailure",
+            "comment": " Return `Nothing` if the given [`Expectation`](#Expectation) is a [`pass`](#pass).\n\nIf it is a [`fail`](#fail), return a record containing the failure message,\nalong with the given inputs if it was a fuzz test. (If no inputs were involved,\nthe record's `given` field will be `\"\"`).\n\nFor example, if a fuzz test generates random integers, this might return\n`{ message = \"it was supposed to be positive\", given = \"-1\" }`\n\n    getFailure (Expect.fail \"this failed\")\n    -- Just { message = \"this failed\", given = \"\" }\n\n    getFailure (Expect.pass)\n    -- Nothing\n",
+            "type": "Expect.Expectation -> Maybe.Maybe { given : String, message : String }"
+          },
+          {
+            "name": "greaterThan",
+            "comment": " Passes if the second argument is greater than the first.\n\n    Expect.greaterThan -2 List.length []\n\n    -- Passes because (0 > -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 > 1) is False\n    List.length []\n        |> Expect.greaterThan 1\n\n    {-\n\n    0\n    ╷\n    │ Expect.greaterThan\n    ╵\n    1\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "lessThan",
+            "comment": " Passes if the second argument is less than the first.\n\n    Expect.lessThan 1 (List.length [])\n\n    -- Passes because (0 < 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 < -1) is False\n    List.length []\n        |> Expect.lessThan -1\n\n\n    {-\n\n    0\n    ╷\n    │ Expect.lessThan\n    ╵\n    -1\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "notEqual",
+            "comment": " Passes if the arguments are not equal.\n\n    Expect.notEqual 11 (90 + 10)\n\n    -- Passes because (11 /= 100) is True\n\nFailures only show one value, because the reason for the failure was that\nboth arguments were equal.\n\n    -- Fails because (100 /= 100) is False\n    (90 + 10)\n        |> Expect.notEqual 100\n\n    {-\n\n    100\n    ╷\n    │ Expect.notEqual\n    ╵\n    100\n\n    -}\n",
+            "type": "a -> a -> Expect.Expectation"
+          },
+          {
+            "name": "onFail",
+            "comment": " If the given expectation fails, replace its failure message with a custom one.\n\n    \"something\"\n        |> Expect.equal \"something else\"\n        |> Expect.onFail \"thought those two strings would be the same\"\n",
+            "type": "String -> Expect.Expectation -> Expect.Expectation"
+          },
+          {
+            "name": "pass",
+            "comment": " Always passes.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
+            "type": "Expect.Expectation"
+          },
+          {
+            "name": "true",
+            "comment": " Passes if the argument is 'True', and otherwise fails with the given message.\n\n    Expect.true \"Expected the list to be empty.\" (List.isEmpty [])\n\n    -- Passes because (List.isEmpty []) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because List.isEmpty returns False, but we expect True.\n    List.isEmpty [ 42 ]\n        |> Expect.true \"Expected the list to be empty.\"\n\n    {-\n\n    Expected the list to be empty.\n\n    -}\n",
+            "type": "String -> Bool -> Expect.Expectation"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Fuzz",
@@ -56349,94 +56589,13 @@
             "type": "Fuzz.Fuzzer ()"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Expect",
-        "comment": " Determining whether tests pass or fail.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual, all\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
-        "aliases": [
-          {
-            "name": "Expectation",
-            "comment": " The result of a single test run: either a [`pass`](#pass) or a\n[`fail`](#fail).\n",
-            "args": [],
-            "type": "Test.Expectation.Expectation"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "all",
-            "comment": " Translate each element in a list into an [`Expectation`](#Expectation). If\nthey all pass, return a pass. If any fail, return a fail whose message includes\nall the other failure messages.\n\n    [ 0, 1, 2, 3, 4, 5 ]\n        |> Expect.all (Expect.lessThan 3)\n\n    {-\n\n    3\n    ╷\n    │ Expect.lessThan\n    ╵\n    3\n\n    ════════════════\n\n    4\n    ╷\n    │ Expect.lessThan\n    ╵\n    3\n\n    ════════════════\n\n    5\n    ╷\n    │ Expect.lessThan\n    ╵\n    3\n\n    -}\n",
-            "type": "(a -> Expect.Expectation) -> List a -> Expect.Expectation"
-          },
-          {
-            "name": "atLeast",
-            "comment": " Passes if the second argument is greater than or equal to the first.\n\n    Expect.atLeast -2 (List.length [])\n\n    -- Passes because (0 >= -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 >= 3) is False\n    List.length []\n        |> Expect.atLeast 3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atLeast\n    ╵\n    3\n\n    -}\n",
-            "type": "comparable -> comparable -> Expect.Expectation"
-          },
-          {
-            "name": "atMost",
-            "comment": " Passes if the second argument is less than or equal to the first.\n\n    Expect.atMost 1 (List.length [])\n\n    -- Passes because (0 <= 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 <= -3) is False\n    List.length []\n        |> Expect.atMost -3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atMost\n    ╵\n    -3\n\n    -}\n",
-            "type": "comparable -> comparable -> Expect.Expectation"
-          },
-          {
-            "name": "equal",
-            "comment": " Passes if the arguments are equal.\n\n    Expect.equal 0 (List.length [])\n\n    -- Passes because (0 == 0) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 == 5) is False\n    List.length []\n        |> Expect.equal 5\n\n\n    {-\n\n    0\n    ╷\n    │ Expect.equal\n    ╵\n    5\n\n    -}\n",
-            "type": "a -> a -> Expect.Expectation"
-          },
-          {
-            "name": "fail",
-            "comment": " Fails with the given message.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
-            "type": "String -> Expect.Expectation"
-          },
-          {
-            "name": "false",
-            "comment": " Passes if the argument is 'False', and otherwise fails with the given message.\n\n    Expect.false \"Expected the list not to be empty.\" (List.isEmpty [ 42 ])\n\n    -- Passes because (List.isEmpty [ 42 ]) is False\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (List.isEmpty []) is True\n    List.isEmpty []\n        |> Expect.false \"Expected the list not to be empty.\"\n\n    {-\n\n    Expected the list not to be empty.\n\n    -}\n",
-            "type": "String -> Bool -> Expect.Expectation"
-          },
-          {
-            "name": "getFailure",
-            "comment": " Return `Nothing` if the given [`Expectation`](#Expectation) is a [`pass`](#pass),\nand `Just` the error message if it is a [`fail`](#fail).\n\n    getFailure (Expect.fail \"this failed\")\n    -- Just \"this failed\"\n\n    getFailure (Expect.pass)\n    -- Nothing\n",
-            "type": "Expect.Expectation -> Maybe.Maybe String"
-          },
-          {
-            "name": "greaterThan",
-            "comment": " Passes if the second argument is greater than the first.\n\n    Expect.greaterThan -2 List.length []\n\n    -- Passes because (0 > -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 > 1) is False\n    List.length []\n        |> Expect.greaterThan 1\n\n    {-\n\n    0\n    ╷\n    │ Expect.greaterThan\n    ╵\n    1\n\n    -}\n",
-            "type": "comparable -> comparable -> Expect.Expectation"
-          },
-          {
-            "name": "lessThan",
-            "comment": " Passes if the second argument is less than the first.\n\n    Expect.lessThan 1 (List.length [])\n\n    -- Passes because (0 < 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 < -1) is False\n    List.length []\n        |> Expect.lessThan -1\n\n\n    {-\n\n    0\n    ╷\n    │ Expect.lessThan\n    ╵\n    -1\n\n    -}\n",
-            "type": "comparable -> comparable -> Expect.Expectation"
-          },
-          {
-            "name": "notEqual",
-            "comment": " Passes if the arguments are not equal.\n\n    Expect.notEqual 11 (90 + 10)\n\n    -- Passes because (11 /= 100) is True\n\nFailures only show one value, because the reason for the failure was that\nboth arguments were equal.\n\n    -- Fails because (100 /= 100) is False\n    (90 + 10)\n        |> Expect.notEqual 100\n\n    {-\n\n    100\n    ╷\n    │ Expect.notEqual\n    ╵\n    100\n\n    -}\n",
-            "type": "a -> a -> Expect.Expectation"
-          },
-          {
-            "name": "onFail",
-            "comment": " If the given expectation fails, replace its failure message with a custom one.\n\n    \"something\"\n        |> Expect.equal \"something else\"\n        |> Expect.onFail \"thought those two strings would be the same\"\n",
-            "type": "String -> Expect.Expectation -> Expect.Expectation"
-          },
-          {
-            "name": "pass",
-            "comment": " Always passes.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
-            "type": "Expect.Expectation"
-          },
-          {
-            "name": "true",
-            "comment": " Passes if the argument is 'True', and otherwise fails with the given message.\n\n    Expect.true \"Expected the list to be empty.\" (List.isEmpty [])\n\n    -- Passes because (List.isEmpty []) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because List.isEmpty returns False, but we expect True.\n    List.isEmpty [ 42 ]\n        |> Expect.true \"Expected the list to be empty.\"\n\n    {-\n\n    Expected the list to be empty.\n\n    -}\n",
-            "type": "String -> Bool -> Expect.Expectation"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
   {
     "name": "project-fuzzball/test-runner",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "docs": [
       {
         "name": "Test.Runner.Html",
@@ -56455,7 +56614,7 @@
             "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Test -> Platform.Program Basics.Never"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Test.Runner.Html.App",
@@ -56469,7 +56628,7 @@
             "type": "Test.Runner.Html.App.RunnerOptions -> Test.Runner.Html.App.AppOptions msg model -> Test.Test -> Platform.Program Basics.Never"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
