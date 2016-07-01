@@ -9723,8 +9723,22 @@
   },
   {
     "name": "akbiggs/elm-effects",
-    "version": "2.0.4",
+    "version": "3.0.0",
     "docs": [
+      {
+        "name": "Effects.App",
+        "comment": " This module simplifies creating an app using functions that return an\n`Effects` wrapper instead of the regular `(Model, Cmd Msg)` pair.\n\n@docs program\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " This function creates a new app, acting as a thin wrapper around\nthe `Html.App` function. It will take a list of Cmds returned from your `init` and `update` functions and\nbatch them together into the single Cmd that the regular Html.App.program functions\nexpect. This allows you to keep your main module consistent with the rest of your codebase\nbecause the functions can use Effects.\n",
+            "type": "{ init : Effects.Effects model (Platform.Cmd.Cmd msg) , update : msg -> model -> Effects.Effects model (Platform.Cmd.Cmd msg) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg } -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
       {
         "name": "Effects",
         "comment": " This package contains several useful functions for operating on pairs\nof a value and a list of side-effects. Side-effects do not have to be external\nElm events such as I/O and randomness - they can be internal app events, such as a message indicating that\nthe score of your game should increase or that you want to navigate back to the home page.\n\nFor example, having the player jump might update the state of the player and have a\nside-effect of playing a sound and spawning some dust particles if the player\njumped off the ground. In that case, your player component might look like this:\n\n    type Msg\n      = Jump\n\n    type Effect\n      = SpawnDustParticles\n      | PlaySound String\n\n    update : Msg -> Model -> Effects Model Effect\n    update msg model =\n        case msg of\n            Jump ->\n                Effects.return { model | velocity = jumpVelocity }\n                    |> Effects.add [PlaySound \"jumpSound.wav\"]\n                    |> Effects.addIf model.isGrounded [SpawnDustParticles]\n\n# Aliases\n@docs Effects, None\n\n# Constructors\n@docs init, return\n\n# Getters\n@docs getValue, getEffects\n\n# Adding Effects\n@docs add, addIf\n\n# Mapping\n@docs mapOverValue, mapOverEffects\n\n# Handling Effects\n@docs Handler, handle, ignoreUnused\n\n# Chaining Operations\n@docs andThen\n\n# Combining\n@docs batch\n\n# Conversion\n@docs toCmd\n",
@@ -9897,6 +9911,239 @@
             "type": "Game.Update.Update a effect -> Maybe.Maybe a -> Game.Update.Result a effect"
           }
         ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "apuchenkin/elm-nested-router",
+    "version": "3.0.0",
+    "docs": [
+      {
+        "name": "Router",
+        "comment": " A simple nested router for single page applications.\n\nSee [Example](https://github.com/apuchenkin/elm-nested-router/tree/master/example) ([Live demo](http://apuchenkin.github.io/elm-nested-router/example))\nand [Tests](https://github.com/apuchenkin/elm-nested-router/tree/master/test/Test) for more details\n\n@docs dispatch, initialState\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dispatch",
+            "comment": " Launches the router.\n  Provide `init` function and router config as parameters\n ",
+            "type": "(flags -> ( Router.Types.WithRouter route state , Platform.Cmd.Cmd (Router.Types.Action (Router.Types.WithRouter route state)) )) -> Router.Types.RouterConfig route (Router.Types.WithRouter route state) -> Platform.Program flags"
+          },
+          {
+            "name": "initialState",
+            "comment": " Initial state for router. Fed this into your application state ",
+            "type": "Router.Types.RouterState route"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Router.Helpers",
+        "comment": " A set of utility functions\n@docs noFx, doNothing, performTask, chainAction, combineActions\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "chainAction",
+            "comment": " Combines two action together ",
+            "type": "Router.Types.Action state -> Router.Types.Action state -> Router.Types.Action state"
+          },
+          {
+            "name": "combineActions",
+            "comment": " @Private\n  Folds actions for a handlers into a single action\n",
+            "type": "List (Router.Types.Action state) -> Router.Types.Action state"
+          },
+          {
+            "name": "doNothing",
+            "comment": " An empty action ",
+            "type": "Router.Types.Action state"
+          },
+          {
+            "name": "noFx",
+            "comment": " An action without side effects ",
+            "type": "state -> ( state, Router.Types.Commands state )"
+          },
+          {
+            "name": "performTask",
+            "comment": " Creates a commnd to perform the task ",
+            "type": "Task.Task Basics.Never (Router.Types.Action state) -> Platform.Cmd.Cmd (Router.Types.Action state)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Router.Types",
+        "comment": " Router types\n\n# URL parts\n@docs URL, RawURL, RawSegment, Param, Constraint, Route, RouteConfig, RouteParams\n\n# Actions and handlers\n@docs WithRouter, Handler, Action, Commands, Response, Transition\n\n# Router\n@docs Router, RouterConfig, RouterState\n",
+        "aliases": [
+          {
+            "name": "Action",
+            "comment": " `Action` represents function that prforms something with application state, and might contain side efects ",
+            "args": [
+              "state"
+            ],
+            "type": "state -> Router.Types.Response state"
+          },
+          {
+            "name": "Commands",
+            "comment": " Helper to get rid of brackets ",
+            "args": [
+              "state"
+            ],
+            "type": "Platform.Cmd.Cmd (Router.Types.Action state)"
+          },
+          {
+            "name": "Handler",
+            "comment": "\n  A `Handler` is a piece of functionality binded to specific route\n  * `view` &mdash; Function that describes how to render application state to map of named views\n  * `actions` &mdash; A set of necessary to perform actions\n",
+            "args": [
+              "state"
+            ],
+            "type": "{ view : state -> Dict.Dict String (Html.Html (Router.Types.Action state)) -> Dict.Dict String (Html.Html (Router.Types.Action state)) , actions : List (Router.Types.Action state) }"
+          },
+          {
+            "name": "Param",
+            "comment": " Dynamic route parameter name ",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "RawSegment",
+            "comment": " A single segment of `RawURL` template ",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "RawURL",
+            "comment": " Raw URL template:\n```\n\"/home/post/:postId\"\n```\n",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "Route",
+            "comment": " combined abstract route type with params ",
+            "args": [
+              "route"
+            ],
+            "type": "( route, Router.Types.RouteParams )"
+          },
+          {
+            "name": "RouteConfig",
+            "comment": "\n  `RouteConfig` is a route configuration\n\n  * `segment` &mdash; URL segment\n\n  Expample:\n```\n\"/home\",\n\"/post/:postId\",\n\"/author[/:authorId]\"\n```\n  * `parent` &mdash; A parent route\n  * `bypass` &mdash; When setted to True - route will not be matched directly, but still can provide actions and views\n  * `constraints` &mdash; A set of constraints applied to route params. (`String`, `Int`, `Enum`, `Regexp`) constraints are supported\n  * `handler` &mdash; A binding to handler.\n\n  **Exapmle of route configuration**:\n```\n  config = {\n    -- \"author\" and \"postId\" is dynamic url parts\n    -- \"postId\" is marked as optional and might me ommited in URL\n    segment = \"/page/:author[/:postId]\"\n  , parent = Nothing\n    -- setting a parent for route means that full route URL will be combined with it's parent, and actions for route and it's parent will be fired on match\n  , bypass = False\n  , constraints = Dict.fromList [(\"author\", String),(\"postId\", Int)]\n    -- constraints specify that `author` param must be a string,\n    -- and postId an integer\n  , handler = always PostHandler\n  }\n```\n\n  A `config` above will match following URLs:\n```\n\"/page/mark/1\", \"/page/mark\", \"/page/joe\"\n```\n  \"mark\" and \"joe\" will be stored as `author` param, and \"1\" as `postId`\n  Everything enclosed by brackets considered as optional.\n",
+            "args": [
+              "route",
+              "state"
+            ],
+            "type": "{ segment : Router.Types.RawSegment , parent : Maybe.Maybe route , bypass : Bool , constraints : Dict.Dict Router.Types.Param Router.Types.Constraint , handler : Router.Types.Router route state -> Router.Types.Handler state }"
+          },
+          {
+            "name": "RouteParams",
+            "comment": " A map of route param names and values ",
+            "args": [],
+            "type": "Dict.Dict Router.Types.Param String"
+          },
+          {
+            "name": "Router",
+            "comment": "\n  A `Router` is a provider of following functions:\n\n  * `bindForward` &mdash; Binds a `forward` action to a provided `Route` with a list of html attributes.\n    This is useful to create links in application\n  * `buildUrl` &mdash; Builds an URL for provided `Route`\n  * `forward` &mdash; Preforms a transition to provided `Route`\n  * `redirect` &mdash; Redirects to provided `Route`\n  * `match` &mdash; Performs attempt to match provided URL.\n\n  Router also provide it's `config`\n",
+            "args": [
+              "route",
+              "state"
+            ],
+            "type": "{ config : Router.Types.RouterConfig route state , bindForward : Router.Types.Route route -> List (Html.Attribute (Router.Types.Action state)) -> List (Html.Attribute (Router.Types.Action state)) , buildUrl : Router.Types.Route route -> Router.Types.URL , forward : Router.Types.Route route -> Router.Types.Action state , redirect : Router.Types.Route route -> Router.Types.Action state , match : String -> Maybe.Maybe (Router.Types.Route route) }"
+          },
+          {
+            "name": "RouterState",
+            "comment": " A state of router ",
+            "args": [
+              "route"
+            ],
+            "type": "{ route : Maybe.Maybe route, params : Router.Types.RouteParams }"
+          },
+          {
+            "name": "Transition",
+            "comment": " A transition from route A to route B ",
+            "args": [
+              "route",
+              "state"
+            ],
+            "type": "Maybe.Maybe (Router.Types.Route route) -> Maybe.Maybe (Router.Types.Route route) -> Router.Types.Action state"
+          },
+          {
+            "name": "URL",
+            "comment": " A valid URL:\n```\n\"/home/post/1\"\n```\n",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "WithRouter",
+            "comment": " Type extension for the application state ",
+            "args": [
+              "route",
+              "state"
+            ],
+            "type": "{ state | router : Router.Types.RouterState route }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Constraint",
+            "comment": " A constraint of route parameter type ",
+            "args": [],
+            "cases": [
+              [
+                "Int",
+                []
+              ],
+              [
+                "String",
+                []
+              ],
+              [
+                "Enum",
+                [
+                  "List String"
+                ]
+              ],
+              [
+                "Regex",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Response",
+            "comment": " An action result - a modified state combined with side effects ",
+            "args": [
+              "state"
+            ],
+            "cases": [
+              [
+                "Response",
+                [
+                  "( state, Router.Types.Commands state )"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "RouterConfig",
+            "comment": "\n  `RouterConfig` is configuration for the router:\n\n  * `html5` &mdash; Use html5 pushState.\n  * `removeTrailingSlash` &mdash; Trailing slashes will be removed from matched and builded urls\n  * `layout` &mdash; Main rendered function that combines named views gathered from Handlers in a single HTML\n  * `transition` &mdash; An action that should be executed on every router transition\n  * `routeConfig` &mdash; A mapping between route and route configuration\n  * `routes` &mdash; A list of routes available for routing\n  * `subscriptions` &mdash; A list of subscriptions (see: [elm-lang/html](http://package.elm-lang.org/packages/elm-lang/html/1.1.0/Html-App) for details)\n",
+            "args": [
+              "route",
+              "state"
+            ],
+            "cases": [
+              [
+                "RouterConfig",
+                [
+                  "{ html5 : Bool , removeTrailingSlash : Bool , layout : Router.Types.Router route state -> state -> Dict.Dict String (Html.Html (Router.Types.Action state)) -> Html.Html (Router.Types.Action state) , transition : Router.Types.Router route state -> Router.Types.Transition route state , routeConfig : route -> Router.Types.RouteConfig route state , routes : List route , subscriptions : state -> Platform.Sub.Sub (Router.Types.Action state) }"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
         "generated-with-elm-version": "0.17.0"
       }
     ]
@@ -41230,6 +41477,102 @@
     ]
   },
   {
+    "name": "jastice/boxes-and-bubbles",
+    "version": "3.0.0",
+    "docs": [
+      {
+        "name": "BoxesAndBubbles",
+        "comment": " The interface for the Boxes and Bubbles physics engine.\n\n# Concepts\n\n## Simulation\n\nBoxes and Bubbles implements a very simple physics simulation. It updates a list of bodies\nat each step. There is no time-normalized integration - if you run it with higher fps, \nit will run faster.\n\nSee the [example code](https://github.com/jastice/boxes-and-bubbles/blob/master/Example.elm) \nand the [example animation](http://jastice.github.io/boxes-and-bubbles/) that it produces\nfor a working usage example.\n\n## Bodies\n\nEverything in Boxes and Bubbles is a Body. A Body is a Box, or a Bubble.\n\nBodies have some properties:\n\n* `position` -- reference point and center of body\n* `velocity` -- direction and speed of movement\n* `mass` -- the mass (stored as inverseMass)\n* `restitution` -- bounciness factor: how much force is preserved on collisions\n* `shape` -- radius for Bubble, extents for Box, wrapped in an ADT.\n\nBodies can have infinite mass. Infinite mass bodies are not affected by any forces.\n\n## Forces\n\nTwo types of global forces: gravity and ambient. Both are vectors,\nso that they could point in any direction. Both can vary over time.\nAmbient force takes the mass of objects into account, while gravity does not.\n\n# Functions\n\n## Constructors and helpers\n\n@docs bubble, box, bounds\n\n## Running the simulation\n\n@docs step\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bounds",
+            "comment": " Create a bounding box made up of boxes with infinite mass.\n\n    bounds (width,height) thickness restitution center meta\n\nCreate bounds with width and height 800, 50 thick walls and 0.6 restitution and a String tag\nat the origin:\n\n    bounds (800,800) 50 0.6 (0,0) \"tag\"\n\n",
+            "type": "BoxesAndBubbles.Math2D.Vec2 -> Float -> Float -> BoxesAndBubbles.Math2D.Vec2 -> meta -> List (BoxesAndBubbles.Bodies.Body meta)"
+          },
+          {
+            "name": "box",
+            "comment": " Create a box. Mass is derived from density and size.\n    \n    box (width,height) position velocity density restitution\n\nCreate a box with width 100, height 20, density 1 and restitution 1\nat origin, moving toward the upper right:\n\n    box (100,20) 1 1 (0,0) (3,3)\n",
+            "type": "BoxesAndBubbles.Math2D.Vec2 -> Float -> Float -> BoxesAndBubbles.Math2D.Vec2 -> BoxesAndBubbles.Math2D.Vec2 -> meta -> BoxesAndBubbles.Bodies.Body meta"
+          },
+          {
+            "name": "bubble",
+            "comment": " Create a bubble. Mass is derived from density and size.\n\n    bubble radius density restitution position velocity meta\n\nCreate a bubble with radius 100 with density 1 and restitution 1\nat origin and a string \"tag\", moving toward the upper right:\n\n    bubble 100 1 1 (0,0) (3,3) \"tag\"\n",
+            "type": "Float -> Float -> Float -> BoxesAndBubbles.Math2D.Vec2 -> BoxesAndBubbles.Math2D.Vec2 -> meta -> BoxesAndBubbles.Bodies.Body meta"
+          },
+          {
+            "name": "step",
+            "comment": " Perform a step in the physics simulation. Applies forces to objects and updates them based\non their velocity and collisions. Order of bodies in input list is not preserved in the output.\n\nThe `gravity` parameter give a global force that ignores object masses, while `force` \ntakes mass into account. Since both types of forces are vectors, they can point in any direction.\nThe ambient force can be used to simulate a current, for example.\n\n    step gravity ambient bodies\n\nApply a downward gravity and sideways ambient force to bodies:\n\n    step (0,-0.2) (20,0) bodies\n",
+            "type": "BoxesAndBubbles.Math2D.Vec2 -> BoxesAndBubbles.Math2D.Vec2 -> List (BoxesAndBubbles.Bodies.Body meta) -> List (BoxesAndBubbles.Bodies.Body meta)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "BoxesAndBubbles.Engine",
+        "comment": " The actual physics implementation of Boxes and Bubbles.\n\n## Exposed functions\n\nExposes some internal functions mostly for use in the actual API \nand to let you fine-tune your application.\nPlease consult the source code to understand these functions.\nNo implication of API stability.\n\n@docs update, collide, collideWith\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "collide",
+            "comment": " Recursive collision resolution.\n\nInternal method, exposed only for your convenience. \nNo implication of API stability.\n",
+            "type": "List (BoxesAndBubbles.Bodies.Body a) -> List (BoxesAndBubbles.Bodies.Body a) -> List (BoxesAndBubbles.Bodies.Body a)"
+          },
+          {
+            "name": "collideWith",
+            "comment": " Collide a0 with all the bodies, modifying b along the way.\n\n   return (updated a0, [updated bodies])\n\n   Internal method, exposed only for your convenience. No implication of API stability.\n",
+            "type": "BoxesAndBubbles.Bodies.Body a -> List (BoxesAndBubbles.Bodies.Body a) -> List (BoxesAndBubbles.Bodies.Body a) -> List (BoxesAndBubbles.Bodies.Body a)"
+          },
+          {
+            "name": "update",
+            "comment": " Update body position with its speed and apply additional forces.\n\nMay be used to gain a more fine-grained control over what forces affect.\nNo implication of API stability.\n",
+            "type": "BoxesAndBubbles.Math2D.Vec2 -> BoxesAndBubbles.Math2D.Vec2 -> BoxesAndBubbles.Bodies.Body a -> BoxesAndBubbles.Bodies.Body a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "BoxesAndBubbles.Bodies",
+        "comment": " # Boxes and Bubbles Bodies.\nDefines bodies as used by the Boxes and Bubbles engine. You will need these data types to \ndisplay and modify bodies being calculated. For creating them, you may prefer the constructor \nfunctions in the BoxesAndBubbles module.\n\n@docs Body, Shape\n\n",
+        "aliases": [
+          {
+            "name": "Body",
+            "comment": " A rigid body in the Boxes and Bubbles universe, as used internally by the engine.\nMass is stored as inverse, because it is more convenient for calculation.\n\nType parameter `meta` can be used to attach arbitrary other information used\nby your application to bodies. For example: label, hit points, an object type ADT, or more low-level, \nan id used to associate the body with arbitrary other data via a Dict.\n",
+            "args": [
+              "meta"
+            ],
+            "type": "{ pos : BoxesAndBubbles.Math2D.Vec2 , velocity : BoxesAndBubbles.Math2D.Vec2 , inverseMass : Float , restitution : Float , shape : BoxesAndBubbles.Bodies.Shape , meta : meta }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Shape",
+            "comment": " Shape data for a body. \nA bubble is defined by its radius.\nA box is defined by its extents (half-width/half-height from the center).\nWe use half-lengths because that's what is convenient for calculation, and it's most consistent\nwith using radius for circles.\n",
+            "args": [],
+            "cases": [
+              [
+                "Box",
+                [
+                  "BoxesAndBubbles.Math2D.Vec2"
+                ]
+              ],
+              [
+                "Bubble",
+                [
+                  "Float"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "javcasas/elm-decimal",
     "version": "1.0.1",
     "docs": [
@@ -41580,7 +41923,7 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "docs": [
       {
         "name": "TimeTravel.Html.App",
@@ -63701,7 +64044,7 @@
   },
   {
     "name": "stil4m/elm-aui-css",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Aui.Dropdown",
@@ -63861,105 +64204,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Toolbar",
-        "comment": " Functions to present AUI toolbars.\n\n# Presentation\n\n@docs toolbar, toolbarPrimary, toolbarSecondary, toolbarGroup\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "toolbar",
-            "comment": " Create a toolbar:\n\n    toolbar\n        [ toolbarPrimary\n            [ buttonGroup [ button baseConfig Edit [ text \"Edit\" ] ]\n            , buttonGroup\n                [ button baseConfig Assign [ text \"Assign\" ]\n                , button baseConfig AssignMe [ text \"Assign to me\" ]\n                ]\n            ]\n        , toolbarSecondary [ button baseConfig Configure [ icon Small Configure ] ]\n        ]\n",
-            "type": "List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "toolbarGroup",
-            "comment": " Create toolbar button group\n",
-            "type": "List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "toolbarPrimary",
-            "comment": " Create primary part of toolbar.\n",
-            "type": "List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "toolbarSecondary",
-            "comment": " Create secondary part of toolbar.\n",
-            "type": "List (Html.Html a) -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Messages",
-        "comment": " Functions to present AUI messages.\n\n\n# Presentation\n\n@docs message, closableMessage\n\n# Types\n\n@docs Type, generic, error, warning, success, info, hint\n\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Type",
-            "comment": " Different message types\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "closableMessage",
-            "comment": " Create a message dialog that has a close button and triggers a message.\n\n    closableMessage Warning\n        Closed\n        [ text \"Title\" ]\n        [ text \"There is a warning\" ]\n",
-            "type": "Aui.Messages.Type -> a -> List (Html.Html a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "error",
-            "comment": " Error type for message\n",
-            "type": "Aui.Messages.Type"
-          },
-          {
-            "name": "generic",
-            "comment": " Generic type for message\n",
-            "type": "Aui.Messages.Type"
-          },
-          {
-            "name": "hint",
-            "comment": " Hint type for message\n",
-            "type": "Aui.Messages.Type"
-          },
-          {
-            "name": "info",
-            "comment": " Info type for message\n",
-            "type": "Aui.Messages.Type"
-          },
-          {
-            "name": "message",
-            "comment": " Create a message.\n\n    message Warning\n        [ text \"Title\" ]\n        [ text \"There is a warning\" ]\n",
-            "type": "Aui.Messages.Type -> List (Html.Html a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "success",
-            "comment": " Success type for message\n",
-            "type": "Aui.Messages.Type"
-          },
-          {
-            "name": "warning",
-            "comment": " Warning type for message\n",
-            "type": "Aui.Messages.Type"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Toggle",
-        "comment": " Functions to present AUI toggle.\n\n# Presentation\n\n@docs toggle\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "toggle",
-            "comment": " Create a toggle with if it is enabled, a message and its state.\n\n    toggle isEnabled\n        ToggleClicked\n        isOn\n",
-            "type": "Bool -> (Bool -> a) -> Bool -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Aui.Tabs",
         "comment": " Functions to present AUI tabs.\n\n# Types\n\n@docs Msg, Config\n\n# Model\n\n@docs Model, modelWithActive\n\n# Update\n\n@docs update\n\n# Presentation\n\n@docs tabs\n\n# ITems\n\n@docs Item, item\n\n\n# Config\n\n@docs Config, baseConfig, horizontal, vertical, withItems\n\n",
         "aliases": [
@@ -64044,6 +64288,35 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Aui.Toolbar",
+        "comment": " Functions to present AUI toolbars.\n\n# Presentation\n\n@docs toolbar, toolbarPrimary, toolbarSecondary, toolbarGroup\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "toolbar",
+            "comment": " Create a toolbar:\n\n    toolbar\n        [ toolbarPrimary\n            [ buttonGroup [ button baseConfig Edit [ text \"Edit\" ] ]\n            , buttonGroup\n                [ button baseConfig Assign [ text \"Assign\" ]\n                , button baseConfig AssignMe [ text \"Assign to me\" ]\n                ]\n            ]\n        , toolbarSecondary [ button baseConfig Configure [ icon Small Configure ] ]\n        ]\n",
+            "type": "List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "toolbarGroup",
+            "comment": " Create toolbar button group\n",
+            "type": "List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "toolbarPrimary",
+            "comment": " Create primary part of toolbar.\n",
+            "type": "List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "toolbarSecondary",
+            "comment": " Create secondary part of toolbar.\n",
+            "type": "List (Html.Html a) -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Aui.ProgressTracker",
         "comment": " Functions to present AUI progress tracker.\n\n\n# Presentation\n\n@docs progressTracker, invertedProgressTracker\n\n",
         "aliases": [],
@@ -64063,6 +64336,76 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Aui.Messages",
+        "comment": " Functions to present AUI messages.\n\n\n# Presentation\n\n@docs message, closableMessage\n\n# Types\n\n@docs Type, generic, error, warning, success, info, hint\n\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Type",
+            "comment": " Different message types\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "closableMessage",
+            "comment": " Create a message dialog that has a close button and triggers a message.\n\n    closableMessage Warning\n        Closed\n        [ text \"Title\" ]\n        [ text \"There is a warning\" ]\n",
+            "type": "Aui.Messages.Type -> a -> List (Html.Html a) -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "error",
+            "comment": " Error type for message\n",
+            "type": "Aui.Messages.Type"
+          },
+          {
+            "name": "generic",
+            "comment": " Generic type for message\n",
+            "type": "Aui.Messages.Type"
+          },
+          {
+            "name": "hint",
+            "comment": " Hint type for message\n",
+            "type": "Aui.Messages.Type"
+          },
+          {
+            "name": "info",
+            "comment": " Info type for message\n",
+            "type": "Aui.Messages.Type"
+          },
+          {
+            "name": "message",
+            "comment": " Create a message.\n\n    message Warning\n        [ text \"Title\" ]\n        [ text \"There is a warning\" ]\n",
+            "type": "Aui.Messages.Type -> List (Html.Html a) -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "success",
+            "comment": " Success type for message\n",
+            "type": "Aui.Messages.Type"
+          },
+          {
+            "name": "warning",
+            "comment": " Warning type for message\n",
+            "type": "Aui.Messages.Type"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Toggle",
+        "comment": " Functions to present AUI toggle.\n\n# Presentation\n\n@docs toggle\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "toggle",
+            "comment": " Create a toggle with if it is enabled, a message and its state.\n\n    toggle isEnabled\n        ToggleClicked\n        isOn\n",
+            "type": "Bool -> (Bool -> a) -> Bool -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Aui.ProgressIndicator",
         "comment": " Functions to present AUI progress indicator.\n\n\n# Presentation\n\n@docs progressIndicator, activeProgressIndicator\n\n",
         "aliases": [],
@@ -64077,6 +64420,129 @@
             "name": "progressIndicator",
             "comment": " Create a progress indicator with a value between 0.0 and 1.0.\n",
             "type": "Float -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Lozenge",
+        "comment": " Functions to present AUI lozenges.\n\n# Presentation\n\n@docs lozenge\n\n# Types\n\n@docs Type, generic, success, error, current, complete, moved\n\n# Presense\n\n@docs Presense, normal,subtle\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Presense",
+            "comment": " Presense style for a lozenge\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Type",
+            "comment": " Types for a lozenge\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "complete",
+            "comment": " Comlete type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          },
+          {
+            "name": "current",
+            "comment": " Current type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          },
+          {
+            "name": "error",
+            "comment": " Error type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          },
+          {
+            "name": "generic",
+            "comment": " Generic type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          },
+          {
+            "name": "lozenge",
+            "comment": " Create a lozenge with presense and type\n",
+            "type": "Aui.Lozenge.Presense -> Aui.Lozenge.Type -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "moved",
+            "comment": " Moved type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          },
+          {
+            "name": "normal",
+            "comment": " Normal presence\n",
+            "type": "Aui.Lozenge.Presense"
+          },
+          {
+            "name": "subtle",
+            "comment": " Subtle presence\n",
+            "type": "Aui.Lozenge.Presense"
+          },
+          {
+            "name": "success",
+            "comment": " Success type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Labels",
+        "comment": " Functions to present AUI labels.\n\n\n# Presentation\n\n@docs label\n\n# Actions\n\n@docs Action, navigate, trigger\n# Types\n\n@docs Config\n\n# Utility\n\n@docs baseConfig, onClick, onRemove\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Action",
+            "comment": " Actions that can be bound to a label\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Config",
+            "comment": " Configuration to present a label.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "baseConfig",
+            "comment": " Base configuration to show a label. No actions are bound by default.\n",
+            "type": "Aui.Labels.Config a"
+          },
+          {
+            "name": "label",
+            "comment": " Show a label with a given configuration and content .\n\n    label (baseConfig\n            |> withNavigate \"http://elm-lang.org/\"\n            |> withRemove RemovedLabel)\n        [ text \"Please remove or click me!\" ]\n",
+            "type": "Aui.Labels.Config a -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "navigate",
+            "comment": " Action to navigate to an url\n",
+            "type": "String -> Aui.Labels.Action a"
+          },
+          {
+            "name": "onClick",
+            "comment": " Bind action to click on label\n",
+            "type": "Aui.Labels.Action a -> Aui.Labels.Config a -> Aui.Labels.Config a"
+          },
+          {
+            "name": "onRemove",
+            "comment": " Allow the label to be removed triggering the given message.\n",
+            "type": "a -> Aui.Labels.Config a -> Aui.Labels.Config a"
+          },
+          {
+            "name": "trigger",
+            "comment": " Action to trigger an action on click\n",
+            "type": "a -> Aui.Labels.Action a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -65047,124 +65513,67 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Lozenge",
-        "comment": " Functions to present AUI lozenges.\n\n# Presentation\n\n@docs lozenge\n\n# Types\n\n@docs Type, generic, success, error, current, complete, moved\n\n# Presense\n\n@docs Presense, normal,subtle\n\n",
-        "aliases": [],
-        "types": [
+        "name": "Aui.Expander",
+        "comment": " Functions to present AUI expander.\n\n\n# Config\n\n@docs Config, withMinHeight, withMoreText, withLessText`\n\n# Model\n\n@docs Model, Msg, initialModel\n\n# Update\n\n@docs update\n\n# Presentation\n\n@docs expander\n\n# Utility\n\n@docs baseConfig\n",
+        "aliases": [
           {
-            "name": "Presense",
-            "comment": " Presense style for a lozenge\n",
+            "name": "Model",
+            "comment": " Model for the expander comonent.\n",
             "args": [],
-            "cases": []
-          },
-          {
-            "name": "Type",
-            "comment": " Types for a lozenge\n",
-            "args": [],
-            "cases": []
+            "type": "Bool"
           }
         ],
-        "values": [
-          {
-            "name": "complete",
-            "comment": " Comlete type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "current",
-            "comment": " Current type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "error",
-            "comment": " Error type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "generic",
-            "comment": " Generic type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "lozenge",
-            "comment": " Create a lozenge with presense and type\n",
-            "type": "Aui.Lozenge.Presense -> Aui.Lozenge.Type -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "moved",
-            "comment": " Moved type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "normal",
-            "comment": " Normal presence\n",
-            "type": "Aui.Lozenge.Presense"
-          },
-          {
-            "name": "subtle",
-            "comment": " Subtle presence\n",
-            "type": "Aui.Lozenge.Presense"
-          },
-          {
-            "name": "success",
-            "comment": " Success type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Labels",
-        "comment": " Functions to present AUI labels.\n\n\n# Presentation\n\n@docs label\n\n# Actions\n\n@docs Action, navigate, trigger\n# Types\n\n@docs Config\n\n# Utility\n\n@docs baseConfig, onClick, onRemove\n",
-        "aliases": [],
         "types": [
-          {
-            "name": "Action",
-            "comment": " Actions that can be bound to a label\n",
-            "args": [
-              "a"
-            ],
-            "cases": []
-          },
           {
             "name": "Config",
-            "comment": " Configuration to present a label.\n",
+            "comment": " Configuration record for presenting an expander.\n",
             "args": [
               "a"
             ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Messages being sent by the expander component.\n",
+            "args": [],
             "cases": []
           }
         ],
         "values": [
           {
             "name": "baseConfig",
-            "comment": " Base configuration to show a label. No actions are bound by default.\n",
-            "type": "Aui.Labels.Config a"
+            "comment": " Create a default configuration with sane defaults to present an expander.\n",
+            "type": "(Aui.Expander.Msg -> a) -> Aui.Expander.Config a"
           },
           {
-            "name": "label",
-            "comment": " Show a label with a given configuration and content .\n\n    label (baseConfig\n            |> withNavigate \"http://elm-lang.org/\"\n            |> withRemove RemovedLabel)\n        [ text \"Please remove or click me!\" ]\n",
-            "type": "Aui.Labels.Config a -> List (Html.Html a) -> Html.Html a"
+            "name": "expander",
+            "comment": " Present a expander given a configuration, content and model.\n\n    view model =\n        expander (baseConfig ExpanderMsg)\n            \"Lorem ipsum...\"\n            model.expander\n",
+            "type": "Aui.Expander.Config a -> String -> Aui.Expander.Model -> Html.Html a"
           },
           {
-            "name": "navigate",
-            "comment": " Action to navigate to an url\n",
-            "type": "String -> Aui.Labels.Action a"
+            "name": "initialModel",
+            "comment": " Default model for a expander component\n",
+            "type": "Aui.Expander.Model"
           },
           {
-            "name": "onClick",
-            "comment": " Bind action to click on label\n",
-            "type": "Aui.Labels.Action a -> Aui.Labels.Config a -> Aui.Labels.Config a"
+            "name": "update",
+            "comment": " Update function for the expander component. This should be called from within your update function when handling `Msg`\n",
+            "type": "Aui.Expander.Msg -> Aui.Expander.Model -> Aui.Expander.Model"
           },
           {
-            "name": "onRemove",
-            "comment": " Allow the label to be removed triggering the given message.\n",
-            "type": "a -> Aui.Labels.Config a -> Aui.Labels.Config a"
+            "name": "withLessText",
+            "comment": " Set less text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
           },
           {
-            "name": "trigger",
-            "comment": " Action to trigger an action on click\n",
-            "type": "a -> Aui.Labels.Action a"
+            "name": "withMinHeight",
+            "comment": " Set less text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
+          },
+          {
+            "name": "withMoreText",
+            "comment": " Set more text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -65236,80 +65645,30 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Expander",
-        "comment": " Functions to present AUI expander.\n\n\n# Config\n\n@docs Config, withMinHeight, withMoreText, withLessText`\n\n# Model\n\n@docs Model, Msg, initialModel\n\n# Update\n\n@docs update\n\n# Presentation\n\n@docs expander\n\n# Utility\n\n@docs baseConfig\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " Model for the expander comonent.\n",
-            "args": [],
-            "type": "Bool"
-          }
-        ],
-        "types": [
-          {
-            "name": "Config",
-            "comment": " Configuration record for presenting an expander.\n",
-            "args": [
-              "a"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Msg",
-            "comment": " Messages being sent by the expander component.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
+        "name": "Aui.Badges",
+        "comment": " Functions to present AUI badges.\n\n\n# Presentation\n\n@docs badge\n",
+        "aliases": [],
+        "types": [],
         "values": [
           {
-            "name": "baseConfig",
-            "comment": " Create a default configuration with sane defaults to present an expander.\n",
-            "type": "(Aui.Expander.Msg -> a) -> Aui.Expander.Config a"
-          },
-          {
-            "name": "expander",
-            "comment": " Present a expander given a configuration, content and model.\n\n    view model =\n        expander (baseConfig ExpanderMsg)\n            \"Lorem ipsum...\"\n            model.expander\n",
-            "type": "Aui.Expander.Config a -> String -> Aui.Expander.Model -> Html.Html a"
-          },
-          {
-            "name": "initialModel",
-            "comment": " Default model for a expander component\n",
-            "type": "Aui.Expander.Model"
-          },
-          {
-            "name": "update",
-            "comment": " Update function for the expander component. This should be called from within your update function when handling `Msg`\n",
-            "type": "Aui.Expander.Msg -> Aui.Expander.Model -> Aui.Expander.Model"
-          },
-          {
-            "name": "withLessText",
-            "comment": " Set less text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
-          },
-          {
-            "name": "withMinHeight",
-            "comment": " Set less text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
-          },
-          {
-            "name": "withMoreText",
-            "comment": " Set more text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
+            "name": "badge",
+            "comment": " Present a badge with a given content\n\n    badge \"Hello world!\"\n",
+            "type": "String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
         "name": "Aui.Buttons",
-        "comment": " Functions to present AUI buttons and groups.\n\n\n# Style\n\n@docs Style, primaryStyle, normalStyle, subtleStyle, lightStyle, linkStyle\n\n# Config\n\n@docs Config, baseConfig, disable, withStyle, withHref, withActive, withAdditionalClass, forceAnchor\n\n# Config\n\n# Presentation\n\n@docs button, buttonGroup\n\n",
+        "comment": " Functions to present AUI buttons and groups.\n\n\n# Style\n\n@docs Style, primaryStyle, normalStyle, subtleStyle, lightStyle, linkStyle\n\n# Config\n\n@docs Config, baseConfig, disable, withStyle, withHref, withAction, withActive, withAdditionalClass, forceAnchor\n\n# Config\n\n# Presentation\n\n@docs button, buttonGroup\n\n",
         "aliases": [],
         "types": [
           {
             "name": "Config",
             "comment": " Configuration type for presenting a button.\n",
-            "args": [],
+            "args": [
+              "a"
+            ],
             "cases": []
           },
           {
@@ -65323,12 +65682,12 @@
           {
             "name": "baseConfig",
             "comment": " A configuration with sane defaults (no style, no anchor, enable, ect.).\n",
-            "type": "Aui.Buttons.Config"
+            "type": "Aui.Buttons.Config a"
           },
           {
             "name": "button",
             "comment": " Render an AUI button.\n\n    button (baseConfig |> withStyle Primary |> withHref \"http://elm-lang.org/\")\n        ButtonClicked\n        [ text \"Click me!\"]\n",
-            "type": "Aui.Buttons.Config -> a -> List (Html.Html a) -> Html.Html a"
+            "type": "Aui.Buttons.Config a -> List (Html.Html a) -> Html.Html a"
           },
           {
             "name": "buttonGroup",
@@ -65338,12 +65697,12 @@
           {
             "name": "disable",
             "comment": " Add the disabled state to a button.\n\n    baseConfig |> disable\n",
-            "type": "Aui.Buttons.Config -> Aui.Buttons.Config"
+            "type": "Aui.Buttons.Config a -> Aui.Buttons.Config a"
           },
           {
             "name": "forceAnchor",
             "comment": " Forces the anchor tag to be used instead of the default button tag (only if no href is specified).\n\n    baseConfig |> forceAnchor\n",
-            "type": "Aui.Buttons.Config -> Aui.Buttons.Config"
+            "type": "Aui.Buttons.Config a -> Aui.Buttons.Config a"
           },
           {
             "name": "lightStyle",
@@ -65371,38 +65730,29 @@
             "type": "Aui.Buttons.Style"
           },
           {
+            "name": "withAction",
+            "comment": " Add an action to the buttons configuration.\n\n    baseConfig |> withAction MyAction\n",
+            "type": "a -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
+          },
+          {
             "name": "withActive",
             "comment": " Make a button active or not active.\n\n    baseConfig |> withActive True\n",
-            "type": "Bool -> Aui.Buttons.Config -> Aui.Buttons.Config"
+            "type": "Bool -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
           },
           {
             "name": "withAdditionalClass",
             "comment": " Add additional classes to the button\n\n    baseConfig |> additionalClass \"my-button\"\n",
-            "type": "String -> Aui.Buttons.Config -> Aui.Buttons.Config"
+            "type": "String -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
           },
           {
             "name": "withHref",
             "comment": " Add a href to the buttons configuration.\n\n    baseConfig |> withHref \"http://elm-lang.org/\"\n",
-            "type": "String -> Aui.Buttons.Config -> Aui.Buttons.Config"
+            "type": "String -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
           },
           {
             "name": "withStyle",
             "comment": " Add a button style to the configuration.\n\n    baseConfig |> withStyle Subtle\n",
-            "type": "Aui.Buttons.Style -> Aui.Buttons.Config -> Aui.Buttons.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Badges",
-        "comment": " Functions to present AUI badges.\n\n\n# Presentation\n\n@docs badge\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "badge",
-            "comment": " Present a badge with a given content\n\n    badge \"Hello world!\"\n",
-            "type": "String -> Html.Html msg"
+            "type": "Aui.Buttons.Style -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
