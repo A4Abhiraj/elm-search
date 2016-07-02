@@ -10858,6 +10858,8 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 						{filter: _p0._0});
 				case 'SetFilterQueryString':
 					var _p1 = _p0._0;
+					var resultChunks = _elm_lang$core$String$isEmpty(_p1) ? _elm_lang$core$Native_List.fromArray(
+						[]) : model.result.chunks;
 					var filterFacts = model.filter;
 					var filter = _elm_lang$core$Native_Utils.update(
 						filterFacts,
@@ -10867,7 +10869,10 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 						});
 					return _elm_lang$core$Native_Utils.update(
 						model,
-						{filter: filter});
+						{
+							filter: filter,
+							result: {chunks: resultChunks}
+						});
 				case 'SetFilterQueryStringAndRunFilter':
 					var _v1 = _klaftertief$elm_search$Search_Model$RunFilter,
 						_v2 = A2(
