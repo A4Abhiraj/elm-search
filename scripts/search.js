@@ -10826,6 +10826,9 @@ var _klaftertief$elm_search$Search_Model$queryListFromString = function (string)
 		}()
 		]);
 };
+var _klaftertief$elm_search$Search_Model$Active = {ctor: 'Active'};
+var _klaftertief$elm_search$Search_Model$Dirty = {ctor: 'Dirty'};
+var _klaftertief$elm_search$Search_Model$Fresh = {ctor: 'Fresh'};
 var _klaftertief$elm_search$Search_Model$RunFilter = {ctor: 'RunFilter'};
 var _klaftertief$elm_search$Search_Model$SetFilterQueryStringAndRunFilter = function (a) {
 	return {ctor: 'SetFilterQueryStringAndRunFilter', _0: a};

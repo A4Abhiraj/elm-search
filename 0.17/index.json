@@ -7830,6 +7830,53 @@
     ]
   },
   {
+    "name": "JasonGFitzpatrick/elm-router",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Router",
+        "comment": " Simple Router library for performing operations based on a list of string\nroutes. This is particularly useful for routing pages in single page applications\nwhere the given list of strings are list of url paths.\n\n\n# Types\n@docs Route, Router\n\n# Route Matching\n@docs match, (:->)\n\n# Useful Helper\n@docs matchPrefix\n",
+        "aliases": [
+          {
+            "name": "Route",
+            "comment": " A Route is a function from a string to some value or computation.\n",
+            "args": [
+              "a"
+            ],
+            "type": "String -> a"
+          },
+          {
+            "name": "Router",
+            "comment": " A Router is a tuple containing a string and its associated route\n",
+            "args": [
+              "a"
+            ],
+            "type": "( String, Router.Route a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": ":->",
+            "comment": " Operator to offer easy-to-read DSL for matching routes. This is an alias\nfor the `(,)` tuple constructor function.\n",
+            "type": "String -> Router.Route a -> Router.Router a"
+          },
+          {
+            "name": "match",
+            "comment": " `match` allows you to select an appropriate route depending on the\ngiven input string. `match` takes a list of routers and a default route,\nwhich acts as a catch-all and returns a route. Returning a route allows\nfor nested routes.\n\nExample:\n\n    mainRoute : Route Html\n    mainRoute = match\n      [ \"/\"           :-> displayHomePage\n      , \"/index.html\" :-> displayHomePage\n      , \"/blog\"       :-> blogRoute\n      , \"/contact\"    :-> displayContactsPage\n      ] display404Page\n\n    blogRoute : Route Html\n    blogRoute = match\n      [ \"/\"             :-> displayBlogPostListing\n      , \"/entry1.html\"  :-> displayEntry1\n      , \"/entry2.html\"  :-> displayEntry2\n      ] display404Page\n\n\nIn some cases, it important to understand how `match` works. Suppose you have\nthe input path \"/users/4873/profile.html\" and there is a router that matches\n\"/users\" with an associated route `usersRoute`. The `usersRoute` function will\nget called with \"/4873/profile.html\" as a parameter. This means that `match`\nwill strip away the string it has matched from the input string before passing\nit onto the route. `match` will also match routes in the order you have stated\nthem. This means that if you have the following route:\n\n    myRoute = match\n      [ \"/user\"   :-> userRoute\n      , \"/users\"  :-> displayUserListing\n      ] display404Page\n\nThere is no way for `displayUserListing` to ever be called. Say you pass in\n\"/users.html\", then this will be matched by \"/user\" which will pass \"s.html\"\nto `userRoute`. To solve this, you may wish to reverse the order of the routes\nas follows:\n\n    myRoute = match\n      [ \"/users\"  :-> displayUserListing\n      , \"/user\"   :-> userRoute\n      ] display404Page\n\nAnd now things will work as intended.\n\nYou may notice that in the first example, I use \"/\" as a route at the very top.\nThis is because `match` special cases \"/\" and the empty string due to their\nprevalence.\n",
+            "type": "List (Router.Router a) -> Router.Route a -> Router.Route a"
+          },
+          {
+            "name": "matchPrefix",
+            "comment": " Takes a reference string and a string to match and returns the second string\nstripped of the matched reference string. Used to implement `match`.\n\n    matchPrefix \"he\" \"hello\" === Just \"llo\"\n\n    matchPrefix \"yo\" \"halo\" === Nothing\n",
+            "type": "String -> String -> Maybe.Maybe String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "NoRedInk/elm-api-components",
     "version": "2.0.0",
     "docs": [
@@ -27089,7 +27136,7 @@
   },
   {
     "name": "elm-community/elm-webgl",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "docs": [
       {
         "name": "WebGL",
@@ -27317,7 +27364,7 @@
           },
           {
             "name": "Error",
-            "comment": " An error which occured in the graphics ocntext ",
+            "comment": " An error which occured in the graphics context ",
             "args": [],
             "cases": [
               [
@@ -28188,7 +28235,7 @@
   },
   {
     "name": "elm-community/intdict",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "IntDict.Safe",
@@ -28247,7 +28294,7 @@
       },
       {
         "name": "IntDict",
-        "comment": " # IntDict\n\nThis module exposes the same API as `Dict`.\n\n# Technicalities\n\nSince JavaScript's number type is kind of messed up, Elm's `Int` is not particularly\nwell-behaved wrt. bitwise operations. Currently, JS supports 32 bit integers, so there is\nprobably enough room for key picks. **However, when sanitizing user input, it is mandatory\nthat a prior `isValidKey` or one of the safe versions in `IntDict.Safe` is used!** This is\nto prevent the overflow behavior.\n\nThis library is inspired by Haskells [IntMap](http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-IntMap.html),\nwhich in turn implements Okasaki and Gill's [Fast mergable integer maps](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf).\n\nAs noted in the [references](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf), here are some runtimes:\n\n*O(min(n, W))*: `insert`, `update`, `remove`, `get`, `member`\n\n*O(n + m)*: `uniteWith`, `union`, `intersection`, `diff`\n\nwhere *n* and *m* are the sizes of the first and second dictionary respectively and *W*\nis the number of bits in `Int` (so a constant with current value 32).\n\n# Data\n@docs IntDict, isValidKey\n# Build\n@docs empty, singleton, insert, update, remove\n# Query\n@docs isEmpty, size, member, get, findMin, findMax\n# Combine\n@docs uniteWith, union, intersect, diff\n# Lists\n@docs keys, values, toList, fromList\n# Transform\n@docs map, foldl, foldr, filter, partition\n# String representation\n@docs toString'\n\n",
+        "comment": " # IntDict\n\nThis module exposes the same API as `Dict`.\n\n# Technicalities\n\nSince JavaScript's number type is kind of messed up, Elm's `Int` is not particularly\nwell-behaved wrt. bitwise operations. Currently, JS supports 32 bit integers, so there is\nprobably enough room for key picks. **However, when sanitizing user input, it is mandatory\nthat a prior `isValidKey` or one of the safe versions in `IntDict.Safe` is used!** This is\nto prevent the overflow behavior.\n\nThis library is inspired by Haskells [IntMap](http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-IntMap.html),\nwhich in turn implements Okasaki and Gill's [Fast mergable integer maps](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf).\n\nAs noted in the [references](http://ittc.ku.edu/~andygill/papers/IntMap98.pdf), here are some runtimes:\n\n*O(min(n, W))*: `insert`, `update`, `remove`, `get`, `member`\n\n*O(n + m)*: `uniteWith`, `union`, `intersection`, `diff`, `merge`\n\nwhere *n* and *m* are the sizes of the first and second dictionary respectively and *W*\nis the number of bits in `Int` (so a constant with current value 32).\n\n# Data\n@docs IntDict, isValidKey\n# Build\n@docs empty, singleton, insert, update, remove\n# Query\n@docs isEmpty, size, member, get, findMin, findMax\n# Combine\n@docs uniteWith, union, intersect, diff, merge\n# Lists\n@docs keys, values, toList, fromList\n# Transform\n@docs map, foldl, foldr, filter, partition\n# String representation\n@docs toString'\n\n",
         "aliases": [],
         "types": [
           {
@@ -28341,6 +28388,11 @@
             "type": "Int -> IntDict.IntDict v -> Bool"
           },
           {
+            "name": "merge",
+            "comment": " The most general way of combining two dictionaries. You provide three\naccumulators for when a given key appears:\n  1. Only in the left dictionary.\n  2. In both dictionaries.\n  3. Only in the right dictionary.\nYou then traverse all the keys from lowest to highest, building up whatever\nyou want.\n\nNote that `uniteWith`, `union`, `intersect` and `diff` could all be implemented\nin terms of this function. The only reason that's not the case is to have more\nsharing of substructure.\n\n  uniteWith merger l r =\n    merge insert merger insert l r empty\n  union l r =\n    merge insert (\\k a _ d -> insert k a d) insert l r empty\n  intersect l r =\n    merge (\\_ _ d -> d) (\\k a _ d -> insert k a d) (\\_ _ d -> d) l r empty\n  diff l r =\n    merge insert (\\_ _ _ d -> d) (\\_ _ d -> d) l r empty\n\n",
+            "type": "(Int -> a -> result -> result) -> (Int -> a -> b -> result -> result) -> (Int -> b -> result -> result) -> IntDict.IntDict a -> IntDict.IntDict b -> result -> result"
+          },
+          {
             "name": "partition",
             "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest. ",
             "type": "(Int -> v -> Bool) -> IntDict.IntDict v -> ( IntDict.IntDict v, IntDict.IntDict v )"
@@ -28377,7 +28429,7 @@
           },
           {
             "name": "uniteWith",
-            "comment": " `uniteWith merger d1 d2` combines two dictionaries. If there is a collision, `merger`\nis called with the conflicting key, the value from `d1` and that from `d2`. ",
+            "comment": " `uniteWith merger l r` combines two dictionaries. If there is a collision, `merger`\nis called with the conflicting key, the value from `l` and that from `r`. ",
             "type": "(Int -> v -> v -> v) -> IntDict.IntDict v -> IntDict.IntDict v -> IntDict.IntDict v"
           },
           {
@@ -51919,6 +51971,94 @@
           }
         ],
         "values": [],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "nphollon/collision",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Collision",
+        "comment": " Detect collisions between rigid three-dimensional objects. The process goes like this:\n\n1. Start with a set of triangular faces that describe the shape of an object.\n\n2. Use `create` to convert the list of faces into a `Bounds` value. Creating the bounds can be time-consuming, so you will want to do this before you start the time loop.\n\n3. If you want to create your bounds ahead of time, you can `encode` them to JSON and `decode` them later.\n\n4. Once your simulation/game is running, test for collisions using `collide`.\n\nThis module will not work for 2D objects.\n\n# Geometry\n@docs Vector, vector, Quaternion, quaternion, axisAngleRotation, Face, face\n\n# Creating Bounds\n@docs Bounds, create\n\n# Checking Collisions\n@docs Body, collide\n\n# Working with JSON\n@docs encode, decode\n",
+        "aliases": [
+          {
+            "name": "Body",
+            "comment": " An object that is positioned and oriented in three-dimensional space. The bounds of the object are given in the body's reference frame. Before testing for a collision, we use the position and orientation to move the bounds into the world's reference frame.\n\nThis way, we can move our objects through the world, but we don't have to re-compute the bounds (as long as the object does not change shape).\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ a | position : Collision.Vector, orientation : Collision.Quaternion, bounds : Maybe.Maybe Collision.Bounds }"
+          },
+          {
+            "name": "Bounds",
+            "comment": " The boundary data for an object, stored as an OBBTree.\n",
+            "args": [],
+            "type": "OBBTree.OBBTree"
+          },
+          {
+            "name": "Face",
+            "comment": " A triangle. The surface of your colliding objects is described by a collection of triangular faces.\n",
+            "args": [],
+            "type": "Face.Face"
+          },
+          {
+            "name": "Quaternion",
+            "comment": " Stores a three-dimensional rotation.\n",
+            "args": [],
+            "type": "Quaternion.Quaternion"
+          },
+          {
+            "name": "Vector",
+            "comment": " Stores a three-dimensional position.\n",
+            "args": [],
+            "type": "Vector.Vector"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "axisAngleRotation",
+            "comment": " Given an axis to rotate around and an angle of rotation, create a quaternion.\n",
+            "type": "Collision.Vector -> Float -> Collision.Quaternion"
+          },
+          {
+            "name": "collide",
+            "comment": " Determine whether two bodies collide.\n",
+            "type": "Collision.Body b -> Collision.Body b' -> Bool"
+          },
+          {
+            "name": "create",
+            "comment": " Generate the OBBTree for a surface. The list of faces defines the surface. If the list is empty, the function returns Nothing.\n\nThe overall time to build the OBBTree is O(n log^2 n), where n is the number of faces.\n",
+            "type": "List Collision.Face -> Maybe.Maybe Collision.Bounds"
+          },
+          {
+            "name": "decode",
+            "comment": " A JSON decoder for an OBBTree encoded with the above function.\n",
+            "type": "Json.Decode.Decoder Collision.Bounds"
+          },
+          {
+            "name": "encode",
+            "comment": " Encode an OBBTree as JSON.\n",
+            "type": "Collision.Bounds -> Json.Encode.Value"
+          },
+          {
+            "name": "face",
+            "comment": " Create a triangular face, given the positions of its three vertexes. The vertexes can be given in any order.\n",
+            "type": "Collision.Vector -> Collision.Vector -> Collision.Vector -> Collision.Face"
+          },
+          {
+            "name": "quaternion",
+            "comment": " Create a quaternion from w, x, y, and z coordinates.\n",
+            "type": "Float -> Float -> Float -> Float -> Collision.Quaternion"
+          },
+          {
+            "name": "vector",
+            "comment": " Create a vector from x, y, and z coordinates.\n",
+            "type": "Float -> Float -> Float -> Collision.Vector"
+          }
+        ],
         "generated-with-elm-version": "0.17.0"
       }
     ]
