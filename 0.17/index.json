@@ -9964,7 +9964,7 @@
   },
   {
     "name": "apuchenkin/elm-nested-router",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Router",
@@ -57177,7 +57177,7 @@
   },
   {
     "name": "pukkamustard/elm-identicon",
-    "version": "2.0.1",
+    "version": "2.0.3",
     "docs": [
       {
         "name": "Identicon",
@@ -57536,7 +57536,7 @@
   },
   {
     "name": "rluiten/elm-date-extra",
-    "version": "7.0.0",
+    "version": "7.1.0",
     "docs": [
       {
         "name": "Date.Extra.Utils",
@@ -57911,71 +57911,57 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Compare",
-        "comment": " Compare dates.\n\n@docs is\n@docs is3\n@docs Compare2\n@docs Compare3\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
-        "types": [
-          {
-            "name": "Compare2",
-            "comment": " Date comparison type for 2 dates.\n\n* After\n * Return True if date1 is after date2.\n* Before\n * Return True if date1 is before date2.\n* Same\n * Return True if date1 is same as date2.\n* SameOrAfter\n * Return True if date1 is same or after date2.\n* SameOrBefore\n * Return True if date1 is same or before date2.\n",
-            "args": [],
-            "cases": [
-              [
-                "After",
-                []
-              ],
-              [
-                "Before",
-                []
-              ],
-              [
-                "Same",
-                []
-              ],
-              [
-                "SameOrAfter",
-                []
-              ],
-              [
-                "SameOrBefore",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Compare3",
-            "comment": " Date comparison type for 3 dates.\n\nBetween does not care if date2 > date3 or date2 < date3.\n\n* Between\n * Return True if date1 is After date2 and Before date3\n * Return True if date1 is After date3 and Before date2\n* BetweenOpenStart\n * Return True if date1 is SameOrAfter date2 and Before date3\n* BetweenOpenEnd\n * Return True if date1 is After date2 and SameOrBefore date3\n* BetweenOpen\n * Return True if date1 is SameOrAfter date2 and SameOrBefore date3\n",
-            "args": [],
-            "cases": [
-              [
-                "Between",
-                []
-              ],
-              [
-                "BetweenOpenStart",
-                []
-              ],
-              [
-                "BetweenOpenEnd",
-                []
-              ],
-              [
-                "BetweenOpen",
-                []
-              ]
-            ]
-          }
-        ],
+        "types": [],
         "values": [
           {
-            "name": "is",
-            "comment": " Compare two dates.\n",
-            "type": "Date.Extra.Compare.Compare2 -> Date.Date -> Date.Date -> Bool"
-          },
+            "name": "config",
+            "comment": " Config for en-us. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_en_gb",
+        "comment": " This is the UK english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
+        "aliases": [],
+        "types": [],
+        "values": [
           {
-            "name": "is3",
-            "comment": " Compare three dates.\n\nThis figures out the low and high bounds from date2\nand date3 using minimum and maximum of them respectively.\n",
-            "type": "Date.Extra.Compare.Compare3 -> Date.Date -> Date.Date -> Date.Date -> Bool"
+            "name": "config",
+            "comment": " Config for en-gb. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_pl_pl",
+        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for pl-pl. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_en_au",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-au. ",
+            "type": "Date.Extra.Config.Config"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -58055,29 +58041,144 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_us",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Compare",
+        "comment": " Compare dates.\n\n@docs is\n@docs is3\n@docs Compare2\n@docs Compare3\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
-        "types": [],
+        "types": [
+          {
+            "name": "Compare2",
+            "comment": " Date comparison type for 2 dates.\n\n* After\n * Return True if date1 is after date2.\n* Before\n * Return True if date1 is before date2.\n* Same\n * Return True if date1 is same as date2.\n* SameOrAfter\n * Return True if date1 is same or after date2.\n* SameOrBefore\n * Return True if date1 is same or before date2.\n",
+            "args": [],
+            "cases": [
+              [
+                "After",
+                []
+              ],
+              [
+                "Before",
+                []
+              ],
+              [
+                "Same",
+                []
+              ],
+              [
+                "SameOrAfter",
+                []
+              ],
+              [
+                "SameOrBefore",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Compare3",
+            "comment": " Date comparison type for 3 dates.\n\nBetween does not care if date2 > date3 or date2 < date3.\n\n* Between\n * Return True if date1 is After date2 and Before date3\n * Return True if date1 is After date3 and Before date2\n* BetweenOpenStart\n * Return True if date1 is SameOrAfter date2 and Before date3\n* BetweenOpenEnd\n * Return True if date1 is After date2 and SameOrBefore date3\n* BetweenOpen\n * Return True if date1 is SameOrAfter date2 and SameOrBefore date3\n",
+            "args": [],
+            "cases": [
+              [
+                "Between",
+                []
+              ],
+              [
+                "BetweenOpenStart",
+                []
+              ],
+              [
+                "BetweenOpenEnd",
+                []
+              ],
+              [
+                "BetweenOpen",
+                []
+              ]
+            ]
+          }
+        ],
         "values": [
           {
-            "name": "config",
-            "comment": " Config for en-us. ",
-            "type": "Date.Extra.Config.Config"
+            "name": "is",
+            "comment": " Compare two dates.\n",
+            "type": "Date.Extra.Compare.Compare2 -> Date.Date -> Date.Date -> Bool"
+          },
+          {
+            "name": "is3",
+            "comment": " Compare three dates.\n\nThis figures out the low and high bounds from date2\nand date3 using minimum and maximum of them respectively.\n",
+            "type": "Date.Extra.Compare.Compare3 -> Date.Date -> Date.Date -> Date.Date -> Bool"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_au",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.I18n.I_fr_fr",
+        "comment": " French values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Bruno Girin\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "config",
-            "comment": " Config for en-au. ",
-            "type": "Date.Extra.Config.Config"
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config",
+        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Configuration for formatting dates. ",
+            "args": [],
+            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
+          }
+        ],
+        "types": [],
+        "values": [],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_en_us",
+        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -58237,8 +58338,8 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_en_us",
-        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.I18n.I_pl_pl",
+        "comment": " Polish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Bartosz Sokół\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -58263,21 +58364,6 @@
             "type": "Date.Month -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config",
-        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [
-          {
-            "name": "Config",
-            "comment": " Configuration for formatting dates. ",
-            "args": [],
-            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
-          }
-        ],
-        "types": [],
-        "values": [],
         "generated-with-elm-version": "0.17.0"
       }
     ]
