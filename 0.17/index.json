@@ -16232,7 +16232,7 @@
   },
   {
     "name": "danyx23/elm-mimetype",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "MimeType",
@@ -16266,6 +16266,10 @@
               ],
               [
                 "PowerPointXml",
+                []
+              ],
+              [
+                "Pdf",
                 []
               ],
               [
@@ -16436,7 +16440,7 @@
             "type": "MimeType.MimeType -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -59320,7 +59324,7 @@
   },
   {
     "name": "rtfeldman/elm-css",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "docs": [
       {
         "name": "Css.File",
@@ -66498,7 +66502,7 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
@@ -66621,7 +66625,7 @@
       },
       {
         "name": "MultiwayTree",
-        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children, foldl, foldr, flatten, filter, filterWithChildPrecedence, length, insertChild, appendChild\n\n# Mapping\n@docs map, mapListOverTree, indexedMap\n",
+        "comment": " A library for constructing multi-way trees. Each Tree carries two pieces of\ninformation, it's datum and children.\n\n\n# Types\n@docs Tree, Forest\n\n# Operations\n@docs datum, children, foldl, foldr, flatten, tuplesOfDatumAndFlatChildren, filter, filterWithChildPrecedence, length, insertChild, appendChild\n\n# Mapping\n@docs map, mapListOverTree, indexedMap\n\n# Sorting\n@docs sortBy, sortWith\n",
         "aliases": [
           {
             "name": "Forest",
@@ -66715,6 +66719,21 @@
             "name": "mapListOverTree",
             "comment": " Map a Function over a List and a MultiwayTree.\n",
             "type": "(a -> b -> result) -> List a -> MultiwayTree.Tree b -> Maybe.Maybe (MultiwayTree.Tree result)"
+          },
+          {
+            "name": "sortBy",
+            "comment": " Sort values by a derived property. Does not alter the nesting structure of\n    the Tree, that is it does not move Nodes up or down levels.\n\n    (sortBy identity\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"d\" []\n            , Tree \"c\" []\n            ])\n    == (Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ])\n",
+            "type": "(a -> comparable) -> MultiwayTree.Tree a -> MultiwayTree.Tree a"
+          },
+          {
+            "name": "sortWith",
+            "comment": " Sort values with a custom comparison function like:\n\n    flippedComparison a b =\n        case compare a b of\n          LT -> GT\n          EQ -> EQ\n          GT -> LT\n\n    This is also the most general sort function, allowing you\n    to define any other.\n",
+            "type": "(a -> a -> Basics.Order) -> MultiwayTree.Tree a -> MultiwayTree.Tree a"
+          },
+          {
+            "name": "tuplesOfDatumAndFlatChildren",
+            "comment": " A special version of flatten which flattens a Tree into a List of Tuples like (element, [all elements in subtree])\n\n    (Tree.tuplesOfDatumAndFlatChildren\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ])\n    == [ ( \"a\", [ \"b\", \"c\", \"d\" ] ), ( \"b\", [] ), ( \"c\", [] ), ( \"d\", [] ) ]\n",
+            "type": "MultiwayTree.Tree a -> List ( a, List a )"
           }
         ],
         "generated-with-elm-version": "0.17.0"
