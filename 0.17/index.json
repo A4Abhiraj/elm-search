@@ -37552,7 +37552,7 @@
   },
   {
     "name": "eskimoblood/elm-color-extra",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "docs": [
       {
         "name": "Color.Gradient",
@@ -37627,6 +37627,55 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Color.Manipulate",
+        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "darken",
+            "comment": " Decrease the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "desaturate",
+            "comment": " Decrease the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeIn",
+            "comment": " Increase the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeOut",
+            "comment": " Decrease the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "grayscale",
+            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
+            "type": "Color.Color -> Color.Color"
+          },
+          {
+            "name": "lighten",
+            "comment": " Increase the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "rotateHue",
+            "comment": " Change the hue of a color. The angle value must be in degrees\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "saturate",
+            "comment": " Increase the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Color.Blending",
         "comment": "\n# Blending\nBased on the [Compositing and Blending Level 1](https://www.w3.org/TR/compositing-1/#blending)\n\n@docs multiply, screen, overlay, difference, exclusion, hardlight, softlight, colorBurn, colorDodge, lighten, darken\n",
         "aliases": [],
@@ -37686,55 +37735,6 @@
             "name": "softlight",
             "comment": "\nDarkens or lightens the colors, depending on the source color value.\nThe effect is similar to shining a diffused spotlight on the backdrop.\n",
             "type": "Color.Color -> Color.Color -> Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Color.Manipulate",
-        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "darken",
-            "comment": " Decrease the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "desaturate",
-            "comment": " Decrease the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeIn",
-            "comment": " Increase the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeOut",
-            "comment": " Decrease the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "grayscale",
-            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
-            "type": "Color.Color -> Color.Color"
-          },
-          {
-            "name": "lighten",
-            "comment": " Increase the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "rotateHue",
-            "comment": " Change the hue of a color. The angle value must be in degrees\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "saturate",
-            "comment": " Increase the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -40174,11 +40174,11 @@
   },
   {
     "name": "fbonetti/elm-phoenix-socket",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Phoenix.Socket",
-        "comment": "\n\n# Socket\n@docs Socket, Msg, init, withDebug, update, listen\n\n# Channels\n@docs join, leave\n\n# Events\n@docs on, off\n\n# Sending messages\n@docs push\n\n",
+        "comment": "\n\n# Socket\n@docs Socket, Msg, init, withDebug, withoutHeartbeat, withHeartbeatInterval, update, listen\n\n# Channels\n@docs join, leave\n\n# Events\n@docs on, off\n\n# Sending messages\n@docs push\n\n",
         "aliases": [
           {
             "name": "Socket",
@@ -40186,7 +40186,7 @@
             "args": [
               "msg"
             ],
-            "type": "{ path : String , debug : Bool , channels : Dict.Dict String (Phoenix.Channel.Channel msg) , events : Dict.Dict ( String, String ) (Json.Encode.Value -> msg) , pushes : Dict.Dict Int (Phoenix.Push.Push msg) , ref : Int }"
+            "type": "{ path : String , debug : Bool , channels : Dict.Dict String (Phoenix.Channel.Channel msg) , events : Dict.Dict ( String, String ) (Json.Encode.Value -> msg) , pushes : Dict.Dict Int (Phoenix.Push.Push msg) , ref : Int , heartbeatIntervalSeconds : Float , withoutHeartbeat : Bool }"
           }
         ],
         "types": [
@@ -40244,6 +40244,54 @@
             "name": "withDebug",
             "comment": " When enabled, prints all incoming Phoenix messages to the console\n",
             "type": "Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          },
+          {
+            "name": "withHeartbeatInterval",
+            "comment": " Sends the heartbeat every interval in seconds\n\n    Default is 30 seconds\n",
+            "type": "Float -> Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          },
+          {
+            "name": "withoutHeartbeat",
+            "comment": " Turns off the heartbeat\n",
+            "type": "Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Phoenix.Push",
+        "comment": "\n\n@docs Push, init, withPayload, onError, onOk\n\n",
+        "aliases": [
+          {
+            "name": "Push",
+            "comment": " Represents a message being pushed to the server\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ event : String , channel : String , payload : Json.Encode.Value , onOk : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initializes a push with the given event and channel\n\n    init \"new:msg\" \"rooms:lobby\"\n\n",
+            "type": "String -> String -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onError",
+            "comment": " Attaches an error handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onError HandlePushError\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onOk",
+            "comment": " Attaches a success handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onOk HandlePushOk\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "withPayload",
+            "comment": " Attaches a payload\n\n    payload = JE.object [ (\"body\", JE.string \"Hello World!\") ]\n    init \"new:msg\" \"rooms:lobby\"\n      |> withPayload payload\n\n",
+            "type": "Json.Encode.Value -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -40325,44 +40373,6 @@
             "name": "withPayload",
             "comment": " Attaches a payload that's used for authentication\n\n    payload = JE.object [ (\"user_id\", JE.string \"123\") ]\n    init \"rooms:lobby\"\n      |> withPayload payload\n\n",
             "type": "Json.Encode.Value -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Phoenix.Push",
-        "comment": "\n\n@docs Push, init, withPayload, onError, onOk\n\n",
-        "aliases": [
-          {
-            "name": "Push",
-            "comment": " Represents a message being pushed to the server\n",
-            "args": [
-              "msg"
-            ],
-            "type": "{ event : String , channel : String , payload : Json.Encode.Value , onOk : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "init",
-            "comment": " Initializes a push with the given event and channel\n\n    init \"new:msg\" \"rooms:lobby\"\n\n",
-            "type": "String -> String -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "onError",
-            "comment": " Attaches an error handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onError HandlePushError\n\n",
-            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "onOk",
-            "comment": " Attaches a success handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onOk HandlePushOk\n\n",
-            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
-          },
-          {
-            "name": "withPayload",
-            "comment": " Attaches a payload\n\n    payload = JE.object [ (\"body\", JE.string \"Hello World!\") ]\n    init \"new:msg\" \"rooms:lobby\"\n      |> withPayload payload\n\n",
-            "type": "Json.Encode.Value -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
