@@ -11851,6 +11851,46 @@
     ]
   },
   {
+    "name": "ccapndave/elm-flat-map",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Maybe.FlatMap",
+        "comment": " This module implements the `flatMap` combinator for `Maybe`.  This allows you to call functions\nthat return a `Maybe` with arguments that are also `Maybe`s without having to worry about ending up\nwith a `Maybe (Maybe a)` return type.\n\nFor example:\n\n    getHeadFromMaybeList : Maybe List -> Maybe a\n    getHeadFromMaybeList =\n      flatMap List.head\n\n# FlatMaps\n@docs flatMap, flatMap2, flatMap3, flatMap4, flatMap5\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "flatMap",
+            "comment": "",
+            "type": "(a -> Maybe.Maybe b) -> Maybe.Maybe a -> Maybe.Maybe b"
+          },
+          {
+            "name": "flatMap2",
+            "comment": "",
+            "type": "(a -> b -> Maybe.Maybe c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
+          },
+          {
+            "name": "flatMap3",
+            "comment": "",
+            "type": "(a -> b -> c -> Maybe.Maybe d) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d"
+          },
+          {
+            "name": "flatMap4",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> Maybe.Maybe e) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe e"
+          },
+          {
+            "name": "flatMap5",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> Maybe.Maybe f) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe e -> Maybe.Maybe f"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "ccapndave/elm-update-extra",
     "version": "2.1.0",
     "docs": [
@@ -40080,6 +40120,57 @@
     ]
   },
   {
+    "name": "fauu/elm-selectable-text",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "SelectableText",
+        "comment": " A selectable text component that renders provided text as a series\nof paragraphs and `span` tags containing single words and punctuation. It lets \nthe user select words using mouse. The model contains the selected phrase in \nform of a string as well as the previously selected one. That provides an easy \nway of detection of a selection change within the parent component.\n\n# Model\n@docs Model, initialModel\n\n# Messages\n@docs Msg\n\n# View function\n@docs view\n\n# Update function\n@docs update\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " The component model:\n  - **id** - Used as the HTML id attribute for the root tag\n",
+            "args": [],
+            "type": "{ id : String , text : SelectableText.Text , mouseOverWordNo : Maybe.Maybe Int , selecting : Bool , selection : Maybe.Maybe SelectableText.Selection , selectedPhrase : Maybe.Maybe String , previousSelectedPhrase : Maybe.Maybe String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " A type representing component messages. The `ParseText` message should be\nused to pass a string to be parsed and rendered by the component from the parent\ncomponent.\n\n\n    RawTextFetched rawText ->\n      model \n        ! [ message\n              <| SelectableTextMsg \n              <| SelectableText.ParseText rawText\n          ] \n\n",
+            "args": [],
+            "cases": [
+              [
+                "ParseText",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "initialModel",
+            "comment": " Initialize the component. Expects user to provide id and a placeholder text\nthat will be displayed until a text is provided by the parent using `ParseText`\nmessage.\n\n\n    selectableTextModel = SelectableText.initialModel \"my-text\" \"Loading...\"\n  \n",
+            "type": "String -> String -> SelectableText.Model"
+          },
+          {
+            "name": "update",
+            "comment": " The selectable text update function.\n",
+            "type": "SelectableText.Msg -> SelectableText.Model -> ( SelectableText.Model, Platform.Cmd.Cmd SelectableText.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " The selectable text view. Renders a `div` element containing the text.\n",
+            "type": "SelectableText.Model -> Html.Html SelectableText.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "fbonetti/elm-geodesy",
     "version": "1.0.0",
     "docs": [
@@ -52966,6 +53057,49 @@
     ]
   },
   {
+    "name": "paramanders/elm-hexagon",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Hexagon",
+        "comment": " Create SVG hexagons with rounded corners\n\n# Definition\n@docs Point, Hexagon\n\n# Common Helpers\n@docs p, hex\n\n# Rendering\n@docs svgHexagon\n\n",
+        "aliases": [
+          {
+            "name": "Hexagon",
+            "comment": " Hexagon definition to generate SVG tags from |",
+            "args": [],
+            "type": "{ center : Hexagon.Point, rotation : Float, radius : Float }"
+          },
+          {
+            "name": "Point",
+            "comment": " Point definition to define hexagon center & corner points |",
+            "args": [],
+            "type": "{ x : Float, y : Float }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "hex",
+            "comment": " Shortcut to create a `Hexagon` |",
+            "type": "Hexagon.Point -> Float -> Float -> Hexagon.Hexagon"
+          },
+          {
+            "name": "p",
+            "comment": " Shortcut to create a `Point` |",
+            "type": "Float -> Float -> Hexagon.Point"
+          },
+          {
+            "name": "svgHexagon",
+            "comment": " Create a SVG path for a `Hexagon` definition |",
+            "type": "List (Svg.Attribute msg) -> Hexagon.Hexagon -> Svg.Svg msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "pdamoc/elm-css",
     "version": "3.0.2",
     "docs": [
@@ -57203,6 +57337,31 @@
             "name": "identicon",
             "comment": " Generate a identicon from a string\n\n    main =\n      identicon \"200px\" \"Hello identicon!\"\n",
             "type": "String -> String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "rainteller/elm-capitalize",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Capitalize",
+        "comment": " Capitalize your sentences.\n\n# Usage\n@docs toCapital, toCapitalAll\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "toCapital",
+            "comment": " Capitalize only the first word of a sentence.\n\n    toCapital \"hello world\"  -- \"Hello world\"\n",
+            "type": "String -> String"
+          },
+          {
+            "name": "toCapitalAll",
+            "comment": " Capitalize each word of a sentence.\n\n    toCapitalAll \"hello world\"  -- \"Hello World\"\n",
+            "type": "String -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
