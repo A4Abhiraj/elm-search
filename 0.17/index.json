@@ -7505,11 +7505,11 @@
   },
   {
     "name": "Fresheyeball/elm-return",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Return",
-        "comment": "\n## Type\nModeling the `update` tuple as a Monad similar to `Writer`\n@docs Return, ReturnF\n\n## Mapping\n@docs map, map2, map3, map4, map5, andMap, mapWith, mapCmd\n\n## Basics\n@docs singleton, andThen, (|<), (>|), (>>|), (|<<), (>>>), (<<<)\n\n## Write `Cmd`s\n@docs return, command, tell, pass, effect\n\n## Read `Cmd`s\n@docs ask, listen\n\n## Fancy non-sense\n@docs sequence, flatten\n",
+        "comment": "\n## Type\nModeling the `update` tuple as a Monad similar to `Writer`\n@docs Return, ReturnF\n\n## Mapping\n@docs map, map2, map3, map4, map5, andMap, mapWith, mapCmd\n\n## Piping\n@docs piper, pipel, zero\n\n## Basics\n@docs singleton, andThen, (>>>), (<<<)\n\n## Write `Cmd`s\n@docs return, command, effect\n\n## Fancy non-sense\n@docs sequence, flatten\n",
         "aliases": [
           {
             "name": "Return",
@@ -7543,20 +7543,6 @@
             "type": "(a -> Return.Return msg b) -> (b -> Return.Return msg c) -> a -> Return.Return msg c"
           },
           {
-            "name": ">>|",
-            "comment": " ",
-            "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b",
-            "associativity": "left",
-            "precedence": 6
-          },
-          {
-            "name": ">|",
-            "comment": "\nSame as `>>|` but the left hand `Model` is dropped\n",
-            "type": "Return.Return msg model -> Return.Return msg model' -> Return.Return msg model'",
-            "associativity": "left",
-            "precedence": 7
-          },
-          {
             "name": "andMap",
             "comment": "\nMap an `Return` into a `Return` containing a `Model` function\n",
             "type": "Return.Return msg (a -> b) -> Return.Return msg a -> Return.Return msg b"
@@ -7567,29 +7553,19 @@
             "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b"
           },
           {
-            "name": "ask",
-            "comment": "\n",
-            "type": "Return.Return msg model -> Return.Return msg (Platform.Cmd.Cmd msg)"
-          },
-          {
             "name": "command",
             "comment": "\nAdd a `Cmd` to a `Return`, the `Model` is uneffected\n",
-            "type": "Platform.Cmd.Cmd msg -> Return.Return msg model -> Return.Return msg model"
+            "type": "Platform.Cmd.Cmd msg -> Return.ReturnF msg model"
           },
           {
             "name": "effect",
             "comment": "\nAdd a `Cmd` to a `Return` based on its `Model`, the `Model` will not be effected\n",
-            "type": "(model -> Platform.Cmd.Cmd msg) -> Return.Return msg model -> Return.Return msg model"
+            "type": "Respond.Respond msg model -> Return.ReturnF msg model"
           },
           {
             "name": "flatten",
             "comment": " ",
             "type": "Return.Return msg (Return.Return msg model) -> Return.Return msg model"
-          },
-          {
-            "name": "listen",
-            "comment": "\n",
-            "type": "Return.Return msg a -> Return.Return msg (Return.Return msg a)"
           },
           {
             "name": "map",
@@ -7627,9 +7603,14 @@
             "type": "(a -> b) -> Platform.Cmd.Cmd msg -> Return.Return msg a -> Return.Return msg b"
           },
           {
-            "name": "pass",
-            "comment": "\n",
-            "type": "Return.Return msg ( model, Platform.Cmd.Cmd msg -> Platform.Cmd.Cmd msg' ) -> Return.Return msg' model"
+            "name": "pipel",
+            "comment": " ",
+            "type": "List (Return.ReturnF msg model) -> Return.ReturnF msg model"
+          },
+          {
+            "name": "piper",
+            "comment": " ",
+            "type": "List (Return.ReturnF msg model) -> Return.ReturnF msg model"
           },
           {
             "name": "return",
@@ -7647,26 +7628,51 @@
             "type": "model -> Return.Return msg model"
           },
           {
-            "name": "tell",
-            "comment": "\nConstruct a `Return` from a `Cmd`\n",
-            "type": "Platform.Cmd.Cmd msg -> Return.Return msg ()"
-          },
-          {
-            "name": "|<",
-            "comment": "\nSame as `>>|` but the right hand `Model` is dropped\n",
-            "type": "Return.Return msg model' -> Return.Return msg model -> Return.Return msg model'",
-            "associativity": "right",
-            "precedence": 7
-          },
-          {
-            "name": "|<<",
+            "name": "zero",
             "comment": " ",
-            "type": "(a -> Return.Return msg b) -> Return.Return msg a -> Return.Return msg b",
-            "associativity": "right",
-            "precedence": 6
+            "type": "Return.ReturnF msg model"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Respond",
+        "comment": "\n@docs Respond, append, sum, zero, comap\n",
+        "aliases": [
+          {
+            "name": "Respond",
+            "comment": "\nA function from a model to a Cmd.\nBasically there are times where you want to\nhave a side effect on the world if the model\nhas a certain shape. `Respond` facilitates\nthis use case.\n",
+            "args": [
+              "msg",
+              "a"
+            ],
+            "type": "a -> Platform.Cmd.Cmd msg"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "append",
+            "comment": " ",
+            "type": "Respond.Respond msg a -> Respond.Respond msg a -> Respond.Respond msg a"
+          },
+          {
+            "name": "comap",
+            "comment": "\nAdd a function to the front\n`b -> a >> a -> Cmd msg`\n",
+            "type": "(b -> a) -> Respond.Respond msg a -> Respond.Respond msg b"
+          },
+          {
+            "name": "sum",
+            "comment": " ",
+            "type": "List (Respond.Respond msg a) -> Respond.Respond msg a"
+          },
+          {
+            "name": "zero",
+            "comment": " ",
+            "type": "Respond.Respond msg a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -8258,6 +8264,124 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "NoRedInk/elm-string-extra",
+    "version": "1.3.1",
+    "docs": [
+      {
+        "name": "String.Extra",
+        "comment": " Convenience functions for working with Strings\n\n# Formatting\n@docs capitalize, pluralize, toSentence\n\n# Whitespace\n@docs isWhitespace\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "capitalize",
+            "comment": " Capitalize or uncapitalize the given string.\n\n    capitalize True \"foo\"\n    -- \"Foo\"\n\n    capitalize False \"BAR\"\n    -- \"bAR\"\n",
+            "type": "Bool -> String -> String"
+          },
+          {
+            "name": "isWhitespace",
+            "comment": " Returns True iff the given String is 1 or more whitespace characters,\nand nothing else.\n\n(Whitespace is defined as the regular expression `\\s` matcher.)\n\n    isWhitespace \"\"   == False\n    isWhitespace \" \"  == True\n    isWhitespace \"  \" == True\n    isWhitespace \" x\" == False\n    isWhitespace \"x \" == False\n",
+            "type": "String -> Bool"
+          },
+          {
+            "name": "pluralize",
+            "comment": " Given a number, a singular string, and a plural string, returns the number\nfollowed by a space, followed by either the singular string if the number was 1,\nor the plural string otherwise.\n\n    pluralize \"elf\" \"elves\" 2 == \"2 elves\"\n    pluralize \"elf\" \"elves\" 1 == \"1 elf\"\n    pluralize \"elf\" \"elves\" 0 == \"0 elves\"\n\n",
+            "type": "String -> String -> number -> String"
+          },
+          {
+            "name": "toSentence",
+            "comment": " Converts a list of strings into a human formatted readable list\n\n\n    toSentence [] ---> \"\"\n    toSentence [\"lions\"] ---> \"lions\"\n    toSentence [\"lions\", \"tigers\"] --> \"lions and tigers\"\n    toSentence [\"lions\", \"tigers\", \"bears\"] --> \"lions, tigers, and bears\"\n\nnotes:\n* It *DOES* include an oxford comma\n* It *DOES NOT* include a period\n* It *DOES NOT* include the phrase \"...oh my!\"\n\n",
+            "type": "List String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "NoRedInk/elm-sweet-poll",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "SweetPoll",
+        "comment": "\n\n# Configuration\n@docs Config, defaultConfig\n\n# Elm Artchitecture\n@docs Model, Action, init, update\n\n# Record Extension Component\n@docs ComponentModel, componentUpdate\n",
+        "aliases": [
+          {
+            "name": "ComponentModel",
+            "comment": " Model type for using the NoRedInk/elm-api-components pattern\n",
+            "args": [
+              "base",
+              "data"
+            ],
+            "type": "{ base | sweetPoll : SweetPoll.Model data }"
+          },
+          {
+            "name": "Config",
+            "comment": " ",
+            "args": [
+              "data"
+            ],
+            "type": "{ url : String , decoder : Json.Decode.Decoder data , delay : Time.Time , samesBeforeDelay : Int , delayMultiplier : Float , maxDelay : Time.Time }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Action",
+            "comment": " ",
+            "args": [
+              "data"
+            ],
+            "cases": [
+              [
+                "PollSuccess",
+                [
+                  "data"
+                ]
+              ],
+              [
+                "PollFailure",
+                [
+                  "Testable.Http.Error"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Model",
+            "comment": " Private state of the SweetPoll component\n",
+            "args": [
+              "data"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "componentUpdate",
+            "comment": " Update function for using the NoRedInk/elm-api-components pattern\n",
+            "type": "SweetPoll.Action data -> SweetPoll.ComponentModel base data -> ( SweetPoll.ComponentModel base data , Testable.Cmd.Cmd (SweetPoll.Action data) )"
+          },
+          {
+            "name": "defaultConfig",
+            "comment": " Default configuration for SweetPoll\n",
+            "type": "Json.Decode.Decoder data -> String -> SweetPoll.Config data"
+          },
+          {
+            "name": "init",
+            "comment": " ",
+            "type": "SweetPoll.Config data -> ( SweetPoll.Model data, Testable.Cmd.Cmd (SweetPoll.Action data) )"
+          },
+          {
+            "name": "update",
+            "comment": " The SweetPoll StartApp-style update function\n",
+            "type": "SweetPoll.Action data -> SweetPoll.Model data -> ( SweetPoll.Model data, Testable.Cmd.Cmd (SweetPoll.Action data) )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -28885,11 +29009,11 @@
   },
   {
     "name": "elm-community/list-extra",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "List.Extra",
-        "comment": " Convenience functions for working with List\n\n# Basics\n@docs last, init, getAt, (!!), uncons, maximumBy, minimumBy, andMap, andThen, takeWhile, dropWhile, dropDuplicates, replaceIf, setAt, deleteIf, updateIf, updateAt, updateIfIndex, singleton, removeAt, removeWhen\n\n# List transformations\n@docs intercalate, transpose, subsequences, permutations, interweave\n\n# Folds\n@docs foldl1, foldr1\n\n# Building lists\n@docs scanl1, scanr, scanr1, unfoldr, iterate\n\n# Sublists\n@docs splitAt, takeWhileEnd, dropWhileEnd, span, break, stripPrefix, group, groupWhile, groupWhileTransitively, inits, tails, select, selectSplit\n\n# Predicates\n@docs isPrefixOf, isSuffixOf, isInfixOf, isSubsequenceOf, isPermutationOf\n\n# Searching\n@docs notMember, find, elemIndex, elemIndices, findIndex, findIndices\n\n# Zipping\n@docs zip, zip3, zip4, zip5\n\n# Lift functions onto multiple lists of arguments\n@docs lift2, lift3, lift4\n\n# Split to groups of given size\n@docs groupsOf, groupsOfWithStep, greedyGroupsOf, greedyGroupsOfWithStep\n",
+        "comment": " Convenience functions for working with List\n\n# Basics\n@docs last, init, getAt, (!!), uncons, maximumBy, minimumBy, andMap, andThen, takeWhile, dropWhile, unique, uniqueBy, replaceIf, setAt, remove, updateIf, updateAt, updateIfIndex, singleton, removeAt, filterNot\n\n# List transformations\n@docs intercalate, transpose, subsequences, permutations, interweave\n\n# Folds\n@docs foldl1, foldr1\n\n# Building lists\n@docs scanl1, scanr, scanr1, unfoldr, iterate\n\n# Sublists\n@docs splitAt, takeWhileRight, dropWhileRight, span, break, stripPrefix, group, groupWhile, groupWhileTransitively, inits, tails, select, selectSplit\n\n# Predicates\n@docs isPrefixOf, isSuffixOf, isInfixOf, isSubsequenceOf, isPermutationOf\n\n# Searching\n@docs notMember, find, elemIndex, elemIndices, findIndex, findIndices\n\n# Zipping\n@docs zip, zip3, zip4, zip5\n\n# Lift functions onto multiple lists of arguments\n@docs lift2, lift3, lift4\n\n# Split to groups of given size\n@docs groupsOf, groupsOfWithStep, greedyGroupsOf, greedyGroupsOfWithStep\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -28914,23 +29038,13 @@
             "type": "(a -> Bool) -> List a -> ( List a, List a )"
           },
           {
-            "name": "deleteIf",
-            "comment": " Remove all values that satisfy a predicate\n",
-            "type": "(a -> Bool) -> List a -> List a"
-          },
-          {
-            "name": "dropDuplicates",
-            "comment": " Drop all duplicates\n",
-            "type": "List comparable -> List comparable"
-          },
-          {
             "name": "dropWhile",
             "comment": " Drop elements in order as long as the predicate evaluates to `True`\n",
             "type": "(a -> Bool) -> List a -> List a"
           },
           {
-            "name": "dropWhileEnd",
-            "comment": " Drop elements from the end, while predicate still holds.\n\n    dropWhileEnd ((<)5) [1..10] == [1,2,3,4,5]\n",
+            "name": "dropWhileRight",
+            "comment": " Drop elements from the right, while predicate still holds.\n\n    dropWhileRight ((<)5) [1..10] == [1,2,3,4,5]\n",
             "type": "(a -> Bool) -> List a -> List a"
           },
           {
@@ -28942,6 +29056,11 @@
             "name": "elemIndices",
             "comment": " Return all indices of occurrences of the element. If element is not found, return empty list. Indexing starts from 0.\n\n    elemIndices 1 [1,2,3] == [0]\n    elemIndices 4 [1,2,3] == []\n    elemIndices 1 [1,2,1] == [0,2]\n",
             "type": "a -> List a -> List Int"
+          },
+          {
+            "name": "filterNot",
+            "comment": " Take a predicate and a list, and return a list that contains elements which fails to satisfy the predicate.\n    This is equivalent to `List.filter (not << predicate) list`.\n\n    filterNot isEven [1,2,3,4] == [1,3]\n",
+            "type": "(a -> Bool) -> List a -> List a"
           },
           {
             "name": "find",
@@ -29005,7 +29124,7 @@
           },
           {
             "name": "groupsOfWithStep",
-            "comment": " Split list into groups of size given by the first argument.  After each group, drop a number of elements given by the second argumet before starting the next group.\n\n    groupsOfWithStep 2 1 [1..4]\n      == [[1,2],[2,3],[3,4]]\n",
+            "comment": " Split list into groups of size given by the first argument.  After each group, drop a number of elements given by the second argument before starting the next group.\n\n    groupsOfWithStep 2 1 [1..4]\n      == [[1,2],[2,3],[3,4]]\n",
             "type": "Int -> Int -> List a -> List (List a)"
           },
           {
@@ -29099,14 +29218,14 @@
             "type": "List a -> List (List a)"
           },
           {
+            "name": "remove",
+            "comment": " Remove the first occurrence of a value from a list.\n",
+            "type": "a -> List a -> List a"
+          },
+          {
             "name": "removeAt",
             "comment": " Remove the element at an index from a list. If the index is out of range, this returns the original list unchanged. Otherwise, it returns the updated list.\n",
             "type": "Int -> List a -> List a"
-          },
-          {
-            "name": "removeWhen",
-            "comment": " Take a predicate and a list, and return a list that contains elements which fails to satisfy the predicate.\n    This is equivalent to `List.filter (not << predicate) list`.\n\n    removeWhen isEven [1,2,3,4] == [1,3]\n",
-            "type": "(a -> Bool) -> List a -> List a"
           },
           {
             "name": "replaceIf",
@@ -29179,8 +29298,8 @@
             "type": "(a -> Bool) -> List a -> List a"
           },
           {
-            "name": "takeWhileEnd",
-            "comment": " Take elements from the end, while predicate still holds.\n\n    takeWhileEnd ((<)5) [1..10] == [6,7,8,9,10]\n",
+            "name": "takeWhileRight",
+            "comment": " Take elements from the right, while predicate still holds.\n\n    takeWhileRight ((<)5) [1..10] == [6,7,8,9,10]\n",
             "type": "(a -> Bool) -> List a -> List a"
           },
           {
@@ -29197,6 +29316,16 @@
             "name": "unfoldr",
             "comment": " The `unfoldr` function is \"dual\" to `foldr`. `foldr` reduces a list to a summary value, `unfoldr` builds a list from a seed. The function takes a function and a starting element. It applies the function to the element. If the result is `Just (a, b)`, `a` is accumulated and the function is applied to `b`. If the result is `Nothing`, the list accumulated so far is returned.\n\n    unfoldr (\\b -> if b == 0 then Nothing else Just (b, b-1)) 5 == [5,4,3,2,1]\n",
             "type": "(b -> Maybe.Maybe ( a, b )) -> b -> List a"
+          },
+          {
+            "name": "unique",
+            "comment": " Remove duplicate values, keeping the first instance of each element which appears more than once.\n\n    unique [0,1,1,0,1] == [0,1]\n",
+            "type": "List comparable -> List comparable"
+          },
+          {
+            "name": "uniqueBy",
+            "comment": " Drop duplicates where what is considered to be a duplicate is the result of first applying the supplied function to the elements of the list.\n",
+            "type": "(a -> comparable) -> List a -> List a"
           },
           {
             "name": "updateAt",
@@ -29234,7 +29363,7 @@
             "type": "List a -> List b -> List c -> List d -> List e -> List ( a, b, c, d, e )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -58260,7 +58389,7 @@
   },
   {
     "name": "rluiten/elm-date-extra",
-    "version": "7.1.0",
+    "version": "7.2.0",
     "docs": [
       {
         "name": "Date.Extra.Utils",
@@ -58335,7 +58464,7 @@
         "values": [
           {
             "name": "endOfTime",
-            "comment": " Return a date created by increasing to maximum value all values below\na given TimeUnit granularity.\n\nThis ceils in local time zone values, as the date element parts\nare pulled straight from the local time zone date values.\n",
+            "comment": " Return a date created by increasing to maximum value all values below\na given TimeUnit granularity.\n\nThis modifies in local time zone values, as the date element parts\nare pulled straight from the local time zone date values.\n",
             "type": "Date.Extra.TimeUnit.TimeUnit -> Date.Date -> Date.Date"
           },
           {
@@ -58635,62 +58764,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_us",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-us. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config.Config_en_gb",
-        "comment": " This is the UK english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-gb. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config.Config_pl_pl",
-        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for pl-pl. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config.Config_en_au",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-au. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.Period",
         "comment": " Period is a fixed length of time.\n\nName of type concept copied from NodaTime.\n\nThis module has no concept of Months or Years which have variable lenghts of time.\nFor that see Duration.\n\n@docs add\n@docs diff\n@docs Period\n@docs DeltaRecord\n@docs zeroDelta\n@docs toTicks\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [
@@ -58835,52 +58908,78 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_fr_fr",
-        "comment": " French values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Bruno Girin\n",
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "dayName",
-            "comment": " Day full name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "dayShort",
-            "comment": " Day short name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "monthName",
-            "comment": " Month full name. ",
-            "type": "Date.Month -> String"
-          },
-          {
-            "name": "monthShort",
-            "comment": " Month short name. ",
-            "type": "Date.Month -> String"
+            "name": "config",
+            "comment": " Config for en-us. ",
+            "type": "Date.Extra.Config.Config"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config",
-        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [
-          {
-            "name": "Config",
-            "comment": " Configuration for formatting dates. ",
-            "args": [],
-            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
-          }
-        ],
+        "name": "Date.Extra.Config.Config_en_gb",
+        "comment": " This is the UK english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
+        "aliases": [],
         "types": [],
-        "values": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-gb. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_en_us",
-        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "name": "Date.Extra.Config.Config_en_au",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-au. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_pl_pl",
+        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for pl-pl. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_fi_fi",
+        "comment": " This is the Finnish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for fi-fi. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_fr_fr",
+        "comment": " French values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Bruno Girin\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -59062,6 +59161,35 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Date.Extra.I18n.I_en_us",
+        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Date.Extra.I18n.I_pl_pl",
         "comment": " Polish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Bartosz Sokół\n",
         "aliases": [],
@@ -59088,6 +59216,50 @@
             "type": "Date.Month -> String"
           }
         ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_fi_fi",
+        "comment": " Finnish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config",
+        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Configuration for formatting dates. ",
+            "args": [],
+            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
+          }
+        ],
+        "types": [],
+        "values": [],
         "generated-with-elm-version": "0.17.0"
       }
     ]
@@ -64656,7 +64828,7 @@
   },
   {
     "name": "sporto/erl",
-    "version": "9.0.1",
+    "version": "10.0.0",
     "docs": [
       {
         "name": "Erl",
@@ -64672,7 +64844,7 @@
             "name": "Url",
             "comment": " Record that holds url attributes\n",
             "args": [],
-            "type": "{ protocol : String , username : String , password : String , host : List String , port' : Int , path : List String , hasTrailingSlash : Bool , hash : String , query : Erl.Query }"
+            "type": "{ protocol : String , username : String , password : String , host : List String , port' : Int , path : List String , hasLeadingSlash : Bool , hasTrailingSlash : Bool , hash : String , query : Erl.Query }"
           }
         ],
         "types": [],
@@ -64724,7 +64896,7 @@
           },
           {
             "name": "new",
-            "comment": " Generate an empty Erl.Url record\n\n    Erl.new ==\n\n    { protocol = \"\"\n    , username = \"\"\n    , password = \"\"\n    , host = []\n    , path = []\n    , hasTrailingSlash = False\n    , port' = 0\n    , hash = \"\"\n    , query = Dict.empty\n    }\n\n",
+            "comment": " Generate an empty Erl.Url record\n\n    Erl.new ==\n\n    { protocol = \"\"\n    , username = \"\"\n    , password = \"\"\n    , host = []\n    , path = []\n    , hasLeadingSlash = False\n    , hasTrailingSlash = False\n    , port' = 0\n    , hash = \"\"\n    , query = Dict.empty\n    }\n\n",
             "type": "Erl.Url"
           },
           {
@@ -64749,7 +64921,7 @@
           },
           {
             "name": "toString",
-            "comment": " Generate url string from an Erl.Url record\n\n    url = { protocol = \"http\",\n          , username = \"\",\n          , password = \"\",\n          , host = [\"www\", \"foo\", \"com\"],\n          , path = [\"users\", \"1\"],\n          , hasTrailingSlash = False\n          , port' = 2000,\n          , hash = \"a/b\",\n          , query = Dict.empty |> Dict.insert \"q\" \"1\" |> Dict.insert \"k\" \"2\"\n          }\n\n    Erl.toString url == \"http://www.foo.com:2000/users/1?k=2&q=1#a/b\"\n\n",
+            "comment": " Generate url string from an Erl.Url record\n\n    url = { protocol = \"http\",\n          , username = \"\",\n          , password = \"\",\n          , host = [\"www\", \"foo\", \"com\"],\n          , path = [\"users\", \"1\"],\n          , hasLeadingSlash = False\n          , hasTrailingSlash = False\n          , port' = 2000,\n          , hash = \"a/b\",\n          , query = Dict.empty |> Dict.insert \"q\" \"1\" |> Dict.insert \"k\" \"2\"\n          }\n\n    Erl.toString url == \"http://www.foo.com:2000/users/1?k=2&q=1#a/b\"\n\n",
             "type": "Erl.Url -> String"
           }
         ],
