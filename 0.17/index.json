@@ -31541,143 +31541,8 @@
   },
   {
     "name": "elm-lang/core",
-    "version": "4.0.1",
+    "version": "4.0.2",
     "docs": [
-      {
-        "name": "Process",
-        "comment": "\n\n# Processes\n@docs Id, spawn, sleep, kill\n\n## Future Plans\n\nRight now, this library is pretty sparse. For example, there is no public API\nfor processes to communicate with each other. This is a really important\nability, but it is also something that is extraordinarily easy to get wrong!\n\nI think the trend will be towards an Erlang style of concurrency, where every\nprocess has an “event queue” that anyone can send messages to. I currently\nthink the API will be extended to be more like this:\n\n    type Id exit msg\n\n    spawn : Task exit a -> Task x (Id exit Never)\n\n    kill : Id exit msg -> Task x ()\n\n    send : Id exit msg -> msg -> Task x ()\n\nA process `Id` will have two type variables to make sure all communication is\nvalid. The `exit` type describes the messages that are produced if the process\nfails because of user code. So if processes are linked and trapping errors,\nthey will need to handle this. The `msg` type just describes what kind of\nmessages this process can be sent by strangers.\n\nWe shall see though! This is just a draft that does not cover nearly everything\nit needs to, so the long-term vision for concurrency in Elm will be rolling out\nslowly as I get more data and experience.\n\nI ask that people bullish on compiling to node.js keep this in mind. I think we\ncan do better than the hopelessly bad concurrency model of node.js, and I hope\nthe Elm community will be supportive of being more ambitious, even if it takes\nlonger. That’s kind of what Elm is all about.\n",
-        "aliases": [
-          {
-            "name": "Id",
-            "comment": " A light-weight process that runs concurrently. You can use `spawn` to\nget a bunch of different tasks running in different processes. The Elm runtime\nwill interleave their progress. So if a task is taking too long, we will pause\nit at an `andThen` and switch over to other stuff.\n\n**Note:** We make a distinction between *concurrency* which means interleaving\ndifferent sequences and *parallelism* which means running different\nsequences at the exact same time. For example, a\n[time-sharing system](https://en.wikipedia.org/wiki/Time-sharing) is definitely\nconcurrent, but not necessarily parallel. So even though JS runs within a\nsingle OS-level thread, Elm can still run things concurrently.\n",
-            "args": [],
-            "type": "Platform.ProcessId"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "kill",
-            "comment": " Sometimes you `spawn` a process, but later decide it would be a waste to\nhave it keep running and doing stuff. The `kill` function will force a process\nto bail on whatever task it is running. So if there is an HTTP request in\nflight, it will also abort the request.\n",
-            "type": "Process.Id -> Task.Task x ()"
-          },
-          {
-            "name": "sleep",
-            "comment": " Block progress on the current process for a given amount of time. The\nJavaScript equivalent of this is [`setTimeout`][setTimeout] which lets you\ndelay work until later.\n\n[setTimeout]: https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout\n",
-            "type": "Time.Time -> Task.Task x ()"
-          },
-          {
-            "name": "spawn",
-            "comment": " Run a task in its own light-weight process. In the following example,\n`task1` and `task2` will be interleaved. If `task1` makes a long HTTP request\nor is just taking a long time, we can hop over to `task2` and do some work\nthere.\n\n    spawn task1 `Task.andThen` \\_ -> spawn task2\n\n**Note:** This creates a relatively restricted kind of `Process` because it\ncannot receive any messages. More flexibility for user-defined processes will\ncome in a later release!\n",
-            "type": "Task.Task x a -> Task.Task y Process.Id"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Random",
-        "comment": " This library helps you generate pseudo-random values.\n\nThis library is all about building [`generators`](#Generator) for whatever\ntype of values you need. There are a bunch of primitive generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier\ngenerators with functions like [`list`](#list) and [`map`](#map).\n\nIt may be helpful to [read about JSON decoders][json] because they work very\nsimilarly.\n\n[json]: https://evancz.gitbooks.io/an-introduction-to-elm/content/interop/json.html\n\n> *Note:* This is an implementation of the Portable Combined Generator of\nL'Ecuyer for 32-bit computers. It is almost a direct translation from the\n[System.Random](http://hackage.haskell.org/package/random-1.0.1.1/docs/System-Random.html)\nmodule. It has a period of roughly 2.30584e18.\n\n# Generators\n@docs Generator\n\n# Primitive Generators\n@docs bool, int, float\n\n# Data Structure Generators\n@docs pair, list\n\n# Custom Generators\n@docs map, map2, map3, map4, map5, andThen\n\n# Generate Values\n@docs generate\n\n# Generate Values Manually\n@docs step, Seed, initialSeed\n\n# Constants\n@docs maxInt, minInt\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Generator",
-            "comment": " A `Generator` is like a recipe for generating certain random values. So a\n`Generator Int` describes how to generate integers and a `Generator String`\ndescribes how to generate strings.\n\nTo actually *run* a generator and produce the random values, you need to use\nfunctions like [`generate`](#generate) and [`initialSeed`](#initialSeed).\n",
-            "args": [
-              "a"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Seed",
-            "comment": " A `Seed` is the source of randomness in this whole system. Whenever\nyou want to use a generator, you need to pair it with a seed.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "andThen",
-            "comment": " Chain random operations, threading through the seed. In the following\nexample, we will generate a random letter by putting together uppercase and\nlowercase letters.\n\n    letter : Generator Char\n    letter =\n      bool `andThen` \\b ->\n        if b then uppercaseLetter else lowercaseLetter\n\n    -- bool : Generator Bool\n    -- uppercaseLetter : Generator Char\n    -- lowercaseLetter : Generator Char\n",
-            "type": "Random.Generator a -> (a -> Random.Generator b) -> Random.Generator b"
-          },
-          {
-            "name": "bool",
-            "comment": " Create a generator that produces boolean values. The following example\nsimulates a coin flip that may land heads or tails.\n\n    type Flip = Heads | Tails\n\n    coinFlip : Generator Flip\n    coinFlip =\n        map (\\b -> if b then Heads else Tails) bool\n",
-            "type": "Random.Generator Bool"
-          },
-          {
-            "name": "float",
-            "comment": " Generate floats in a given range. The following example is a generator\nthat produces decimals between 0 and 1.\n\n    probability : Generator Float\n    probability =\n        float 0 1\n",
-            "type": "Float -> Float -> Random.Generator Float"
-          },
-          {
-            "name": "generate",
-            "comment": " Create a command that will generate random values.\n\nRead more about how to use this in your programs in [The Elm Architecture\ntutorial][arch] which has a section specifically [about random values][rand].\n\n[arch]: https://evancz.gitbooks.io/an-introduction-to-elm/content/architecture/index.html\n[rand]: https://evancz.gitbooks.io/an-introduction-to-elm/content/architecture/effects/random.html\n",
-            "type": "(a -> msg) -> Random.Generator a -> Platform.Cmd.Cmd msg"
-          },
-          {
-            "name": "initialSeed",
-            "comment": " Create a &ldquo;seed&rdquo; of randomness which makes it possible to\ngenerate random values. If you use the same seed many times, it will result\nin the same thing every time! A good way to get an unexpected seed is to use\nthe current time.\n",
-            "type": "Int -> Random.Seed"
-          },
-          {
-            "name": "int",
-            "comment": " Generate 32-bit integers in a given range.\n\n    int 0 10   -- an integer between zero and ten\n    int -5 5   -- an integer between -5 and 5\n\n    int minInt maxInt  -- an integer in the widest range feasible\n\nThis function *can* produce values outside of the range [[`minInt`](#minInt),\n[`maxInt`](#maxInt)] but sufficient randomness is not guaranteed.\n",
-            "type": "Int -> Int -> Random.Generator Int"
-          },
-          {
-            "name": "list",
-            "comment": " Create a list of random values.\n\n    floatList : Generator (List Float)\n    floatList =\n        list 10 (float 0 1)\n\n    intList : Generator (List Int)\n    intList =\n        list 5 (int 0 100)\n\n    intPairs : Generator (List (Int, Int))\n    intPairs =\n        list 10 <| pair (int 0 100) (int 0 100)\n",
-            "type": "Int -> Random.Generator a -> Random.Generator (List a)"
-          },
-          {
-            "name": "map",
-            "comment": " Transform the values produced by a generator. The following examples show\nhow to generate booleans and letters based on a basic integer generator.\n\n    bool : Generator Bool\n    bool =\n      map ((==) 1) (int 0 1)\n\n    lowercaseLetter : Generator Char\n    lowercaseLetter =\n      map (\\n -> Char.fromCode (n + 97)) (int 0 25)\n\n    uppercaseLetter : Generator Char\n    uppercaseLetter =\n      map (\\n -> Char.fromCode (n + 65)) (int 0 25)\n\n",
-            "type": "(a -> b) -> Random.Generator a -> Random.Generator b"
-          },
-          {
-            "name": "map2",
-            "comment": " Combine two generators.\n\nThis function is used to define things like [`pair`](#pair) where you want to\nput two generators together.\n\n    pair : Generator a -> Generator b -> Generator (a,b)\n    pair genA genB =\n      map2 (,) genA genB\n\n",
-            "type": "(a -> b -> c) -> Random.Generator a -> Random.Generator b -> Random.Generator c"
-          },
-          {
-            "name": "map3",
-            "comment": " Combine three generators. This could be used to produce random colors.\n\n    import Color\n\n    rgb : Generator Color.Color\n    rgb =\n      map3 Color.rgb (int 0 255) (int 0 255) (int 0 255)\n\n    hsl : Generator Color.Color\n    hsl =\n      map3 Color.hsl (map degrees (int 0 360)) (float 0 1) (float 0 1)\n",
-            "type": "(a -> b -> c -> d) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d"
-          },
-          {
-            "name": "map4",
-            "comment": " Combine four generators.\n",
-            "type": "(a -> b -> c -> d -> e) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e"
-          },
-          {
-            "name": "map5",
-            "comment": " Combine five generators.\n",
-            "type": "(a -> b -> c -> d -> e -> f) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e -> Random.Generator f"
-          },
-          {
-            "name": "maxInt",
-            "comment": " The maximum value for randomly generated 32-bit ints: 2147483647 ",
-            "type": "Int"
-          },
-          {
-            "name": "minInt",
-            "comment": " The minimum value for randomly generated 32-bit ints: -2147483648 ",
-            "type": "Int"
-          },
-          {
-            "name": "pair",
-            "comment": " Create a pair of random values. A common use of this might be to generate\na point in a certain 2D space. Imagine we have a collage that is 400 pixels\nwide and 200 pixels tall.\n\n    randomPoint : Generator (Int,Int)\n    randomPoint =\n        pair (int -200 200) (int -100 100)\n\n",
-            "type": "Random.Generator a -> Random.Generator b -> Random.Generator ( a, b )"
-          },
-          {
-            "name": "step",
-            "comment": " Generate a random value as specified by a given `Generator`.\n\nIn the following example, we are trying to generate a number between 0 and 100\nwith the `int 0 100` generator. Each time we call `step` we need to provide a\nseed. This will produce a random number and a *new* seed to use if we want to\nrun other generators later.\n\nSo here it is done right, where we get a new seed from each `step` call and\nthread that through.\n\n    seed0 = initialSeed 31415\n\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed1 ==> (31, seed2)\n    -- step (int 0 100) seed2 ==> (99, seed3)\n\nNotice that we use different seeds on each line. This is important! If you use\nthe same seed, you get the same results.\n\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed0 ==> (42, seed1)\n",
-            "type": "Random.Generator a -> Random.Seed -> ( a, Random.Seed )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
       {
         "name": "Date",
         "comment": " Library for working with dates. Email the mailing list if you encounter\nissues with internationalization or locale formatting.\n\n# Dates\n@docs Date, now\n\n# Conversions\n@docs fromString, toTime, fromTime\n\n# Extractions\n@docs year, month, Month, day, dayOfWeek, Day, hour, minute, second, millisecond\n\n",
@@ -31842,7 +31707,142 @@
             "type": "Date.Date -> Int"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Process",
+        "comment": "\n\n# Processes\n@docs Id, spawn, sleep, kill\n\n## Future Plans\n\nRight now, this library is pretty sparse. For example, there is no public API\nfor processes to communicate with each other. This is a really important\nability, but it is also something that is extraordinarily easy to get wrong!\n\nI think the trend will be towards an Erlang style of concurrency, where every\nprocess has an “event queue” that anyone can send messages to. I currently\nthink the API will be extended to be more like this:\n\n    type Id exit msg\n\n    spawn : Task exit a -> Task x (Id exit Never)\n\n    kill : Id exit msg -> Task x ()\n\n    send : Id exit msg -> msg -> Task x ()\n\nA process `Id` will have two type variables to make sure all communication is\nvalid. The `exit` type describes the messages that are produced if the process\nfails because of user code. So if processes are linked and trapping errors,\nthey will need to handle this. The `msg` type just describes what kind of\nmessages this process can be sent by strangers.\n\nWe shall see though! This is just a draft that does not cover nearly everything\nit needs to, so the long-term vision for concurrency in Elm will be rolling out\nslowly as I get more data and experience.\n\nI ask that people bullish on compiling to node.js keep this in mind. I think we\ncan do better than the hopelessly bad concurrency model of node.js, and I hope\nthe Elm community will be supportive of being more ambitious, even if it takes\nlonger. That’s kind of what Elm is all about.\n",
+        "aliases": [
+          {
+            "name": "Id",
+            "comment": " A light-weight process that runs concurrently. You can use `spawn` to\nget a bunch of different tasks running in different processes. The Elm runtime\nwill interleave their progress. So if a task is taking too long, we will pause\nit at an `andThen` and switch over to other stuff.\n\n**Note:** We make a distinction between *concurrency* which means interleaving\ndifferent sequences and *parallelism* which means running different\nsequences at the exact same time. For example, a\n[time-sharing system](https://en.wikipedia.org/wiki/Time-sharing) is definitely\nconcurrent, but not necessarily parallel. So even though JS runs within a\nsingle OS-level thread, Elm can still run things concurrently.\n",
+            "args": [],
+            "type": "Platform.ProcessId"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "kill",
+            "comment": " Sometimes you `spawn` a process, but later decide it would be a waste to\nhave it keep running and doing stuff. The `kill` function will force a process\nto bail on whatever task it is running. So if there is an HTTP request in\nflight, it will also abort the request.\n",
+            "type": "Process.Id -> Task.Task x ()"
+          },
+          {
+            "name": "sleep",
+            "comment": " Block progress on the current process for a given amount of time. The\nJavaScript equivalent of this is [`setTimeout`][setTimeout] which lets you\ndelay work until later.\n\n[setTimeout]: https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout\n",
+            "type": "Time.Time -> Task.Task x ()"
+          },
+          {
+            "name": "spawn",
+            "comment": " Run a task in its own light-weight process. In the following example,\n`task1` and `task2` will be interleaved. If `task1` makes a long HTTP request\nor is just taking a long time, we can hop over to `task2` and do some work\nthere.\n\n    spawn task1 `Task.andThen` \\_ -> spawn task2\n\n**Note:** This creates a relatively restricted kind of `Process` because it\ncannot receive any messages. More flexibility for user-defined processes will\ncome in a later release!\n",
+            "type": "Task.Task x a -> Task.Task y Process.Id"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Random",
+        "comment": " This library helps you generate pseudo-random values.\n\nThis library is all about building [`generators`](#Generator) for whatever\ntype of values you need. There are a bunch of primitive generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier\ngenerators with functions like [`list`](#list) and [`map`](#map).\n\nIt may be helpful to [read about JSON decoders][json] because they work very\nsimilarly.\n\n[json]: https://evancz.gitbooks.io/an-introduction-to-elm/content/interop/json.html\n\n> *Note:* This is an implementation of the Portable Combined Generator of\nL'Ecuyer for 32-bit computers. It is almost a direct translation from the\n[System.Random](http://hackage.haskell.org/package/random-1.0.1.1/docs/System-Random.html)\nmodule. It has a period of roughly 2.30584e18.\n\n# Generators\n@docs Generator\n\n# Primitive Generators\n@docs bool, int, float\n\n# Data Structure Generators\n@docs pair, list\n\n# Custom Generators\n@docs map, map2, map3, map4, map5, andThen\n\n# Generate Values\n@docs generate\n\n# Generate Values Manually\n@docs step, Seed, initialSeed\n\n# Constants\n@docs maxInt, minInt\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Generator",
+            "comment": " A `Generator` is like a recipe for generating certain random values. So a\n`Generator Int` describes how to generate integers and a `Generator String`\ndescribes how to generate strings.\n\nTo actually *run* a generator and produce the random values, you need to use\nfunctions like [`generate`](#generate) and [`initialSeed`](#initialSeed).\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Seed",
+            "comment": " A `Seed` is the source of randomness in this whole system. Whenever\nyou want to use a generator, you need to pair it with a seed.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Chain random operations, threading through the seed. In the following\nexample, we will generate a random letter by putting together uppercase and\nlowercase letters.\n\n    letter : Generator Char\n    letter =\n      bool `andThen` \\b ->\n        if b then uppercaseLetter else lowercaseLetter\n\n    -- bool : Generator Bool\n    -- uppercaseLetter : Generator Char\n    -- lowercaseLetter : Generator Char\n",
+            "type": "Random.Generator a -> (a -> Random.Generator b) -> Random.Generator b"
+          },
+          {
+            "name": "bool",
+            "comment": " Create a generator that produces boolean values. The following example\nsimulates a coin flip that may land heads or tails.\n\n    type Flip = Heads | Tails\n\n    coinFlip : Generator Flip\n    coinFlip =\n        map (\\b -> if b then Heads else Tails) bool\n",
+            "type": "Random.Generator Bool"
+          },
+          {
+            "name": "float",
+            "comment": " Generate floats in a given range. The following example is a generator\nthat produces decimals between 0 and 1.\n\n    probability : Generator Float\n    probability =\n        float 0 1\n",
+            "type": "Float -> Float -> Random.Generator Float"
+          },
+          {
+            "name": "generate",
+            "comment": " Create a command that will generate random values.\n\nRead more about how to use this in your programs in [The Elm Architecture\ntutorial][arch] which has a section specifically [about random values][rand].\n\n[arch]: https://evancz.gitbooks.io/an-introduction-to-elm/content/architecture/index.html\n[rand]: https://evancz.gitbooks.io/an-introduction-to-elm/content/architecture/effects/random.html\n",
+            "type": "(a -> msg) -> Random.Generator a -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "initialSeed",
+            "comment": " Create a &ldquo;seed&rdquo; of randomness which makes it possible to\ngenerate random values. If you use the same seed many times, it will result\nin the same thing every time! A good way to get an unexpected seed is to use\nthe current time.\n",
+            "type": "Int -> Random.Seed"
+          },
+          {
+            "name": "int",
+            "comment": " Generate 32-bit integers in a given range.\n\n    int 0 10   -- an integer between zero and ten\n    int -5 5   -- an integer between -5 and 5\n\n    int minInt maxInt  -- an integer in the widest range feasible\n\nThis function *can* produce values outside of the range [[`minInt`](#minInt),\n[`maxInt`](#maxInt)] but sufficient randomness is not guaranteed.\n",
+            "type": "Int -> Int -> Random.Generator Int"
+          },
+          {
+            "name": "list",
+            "comment": " Create a list of random values.\n\n    floatList : Generator (List Float)\n    floatList =\n        list 10 (float 0 1)\n\n    intList : Generator (List Int)\n    intList =\n        list 5 (int 0 100)\n\n    intPairs : Generator (List (Int, Int))\n    intPairs =\n        list 10 <| pair (int 0 100) (int 0 100)\n",
+            "type": "Int -> Random.Generator a -> Random.Generator (List a)"
+          },
+          {
+            "name": "map",
+            "comment": " Transform the values produced by a generator. The following examples show\nhow to generate booleans and letters based on a basic integer generator.\n\n    bool : Generator Bool\n    bool =\n      map ((==) 1) (int 0 1)\n\n    lowercaseLetter : Generator Char\n    lowercaseLetter =\n      map (\\n -> Char.fromCode (n + 97)) (int 0 25)\n\n    uppercaseLetter : Generator Char\n    uppercaseLetter =\n      map (\\n -> Char.fromCode (n + 65)) (int 0 25)\n\n",
+            "type": "(a -> b) -> Random.Generator a -> Random.Generator b"
+          },
+          {
+            "name": "map2",
+            "comment": " Combine two generators.\n\nThis function is used to define things like [`pair`](#pair) where you want to\nput two generators together.\n\n    pair : Generator a -> Generator b -> Generator (a,b)\n    pair genA genB =\n      map2 (,) genA genB\n\n",
+            "type": "(a -> b -> c) -> Random.Generator a -> Random.Generator b -> Random.Generator c"
+          },
+          {
+            "name": "map3",
+            "comment": " Combine three generators. This could be used to produce random colors.\n\n    import Color\n\n    rgb : Generator Color.Color\n    rgb =\n      map3 Color.rgb (int 0 255) (int 0 255) (int 0 255)\n\n    hsl : Generator Color.Color\n    hsl =\n      map3 Color.hsl (map degrees (int 0 360)) (float 0 1) (float 0 1)\n",
+            "type": "(a -> b -> c -> d) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d"
+          },
+          {
+            "name": "map4",
+            "comment": " Combine four generators.\n",
+            "type": "(a -> b -> c -> d -> e) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e"
+          },
+          {
+            "name": "map5",
+            "comment": " Combine five generators.\n",
+            "type": "(a -> b -> c -> d -> e -> f) -> Random.Generator a -> Random.Generator b -> Random.Generator c -> Random.Generator d -> Random.Generator e -> Random.Generator f"
+          },
+          {
+            "name": "maxInt",
+            "comment": " The maximum value for randomly generated 32-bit ints: 2147483647 ",
+            "type": "Int"
+          },
+          {
+            "name": "minInt",
+            "comment": " The minimum value for randomly generated 32-bit ints: -2147483648 ",
+            "type": "Int"
+          },
+          {
+            "name": "pair",
+            "comment": " Create a pair of random values. A common use of this might be to generate\na point in a certain 2D space. Imagine we have a collage that is 400 pixels\nwide and 200 pixels tall.\n\n    randomPoint : Generator (Int,Int)\n    randomPoint =\n        pair (int -200 200) (int -100 100)\n\n",
+            "type": "Random.Generator a -> Random.Generator b -> Random.Generator ( a, b )"
+          },
+          {
+            "name": "step",
+            "comment": " Generate a random value as specified by a given `Generator`.\n\nIn the following example, we are trying to generate a number between 0 and 100\nwith the `int 0 100` generator. Each time we call `step` we need to provide a\nseed. This will produce a random number and a *new* seed to use if we want to\nrun other generators later.\n\nSo here it is done right, where we get a new seed from each `step` call and\nthread that through.\n\n    seed0 = initialSeed 31415\n\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed1 ==> (31, seed2)\n    -- step (int 0 100) seed2 ==> (99, seed3)\n\nNotice that we use different seeds on each line. This is important! If you use\nthe same seed, you get the same results.\n\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed0 ==> (42, seed1)\n    -- step (int 0 100) seed0 ==> (42, seed1)\n",
+            "type": "Random.Generator a -> Random.Seed -> ( a, Random.Seed )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Time",
@@ -31908,7 +31908,110 @@
             "type": "Time.Time"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Set",
+        "comment": " A set of unique values. The values can be any comparable type. This\nincludes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists\nof comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Sets\n@docs Set\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Set",
+            "comment": " Represents a set of unique values. So `(Set Int)` is a set of integers and\n`(Set String)` is a set of strings.\n",
+            "args": [
+              "t"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Get the difference between the first set and the second. Keeps values\nthat do not appear in the second set.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty set.\n",
+            "type": "Set.Set a"
+          },
+          {
+            "name": "filter",
+            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
+            "type": "(comparable -> Bool) -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the values in a set, in order from lowest to highest.\n",
+            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the values in a set, in order from highest to lowest.\n",
+            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list into a set, removing any duplicates.\n",
+            "type": "List comparable -> Set.Set comparable"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a value into a set.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "intersect",
+            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a set is empty.\n",
+            "type": "Set.Set a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function onto a set, creating a new set with no duplicates.\n",
+            "type": "(comparable -> comparable') -> Set.Set comparable -> Set.Set comparable'"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a value is in a set.\n",
+            "type": "comparable -> Set.Set comparable -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Create two new sets; the first consisting of elements which satisfy a\npredicate, the second consisting of elements which do not.\n",
+            "type": "(comparable -> Bool) -> Set.Set comparable -> ( Set.Set comparable, Set.Set comparable )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a value from a set. If the value is not found, no changes are made.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a set with one value.\n",
+            "type": "comparable -> Set.Set comparable"
+          },
+          {
+            "name": "size",
+            "comment": " Determine the number of elements in a set.\n",
+            "type": "Set.Set a -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into a list, sorted from lowest to highest.\n",
+            "type": "Set.Set comparable -> List comparable"
+          },
+          {
+            "name": "union",
+            "comment": " Get the union of two sets. Keep all values.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Json.Decode",
@@ -32014,7 +32117,7 @@
           },
           {
             "name": "null",
-            "comment": " Decode null as the value given, and fail otherwise. Primarily useful for\ncreating *other* decoders.\n\n    numbers : Decoder [Int]\n    numbers =\n        list (oneOf [ int, null 0 ])\n\nThis decoder treats `null` as `Nothing`, and otherwise tries to produce a\n`Just`.\n\n    nullOr : Decoder a -> Decoder (Maybe a)\n    nullOr decoder =\n        oneOf\n        [ null Nothing\n        , map Just decoder\n        ]\n",
+            "comment": " Decode null as the value given, and fail otherwise. Primarily useful for\ncreating *other* decoders.\n\n    numbers : Decoder (List Int)\n    numbers =\n        list (oneOf [ int, null 0 ])\n\nThis decoder treats `null` as `Nothing`, and otherwise tries to produce a\n`Just`.\n\n    nullOr : Decoder a -> Decoder (Maybe a)\n    nullOr decoder =\n        oneOf\n        [ null Nothing\n        , map Just decoder\n        ]\n",
             "type": "a -> Json.Decode.Decoder a"
           },
           {
@@ -32118,114 +32221,11 @@
             "type": "Json.Decode.Decoder Json.Decode.Value"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Set",
-        "comment": " A set of unique values. The values can be any comparable type. This\nincludes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists\nof comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time. Set equality with\n`(==)` is unreliable and should not be used.\n\n# Sets\n@docs Set\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Set",
-            "comment": " Represents a set of unique values. So `(Set Int)` is a set of integers and\n`(Set String)` is a set of strings.\n",
-            "args": [
-              "t"
-            ],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "diff",
-            "comment": " Get the difference between the first set and the second. Keeps values\nthat do not appear in the second set.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "empty",
-            "comment": " Create an empty set.\n",
-            "type": "Set.Set a"
-          },
-          {
-            "name": "filter",
-            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
-            "type": "(comparable -> Bool) -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "foldl",
-            "comment": " Fold over the values in a set, in order from lowest to highest.\n",
-            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
-          },
-          {
-            "name": "foldr",
-            "comment": " Fold over the values in a set, in order from highest to lowest.\n",
-            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
-          },
-          {
-            "name": "fromList",
-            "comment": " Convert a list into a set, removing any duplicates.\n",
-            "type": "List comparable -> Set.Set comparable"
-          },
-          {
-            "name": "insert",
-            "comment": " Insert a value into a set.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "intersect",
-            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "isEmpty",
-            "comment": " Determine if a set is empty.\n",
-            "type": "Set.Set a -> Bool"
-          },
-          {
-            "name": "map",
-            "comment": " Map a function onto a set, creating a new set with no duplicates.\n",
-            "type": "(comparable -> comparable') -> Set.Set comparable -> Set.Set comparable'"
-          },
-          {
-            "name": "member",
-            "comment": " Determine if a value is in a set.\n",
-            "type": "comparable -> Set.Set comparable -> Bool"
-          },
-          {
-            "name": "partition",
-            "comment": " Create two new sets; the first consisting of elements which satisfy a\npredicate, the second consisting of elements which do not.\n",
-            "type": "(comparable -> Bool) -> Set.Set comparable -> ( Set.Set comparable, Set.Set comparable )"
-          },
-          {
-            "name": "remove",
-            "comment": " Remove a value from a set. If the value is not found, no changes are made.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "singleton",
-            "comment": " Create a set with one value.\n",
-            "type": "comparable -> Set.Set comparable"
-          },
-          {
-            "name": "size",
-            "comment": " Determine the number of elements in a set.\n",
-            "type": "Set.Set a -> Int"
-          },
-          {
-            "name": "toList",
-            "comment": " Convert a set into a list, sorted from lowest to highest.\n",
-            "type": "Set.Set comparable -> List comparable"
-          },
-          {
-            "name": "union",
-            "comment": " Get the union of two sets. Keep all values.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Dict",
-        "comment": " A dictionary mapping unique keys to values. The keys can be any comparable\ntype. This includes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or\nlists of comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time. Dictionary\nequality with `(==)` is unreliable and should not be used.\n\n# Dictionaries\n@docs Dict\n\n# Build\n@docs empty, singleton, insert, update, remove\n\n# Query\n@docs isEmpty, member, get, size\n\n# Lists\n@docs keys, values, toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n# Combine\n@docs union, intersect, diff, merge\n\n",
+        "comment": " A dictionary mapping unique keys to values. The keys can be any comparable\ntype. This includes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or\nlists of comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Dictionaries\n@docs Dict\n\n# Build\n@docs empty, singleton, insert, update, remove\n\n# Query\n@docs isEmpty, member, get, size\n\n# Lists\n@docs keys, values, toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n# Combine\n@docs union, intersect, diff, merge\n\n",
         "aliases": [],
         "types": [
           {
@@ -32350,7 +32350,7 @@
             "type": "Dict.Dict comparable v -> List v"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Json.Encode",
@@ -32411,7 +32411,7 @@
             "type": "String -> Json.Encode.Value"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "String",
@@ -32591,7 +32591,7 @@
           },
           {
             "name": "toLower",
-            "comment": " Convert a string to all lower case. Useful for case-insensitive comparisons.\n\n   toLower \"X-FILES\" == \"x-files\"\n",
+            "comment": " Convert a string to all lower case. Useful for case-insensitive comparisons.\n\n    toLower \"X-FILES\" == \"x-files\"\n",
             "type": "String -> String"
           },
           {
@@ -32625,7 +32625,7 @@
             "type": "String -> List String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Task",
@@ -32729,7 +32729,7 @@
             "type": "Task.Task x a -> Task.Task never (Result.Result x a)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Array",
@@ -32837,82 +32837,7 @@
             "type": "Array.Array a -> List a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Regex",
-        "comment": " A library for working with regular expressions. It uses [the\nsame kind of regular expressions accepted by JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions).\n\n# Create\n@docs Regex, regex, escape, caseInsensitive\n\n# Helpful Data Structures\n\nThese data structures are needed to help define functions like [`find`](#find)\nand [`replace`](#replace).\n\n@docs HowMany, Match\n\n# Use\n@docs contains, find, replace, split\n\n",
-        "aliases": [
-          {
-            "name": "Match",
-            "comment": " A `Match` represents all of the details about a particular match in a string.\nHere are details on each field:\n\n  * `match` &mdash; the full string of the match.\n  * `submatches` &mdash; a regex might have [subpatterns, surrounded by\n    parentheses](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Parenthesized_Substring_Matches).\n    If there are N subpatterns, there will be N elements in the `submatches` list.\n    Each submatch in this list is a `Maybe` because not all subpatterns may trigger.\n    For example, `(regex \"(a+)|(b+)\")` will either match many `a`&rsquo;s or\n    many `b`&rsquo;s, but never both.\n  * `index` &mdash; the index of the match in the original string.\n  * `number` &mdash; if you find many matches, you can think of each one\n    as being labeled with a `number` starting at one. So the first time you\n    find a match, that is match `number` one. Second time is match `number` two.\n    This is useful when paired with `replace All` if replacement is dependent on how\n    many times a pattern has appeared before.\n",
-            "args": [],
-            "type": "{ match : String , submatches : List (Maybe.Maybe String) , index : Int , number : Int }"
-          }
-        ],
-        "types": [
-          {
-            "name": "HowMany",
-            "comment": " `HowMany` is used to specify how many matches you want to make. So\n`replace All` would replace every match, but `replace (AtMost 2)` would\nreplace at most two matches (i.e. zero, one, two, but never three or more).\n",
-            "args": [],
-            "cases": [
-              [
-                "All",
-                []
-              ],
-              [
-                "AtMost",
-                [
-                  "Int"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "Regex",
-            "comment": " A regular expression, describing a certain set of strings.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "caseInsensitive",
-            "comment": " Make a regex case insensitive ",
-            "type": "Regex.Regex -> Regex.Regex"
-          },
-          {
-            "name": "contains",
-            "comment": " Check to see if a Regex is contained in a string.\n\n    contains (regex \"123\") \"12345\" == True\n    contains (regex \"b+\") \"aabbcc\" == True\n\n    contains (regex \"789\") \"12345\" == False\n    contains (regex \"z+\") \"aabbcc\" == False\n",
-            "type": "Regex.Regex -> String -> Bool"
-          },
-          {
-            "name": "escape",
-            "comment": " Escape strings to be regular expressions, making all special characters\nsafe. So `regex (escape \"^a+\")` will match exactly `\"^a+\"` instead of a series\nof `a`&rsquo;s that start at the beginning of the line.\n",
-            "type": "String -> String"
-          },
-          {
-            "name": "find",
-            "comment": " Find matches in a string:\n\n    findTwoCommas = find (AtMost 2) (regex \",\")\n\n      -- map .index (findTwoCommas \"a,b,c,d,e\") == [1,3]\n      -- map .index (findTwoCommas \"a b c d e\") == []\n\n    places = find All (regex \"[oi]n a (\\\\w+)\") \"I am on a boat in a lake.\"\n\n      -- map .match places == [\"on a boat\", \"in a lake\"]\n      -- map .submatches places == [ [Just \"boat\"], [Just \"lake\"] ]\n",
-            "type": "Regex.HowMany -> Regex.Regex -> String -> List Regex.Match"
-          },
-          {
-            "name": "regex",
-            "comment": " Create a Regex that matches patterns [as specified in JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Writing_a_Regular_Expression_Pattern).\n\nBe careful to escape backslashes properly! For example, `\"\\w\"` is escaping the\nletter `w` which is probably not what you want. You probably want `\"\\\\w\"`\ninstead, which escapes the backslash.\n",
-            "type": "String -> Regex.Regex"
-          },
-          {
-            "name": "replace",
-            "comment": " Replace matches. The function from `Match` to `String` lets\nyou use the details of a specific match when making replacements.\n\n    devowel = replace All (regex \"[aeiou]\") (\\_ -> \"\")\n\n      -- devowel \"The quick brown fox\" == \"Th qck brwn fx\"\n\n    reverseWords = replace All (regex \"\\\\w+\") (\\{match} -> String.reverse match)\n\n      -- reverseWords \"deliver mined parts\" == \"reviled denim strap\"\n",
-            "type": "Regex.HowMany -> Regex.Regex -> (Regex.Match -> String) -> String -> String"
-          },
-          {
-            "name": "split",
-            "comment": " Split a string, using the regex as the separator.\n\n    split (AtMost 1) (regex \",\") \"tom,99,90,85\" == [\"tom\",\"99,90,85\"]\n\n    split All (regex \",\") \"a,b,c,d\" == [\"a\",\"b\",\"c\",\"d\"]\n",
-            "type": "Regex.HowMany -> Regex.Regex -> String -> List String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Result",
@@ -32994,7 +32919,82 @@
             "type": "a -> Result.Result x a -> a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Regex",
+        "comment": " A library for working with regular expressions. It uses [the\nsame kind of regular expressions accepted by JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions).\n\n# Create\n@docs Regex, regex, escape, caseInsensitive\n\n# Helpful Data Structures\n\nThese data structures are needed to help define functions like [`find`](#find)\nand [`replace`](#replace).\n\n@docs HowMany, Match\n\n# Use\n@docs contains, find, replace, split\n\n",
+        "aliases": [
+          {
+            "name": "Match",
+            "comment": " A `Match` represents all of the details about a particular match in a string.\nHere are details on each field:\n\n  * `match` &mdash; the full string of the match.\n  * `submatches` &mdash; a regex might have [subpatterns, surrounded by\n    parentheses](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Parenthesized_Substring_Matches).\n    If there are N subpatterns, there will be N elements in the `submatches` list.\n    Each submatch in this list is a `Maybe` because not all subpatterns may trigger.\n    For example, `(regex \"(a+)|(b+)\")` will either match many `a`&rsquo;s or\n    many `b`&rsquo;s, but never both.\n  * `index` &mdash; the index of the match in the original string.\n  * `number` &mdash; if you find many matches, you can think of each one\n    as being labeled with a `number` starting at one. So the first time you\n    find a match, that is match `number` one. Second time is match `number` two.\n    This is useful when paired with `replace All` if replacement is dependent on how\n    many times a pattern has appeared before.\n",
+            "args": [],
+            "type": "{ match : String , submatches : List (Maybe.Maybe String) , index : Int , number : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "HowMany",
+            "comment": " `HowMany` is used to specify how many matches you want to make. So\n`replace All` would replace every match, but `replace (AtMost 2)` would\nreplace at most two matches (i.e. zero, one, two, but never three or more).\n",
+            "args": [],
+            "cases": [
+              [
+                "All",
+                []
+              ],
+              [
+                "AtMost",
+                [
+                  "Int"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Regex",
+            "comment": " A regular expression, describing a certain set of strings.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "caseInsensitive",
+            "comment": " Make a regex case insensitive ",
+            "type": "Regex.Regex -> Regex.Regex"
+          },
+          {
+            "name": "contains",
+            "comment": " Check to see if a Regex is contained in a string.\n\n    contains (regex \"123\") \"12345\" == True\n    contains (regex \"b+\") \"aabbcc\" == True\n\n    contains (regex \"789\") \"12345\" == False\n    contains (regex \"z+\") \"aabbcc\" == False\n",
+            "type": "Regex.Regex -> String -> Bool"
+          },
+          {
+            "name": "escape",
+            "comment": " Escape strings to be regular expressions, making all special characters\nsafe. So `regex (escape \"^a+\")` will match exactly `\"^a+\"` instead of a series\nof `a`&rsquo;s that start at the beginning of the line.\n",
+            "type": "String -> String"
+          },
+          {
+            "name": "find",
+            "comment": " Find matches in a string:\n\n    findTwoCommas = find (AtMost 2) (regex \",\")\n\n      -- map .index (findTwoCommas \"a,b,c,d,e\") == [1,3]\n      -- map .index (findTwoCommas \"a b c d e\") == []\n\n    places = find All (regex \"[oi]n a (\\\\w+)\") \"I am on a boat in a lake.\"\n\n      -- map .match places == [\"on a boat\", \"in a lake\"]\n      -- map .submatches places == [ [Just \"boat\"], [Just \"lake\"] ]\n",
+            "type": "Regex.HowMany -> Regex.Regex -> String -> List Regex.Match"
+          },
+          {
+            "name": "regex",
+            "comment": " Create a Regex that matches patterns [as specified in JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Writing_a_Regular_Expression_Pattern).\n\nBe careful to escape backslashes properly! For example, `\"\\w\"` is escaping the\nletter `w` which is probably not what you want. You probably want `\"\\\\w\"`\ninstead, which escapes the backslash.\n",
+            "type": "String -> Regex.Regex"
+          },
+          {
+            "name": "replace",
+            "comment": " Replace matches. The function from `Match` to `String` lets\nyou use the details of a specific match when making replacements.\n\n    devowel = replace All (regex \"[aeiou]\") (\\_ -> \"\")\n\n      -- devowel \"The quick brown fox\" == \"Th qck brwn fx\"\n\n    reverseWords = replace All (regex \"\\\\w+\") (\\{match} -> String.reverse match)\n\n      -- reverseWords \"deliver mined parts\" == \"reviled denim strap\"\n",
+            "type": "Regex.HowMany -> Regex.Regex -> (Regex.Match -> String) -> String -> String"
+          },
+          {
+            "name": "split",
+            "comment": " Split a string, using the regex as the separator.\n\n    split (AtMost 1) (regex \",\") \"tom,99,90,85\" == [\"tom\",\"99,90,85\"]\n\n    split All (regex \",\") \"a,b,c,d\" == [\"a\",\"b\",\"c\",\"d\"]\n",
+            "type": "Regex.HowMany -> Regex.Regex -> String -> List String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "List",
@@ -33185,7 +33185,7 @@
             "type": "List ( a, b ) -> ( List a, List b )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Platform",
@@ -33237,7 +33237,7 @@
             "type": "Platform.Router a msg -> msg -> Platform.Task x ()"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Char",
@@ -33308,7 +33308,7 @@
             "type": "Char -> Char"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Color",
@@ -33545,7 +33545,7 @@
             "type": "Color.Color"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Platform.Cmd",
@@ -33583,7 +33583,7 @@
             "type": "Platform.Cmd.Cmd msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Platform.Sub",
@@ -33616,7 +33616,26 @@
             "type": "Platform.Sub.Sub msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Debug",
+        "comment": " This library is for investigating bugs or performance problems. It should\n*not* be used in production code.\n\n# Debugging\n@docs log, crash\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "crash",
+            "comment": " Crash the program with an error message. This is an uncatchable error,\nintended for code that is soon-to-be-implemented. For example, if you are\nworking with a large ADT and have partially completed a case expression, it may\nmake sense to do this:\n\n    type Entity = Ship | Fish | Captain | Seagull\n\n    drawEntity entity =\n      case entity of\n        Ship ->\n          ...\n\n        Fish ->\n          ...\n\n        _ ->\n          Debug.crash \"TODO\"\n\nThe Elm compiler recognizes each `Debug.crash` and when you run into it at\nruntime, the error will point to the corresponding module name and line number.\nFor `case` expressions that ends with a wildcard pattern and a crash, it will\nalso show the value that snuck through. In our example, that'd be `Captain` or\n`Seagull`.\n\n**Use this if** you want to do some testing while you are partway through\nwriting a function.\n\n**Do not use this if** you want to do some typical try-catch exception handling.\nUse the [`Maybe`](Maybe) or [`Result`](Result) libraries instead.\n",
+            "type": "String -> a"
+          },
+          {
+            "name": "log",
+            "comment": " Log a tagged value on the developer console, and then return the value.\n\n    1 + log \"number\" 1        -- equals 2, logs \"number: 1\"\n    length (log \"start\" [])   -- equals 0, logs \"start: []\"\n\nNotice that `log` is not a pure function! It should *only* be used for\ninvestigating bugs or performance problems.\n",
+            "type": "String -> a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Maybe",
@@ -33685,26 +33704,7 @@
             "type": "a -> Maybe.Maybe a -> a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Debug",
-        "comment": " This library is for investigating bugs or performance problems. It should\n*not* be used in production code.\n\n# Debugging\n@docs log, crash\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "crash",
-            "comment": " Crash the program with an error message. This is an uncatchable error,\nintended for code that is soon-to-be-implemented. For example, if you are\nworking with a large ADT and have partially completed a case expression, it may\nmake sense to do this:\n\n    type Entity = Ship | Fish | Captain | Seagull\n\n    drawEntity entity =\n      case entity of\n        Ship ->\n          ...\n\n        Fish ->\n          ...\n\n        _ ->\n          Debug.crash \"TODO\"\n\nThe Elm compiler recognizes each `Debug.crash` and when you run into it at\nruntime, the error will point to the corresponding module name and line number.\nFor `case` expressions that ends with a wildcard pattern and a crash, it will\nalso show the value that snuck through. In our example, that'd be `Captain` or\n`Seagull`.\n\n**Use this if** you want to do some testing while you are partway through\nwriting a function.\n\n**Do not use this if** you want to do some typical try-catch exception handling.\nUse the [`Maybe`](Maybe) or [`Result`](Result) libraries instead.\n",
-            "type": "String -> a"
-          },
-          {
-            "name": "log",
-            "comment": " Log a tagged value on the developer console, and then return the value.\n\n    1 + log \"number\" 1        -- equals 2, logs \"number: 1\"\n    length (log \"start\" [])   -- equals 0, logs \"start: []\"\n\nNotice that `log` is not a pure function! It should *only* be used for\ninvestigating bugs or performance problems.\n",
-            "type": "String -> a -> a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Bitwise",
@@ -33748,7 +33748,7 @@
             "type": "Int -> Int -> Int"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Basics",
@@ -33840,7 +33840,7 @@
           },
           {
             "name": "/=",
-            "comment": "",
+            "comment": " Check if values are not &ldquo;the same&rdquo;.\n\nSo `(a /= b)` is the same as `(not (a == b))`.\n",
             "type": "a -> a -> Bool",
             "associativity": "non",
             "precedence": 4
@@ -33875,7 +33875,7 @@
           },
           {
             "name": "==",
-            "comment": "",
+            "comment": " Check if values are &ldquo;the same&rdquo;.\n\n**Note:** Elm uses structural equality on tuples, records, and user-defined\nunion types. This means the values `(3, 4)` and `(3, 4)` are definitely equal.\nThis is not true in languages like JavaScript that use reference equality on\nobjects.\n\n**Note:** Equality (in the Elm sense) is not possible for certain types. For\nexample, the functions `(\\n -> n + 1)` and `(\\n -> 1 + n)` are &ldquo;the\nsame&rdquo; but detecting this in general is [undecidable][]. In a future\nrelease, the compiler will detect when `(==)` is used with problematic\ntypes and provide a helpful error message. This will require quite serious\ninfrastructure work that makes sense to batch with another big project, so the\nstopgap is to crash as quickly as possible. Problematic types include functions\nand JavaScript values like `Json.Encode.Value` which could contain functions\nif passed through a port.\n\n[undecidable]: https://en.wikipedia.org/wiki/Undecidable_problem\n",
             "type": "a -> a -> Bool",
             "associativity": "non",
             "precedence": 4
@@ -34125,7 +34125,7 @@
             "precedence": 2
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -38835,7 +38835,7 @@
   },
   {
     "name": "etaque/elm-simple-form",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "docs": [
       {
         "name": "Form.Input",
@@ -38843,7 +38843,7 @@
         "aliases": [
           {
             "name": "Input",
-            "comment": " An input render Html from a field state, a form and address for messages.\nAll input functions using this type alias are pre-wired with event handlers.\n",
+            "comment": " An input renders Html from a field state and list of additional attributes.\nAll input functions using this type alias are pre-wired with event handlers.\n",
             "args": [
               "e",
               "a"
@@ -38894,7 +38894,7 @@
             "type": "Form.Input.Input e String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Form",
@@ -39007,7 +39007,7 @@
             "type": "Form.Msg -> Form.Form e output -> Form.Form e output"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Form.Validate",
@@ -39027,7 +39027,7 @@
         "values": [
           {
             "name": "andThen",
-            "comment": " Apply a new validation to the result of the validation.\n\n    int `andThen` (minInt 10)\n",
+            "comment": " Apply a new validation to the result of the validation.\n\n    get \"myfield\" (int `andThen` minInt 10)\n",
             "type": "Form.Validate.Validation e a -> (a -> Form.Validate.Validation e b) -> Form.Validate.Validation e b"
           },
           {
@@ -39211,7 +39211,7 @@
             "type": "Form.Validate.Validation e String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Form.Error",
@@ -39323,7 +39323,7 @@
             "type": "String -> Form.Error.Error e -> Maybe.Maybe (Form.Error.Error e)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Form.Field",
@@ -39400,7 +39400,7 @@
             "type": "List ( String, Form.Field.Field ) -> Form.Field.Field"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
