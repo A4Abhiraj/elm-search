@@ -20281,11 +20281,11 @@
   },
   {
     "name": "elm-community/elm-lazy-list",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Lazy.List",
-        "comment": " Lazy list implementation in Elm.\n\n# Types\n@docs LazyList, LazyListView\n\n# Constructors\n@docs cons, empty, singleton\n\n# Query operations\n@docs isEmpty, head, tail, member, length\n\n# Conversions\n@docs toList, fromList, toArray, fromArray\n\n# Map-reduce et al.\n@docs map, zip, reduce, flatten, flatMap, append, foldl, foldr\n\n# Common operations\n@docs intersperse, interleave, reverse, cycle, iterate, repeat, take, takeWhile, drop, dropWhile\n\n# Filtering operations\n@docs keepIf, dropIf, unique\n\n# Chaining operations\n@docs andMap, andThen\n\n# Useful stuff\n@docs numbers, sum, product\n\n# All the maps!\n@docs map2, map3, map4, map5\n\n# All the zips!\n@docs zip3, zip4, zip5\n\n# Infix Operators\n@docs (:::), (+++)\n\n",
+        "comment": " Lazy list implementation in Elm.\n\n# Types\n@docs LazyList, LazyListView\n\n# Constructors\n@docs cons, empty, singleton\n\n# Query operations\n@docs isEmpty, head, tail, headAndTail, member, length\n\n# Conversions\n@docs toList, fromList, toArray, fromArray\n\n# Map-reduce et al.\n@docs map, zip, reduce, flatten, flatMap, append, foldl, foldr\n\n# Common operations\n@docs intersperse, interleave, reverse, cycle, iterate, repeat, take, takeWhile, drop, dropWhile\n\n# Filtering operations\n@docs keepIf, dropIf, unique\n\n# Chaining operations\n@docs andMap, andThen\n\n# Useful stuff\n@docs numbers, sum, product\n\n# All the maps!\n@docs map2, map3, map4, map5\n\n# All the zips!\n@docs zip3, zip4, zip5\n\n# Infix Operators\n@docs (:::), (+++)\n\n",
         "aliases": [
           {
             "name": "LazyList",
@@ -20414,6 +20414,11 @@
             "type": "Lazy.List.LazyList a -> Maybe.Maybe a"
           },
           {
+            "name": "headAndTail",
+            "comment": " Get the head and tail of a list.\n",
+            "type": "Lazy.List.LazyList a -> Maybe.Maybe ( a, Lazy.List.LazyList a )"
+          },
+          {
             "name": "interleave",
             "comment": " Interleave the elements of a list in another list. The two lists get\ninterleaved at the end.\n",
             "type": "Lazy.List.LazyList a -> Lazy.List.LazyList a -> Lazy.List.LazyList a"
@@ -20450,22 +20455,22 @@
           },
           {
             "name": "map2",
-            "comment": "",
+            "comment": " ",
             "type": "(a -> b -> c) -> Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c"
           },
           {
             "name": "map3",
-            "comment": "",
+            "comment": " ",
             "type": "(a -> b -> c -> d) -> Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList d"
           },
           {
             "name": "map4",
-            "comment": "",
+            "comment": " ",
             "type": "(a -> b -> c -> d -> e) -> Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList d -> Lazy.List.LazyList e"
           },
           {
             "name": "map5",
-            "comment": "",
+            "comment": " ",
             "type": "(a -> b -> c -> d -> e -> f) -> Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList d -> Lazy.List.LazyList e -> Lazy.List.LazyList f"
           },
           {
@@ -20540,26 +20545,26 @@
           },
           {
             "name": "zip",
-            "comment": "",
+            "comment": " ",
             "type": "Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList ( a, b )"
           },
           {
             "name": "zip3",
-            "comment": "",
+            "comment": " ",
             "type": "Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList ( a, b, c )"
           },
           {
             "name": "zip4",
-            "comment": "",
+            "comment": " ",
             "type": "Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList d -> Lazy.List.LazyList ( a, b, c, d )"
           },
           {
             "name": "zip5",
-            "comment": "",
+            "comment": " ",
             "type": "Lazy.List.LazyList a -> Lazy.List.LazyList b -> Lazy.List.LazyList c -> Lazy.List.LazyList d -> Lazy.List.LazyList e -> Lazy.List.LazyList ( a, b, c, d, e )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -41150,6 +41155,61 @@
     ]
   },
   {
+    "name": "fredcy/elm-debouncer",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Debounce",
+        "comment": "\n\nThis provides a component that can \"debounce\" a changing value: monitor a\ntime-varying sequence of values and output the latest value every time there is\nno further change for some minimum interval.\n\nThis implementation attempts to minimize the number of `update` calls by using\n`Process.sleep` to manage the settling time (rather than recalculating elapsed\ninterval on every fine-grained tick). An added tuple element in the `update`\nfunction's return value provides the notification to the parent of the settled\nvalue. It's also possible to poll the settled value.\n\n# Types\n@docs Model, Msg(Change)\n\n# Update\n@docs init, update\n\n# Read\n@docs settled\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Debouncer model. Each instance handles a single time-varying sequence of the\nsame type (the `datatype`).\n",
+            "args": [
+              "datatype"
+            ],
+            "type": "{ data : datatype , settled : datatype , sleepCount : Int , settleTime : Time.Time }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Use the `Change` message to pass a new value to debouncer.\n",
+            "args": [
+              "datatype"
+            ],
+            "cases": [
+              [
+                "Change",
+                [
+                  "datatype"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initialize the debouncer with the time to wait for changing values to settle\nand the initial settled value.\n",
+            "type": "Time.Time -> datatype -> Debounce.Model datatype"
+          },
+          {
+            "name": "settled",
+            "comment": " Access the settled value.\n",
+            "type": "Debounce.Model datatype -> datatype"
+          },
+          {
+            "name": "update",
+            "comment": " Update the debouncer as a typical TEA component. The return value adds a\nfinal tuple element that is `Nothing` while the value is still changing and\n`Just x` when the value has settled to `x`.\n",
+            "type": "Debounce.Msg datatype -> Debounce.Model datatype -> ( Debounce.Model datatype , Platform.Cmd.Cmd (Debounce.Msg datatype) , Maybe.Maybe datatype )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "fredcy/elm-defer-command",
     "version": "1.0.0",
     "docs": [
@@ -47342,7 +47402,7 @@
   },
   {
     "name": "krisajenkins/elm-exts",
-    "version": "25.7.0",
+    "version": "25.8.0",
     "docs": [
       {
         "name": "Exts.Html",
@@ -47361,88 +47421,7 @@
             "type": "String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Array",
-        "comment": " Extensions to the core `Array` library.\n\n@docs update\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "update",
-            "comment": " 'Update' the entry at position `n`, by applying `f` to it. If the\nindex is out of range, the array is unaltered.\n",
-            "type": "Int -> (a -> a) -> Array.Array a -> Array.Array a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Tuple",
-        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "both",
-            "comment": " Update both components of a pair with a single function.\n",
-            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
-          },
-          {
-            "name": "first",
-            "comment": " Update the first component of a pair.\n",
-            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
-          },
-          {
-            "name": "fork",
-            "comment": " Generate a pair from a single value and a left & right function.\n",
-            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
-          },
-          {
-            "name": "indexedPair",
-            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
-            "type": "(a -> b) -> a -> ( b, a )"
-          },
-          {
-            "name": "pair",
-            "comment": " Update both components of a pair with two functions.\n",
-            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
-          },
-          {
-            "name": "second",
-            "comment": " Update the second component of a pair.\n",
-            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.String",
-        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "removePrefix",
-            "comment": " Strip a leading string from a `String`.\n",
-            "type": "String -> String -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Task",
-        "comment": " Extensions to the core `Process` library.\n\n@docs delay\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "delay",
-            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
-            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Validation",
@@ -47497,105 +47476,79 @@
             "type": "Result.Result e (a -> b) -> Result.Result e a -> Result.Result e b"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Maybe",
-        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust, isNothing, maybe, mappend, catMaybes, join, maybeDefault, matches, validate, when\n",
+        "name": "Exts.String",
+        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "catMaybes",
-            "comment": " Extract all the `Just` values from a List of Maybes.\n",
-            "type": "List (Maybe.Maybe a) -> List a"
-          },
-          {
-            "name": "isJust",
-            "comment": " Boolean checks.\n",
-            "type": "Maybe.Maybe a -> Bool"
-          },
-          {
-            "name": "isNothing",
-            "comment": " ",
-            "type": "Maybe.Maybe a -> Bool"
-          },
-          {
-            "name": "join",
-            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
-            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
-          },
-          {
-            "name": "mappend",
-            "comment": " Join two `Maybe`s together as though they were one.\n",
-            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
-          },
-          {
-            "name": "matches",
-            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
-            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "maybe",
-            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
-            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
-          },
-          {
-            "name": "maybeDefault",
-            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
-            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "validate",
-            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
-            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
-          },
-          {
-            "name": "when",
-            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
-            "type": "Bool -> a -> Maybe.Maybe a"
+            "name": "removePrefix",
+            "comment": " Strip a leading string from a `String`.\n",
+            "type": "String -> String -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Result",
-        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
+        "name": "Exts.Task",
+        "comment": " Extensions to the core `Process` library.\n\n@docs delay, asCmd\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "fromErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Maybe.Maybe e"
+            "name": "asCmd",
+            "comment": " Turn a `Task` into a `Cmd` which returns a `Result`.\n",
+            "type": "Task.Task e a -> Platform.Cmd.Cmd (Result.Result e a)"
           },
           {
-            "name": "fromOk",
-            "comment": " Convert a `Result` to a `Maybe`.\n",
-            "type": "Result.Result e a -> Maybe.Maybe a"
-          },
-          {
-            "name": "isErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "isOk",
-            "comment": " Boolean checks for success/failure.\n",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
-            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
-          },
-          {
-            "name": "mappend",
-            "comment": " Monoidal append - join two Results together as though they were one.\n",
-            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
+            "name": "delay",
+            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
+            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Tuple",
+        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "both",
+            "comment": " Update both components of a pair with a single function.\n",
+            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
+          },
+          {
+            "name": "first",
+            "comment": " Update the first component of a pair.\n",
+            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
+          },
+          {
+            "name": "fork",
+            "comment": " Generate a pair from a single value and a left & right function.\n",
+            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
+          },
+          {
+            "name": "indexedPair",
+            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
+            "type": "(a -> b) -> a -> ( b, a )"
+          },
+          {
+            "name": "pair",
+            "comment": " Update both components of a pair with two functions.\n",
+            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
+          },
+          {
+            "name": "second",
+            "comment": " Update the second component of a pair.\n",
+            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.RemoteData",
@@ -47704,7 +47657,7 @@
             "type": "a -> Exts.RemoteData.RemoteData e a -> a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Set",
@@ -47728,45 +47681,105 @@
             "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Json.Decode",
-        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
+        "name": "Exts.Result",
+        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "stringIgnoringBlanks",
-            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+            "name": "fromErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Maybe.Maybe e"
+          },
+          {
+            "name": "fromOk",
+            "comment": " Convert a `Result` to a `Maybe`.\n",
+            "type": "Result.Result e a -> Maybe.Maybe a"
+          },
+          {
+            "name": "isErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "isOk",
+            "comment": " Boolean checks for success/failure.\n",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
+            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
+          },
+          {
+            "name": "mappend",
+            "comment": " Monoidal append - join two Results together as though they were one.\n",
+            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Json.Encode",
-        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
+        "name": "Exts.Maybe",
+        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust, isNothing, maybe, mappend, catMaybes, join, maybeDefault, matches, validate, when\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "dict",
-            "comment": " Encode a `Dict` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
+            "name": "catMaybes",
+            "comment": " Extract all the `Just` values from a List of Maybes.\n",
+            "type": "List (Maybe.Maybe a) -> List a"
           },
           {
-            "name": "set",
-            "comment": " Encode a `Set` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
+            "name": "isJust",
+            "comment": " Boolean checks.\n",
+            "type": "Maybe.Maybe a -> Bool"
           },
           {
-            "name": "tuple2",
-            "comment": " Encode a pair to a JSON array .\n",
-            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
+            "name": "isNothing",
+            "comment": " ",
+            "type": "Maybe.Maybe a -> Bool"
+          },
+          {
+            "name": "join",
+            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
+            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
+          },
+          {
+            "name": "mappend",
+            "comment": " Join two `Maybe`s together as though they were one.\n",
+            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
+          },
+          {
+            "name": "matches",
+            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
+            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maybe",
+            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
+            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
+          },
+          {
+            "name": "maybeDefault",
+            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
+            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "validate",
+            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
+            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
+          },
+          {
+            "name": "when",
+            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
+            "type": "Bool -> a -> Maybe.Maybe a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.LatLng",
@@ -47785,7 +47798,7 @@
             "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.List",
@@ -47829,113 +47842,45 @@
             "type": "List comparable -> List comparable"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Html.Events",
-        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter, onSelect\n",
+        "name": "Exts.Json.Decode",
+        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "onEnter",
-            "comment": " Send a message when the user hits enter.\n",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onSelect",
-            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
-            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
+            "name": "stringIgnoringBlanks",
+            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Http",
-        "comment": " Extensions to the `Http` library.\n\n@docs handleError, put, postContent, postForm, postJson, cgiParameters\n",
+        "name": "Exts.Json.Encode",
+        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "cgiParameters",
-            "comment": " Encode a CGI parameter list.\n",
-            "type": "List ( String, String ) -> String"
+            "name": "dict",
+            "comment": " Encode a `Dict` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
           },
           {
-            "name": "handleError",
-            "comment": " Lift a raw Http response into a `Task Error Response`, using the same rules `Http` uses internally.\n",
-            "type": "Task.Task Http.RawError Http.Response -> Task.Task Http.Error Http.Response"
+            "name": "set",
+            "comment": " Encode a `Set` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
           },
           {
-            "name": "postContent",
-            "comment": " Send a `POST` request with the given content-type.\n",
-            "type": "String -> Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "postForm",
-            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "postJson",
-            "comment": " Send a `POST` request with appropriate headers form-encoding.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          },
-          {
-            "name": "put",
-            "comment": " Send a simple `PUT` request.\n",
-            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+            "name": "tuple2",
+            "comment": " Encode a pair to a JSON array .\n",
+            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Html.Table",
-        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef, TableDef, simpleTable, simpleTableRow, titleGroup, valueGroup\n",
-        "aliases": [
-          {
-            "name": "CellDef",
-            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "( Html.Html msg, a -> Html.Html msg )"
-          },
-          {
-            "name": "TableDef",
-            "comment": " ",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "List (Exts.Html.Table.CellDef a msg)"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "simpleTable",
-            "comment": " Given a table definition, render a list of elements as HTML.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
-          },
-          {
-            "name": "simpleTableRow",
-            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
-          },
-          {
-            "name": "titleGroup",
-            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
-            "type": "List String -> Html.Html msg"
-          },
-          {
-            "name": "valueGroup",
-            "comment": " ",
-            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Int",
@@ -47949,7 +47894,7 @@
             "type": "Int -> Int -> Maybe.Maybe Int"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Html.Bootstrap",
@@ -48062,55 +48007,74 @@
             "type": "List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Float",
-        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
+        "name": "Exts.Html.Table",
+        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef, TableDef, simpleTable, simpleTableRow, titleGroup, valueGroup\n",
+        "aliases": [
+          {
+            "name": "CellDef",
+            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "( Html.Html msg, a -> Html.Html msg )"
+          },
+          {
+            "name": "TableDef",
+            "comment": " ",
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "List (Exts.Html.Table.CellDef a msg)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "simpleTable",
+            "comment": " Given a table definition, render a list of elements as HTML.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
+          },
+          {
+            "name": "simpleTableRow",
+            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
+          },
+          {
+            "name": "titleGroup",
+            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
+            "type": "List String -> Html.Html msg"
+          },
+          {
+            "name": "valueGroup",
+            "comment": " ",
+            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Events",
+        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter, onSelect\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "roundTo",
-            "comment": " Round a `Float` to a given number of decimal places.\n",
-            "type": "Int -> Float -> Float"
+            "name": "onEnter",
+            "comment": " Send a message when the user hits enter.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onSelect",
+            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
+            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Exts.Html.Attributes",
-        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultFloat",
-            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
-            "type": "Float -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultInt",
-            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
-            "type": "Int -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultString",
-            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
-            "type": "String -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultValue",
-            "comment": " Set a default value for an input field.\n",
-            "type": "Json.Encode.Value -> Html.Attribute msg"
-          },
-          {
-            "name": "styleList",
-            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
-            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Html.Bootstrap.Glyphicons",
@@ -49184,49 +49148,80 @@
             "type": "Exts.Html.Bootstrap.Glyphicons.Glyphicon -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Basics",
-        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n\n",
+        "name": "Exts.Html.Attributes",
+        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "compareBy",
-            "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
-            "type": "(a -> comparable) -> a -> a -> Basics.Order"
+            "name": "defaultFloat",
+            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
+            "type": "Float -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultInt",
+            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
+            "type": "Int -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultString",
+            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultValue",
+            "comment": " Set a default value for an input field.\n",
+            "type": "Json.Encode.Value -> Html.Attribute msg"
+          },
+          {
+            "name": "styleList",
+            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
+            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Delta",
-        "comment": " A system for tracking players that enter and leave a stage, a-la D3.\n\nImplementation detail: This code is hampered by the lack of Elm's type classes. Note the following:\n1. Performance may degrade badly as the number of elements increases.\n2. It is up to you to ensure (a) implments Eq correctly.\n\n@docs Delta, empty, generation\n",
-        "aliases": [
-          {
-            "name": "Delta",
-            "comment": " A data-structure that maintains the difference list of entering, continuing and leaving players.\n",
-            "args": [
-              "a"
-            ],
-            "type": "{ entering : List a, continuing : List a, leaving : List a }"
-          }
-        ],
+        "name": "Exts.Http",
+        "comment": " Extensions to the `Http` library.\n\n@docs handleError, put, postContent, postForm, postJson, cgiParameters\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "empty",
-            "comment": " A default starting state for Deltas.\n",
-            "type": "Exts.Delta.Delta a"
+            "name": "cgiParameters",
+            "comment": " Encode a CGI parameter list.\n",
+            "type": "List ( String, String ) -> String"
           },
           {
-            "name": "generation",
-            "comment": " Update the delta by inspecting a list of players.\n",
-            "type": "List a -> Exts.Delta.Delta a -> Exts.Delta.Delta a"
+            "name": "handleError",
+            "comment": " Lift a raw Http response into a `Task Error Response`, using the same rules `Http` uses internally.\n",
+            "type": "Task.Task Http.RawError Http.Response -> Task.Task Http.Error Http.Response"
+          },
+          {
+            "name": "postContent",
+            "comment": " Send a `POST` request with the given content-type.\n",
+            "type": "String -> Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "postForm",
+            "comment": " Send a `POST` request with appropriate headers for form payloads.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "postJson",
+            "comment": " Send a `POST` request with appropriate headers JSON payloads.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          },
+          {
+            "name": "put",
+            "comment": " Send a simple `PUT` request.\n",
+            "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Dict",
@@ -49260,7 +49255,21 @@
             "type": "(v -> comparable) -> List v -> Dict.Dict comparable v"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Float",
+        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "roundTo",
+            "comment": " Round a `Float` to a given number of decimal places.\n",
+            "type": "Int -> Float -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Exts.Date",
@@ -49284,7 +49293,63 @@
             "type": "Date.Date -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Delta",
+        "comment": " A system for tracking players that enter and leave a stage, a-la D3.\n\nImplementation detail: This code is hampered by the lack of Elm's type classes. Note the following:\n1. Performance may degrade badly as the number of elements increases.\n2. It is up to you to ensure (a) implments Eq correctly.\n\n@docs Delta, empty, generation\n",
+        "aliases": [
+          {
+            "name": "Delta",
+            "comment": " A data-structure that maintains the difference list of entering, continuing and leaving players.\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ entering : List a, continuing : List a, leaving : List a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " A default starting state for Deltas.\n",
+            "type": "Exts.Delta.Delta a"
+          },
+          {
+            "name": "generation",
+            "comment": " Update the delta by inspecting a list of players.\n",
+            "type": "List a -> Exts.Delta.Delta a -> Exts.Delta.Delta a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Basics",
+        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "compareBy",
+            "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
+            "type": "(a -> comparable) -> a -> a -> Basics.Order"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Array",
+        "comment": " Extensions to the core `Array` library.\n\n@docs update\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "update",
+            "comment": " 'Update' the entry at position `n`, by applying `f` to it. If the\nindex is out of range, the array is unaltered.\n",
+            "type": "Int -> (a -> a) -> Array.Array a -> Array.Array a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
