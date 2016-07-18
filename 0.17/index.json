@@ -9229,7 +9229,7 @@
   },
   {
     "name": "Skinney/murmur3",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "docs": [
       {
         "name": "Murmur3",
@@ -16634,11 +16634,11 @@
   },
   {
     "name": "cobalamin/history-tree",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "HistoryTree",
-        "comment": " This library defines a tree structure that contains a complete history of\nsome parent and child states, with infinitely many different timelines.\n\nYou can undo/redo along this timeline, and continue to do new actions from any point in time, without losing the other timeline you had created earlier.\n\n# Definition\n@docs HistoryTree\n\n# Creation and basic usage\n@docs init, current, undo, redo\n\n# Manipulation\n@docs apply, push\n\n# Checks\n@docs canUndo, canRedo\n\n# Changing focus\n@docs goto\n",
+        "comment": " This library defines a tree structure that contains a complete history of\nsome parent and child states, with infinitely many different timelines.\n\nYou can undo/redo along this timeline, and continue to do new actions from any point in time, without losing the other timeline you had created earlier.\n\n# Definition\n@docs HistoryTree, Index\n\n# Creation and basic usage\n@docs init, current, undo, redo, branchCount\n\n# Manipulation\n@docs apply, push\n\n# Checks\n@docs canUndo, canRedo\n\n# Changing focus\n@docs goto\n",
         "aliases": [
           {
             "name": "HistoryTree",
@@ -16647,6 +16647,12 @@
               "a"
             ],
             "type": "FocusTree.FocusTree a"
+          },
+          {
+            "name": "Index",
+            "comment": " The index pointing at a certain subtree. An alias for Int.\n",
+            "args": [],
+            "type": "FocusTree.Index"
           }
         ],
         "types": [],
@@ -16655,6 +16661,11 @@
             "name": "apply",
             "comment": " Push a new history entry calculated from the current value onto the tree, and focus on it.\nLike `push`, but with the new value being a transformation of the current point in history.\n",
             "type": "(a -> a) -> HistoryTree.HistoryTree a -> HistoryTree.HistoryTree a"
+          },
+          {
+            "name": "branchCount",
+            "comment": " Returns the count of child timeline branches from the currently focussed point.\nCan be used to e.g. show several different Redo buttons for each child branch.\n",
+            "type": "HistoryTree.HistoryTree a -> Int"
           },
           {
             "name": "canRedo",
@@ -16674,7 +16685,7 @@
           {
             "name": "goto",
             "comment": " Try to traverse the tree downwards to a certain point in history.\nThis is like repeated applications of `redo` - you can think of it as taking a described path to the point in history.\nReturns a `Just` value containing the history tree with the chosen history point in focus,\n`Nothing` when there is no history point at the given path to be found.\n",
-            "type": "List FocusTree.Index -> HistoryTree.HistoryTree a -> Maybe.Maybe (HistoryTree.HistoryTree a)"
+            "type": "List HistoryTree.Index -> HistoryTree.HistoryTree a -> Maybe.Maybe (HistoryTree.HistoryTree a)"
           },
           {
             "name": "init",
@@ -16689,7 +16700,7 @@
           {
             "name": "redo",
             "comment": " Try to redo a certain history child. These are numbered with Int indices.\nReturns a `Just` value containing the history tree with the chosen child in focus,\n`Nothing` when there is no child with the given index available.\n",
-            "type": "FocusTree.Index -> HistoryTree.HistoryTree a -> Maybe.Maybe (HistoryTree.HistoryTree a)"
+            "type": "HistoryTree.Index -> HistoryTree.HistoryTree a -> Maybe.Maybe (HistoryTree.HistoryTree a)"
           },
           {
             "name": "undo",
@@ -30055,7 +30066,7 @@
   },
   {
     "name": "elm-community/list-split",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "List.Split",
@@ -30065,16 +30076,16 @@
         "values": [
           {
             "name": "chunksOfLeft",
-            "comment": " Split list into smaller lists of length `k`, starting from the left.\n\n    chunksOfLeft 3 [1..9] == [[1,2,3],[4,5,6],[7,8,9]]\n    chunksOfLeft 3 [1,2,3,4,5,6,7,8] == [[1,2,3],[4,5,6],[7,8]]\n    chunksOfLeft 3 [] == [[]]\n",
+            "comment": " Split list into smaller lists of length `k`, starting from the left.\n\n    chunksOfLeft  3 [1..9] == [[1,2,3],[4,5,6],[7,8,9]]\n    chunksOfLeft  3 [1,2,3,4,5,6,7,8] == [[1,2,3],[4,5,6],[7,8]]\n    chunksOfLeft  3 [] == [[]]\n    chunksOfLeft  0 xs == [[]]\n    chunksOfLeft -1 xs == []\n",
             "type": "Int -> List a -> List (List a)"
           },
           {
             "name": "chunksOfRight",
-            "comment": " Split list into smaller lists of length `k`, starting from the right.\n\n    chunksOfRight 3 [1..9] == [[1,2,3],[4,5,6],[7,8,9]]\n    chunksOfRight 3 [1,2,3,4,5,6,7,8] == [[1,2], [3,4,5], [6,7,8]]\n    chunksOfRight 3 [] == [[]]\n",
+            "comment": " Split list into smaller lists of length `k`, starting from the right.\n\n    chunksOfRight  3 [1..9] == [[7,8,9],[4,5,6],[1,2,3]]\n    chunksOfRight  3 [1,2,3,4,5,6,7,8] == [[6,7,8],[3,4,5],[1,2]]\n    chunksOfRight  3 [] == [[]]\n    chunksOfRight  0 xs == [[]]\n    chunksOfRight -1 xs == []\n",
             "type": "Int -> List a -> List (List a)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -38747,6 +38758,90 @@
     ]
   },
   {
+    "name": "erwald/elm-edit-distance",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "EditDistance",
+        "comment": "  The EditDistance module allows for calculating the Levenshtein distance\nbetween two lists, or the actual edit steps required to go from one to the\nother.\n\n# Edit Steps\n@docs EditStep, edits, editsFromStrings, editsWithCostFunc, editsWithCostFuncFromStrings\n\n# Levenshtein\n@docs levenshtein, levenshteinFromStrings\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "EditStep",
+            "comment": " Describes an edit step used to go from one list to another.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Insert",
+                [
+                  "a",
+                  "Int"
+                ]
+              ],
+              [
+                "Delete",
+                [
+                  "a",
+                  "Int"
+                ]
+              ],
+              [
+                "Substitute",
+                [
+                  "a",
+                  "Int"
+                ]
+              ],
+              [
+                "Move",
+                [
+                  "a",
+                  "Int",
+                  "Int"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "edits",
+            "comment": " Calculate the minimum steps (insertions, deletions, moves and substitutions)\nrequired to turn one given list into another.\n\n    edits (String.toList \"kitten\") (String.toList \"sitting\") ==\n      [ Substitute 's' 0\n      , Substitute 'i' 4\n      , Insert 'g' 6\n      ]\n\n    edits (String.toList \"garvey\") (String.toList \"avery\") ==\n      [ Delete 'g' 0\n      , Move 'r' 2 3\n      ]\n\nThe resulting indices reflect edits where _deletions are made first_, before\ninsertions and substitutions. That is, indices for deletions refer to the source\nlist, whereas indices for insertions and substitutions refer to the latter,\nintermediate lists.\n",
+            "type": "List comparable -> List comparable -> List (EditDistance.EditStep comparable)"
+          },
+          {
+            "name": "editsFromStrings",
+            "comment": " Same as the `edits` function, but for String values.\n\n    editsFromStrings \"kitten\" \"sitting\" ==\n      [ Substitute 's' 0\n      , Substitute 'i' 4\n      , Insert 'g' 6\n      ]\n\n    editsFromStrings \"garvey\" \"avery\" ==\n      [ Delete 'g' 0\n      , Move 'r' 2 3\n      ]\n",
+            "type": "String -> String -> List (EditDistance.EditStep Char)"
+          },
+          {
+            "name": "editsWithCostFunc",
+            "comment": " Same as `edits`, but also takes a custom cost function, which takes an\nEditStep (of type Insert, Delete or Substitute) and returns a cost (i.e. an\nInt).\n\n    edits (String.toList \"abc\") (String.toList \"adc\") ==\n      [ Substitute 'd' 1\n      ]\n\n    -- Make substitutions more costly.\n    costFunc editStep =\n      case editStep of\n        Substitute _ _ -> 3\n        _ -> 1\n\n    -- Substitutions are replaced by insertions and deletions.\n    editsWithCostFunc costFunc (String.toList \"abc\") (String.toList \"adc\") ==\n      [ Insert 'd' 1\n      , Delete 'b' 1\n      ]\n\n(Note that the cost function is applied _before_ insertions and deletions are\nconverted into moves, meaning it will never receive an EditStep of type Move as\nan argument.)\n",
+            "type": "(EditDistance.EditStep comparable -> Int) -> List comparable -> List comparable -> List (EditDistance.EditStep comparable)"
+          },
+          {
+            "name": "editsWithCostFuncFromStrings",
+            "comment": " Same as the `editsWithCostFunc` function, but for String values.\n\n    editsFromStrings \"abc\" \"adc\" ==\n      [ Substitute 'd' 1\n      ]\n\n    -- Make substitutions more costly.\n    costFunc editStep =\n      case editStep of\n        Substitute _ -> 3\n        _ -> 1\n\n    -- Substitutions are replaced by insertions and deletions.\n    editsWithCostFuncFromStrings costFunc \"abc\" \"adc\" ==\n      [ Insert 'd' 1\n      , Delete 'b' 1\n      ]\n",
+            "type": "(EditDistance.EditStep Char -> Int) -> String -> String -> List (EditDistance.EditStep Char)"
+          },
+          {
+            "name": "levenshtein",
+            "comment": " Calculate the Levenshtein distance between two lists, i.e. how many\ninsertions, deletions or substitutions are required to turn one given list\ninto another.\n\n    levenshtein (String.toList \"kitten\") (String.toList \"sitting\")\n      == 3\n\n    levenshtein (String.toList \"preterit\") (String.toList \"zeitgeist\")\n      == 6\n\n    levenshtein (String.toList \"garvey\") (String.toList \"avery\")\n      == 3\n",
+            "type": "List comparable -> List comparable -> Int"
+          },
+          {
+            "name": "levenshteinFromStrings",
+            "comment": " Same as the `levenshtein` function, but for String values.\n\n    levenshtein \"kitten\" \"sitting\" == 3\n\n    levenshtein \"preterit\" \"zeitgeist\" == 6\n\n    levenshtein \"garvey\" \"avery\" == 3\n",
+            "type": "String -> String -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "eskimoblood/elm-color-extra",
     "version": "3.0.4",
     "docs": [
@@ -41964,7 +42059,7 @@
   },
   {
     "name": "folkertdev/outmessage",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "OutMessage",
@@ -43679,6 +43774,59 @@
             "name": "hash",
             "comment": "\nHashes a String to an Int using the\n[djb2](http://www.cse.yorku.ca/~oz/hash.html) algorithm. This is in no way\ncryptographically secure. It is just for turning abirary strings in to numbers.\n\n    hash \"yolo swaggins\" == 2438413579\n",
             "type": "String -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "jinjor/elm-diff",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Diff",
+        "comment": " Compares two list and returns how they have changed.\nEach function uses an [O(ND) algorithm](http://www.xmailserver.org/diff2.pdf) internally,\nwhere N is sum of the each length of two text and D is the edit distance.\nIf large text is replaced with another large text, it is the worst case.\n\n# Types\n@docs Change\n\n# Diffing\n@docs diff, diffLines\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Change",
+            "comment": " This describes how each line has changed and also contains its value.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Added",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Removed",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "NoChange",
+                [
+                  "a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Compares general lists.\n\n```\ndiff [1, 3] [2, 3] == [Removed 1, Added 2, NoChange 3] -- True\n```\n\n",
+            "type": "List a -> List a -> List (Diff.Change a)"
+          },
+          {
+            "name": "diffLines",
+            "comment": " Compares two text.\n\nGiving the following text\n\n```\na = \"\"\"aaa\nbbb\nddd\"\"\"\n\nb = \"\"\"zzz\naaa\nccc\nddd\"\"\"\n```\n\nresults in\n\n```\n[ Added \"zzz\"\n, NoChange \"aaa\"\n, Removed \"bbb\"\n, Added \"ccc\"\n, NoChange \"ddd\"\n]\n```\n\n.\n\n",
+            "type": "String -> String -> List (Diff.Change String)"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -48215,6 +48363,49 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "krisajenkins/elm-astar",
+    "version": "2.0.1",
+    "docs": [
+      {
+        "name": "AStar",
+        "comment": " The A-Star pathfinding algorithm.\n\n@docs Position\n@docs Path\n@docs findPath\n@docs straightLineCost\n@docs pythagoreanCost\n",
+        "aliases": [
+          {
+            "name": "Path",
+            "comment": " A path is a `List` of `Position`s.\n",
+            "args": [],
+            "type": "List AStar.Position"
+          },
+          {
+            "name": "Position",
+            "comment": " A position is just a pair of (x,y) coordinates.\n",
+            "args": [],
+            "type": "( Int, Int )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "findPath",
+            "comment": " Find a path between the `start` and `end` `Position`s. You must\n  supply a cost function and a move function.\n\n  The cost function must estimate the distance between any two\n  positions. It doesn't really matter how accurate this estimate is,\n  as long as it *never* underestimates.\n\n  The move function takes a `Position` and returns a `Set` of possible\n  places you can move to in one step.\n\n  If this function returns `Nothing`, there is no path between the two\n  points. Otherwise it returns `Just` a `List` of steps from `start`\n  to `end`.\n\n  Example usage.\n\n     import AStar exposing (..)\n\n\n     type World =\n         ...your custom code...\n\n\n     movesFrom : World -> Position -> Set Position\n     movesFrom world (x,y) =\n         ...your custom code...\n\n\n     findPath\n         straightLineCost\n         (movesFrom  currentWorld)\n         ( 0, 0 ) ( 2, 0 )\n     --> Just [ ( 1, 0 ), ( 2, 0 ) ]\n\n\n",
+            "type": "(AStar.Position -> AStar.Position -> Float) -> (AStar.Position -> Set.Set AStar.Position) -> AStar.Position -> AStar.Position -> Maybe.Maybe AStar.Path"
+          },
+          {
+            "name": "pythagoreanCost",
+            "comment": " An alternative costing algorithm, which calculates pythagorean distance.\n",
+            "type": "AStar.Position -> AStar.Position -> Float"
+          },
+          {
+            "name": "straightLineCost",
+            "comment": " A simple costing algorithm. Think of it as the number of moves a\nrook/castle would have to make on a chessboard. Even if your piece can\nmove diagonally it will still work! A-Star only requires that the cost\nfunction never *under*estimates.\n",
+            "type": "AStar.Position -> AStar.Position -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -60199,6 +60390,66 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "rhofour/elm-pairing-heap",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "PairingHeap",
+        "comment": " This is a simple pairing heap implementation written in Elm usable as a priority queue. This code is\nbased heavily on the pseudocode available at [the Wikipedia page](https://en.wikipedia.org/wiki/Pairing_heap).\n\n# Type and Constructor\n@docs PairingHeap, empty\n\n# Operations\n@docs insert, merge, findMin, deleteMin\n\n# Convenience functions\n@docs fromList, toSortedList\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "PairingHeap",
+            "comment": " A `PairingHeap` has comparable keys and values of an arbitrary type.\n",
+            "args": [
+              "comparable",
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "deleteMin",
+            "comment": " Removes the minimum element from a `PairingHeap` returning a new heap without that element.\nThis will return an empty heap if given an empty heap as input.\n\nComplexity: O(log n)\n",
+            "type": "PairingHeap.PairingHeap comparable a -> PairingHeap.PairingHeap comparable a"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty PairingHeap.\n",
+            "type": "PairingHeap.PairingHeap comparable a"
+          },
+          {
+            "name": "findMin",
+            "comment": " Find the minimum value in a heap returning Nothing if the heap is empty.\n\nComplexity: O(1)\n\n    findMin (fromList [(10, ()), (3, ()), (8, ())]) == Just 3\n",
+            "type": "PairingHeap.PairingHeap comparable a -> Maybe.Maybe ( comparable, a )"
+          },
+          {
+            "name": "fromList",
+            "comment": " This function turns a list of key-value pairs into a `PairingHeap`.\n\nComplexity: O(n)\n",
+            "type": "List ( comparable, a ) -> PairingHeap.PairingHeap comparable a"
+          },
+          {
+            "name": "insert",
+            "comment": " Inserts a new element into a `PairingHeap`.\n\nComplexity: O(1)\n",
+            "type": "( comparable, a ) -> PairingHeap.PairingHeap comparable a -> PairingHeap.PairingHeap comparable a"
+          },
+          {
+            "name": "merge",
+            "comment": " Merges two `PairingHeap`s together into one new heap containing all of the key-value pairs from both inputs.\n\nComplexity: O(1)\n",
+            "type": "PairingHeap.PairingHeap comparable a -> PairingHeap.PairingHeap comparable a -> PairingHeap.PairingHeap comparable a"
+          },
+          {
+            "name": "toSortedList",
+            "comment": " This function turns a `PairingHeap` into a sorted list of key-value pairs.\n\nComplexity: O(n log n)\n",
+            "type": "PairingHeap.PairingHeap comparable a -> List ( comparable, a )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
