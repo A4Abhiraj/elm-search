@@ -51740,6 +51740,31 @@
     ]
   },
   {
+    "name": "lynn/elm-ordinal",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Ordinal",
+        "comment": " A library for converting integers (`23`, `0`, `-2`) to English ordinal\nstrings (`\"23rd\"`, `\"0th\"`, `\"-2nd\"`).\n\n# Ordinal conversion\n@docs ordinal\n@docs ordinalSuffix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "ordinal",
+            "comment": " Convert an integer into an English ordinal number string (like `\"4th\"`).\n\n    ordinal 42 == \"42nd\"\n    ordinal 0 == \"0th\"\n    ordinal (-1) == \"-1st\"\n",
+            "type": "Int -> String"
+          },
+          {
+            "name": "ordinalSuffix",
+            "comment": " Get the English ordinal suffix (st/nd/rd/th) for a given integer.\n\n    ordinalSuffix 42 == \"nd\"\n    ordinalSuffix 0 == \"th\"\n    ordinalSuffix (-1) == \"st\"\n",
+            "type": "Int -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "marcosh/elm-html-to-unicode",
     "version": "1.0.1",
     "docs": [
@@ -70593,7 +70618,7 @@
   },
   {
     "name": "xarvh/elm-slides",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Slides",
@@ -70613,7 +70638,7 @@
           },
           {
             "name": "Options",
-            "comment": "\nConfiguration options:\n\n* `slidePixelSize` &mdash; `width` and `height` geometry of the slide area, in pixel.\n   While the slide will be scaled to the window size, the internal coordinates of the slide will refer to these values.\n\n* `easingFunction` &mdash: Any f : [0, 1] -> [0, 1]\n  The standard ones are available in Elm's [easing-functions](http://package.elm-lang.org/packages/elm-community/easing-functions/1.0.1/).\n\n* `slideAttributes` &mdash: The function used to customize the slide animation.\n  It takes the slide state and motion as argument, and produces a list of DOM attributes (usually just the `style`\n  attribute, but you can add `class` or anything else you need) that can be used to animate the slides.\n\n* `fragmentAttributes` &mdash; the function used to animate a fragment within a slide.\n  It takes the fragment completion from 0 to 1 (0 being invisible and 1 being fully visible) and produces a list of Dom attributes\n  (as above, usually just the `style` attribute will suffice).\n\n* `animationDuration` &mdash; the `Time` duration of a slide or fragment animation.\n\n* `keyCodesToMessage` &mdash; a map of all Messages and the key codes that can trigger them.\n",
+            "comment": "\nConfiguration options:\n\n* `slidePixelSize` &mdash; `width` and `height` geometry of the slide area, in pixel.\n   While the slide will be scaled to the window size, the internal coordinates of the slide will refer to these values.\n\n* `easingFunction` &mdash; Any f : [0, 1] -> [0, 1]\n  The standard ones are available in Elm's [easing-functions](http://package.elm-lang.org/packages/elm-community/easing-functions/1.0.1/).\n\n* `slideAttributes` &mdash; The function used to customize the slide animation.\n  It takes the slide state and motion as argument, and produces a list of DOM attributes (usually just the `style`\n  attribute, but you can add `class` or anything else you need) that can be used to animate the slides.\n\n* `fragmentAttributes` &mdash; the function used to animate a fragment within a slide.\n  It takes the fragment completion from 0 to 1 (0 being invisible and 1 being fully visible) and produces a list of Dom attributes\n  (as above, usually just the `style` attribute will suffice).\n\n* `animationDuration` &mdash; the `Time` duration of a slide or fragment animation.\n\n* `keyCodesToMessage` &mdash; a map of all Messages and the key codes that can trigger them.\n",
             "args": [],
             "type": "{ slidePixelSize : { height : Int, width : Int } , easingFunction : Float -> Float , slideAttributes : Slides.SlideAttributes , fragmentAttributes : Slides.FragmentAttributes , animationDuration : Time.Time , keyCodesToMessage : List { message : Slides.Message, keyCodes : List Int } }"
           },
@@ -70670,7 +70695,7 @@
           },
           {
             "name": "SlideAnimation",
-            "comment": " Tells you what a visible slide is doing.\n",
+            "comment": " Tells you what a visible slide is doing.\n    The `Float` used by the `Moving` constructor is for the animation completion that runs between 0 and 1,\n    0 when the animation hasn't yet started and 1 when it is completed.\n",
             "args": [],
             "cases": [
               [
@@ -70731,7 +70756,7 @@
           },
           {
             "name": "htmlFragments",
-            "comment": "\nCreates a single slide made by several fragments, which are displayed in sequence, one after the other.\n```\nslide2 = htmlFragments\n    [ div [] [ text \"I am always visible when the slide is visible\" ]\n    , div [] [ text \"Then I appear\"\n    , div [] [ text \"and then I appear!\"\n    ]\n",
+            "comment": "\nCreates a single slide made by several fragments, which are displayed in sequence, one after the other.\n```\nslide2 = htmlFragments\n    [ div [] [ text \"I am always visible when the slide is visible\" ]\n    , div [] [ text \"Then I appear\"\n    , div [] [ text \"and then I appear!\"\n    ]\n```\n",
             "type": "List (Html.Html Slides.Message) -> Slides.Slide"
           },
           {
@@ -70751,7 +70776,7 @@
           },
           {
             "name": "slidesDefaultOptions",
-            "comment": "\n    Default configuration options.\n\n    I called them `slidesDefaultOptions` instead than just `defaultOptions` because you can't use `{ Slides.defaultOptions | whatever... }`\n    so at least it is possible to `import Slides exposing (slidesDefaultOptions)` that does not pollute the scope.\n\n    { slidePixelSize =\n        { height = 700\n        , width = 960\n        }\n\n    , easingFunction =\n        Ease.inOutCubic\n\n    , animationDuration =\n        500 * Time.millisecond\n\n    , slideAttributes =\n        slideAttributesScroll\n\n    , fragmentAttributes =\n        fragmentAttributesOpacity\n\n    , keyCodesToMessage =\n        [   { message = First\n            , keyCodes = [36] -- Home\n            }\n        ,   { message = Last\n            , keyCodes = [35] -- End\n            }\n        ,   { message = Next\n            , keyCodes = [13, 32, 39, 76, 68] -- Enter, Spacebar, Arrow Right, l, d\n            }\n        ,   { message = Prev\n            , keyCodes = [37, 72, 65] -- Arrow Left, h, a\n            }\n        ,   { message = PauseAnimation\n            , keyCodes = [80]\n            }\n        ]\n    }\n",
+            "comment": " Default configuration options.\n    It is named `slidesDefaultOptions` instead than just `defaultOptions` because you can't use `{ Slides.defaultOptions | whatever... }`\n    so at least it is possible to `import Slides exposing (slidesDefaultOptions)` that does not pollute the scope.\n\n    ```\n    { slidePixelSize =\n        { height = 700\n        , width = 960\n        }\n\n    , easingFunction =\n        Ease.inOutCubic\n\n    , animationDuration =\n        500 * Time.millisecond\n\n    , slideAttributes =\n        slideAttributesScroll\n\n    , fragmentAttributes =\n        fragmentAttributesOpacity\n\n    , keyCodesToMessage =\n        [   { message = First\n            , keyCodes = [36] -- Home\n            }\n        ,   { message = Last\n            , keyCodes = [35] -- End\n            }\n        ,   { message = Next\n            , keyCodes = [13, 32, 39, 76, 68] -- Enter, Spacebar, Arrow Right, l, d\n            }\n        ,   { message = Prev\n            , keyCodes = [37, 72, 65] -- Arrow Left, h, a\n            }\n        ,   { message = PauseAnimation\n            , keyCodes = [80]\n            }\n        ]\n    }\n    ```\n",
             "type": "Slides.Options"
           }
         ],
