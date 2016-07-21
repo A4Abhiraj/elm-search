@@ -42416,7 +42416,7 @@
   },
   {
     "name": "ggb/numeral-elm",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "docs": [
       {
         "name": "Numeral",
@@ -42433,6 +42433,20 @@
             "name": "formatWithLanguage",
             "comment": " Format a number with a given language.\n\n    import Language.Japanese as Japanese\n\n    myFormat = formatWithLanguage Japanese.lang \"0.0a\"\n\n    -- map myFormat [10123.12, 235798239.3242] == [\"10.1千\",\"235.8百万\"]\n",
             "type": "Language.Language -> String -> Float -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Languages.English",
+        "comment": " English language configuration.\n\n@docs lang\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lang",
+            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=englishOrdinal\n      , currency=\n        { symbol=\"$\"\n        }\n      }\n",
+            "type": "Language.Language"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -42488,20 +42502,6 @@
           {
             "name": "lang",
             "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\" \"\n        , decimal=\",\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=germanOrdinal\n      , currency=\n        { symbol=\"€\"\n        }\n      }\n",
-            "type": "Language.Language"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Languages.English",
-        "comment": " English language configuration.\n\n@docs lang\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lang",
-            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=englishOrdinal\n      , currency=\n        { symbol=\"$\"\n        }\n      }\n",
             "type": "Language.Language"
           }
         ],
