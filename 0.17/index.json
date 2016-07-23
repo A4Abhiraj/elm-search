@@ -7888,53 +7888,547 @@
     ]
   },
   {
-    "name": "MatthewJohnHeath/elm-fingertree",
-    "version": "1.0.0",
+    "name": "JeremyBellows/elm-bootstrapify",
+    "version": "2.0.1",
     "docs": [
       {
-        "name": "PriorityQueue",
-        "comment": "Purely functional priority queue\n#Definition\n@docs PriorityQueue\n#Create\n@docs empty\n# Priority queue operations\n@docs topPriority, top, pop, push\n",
-        "aliases": [
+        "name": "Bootstrap.Wells",
+        "comment": " Functions for generating bootstrap wells\n\n# Wells\n@docs WellOption, well\n\n",
+        "aliases": [],
+        "types": [
           {
-            "name": "PriorityQueue",
-            "comment": "Persistant prirotiy queue. Constant time push and access to top. ",
-            "args": [
-              "a",
-              "comparable"
-            ],
-            "type": "Annotated.AnnotatedFingerTree (Monoid.WithAppendedZero ( a, comparable )) (Monoid.WithAppendedZero ( a, comparable ))"
+            "name": "WellOption",
+            "comment": "\n  Different Size Wells!\n",
+            "args": [],
+            "cases": [
+              [
+                "WellNormal",
+                []
+              ],
+              [
+                "WellSmall",
+                []
+              ],
+              [
+                "WellLarge",
+                []
+              ]
+            ]
           }
         ],
-        "types": [],
         "values": [
           {
-            "name": "empty",
-            "comment": " returns an empty priority queue",
-            "type": "PriorityQueue.PriorityQueue a comparable"
-          },
-          {
-            "name": "pop",
-            "comment": "Remove the element with the top priority. Returns Nothing if input was empty",
-            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe (PriorityQueue.PriorityQueue a comparable)"
-          },
-          {
-            "name": "push",
-            "comment": "Add element to priority queue",
-            "type": "comparable -> a -> PriorityQueue.PriorityQueue a comparable -> PriorityQueue.PriorityQueue a comparable"
-          },
-          {
-            "name": "top",
-            "comment": "Returns the value with the highest prority",
-            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe a"
-          },
-          {
-            "name": "topPriority",
-            "comment": "Returns the highest priority in the priority queue",
-            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe comparable"
+            "name": "well",
+            "comment": " Generates a well html element\n\n    well WellLarge [] []\n",
+            "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
+      {
+        "name": "Bootstrap.Buttons",
+        "comment": " Functions for bootstrap buttons\n\n# Buttons\n@docs ButtonOption, ButtonSizeModifier, btn\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ButtonOption",
+            "comment": "\n  A set of options for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnDefault",
+                []
+              ],
+              [
+                "BtnPrimary",
+                []
+              ],
+              [
+                "BtnSuccess",
+                []
+              ],
+              [
+                "BtnWarning",
+                []
+              ],
+              [
+                "BtnInfo",
+                []
+              ],
+              [
+                "BtnDanger",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "ButtonSizeModifier",
+            "comment": "\n  A set of sizes for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnLarge",
+                []
+              ],
+              [
+                "BtnBlock",
+                []
+              ],
+              [
+                "BtnSmall",
+                []
+              ],
+              [
+                "BtnExtraSmall",
+                []
+              ],
+              [
+                "NavbarBtn",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "btn",
+            "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [] [ text \"Hello world!\" ]\n",
+            "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.Navbar",
+        "comment": " Functions for generating Bootstrap navbar elements\n\n# Navbar\n@docs NavbarType, navbar, navbarHeader, navbarBrand\n\n# Navbar List\n@docs NavbarListAdjustment, NavbarPillsOptions, NavbarOptions, navbarList\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "NavbarListAdjustment",
+            "comment": " A set of options for adjusting a navbar list\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarDefault",
+                []
+              ],
+              [
+                "NavbarRight",
+                []
+              ],
+              [
+                "NavbarLeft",
+                []
+              ],
+              [
+                "NavbarJustified",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarOptions",
+            "comment": "\n  A set of Navbar Options\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarNav",
+                []
+              ],
+              [
+                "NavbarTabs",
+                []
+              ],
+              [
+                "NavbarPills",
+                [
+                  "Bootstrap.Navbar.NavbarPillsOptions"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "NavbarPillsOptions",
+            "comment": "\n  Option for Navbar Pills\n",
+            "args": [],
+            "cases": [
+              [
+                "PillsNotStacked",
+                []
+              ],
+              [
+                "PillsStacked",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarType",
+            "comment": "\n  Different types of Navbar styles\n",
+            "args": [],
+            "cases": [
+              [
+                "DefaultNavbar",
+                []
+              ],
+              [
+                "InverseNavbar",
+                []
+              ],
+              [
+                "FormNavbar",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "navbar",
+            "comment": " Generates a navbar html element\n\n    navbar DefaultNavbar [] []\n",
+            "type": "Bootstrap.Navbar.NavbarType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarBrand",
+            "comment": " Generates a navbarBrand html element\n\n    navbarBrand [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarHeader",
+            "comment": " Generates a navbar header html element\n\n    navbarHeader [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarList",
+            "comment": " Generates a navbarList html element\n\n    navbarList (NavbarPills PillsStacked) NavbarRight []\n     [\n     ]\n",
+            "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.Panels",
+        "comment": " Functions for generating bootstrap panels\n\n# Panels\n@docs PanelType, panelGroup, panel, panelHeading, panelBody\n\n# Panel Headings\n@docs PanelHeadingTitleType, panelHeading\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "PanelHeadingTitleType",
+            "comment": "\n  Types of Panel Headings\n",
+            "args": [],
+            "cases": [
+              [
+                "DefaultTitle",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "PanelH1",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "PanelH2",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "PanelH3",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "PanelH4",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "PanelH5",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "PanelType",
+            "comment": "\n  A set of options for Panels\n",
+            "args": [],
+            "cases": [
+              [
+                "NormalPanel",
+                []
+              ],
+              [
+                "PrimaryPanel",
+                []
+              ],
+              [
+                "SuccessPanel",
+                []
+              ],
+              [
+                "InfoPanel",
+                []
+              ],
+              [
+                "WarningPanel",
+                []
+              ],
+              [
+                "DangerPanel",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "panel",
+            "comment": " Generates a panel html element\n\n    panel PrimaryPanel [] []\n",
+            "type": "Bootstrap.Panels.PanelType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelBody",
+            "comment": " Generates a panelBody html element\n\n    panelBody [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelGroup",
+            "comment": " Generates a panelGroup html element\n\n    panelGroup [] []\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelHeading",
+            "comment": " Generates a panelHeading html element\n\n    panelHeading PanelH3 [] []\n",
+            "type": "Bootstrap.Panels.PanelHeadingTitleType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.Page",
+        "comment": " Bootstrap page functions\n\n# Page\n@docs pullRight, pageHeader, jumbotron\n\n# Automation\n@docs automationTag\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "automationTag",
+            "comment": " This is for being able to write UI Automation selectors efficiently\n\n    button [ automationTag \"btn\" \"submit\" ] []\n",
+            "type": "String -> String -> Html.Attribute msg"
+          },
+          {
+            "name": "jumbotron",
+            "comment": " Generates a jumbotron html element\n\n    jumbotron [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "pageHeader",
+            "comment": " Generates a page header html element\n\n    pageHeader [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "pullRight",
+            "comment": " Generates a div with the pull-right class\n\n    pullRight [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.ListGroup",
+        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "listGroup",
+            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "listGroupItem",
+            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.Grid",
+        "comment": " Bootstrap grid functions for generating html\n\n# Grid\n@docs containerFluid, container, row, column\n\n# Column\n@docs ColumnSize, ColumnType, column\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ColumnSize",
+            "comment": " Type to be used when determining column size\n  Note that a row can only container up to 12 column size units\n",
+            "args": [],
+            "cases": [
+              [
+                "One",
+                []
+              ],
+              [
+                "Two",
+                []
+              ],
+              [
+                "Three",
+                []
+              ],
+              [
+                "Four",
+                []
+              ],
+              [
+                "Five",
+                []
+              ],
+              [
+                "Six",
+                []
+              ],
+              [
+                "Seven",
+                []
+              ],
+              [
+                "Eight",
+                []
+              ],
+              [
+                "Nine",
+                []
+              ],
+              [
+                "Ten",
+                []
+              ],
+              [
+                "Eleven",
+                []
+              ],
+              [
+                "Twelve",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "ColumnType",
+            "comment": "\n  Type to be used when determining column size based on screen size\n  Extra small devices Phones (<768px)\n  Small devices Tablets (≥768px)\n  Medium devices Desktops (≥992px)\n  Large devices Desktops (≥1200px)\n",
+            "args": [],
+            "cases": [
+              [
+                "ExtraSmall",
+                [
+                  "Bootstrap.Grid.ColumnSize"
+                ]
+              ],
+              [
+                "Small",
+                [
+                  "Bootstrap.Grid.ColumnSize"
+                ]
+              ],
+              [
+                "Medium",
+                [
+                  "Bootstrap.Grid.ColumnSize"
+                ]
+              ],
+              [
+                "Large",
+                [
+                  "Bootstrap.Grid.ColumnSize"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "column",
+            "comment": " Generates a column html element\n\n    containerFluid\n     [\n      row\n       [\n        column [ ExtraSmall Twelve, Small Twelve, Medium Twelve, Large Twelve ]\n         [\n         ]\n       ]\n     ]\n",
+            "type": "List Bootstrap.Grid.ColumnType -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "container",
+            "comment": " Generates a container html element\n\n    container [ ]\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "containerFluid",
+            "comment": " Generates a fluid container html element\n\n    containerFluid [ ]\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "row",
+            "comment": " Generates a row html element\n\n    containerFluid\n     [\n      row\n       [\n       ]\n     ]\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Bootstrap.Forms",
+        "comment": " Bootstrap functions pertainig to forms\n\n# Forms\n@docs formHorizontal, FormGroupOption, formLabel, formInput, formTextArea\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "FormGroupOption",
+            "comment": "\n  A set of different Form group options\n",
+            "args": [],
+            "cases": [
+              [
+                "FormGroupDefault",
+                []
+              ],
+              [
+                "FormGroupSmall",
+                []
+              ],
+              [
+                "FormGroupLarge",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "formHorizontal",
+            "comment": " Generates a row form-horizontal element\n\n    formHorizontal\n      [\n      ]\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formInput",
+            "comment": " Generates a formInput html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formInput [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formLabel",
+            "comment": " Generates a formLabel html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formLabel [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formTextArea",
+            "comment": " Generates a form text area html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formTextArea [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "MatthewJohnHeath/elm-fingertree",
+    "version": "1.1.1",
+    "docs": [
       {
         "name": "Container",
         "comment": " Dequeue with random access\n# Definition\n@docs Container\n\n# Create\n@docs empty, fromList\n\n# Dequeue Operations\n@docs pushFront, popFront, peekFront, pushBack, popBack, peekBack, size\n\n# Random Access\n@docs get, set, remove, insert, slice\n",
@@ -8019,6 +8513,50 @@
             "name": "slice",
             "comment": "Get a sub-section of an array: (slice start end array). The start is a zero-based index where we will start our slice.\nThe end is a zero-based index that indicates the end of the slice. The slice extracts up to but not including end.",
             "type": "Int -> Int -> Container.Container a -> Container.Container a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "PriorityQueue",
+        "comment": "Purely functional priority queue\n#Definition\n@docs PriorityQueue\n#Create\n@docs empty\n# Priority queue operations\n@docs topPriority, top, pop, push\n",
+        "aliases": [
+          {
+            "name": "PriorityQueue",
+            "comment": "Persistant prirotiy queue. Constant time push and access to top. ",
+            "args": [
+              "a",
+              "comparable"
+            ],
+            "type": "Annotated.AnnotatedFingerTree (Monoid.WithAppendedZero ( a, comparable )) (Monoid.WithAppendedZero ( a, comparable ))"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " returns an empty priority queue",
+            "type": "PriorityQueue.PriorityQueue a comparable"
+          },
+          {
+            "name": "pop",
+            "comment": "Remove the element with the top priority. Returns Nothing if input was empty",
+            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe (PriorityQueue.PriorityQueue a comparable)"
+          },
+          {
+            "name": "push",
+            "comment": "Add element to priority queue",
+            "type": "comparable -> a -> PriorityQueue.PriorityQueue a comparable -> PriorityQueue.PriorityQueue a comparable"
+          },
+          {
+            "name": "top",
+            "comment": "Returns the value with the highest prority",
+            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe a"
+          },
+          {
+            "name": "topPriority",
+            "comment": "Returns the highest priority in the priority queue",
+            "type": "PriorityQueue.PriorityQueue a comparable -> Maybe.Maybe comparable"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -8140,13 +8678,50 @@
           },
           {
             "name": "split",
-            "comment": "split",
+            "comment": "Let & be the monoid operation\n  split measure aft returns the split at the leftmost \"middle\" such that ( (reduce split left ) & split.middle ) |> measure = true",
             "type": "(b -> Bool) -> Annotated.AnnotatedFingerTree a b -> Maybe.Maybe (Annotated.Split a b)"
           },
           {
             "name": "upTo",
             "comment": "elements before and equal to when measure turns true",
             "type": "(b -> Bool) -> Annotated.AnnotatedFingerTree a b -> Annotated.AnnotatedFingerTree a b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Monoid",
+        "comment": " Module defining a monoid on a type and some functions for creatinbg them\n# Definition\n@docs Monoid, WithAppendedZero\n\n# Create\n@docs appendZero, int\n\n",
+        "aliases": [
+          {
+            "name": "Monoid",
+            "comment": "Contains a binary operator op : a -> a-> a such that op (op a b) c) = op a (op b c)\n(associativity) and an element zero of type a such that for any a' of type a\nop a' zero = op zero a' = a'",
+            "args": [
+              "a"
+            ],
+            "type": "{ zero : a, op : a -> a -> a }"
+          }
+        ],
+        "types": [
+          {
+            "name": "WithAppendedZero",
+            "comment": "Basically the same as Maybe. Adjoins a single extra eleemnt that we will use to make associtaive operators into monoid",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "appendZero",
+            "comment": "Given an associative function a->a->a extends this to a with an extra \"zero\" element to produce a monoid",
+            "type": "(a -> a -> a) -> Monoid.Monoid (Monoid.WithAppendedZero a)"
+          },
+          {
+            "name": "int",
+            "comment": "The monoid of integers with normal addition as the operation and 0 as zero ",
+            "type": "Monoid.Monoid Int"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -42442,6 +43017,43 @@
     ]
   },
   {
+    "name": "ggb/elm-bloom",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Bloom",
+        "comment": " Elm [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) implementation using [Murmur3](https://en.wikipedia.org/wiki/MurmurHash). It may not be the fastest implementation, but it is simple and easy to use. This [blog post](https://corte.si/posts/code/bloom-filter-rules-of-thumb/index.html) with rules of thumb for choosing m and k might be helpful. \n\nUse it as follows:\n\n    import Bloom exposing (empty, add, test)\n\n    -- create an empty filter with m elements and k hashes\n    emptyFilter = empty 1000 4\n\n    -- add elements to the filter\n    filter = \n      List.foldr \n        add\n        emptyFilter \n        [\"foo\", \"bar\", \"baz\", ... ]\n\n    -- check if elements are recognized by the filter\n    test \"bar\" filter == True\n    test \"barr\" filter == False\n\n# Data\n\n@docs Filter\n\n# Create, manipulate and test\n\n@docs empty, add, test\n\n",
+        "aliases": [
+          {
+            "name": "Filter",
+            "comment": " The Filter struct holds an array containing the actual filter, but also the values for m and k (for simplicity).\n",
+            "args": [],
+            "type": "{ set : Array.Array Int, m : Int, k : Int }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Adds elements to an existing Filter.\n\n    import Bloom exposing (add, empty)\n\n    t = List.foldr add (empty 20 3) [\"foo\", \"bar\", \"baz\"]\n",
+            "type": "String -> Bloom.Filter -> Bloom.Filter"
+          },
+          {
+            "name": "empty",
+            "comment": " Creates an empty Filter, containing m elements and using k hashes.\n\n    import Bloom\n\n    Bloom.empty 10 3 |> Array.toList\n\n    -- {m=10, k=3, set=[0,0,0,0,0,0,0,0,0,0]}\n",
+            "type": "Int -> Int -> Bloom.Filter"
+          },
+          {
+            "name": "test",
+            "comment": " Tests if a filter contains an element. By its probalistic nature this function may yield false positive results.\n\n    import Bloom exposing (add, empty)\n\n    -- create filter t\n    \n    test \"foo\" t == True\n    test \"fou\" t == False\n",
+            "type": "String -> Bloom.Filter -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "ggb/numeral-elm",
     "version": "1.2.1",
     "docs": [
@@ -43907,8 +44519,27 @@
   },
   {
     "name": "jinjor/elm-time-travel",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "docs": [
+      {
+        "name": "TimeTravel.Navigation",
+        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
+            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
+            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
       {
         "name": "TimeTravel.Html.App",
         "comment": " Each functions in this module has the same interface as [Html.App](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App)\n\n# Start your Program\n@docs beginnerProgram, program, programWithFlags\n\n",
@@ -43929,25 +44560,6 @@
             "name": "programWithFlags",
             "comment": " See [Html.App.programWithFlags](http://package.elm-lang.org/packages/elm-lang/html/1.0.0/Html-App#programWithFlags)\n",
             "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "TimeTravel.Navigation",
-        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "program",
-            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#program)\n",
-            "type": "Navigation.Parser data -> { init : data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "programWithFlags",
-            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#programWithFlags)\n",
-            "type": "Navigation.Parser data -> { init : flags -> data -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , urlUpdate : data -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -48499,7 +49111,7 @@
   },
   {
     "name": "krisajenkins/elm-exts",
-    "version": "25.8.0",
+    "version": "25.8.1",
     "docs": [
       {
         "name": "Exts.Html",
@@ -48521,12 +49133,73 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Exts.Array",
+        "comment": " Extensions to the core `Array` library.\n\n@docs update\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "update",
+            "comment": " 'Update' the entry at position `n`, by applying `f` to it. If the\nindex is out of range, the array is unaltered.\n",
+            "type": "Int -> (a -> a) -> Array.Array a -> Array.Array a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Task",
+        "comment": " Extensions to the core `Process` library.\n\n@docs delay, asCmd\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "asCmd",
+            "comment": " Turn a `Task` into a `Cmd` which returns a `Result`.\n",
+            "type": "Task.Task e a -> Platform.Cmd.Cmd (Result.Result e a)"
+          },
+          {
+            "name": "delay",
+            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
+            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Delta",
+        "comment": " A system for tracking players that enter and leave a stage, a-la D3.\n\nImplementation detail: This code is hampered by the lack of Elm's type classes. Note the following:\n1. Performance may degrade badly as the number of elements increases.\n2. It is up to you to ensure (a) implments Eq correctly.\n\n@docs Delta, empty, generation\n",
+        "aliases": [
+          {
+            "name": "Delta",
+            "comment": " A data-structure that maintains the difference list of entering, continuing and leaving players.\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ entering : List a, continuing : List a, leaving : List a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " A default starting state for Deltas.\n",
+            "type": "Exts.Delta.Delta a"
+          },
+          {
+            "name": "generation",
+            "comment": " Update the delta by inspecting a list of players.\n",
+            "type": "List a -> Exts.Delta.Delta a -> Exts.Delta.Delta a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Exts.Validation",
-        "comment": " Simple tools for validation. See also [Richard Feldman's elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/latest)\n\n@docs Validator, apply, (|:), required, notBlank, matches, email, emailRegex\n",
+        "comment": " Simple tools for validation. See also [Richard Feldman's elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/latest).\n\n@docs Validator, apply, (|:), required, notBlank, matches, email, emailRegex\n",
         "aliases": [
           {
             "name": "Validator",
-            "comment": " A validator is a function that takes a possibly-invalid form, and\neither returns an error message, or a form that is definitely valid. For example:\n\n    type alias Form =\n      { email : Maybe String\n      , age : Maybe Int\n      }\n\n    type alias ValidForm =\n      { email : String\n      , age : Int\n      }\n\n    validateForm : Form -> Result String ValidForm\n    validateForm form =\n      Ok ValidForm\n        |: notBlank \"Message is required and may not be blank.\" form.message\n        |: email \"Email is required and may not be blank.\" form.email\n        |: matches (caseInsensitive (regex \"^\\\\[a-z]+$\")) \"First name may only contain letters.\" form.firstName\n        |: required \"Age is required\" form.age\n\nAn error message is typically a `String`, but may be any type you choose.\n",
+            "comment": " A validator is a function that takes a possibly-invalid form, and\neither returns an error message, or a form that is definitely valid. For example:\n\n    type alias Form =\n      { message : Maybe String\n      , email : Maybe String\n      , firstName : Maybe String\n      , age : Maybe Int\n      }\n\n    type alias ValidForm =\n      { message : String\n      , email : String\n      , firstName : String\n      , age : Int\n      }\n\n    validateForm : Form -> Result String ValidForm\n    validateForm form =\n      Ok ValidForm\n        |: notBlank \"Message is required and may not be blank.\" form.message\n        |: email \"Email is required and may not be blank.\" form.email\n        |: matches (caseInsensitive (regex \"^[a-z]+$\")) \"First name may only contain letters.\" form.firstName\n        |: required \"Age is required\" form.age\n\nAn error message is typically a `String`, but may be any type you choose.\n",
             "args": [
               "e",
               "a",
@@ -48576,80 +49249,8 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.String",
-        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "removePrefix",
-            "comment": " Strip a leading string from a `String`.\n",
-            "type": "String -> String -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Task",
-        "comment": " Extensions to the core `Process` library.\n\n@docs delay, asCmd\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "asCmd",
-            "comment": " Turn a `Task` into a `Cmd` which returns a `Result`.\n",
-            "type": "Task.Task e a -> Platform.Cmd.Cmd (Result.Result e a)"
-          },
-          {
-            "name": "delay",
-            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
-            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Tuple",
-        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "both",
-            "comment": " Update both components of a pair with a single function.\n",
-            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
-          },
-          {
-            "name": "first",
-            "comment": " Update the first component of a pair.\n",
-            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
-          },
-          {
-            "name": "fork",
-            "comment": " Generate a pair from a single value and a left & right function.\n",
-            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
-          },
-          {
-            "name": "indexedPair",
-            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
-            "type": "(a -> b) -> a -> ( b, a )"
-          },
-          {
-            "name": "pair",
-            "comment": " Update both components of a pair with two functions.\n",
-            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
-          },
-          {
-            "name": "second",
-            "comment": " Update the second component of a pair.\n",
-            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.RemoteData",
-        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\n@docs RemoteData, WebData, map, mapFailure, mapBoth, andThen, withDefault, fromResult, asCmd, fromTask, append, mappend, isSuccess, update\n\n",
+        "comment": " **NOTE:** This file has been promoted to its own project. Please see\nthe [RemoteData for Elm package](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest).\nThis file will be remove from elm-exts in a future release.\n\n\n\nA datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\n@docs RemoteData, WebData, map, mapFailure, mapBoth, andThen, withDefault, fromResult, asCmd, fromTask, append, mappend, isSuccess, update\n\n",
         "aliases": [
           {
             "name": "WebData",
@@ -48757,6 +49358,59 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Exts.String",
+        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "removePrefix",
+            "comment": " Strip a leading string from a `String`.\n",
+            "type": "String -> String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Tuple",
+        "comment": " Extensions for tuples.\n\n@docs indexedPair, first, second, both, pair, fork\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "both",
+            "comment": " Update both components of a pair with a single function.\n",
+            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
+          },
+          {
+            "name": "first",
+            "comment": " Update the first component of a pair.\n",
+            "type": "(a -> a') -> ( a, b ) -> ( a', b )"
+          },
+          {
+            "name": "fork",
+            "comment": " Generate a pair from a single value and a left & right function.\n",
+            "type": "(a -> b) -> (a -> c) -> a -> ( b, c )"
+          },
+          {
+            "name": "indexedPair",
+            "comment": " Turn a items into a key-value pair.\n\n  See also `Exts.Dict.indexBy` and `Exts.Dict.groupBy`.\n",
+            "type": "(a -> b) -> a -> ( b, a )"
+          },
+          {
+            "name": "pair",
+            "comment": " Update both components of a pair with two functions.\n",
+            "type": "(a -> a') -> (b -> b') -> ( a, b ) -> ( a', b' )"
+          },
+          {
+            "name": "second",
+            "comment": " Update the second component of a pair.\n",
+            "type": "(b -> b') -> ( a, b ) -> ( a, b' )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Exts.Set",
         "comment": " Extensions to the core `Set` library.\n\n@docs select, uniqueItems, toggle\n\n",
         "aliases": [],
@@ -48781,40 +49435,25 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Result",
-        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
+        "name": "Exts.Json.Encode",
+        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "fromErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Maybe.Maybe e"
+            "name": "dict",
+            "comment": " Encode a `Dict` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
           },
           {
-            "name": "fromOk",
-            "comment": " Convert a `Result` to a `Maybe`.\n",
-            "type": "Result.Result e a -> Maybe.Maybe a"
+            "name": "set",
+            "comment": " Encode a `Set` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
           },
           {
-            "name": "isErr",
-            "comment": " ",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "isOk",
-            "comment": " Boolean checks for success/failure.\n",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
-            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
-          },
-          {
-            "name": "mappend",
-            "comment": " Monoidal append - join two Results together as though they were one.\n",
-            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
+            "name": "tuple2",
+            "comment": " Encode a pair to a JSON array .\n",
+            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -48879,20 +49518,40 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.LatLng",
-        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
+        "name": "Exts.Result",
+        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth, isOk, isErr, fromOk, fromErr, mappend\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "bearingTo",
-            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+            "name": "fromErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Maybe.Maybe e"
           },
           {
-            "name": "distanceBetween",
-            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+            "name": "fromOk",
+            "comment": " Convert a `Result` to a `Maybe`.\n",
+            "type": "Result.Result e a -> Maybe.Maybe a"
+          },
+          {
+            "name": "isErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "isOk",
+            "comment": " Boolean checks for success/failure.\n",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
+            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
+          },
+          {
+            "name": "mappend",
+            "comment": " Monoidal append - join two Results together as though they were one.\n",
+            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -48942,171 +49601,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Json.Decode",
-        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "stringIgnoringBlanks",
-            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Json.Encode",
-        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set, dict, tuple2\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dict",
-            "comment": " Encode a `Dict` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
-          },
-          {
-            "name": "set",
-            "comment": " Encode a `Set` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
-          },
-          {
-            "name": "tuple2",
-            "comment": " Encode a pair to a JSON array .\n",
-            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Int",
-        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "floorBy",
-            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
-            "type": "Int -> Int -> Maybe.Maybe Int"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Html.Bootstrap",
-        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet, container, containerFluid, row, formGroup, empty, twoColumns, Ratio, video, popover, PopoverDirection, clearfix, well, jumbotron, badge\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "PopoverDirection",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "Top",
-                []
-              ],
-              [
-                "Right",
-                []
-              ],
-              [
-                "Bottom",
-                []
-              ],
-              [
-                "Left",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Ratio",
-            "comment": " Aspect ratios for responsive video embedding.\n",
-            "args": [],
-            "cases": [
-              [
-                "SixteenByNine",
-                []
-              ],
-              [
-                "FourByThree",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "badge",
-            "comment": " Bootstrap badge component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "clearfix",
-            "comment": " Bootstrap clearfix.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "container",
-            "comment": " Bootstrap grid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "containerFluid",
-            "comment": " Bootstrap grid fluid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "empty",
-            "comment": " The minimum markup - an empty span.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "formGroup",
-            "comment": " Bootstrap form group.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "jumbotron",
-            "comment": " Bootstrap jumbotron component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "popover",
-            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
-            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
-          },
-          {
-            "name": "row",
-            "comment": " Bootstrap grid row.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "stylesheet",
-            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "twoColumns",
-            "comment": " Two evenly-sized columns. Must be used within a row.\n",
-            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "video",
-            "comment": " Embed a responsive video.\n",
-            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
-          },
-          {
-            "name": "well",
-            "comment": " Bootstrap well component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.Html.Table",
         "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef, TableDef, simpleTable, simpleTableRow, titleGroup, valueGroup\n",
         "aliases": [
@@ -49150,6 +49644,87 @@
             "name": "valueGroup",
             "comment": " ",
             "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Json.Decode",
+        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "stringIgnoringBlanks",
+            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Int",
+        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "floorBy",
+            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
+            "type": "Int -> Int -> Maybe.Maybe Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.LatLng",
+        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bearingTo",
+            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          },
+          {
+            "name": "distanceBetween",
+            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Attributes",
+        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultFloat",
+            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
+            "type": "Float -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultInt",
+            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
+            "type": "Int -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultString",
+            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultValue",
+            "comment": " Set a default value for an input field.\n",
+            "type": "Json.Encode.Value -> Html.Attribute msg"
+          },
+          {
+            "name": "styleList",
+            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
+            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -50248,40 +50823,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Html.Attributes",
-        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue, defaultString, defaultInt, defaultFloat, styleList\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultFloat",
-            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
-            "type": "Float -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultInt",
-            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
-            "type": "Int -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultString",
-            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
-            "type": "String -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultValue",
-            "comment": " Set a default value for an input field.\n",
-            "type": "Json.Encode.Value -> Html.Attribute msg"
-          },
-          {
-            "name": "styleList",
-            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
-            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.Http",
         "comment": " Extensions to the `Http` library.\n\n@docs handleError, put, postContent, postForm, postJson, cgiParameters\n",
         "aliases": [],
@@ -50316,40 +50857,6 @@
             "name": "put",
             "comment": " Send a simple `PUT` request.\n",
             "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Dict",
-        "comment": " Extensions to the core `Dict` library.\n\n@docs indexBy, groupBy, frequency, getWithDefault, foldToList\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "foldToList",
-            "comment": " Run a function over the dictionary entries, resulting in a list of the final results.\n",
-            "type": "(comparable -> v -> b) -> Dict.Dict comparable v -> List b"
-          },
-          {
-            "name": "frequency",
-            "comment": " Create a frequency-map from the given list.\n",
-            "type": "List comparable -> Dict.Dict comparable Int"
-          },
-          {
-            "name": "getWithDefault",
-            "comment": " Attempt to find a key, if it's not there, return a default value.\n",
-            "type": "a -> comparable -> Dict.Dict comparable a -> a"
-          },
-          {
-            "name": "groupBy",
-            "comment": " Group a list of items by a key.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `groupBy` returns a dictionary of group-key/list-of-items.\n\n  If the indexing function returns a unique key for every item, consider `indexBy` instead.\n",
-            "type": "(v -> comparable) -> List v -> Dict.Dict comparable (List v)"
-          },
-          {
-            "name": "indexBy",
-            "comment": " Turn a list of items into an indexed dictionary.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `indexBy` returns a dictionary with each item stored under\n  its index.\n\n  This code assumes each index is unique. If that is not the case, you\n  should use `groupBy` instead.\n",
-            "type": "(v -> comparable) -> List v -> Dict.Dict comparable v"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -50393,29 +50900,148 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Delta",
-        "comment": " A system for tracking players that enter and leave a stage, a-la D3.\n\nImplementation detail: This code is hampered by the lack of Elm's type classes. Note the following:\n1. Performance may degrade badly as the number of elements increases.\n2. It is up to you to ensure (a) implments Eq correctly.\n\n@docs Delta, empty, generation\n",
-        "aliases": [
-          {
-            "name": "Delta",
-            "comment": " A data-structure that maintains the difference list of entering, continuing and leaving players.\n",
-            "args": [
-              "a"
-            ],
-            "type": "{ entering : List a, continuing : List a, leaving : List a }"
-          }
-        ],
+        "name": "Exts.Dict",
+        "comment": " Extensions to the core `Dict` library.\n\n@docs indexBy, groupBy, frequency, getWithDefault, foldToList\n\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "empty",
-            "comment": " A default starting state for Deltas.\n",
-            "type": "Exts.Delta.Delta a"
+            "name": "foldToList",
+            "comment": " Run a function over the dictionary entries, resulting in a list of the final results.\n",
+            "type": "(comparable -> v -> b) -> Dict.Dict comparable v -> List b"
           },
           {
-            "name": "generation",
-            "comment": " Update the delta by inspecting a list of players.\n",
-            "type": "List a -> Exts.Delta.Delta a -> Exts.Delta.Delta a"
+            "name": "frequency",
+            "comment": " Create a frequency-map from the given list.\n",
+            "type": "List comparable -> Dict.Dict comparable Int"
+          },
+          {
+            "name": "getWithDefault",
+            "comment": " Attempt to find a key, if it's not there, return a default value.\n",
+            "type": "a -> comparable -> Dict.Dict comparable a -> a"
+          },
+          {
+            "name": "groupBy",
+            "comment": " Group a list of items by a key.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `groupBy` returns a dictionary of group-key/list-of-items.\n\n  If the indexing function returns a unique key for every item, consider `indexBy` instead.\n",
+            "type": "(v -> comparable) -> List v -> Dict.Dict comparable (List v)"
+          },
+          {
+            "name": "indexBy",
+            "comment": " Turn a list of items into an indexed dictionary.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `indexBy` returns a dictionary with each item stored under\n  its index.\n\n  This code assumes each index is unique. If that is not the case, you\n  should use `groupBy` instead.\n",
+            "type": "(v -> comparable) -> List v -> Dict.Dict comparable v"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Bootstrap",
+        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet, container, containerFluid, row, formGroup, empty, twoColumns, Ratio, video, popover, PopoverDirection, clearfix, well, jumbotron, badge\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "PopoverDirection",
+            "comment": " ",
+            "args": [],
+            "cases": [
+              [
+                "Top",
+                []
+              ],
+              [
+                "Right",
+                []
+              ],
+              [
+                "Bottom",
+                []
+              ],
+              [
+                "Left",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Ratio",
+            "comment": " Aspect ratios for responsive video embedding.\n",
+            "args": [],
+            "cases": [
+              [
+                "SixteenByNine",
+                []
+              ],
+              [
+                "FourByThree",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "badge",
+            "comment": " Bootstrap badge component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "clearfix",
+            "comment": " Bootstrap clearfix.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "container",
+            "comment": " Bootstrap grid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "containerFluid",
+            "comment": " Bootstrap grid fluid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "empty",
+            "comment": " The minimum markup - an empty span.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "formGroup",
+            "comment": " Bootstrap form group.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "jumbotron",
+            "comment": " Bootstrap jumbotron component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "popover",
+            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
+            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
+          },
+          {
+            "name": "row",
+            "comment": " Bootstrap grid row.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "stylesheet",
+            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "twoColumns",
+            "comment": " Two evenly-sized columns. Must be used within a row.\n",
+            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "video",
+            "comment": " Embed a responsive video.\n",
+            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
+          },
+          {
+            "name": "well",
+            "comment": " Bootstrap well component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -50430,20 +51056,6 @@
             "name": "compareBy",
             "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
             "type": "(a -> comparable) -> a -> a -> Basics.Order"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Array",
-        "comment": " Extensions to the core `Array` library.\n\n@docs update\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "update",
-            "comment": " 'Update' the entry at position `n`, by applying `f` to it. If the\nindex is out of range, the array is unaltered.\n",
-            "type": "Int -> (a -> a) -> Array.Array a -> Array.Array a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -54987,7 +55599,7 @@
   },
   {
     "name": "nphollon/collision",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Collision",
@@ -62501,7 +63113,7 @@
   },
   {
     "name": "rtfeldman/elm-css",
-    "version": "3.1.2",
+    "version": "4.0.1",
     "docs": [
       {
         "name": "Css.File",
@@ -62530,22 +63142,8 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Css.Namespace",
-        "comment": " Namespacing\n@docs namespace\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "namespace",
-            "comment": "\ntakes an identifier, namespaces the list of snippets given with that identifier\n",
-            "type": "a -> List Css.Preprocess.Snippet -> List Css.Preprocess.Snippet"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Css",
-        "comment": " Functions for building stylesheets.\n\n# Misc\n@docs Stylesheet, asPairs, absolute, all, allPetiteCaps, allSmallCaps, withClass, auto, baseline, block, bold, bolder, border, border2, border3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockEndColor, borderBlockEndStyle, borderBlockStart, borderBlockStart2, borderBlockStart3, borderBlockStartColor, borderBlockStartStyle, borderBottom, borderBottom2, borderBottom3, borderBottomColor, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderColor2, borderColor3, borderColor4, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineEndColor, borderInlineEndStyle, borderInlineEndWidth, borderInlineStart, borderInlineStart2, borderInlineStart3, borderInlineStartColor, borderInlineStartStyle, borderLeft, borderLeft2, borderLeft3, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderRight, borderRight2, borderRight3, borderRightColor, borderRightStyle, borderRightWidth, borderStyle, borderTop, borderTop2, borderTop3, borderTopColor, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderTopStyle, borderTopWidth, bottom, column, columnReverse, commonLigatures, content, contentBox, contextual, cursive, dashed, diagonalFractions, discretionaryLigatures, dotted, double, fantasy, fillBox, fixed, flat, displayFlex, flexEnd, flexStart, groove, hex, hidden, historicalLigatures, hsl, hsla, important, inherit, initial, inline, inlineBlock, inset, italic, large, larger, lighter, liningNums, matrix, matrix3d, middle, monospace, noCommonLigatures, noContextual, noDiscretionaryLigatures, noHistoricalLigatures, noWrap, none, normal, oblique, oldstyleNums, ordinal, outset, perspective, petiteCaps, position, preserve3d, proportionalNums, relative, rgb, rgba, ridge, rotate, rotate3d, rotateX, rotateY, rotateZ, row, rowReverse, sansSerif, scale, scale2, scale3d, scaleX, scaleY, scroll, serif, skew, skew2, skewX, skewY, slashedZero, small, smallCaps, smaller, solid, stackedFractions, static, sticky, stretch, sub, super, tabularNums, textBottom, textTop, titlingCaps, top, translate, translate2, translate3d, translateX, translateY, translateZ, transparent, unicase, unset, viewBox, visible, wavy, wrap, wrapReverse, xLarge, xSmall, xxLarge, xxSmall\n\n# Style\n@docs Snippet, Mixin, mixin, stylesheet, compile\n\n# Statements\n@docs (#), (.), selector, everything\n\n# Combinators\n@docs children, descendants, adjacentSiblings, generalSiblings\n\n# Media Queries\n@docs screen, tv, projection, print\n\n# Properties\n@docs property, flex, flex2, flex3, medium, alignSelf, alignItems, order, flexDirection, flexFlow1, flexFlow2, flexWrap, flexBasis, flexGrow, flexShrink, transformStyle, transformBox, transform, transforms, currentColor, underline, overline, lineThrough, textDecoration, textDecoration2, textDecoration3, textDecorationLine, textDecorations, textDecorations2, textDecorations3, textDecorationLine, textDecorationLines, textDecorationStyle, capitalize, uppercase, lowercase, fullWidth, hanging, eachLine, textIndent, textIndent2, textIndent3, clip, ellipsis, textOverflow, optimizeSpeed, optimizeLegibility, geometricPrecision, textRendering, textTransform, textAlign, textAlignLast, left, right, center, textJustify, justifyAll, start, end, matchParent, true, verticalAlign, display, opacity, minContent, maxContent, fitContent, fillAvailable, width, minWidth, maxWidth, height, minHeight, maxHeight, padding, padding2, padding3, padding4, paddingTop, paddingBottom, paddingRight, paddingLeft, paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd, margin, margin2, margin3, margin4, marginTop, marginBottom, marginRight, marginLeft, marginBlockStart, marginBlockEnd, marginInlineStart, marginInlineEnd, boxSizing, overflow, overflowX, overflowY, whiteSpace, backgroundColor, color, withMedia, each, media, mediaQuery, textShadow, textShadow2, textShadow3, textShadow4, lineHeight, letterSpacing, fontFace, fontFamily, fontSize, fontStyle, fontWeight, fontVariant, fontVariant2, fontVariant3, fontVariantLigatures, fontVariantCaps, fontVariantNumeric, fontVariantNumeric2, fontVariantNumeric3, fontFamilies, fontVariantNumerics, fontFeatureSettings, fontFeatureSettingsList\n\n# Values\n\n## Color values\n@docs Color all, important, custom, solid, transparent, rgb, rgba, hsl, hsla, hex\n\n## Font values\n@docs featureTag, featureTag2, featureOn, featureOff\n\n## Other values\n@docs borderColor, borderColor2, borderColor3, borderColor4, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderBottomWidth, borderInlineEndWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBlockEndStyle, borderBlockStartStyle, borderInlineEndStyle, borderBottomStyle, borderInlineStartStyle, borderLeftStyle, borderRightStyle, borderTopStyle, borderStyle, borderBlockStartColor, borderBlockEndColor, borderBottomColor, borderInlineStartColor, borderInlineEndColor, borderLeftColor, borderRightColor, borderTopColor, borderBox, contentBox, border, border2, border3, borderTop, borderTop2, borderTop3, borderBottom, borderBottom2, borderBottom3, borderLeft, borderLeft2, borderLeft3, borderRight, borderRight2, borderRight3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockStart, borderBlockStart2, borderBlockStart3, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineStart, borderInlineStart2, borderInlineStart3, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, scroll, visible, block, inlineBlock, inline, none, auto, inherit, unset, initial, noWrap, top, static, fixed, sticky, relative, absolute, position, bottom, middle, baseline, sub, super, textTop, textBottom, hidden, wavy, dotted, dashed, solid, double, groove, ridge, inset, outset, matrix, matrix3d, perspective, rotate3d, rotateX, rotateY, rotateZ, scale, scale2, scale3d, scaleX, scaleY, skew, skew2, skewX, skewY, translate, translate2, translate3d, translateX, translateY, translateZ, rotate, fillBox, viewBox, flat, preserve3d, content, wrapReverse, wrap, flexStart, flexEnd, stretch, row, rowReverse, column, columnReverse, serif, sansSerif, monospace, cursive, fantasy, xxSmall, xSmall, small, large, xLarge, xxLarge, smaller, larger, normal, italic, oblique, bold, lighter, bolder, smallCaps, allSmallCaps, petiteCaps, allPetiteCaps, unicase, titlingCaps, commonLigatures, noCommonLigatures, discretionaryLigatures, noDiscretionaryLigatures, historicalLigatures, noHistoricalLigatures, contextual, noContextual, liningNums, oldstyleNums, proportionalNums, tabularNums, diagonalFractions, stackedFractions, ordinal, slashedZero\n\n# Length\n@docs Length, pct, px, em, pt, ex, ch, rem, vh, vw, vmin, vmax, mm, cm, inches, pc, int, float, zero, (|+|), (|-|), (|*|), (|/|)\n\n# Angle\n@docs deg, rad, grad, turn\n\n# Pseudo-Classes\n@docs active, any, checked, dir, disabled, empty, enabled, first, firstChild, firstOfType, fullscreen, focus, hover, indeterminate, invalid, lang, lastChild, lastOfType, link, nthChild, nthLastChild, nthLastOfType, nthOfType, onlyChild, onlyOfType, optional, outOfRange, readWrite, required, root, scope, target, valid\n\n# Pseudo-Elements\n@docs after, before, firstLetter, firstLine, selection\n\n# Media Queries\n@docs MediaQuery, screen, print, tv, projection\n\n# Source\n@docs src\n\n# Quoting\n@docs qt\n\n# Types\n\n@docs FontSize, ColorValue\n\n# Intentionally Unsupported\n\nThese are features you might expect to be in elm-css (because they are in the\nCSS specification) but which have been omitted because their use is either\ndeprecated or discouraged.\n\n@docs thin, medium, thick, blink\n",
+        "comment": " Functions for building stylesheets.\n\n# Misc\n@docs Stylesheet, asPairs, absolute, all, allPetiteCaps, allSmallCaps, withClass, auto, baseline, block, bold, bolder, border, border2, border3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockEndColor, borderBlockEndStyle, borderBlockStart, borderBlockStart2, borderBlockStart3, borderBlockStartColor, borderBlockStartStyle, borderBottom, borderBottom2, borderBottom3, borderBottomColor, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderColor2, borderColor3, borderColor4, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineEndColor, borderInlineEndStyle, borderInlineEndWidth, borderInlineStart, borderInlineStart2, borderInlineStart3, borderInlineStartColor, borderInlineStartStyle, borderLeft, borderLeft2, borderLeft3, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderRight, borderRight2, borderRight3, borderRightColor, borderRightStyle, borderRightWidth, borderStyle, borderTop, borderTop2, borderTop3, borderTopColor, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderTopStyle, borderTopWidth, bottom, column, columnReverse, commonLigatures, content, contentBox, contextual, cursive, dashed, diagonalFractions, discretionaryLigatures, dotted, double, fantasy, fillBox, fixed, flat, displayFlex, flexEnd, flexStart, groove, hex, hidden, historicalLigatures, hsl, hsla, important, inherit, initial, inline, inlineBlock, inset, italic, large, larger, lighter, liningNums, matrix, matrix3d, middle, monospace, noCommonLigatures, noContextual, noDiscretionaryLigatures, noHistoricalLigatures, noWrap, none, normal, oblique, oldstyleNums, ordinal, outset, perspective, petiteCaps, position, preserve3d, proportionalNums, relative, rgb, rgba, ridge, rotate, rotate3d, rotateX, rotateY, rotateZ, row, rowReverse, sansSerif, scale, scale2, scale3d, scaleX, scaleY, scroll, serif, skew, skew2, skewX, skewY, slashedZero, small, smallCaps, smaller, solid, stackedFractions, static, sticky, stretch, sub, super, tabularNums, textBottom, textTop, titlingCaps, top, translate, translate2, translate3d, translateX, translateY, translateZ, transparent, unicase, unset, viewBox, visible, wavy, wrap, wrapReverse, xLarge, xSmall, xxLarge, xxSmall\n\n# Style\n@docs Snippet, Mixin, mixin, stylesheet, compile\n\n# Statements\n@docs (#), (.), selector, everything\n\n# Combinators\n@docs children, descendants, adjacentSiblings, generalSiblings\n\n# Media Queries\n@docs screen, tv, projection, print\n\n# Properties\n@docs property, flex, flex2, flex3, medium, alignSelf, alignItems, order, flexDirection, flexFlow1, flexFlow2, flexWrap, flexBasis, flexGrow, flexShrink, transformStyle, transformBox, transform, transforms, currentColor, underline, overline, lineThrough, textDecoration, textDecoration2, textDecoration3, textDecorationLine, textDecorations, textDecorations2, textDecorations3, textDecorationLine, textDecorationLines, textDecorationStyle, capitalize, uppercase, lowercase, fullWidth, hanging, eachLine, textIndent, textIndent2, textIndent3, clip, ellipsis, textOverflow, optimizeSpeed, optimizeLegibility, geometricPrecision, textRendering, textTransform, textAlign, textAlignLast, left, right, center, textJustify, justifyAll, start, end, matchParent, true, verticalAlign, display, opacity, minContent, maxContent, fitContent, fillAvailable, width, minWidth, maxWidth, height, minHeight, maxHeight, padding, padding2, padding3, padding4, paddingTop, paddingBottom, paddingRight, paddingLeft, paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd, margin, margin2, margin3, margin4, marginTop, marginBottom, marginRight, marginLeft, marginBlockStart, marginBlockEnd, marginInlineStart, marginInlineEnd, boxSizing, overflow, overflowX, overflowY, whiteSpace, backgroundColor, color, withMedia, each, media, mediaQuery, textShadow, textShadow2, textShadow3, textShadow4, lineHeight, letterSpacing, fontFace, fontFamily, fontSize, fontStyle, fontWeight, fontVariant, fontVariant2, fontVariant3, fontVariantLigatures, fontVariantCaps, fontVariantNumeric, fontVariantNumeric2, fontVariantNumeric3, fontFamilies, fontVariantNumerics, fontFeatureSettings, fontFeatureSettingsList, cursor\n\n# Values\n\n## Color values\n@docs Color all, important, custom, solid, transparent, rgb, rgba, hsl, hsla, hex\n\n## Font values\n@docs featureTag, featureTag2, featureOn, featureOff\n\n## Other values\n@docs borderColor, borderColor2, borderColor3, borderColor4, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderBottomWidth, borderInlineEndWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBlockEndStyle, borderBlockStartStyle, borderInlineEndStyle, borderBottomStyle, borderInlineStartStyle, borderLeftStyle, borderRightStyle, borderTopStyle, borderStyle, borderBlockStartColor, borderBlockEndColor, borderBottomColor, borderInlineStartColor, borderInlineEndColor, borderLeftColor, borderRightColor, borderTopColor, borderBox, contentBox, border, border2, border3, borderTop, borderTop2, borderTop3, borderBottom, borderBottom2, borderBottom3, borderLeft, borderLeft2, borderLeft3, borderRight, borderRight2, borderRight3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockStart, borderBlockStart2, borderBlockStart3, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineStart, borderInlineStart2, borderInlineStart3, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, scroll, visible, block, inlineBlock, inline, none, auto, inherit, unset, initial, noWrap, top, static, fixed, sticky, relative, absolute, position, bottom, middle, baseline, sub, super, textTop, textBottom, hidden, wavy, dotted, dashed, solid, double, groove, ridge, inset, outset, matrix, matrix3d, perspective, rotate3d, rotateX, rotateY, rotateZ, scale, scale2, scale3d, scaleX, scaleY, skew, skew2, skewX, skewY, translate, translate2, translate3d, translateX, translateY, translateZ, rotate, fillBox, viewBox, flat, preserve3d, content, wrapReverse, wrap, flexStart, flexEnd, stretch, row, rowReverse, column, columnReverse, serif, sansSerif, monospace, cursive, fantasy, xxSmall, xSmall, small, large, xLarge, xxLarge, smaller, larger, normal, italic, oblique, bold, lighter, bolder, smallCaps, allSmallCaps, petiteCaps, allPetiteCaps, unicase, titlingCaps, commonLigatures, noCommonLigatures, discretionaryLigatures, noDiscretionaryLigatures, historicalLigatures, noHistoricalLigatures, contextual, noContextual, liningNums, oldstyleNums, proportionalNums, tabularNums, diagonalFractions, stackedFractions, ordinal, slashedZero, default, pointer, crosshair, contextMenu, help, progress, wait, cell, text, verticalText, cursorAlias, copy, move, noDrop, notAllowed, eResize, nResize, neResize, nwResize, sResize, seResize, swResize, wResize, ewResize, nsResize, neswResize, nwseResize, colResize, rowResize, allScroll, zoomIn, zoomOut, grab, grabbing\n\n# Length\n@docs Length, pct, px, em, pt, ex, ch, rem, vh, vw, vmin, vmax, mm, cm, inches, pc, int, float, zero, (|+|), (|-|), (|*|), (|/|)\n\n# Angle\n@docs deg, rad, grad, turn\n\n# Pseudo-Classes\n@docs active, any, checked, dir, disabled, empty, enabled, first, firstChild, firstOfType, fullscreen, focus, hover, indeterminate, invalid, lang, lastChild, lastOfType, link, nthChild, nthLastChild, nthLastOfType, nthOfType, onlyChild, onlyOfType, optional, outOfRange, readWrite, required, root, scope, target, valid\n\n# Pseudo-Elements\n@docs after, before, firstLetter, firstLine, selection\n\n# Media Queries\n@docs MediaQuery, screen, print, tv, projection\n\n# Source\n@docs src\n\n# Quoting\n@docs qt\n\n# Types\n\n@docs FontSize, ColorValue\n\n# Intentionally Unsupported\n\nThese are features you might expect to be in elm-css (because they are in the\nCSS specification) but which have been omitted because their use is either\ndeprecated or discouraged.\n\n@docs thin, medium, thick, blink\n",
         "aliases": [
           {
             "name": "Color",
@@ -62656,6 +63254,11 @@
             "type": "Css.FontVariantCaps {}"
           },
           {
+            "name": "allScroll",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "allSmallCaps",
             "comment": " ",
             "type": "Css.FontVariantCaps {}"
@@ -62673,7 +63276,7 @@
           {
             "name": "auto",
             "comment": " ",
-            "type": "{ lengthOrAuto : Css.Compatible , overflow : Css.Compatible , textRendering : Css.Compatible , flexBasis : Css.Compatible , lengthOrNumberOrAutoOrNoneOrContent : Css.Compatible , alignItemsOrAuto : Css.Compatible , value : String }"
+            "type": "{ lengthOrAuto : Css.Compatible , overflow : Css.Compatible , textRendering : Css.Compatible , flexBasis : Css.Compatible , lengthOrNumberOrAutoOrNoneOrContent : Css.Compatible , alignItemsOrAuto : Css.Compatible , cursor : Css.Compatible , value : String }"
           },
           {
             "name": "backgroundColor",
@@ -63096,6 +63699,11 @@
             "type": "Css.TextTransform {}"
           },
           {
+            "name": "cell",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "center",
             "comment": " `center` [alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align).\nCan also be used with flex-box's align-items property to apply the value of center\n",
             "type": "Css.TextAlign a b"
@@ -63124,6 +63732,11 @@
             "name": "cm",
             "comment": " [`cm`](https://developer.mozilla.org/en-US/docs/Web/CSS/length#cm) units.\n",
             "type": "Float -> Css.ExplicitLength Css.CMUnits"
+          },
+          {
+            "name": "colResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "color",
@@ -63161,9 +63774,24 @@
             "type": "Css.BoxSizing {}"
           },
           {
+            "name": "contextMenu",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "contextual",
             "comment": " ",
             "type": "Css.FontVariantLigatures {}"
+          },
+          {
+            "name": "copy",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "crosshair",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "currentColor",
@@ -63176,9 +63804,24 @@
             "type": "Css.FontFamily {}"
           },
           {
+            "name": "cursor",
+            "comment": " A [`cursor`](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#Values)\nspecifies the mouse cursor displayed when mouse pointer is over an element.\n",
+            "type": "Css.Cursor compatible -> Css.Mixin"
+          },
+          {
+            "name": "cursorAlias",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "dashed",
             "comment": " A `dashed` [border style](https://developer.mozilla.org/en-US/docs/Web/CSS/border-style#Values).\n",
             "type": "Css.BorderStyle (Css.TextDecorationStyle {})"
+          },
+          {
+            "name": "default",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "deg",
@@ -63231,6 +63874,11 @@
             "type": "Css.BorderStyle (Css.TextDecorationStyle {})"
           },
           {
+            "name": "eResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "each",
             "comment": " ",
             "type": "List (List Css.Mixin -> Css.Snippet) -> List Css.Mixin -> Css.Snippet"
@@ -63269,6 +63917,11 @@
             "name": "everything",
             "comment": " A [`*` selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Universal_selectors).\n\n    (.) Foo\n      [ children\n          [ everything\n              [ color (rgb 14 15 16)\n              , borderRadius (px 5)\n              ]\n          ]\n      ]\n\n...compiles to:\n\n    .Foo > * {\n      color: rgb(14, 15, 16);\n      border-radius: 5px;\n    }\n\n",
             "type": "List Css.Mixin -> Css.Snippet"
+          },
+          {
+            "name": "ewResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "ex",
@@ -63526,6 +64179,16 @@
             "type": "Css.TextRendering {}"
           },
           {
+            "name": "grab",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "grabbing",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "grad",
             "comment": " [`grad`](https://developer.mozilla.org/en-US/docs/Web/CSS/angle#grad) units.\n",
             "type": "number -> Css.Angle {}"
@@ -63544,6 +64207,11 @@
             "name": "height",
             "comment": " Sets [`height`](https://developer.mozilla.org/en-US/docs/Web/CSS/height)\n\n    height (px 800)\n",
             "type": "Css.LengthOrAuto compatible -> Css.Mixin"
+          },
+          {
+            "name": "help",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "hex",
@@ -63841,6 +64509,26 @@
             "type": "Css.FontFamily {}"
           },
           {
+            "name": "move",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "nResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "neResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "neswResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "noCommonLigatures",
             "comment": " ",
             "type": "Css.FontVariantLigatures {}"
@@ -63856,6 +64544,11 @@
             "type": "Css.FontVariantLigatures {}"
           },
           {
+            "name": "noDrop",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "noHistoricalLigatures",
             "comment": " ",
             "type": "Css.FontVariantLigatures {}"
@@ -63868,12 +64561,22 @@
           {
             "name": "none",
             "comment": " ",
-            "type": "{ borderStyle : Css.Compatible , display : Css.Compatible , lengthOrNumberOrAutoOrNoneOrContent : Css.Compatible , none : Css.Compatible , lengthOrNone : Css.Compatible , lengthOrNoneOrMinMaxDimension : Css.Compatible , textDecorationLine : Css.Compatible , transform : Css.Compatible , value : String }"
+            "type": "{ borderStyle : Css.Compatible , cursor : Css.Compatible , display : Css.Compatible , lengthOrNumberOrAutoOrNoneOrContent : Css.Compatible , none : Css.Compatible , lengthOrNone : Css.Compatible , lengthOrNoneOrMinMaxDimension : Css.Compatible , textDecorationLine : Css.Compatible , transform : Css.Compatible , value : String }"
           },
           {
             "name": "normal",
             "comment": " ",
             "type": "Css.FontStyleOrFeatureTagValue {}"
+          },
+          {
+            "name": "notAllowed",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "nsResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "nthChild",
@@ -63894,6 +64597,16 @@
             "name": "nthOfType",
             "comment": " An [`:nth`](https://developer.mozilla.org/en-US/docs/Web/CSS/%3Anth-of-type)\n[pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes).\n",
             "type": "String -> List Css.Mixin -> Css.Mixin"
+          },
+          {
+            "name": "nwResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "nwseResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "oblique",
@@ -64056,6 +64769,11 @@
             "type": "Css.FontVariantCaps {}"
           },
           {
+            "name": "pointer",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "position",
             "comment": " The [`position`](https://developer.mozilla.org/en-US/docs/Web/CSS/position) property.\n",
             "type": "Css.Position compatible -> Css.Mixin"
@@ -64069,6 +64787,11 @@
             "name": "print",
             "comment": " ",
             "type": "Css.MediaQuery"
+          },
+          {
+            "name": "progress",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "projection",
@@ -64181,9 +64904,19 @@
             "type": "Css.FlexDirectionOrWrap (Css.FlexDirection {})"
           },
           {
+            "name": "rowResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "rowReverse",
             "comment": " The[`row-reverse`](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction #Values) value for the\n  flex-direction property.\n",
             "type": "Css.FlexDirectionOrWrap (Css.FlexDirection {})"
+          },
+          {
+            "name": "sResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "sansSerif",
@@ -64229,6 +64962,11 @@
             "name": "scroll",
             "comment": " The `scroll` [`overflow`](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Values) value.\n",
             "type": "Css.Overflow {}"
+          },
+          {
+            "name": "seResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "selection",
@@ -64336,6 +65074,11 @@
             "type": "Css.VerticalAlign a b"
           },
           {
+            "name": "swResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "tabularNums",
             "comment": " ",
             "type": "Css.FontVariantNumeric {}"
@@ -64344,6 +65087,11 @@
             "name": "target",
             "comment": " A [`:target`](https://developer.mozilla.org/en-US/docs/Web/CSS/%3Atarget)\n[pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes).\n",
             "type": "List Css.Mixin -> Css.Mixin"
+          },
+          {
+            "name": "text",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "textAlign",
@@ -64586,6 +65334,11 @@
             "type": "(Css.ExplicitLength Css.IncompatibleUnits -> Css.Mixin) -> Css.Mixin"
           },
           {
+            "name": "verticalText",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "vh",
             "comment": " [`vh`](https://developer.mozilla.org/en-US/docs/Web/CSS/length#vh) units.\n",
             "type": "Float -> Css.ExplicitLength Css.VhUnits"
@@ -64614,6 +65367,16 @@
             "name": "vw",
             "comment": " [`vw`](https://developer.mozilla.org/en-US/docs/Web/CSS/length#vw) units.\n",
             "type": "Float -> Css.ExplicitLength Css.VwUnits"
+          },
+          {
+            "name": "wResize",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "wait",
+            "comment": " ",
+            "type": "Css.Cursor {}"
           },
           {
             "name": "wavy",
@@ -64676,6 +65439,16 @@
             "type": "{ value : String , length : Css.Compatible , lengthOrNumber : Css.Compatible , lengthOrNone : Css.Compatible , lengthOrAuto : Css.Compatible , lengthOrMinMaxDimension : Css.Compatible , lengthOrNoneOrMinMaxDimension : Css.Compatible , number : Css.Compatible , units : Css.UnitlessInteger , unitLabel : String , numericValue : Float }"
           },
           {
+            "name": "zoomIn",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
+            "name": "zoomOut",
+            "comment": " ",
+            "type": "Css.Cursor {}"
+          },
+          {
             "name": "|*|",
             "comment": " ",
             "type": "Css.Length compatible units -> Css.Length compatible units -> Css.Length compatible units"
@@ -64694,6 +65467,20 @@
             "name": "|/|",
             "comment": " ",
             "type": "Css.Length compatible units -> Css.Length compatible units -> Css.Length compatible units"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Css.Namespace",
+        "comment": " Namespacing\n@docs namespace\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "namespace",
+            "comment": "\ntakes an identifier, namespaces the list of snippets given with that identifier\n",
+            "type": "a -> List Css.Preprocess.Snippet -> List Css.Preprocess.Snippet"
           }
         ],
         "generated-with-elm-version": "0.17.1"
