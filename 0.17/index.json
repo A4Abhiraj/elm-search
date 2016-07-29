@@ -7894,7 +7894,7 @@
   },
   {
     "name": "JeremyBellows/elm-bootstrapify",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Bootstrap.Wells",
@@ -7928,67 +7928,83 @@
             "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Bootstrap.Buttons",
-        "comment": " Functions for bootstrap buttons\n\n# Buttons\n@docs ButtonOption, ButtonSizeModifier, btn\n\n",
+        "name": "Bootstrap.Panels",
+        "comment": " Functions for generating bootstrap panels\n\n# Panels\n@docs PanelType, panelGroup, panel, panelHeading, panelBody\n\n# Panel Headings\n@docs PanelHeadingTitleType, panelHeading\n\n",
         "aliases": [],
         "types": [
           {
-            "name": "ButtonOption",
-            "comment": "\n  A set of options for rendering a btn\n",
+            "name": "PanelHeadingTitleType",
+            "comment": "\n  Types of Panel Headings\n",
             "args": [],
             "cases": [
               [
-                "BtnDefault",
-                []
+                "DefaultTitle",
+                [
+                  "String"
+                ]
               ],
               [
-                "BtnPrimary",
-                []
+                "PanelH1",
+                [
+                  "String"
+                ]
               ],
               [
-                "BtnSuccess",
-                []
+                "PanelH2",
+                [
+                  "String"
+                ]
               ],
               [
-                "BtnWarning",
-                []
+                "PanelH3",
+                [
+                  "String"
+                ]
               ],
               [
-                "BtnInfo",
-                []
+                "PanelH4",
+                [
+                  "String"
+                ]
               ],
               [
-                "BtnDanger",
-                []
+                "PanelH5",
+                [
+                  "String"
+                ]
               ]
             ]
           },
           {
-            "name": "ButtonSizeModifier",
-            "comment": "\n  A set of sizes for rendering a btn\n",
+            "name": "PanelType",
+            "comment": "\n  A set of options for Panels\n",
             "args": [],
             "cases": [
               [
-                "BtnLarge",
+                "NormalPanel",
                 []
               ],
               [
-                "BtnBlock",
+                "PrimaryPanel",
                 []
               ],
               [
-                "BtnSmall",
+                "SuccessPanel",
                 []
               ],
               [
-                "BtnExtraSmall",
+                "InfoPanel",
                 []
               ],
               [
-                "NavbarBtn",
+                "WarningPanel",
+                []
+              ],
+              [
+                "DangerPanel",
                 []
               ]
             ]
@@ -7996,12 +8012,27 @@
         ],
         "values": [
           {
-            "name": "btn",
-            "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [] [ text \"Hello world!\" ]\n",
-            "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "panel",
+            "comment": " Generates a panel html element\n\n    panel PrimaryPanel [] []\n",
+            "type": "Bootstrap.Panels.PanelType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelBody",
+            "comment": " Generates a panelBody html element\n\n    panelBody [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelGroup",
+            "comment": " Generates a panelGroup html element\n\n    panelGroup [] []\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "panelHeading",
+            "comment": " Generates a panelHeading html element\n\n    panelHeading PanelH3 [] []\n",
+            "type": "Bootstrap.Panels.PanelHeadingTitleType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Bootstrap.Navbar",
@@ -8109,111 +8140,26 @@
             "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Bootstrap.Panels",
-        "comment": " Functions for generating bootstrap panels\n\n# Panels\n@docs PanelType, panelGroup, panel, panelHeading, panelBody\n\n# Panel Headings\n@docs PanelHeadingTitleType, panelHeading\n\n",
+        "name": "Bootstrap.ListGroup",
+        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
         "aliases": [],
-        "types": [
-          {
-            "name": "PanelHeadingTitleType",
-            "comment": "\n  Types of Panel Headings\n",
-            "args": [],
-            "cases": [
-              [
-                "DefaultTitle",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "PanelH1",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "PanelH2",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "PanelH3",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "PanelH4",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "PanelH5",
-                [
-                  "String"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "PanelType",
-            "comment": "\n  A set of options for Panels\n",
-            "args": [],
-            "cases": [
-              [
-                "NormalPanel",
-                []
-              ],
-              [
-                "PrimaryPanel",
-                []
-              ],
-              [
-                "SuccessPanel",
-                []
-              ],
-              [
-                "InfoPanel",
-                []
-              ],
-              [
-                "WarningPanel",
-                []
-              ],
-              [
-                "DangerPanel",
-                []
-              ]
-            ]
-          }
-        ],
+        "types": [],
         "values": [
           {
-            "name": "panel",
-            "comment": " Generates a panel html element\n\n    panel PrimaryPanel [] []\n",
-            "type": "Bootstrap.Panels.PanelType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "panelBody",
-            "comment": " Generates a panelBody html element\n\n    panelBody [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "panelGroup",
-            "comment": " Generates a panelGroup html element\n\n    panelGroup [] []\n",
+            "name": "listGroup",
+            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
             "type": "List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "panelHeading",
-            "comment": " Generates a panelHeading html element\n\n    panelHeading PanelH3 [] []\n",
-            "type": "Bootstrap.Panels.PanelHeadingTitleType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "listGroupItem",
+            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Bootstrap.Page",
@@ -8242,26 +8188,7 @@
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Bootstrap.ListGroup",
-        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "listGroup",
-            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "listGroupItem",
-            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Bootstrap.Grid",
@@ -8377,11 +8304,11 @@
             "type": "List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Bootstrap.Forms",
-        "comment": " Bootstrap functions pertainig to forms\n\n# Forms\n@docs formHorizontal, FormGroupOption, formLabel, formInput, formTextArea\n\n",
+        "comment": " Bootstrap functions pertaining to forms\n\n# Forms\n@docs formHorizontal, formGroup, FormGroupOption, formLabel, formInput, formTextArea\n\n",
         "aliases": [],
         "types": [
           {
@@ -8406,6 +8333,11 @@
         ],
         "values": [
           {
+            "name": "formGroup",
+            "comment": " Generates a formGroup html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n        ]\n     ]\n",
+            "type": "Bootstrap.Forms.FormGroupOption -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
             "name": "formHorizontal",
             "comment": " Generates a row form-horizontal element\n\n    formHorizontal\n      [\n      ]\n",
             "type": "List (Html.Html msg) -> Html.Html msg"
@@ -8426,7 +8358,80 @@
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.Buttons",
+        "comment": " Functions for bootstrap buttons\n\n# Buttons\n@docs ButtonOption, ButtonSizeModifier, btn\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ButtonOption",
+            "comment": "\n  A set of options for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnDefault",
+                []
+              ],
+              [
+                "BtnPrimary",
+                []
+              ],
+              [
+                "BtnSuccess",
+                []
+              ],
+              [
+                "BtnWarning",
+                []
+              ],
+              [
+                "BtnInfo",
+                []
+              ],
+              [
+                "BtnDanger",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "ButtonSizeModifier",
+            "comment": "\n  A set of sizes for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnLarge",
+                []
+              ],
+              [
+                "BtnBlock",
+                []
+              ],
+              [
+                "BtnSmall",
+                []
+              ],
+              [
+                "BtnExtraSmall",
+                []
+              ],
+              [
+                "NavbarBtn",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "btn",
+            "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [] [ text \"Hello world!\" ]\n",
+            "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
