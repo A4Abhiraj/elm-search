@@ -7894,42 +7894,8 @@
   },
   {
     "name": "JeremyBellows/elm-bootstrapify",
-    "version": "2.1.0",
+    "version": "5.0.0",
     "docs": [
-      {
-        "name": "Bootstrap.Wells",
-        "comment": " Functions for generating bootstrap wells\n\n# Wells\n@docs WellOption, well\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "WellOption",
-            "comment": "\n  Different Size Wells!\n",
-            "args": [],
-            "cases": [
-              [
-                "WellNormal",
-                []
-              ],
-              [
-                "WellSmall",
-                []
-              ],
-              [
-                "WellLarge",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "well",
-            "comment": " Generates a well html element\n\n    well WellLarge [] []\n",
-            "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
       {
         "name": "Bootstrap.Panels",
         "comment": " Functions for generating bootstrap panels\n\n# Panels\n@docs PanelType, panelGroup, panel, panelHeading, panelBody\n\n# Panel Headings\n@docs PanelHeadingTitleType, panelHeading\n\n",
@@ -8035,84 +8001,25 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Bootstrap.Navbar",
-        "comment": " Functions for generating Bootstrap navbar elements\n\n# Navbar\n@docs NavbarType, navbar, navbarHeader, navbarBrand\n\n# Navbar List\n@docs NavbarListAdjustment, NavbarPillsOptions, NavbarOptions, navbarList\n\n",
+        "name": "Bootstrap.Wells",
+        "comment": " Functions for generating bootstrap wells\n\n# Wells\n@docs WellOption, well\n\n",
         "aliases": [],
         "types": [
           {
-            "name": "NavbarListAdjustment",
-            "comment": " A set of options for adjusting a navbar list\n",
+            "name": "WellOption",
+            "comment": "\n  Different Size Wells!\n",
             "args": [],
             "cases": [
               [
-                "NavbarDefault",
+                "WellNormal",
                 []
               ],
               [
-                "NavbarRight",
+                "WellSmall",
                 []
               ],
               [
-                "NavbarLeft",
-                []
-              ],
-              [
-                "NavbarJustified",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "NavbarOptions",
-            "comment": "\n  A set of Navbar Options\n",
-            "args": [],
-            "cases": [
-              [
-                "NavbarNav",
-                []
-              ],
-              [
-                "NavbarTabs",
-                []
-              ],
-              [
-                "NavbarPills",
-                [
-                  "Bootstrap.Navbar.NavbarPillsOptions"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "NavbarPillsOptions",
-            "comment": "\n  Option for Navbar Pills\n",
-            "args": [],
-            "cases": [
-              [
-                "PillsNotStacked",
-                []
-              ],
-              [
-                "PillsStacked",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "NavbarType",
-            "comment": "\n  Different types of Navbar styles\n",
-            "args": [],
-            "cases": [
-              [
-                "DefaultNavbar",
-                []
-              ],
-              [
-                "InverseNavbar",
-                []
-              ],
-              [
-                "FormNavbar",
+                "WellLarge",
                 []
               ]
             ]
@@ -8120,43 +8027,9 @@
         ],
         "values": [
           {
-            "name": "navbar",
-            "comment": " Generates a navbar html element\n\n    navbar DefaultNavbar [] []\n",
-            "type": "Bootstrap.Navbar.NavbarType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "navbarBrand",
-            "comment": " Generates a navbarBrand html element\n\n    navbarBrand [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "navbarHeader",
-            "comment": " Generates a navbar header html element\n\n    navbarHeader [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "navbarList",
-            "comment": " Generates a navbarList html element\n\n    navbarList (NavbarPills PillsStacked) NavbarRight []\n     [\n     ]\n",
-            "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Bootstrap.ListGroup",
-        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "listGroup",
-            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "listGroupItem",
-            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "well",
+            "comment": " Generates a well html element\n\n    well WellLarge [] []\n",
+            "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -8308,9 +8181,28 @@
       },
       {
         "name": "Bootstrap.Forms",
-        "comment": " Bootstrap functions pertaining to forms\n\n# Forms\n@docs formHorizontal, formGroup, FormGroupOption, formLabel, formInput, formTextArea\n\n",
+        "comment": " Bootstrap functions pertaining to forms\n\n# Forms\n@docs FormAlignmentOption, form, formGroup, FormGroupOption, formLabel, formInput, formTextArea\n\n",
         "aliases": [],
         "types": [
+          {
+            "name": "FormAlignmentOption",
+            "comment": " Options for Form Alignment\n\n    case formAlignmentOption of\n      FormDefault -> \"\"\n      FormHorizontal -> \"form-horizontal\"\n      FormInline -> \"form-inline\"\n",
+            "args": [],
+            "cases": [
+              [
+                "FormDefault",
+                []
+              ],
+              [
+                "FormHorizontal",
+                []
+              ],
+              [
+                "FormInline",
+                []
+              ]
+            ]
+          },
           {
             "name": "FormGroupOption",
             "comment": "\n  A set of different Form group options\n",
@@ -8333,28 +8225,47 @@
         ],
         "values": [
           {
+            "name": "form",
+            "comment": " Generates a form with the supplied alignment\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n     ]\n",
+            "type": "Bootstrap.Forms.FormAlignmentOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
             "name": "formGroup",
-            "comment": " Generates a formGroup html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n        ]\n     ]\n",
+            "comment": " Generates a formGroup html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n        ]\n     ]\n",
             "type": "Bootstrap.Forms.FormGroupOption -> List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "formHorizontal",
-            "comment": " Generates a row form-horizontal element\n\n    formHorizontal\n      [\n      ]\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
             "name": "formInput",
-            "comment": " Generates a formInput html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formInput [] []\n        ]\n     ]\n",
+            "comment": " Generates a formInput html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formInput [] []\n        ]\n     ]\n",
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           },
           {
             "name": "formLabel",
-            "comment": " Generates a formLabel html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formLabel [] []\n        ]\n     ]\n",
+            "comment": " Generates a formLabel html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formLabel [] []\n        ]\n     ]\n",
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           },
           {
             "name": "formTextArea",
-            "comment": " Generates a form text area html element\n\n    formHorizontal\n     [\n      formGroup FormGroupDefault\n        [\n         formTextArea [] []\n        ]\n     ]\n",
+            "comment": " Generates a form text area html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formTextArea [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.ListGroup",
+        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "listGroup",
+            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "listGroupItem",
+            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
@@ -8429,6 +8340,114 @@
             "name": "btn",
             "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [] [ text \"Hello world!\" ]\n",
             "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.Navbar",
+        "comment": " Functions for generating Bootstrap navbar elements\n\n# Navbar\n@docs NavbarType, navbar, navbarHeader, navbarBrand\n\n# Navbar List\n@docs NavbarListAdjustment, NavbarPillsOptions, NavbarOptions, navbarList\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "NavbarListAdjustment",
+            "comment": " A set of options for adjusting a navbar list\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarDefault",
+                []
+              ],
+              [
+                "NavbarRight",
+                []
+              ],
+              [
+                "NavbarLeft",
+                []
+              ],
+              [
+                "NavbarJustified",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarOptions",
+            "comment": "\n  A set of Navbar Options\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarNav",
+                []
+              ],
+              [
+                "NavbarTabs",
+                []
+              ],
+              [
+                "NavbarPills",
+                [
+                  "Bootstrap.Navbar.NavbarPillsOptions"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "NavbarPillsOptions",
+            "comment": "\n  Option for Navbar Pills\n",
+            "args": [],
+            "cases": [
+              [
+                "PillsNotStacked",
+                []
+              ],
+              [
+                "PillsStacked",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarType",
+            "comment": "\n  Different types of Navbar styles\n",
+            "args": [],
+            "cases": [
+              [
+                "DefaultNavbar",
+                []
+              ],
+              [
+                "InverseNavbar",
+                []
+              ],
+              [
+                "FormNavbar",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "navbar",
+            "comment": " Generates a navbar html element\n\n    navbar DefaultNavbar [] []\n",
+            "type": "Bootstrap.Navbar.NavbarType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarBrand",
+            "comment": " Generates a navbarBrand html element\n\n    navbarBrand [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarHeader",
+            "comment": " Generates a navbar header html element\n\n    navbarHeader [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarList",
+            "comment": " Generates a navbarList html element\n\n    navbarList (NavbarPills PillsStacked) NavbarRight []\n     [\n     ]\n",
+            "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
