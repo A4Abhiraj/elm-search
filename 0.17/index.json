@@ -20106,11 +20106,11 @@
   },
   {
     "name": "debois/elm-parts",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "Parts",
-        "comment": " \n\nGiven a TEA component with model type `model` and message type `msg`, we construct\na variant component which knows how to extract its model from a c model\n`c` and produces generic messages `Msg c`. The consuming component is assumed\nto have message type `obs` (for \"observation\"). \n\n# Elm Architecture types\n@docs Update, View\n\n# Model embeddings \n@docs Get, Set, embedView, embedUpdate\n@docs accessors, Accessors\n\n## Indexed model embeddings\n@docs Index, Indexed, indexed\n\n# Message embeddings\n@docs Msg, update, pack\n\n# Part construction\n@docs create, create1\n\n# Lazyness\n\nRecall that `Html.Lazy` avoids re-computing views when the model doesn't change\nacross updates. However, \"doesn't change\" does not mean `model == model'` but rather\nthe stricter `model === model'` (in Javascript terms). That is, the old and new model\nmust not only be structurally the same, they must be literally the same\ndata-structure in memory.  \n\nParts generally do not achieve referential equality of no-op updates, since we\nare wrapping updates conceptually like this: \n\n    let (submodel, submsgs) = SubComponent.update msg model.submodel \n        model' = { model | submodel = submodel }\n    in \n        ...\nIn the second line, even if `submodel == model.submodel` and so `model ==\nmodel'`, we won't have (in Javascript terms) `model === model'`. \n\nIf you need lazy and thus referential equality of no-op updates, use \n`update'` below instead of the regular `update`, and create your parts with \n`create1'`, `pack'` etc. These functions all require that your base `update`\nfunction has the type of `Update'`, that is, wraps the resulting model in \n`Maybe` and explicitly signals a no-op by returning a `Nothing` model. \n\n@docs Update', update', create1', pack', embedUpdate'\n\n",
+        "comment": " \n\nGiven a TEA component with model type `model` and message type `msg`, we construct\na variant component which knows how to extract its model from a c model\n`c` and produces generic messages `Msg c`. The consuming component is assumed\nto have message type `obs` (for \"observation\"). \n\n# Lazyness\n\nRecall that `Html.Lazy` avoids re-computing views when the model doesn't change\nacross updates. However, \"doesn't change\" does not mean `model == model'` but rather\nthe stricter `model === model'` (in Javascript terms). That is, the old and new model\nmust not only be structurally the same, they must be literally the same\ndata-structure in memory.  \n\nParts generally do not achieve referential equality of no-op updates, since we\nare wrapping updates conceptually like this: \n\n    let (submodel, submsgs) = SubComponent.update msg model.submodel \n        model' = { model | submodel = submodel }\n    in \n        ...\nIn the second line, even if `submodel == model.submodel` and so `model ==\nmodel'`, we won't have (in Javascript terms) `model === model'`. \n\nFor this reason, the result of `update` functions used in parts should be\n`Maybe (model, Cmd msg)` rather than the usual `(model, Cmd msg)`; the \n`Nothing` case signifies a no-op. \n\n# Communicating to the parent component\n\nBecause parts wrap messages in an opaque type, the parent component loses the\nability to inspect and maybe react to messages of the part. We recover this \nability by requiring the `update` function to take as parameter a lifting \nfunction which lifts the parts messages to that of its parent. \n\n@docs Update, View\n\n# Model embeddings \n@docs Get, Set, embedView, embedUpdate\n@docs accessors, Accessors\n\n## Indexed model embeddings\n@docs Index, Indexed, indexed\n\n# Message embeddings\n@docs Msg, update, update', partial\n\n# Part construction\n@docs create, create1, generalize, pack, pack1\n",
         "aliases": [
           {
             "name": "Accessors",
@@ -20155,21 +20155,13 @@
           },
           {
             "name": "Update",
-            "comment": " Standard TEA update function type. \n",
+            "comment": " Update functions. \n\nTEA update function with explicit message lifting and no-op. You should have:\n\n    fst (update f msg model) == Nothing       -- No change to model\n    fst (update f msg model) == Just model'   -- Change to model'\n",
             "args": [
               "model",
-              "msg"
+              "msg",
+              "obs"
             ],
-            "type": "msg -> model -> ( model, Platform.Cmd.Cmd msg )"
-          },
-          {
-            "name": "Update'",
-            "comment": " TEA update function with explicit no-op. You should have:\n\n    fst (update msg model) == Nothing       -- No change to model\n    fst (update msg model) == Just model'   -- Change to model'\n\n",
-            "args": [
-              "model",
-              "msg"
-            ],
-            "type": "msg -> model -> ( Maybe.Maybe model, Platform.Cmd.Cmd msg )"
+            "type": "(msg -> obs) -> msg -> model -> Maybe.Maybe ( model, Platform.Cmd.Cmd obs )"
           },
           {
             "name": "View",
@@ -20186,7 +20178,8 @@
             "name": "Msg",
             "comment": " Similar to how embeddings enable collecting models of different type\nin a single model c, we collect messages in a single \"master\nmessage\" type. Messages exist exclusively to be dispatched by a corresponding\n`update` function; we can avoid distinguishing between different types of \nmessages by dispatching not the `Msg` itself, but a partially applied update\nfunction `update msg`. \n\nIt's instructive to compare `Msg` to the type of `update` partially applied to \nan actual carried message `m`:\n\n    update : m -> c -> (c, Cmd m)\n    (update m) : c -> (c, Cmd m)\n",
             "args": [
-              "c"
+              "c",
+              "obs"
             ],
             "cases": []
           }
@@ -20199,33 +20192,28 @@
           },
           {
             "name": "create",
-            "comment": " From `update` and `view` functions, produce a `view` function which (a) \nfetches its model from a `c` model, and (b) dispatches generic `Msg`\nmessages. \n\nIts instructive to compare the types of the input `view` and `update` for a \ntypical case. Notice that `create` transforms `model` -> `c` and\n`Html m` -> `Html (Msg c)`. \n\n  {- Input -}\n  view : (m -> obs) -> model -> List (Attributes m) -> List (Html m) -> Html m\n  update : m -> model -> (model, Cmd m)\n\n  {- Output -}\n  type alias m' = Msg c\n  view : c -> List (Attributes m') -> List (Html m') -> Html m'\n\nNote that the input `view` function is assumed to take a function lifting its\nmessages. \n\n",
-            "type": "((m -> obs) -> Parts.View model a) -> Parts.Update model m -> Parts.Get (Parts.Indexed model) c -> Parts.Set (Parts.Indexed model) c -> model -> (Parts.Msg c -> obs) -> Parts.Index -> Parts.View c a"
+            "comment": " From `update` and `view` functions, produce a `view` function which (a) \nfetches its model from a `c` model, and (b) dispatches generic `Msg`\nmessages. \n\nIts instructive to compare the types of the input `view` and `update` for a \ntypical case. Notice that `create` transforms `model` -> `c` and\n`Html m` -> `Html obs`.\n\n  {- Input -}\n  view : (m -> obs) -> model -> List (Attributes obs) -> List (Html obs) -> Html obs\n  update : (m -> obs) -> model -> (Maybe model, Cmd obs)\n\n  {- Output -}\n  view : Index -> c -> List (Attributes obs) -> List (Html obs) -> Html obs\n\nNote that the input `view` function is assumed to take a function lifting its\nmessages. \n",
+            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg obs -> Parts.Get (Parts.Indexed model) c -> Parts.Set (Parts.Indexed model) c -> model -> (Parts.Msg c obs -> obs) -> Parts.Index -> Parts.View c a"
           },
           {
             "name": "create1",
             "comment": " Like `create`, but for components that are assumed to have only one\ninstance.\n",
-            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c -> obs) -> Parts.View c a"
-          },
-          {
-            "name": "create1'",
-            "comment": " Like `create1`, but for explicit no-op update functions. \n",
-            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update' model msg -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c -> obs) -> Parts.View c a"
+            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg obs -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c obs -> obs) -> Parts.View c a"
           },
           {
             "name": "embedUpdate",
             "comment": " Lift an `Update` from operating on `model` to a c model `c`. \n",
-            "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update model msg -> Parts.Update c msg"
-          },
-          {
-            "name": "embedUpdate'",
-            "comment": " Lift an explicit no-op `Update'` from operating on `model` to a c model `c`. \n",
-            "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update' model msg -> Parts.Update' c msg"
+            "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update model msg obs -> Parts.Update c msg obs"
           },
           {
             "name": "embedView",
             "comment": " Lift a `view` to one which knows how to retrieve its `model` from \na c model `c`. \n",
             "type": "Parts.Get model c -> Parts.View model a -> Parts.View c a"
+          },
+          {
+            "name": "generalize",
+            "comment": " Generalise a standard TEA `update` function to one fitting with \nparts (explicit lifter, explicit no-op). \n",
+            "type": "(msg -> model -> ( model, Platform.Cmd.Cmd msg )) -> Parts.Update model msg obs"
           },
           {
             "name": "indexed",
@@ -20234,26 +20222,31 @@
           },
           {
             "name": "pack",
-            "comment": " Partially apply an `Update` function to a `msg`, producing a generic Msg.\n",
-            "type": "Parts.Update c msg -> msg -> Parts.Msg c"
+            "comment": " Pack up a an indexed component message `msg` in an `obs`.\n",
+            "type": "Parts.Update model msg obs -> Parts.Get (Parts.Indexed model) c -> Parts.Set (Parts.Indexed model) c -> model -> (Parts.Msg c obs -> obs) -> Parts.Index -> msg -> obs"
           },
           {
-            "name": "pack'",
-            "comment": " Partially apply an explicit no-op `Update'` function to a `msg`, producing\na generic Msg.\n",
-            "type": "(a -> b -> ( Maybe.Maybe b, Platform.Cmd.Cmd a )) -> a -> Parts.Msg b"
+            "name": "pack1",
+            "comment": " Pack up a singleton component message `msg` in an `obs`.\n",
+            "type": "Parts.Update model msg obs -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c obs -> obs) -> msg -> obs"
+          },
+          {
+            "name": "partial",
+            "comment": " Partially apply an `Update` function to a `msg`, producing\na generic Msg.\n",
+            "type": "(Parts.Msg c obs -> obs) -> Parts.Update c msg obs -> msg -> Parts.Msg c obs"
           },
           {
             "name": "update",
             "comment": " Generic update function for `Msg`. \n",
-            "type": "(Parts.Msg c -> m) -> Parts.Msg c -> c -> ( c, Platform.Cmd.Cmd m )"
+            "type": "Parts.Msg c obs -> c -> ( c, Platform.Cmd.Cmd obs )"
           },
           {
             "name": "update'",
             "comment": " Generic explict no-op update function for `Msg`. \n",
-            "type": "(Parts.Msg c -> m) -> Parts.Msg c -> c -> ( Maybe.Maybe c, Platform.Cmd.Cmd m )"
+            "type": "Parts.Msg c obs -> c -> Maybe.Maybe ( c, Platform.Cmd.Cmd obs )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -43144,11 +43137,11 @@
   },
   {
     "name": "fredcy/elm-debouncer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "Debounce",
-        "comment": "\n\nThis provides a component that can \"debounce\" a changing value: monitor a\ntime-varying sequence of values and output the latest value every time there is\nno further change for some minimum interval.\n\nThis implementation attempts to minimize the number of `update` calls by using\n`Process.sleep` to manage the settling time (rather than recalculating elapsed\ninterval on every fine-grained tick). An added tuple element in the `update`\nfunction's return value provides the notification to the parent of the settled\nvalue. It's also possible to poll the settled value.\n\n# Types\n@docs Model, Msg(Change)\n\n# Update\n@docs init, update\n\n# Read\n@docs settled\n\n",
+        "comment": "\n\nThis provides a component that can \"debounce\" a changing value: monitor a\ntime-varying sequence of values and output the latest value every time there is\nno further change for some minimum interval.\n\nThis implementation attempts to minimize the number of `update` calls by using\n`Process.sleep` to manage the settling time (rather than recalculating elapsed\ninterval on every fine-grained tick). An added tuple element in the `update`\nfunction's return value provides the notification to the parent of the settled\nvalue. It's also possible to poll the settled value.\n\n# Types\n@docs Model, Msg\n\n# Update\n@docs init, update\n\n# Read\n@docs settled\n\n",
         "aliases": [
           {
             "name": "Model",
@@ -55323,7 +55316,7 @@
   },
   {
     "name": "mgold/elm-random-pcg",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Random.Pcg.Interop",
@@ -55333,15 +55326,15 @@
         "values": [
           {
             "name": "fission",
-            "comment": " Use the core library's random seed to produce a PCG random seed.\n\nIt seems that the package website doesn't show modules in type annotations, so here it is in full:\n\n    fission : Random.Seed -> (Random.Pcg.Seed, Random.Seed)\n\n",
-            "type": "Random.Seed -> ( Random.Pcg.Seed, Random.Seed )"
+            "comment": " Use the core library's random seed to produce a PCG random seed.\n\nIt seems that the package website doesn't show modules in type annotations, so here it is in full:\n\n    fission : Random.Generator (Random.Pcg.Seed)\n\n",
+            "type": "Random.Generator Random.Pcg.Seed"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Random.Pcg",
-        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model. If\nyou have many separate models, you can give them all [independent\nseeds](#independentSeed).\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed2, step\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice, choices, frequency\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, initialSeed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
+        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model.\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed, step, generate\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice, choices, frequency\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
         "aliases": [],
         "types": [
           {
@@ -55412,23 +55405,23 @@
           },
           {
             "name": "fromJson",
-            "comment": " A JSON decoder that can recover seeds encoded using `toJson`.\n\n    Json.Decode.decodeValue fromJson (toJson mySeed) == Ok mySeed\n\nIf the JSON is an array of one or two integers, or just an integer, these will\nbe used to initialize a new seed. This can be useful when you sometimes have an\nold seed and sometimes need a new one. The integers should be 32 random bits.\n",
+            "comment": " A JSON decoder that can recover seeds encoded using `toJson`. Alternatively,\npass an integer to create a seed using `initialSeed`.\n\n    Json.Decode.decodeValue fromJson (toJson mySeed) == Ok mySeed\n",
             "type": "Json.Decode.Decoder Random.Pcg.Seed"
           },
           {
+            "name": "generate",
+            "comment": " Create a Command that will generate random values according to the supplied\n`Generator`.\n\nThink of this function as an alternative to `step`, since they both provide a\nway to actually get the random values that you want. This function frees you\nfrom worrying about seeds entirely, but as a tradeoff, you get your random\nvalues asynchronously, in their own Message. Additionally, due to constraints on\nthird-party packages, it's possible that multiple commands sent at the same\nmoment will return the same values.\n\nYou can also think of this function as an alternative to `independentSeed`,\nsince they both allow you to use randomness in deeply nested components. In the\ncase of this function, it's through sending Commands up the chain that you have\nto set up anyway.\n",
+            "type": "(a -> msg) -> Random.Pcg.Generator a -> Platform.Cmd.Cmd msg"
+          },
+          {
             "name": "independentSeed",
-            "comment": " A generator that produces a seed that is independent of any other seed in\nthe program. These seeds will generate their own unqiue sequences of random\nvalues. They are useful when you need an unknown amount of randomness *later*\nbut can request only a fixed amount of randomness *now*.\n\nLet's say you write a component that uses some randomness to initialize itself\nand then never needs randomness again. You can easily write a `Generator\nComponent` by mapping over the generators it needs. But if component requires\nrandomness after initialization, it should keep its own independent seed, which\nit can get by mapping over *this* generator.\n\n    type alias Component = { seed : Seed }\n\n    genComponent : Generator Component\n    genComponent = map Component independentSeed\n\nIf you have a lot of components, you can initialize them like so:\n\n    genComponents : List (Seed -> a) -> Generator (List a)\n    genComponents constructors =\n      list (List.length constructors) independentSeed\n          |> map (List.map2 (<|) constructors)\n\nThe independent seeds are extremely likely to be distinct for all practical\npurposes. However, it is not proven that there are no pathological cases.\n",
+            "comment": " A generator that produces a seed that is independent of any other seed in\nthe program. These seeds will generate their own unqiue sequences of random\nvalues. They are useful when you need an unknown amount of randomness *later*\nbut can request only a fixed amount of randomness *now*.\n\nLet's say you write a component that uses some randomness to initialize itself\nand then never needs randomness again. You can easily write a `Generator\nComponent` by mapping over the generators it needs. But if component requires\nrandomness after initialization, it should keep its own independent seed, which\nit can get by mapping over *this* generator.\n\n    type alias Component = { seed : Seed }\n\n    genComponent : Generator Component\n    genComponent = map Component independentSeed\n\nIf you have a lot of components, you can initialize them like so:\n\n    genComponents : List (Seed -> a) -> Generator (List a)\n    genComponents constructors =\n        list (List.length constructors) independentSeed\n            |> map (List.map2 (<|) constructors)\n\nThe independent seeds are extremely likely to be distinct for all practical\npurposes. However, it is not proven that there are no pathological cases.\n",
             "type": "Random.Pcg.Generator Random.Pcg.Seed"
           },
           {
             "name": "initialSeed",
-            "comment": " Like `initialSeed2`, but takes only one integer. Mostly for compatibility\nwith core. The integer provided becomes the high bits of the seed.\n",
+            "comment": " Initialize the state of the random number generator. The input should be\na randomly chosen 32-bit integer. You can generate and copy random integers to\ncreate a reproducible psuedo-random generator.\n\n    $ node\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    227852860\n\n    -- Elm\n    seed0 : Seed\n    seed0 = initialSeed 227852860\n\nAlternatively, you can generate the random integers on page load and pass them\nthrough a port. The program will be different every time.\n\n    -- Elm\n    port randomSeed : Int\n\n    seed0 : Seed\n    seed0 = initialSeed randomSeed\n\n    -- JS\n    Elm.ModuleName.fullscreen(\n      { randomSeed: Math.floor(Math.random()*0xFFFFFFFF) })\n\nEither way, you should initialize a random seed only once. After that, whenever\nyou use a seed, you'll get another one back.\n",
             "type": "Int -> Random.Pcg.Seed"
-          },
-          {
-            "name": "initialSeed2",
-            "comment": " Take two integers to fully initialize the 64-bit state of the random\nnumber generator. Only the least significant 32 bits of each integer matter, and\nthose bits should be as random as possible. The first argument is the high bits,\nbut if you're pulling from a random data source, it shouldn't matter.\n\nYou can generate and copy random integers to create a reproducible psuedo-random\ngenerator.\n\n    $ node\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    227852860\n    > Math.floor(Math.random()*0xFFFFFFFF)\n    1498709020\n\n    -- Elm\n    seed0 : Seed\n    seed0 = initialSeed2 227852860 1498709020\n\nAlternatively, you can generate the random integers on page load and pass them\nthrough a port. The program will be different every time.\n\n    -- Elm\n    port randomSeed : (Int, Int)\n\n    seed0 : Seed\n    seed0 = (uncurry initialSeed2) randomSeed\n\n    -- JS\n    Elm.fullscreen(Elm.ModuleName,\n      {randomSeed: [Math.floor(Math.random()*0xFFFFFFFF),\n                    Math.floor(Math.random()*0xFFFFFFFF)] })\n\nEither way, you should initialize a random seed only once. After that, whenever\nyou use a seed, you'll get another one back.\n",
-            "type": "Int -> Int -> Random.Pcg.Seed"
           },
           {
             "name": "int",
@@ -55502,7 +55495,7 @@
           },
           {
             "name": "toJson",
-            "comment": " Serialize a seed as a [JSON value](http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Encode#Value)\nto be sent out a port, stored in local storage, and so on. The seed can be\nrecovered using `fromJson`.\n\nDo not inspect or change the resulting JSON value.\n",
+            "comment": " Serialize a seed as a [JSON\nvalue](http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Encode#Value)\nto be sent out a port, stored in local storage, and so on. The seed can be\nrecovered using `fromJson`.\n\nDo not inspect or change the resulting JSON value.\n",
             "type": "Random.Pcg.Seed -> Json.Encode.Value"
           }
         ],
