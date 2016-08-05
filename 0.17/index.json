@@ -44246,6 +44246,82 @@
     ]
   },
   {
+    "name": "halfzebra/elm-sierpinski",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Sierpinski",
+        "comment": " This module provides a set of helpers for generating Seierpinski fractal\nusing Graphics module.\n\n# Definition\n@docs Point, Triangle, Painted\n\n# Type casting Helpers\n@docs toPolygon, toPainted, toFilled\n\n# Geometrical Helpers\n@docs equaliteral, midpoint\n\n# Fractal generation\n@docs recursive, embedded, children\n\n",
+        "aliases": [
+          {
+            "name": "Painted",
+            "comment": " A triangle with color value, ready to be rendered on to Collage.\n\n    painted =\n            toPainted (rgb 240 173 0) (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ a | color : Color.Color }"
+          },
+          {
+            "name": "Point",
+            "comment": " A point woth coordinates.\n\n    midpoint (Point 0 0) (Point 5 5) -- Point 2.5 2.5\n",
+            "args": [],
+            "type": "{ x : Float, y : Float }"
+          },
+          {
+            "name": "Triangle",
+            "comment": " Type alias for representing a triangle.\n\n    triangle =\n        Triangle (Point 0 0) (Point 5 5) (Point 0 5)\n\n\n    toPolygon triangle --\n",
+            "args": [],
+            "type": "{ a : Sierpinski.Point, b : Sierpinski.Point, c : Sierpinski.Point }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "children",
+            "comment": " Produces a list of child triangles from container Triangle and embedded Triangle.\n\n\n    parent =\n        (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n\n    current =\n        embedded parent\n\n    children parent current\n",
+            "type": "Sierpinski.Triangle -> Sierpinski.Triangle -> List Sierpinski.Triangle"
+          },
+          {
+            "name": "embedded",
+            "comment": " Create a new triangle, using midpoints of parent's sides.\n\n    embedded (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n",
+            "type": "Sierpinski.Triangle -> Sierpinski.Triangle"
+          },
+          {
+            "name": "equaliteral",
+            "comment": " Produces an initial container equaliteral triangle for the fractal.\n\n    equaliteral ((toFloat Window.width) / 3)\n",
+            "type": "Float -> Sierpinski.Triangle"
+          },
+          {
+            "name": "midpoint",
+            "comment": " Calculate the midpoint between two points.\n\n    midpoint (Point 0 0) (Point 5 5)\n",
+            "type": "Sierpinski.Point -> Sierpinski.Point -> Sierpinski.Point"
+          },
+          {
+            "name": "recursive",
+            "comment": " Recursive function for generating the fractal, requires depth,\nlist of existing Triangles(used in recursion) and container Triangle for the fractal.\n\n    recursive 5 [] (equaliteral ((toFloat Window.width) / 3))\n",
+            "type": "Int -> List Sierpinski.Triangle -> Sierpinski.Triangle -> List Sierpinski.Triangle"
+          },
+          {
+            "name": "toFilled",
+            "comment": " Converts a triangle in to a polygon, filled with color.\n\n    painted =\n            toPainted (rgb 240 173 0) (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n\n    toFilled painted\n",
+            "type": "Sierpinski.Painted Sierpinski.Triangle -> Collage.Form"
+          },
+          {
+            "name": "toPainted",
+            "comment": " Convert triangle in to Painted Triangle, which can be filled with a color and rendered.\n\n    toPainted (rgb 240 173 0) (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n",
+            "type": "Color.Color -> Sierpinski.Triangle -> Sierpinski.Painted Sierpinski.Triangle"
+          },
+          {
+            "name": "toPolygon",
+            "comment": " Convert Triangle in to polygon Shape.\n\n    toPolygon (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n",
+            "type": "Sierpinski.Triangle -> Collage.Shape"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "hoelzro/elm-drag",
     "version": "1.0.0",
     "docs": [
@@ -45488,7 +45564,7 @@
   },
   {
     "name": "jinjor/elm-diff",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Diff",
@@ -52949,11 +53025,11 @@
   },
   {
     "name": "lukewestby/elm-http-builder",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "HttpBuilder",
-        "comment": " Extra helpers for more easily building Http requests that require greater\nconfiguration than what is provided by `elm-http` out of the box.\n\n\n# Start a request\n@docs RequestBuilder, url, get, post, put, patch, delete\n\n# Configure request properties\n@docs withHeader, withHeaders, withBody, withStringBody, withJsonBody, withMultipartBody, withMultipartStringBody, withUrlEncodedBody\n\n# Configure settings\n@docs withTimeout, withStartHandler, withProgressHandler, withMimeType, withCredentials\n\n# Custom configurations\n@docs withCacheBuster, withZeroStatusAllowed\n\n# Send the request\n@docs send\n\n# Parse the response\n@docs BodyReader, stringReader, jsonReader, Error, Response\n\n# Inspect the request\n@docs toRequest, toSettings, Request, Settings\n",
+        "comment": " Extra helpers for more easily building Http requests that require greater\nconfiguration than what is provided by `elm-http` out of the box.\n\n\n# Start a request\n@docs RequestBuilder, url, get, post, put, patch, delete, options, trace, head\n\n# Configure request properties\n@docs withHeader, withHeaders, withBody, withStringBody, withJsonBody, withMultipartBody, withMultipartStringBody, withUrlEncodedBody\n\n# Configure settings\n@docs withTimeout, withStartHandler, withProgressHandler, withMimeType, withCredentials\n\n# Custom configurations\n@docs withCacheBuster, withZeroStatusAllowed\n\n# Send the request\n@docs send\n\n# Parse the response\n@docs BodyReader, stringReader, jsonReader, Error, Response\n\n# Inspect the request\n@docs toRequest, toSettings, Request, Settings\n",
         "aliases": [
           {
             "name": "BodyReader",
@@ -53033,9 +53109,19 @@
             "type": "String -> HttpBuilder.RequestBuilder"
           },
           {
+            "name": "head",
+            "comment": " Start building a HEAD request with a given URL\n\n    head \"https://example.com/api/items/1\"\n",
+            "type": "String -> HttpBuilder.RequestBuilder"
+          },
+          {
             "name": "jsonReader",
             "comment": " Attempts to decode the raw response body with the given\n`Json.Decode.Decoder`, failing if the body is malformed or not readable as a\nstring.\n",
             "type": "Json.Decode.Decoder a -> HttpBuilder.BodyReader a"
+          },
+          {
+            "name": "options",
+            "comment": " Start building a OPTIONS request with a given URL\n\n    options \"https://example.com/api/items/1\"\n",
+            "type": "String -> HttpBuilder.RequestBuilder"
           },
           {
             "name": "patch",
@@ -53071,6 +53157,11 @@
             "name": "toSettings",
             "comment": " Extract the Http.Settings component of the builder, for introspection and\ntesting\n",
             "type": "HttpBuilder.RequestBuilder -> HttpBuilder.Settings"
+          },
+          {
+            "name": "trace",
+            "comment": " Start building a TRACE request with a given URL\n\n    trace \"https://example.com/api/items/1\"\n",
+            "type": "String -> HttpBuilder.RequestBuilder"
           },
           {
             "name": "url",
@@ -53153,7 +53244,7 @@
             "type": "HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -61426,6 +61517,31 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "project-fuzzball/node",
+    "version": "3.1.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Node",
+        "comment": " # Node Runner\n\nRuns a test and outputs its results to the console. Exit code is 0 if tests\npassed and 1 if any failed.\n\n@docs run, runWithOptions\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
+            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
+            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
