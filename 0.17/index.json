@@ -12663,6 +12663,176 @@
     ]
   },
   {
+    "name": "benthepoet/elm-purecss",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Pure",
+        "comment": " A set of helpers for Pure CSS\n\n@docs button, buttonActive, buttonDisabled, buttonPrimary\n    , checkbox, controlGroup, form, formAligned, formStacked\n    , grid, group, img, input, inputRounded, menu, menuAllowHover\n    , menuChildren, menuDisabled, menuHasChildren, menuHeading\n    , menuHorizontal, menuItem, menuLink, menuList, menuSelected\n    , menuScrollable, radio, table, tableBordered, tableStriped\n    , unit\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "button",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "buttonActive",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "buttonDisabled",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "buttonPrimary",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "checkbox",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "controlGroup",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "form",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "formAligned",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "formStacked",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "grid",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "group",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "img",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "input",
+            "comment": "",
+            "type": "List String -> String"
+          },
+          {
+            "name": "inputRounded",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menu",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuAllowHover",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuChildren",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuDisabled",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuHasChildren",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuHeading",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuHorizontal",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuItem",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuLink",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuList",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuScrollable",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "menuSelected",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "radio",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "table",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "tableBordered",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "tableStriped",
+            "comment": "",
+            "type": "String"
+          },
+          {
+            "name": "unit",
+            "comment": "",
+            "type": "List String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "besuikerd/elm-dictset",
     "version": "1.0.0",
     "docs": [
@@ -21593,36 +21763,41 @@
   },
   {
     "name": "elm-community/dict-extra",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Dict.Extra",
-        "comment": " Convenience functions for working with `Dict`\n\n# List operations\n@docs groupBy\n\n# Manipulation\n@docs removeWhen, removeMany, keepOnly\n",
+        "comment": " Convenience functions for working with `Dict`\n\n# List operations\n@docs groupBy, fromListBy\n\n# Manipulation\n@docs removeWhen, removeMany, keepOnly\n",
         "aliases": [],
         "types": [],
         "values": [
           {
+            "name": "fromListBy",
+            "comment": " Create a dictionary from a list of values, by passing a function that can get a key from any such value.\nIf the function does not return unique keys, earlier values are discarded.\nThis can, for instance, be useful when constructing Dicts from a List of records with `id` fields:\n\n    jack = {id=2, name=\"Jack\"}\n    jill = {id=1, name=\"Jill\"}\n    fromListBy .id [jack, jill] == Dict.fromList [(1, jack), (2, jill)]\n",
+            "type": "(a -> comparable) -> List a -> Dict.Dict comparable a"
+          },
+          {
             "name": "groupBy",
-            "comment": " Takes a key-fn and a list, creates a `Dict` which maps the key returned from key-fn, to a list of matching elements.\n\n    mary = {groupId: 1, name: \"Mary\"}\n    jack = {groupId: 2, name: \"Jack\"}\n    jill = {groupId: 1, name: \"Jill\"}\n    groupBy .groupId [mary, jack, jill] == Dict.fromList [(1, [jill, mary]), (2, [jack])]\n",
+            "comment": " Takes a key-fn and a list.\nCreates a `Dict` which maps the key to a list of matching elements.\n\n    mary = {id=1, name=\"Mary\"}\n    jack = {id=2, name=\"Jack\"}\n    jill = {id=1, name=\"Jill\"}\n    groupBy .id [mary, jack, jill] == Dict.fromList [(1, [jill, mary]), (2, [jack])]\n",
             "type": "(a -> comparable) -> List a -> Dict.Dict comparable (List a)"
           },
           {
             "name": "keepOnly",
-            "comment": " Keep a key-value pair exactly if its key appears in the set.\n",
+            "comment": " Keep a key-value pair if its key appears in the set.\n",
             "type": "Set.Set comparable -> Dict.Dict comparable v -> Dict.Dict comparable v"
           },
           {
             "name": "removeMany",
-            "comment": " Keep a key-value pair exactly if its key does not appear in the set.\n",
+            "comment": " Remove a key-value pair if its key appears in the set.\n",
             "type": "Set.Set comparable -> Dict.Dict comparable v -> Dict.Dict comparable v"
           },
           {
             "name": "removeWhen",
-            "comment": " Keep elements which fail to satisfy the predicate.\n    This is functionally equivalent to `Dict.filter (not << predicate) dict`.\n\n    removeWhen (\\c v -> v == 1) Dict.fromList [(\"Mary\", 1), (\"Jack\", 2), (\"Jill\", 1)] == Dict.fromList [(\"Jack\", 2)]\n",
+            "comment": " Remove elements which satisfies the predicate.\n\n    removeWhen (\\c v -> v == 1) Dict.fromList [(\"Mary\", 1), (\"Jack\", 2), (\"Jill\", 1)] == Dict.fromList [(\"Jack\", 2)]\n",
             "type": "(comparable -> v -> Bool) -> Dict.Dict comparable v -> Dict.Dict comparable v"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -68909,7 +69084,7 @@
   },
   {
     "name": "sporto/hop",
-    "version": "5.0.1",
+    "version": "5.1.0",
     "docs": [
       {
         "name": "Hop",
@@ -68962,7 +69137,7 @@
       },
       {
         "name": "Hop.Matchers",
-        "comment": "\nFunctions for building matchers\n\n# Building matchers\n@docs match1, match2, match3, match4, nested1, nested2, int, str\n\n",
+        "comment": "\nFunctions for building matchers\n\n# Building matchers\n@docs match1, match2, match3, match4, nested1, nested2, int, str, regex\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -69000,6 +69175,11 @@
             "name": "nested2",
             "comment": " Create a matcher with two segments and nested routes\n\n    type ReviewsRoutes = Reviews | Review Int\n    type Route = BookReviews ReviewsRoutes\n\n    nested2 BookReviews \"/books/\" int reviewsRoutes\n\nThis could match paths like (depending on the nested routes)\n\n    \"/books/1/reviews\"\n    \"/books/1/reviews/3\"\n\n",
             "type": "(param1 -> subRoute -> route) -> String -> Combine.Parser param1 -> List (Hop.Types.PathMatcher subRoute) -> Hop.Types.PathMatcher route"
+          },
+          {
+            "name": "regex",
+            "comment": " Build your own string matcher using a regex\n\n    match2 CatchAllRoute \"/\" (regex \".+\")\n",
+            "type": "String -> Combine.Parser String"
           },
           {
             "name": "str",
@@ -71532,6 +71712,103 @@
         ],
         "values": [],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "tiziano88/elm-oauth",
+    "version": "1.2.1",
+    "docs": [
+      {
+        "name": "OAuth.Config",
+        "comment": " This library contains several ready-made server configs for various OAuth 2.0 providers\n\n@docs google, facebook, digitalOcean, gitHub, stackExchange\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "digitalOcean",
+            "comment": " Base configuration for DigitalOcean endpoints.\n\nBased on https://developers.digitalocean.com/documentation/oauth/#client-application-flow\n\nNote: Verification does not seem to be provided by this endpoint.\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "facebook",
+            "comment": " Base configuration for Facebook endpoints.\n\nBased on https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow .\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "gitHub",
+            "comment": " Base configuration for GitHub endpoints.\n\nBased on https://developer.github.com/v3/oauth/ .\n\nNote: Does not currently work. It seems that GitHub does not currently support web-only flow.\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "google",
+            "comment": " Base configuration for Google endpoints.\n\nBased on https://developers.google.com/identity/protocols/OAuth2UserAgent .\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "stackExchange",
+            "comment": " Base configuration for StackExchange endpoints.\n\nBased on https://api.stackexchange.com/docs/authentication .\n\nNote: Verification does not seem to be provided by this endpoint.\n",
+            "type": "OAuth.ServerConfig"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "OAuth",
+        "comment": " This library allows handling OAuth 2.0 authentication.\n\n# Client\n\n@docs Client, newClient\n\n# Configuration\n\n@docs ServerConfig, ClientConfig\n\n# Token\n\n@docs Token\n\n# App\n\n@docs buildAuthUrl, urlParser\n\n",
+        "aliases": [
+          {
+            "name": "Client",
+            "comment": " An OAuth client.\n",
+            "args": [],
+            "type": "{ serverConfig : OAuth.ServerConfig , clientConfig : OAuth.ClientConfig }"
+          },
+          {
+            "name": "ClientConfig",
+            "comment": " Client-side configuration for a single OAuth client.\nIt includes the endpoints used to obtain and verify tokens, and also client-specific settings.\n",
+            "args": [],
+            "type": "{ clientId : String, scopes : List String, redirectUrl : String }"
+          },
+          {
+            "name": "ServerConfig",
+            "comment": " Server-side configuration for a single OAuth client.\nIt includes the endpoints used to obtain and verify tokens, and also client-specific settings.\n",
+            "args": [],
+            "type": "{ endpointUrl : String, validateUrl : String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Token",
+            "comment": " Represents a validated OAuth token.\n",
+            "args": [],
+            "cases": [
+              [
+                "Validated",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "buildAuthUrl",
+            "comment": " Builds an URL that when followed allows the user to authenticate with the specified provider.\n",
+            "type": "OAuth.Client -> String"
+          },
+          {
+            "name": "newClient",
+            "comment": " Creates a new OAuth client based on a server configuration and a client configuration.\nNormally defined at top-level in the application.\n\n    authClient : OAuth.Client\n    authClient = OAuth.newClient serverConfig clientConfig\n\n",
+            "type": "OAuth.ServerConfig -> OAuth.ClientConfig -> OAuth.Client"
+          },
+          {
+            "name": "urlParser",
+            "comment": " A function to create a URL parser to be used with a `Navigation.program`.\n\n    main =\n      Navigation.program (OAuth.urlParser authClient)\n        { init = ...\n        , view = ...\n        , update = ...\n        , urlUpdate = ...\n        , subscriptions = ...\n        }\n\n",
+            "type": "OAuth.Client -> Navigation.Parser (Task.Task String OAuth.Token)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
