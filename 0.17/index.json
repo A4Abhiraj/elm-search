@@ -18468,7 +18468,7 @@
   },
   {
     "name": "debois/elm-mdl",
-    "version": "7.2.0",
+    "version": "7.3.0",
     "docs": [
       {
         "name": "Material",
@@ -18515,80 +18515,20 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.List",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#lists-section):\n\n> Lists present multiple line items vertically as a single continuous element.\n> Refer the Material Design Spec to know more about the content options.\n\nSee also the\n[Material Design Specification]([https://material.google.com/components/lists.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#lists)\nfor a live demo and example code.\n\n# List and item containers\n@docs ul, li\n\n# Primary content\n@docs content\n@docs subtitle, withSubtitle, body, withBody\n\n## Icons & avatars\n@docs avatarIcon, avatarImage, avatar, icon\n\n# Secondary content\n@docs content2, action2, info2\n\n",
+        "name": "Material.Scheme",
+        "comment": " \nThe elm-mdl library depends on Google's MDL CSS implementation, and your\napplication must load this CSS in order for elm-mdl to function correctly.\nThere are two ways to accomplish this: \n\n1. Load CSS from HTML by adding suitable `<link ...>` directives to the\nHTML-file containing your app, or \n2. Load CSS from Elm (by inserting `style` elements into the DOM).\n\n\n# Load CSS from HTML \n\nTo load CSS manually, add the following to your main html file. \n\n    <!-- MDL -->\n    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>\n    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n    <link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.1.3/material.min.css\" />\n\nYou may find the [elm-mdl demo's\nhtml](https://github.com/debois/elm-mdl/blob/master/demo/page.html) helpful. \n\n# Loading CSS from Elm \n\n@docs topWithScheme, top\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "action2",
-            "comment": " Defines the secondary action sub-division. (The primary action is clicking\nthe primary content.)\n",
-            "type": "Material.Options.Property a m"
+            "name": "top",
+            "comment": " Top-level container with default color scheme. See `topWithScheme` above.\n",
+            "type": "Html.Html a -> Html.Html a"
           },
           {
-            "name": "avatar",
-            "comment": " If you need fine-grained control of the avatar, specify whatever element\nyou want, then add this property. (You may want to use this in conjunction with\n  `Options.img`.)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "avatarIcon",
-            "comment": " Set an avatar icon. Like `Icon.view`. \n",
-            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
-          },
-          {
-            "name": "avatarImage",
-            "comment": " Set an avatar image. `src` is a value for `Html.Attributes.src`.\n",
-            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
-          },
-          {
-            "name": "body",
-            "comment": " Defines the text-body sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withBody` to `li` if you use this. \nMutually exclusive with `subtitle`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "content",
-            "comment": " Defines the primary content sub-division. Use within `li`. \n",
-            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "content2",
-            "comment": " Defines the secondary content sub-division.\tUse within `li`. \n",
-            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "icon",
-            "comment": " Set an icon. Refer to `Icon.view`. \n",
-            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
-          },
-          {
-            "name": "info2",
-            "comment": " Defines the information sub-division.\tApplicable only within `content2`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "li",
-            "comment": " List-item, no secondary content. (Use this rather than `Html.li`.)\n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "subtitle",
-            "comment": " Defines the subtitle sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withSubtitle` to `li` if you use this. \nMutually exclusive with `body`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "ul",
-            "comment": " Container for list items. (Use this rather than `Html.ul`.)\n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "withBody",
-            "comment": " Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set\nboth this and `withSubtitle`. \n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "withSubtitle",
-            "comment": " Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.\nDon't set both this and `withBody`.\n",
-            "type": "Material.Options.Property c m"
+            "name": "topWithScheme",
+            "comment": " Top-level container for Material components. This will force loading of\nMaterial Design Lite CSS files by inserting an appropriate `style` element.\n\nSupply primary and accent colors as parameters. Refer to the Material Design\nLite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)\nto preview combinations.  Please be aware that Grey, Blue Grey, and Brown\ncannot be secondary colors. If you choose them as such anyway, you will get the\ndefault theme.\n\n**NB!** Using this top-level container is not recommended, as most browsers\nwill load CSS requested from `style` elements concurrently with rendering the\ninitial page, which will produce a flicker on page load. The container is\nincluded only to provide an option to get started quickly and for use with\nelm-reactor.\n\nExample use: \n\n    view : Model -> Html Msg\n    view = \n      div \n        []\n        [ Scheme.topWithScheme Color.Teal Color.Red contents\n        , ...\n        ]\n",
+            "type": "Material.Color.Hue -> Material.Color.Hue -> Html.Html a -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -18894,130 +18834,128 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Scheme",
-        "comment": " \nThe elm-mdl library depends on Google's MDL CSS implementation, and your\napplication must load this CSS in order for elm-mdl to function correctly.\nThere are two ways to accomplish this: \n\n1. Load CSS from HTML by adding suitable `<link ...>` directives to the\nHTML-file containing your app, or \n2. Load CSS from Elm (by inserting `style` elements into the DOM).\n\n\n# Load CSS from HTML \n\nTo load CSS manually, add the following to your main html file. \n\n    <!-- MDL -->\n    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>\n    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n    <link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.1.3/material.min.css\" />\n\nYou may find the [elm-mdl demo's\nhtml](https://github.com/debois/elm-mdl/blob/master/demo/page.html) helpful. \n\n# Loading CSS from Elm \n\n@docs topWithScheme, top\n",
+        "name": "Material.List",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#lists-section):\n\n> Lists present multiple line items vertically as a single continuous element.\n> Refer the Material Design Spec to know more about the content options.\n\nSee also the\n[Material Design Specification]([https://material.google.com/components/lists.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#lists)\nfor a live demo and example code.\n\n# List and item containers\n@docs ul, li\n\n# Primary content\n@docs content\n@docs subtitle, withSubtitle, body, withBody\n\n## Icons & avatars\n@docs avatarIcon, avatarImage, avatar, icon\n\n# Secondary content\n@docs content2, action2, info2\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "top",
-            "comment": " Top-level container with default color scheme. See `topWithScheme` above.\n",
-            "type": "Html.Html a -> Html.Html a"
+            "name": "action2",
+            "comment": " Defines the secondary action sub-division. (The primary action is clicking\nthe primary content.)\n",
+            "type": "Material.Options.Property a m"
           },
           {
-            "name": "topWithScheme",
-            "comment": " Top-level container for Material components. This will force loading of\nMaterial Design Lite CSS files by inserting an appropriate `style` element.\n\nSupply primary and accent colors as parameters. Refer to the Material Design\nLite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)\nto preview combinations.  Please be aware that Grey, Blue Grey, and Brown\ncannot be secondary colors. If you choose them as such anyway, you will get the\ndefault theme.\n\n**NB!** Using this top-level container is not recommended, as most browsers\nwill load CSS requested from `style` elements concurrently with rendering the\ninitial page, which will produce a flicker on page load. The container is\nincluded only to provide an option to get started quickly and for use with\nelm-reactor.\n\nExample use: \n\n    view : Model -> Html Msg\n    view = \n      div \n        []\n        [ Scheme.topWithScheme Color.Teal Color.Red contents\n        , ...\n        ]\n",
-            "type": "Material.Color.Hue -> Material.Color.Hue -> Html.Html a -> Html.Html a"
+            "name": "avatar",
+            "comment": " If you need fine-grained control of the avatar, specify whatever element\nyou want, then add this property. (You may want to use this in conjunction with\n  `Options.img`.)\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "avatarIcon",
+            "comment": " Set an avatar icon. Like `Icon.view`. \n",
+            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
+          },
+          {
+            "name": "avatarImage",
+            "comment": " Set an avatar image. `src` is a value for `Html.Attributes.src`.\n",
+            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
+          },
+          {
+            "name": "body",
+            "comment": " Defines the text-body sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withBody` to `li` if you use this. \nMutually exclusive with `subtitle`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "content",
+            "comment": " Defines the primary content sub-division. Use within `li`. \n",
+            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "content2",
+            "comment": " Defines the secondary content sub-division.\tUse within `li`. \n",
+            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "icon",
+            "comment": " Set an icon. Refer to `Icon.view`. \n",
+            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
+          },
+          {
+            "name": "info2",
+            "comment": " Defines the information sub-division.\tApplicable only within `content2`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "li",
+            "comment": " List-item, no secondary content. (Use this rather than `Html.li`.)\n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "subtitle",
+            "comment": " Defines the subtitle sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withSubtitle` to `li` if you use this. \nMutually exclusive with `body`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "ul",
+            "comment": " Container for list items. (Use this rather than `Html.ul`.)\n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "withBody",
+            "comment": " Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set\nboth this and `withSubtitle`. \n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "withSubtitle",
+            "comment": " Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.\nDon't set both this and `withBody`.\n",
+            "type": "Material.Options.Property c m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Button",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):\n\n> The Material Design Lite (MDL) button component is an enhanced version of the\n> standard HTML `<button>` element. A button consists of text and/or an image that\n> clearly communicates what action will occur when the user clicks or touches it.\n> The MDL button component provides various types of buttons, and allows you to\n> add both display and click effects.\n>\n> Buttons are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the button component's Material\n> Design specifications page for details.\n>\n> The available button display types are flat (default), raised, fab, mini-fab,\n> and icon; any of these types may be plain (light gray) or colored, and may be\n> initially or programmatically disabled. The fab, mini-fab, and icon button\n> types typically use a small image as their caption rather than text.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#buttons) \nfor a live demo. \n\n# Render\n@docs render\n\n# Options\n\n@docs Property\n\n## Appearance\n@docs plain, colored, primary, accent\n@docs ripple, disabled\n  \n## Events\n@docs onClick\n\n## Type \nRefer to the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html)\nfor details about what type of buttons are appropriate for which situations.\n@docs flat, raised, fab, minifab, icon\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update, view\n\n\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " \n",
-            "args": [],
-            "type": "Material.Ripple.Model"
-          },
-          {
-            "name": "Msg",
-            "comment": " Component action.\n",
-            "args": [],
-            "type": "Material.Ripple.Msg"
-          },
-          {
-            "name": "Property",
-            "comment": " Properties for Button options.\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property (Material.Button.Config m) m"
-          }
-        ],
+        "name": "Material.Progress",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section):\n\n> The Material Design Lite (MDL) progress component is a visual indicator of\n> background activity in a web page or application. A progress indicator\n> consists of a (typically) horizontal bar containing some animation that\n> conveys a sense of motion. While some progress devices indicate an\n> approximate or specific percentage of completion, the MDL progress component\n> simply communicates the fact that an activity is ongoing and is not yet\n> complete.\n\n> Progress indicators are an established but non-standardized feature in user\n> interfaces, and provide users with a visual clue to an application's status.\n> Their design and use is therefore an important factor in the overall user\n> experience. See the progress component's Material Design specifications page\n> for details.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n# Render\n@docs indeterminate, progress, buffered\n\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "accent",
-            "comment": " Color button with accent color. \n",
-            "type": "Material.Button.Property m"
+            "name": "buffered",
+            "comment": " A buffered progress bar. First argument is completion in percent (0-100),\nsecond argument indicates buffer completion in percent (0-100). \n",
+            "type": "Float -> Float -> Html.Html m"
           },
           {
-            "name": "colored",
-            "comment": " Color button with primary or accent color depending on button type.\n",
-            "type": "Material.Button.Property m"
+            "name": "indeterminate",
+            "comment": " An indeterminate progress bar.\n",
+            "type": "Html.Html m"
           },
           {
-            "name": "defaultModel",
-            "comment": "\n",
-            "type": "Material.Button.Model"
+            "name": "progress",
+            "comment": " A progress bar. First argument is completion in percent (0–100).\n",
+            "type": "Float -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Badge",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):\n\n> The Material Design Lite (MDL) badge component is an onscreen notification element.\n> A badge consists of a small circle, typically containing a number or other characters,\n> that appears in proximity to another object. A badge can be both a notifier that there\n> are additional items associated with an object and an indicator of how many items there are.\n>\n> You can use a badge to unobtrusively draw the user's attention to items they might not\n> otherwise notice, or to emphasize that items may need their attention. For example:\n>\n> A \"New messages\" notification might be followed by a badge containing the number of unread messages.\n> A \"You have unpurchased items in your shopping cart\" reminder might include a badge\n> showing the number of items in the cart.\n> A \"Join the discussion!\" button might have an accompanying badge indicating the number of\n> users currently participating in the discussion.\n> A badge is almost always positioned near a link so that the user has a convenient way to access \n> the additional information indicated by the badge. However, depending on the intent, the \n> badge itself may or may not be part of the link.\n>\n> Badges are a new feature in user interfaces, and provide users with a visual clue to help them\n> discover additional relevant content. Their design and use is therefore an important\n> factor in the overall user experience.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#badges)\nfor a live demo. \n\n@docs add, noBackground, overlap\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add a badge to the containing element.\n",
+            "type": "String -> Material.Options.Property c m"
           },
           {
-            "name": "disabled",
-            "comment": " Set button to \"disabled\".\n",
-            "type": "Material.Button.Property m"
+            "name": "noBackground",
+            "comment": " No background for badge.\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "fab",
-            "comment": " Floating Msg Button. From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons-floating-action-button.html):\n\n> Floating action buttons are used for a promoted action. They are distinguished\n> by a circled icon floating above the UI and have motion behaviors that include\n> morphing, launching, and a transferring anchor point.\n>\n> Floating action buttons come in two sizes:\n>\n>  - Default size: For most use cases\n>  - Mini size: Only used to create visual continuity with other screen elements\n\nThis constructor produces the default size, use `minifab` to get the mini-size.\n\nExample use (colored with a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    fabButton : Html\n    fabButton = fab addr model Colored [Icon.i \"add\"]\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "flat",
-            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-flat-buttons):\n\n> Flat buttons are printed on material. They do not lift, but fill with color on\n> press.\n>\n> Use flat buttons in the following locations:\n>\n>  - On toolbars\n>  - In dialogs, to unify the button action with the dialog content\n>  - Inline, with padding, so the user can easily find them\n\nExample use (uncolored flat button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    flatButton : Html\n    flatButton = Button.flat addr model Button.Plain [text \"Click me!\"]\n\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "icon",
-            "comment": " The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)\nalso offers an \"icon button\", which we\nre-implement here. See also\n[Material Design Specification](http://www.google.com/design/spec/components/buttons.html#buttons-toggle-buttons).\nExample use (no color, displaying a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    iconButton : Html\n    iconButton = icon addr model Plain [Icon.i \"add\"]\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "minifab",
-            "comment": " Mini-sized variant of a Floating Msg Button; refer to `fab`.\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "onClick",
-            "comment": " Add an `on \"click\"` handler to a button. \n",
-            "type": "m -> Material.Button.Property m"
-          },
-          {
-            "name": "plain",
-            "comment": " Plain, uncolored button (default). \n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "primary",
-            "comment": " Color button with primary color.\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "raised",
-            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-raised-buttons):\n\n> Raised buttons add dimension to mostly flat layouts. They emphasize functions\n> on busy or wide spaces.\n>\n> Raised buttons behave like a piece of material resting on another sheet –\n> they lift and fill with color on press.\n\nExample use (colored raised button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    raisedButton : Html\n    raisedButton = Button.raised addr model Button.Colored [text \"Click me!\"]\n\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "render",
-            "comment": " Component render.  Below is an example, assuming boilerplate setup as\nindicated in `Material`, and a user message `PollMsg`.\n    Button.render Mdl [0] model.mdl\n      [ Button.raised\n      , Button.ripple\n      , Button.onClick PollMsg\n      ]\n      [ text \"Fetch new\"]\n",
-            "type": "(Parts.Msg (Material.Button.Container c) m -> m) -> Parts.Index -> Material.Button.Container c -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "ripple",
-            "comment": " Set button to ripple when clicked.\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "update",
-            "comment": " Component update.\n",
-            "type": "Material.Button.Msg -> Material.Button.Model -> ( Material.Button.Model, Platform.Cmd.Cmd Material.Button.Msg )"
-          },
-          {
-            "name": "view",
-            "comment": " Component view function.\n",
-            "type": "(Material.Button.Msg -> m) -> Material.Button.Model -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+            "name": "overlap",
+            "comment": " Badge overlaps text/contents. \n",
+            "type": "Material.Options.Property c m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -19195,234 +19133,8 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Tooltip",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):\r\n\r\n> The Material Design Lite (MDL) tooltip component is an enhanced version of the\r\n> standard HTML tooltip as produced by the `title` attribute. A tooltip consists\r\n> of text and/or an image that clearly communicates additional information about\r\n> an element when the user hovers over or, in a touch-based UI, touches the\r\n> element. The MDL tooltip component is pre-styled (colors, fonts, and other\r\n> settings are contained in material.min.css) to provide a vivid, attractive\r\n> visual element that displays related but typically non-essential content,\r\n> e.g., a definition, clarification, or brief instruction.\r\n>\r\n> Tooltips are a ubiquitous feature of most user interfaces, regardless of a\r\n> site's content or function. Their design and use is an important factor in the\r\n> overall user experience. See the tooltip component's Material Design\r\n> specifications page for details.\r\n\r\nSee also the\r\n[Material Design Specification](https://material.google.com/components/tooltips.html).\r\n\r\nRefer to [this site](http://debois.github.io/elm-mdl/#tooltips)\r\nfor a live demo.\r\n\r\nTo use a `tooltip` you have to (a) attach the mouse event listeners to the target\r\nby calling `attach`, and (b) create a tooltip with element `Tooltip.render`\r\nas a sibling of the target. Here is an example: \r\n\r\n```elm\r\nimport Material.Tooltip as Tooltip\r\nimport Material.Icon as Icon\r\n\r\ntooltip : Model -> Html Msg\r\ntooltip model =\r\n  div []\r\n    [ Icon.view \"add\" [ Tooltip.attach Mdl [0] ]\r\n    , Tooltip.render Mdl [0] model.mdl\r\n        [Tooltip.default]\r\n        [text \"Default tooltip\"]\r\n    ]\r\n```\r\n\r\n# Render\r\n@docs attach, render\r\n\r\n# Options\r\n@docs Property\r\n@docs left, right, top, bottom\r\n@docs large\r\n@docs container\r\n\r\n# Elm architecture\r\nIf you do not use parts, you should not use `attach`, but instead add the\r\n`onEnter` and `onLeave` attributes to the target element. \r\n\r\n@docs onEnter, onLeave\r\n@docs Model, defaultModel, Msg, update, view\r\n\r\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " Component model.\r\n",
-            "args": [],
-            "type": "{ isActive : Bool, domState : Material.Tooltip.DOMState }"
-          },
-          {
-            "name": "Property",
-            "comment": " Properties for Tooltip options.\r\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property (Material.Tooltip.Config m) m"
-          }
-        ],
-        "types": [
-          {
-            "name": "Msg",
-            "comment": " Component message.\r\n",
-            "args": [],
-            "cases": [
-              [
-                "Enter",
-                [
-                  "Material.Tooltip.DOMState"
-                ]
-              ],
-              [
-                "Leave",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "attach",
-            "comment": " Attach event handlers for Parts version\r\n",
-            "type": "(Parts.Msg (Material.Tooltip.Container a) b -> b) -> Parts.Index -> Material.Options.Property c b"
-          },
-          {
-            "name": "bottom",
-            "comment": " Position the tooltip below the target element\r\n",
-            "type": "Material.Tooltip.Property m"
-          },
-          {
-            "name": "container",
-            "comment": " Set the tooltip container element. You are unlikely to need this. \r\n\r\nThis option simply sets the  container element for the tooltip itself, which\r\nyou might want to control for layout purposes. It does not set the element\r\nhovering on which triggers the tooltip; use `attach` to set that. \r\n",
-            "type": "Material.Tooltip.HtmlElement m -> Material.Tooltip.Property m"
-          },
-          {
-            "name": "defaultModel",
-            "comment": " Default component model constructor.\r\n",
-            "type": "Material.Tooltip.Model"
-          },
-          {
-            "name": "large",
-            "comment": " Large tooltip\r\n",
-            "type": "Material.Tooltip.Property m"
-          },
-          {
-            "name": "left",
-            "comment": " Position the tooltip on the left of the target element\r\n",
-            "type": "Material.Tooltip.Property m"
-          },
-          {
-            "name": "onEnter",
-            "comment": " Mouse enter event handler, TEA variant\r\n",
-            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
-          },
-          {
-            "name": "onLeave",
-            "comment": " Mouse leave event handler, TEA variant\r\n",
-            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
-          },
-          {
-            "name": "render",
-            "comment": " Component render.\r\n",
-            "type": "(Parts.Msg (Material.Tooltip.Container c) m -> m) -> Parts.Index -> Material.Tooltip.Container c -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "right",
-            "comment": " Position the tooltip on the right of the target element\r\n",
-            "type": "Material.Tooltip.Property m"
-          },
-          {
-            "name": "top",
-            "comment": " Position the tooltip above the target element\r\n",
-            "type": "Material.Tooltip.Property m"
-          },
-          {
-            "name": "update",
-            "comment": " Component update.\r\n",
-            "type": "Material.Tooltip.Msg -> Material.Tooltip.Model -> ( Material.Tooltip.Model, Platform.Cmd.Cmd Material.Tooltip.Msg )"
-          },
-          {
-            "name": "view",
-            "comment": " Component view.\r\n",
-            "type": "(Material.Tooltip.Msg -> m) -> Material.Tooltip.Model -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Typography",
-        "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction):\n\n> The Material Design Lite (MDL) typography component is a comprehensive approach\n> to standardizing the use of typefaces in applications and page displays. MDL\n> typography elements are intended to replace the myriad fonts used by developers\n> (which vary significantly in appearance) and provide a robust, uniform library\n> of text styles from which developers can choose.\n>\n> The \"Roboto\" typeface is the standard for MDL display; it can easily be\n> integrated into a web page using the CSS3 @font-face rule. However, Roboto is\n> most simply accessed and included using a single standard HTML <link> element,\n> which can be obtained at this Google fonts page.\n>\n> Because of the many possible variations in font display characteristics in HTML\n> and CSS, MDL typography aims to provide simple and intuitive styles that use the\n> Roboto font and produce visually attractive and internally consistent text\n> results. See the typography component's [Material Design specifications](https://material.google.com/style/typography.html) page for\n> details.\n\nSee also the\n[Material Design Specification](https://www.google.com/design/spec/style/typography.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#typography)\nfor a live demo.\n\n# Styles\n\nThe [Material Design\nspecification](https://material.google.com/style/typography.html#typography-other-typographic-guidelines)\nstipulates that typography has particular color contrast. The styles in this\nfile gives correct contrast for black and white only; for colored typography or backgrounds, use the \n`contrast` option to regulate color contrast. \n\n\n@docs display1\n@docs display2\n@docs display3\n@docs display4\n@docs body1\n@docs body2\n@docs headline\n@docs title\n@docs subhead\n@docs caption\n@docs button\n@docs menu\n\n## Color contrast\n@docs contrast\n\n# Transforms\n@docs capitalize\n@docs lowercase\n@docs uppercase\n\n# Alignment\n@docs left\n@docs center\n@docs right\n@docs justify\n\n# Utility\n@docs nowrap\n@docs tableStriped\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "body1",
-            "comment": " Regular 14px (Device), Regular 13px (Desktop)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "body2",
-            "comment": " Medium 14px (Device), Medium 13px (Desktop)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "button",
-            "comment": " Medium (All Caps) 14px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "capitalize",
-            "comment": " Capitalized text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "caption",
-            "comment": " Regular 12px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "center",
-            "comment": " Center aligned text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "contrast",
-            "comment": " Modify contrast of typography. Implemented under the hood by setting CSS\n`opacity`. \n",
-            "type": "Float -> Material.Options.Property c m"
-          },
-          {
-            "name": "display1",
-            "comment": " Regular 34px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "display2",
-            "comment": " Regular 45px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "display3",
-            "comment": " Regular 56px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "display4",
-            "comment": " Light 112px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "headline",
-            "comment": " Regular 24px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "justify",
-            "comment": " Justified text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "left",
-            "comment": " Left aligned text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "lowercase",
-            "comment": " Lowercased text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "menu",
-            "comment": " Medium 14px (Device), Medium 13px (Desktop)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "nowrap",
-            "comment": " No wrap text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "right",
-            "comment": " Right aligned text\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "subhead",
-            "comment": " Regular 16px (Device), Regular 15px (Desktop)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "tableStriped",
-            "comment": " Striped table\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "title",
-            "comment": " Medium 20px\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "uppercase",
-            "comment": " Uppercased text\n",
-            "type": "Material.Options.Property c m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Material.Textfield",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):\n\n> The Material Design Lite (MDL) text field component is an enhanced version of\n> the standard HTML `<input type=\"text\">` and `<input type=\"textarea\">` elements.\n> A text field consists of a horizontal line indicating where keyboard input\n> can occur and, typically, text that clearly communicates the intended\n> contents of the text field. The MDL text field component provides various\n> types of text fields, and allows you to add both display and click effects.\n>\n> Text fields are a common feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the text field component's\n> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)\n> for details.\n>\n> The enhanced text field component has a more vivid visual look than a standard\n> text field, and may be initially or programmatically disabled. There are three\n> main types of text fields in the text field component, each with its own basic\n> coding requirements. The types are single-line, multi-line, and expandable.\n\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#textfields)\nfor a live demo.\n \n# Component render\n@docs render\n\n# Options\n@docs Property, value\n  \n# Appearance\n\n@docs label, floatingLabel, error, disabled, rows, cols\n@docs autofocus, maxlength\n\n## Styling\nTextfields are implemented as `<input>` elements sitting inside a\n`<div>`, along with various helper elements. Supplying styling arguments (e.g.,\n`Options.css`) to `render` or `view` will apply these arguments to the\noutermost `<div>`.  If you wish to apply styling to the underlying `<input>`\nelement, use the `style` property below. \n\n@docs style\n\n# Type \n@docs password, textarea, text', onInput\n@docs onBlur, onFocus\n\n# Elm Architecture\n@docs Msg, Model, defaultModel, update, view\n\n",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):\n\n> The Material Design Lite (MDL) text field component is an enhanced version of\n> the standard HTML `<input type=\"text\">` and `<input type=\"textarea\">` elements.\n> A text field consists of a horizontal line indicating where keyboard input\n> can occur and, typically, text that clearly communicates the intended\n> contents of the text field. The MDL text field component provides various\n> types of text fields, and allows you to add both display and click effects.\n>\n> Text fields are a common feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the text field component's\n> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)\n> for details.\n>\n> The enhanced text field component has a more vivid visual look than a standard\n> text field, and may be initially or programmatically disabled. There are three\n> main types of text fields in the text field component, each with its own basic\n> coding requirements. The types are single-line, multi-line, and expandable.\n\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#textfields)\nfor a live demo.\n \n# Component render\n@docs render\n\n# Options\n@docs Property, value\n  \n# Appearance\n\n@docs label, floatingLabel, error, disabled, rows, cols\n@docs autofocus, maxlength\n\n## Styling\nTextfields are implemented as `<input>` elements sitting inside a\n`<div>`, along with various helper elements. Supplying styling arguments (e.g.,\n`Options.css`) to `render` or `view` will apply these arguments to the\noutermost `<div>`.  If you wish to apply styling to the underlying `<input>`\nelement, use the `style` property below. \n\n@docs style\n\n# Type \n@docs password, textarea, text', onInput\n@docs onBlur, onFocus\n\n# Advanced\n@docs on\n\n# Elm Architecture\n@docs Msg, Model, defaultModel, update, view\n\n",
         "aliases": [
           {
             "name": "Model",
@@ -19489,6 +19201,11 @@
             "type": "Int -> Material.Textfield.Property m"
           },
           {
+            "name": "on",
+            "comment": " Add custom event handlers\n ",
+            "type": "String -> Json.Decode.Decoder m -> Material.Textfield.Property m"
+          },
+          {
             "name": "onBlur",
             "comment": " The `blur` event occurs when the input loses focus.\n",
             "type": "m -> Material.Textfield.Property m"
@@ -19547,50 +19264,6 @@
             "name": "view",
             "comment": " Component view\n\nBe aware that styling (third argument) is applied to the outermost element\nof the textfield's implementation, and so is mostly useful for positioning\n(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`\nif you need to apply styling to the underlying `<input>` element. \n",
             "type": "(Material.Textfield.Msg -> m) -> Material.Textfield.Model -> List (Material.Textfield.Property m) -> Html.Html m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Spinner",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):\n\n> The Material Design Lite (MDL) spinner component is an enhanced replacement\n> for the classic \"wait cursor\" (which varies significantly among hardware and\n> software versions) and indicates that there is an ongoing process, the\n> results of which are not yet available. A spinner consists of an open circle\n> that changes colors as it animates in a clockwise direction, and clearly\n> communicates that a process has been started but not completed.\n\n> A spinner performs no action itself, either by its display nor when the user\n> clicks or touches it, and does not indicate a process's specific progress or\n> degree of completion. The MDL spinner component provides various types of\n> spinners, and allows you to add display effects.\n\n> Spinners are a fairly new feature of most user interfaces, and provide users\n> with a consistent visual cue about ongoing activity, regardless of hardware\n> device, operating system, or browser environment. Their design and use is an\n> important factor in the overall user experience.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n@docs spinner, active, singleColor\n@docs Property, Config, defaultConfig\n\n",
-        "aliases": [
-          {
-            "name": "Config",
-            "comment": " Spinner config\n",
-            "args": [],
-            "type": "{ active : Bool, singleColor : Bool }"
-          },
-          {
-            "name": "Property",
-            "comment": " A spinner's property.\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property Material.Spinner.Config m"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "active",
-            "comment": " Make a spinner visible\n",
-            "type": "Bool -> Material.Spinner.Property m"
-          },
-          {
-            "name": "defaultConfig",
-            "comment": " Spinner default config is not `active`, not `singleColor`.\n",
-            "type": "Material.Spinner.Config"
-          },
-          {
-            "name": "singleColor",
-            "comment": " Make a spinner a single color (the active color) of the stylesheet.\n",
-            "type": "Bool -> Material.Spinner.Property m"
-          },
-          {
-            "name": "spinner",
-            "comment": " A spinner is a loading indicator that by default changes color and is\ninvisible. Example use: \n\n    spinner [ active ] []\n",
-            "type": "List (Material.Spinner.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -19739,78 +19412,381 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Progress",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section):\n\n> The Material Design Lite (MDL) progress component is a visual indicator of\n> background activity in a web page or application. A progress indicator\n> consists of a (typically) horizontal bar containing some animation that\n> conveys a sense of motion. While some progress devices indicate an\n> approximate or specific percentage of completion, the MDL progress component\n> simply communicates the fact that an activity is ongoing and is not yet\n> complete.\n\n> Progress indicators are an established but non-standardized feature in user\n> interfaces, and provide users with a visual clue to an application's status.\n> Their design and use is therefore an important factor in the overall user\n> experience. See the progress component's Material Design specifications page\n> for details.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n# Render\n@docs indeterminate, progress, buffered\n\n",
-        "aliases": [],
+        "name": "Material.Spinner",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):\n\n> The Material Design Lite (MDL) spinner component is an enhanced replacement\n> for the classic \"wait cursor\" (which varies significantly among hardware and\n> software versions) and indicates that there is an ongoing process, the\n> results of which are not yet available. A spinner consists of an open circle\n> that changes colors as it animates in a clockwise direction, and clearly\n> communicates that a process has been started but not completed.\n\n> A spinner performs no action itself, either by its display nor when the user\n> clicks or touches it, and does not indicate a process's specific progress or\n> degree of completion. The MDL spinner component provides various types of\n> spinners, and allows you to add display effects.\n\n> Spinners are a fairly new feature of most user interfaces, and provide users\n> with a consistent visual cue about ongoing activity, regardless of hardware\n> device, operating system, or browser environment. Their design and use is an\n> important factor in the overall user experience.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n@docs spinner, active, singleColor\n@docs Property, Config, defaultConfig\n\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Spinner config\n",
+            "args": [],
+            "type": "{ active : Bool, singleColor : Bool }"
+          },
+          {
+            "name": "Property",
+            "comment": " A spinner's property.\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property Material.Spinner.Config m"
+          }
+        ],
         "types": [],
         "values": [
           {
-            "name": "buffered",
-            "comment": " A buffered progress bar. First argument is completion in percent (0-100),\nsecond argument indicates buffer completion in percent (0-100). \n",
-            "type": "Float -> Float -> Html.Html m"
+            "name": "active",
+            "comment": " Make a spinner visible\n",
+            "type": "Bool -> Material.Spinner.Property m"
           },
           {
-            "name": "indeterminate",
-            "comment": " An indeterminate progress bar.\n",
-            "type": "Html.Html m"
+            "name": "defaultConfig",
+            "comment": " Spinner default config is not `active`, not `singleColor`.\n",
+            "type": "Material.Spinner.Config"
           },
           {
-            "name": "progress",
-            "comment": " A progress bar. First argument is completion in percent (0–100).\n",
-            "type": "Float -> Html.Html m"
+            "name": "singleColor",
+            "comment": " Make a spinner a single color (the active color) of the stylesheet.\n",
+            "type": "Bool -> Material.Spinner.Property m"
+          },
+          {
+            "name": "spinner",
+            "comment": " A spinner is a loading indicator that by default changes color and is\ninvisible. Example use: \n\n    spinner [ active ] []\n",
+            "type": "List (Material.Spinner.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Icon",
-        "comment": " Convenience functions for producing Material Design Icons. Refer to\n[the Material Design Icons page](https://google.github.io/material-design-icons),\nor skip straight to the [Material Icons Library](https://design.google.com/icons/).\n\nThis implementation assumes that you have\n\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\"\n      rel=\"stylesheet\">\n\nor an equivalent means of loading the icons in your HTML header. \n(`Material.top` will do this for you.)\n\n@docs i, view, size18, size24, size36, size48, onClick, Property\n",
-        "aliases": [
-          {
-            "name": "Property",
-            "comment": " Type of Icon properties. (You are unlikely to need this.)\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property (Material.Icon.Config m) m"
-          }
-        ],
+        "name": "Material.Typography",
+        "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction):\n\n> The Material Design Lite (MDL) typography component is a comprehensive approach\n> to standardizing the use of typefaces in applications and page displays. MDL\n> typography elements are intended to replace the myriad fonts used by developers\n> (which vary significantly in appearance) and provide a robust, uniform library\n> of text styles from which developers can choose.\n>\n> The \"Roboto\" typeface is the standard for MDL display; it can easily be\n> integrated into a web page using the CSS3 @font-face rule. However, Roboto is\n> most simply accessed and included using a single standard HTML <link> element,\n> which can be obtained at this Google fonts page.\n>\n> Because of the many possible variations in font display characteristics in HTML\n> and CSS, MDL typography aims to provide simple and intuitive styles that use the\n> Roboto font and produce visually attractive and internally consistent text\n> results. See the typography component's [Material Design specifications](https://material.google.com/style/typography.html) page for\n> details.\n\nSee also the\n[Material Design Specification](https://www.google.com/design/spec/style/typography.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#typography)\nfor a live demo.\n\n# Styles\n\nThe [Material Design\nspecification](https://material.google.com/style/typography.html#typography-other-typographic-guidelines)\nstipulates that typography has particular color contrast. The styles in this\nfile gives correct contrast for black and white only; for colored typography or backgrounds, use the \n`contrast` option to regulate color contrast. \n\n\n@docs display1\n@docs display2\n@docs display3\n@docs display4\n@docs body1\n@docs body2\n@docs headline\n@docs title\n@docs subhead\n@docs caption\n@docs button\n@docs menu\n\n## Color contrast\n@docs contrast\n\n# Transforms\n@docs capitalize\n@docs lowercase\n@docs uppercase\n\n# Alignment\n@docs left\n@docs center\n@docs right\n@docs justify\n\n# Utility\n@docs nowrap\n@docs tableStriped\n\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "i",
-            "comment": " Render a default-sized icon with no behaviour. The\n`String` argument must be the name of a [Material Icon](https://design.google.com/icons/)\n(replace spaces with underscores).\n\nI.e., to produce a default size (24xp) \"trending flat\" icon:\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.i \"trending_flat\"\n",
-            "type": "String -> Html.Html m"
+            "name": "body1",
+            "comment": " Regular 14px (Device), Regular 13px (Desktop)\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "onClick",
-            "comment": " Add an `on \"click\"` handler to an Icon. (You may want to use a `Button`\nwith `Button.icon` instead.)\n",
-            "type": "m -> Material.Icon.Property m"
+            "name": "body2",
+            "comment": " Medium 14px (Device), Medium 13px (Desktop)\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "size18",
-            "comment": " Set icon to have size 18px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "button",
+            "comment": " Medium (All Caps) 14px\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "size24",
-            "comment": " Set icon to have size 24px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "capitalize",
+            "comment": " Capitalized text\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "size36",
-            "comment": " Set icon to have size 36px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "caption",
+            "comment": " Regular 12px\n",
+            "type": "Material.Options.Property c m"
           },
           {
-            "name": "size48",
-            "comment": " Set icon to have size 48px. \n",
-            "type": "Material.Icon.Property m"
+            "name": "center",
+            "comment": " Center aligned text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "contrast",
+            "comment": " Modify contrast of typography. Implemented under the hood by setting CSS\n`opacity`. \n",
+            "type": "Float -> Material.Options.Property c m"
+          },
+          {
+            "name": "display1",
+            "comment": " Regular 34px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "display2",
+            "comment": " Regular 45px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "display3",
+            "comment": " Regular 56px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "display4",
+            "comment": " Light 112px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "headline",
+            "comment": " Regular 24px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "justify",
+            "comment": " Justified text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "left",
+            "comment": " Left aligned text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "lowercase",
+            "comment": " Lowercased text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "menu",
+            "comment": " Medium 14px (Device), Medium 13px (Desktop)\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "nowrap",
+            "comment": " No wrap text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "right",
+            "comment": " Right aligned text\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "subhead",
+            "comment": " Regular 16px (Device), Regular 15px (Desktop)\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "tableStriped",
+            "comment": " Striped table\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "title",
+            "comment": " Medium 20px\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "uppercase",
+            "comment": " Uppercased text\n",
+            "type": "Material.Options.Property c m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Tooltip",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):\r\n\r\n> The Material Design Lite (MDL) tooltip component is an enhanced version of the\r\n> standard HTML tooltip as produced by the `title` attribute. A tooltip consists\r\n> of text and/or an image that clearly communicates additional information about\r\n> an element when the user hovers over or, in a touch-based UI, touches the\r\n> element. The MDL tooltip component is pre-styled (colors, fonts, and other\r\n> settings are contained in material.min.css) to provide a vivid, attractive\r\n> visual element that displays related but typically non-essential content,\r\n> e.g., a definition, clarification, or brief instruction.\r\n>\r\n> Tooltips are a ubiquitous feature of most user interfaces, regardless of a\r\n> site's content or function. Their design and use is an important factor in the\r\n> overall user experience. See the tooltip component's Material Design\r\n> specifications page for details.\r\n\r\nSee also the\r\n[Material Design Specification](https://material.google.com/components/tooltips.html).\r\n\r\nRefer to [this site](http://debois.github.io/elm-mdl/#tooltips)\r\nfor a live demo.\r\n\r\nTo use a `tooltip` you have to (a) attach the mouse event listeners to the target\r\nby calling `attach`, and (b) create a tooltip with element `Tooltip.render`\r\nas a sibling of the target. Here is an example: \r\n\r\n```elm\r\nimport Material.Tooltip as Tooltip\r\nimport Material.Icon as Icon\r\n\r\ntooltip : Model -> Html Msg\r\ntooltip model =\r\n  div []\r\n    [ Icon.view \"add\" [ Tooltip.attach Mdl [0] ]\r\n    , Tooltip.render Mdl [0] model.mdl\r\n        [Tooltip.default]\r\n        [text \"Default tooltip\"]\r\n    ]\r\n```\r\n\r\n# Render\r\n@docs attach, render\r\n\r\n# Options\r\n@docs Property\r\n@docs left, right, top, bottom\r\n@docs large\r\n@docs container\r\n\r\n# Elm architecture\r\nIf you do not use parts, you should not use `attach`, but instead add the\r\n`onEnter` and `onLeave` attributes to the target element. \r\n\r\n@docs onEnter, onLeave\r\n@docs Model, defaultModel, Msg, update, view\r\n\r\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Component model.\r\n",
+            "args": [],
+            "type": "{ isActive : Bool, domState : Material.Tooltip.DOMState }"
+          },
+          {
+            "name": "Property",
+            "comment": " Properties for Tooltip options.\r\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Tooltip.Config m) m"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Component message.\r\n",
+            "args": [],
+            "cases": [
+              [
+                "Enter",
+                [
+                  "Material.Tooltip.DOMState"
+                ]
+              ],
+              [
+                "Leave",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "attach",
+            "comment": " Attach event handlers for Parts version\r\n",
+            "type": "(Parts.Msg (Material.Tooltip.Container a) b -> b) -> Parts.Index -> Material.Options.Property c b"
+          },
+          {
+            "name": "bottom",
+            "comment": " Position the tooltip below the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "container",
+            "comment": " Set the tooltip container element. You are unlikely to need this. \r\n\r\nThis option simply sets the  container element for the tooltip itself, which\r\nyou might want to control for layout purposes. It does not set the element\r\nhovering on which triggers the tooltip; use `attach` to set that. \r\n",
+            "type": "Material.Tooltip.HtmlElement m -> Material.Tooltip.Property m"
+          },
+          {
+            "name": "defaultModel",
+            "comment": " Default component model constructor.\r\n",
+            "type": "Material.Tooltip.Model"
+          },
+          {
+            "name": "large",
+            "comment": " Large tooltip\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "left",
+            "comment": " Position the tooltip on the left of the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "onEnter",
+            "comment": " Mouse enter event handler, TEA variant\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
+          },
+          {
+            "name": "onLeave",
+            "comment": " Mouse leave event handler, TEA variant\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Html.Attribute m"
+          },
+          {
+            "name": "render",
+            "comment": " Component render.\r\n",
+            "type": "(Parts.Msg (Material.Tooltip.Container c) m -> m) -> Parts.Index -> Material.Tooltip.Container c -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "right",
+            "comment": " Position the tooltip on the right of the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "top",
+            "comment": " Position the tooltip above the target element\r\n",
+            "type": "Material.Tooltip.Property m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\r\n",
+            "type": "Material.Tooltip.Msg -> Material.Tooltip.Model -> ( Material.Tooltip.Model, Platform.Cmd.Cmd Material.Tooltip.Msg )"
           },
           {
             "name": "view",
-            "comment": " View function for icons. Supply the\n[Material Icons Library](https://design.google.com/icons/) name as\nthe first argument (replace spaces with underscores). Set the size of the\nicon with the `size..` Styles (default is 24px).  Do not use this function to\nproduce clickable icons; use icon buttons in Material.Button.icon for that.\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.view \"trending_flat\" [Icon.size48] []\n",
-            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
+            "comment": " Component view.\r\n",
+            "type": "(Material.Tooltip.Msg -> m) -> Material.Tooltip.Model -> List (Material.Tooltip.Property m) -> List (Html.Html m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Grid",
+        "comment": " From the\n[Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid):\n\n> The Material Design Lite (MDL) grid component is a simplified method for laying\n> out content for multiple screen sizes. It reduces the usual coding burden\n> required to correctly display blocks of content in a variety of display\n> conditions.\n>\n> The MDL grid is defined and enclosed by a container element. A grid has 12\n> columns in the desktop screen size, 8 in the tablet size, and 4 in the phone\n> size, each size having predefined margins and gutters. Cells are laid out\n> sequentially in a row, in the order they are defined, with some exceptions:\n>\n>   - If a cell doesn't fit in the row in one of the screen sizes, it flows\n>     into the following line.\n>   - If a cell has a specified column size equal to or larger than the number\n>     of columns for the current screen size, it takes up the entirety of its\n>     row.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#grid)\nfor a live demo. \n\nExample use:\n\n    import Material.Grid exposing (grid, cell, size, Device(..))\n\n    top : (Html a)\n    top =\n      grid []\n        [ cell [ size All 4 ]\n            [ h4 [] [text \"Cell 1\"]\n            ]\n        , cell [ offset All 2, size All 4 ]\n            [ h4 [] [text \"Cell 2\"]\n            , p [] [text \"This cell is offset by 2\"]\n            ]\n        , cell [ size All 6 ]\n            [ h4 [] [text \"Cell 3\"]\n            ]\n        , cell [ size Tablet 6, size Desktop 12, size Phone 2 ]\n            [ h4 [] [text \"Cell 4\"]\n            , p [] [text \"Size varies with device\"]\n            ]\n        ]\n\n# Grid container\n@docs grid, noSpacing, maxWidth\n\n# Cells\n\nCells are configured with a `List Style`; this configuration dictates the\nsize, offset, etc. of the cell. \n\n@docs cell, Cell, Device, size, offset, Align, align, stretch, hide, order\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Align",
+            "comment": " Alignment of cell contents; use with `align`.\n",
+            "args": [],
+            "cases": [
+              [
+                "Top",
+                []
+              ],
+              [
+                "Middle",
+                []
+              ],
+              [
+                "Bottom",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Cell",
+            "comment": " Opaque cell type.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Device",
+            "comment": " Device specifiers, used with `size` and `offset`. (A `Device` really\nencapsulates a screen size.)\n",
+            "args": [],
+            "cases": [
+              [
+                "All",
+                []
+              ],
+              [
+                "Desktop",
+                []
+              ],
+              [
+                "Tablet",
+                []
+              ],
+              [
+                "Phone",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "align",
+            "comment": " Specify vertical cell alignment. See `Align`.\n",
+            "type": "Material.Grid.Align -> Material.Options.Style a"
+          },
+          {
+            "name": "cell",
+            "comment": " Construct a cell for use in the argument list for `grid`. Note that this\nmodule defines exposing various styles to set size, offset, etc. of the cell. \n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Grid.Cell a"
+          },
+          {
+            "name": "grid",
+            "comment": " Construct a grid with options.\n",
+            "type": "List (Material.Options.Style a) -> List (Material.Grid.Cell a) -> Html.Html a"
+          },
+          {
+            "name": "hide",
+            "comment": " Specify that a cell should be hidden on given `Device`.\n",
+            "type": "Material.Grid.Device -> Material.Options.Style a"
+          },
+          {
+            "name": "maxWidth",
+            "comment": " Set maximum grid width. If more space is available, the grid stays centered with\npadding on either side. Width must be a valid CSS dimension. \n",
+            "type": "String -> Material.Options.Style a"
+          },
+          {
+            "name": "noSpacing",
+            "comment": " Set grid to have no spacing between cells. \n",
+            "type": "Material.Options.Style a"
+          },
+          {
+            "name": "offset",
+            "comment": " Specify cell offset, i.e., empty number of empty cells before the present\none. On devices of type `Device`, leave `Int` columns blank before the present\none begins.\n",
+            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
+          },
+          {
+            "name": "order",
+            "comment": " Specify that a cell should re-order itself to position 'Int' on `Device`.\n",
+            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
+          },
+          {
+            "name": "size",
+            "comment": " Specify cell size. On devices of type `Device`, the\ncell being specified spans `Int` columns.\n",
+            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
+          },
+          {
+            "name": "stretch",
+            "comment": " Specify that a cell stretches vertically to fill the parent.\n",
+            "type": "Material.Options.Style a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -19982,116 +19958,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Grid",
-        "comment": " From the\n[Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid):\n\n> The Material Design Lite (MDL) grid component is a simplified method for laying\n> out content for multiple screen sizes. It reduces the usual coding burden\n> required to correctly display blocks of content in a variety of display\n> conditions.\n>\n> The MDL grid is defined and enclosed by a container element. A grid has 12\n> columns in the desktop screen size, 8 in the tablet size, and 4 in the phone\n> size, each size having predefined margins and gutters. Cells are laid out\n> sequentially in a row, in the order they are defined, with some exceptions:\n>\n>   - If a cell doesn't fit in the row in one of the screen sizes, it flows\n>     into the following line.\n>   - If a cell has a specified column size equal to or larger than the number\n>     of columns for the current screen size, it takes up the entirety of its\n>     row.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#grid)\nfor a live demo. \n\nExample use:\n\n    import Material.Grid exposing (grid, cell, size, Device(..))\n\n    top : (Html a)\n    top =\n      grid []\n        [ cell [ size All 4 ]\n            [ h4 [] [text \"Cell 1\"]\n            ]\n        , cell [ offset All 2, size All 4 ]\n            [ h4 [] [text \"Cell 2\"]\n            , p [] [text \"This cell is offset by 2\"]\n            ]\n        , cell [ size All 6 ]\n            [ h4 [] [text \"Cell 3\"]\n            ]\n        , cell [ size Tablet 6, size Desktop 12, size Phone 2 ]\n            [ h4 [] [text \"Cell 4\"]\n            , p [] [text \"Size varies with device\"]\n            ]\n        ]\n\n# Grid container\n@docs grid, noSpacing, maxWidth\n\n# Cells\n\nCells are configured with a `List Style`; this configuration dictates the\nsize, offset, etc. of the cell. \n\n@docs cell, Cell, Device, size, offset, Align, align, stretch, hide, order\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Align",
-            "comment": " Alignment of cell contents; use with `align`.\n",
-            "args": [],
-            "cases": [
-              [
-                "Top",
-                []
-              ],
-              [
-                "Middle",
-                []
-              ],
-              [
-                "Bottom",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Cell",
-            "comment": " Opaque cell type.\n",
-            "args": [
-              "a"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Device",
-            "comment": " Device specifiers, used with `size` and `offset`. (A `Device` really\nencapsulates a screen size.)\n",
-            "args": [],
-            "cases": [
-              [
-                "All",
-                []
-              ],
-              [
-                "Desktop",
-                []
-              ],
-              [
-                "Tablet",
-                []
-              ],
-              [
-                "Phone",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "align",
-            "comment": " Specify vertical cell alignment. See `Align`.\n",
-            "type": "Material.Grid.Align -> Material.Options.Style a"
-          },
-          {
-            "name": "cell",
-            "comment": " Construct a cell for use in the argument list for `grid`. Note that this\nmodule defines exposing various styles to set size, offset, etc. of the cell. \n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Grid.Cell a"
-          },
-          {
-            "name": "grid",
-            "comment": " Construct a grid with options.\n",
-            "type": "List (Material.Options.Style a) -> List (Material.Grid.Cell a) -> Html.Html a"
-          },
-          {
-            "name": "hide",
-            "comment": " Specify that a cell should be hidden on given `Device`.\n",
-            "type": "Material.Grid.Device -> Material.Options.Style a"
-          },
-          {
-            "name": "maxWidth",
-            "comment": " Set maximum grid width. If more space is available, the grid stays centered with\npadding on either side. Width must be a valid CSS dimension. \n",
-            "type": "String -> Material.Options.Style a"
-          },
-          {
-            "name": "noSpacing",
-            "comment": " Set grid to have no spacing between cells. \n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "offset",
-            "comment": " Specify cell offset, i.e., empty number of empty cells before the present\none. On devices of type `Device`, leave `Int` columns blank before the present\none begins.\n",
-            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
-          },
-          {
-            "name": "order",
-            "comment": " Specify that a cell should re-order itself to position 'Int' on `Device`.\n",
-            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
-          },
-          {
-            "name": "size",
-            "comment": " Specify cell size. On devices of type `Device`, the\ncell being specified spans `Int` columns.\n",
-            "type": "Material.Grid.Device -> Int -> Material.Options.Style a"
-          },
-          {
-            "name": "stretch",
-            "comment": " Specify that a cell stretches vertically to fill the parent.\n",
-            "type": "Material.Options.Style a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Material.Elevation",
         "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)\n\n> The Material Design Lite (MDL) shadow is not a component in the same sense as\n> an MDL card, menu, or textbox; it is a visual effect that can be assigned to a\n> user interface element. The effect simulates a three-dimensional positioning of\n> the element, as though it is slightly raised above the surface it rests upon —\n> a positive z-axis value, in user interface terms. The shadow starts at the\n> edges of the element and gradually fades outward, providing a realistic 3-D\n> effect.\n> \n> Shadows are a convenient and intuitive means of distinguishing an element from\n> its surroundings. A shadow can draw the user's eye to an object and emphasize\n> the object's importance, uniqueness, or immediacy.\n> \n> Shadows are a well-established feature in user interfaces, and provide users\n> with a visual clue to an object's intended use or value. Their design and use\n> is an important factor in the overall user experience.)\n\nThe [Material Design Specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html#elevation-shadows-elevation-android-)\npre-defines appropriate elevation for most UI elements; you need to manually\nassign shadows only to your own elements. \n\nYou are encouraged to visit the\n[Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)\nfor details about appropriate use of shadows. \n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#elevation)\nfor a live demo. \n  \n\n# Elevations\nEach of the values below denote an elevation of a certain heigh, e.g., \n`e4` will cast a shadow indicating an elevation of 4dp. The default elevation\nis `e0`, no elevation.\n@docs e0, e2, e3, e4, e6, e8, e16, e24\n@docs elevations\n\n# Transitions\n@docs transition\n\n",
         "aliases": [],
@@ -20146,6 +20012,109 @@
             "name": "transition",
             "comment": " Add a CSS-transition to changes in elevation. Supply a transition\nduration in milliseconds as argument. \n\nNB! This Property a m is dictated by neither MDL nor the Material Design\nSpecification. \n",
             "type": "Float -> Material.Options.Property a m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Dialog",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) dialog component allows for verification of user\n> actions, simple data input, and alerts to provide extra information to users.\n>\n> To use the dialog component, you must be using a browser that supports the\n> dialog element. Only Chrome and Opera have native support at the time of\n> writing. For other browsers you will need to include the dialog polyfill\n> or create your own.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#dialog)\nfor a live demo.\n\n@docs view\n\n# Contents\n@docs title, content, actions, fullWidth\n\n# Opening & closing\n@docs openOn, closeOn\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "actions",
+            "comment": " Generate an actions content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "closeOn",
+            "comment": " Close the dialog. The dialog must be open. Use like this: \n\n    Button.render Mdl [1] model.mdl\n      [ Dialog.closeOn \"click\" ]\n      [ text \"Close\" ] \n",
+            "type": "String -> Material.Options.Property c m"
+          },
+          {
+            "name": "content",
+            "comment": " Generate a supporting text content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "fullWidth",
+            "comment": " Option to `actions`. If set, each control takes up the full width of the\ndialog. \n",
+            "type": "Material.Options.Style a"
+          },
+          {
+            "name": "openOn",
+            "comment": " Open dialog in response to given DOM event. The DOM must also contain a\n`dialog` produced using `Dialog.view`.  Use like this: \n\n    Button.render Mdl [0] model.mdl\n      [ Dialog.openOn \"click\" ] \n      [ text \"Open dialog\" ]\n",
+            "type": "String -> Material.Options.Property c m"
+          },
+          {
+            "name": "title",
+            "comment": " Generate a title content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "view",
+            "comment": " Construct a dialog. \n\n- If you target browser not supporting\n`<dialog>` natively, you will need to load [this\npolyfill](https://github.com/GoogleChrome/dialog-polyfill).\n- Using this polyfill [places\nrestrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on\nwhere in the DOM you can put the output of this function.\n- The elm-mdl library currently support only one dialog pr. application. \nInstalling more than one dialog will result in a random one showing. \n",
+            "type": "List (Material.Options.Style a) -> List (Material.Dialog.Block a) -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Card",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) card component is a user interface element\n> representing a virtual piece of paper that contains related data — such as a\n> photo, some text, and a link — that are all about a single subject.\n>\n> Cards are a convenient means of coherently displaying related block that is\n> composed of different types of objects. They are also well-suited for presenting\n> similar objects whose size or supported actions can vary considerably, like\n> photos with captions of variable length. Cards have a constant width and a\n> variable height, depending on their block.\n>\n> Cards are a fairly new feature in user interfaces, and allow users an access\n> point to more complex and detailed information. Their design and use is an\n> important factor in the overall user experience. See the card component's\n> Material Design specifications page for details.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#cards)\nfor a live demo.\n\n# Render\n@docs view\n\n# Content blocks\n@docs title, media, text, actions\n\n## Title block\n@docs subhead, head\n\n# Misc\n@docs expand, border, menu\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "actions",
+            "comment": " Generate an actions block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
+          },
+          {
+            "name": "border",
+            "comment": " Separate given content block from others by adding a thin border.\n",
+            "type": "Material.Options.Style a"
+          },
+          {
+            "name": "expand",
+            "comment": " Set given content block to expand or compress vertically as necessary.\n",
+            "type": "Material.Options.Style a"
+          },
+          {
+            "name": "head",
+            "comment": " Head for title block. (This is called \"title\" in the Material Design\nSpecification.)\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "media",
+            "comment": " Generate a media block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
+          },
+          {
+            "name": "menu",
+            "comment": " Generate a menu block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
+          },
+          {
+            "name": "subhead",
+            "comment": " Sub-head for title block. (This is called \"subtitle\" in the Material Design\nSpecification.\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
+          },
+          {
+            "name": "text",
+            "comment": " Generate a supporting text block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
+          },
+          {
+            "name": "title",
+            "comment": " Generate a title block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
+          },
+          {
+            "name": "view",
+            "comment": " Construct a card.\n\nNotes. Google's MDL implementation sets `min-height: 200px`; this precludes a\nnumber of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),\nso the elm-mdl implementation sets `min-height: 0px`. Add `css \"min-height\" \"200px\"` as an option to `view`\nto adhere to the MDL implementation. \n",
+            "type": "List (Material.Options.Style a) -> List (Material.Card.Block a) -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -20388,212 +20357,164 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Dialog",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) dialog component allows for verification of user\n> actions, simple data input, and alerts to provide extra information to users.\n>\n> To use the dialog component, you must be using a browser that supports the\n> dialog element. Only Chrome and Opera have native support at the time of\n> writing. For other browsers you will need to include the dialog polyfill\n> or create your own.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#dialog)\nfor a live demo.\n\n@docs view\n\n# Contents\n@docs title, content, actions, fullWidth\n\n# Opening & closing\n@docs openOn, closeOn\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "actions",
-            "comment": " Generate an actions content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "closeOn",
-            "comment": " Close the dialog. The dialog must be open. Use like this: \n\n    Button.render Mdl [1] model.mdl\n      [ Dialog.closeOn \"click\" ]\n      [ text \"Close\" ] \n",
-            "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "content",
-            "comment": " Generate a supporting text content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "fullWidth",
-            "comment": " Option to `actions`. If set, each control takes up the full width of the\ndialog. \n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "openOn",
-            "comment": " Open dialog in response to given DOM event. The DOM must also contain a\n`dialog` produced using `Dialog.view`.  Use like this: \n\n    Button.render Mdl [0] model.mdl\n      [ Dialog.openOn \"click\" ] \n      [ text \"Open dialog\" ]\n",
-            "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "title",
-            "comment": " Generate a title content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "view",
-            "comment": " Construct a dialog. \n\n- If you target browser not supporting\n`<dialog>` natively, you will need to load [this\npolyfill](https://github.com/GoogleChrome/dialog-polyfill).\n- Using this polyfill [places\nrestrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on\nwhere in the DOM you can put the output of this function.\n- The elm-mdl library currently support only one dialog pr. application. \nInstalling more than one dialog will result in a random one showing. \n",
-            "type": "List (Material.Options.Style a) -> List (Material.Dialog.Block a) -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Badge",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):\n\n> The Material Design Lite (MDL) badge component is an onscreen notification element.\n> A badge consists of a small circle, typically containing a number or other characters,\n> that appears in proximity to another object. A badge can be both a notifier that there\n> are additional items associated with an object and an indicator of how many items there are.\n>\n> You can use a badge to unobtrusively draw the user's attention to items they might not\n> otherwise notice, or to emphasize that items may need their attention. For example:\n>\n> A \"New messages\" notification might be followed by a badge containing the number of unread messages.\n> A \"You have unpurchased items in your shopping cart\" reminder might include a badge\n> showing the number of items in the cart.\n> A \"Join the discussion!\" button might have an accompanying badge indicating the number of\n> users currently participating in the discussion.\n> A badge is almost always positioned near a link so that the user has a convenient way to access \n> the additional information indicated by the badge. However, depending on the intent, the \n> badge itself may or may not be part of the link.\n>\n> Badges are a new feature in user interfaces, and provide users with a visual clue to help them\n> discover additional relevant content. Their design and use is therefore an important\n> factor in the overall user experience.\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#badges)\nfor a live demo. \n\n@docs add, noBackground, overlap\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "add",
-            "comment": " Add a badge to the containing element.\n",
-            "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "noBackground",
-            "comment": " No background for badge.\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "overlap",
-            "comment": " Badge overlaps text/contents. \n",
-            "type": "Material.Options.Property c m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Card",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) card component is a user interface element\n> representing a virtual piece of paper that contains related data — such as a\n> photo, some text, and a link — that are all about a single subject.\n>\n> Cards are a convenient means of coherently displaying related block that is\n> composed of different types of objects. They are also well-suited for presenting\n> similar objects whose size or supported actions can vary considerably, like\n> photos with captions of variable length. Cards have a constant width and a\n> variable height, depending on their block.\n>\n> Cards are a fairly new feature in user interfaces, and allow users an access\n> point to more complex and detailed information. Their design and use is an\n> important factor in the overall user experience. See the card component's\n> Material Design specifications page for details.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#cards)\nfor a live demo.\n\n# Render\n@docs view\n\n# Content blocks\n@docs title, media, text, actions\n\n## Title block\n@docs subhead, head\n\n# Misc\n@docs expand, border, menu\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "actions",
-            "comment": " Generate an actions block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "border",
-            "comment": " Separate given content block from others by adding a thin border.\n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "expand",
-            "comment": " Set given content block to expand or compress vertically as necessary.\n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "head",
-            "comment": " Head for title block. (This is called \"title\" in the Material Design\nSpecification.)\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "media",
-            "comment": " Generate a media block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "menu",
-            "comment": " Generate a menu block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "subhead",
-            "comment": " Sub-head for title block. (This is called \"subtitle\" in the Material Design\nSpecification.\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "text",
-            "comment": " Generate a supporting text block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "title",
-            "comment": " Generate a title block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "view",
-            "comment": " Construct a card.\n\nNotes. Google's MDL implementation sets `min-height: 200px`; this precludes a\nnumber of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),\nso the elm-mdl implementation sets `min-height: 0px`. Add `css \"min-height\" \"200px\"` as an option to `view`\nto adhere to the MDL implementation. \n",
-            "type": "List (Material.Options.Style a) -> List (Material.Card.Block a) -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Snackbar",
-        "comment": " From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):\n\n> The Material Design Lite (MDL) __snackbar__ component is a container used to\n> notify a user of an operation's status. It displays at the bottom of the\n> screen. A snackbar may contain an action button to execute a command for the\n> user. Msgs should undo the committed action or retry it if it failed for\n> example. Msgs should not be to close the snackbar. By not providing an\n> action, the snackbar becomes a __toast__ component.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#snackbar)\nfor a live demo. \n\n# Generating messages\n@docs Contents, toast, snackbar, add\n\n# Elm Architecture\n\n@docs Model, model\n@docs Msg, update\n@docs view\n\n# Render\nSnackbar does not have a `render` value. It must be used as a regular TEA\ncomponent. \n",
+        "name": "Material.Button",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):\n\n> The Material Design Lite (MDL) button component is an enhanced version of the\n> standard HTML `<button>` element. A button consists of text and/or an image that\n> clearly communicates what action will occur when the user clicks or touches it.\n> The MDL button component provides various types of buttons, and allows you to\n> add both display and click effects.\n>\n> Buttons are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the button component's Material\n> Design specifications page for details.\n>\n> The available button display types are flat (default), raised, fab, mini-fab,\n> and icon; any of these types may be plain (light gray) or colored, and may be\n> initially or programmatically disabled. The fab, mini-fab, and icon button\n> types typically use a small image as their caption rather than text.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#buttons) \nfor a live demo. \n\n# Render\n@docs render\n\n# Options\n\n@docs Property\n\n## Appearance\n@docs plain, colored, primary, accent\n@docs ripple, disabled\n  \n## Events\n@docs onClick\n\n## Type \nRefer to the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html)\nfor details about what type of buttons are appropriate for which situations.\n@docs flat, raised, fab, minifab, icon\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update, view\n\n\n",
         "aliases": [
           {
-            "name": "Contents",
-            "comment": " Defines a single snackbar message. Usually, you would use either `toast`\nor `snackbar` to construct `Contents`.\n\n - `message` defines the (text) message displayed\n - `action` defines a label for the action-button in the snackbar. If \n    no action is provided, the snackbar is a message-only toast. \n - `payload` defines the data returned by Snackbar actions for this message. \n   You will usually choose this to be an Msg of yours for later dispatch, \n   e.g., if your snackbar has an \"Undo\" action, you would store the\n   corresponding action as the payload. \n - `timeout` is the amount of time the snackbar should be visible\n - `fade` is the duration of the fading animation of the snackbar. \n\nIf you are satsified with the default timeout and fade, do not construct\nvalues of this type yourself; use `snackbar` and `toast` below instead. \n",
-            "args": [
-              "a"
-            ],
-            "type": "{ message : String , action : Maybe.Maybe String , payload : a , timeout : Time.Time , fade : Time.Time }"
-          },
-          {
             "name": "Model",
-            "comment": " Do not construct this yourself; use `model` below.\n",
-            "args": [
-              "a"
-            ],
-            "type": "{ queue : List (Material.Snackbar.Contents a) , state : Material.Snackbar.State a , seq : Int }"
-          }
-        ],
-        "types": [
+            "comment": " \n",
+            "args": [],
+            "type": "Material.Ripple.Model"
+          },
           {
             "name": "Msg",
-            "comment": " Elm Architecture Msg type.  \nThe following actions are observable to you: \n- `Begin a`. The snackbar is now displaying the message with payload `a`.\n- `End a`. The snackbar is done displaying the message with payload `a`.\n- `Click a`. The user clicked the action on the message with payload `a`.\nYou can consume these three actions without forwarding them to `Snackbar.update`.\n(You still need to forward other Snackbar actions.)\n",
+            "comment": " Component action.\n",
+            "args": [],
+            "type": "Material.Ripple.Msg"
+          },
+          {
+            "name": "Property",
+            "comment": " Properties for Button options.\n",
             "args": [
-              "a"
+              "m"
             ],
-            "cases": [
-              [
-                "Begin",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "End",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Click",
-                [
-                  "a"
-                ]
-              ]
-            ]
+            "type": "Material.Options.Property (Material.Button.Config m) m"
           }
         ],
+        "types": [],
         "values": [
           {
-            "name": "add",
-            "comment": " Add a message to the snackbar. If another message is currently displayed, \nthe provided message will be queued. You will be able to observe a `Begin` action\n(see `Msg` above) once the action begins displaying.\n\nYou must dispatch the returned effect for the Snackbar to begin displaying your\nmessage.\n",
-            "type": "Material.Snackbar.Contents a -> Material.Snackbar.Model a -> ( Material.Snackbar.Model a , Platform.Cmd.Cmd (Material.Snackbar.Msg a) )"
+            "name": "accent",
+            "comment": " Color button with accent color. \n",
+            "type": "Material.Button.Property m"
           },
           {
-            "name": "model",
-            "comment": " Default snackbar model.\n",
-            "type": "Material.Snackbar.Model a"
+            "name": "colored",
+            "comment": " Color button with primary or accent color depending on button type.\n",
+            "type": "Material.Button.Property m"
           },
           {
-            "name": "snackbar",
-            "comment": " Generate snackbar with given payload, message and label. \nTimeout is 2750ms, fade 250ms.\n",
-            "type": "a -> String -> String -> Material.Snackbar.Contents a"
+            "name": "defaultModel",
+            "comment": "\n",
+            "type": "Material.Button.Model"
           },
           {
-            "name": "toast",
-            "comment": " Generate toast with given payload and message. Timeout is 2750ms, fade 250ms.\n",
-            "type": "a -> String -> Material.Snackbar.Contents a"
+            "name": "disabled",
+            "comment": " Set button to \"disabled\".\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "fab",
+            "comment": " Floating Msg Button. From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons-floating-action-button.html):\n\n> Floating action buttons are used for a promoted action. They are distinguished\n> by a circled icon floating above the UI and have motion behaviors that include\n> morphing, launching, and a transferring anchor point.\n>\n> Floating action buttons come in two sizes:\n>\n>  - Default size: For most use cases\n>  - Mini size: Only used to create visual continuity with other screen elements\n\nThis constructor produces the default size, use `minifab` to get the mini-size.\n\nExample use (colored with a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    fabButton : Html\n    fabButton = fab addr model Colored [Icon.i \"add\"]\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "flat",
+            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-flat-buttons):\n\n> Flat buttons are printed on material. They do not lift, but fill with color on\n> press.\n>\n> Use flat buttons in the following locations:\n>\n>  - On toolbars\n>  - In dialogs, to unify the button action with the dialog content\n>  - Inline, with padding, so the user can easily find them\n\nExample use (uncolored flat button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    flatButton : Html\n    flatButton = Button.flat addr model Button.Plain [text \"Click me!\"]\n\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "icon",
+            "comment": " The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)\nalso offers an \"icon button\", which we\nre-implement here. See also\n[Material Design Specification](http://www.google.com/design/spec/components/buttons.html#buttons-toggle-buttons).\nExample use (no color, displaying a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    iconButton : Html\n    iconButton = icon addr model Plain [Icon.i \"add\"]\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "minifab",
+            "comment": " Mini-sized variant of a Floating Msg Button; refer to `fab`.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Add an `on \"click\"` handler to a button. \n",
+            "type": "m -> Material.Button.Property m"
+          },
+          {
+            "name": "plain",
+            "comment": " Plain, uncolored button (default). \n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "primary",
+            "comment": " Color button with primary color.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "raised",
+            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-raised-buttons):\n\n> Raised buttons add dimension to mostly flat layouts. They emphasize functions\n> on busy or wide spaces.\n>\n> Raised buttons behave like a piece of material resting on another sheet –\n> they lift and fill with color on press.\n\nExample use (colored raised button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    raisedButton : Html\n    raisedButton = Button.raised addr model Button.Colored [text \"Click me!\"]\n\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "render",
+            "comment": " Component render.  Below is an example, assuming boilerplate setup as\nindicated in `Material`, and a user message `PollMsg`.\n    Button.render Mdl [0] model.mdl\n      [ Button.raised\n      , Button.ripple\n      , Button.onClick PollMsg\n      ]\n      [ text \"Fetch new\"]\n",
+            "type": "(Parts.Msg (Material.Button.Container c) m -> m) -> Parts.Index -> Material.Button.Container c -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "ripple",
+            "comment": " Set button to ripple when clicked.\n",
+            "type": "Material.Button.Property m"
           },
           {
             "name": "update",
-            "comment": " Elm Architecture update function. \n",
-            "type": "Material.Snackbar.Msg a -> Material.Snackbar.Model a -> ( Material.Snackbar.Model a , Platform.Cmd.Cmd (Material.Snackbar.Msg a) )"
+            "comment": " Component update.\n",
+            "type": "Material.Button.Msg -> Material.Button.Model -> ( Material.Button.Model, Platform.Cmd.Cmd Material.Button.Msg )"
           },
           {
             "name": "view",
-            "comment": " Elm architecture update function. \n",
-            "type": "Material.Snackbar.Model a -> Html.Html (Material.Snackbar.Msg a)"
+            "comment": " Component view function.\n",
+            "type": "(Material.Button.Msg -> m) -> Material.Button.Model -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Icon",
+        "comment": " Convenience functions for producing Material Design Icons. Refer to\n[the Material Design Icons page](https://google.github.io/material-design-icons),\nor skip straight to the [Material Icons Library](https://design.google.com/icons/).\n\nThis implementation assumes that you have\n\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\"\n      rel=\"stylesheet\">\n\nor an equivalent means of loading the icons in your HTML header. \n(`Material.top` will do this for you.)\n\n@docs i, view, size18, size24, size36, size48, onClick, Property\n",
+        "aliases": [
+          {
+            "name": "Property",
+            "comment": " Type of Icon properties. (You are unlikely to need this.)\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Icon.Config m) m"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "i",
+            "comment": " Render a default-sized icon with no behaviour. The\n`String` argument must be the name of a [Material Icon](https://design.google.com/icons/)\n(replace spaces with underscores).\n\nI.e., to produce a default size (24xp) \"trending flat\" icon:\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.i \"trending_flat\"\n",
+            "type": "String -> Html.Html m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Add an `on \"click\"` handler to an Icon. (You may want to use a `Button`\nwith `Button.icon` instead.)\n",
+            "type": "m -> Material.Icon.Property m"
+          },
+          {
+            "name": "size18",
+            "comment": " Set icon to have size 18px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size24",
+            "comment": " Set icon to have size 24px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size36",
+            "comment": " Set icon to have size 36px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "size48",
+            "comment": " Set icon to have size 48px. \n",
+            "type": "Material.Icon.Property m"
+          },
+          {
+            "name": "view",
+            "comment": " View function for icons. Supply the\n[Material Icons Library](https://design.google.com/icons/) name as\nthe first argument (replace spaces with underscores). Set the size of the\nicon with the `size..` Styles (default is 24px).  Do not use this function to\nproduce clickable icons; use icon buttons in Material.Button.icon for that.\n\n    import Material.Icon as Icon\n\n    icon : Html m\n    icon = Icon.view \"trending_flat\" [Icon.size48] []\n",
+            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -20730,6 +20651,90 @@
             "name": "when",
             "comment": " Conditional option. When the guard evaluates to `true`, the option is\napplied; otherwise it is ignored. Use like this: \n\n    Button.disabled `when` not model.isRunning\n",
             "type": "Material.Options.Property c m -> Bool -> Material.Options.Property c m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Snackbar",
+        "comment": " From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):\n\n> The Material Design Lite (MDL) __snackbar__ component is a container used to\n> notify a user of an operation's status. It displays at the bottom of the\n> screen. A snackbar may contain an action button to execute a command for the\n> user. Msgs should undo the committed action or retry it if it failed for\n> example. Msgs should not be to close the snackbar. By not providing an\n> action, the snackbar becomes a __toast__ component.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#snackbar)\nfor a live demo. \n\n# Generating messages\n@docs Contents, toast, snackbar, add\n\n# Elm Architecture\n\n@docs Model, model\n@docs Msg, update\n@docs view\n\n# Render\nSnackbar does not have a `render` value. It must be used as a regular TEA\ncomponent. \n",
+        "aliases": [
+          {
+            "name": "Contents",
+            "comment": " Defines a single snackbar message. Usually, you would use either `toast`\nor `snackbar` to construct `Contents`.\n\n - `message` defines the (text) message displayed\n - `action` defines a label for the action-button in the snackbar. If \n    no action is provided, the snackbar is a message-only toast. \n - `payload` defines the data returned by Snackbar actions for this message. \n   You will usually choose this to be an Msg of yours for later dispatch, \n   e.g., if your snackbar has an \"Undo\" action, you would store the\n   corresponding action as the payload. \n - `timeout` is the amount of time the snackbar should be visible\n - `fade` is the duration of the fading animation of the snackbar. \n\nIf you are satsified with the default timeout and fade, do not construct\nvalues of this type yourself; use `snackbar` and `toast` below instead. \n",
+            "args": [
+              "a"
+            ],
+            "type": "{ message : String , action : Maybe.Maybe String , payload : a , timeout : Time.Time , fade : Time.Time }"
+          },
+          {
+            "name": "Model",
+            "comment": " Do not construct this yourself; use `model` below.\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ queue : List (Material.Snackbar.Contents a) , state : Material.Snackbar.State a , seq : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Elm Architecture Msg type.  \nThe following actions are observable to you: \n- `Begin a`. The snackbar is now displaying the message with payload `a`.\n- `End a`. The snackbar is done displaying the message with payload `a`.\n- `Click a`. The user clicked the action on the message with payload `a`.\nYou can consume these three actions without forwarding them to `Snackbar.update`.\n(You still need to forward other Snackbar actions.)\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Begin",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "End",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Click",
+                [
+                  "a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add a message to the snackbar. If another message is currently displayed, \nthe provided message will be queued. You will be able to observe a `Begin` action\n(see `Msg` above) once the action begins displaying.\n\nYou must dispatch the returned effect for the Snackbar to begin displaying your\nmessage.\n",
+            "type": "Material.Snackbar.Contents a -> Material.Snackbar.Model a -> ( Material.Snackbar.Model a , Platform.Cmd.Cmd (Material.Snackbar.Msg a) )"
+          },
+          {
+            "name": "model",
+            "comment": " Default snackbar model.\n",
+            "type": "Material.Snackbar.Model a"
+          },
+          {
+            "name": "snackbar",
+            "comment": " Generate snackbar with given payload, message and label. \nTimeout is 2750ms, fade 250ms.\n",
+            "type": "a -> String -> String -> Material.Snackbar.Contents a"
+          },
+          {
+            "name": "toast",
+            "comment": " Generate toast with given payload and message. Timeout is 2750ms, fade 250ms.\n",
+            "type": "a -> String -> Material.Snackbar.Contents a"
+          },
+          {
+            "name": "update",
+            "comment": " Elm Architecture update function. \n",
+            "type": "Material.Snackbar.Msg a -> Material.Snackbar.Model a -> ( Material.Snackbar.Model a , Platform.Cmd.Cmd (Material.Snackbar.Msg a) )"
+          },
+          {
+            "name": "view",
+            "comment": " Elm architecture update function. \n",
+            "type": "Material.Snackbar.Model a -> Html.Html (Material.Snackbar.Msg a)"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -22642,7 +22647,7 @@
   },
   {
     "name": "elm-community/elm-linear-algebra",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "docs": [
       {
         "name": "Math.Matrix4",
@@ -22773,269 +22778,7 @@
             "type": "Math.Matrix4.Mat4 -> Math.Matrix4.Mat4"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Math.Vector2",
-        "comment": " A high performance linear algebra library using native JS arrays. Geared\ntowards 3D graphics and use with `Graphics.WebGL`. All vectors are immutable.\n\n# Create\n@docs Vec2, vec2\n\n# Get and Set\nThe set functions create a new copy of the vector, updating a single field.\n\n@docs getX, getY, setX, setY\n\n# Operations\n@docs add, sub, negate, scale, dot, normalize, direction,\n      length, lengthSquared, distance, distanceSquared\n\n# Conversions\n@docs toTuple, fromTuple, toRecord, fromRecord\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Vec2",
-            "comment": " Two dimensional vector type ",
-            "args": [],
-            "cases": [
-              [
-                "Vec2",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "add",
-            "comment": " Vector addition: a + b ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "direction",
-            "comment": " The normalized direction from b to a: (a - b) / |a - b| ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "distance",
-            "comment": " The distance between two vectors. ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "distanceSquared",
-            "comment": " The square of the distance between two vectors. ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "dot",
-            "comment": " The dot product of a and b ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "fromRecord",
-            "comment": " Convert a record to a vector. ",
-            "type": "{ x : Float, y : Float } -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "fromTuple",
-            "comment": " Convert a tuple to a vector. ",
-            "type": "( Float, Float ) -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "getX",
-            "comment": " Extract the x component of a vector. ",
-            "type": "Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "getY",
-            "comment": " Extract the y component of a vector. ",
-            "type": "Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "length",
-            "comment": " The length of the given vector: |a| ",
-            "type": "Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "lengthSquared",
-            "comment": " The square of the length of the given vector: |a| * |a| ",
-            "type": "Math.Vector2.Vec2 -> Float"
-          },
-          {
-            "name": "negate",
-            "comment": " Vector negation: -a ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "normalize",
-            "comment": " A unit vector with the same direction as the given vector: a / |a| ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "scale",
-            "comment": " Multiply the vector by a scalar: s * v ",
-            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "setX",
-            "comment": " Update the x component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "setY",
-            "comment": " Update the y component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "sub",
-            "comment": " Vector subtraction: a - b ",
-            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
-          },
-          {
-            "name": "toRecord",
-            "comment": " Convert a vector to a record. ",
-            "type": "Math.Vector2.Vec2 -> { x : Float, y : Float }"
-          },
-          {
-            "name": "toTuple",
-            "comment": " Convert a vector to a tuple. ",
-            "type": "Math.Vector2.Vec2 -> ( Float, Float )"
-          },
-          {
-            "name": "vec2",
-            "comment": " Creates a new 2-element vector with the given values. ",
-            "type": "Float -> Float -> Math.Vector2.Vec2"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Math.Vector4",
-        "comment": " A high performance linear algebra library using native JS arrays. Geared\ntowards 3D graphics and use with `Graphics.WebGL`. All vectors are immutable.\n\n# Create\n@docs Vec4, vec4\n\n# Get and Set\nThe set functions create a new copy of the vector, updating a single field.\n\n@docs getX, getY, getZ, getW, setX, setY, setZ, setW\n\n# Operations\n@docs add, sub, negate, scale, dot, normalize, direction,\n      length, lengthSquared, distance, distanceSquared\n\n# Conversions\n@docs toTuple, fromTuple, toRecord, fromRecord\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Vec4",
-            "comment": " Four dimensional vector type ",
-            "args": [],
-            "cases": [
-              [
-                "Vec4",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "add",
-            "comment": " Vector addition: a + b ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "direction",
-            "comment": " The normalized direction from b to a: (a - b) / |a - b| ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "distance",
-            "comment": " The distance between two vectors. ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "distanceSquared",
-            "comment": " The square of the distance between two vectors. ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "dot",
-            "comment": " The dot product of a and b ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "fromRecord",
-            "comment": " Convert a record to a vector. ",
-            "type": "{ x : Float, y : Float, z : Float, w : Float } -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "fromTuple",
-            "comment": " Convert a tuple to a vector. ",
-            "type": "( Float, Float, Float, Float ) -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "getW",
-            "comment": " Extract the w component of a vector. ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "getX",
-            "comment": " Extract the x component of a vector. ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "getY",
-            "comment": " Extract the y component of a vector. ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "getZ",
-            "comment": " Extract the z component of a vector. ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "length",
-            "comment": " The length of the given vector: |a| ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "lengthSquared",
-            "comment": " The square of the length of the given vector: |a| * |a| ",
-            "type": "Math.Vector4.Vec4 -> Float"
-          },
-          {
-            "name": "negate",
-            "comment": " Vector negation: -a ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "normalize",
-            "comment": " A unit vector with the same direction as the given vector: a / |a| ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "scale",
-            "comment": " Multiply the vector by a scalar: s * v ",
-            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "setW",
-            "comment": " Update the w component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "setX",
-            "comment": " Update the x component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "setY",
-            "comment": " Update the y component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "setZ",
-            "comment": " Update the z component of a vector, returning a new vector. ",
-            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "sub",
-            "comment": " Vector subtraction: a - b ",
-            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
-          },
-          {
-            "name": "toRecord",
-            "comment": " Convert a vector to a record. ",
-            "type": "Math.Vector4.Vec4 -> { x : Float, y : Float, z : Float, w : Float }"
-          },
-          {
-            "name": "toTuple",
-            "comment": " Convert a vector to a tuple. ",
-            "type": "Math.Vector4.Vec4 -> ( Float, Float, Float, Float )"
-          },
-          {
-            "name": "vec4",
-            "comment": " Creates a new 4-element vector with the given x, y, z, and w values. ",
-            "type": "Float -> Float -> Float -> Float -> Math.Vector4.Vec4"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Math.Vector3",
@@ -23186,7 +22929,269 @@
             "type": "Float -> Float -> Float -> Math.Vector3.Vec3"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Math.Vector2",
+        "comment": " A high performance linear algebra library using native JS arrays. Geared\ntowards 3D graphics and use with `Graphics.WebGL`. All vectors are immutable.\n\n# Create\n@docs Vec2, vec2\n\n# Get and Set\nThe set functions create a new copy of the vector, updating a single field.\n\n@docs getX, getY, setX, setY\n\n# Operations\n@docs add, sub, negate, scale, dot, normalize, direction,\n      length, lengthSquared, distance, distanceSquared\n\n# Conversions\n@docs toTuple, fromTuple, toRecord, fromRecord\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Vec2",
+            "comment": " Two dimensional vector type ",
+            "args": [],
+            "cases": [
+              [
+                "Vec2",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Vector addition: a + b ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "direction",
+            "comment": " The normalized direction from b to a: (a - b) / |a - b| ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "distance",
+            "comment": " The distance between two vectors. ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "distanceSquared",
+            "comment": " The square of the distance between two vectors. ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "dot",
+            "comment": " The dot product of a and b ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "fromRecord",
+            "comment": " Convert a record to a vector. ",
+            "type": "{ x : Float, y : Float } -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "fromTuple",
+            "comment": " Convert a tuple to a vector. ",
+            "type": "( Float, Float ) -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "getX",
+            "comment": " Extract the x component of a vector. ",
+            "type": "Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "getY",
+            "comment": " Extract the y component of a vector. ",
+            "type": "Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "length",
+            "comment": " The length of the given vector: |a| ",
+            "type": "Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The square of the length of the given vector: |a| * |a| ",
+            "type": "Math.Vector2.Vec2 -> Float"
+          },
+          {
+            "name": "negate",
+            "comment": " Vector negation: -a ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "normalize",
+            "comment": " A unit vector with the same direction as the given vector: a / |a| ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "scale",
+            "comment": " Multiply the vector by a scalar: s * v ",
+            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "setX",
+            "comment": " Update the x component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "setY",
+            "comment": " Update the y component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "sub",
+            "comment": " Vector subtraction: a - b ",
+            "type": "Math.Vector2.Vec2 -> Math.Vector2.Vec2 -> Math.Vector2.Vec2"
+          },
+          {
+            "name": "toRecord",
+            "comment": " Convert a vector to a record. ",
+            "type": "Math.Vector2.Vec2 -> { x : Float, y : Float }"
+          },
+          {
+            "name": "toTuple",
+            "comment": " Convert a vector to a tuple. ",
+            "type": "Math.Vector2.Vec2 -> ( Float, Float )"
+          },
+          {
+            "name": "vec2",
+            "comment": " Creates a new 2-element vector with the given values. ",
+            "type": "Float -> Float -> Math.Vector2.Vec2"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Math.Vector4",
+        "comment": " A high performance linear algebra library using native JS arrays. Geared\ntowards 3D graphics and use with `Graphics.WebGL`. All vectors are immutable.\n\n# Create\n@docs Vec4, vec4\n\n# Get and Set\nThe set functions create a new copy of the vector, updating a single field.\n\n@docs getX, getY, getZ, getW, setX, setY, setZ, setW\n\n# Operations\n@docs add, sub, negate, scale, dot, normalize, direction,\n      length, lengthSquared, distance, distanceSquared\n\n# Conversions\n@docs toTuple, fromTuple, toRecord, fromRecord\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Vec4",
+            "comment": " Four dimensional vector type ",
+            "args": [],
+            "cases": [
+              [
+                "Vec4",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Vector addition: a + b ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "direction",
+            "comment": " The normalized direction from b to a: (a - b) / |a - b| ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "distance",
+            "comment": " The distance between two vectors. ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "distanceSquared",
+            "comment": " The square of the distance between two vectors. ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "dot",
+            "comment": " The dot product of a and b ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "fromRecord",
+            "comment": " Convert a record to a vector. ",
+            "type": "{ x : Float, y : Float, z : Float, w : Float } -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "fromTuple",
+            "comment": " Convert a tuple to a vector. ",
+            "type": "( Float, Float, Float, Float ) -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "getW",
+            "comment": " Extract the w component of a vector. ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "getX",
+            "comment": " Extract the x component of a vector. ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "getY",
+            "comment": " Extract the y component of a vector. ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "getZ",
+            "comment": " Extract the z component of a vector. ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "length",
+            "comment": " The length of the given vector: |a| ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The square of the length of the given vector: |a| * |a| ",
+            "type": "Math.Vector4.Vec4 -> Float"
+          },
+          {
+            "name": "negate",
+            "comment": " Vector negation: -a ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "normalize",
+            "comment": " A unit vector with the same direction as the given vector: a / |a| ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "scale",
+            "comment": " Multiply the vector by a scalar: s * v ",
+            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "setW",
+            "comment": " Update the w component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "setX",
+            "comment": " Update the x component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "setY",
+            "comment": " Update the y component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "setZ",
+            "comment": " Update the z component of a vector, returning a new vector. ",
+            "type": "Float -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "sub",
+            "comment": " Vector subtraction: a - b ",
+            "type": "Math.Vector4.Vec4 -> Math.Vector4.Vec4 -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "toRecord",
+            "comment": " Convert a vector to a record. ",
+            "type": "Math.Vector4.Vec4 -> { x : Float, y : Float, z : Float, w : Float }"
+          },
+          {
+            "name": "toTuple",
+            "comment": " Convert a vector to a tuple. ",
+            "type": "Math.Vector4.Vec4 -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "vec4",
+            "comment": " Creates a new 4-element vector with the given x, y, z, and w values. ",
+            "type": "Float -> Float -> Float -> Float -> Math.Vector4.Vec4"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -29615,104 +29620,340 @@
   },
   {
     "name": "elm-community/elm-test",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "docs": [
       {
-        "name": "ElmTest",
-        "comment": " A unit testing framework for Elm.\n\n# Tests\n@docs Test, test, defaultTest, equals, suite\n\n# Assertions\n@docs Assertion, assert, assertEqual, assertNotEqual, lazyAssert, assertionList, pass, fail\n\n# Run tests in-program\n@docs consoleRunner, stringRunner\n\n# Run tests as an app\n@docs runSuite, runSuiteHtml\n",
+        "name": "Test.Runner",
+        "comment": " A collection of functions used by authors of test runners. To run your\nown tests, you should use these runners; see the `README` for more information.\n\n## Runner\n\n@docs Runner, fromTest\n\n## Runnable\n\n@docs Runnable, run\n\n## Formatting\n\n@docs formatLabels\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Runnable",
+            "comment": " An unevaluated test. Run it with [`run`](#run) to evaluate it into a\nlist of `Expectation`s.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Runner",
+            "comment": " A structured test runner, incorporating:\n\n* The expectations to run\n* The hierarchy of description strings that describe the results\n",
+            "args": [],
+            "cases": [
+              [
+                "Runnable",
+                [
+                  "Test.Runner.Runnable"
+                ]
+              ],
+              [
+                "Labeled",
+                [
+                  "String",
+                  "Test.Runner.Runner"
+                ]
+              ],
+              [
+                "Batch",
+                [
+                  "List Test.Runner.Runner"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "formatLabels",
+            "comment": " A standard way to format descriptiona and test labels, to keep things\nconsistent across test runner implementations.\n\nThe HTML, Node, String, and Log runners all use this.\n\nWhat it does:\n\n* drop any labels that are empty strings\n* format the first label differently from the others\n* reverse the resulting list\n\n    [ \"the actual test that failed\"\n    , \"nested description failure\"\n    , \"top-level description failure\"\n    ]\n        |> formatLabels ((++) \"↓ \") ((++) \"✗ \")\n\n    {-\n        [ \"↓ top-level description failure\"\n        , \"↓ nested description failure\"\n        , \"✗ the actual test that failed\"\n        ]\n    -}\n\n",
+            "type": "(String -> format) -> (String -> format) -> List String -> List format"
+          },
+          {
+            "name": "fromTest",
+            "comment": " Convert a `Test` into a `Runner`.\n\nIn order to run any fuzz tests that the `Test` may have, it requires a default run count as well\nas an initial `Random.Pcg.Seed`. `100` is a good run count. To obtain a good random seed, pass a\nrandom 32-bit integer to `Random.Pcg.initialSeed`. You can obtain such an integer by running\n`Math.floor(Math.random()*0xFFFFFFFF)` in Node. It's typically fine to hard-code this value into\nyour Elm code; it's easy and makes your tests reproducible.\n",
+            "type": "Int -> Random.Pcg.Seed -> Test.Test -> Test.Runner.Runner"
+          },
+          {
+            "name": "run",
+            "comment": " Evaluate a [`Runnable`](#Runnable) to get a list of `Expectation`s.\n",
+            "type": "Test.Runner.Runnable -> List Expect.Expectation"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Test",
+        "comment": " A module containing functions for creating and managing tests.\n\n@docs Test, test\n\n## Organizing Tests\n\n@docs describe, concat, filter\n\n## Fuzz Testing\n\n@docs fuzz, fuzz2, fuzz3, fuzz4, fuzz5, fuzzWith, FuzzOptions\n",
         "aliases": [
           {
-            "name": "Assertion",
-            "comment": " The basic unit of testability.\n",
+            "name": "FuzzOptions",
+            "comment": " Options [`fuzzWith`](#fuzzWith) accepts. Currently there is only one but this\nAPI is designed so that it can accept more in the future.\n\n### `runs`\n\nThe number of times to run each fuzz test. (Default is 100.)\n\n    import Test exposing (fuzzWith)\n    import Fuzz exposing (list, int)\n    import Expect\n\n\n    fuzzWith { runs = 350 } (list int) \"List.length should always be positive\" <|\n        -- This anonymous function will be run 350 times, each time with a\n        -- randomly-generated fuzzList value. (It will always be a list of ints\n        -- because of (list int) above.)\n        \\fuzzList ->\n            fuzzList\n                |> List.length\n                |> Expect.atLeast 0\n",
             "args": [],
-            "type": "ElmTest.Assertion.Assertion"
+            "type": "{ runs : Int }"
           },
           {
             "name": "Test",
-            "comment": " The core unit representing a runnable test, or a group of tests called a\nsuite.\n",
+            "comment": " A test which has yet to be evaluated. When evaluated, it produces one\nor more [`Expectation`](../Expect#Expectation)s.\n\nSee [`test`](#test) and [`fuzz`](#fuzz) for some ways to create a `Test`.\n",
             "args": [],
-            "type": "ElmTest.Test.Test"
+            "type": "Test.Internal.Test"
           }
         ],
         "types": [],
         "values": [
           {
-            "name": "assert",
-            "comment": " Basic function to assert that some expression is True\n",
-            "type": "Bool -> ElmTest.Assertion"
+            "name": "concat",
+            "comment": " Run each of the given tests.\n\n    concat [ testDecoder, testSorting ]\n",
+            "type": "List Test.Test -> Test.Test"
           },
           {
-            "name": "assertEqual",
-            "comment": " Basic function to assert that two expressions are equal in value.\n",
-            "type": "a -> a -> ElmTest.Assertion"
+            "name": "describe",
+            "comment": " Apply a description to a list of tests.\n\n    import Test exposing (describe, test, fuzz)\n    import Fuzz expoing (int)\n    import Expect\n\n\n    describe \"List\"\n        [ describe \"reverse\"\n            [ test \"has no effect on an empty list\" <|\n                \\() ->\n                    List.reverse []\n                        |> Expect.toEqual []\n            , fuzz int \"has no effect on a one-item list\" <|\n                \\num ->\n                     List.reverse [ num ]\n                        |> Expect.toEqual [ num ]\n            ]\n        ]\n",
+            "type": "String -> List Test.Test -> Test.Test"
           },
           {
-            "name": "assertNotEqual",
-            "comment": " Basic function to assser that two expressions are not equal.\n",
-            "type": "a -> a -> ElmTest.Assertion"
+            "name": "filter",
+            "comment": " Remove any test unless its description satisfies the given predicate\nfunction. Nested descriptions added with [`describe`](#describe) are not considered.\n\n    describe \"String.reverse\"\n        [ test \"has no effect on a palindrome\" testGoesHere\n        , test \"reverses a known string\" anotherTest\n        , fuzz string \"restores the original string if you run it again\" oneMore\n        ]\n            |> Test.filter (String.contains \"original\")\n\n    -- only runs the final test\n\nYou can use this to focus on a specific test or two, silencing the failures of\ntests you don't want to work on yet, and then remove the call to `Test.filter`\nafter you're done working on the tests.\n",
+            "type": "(String -> Bool) -> Test.Test -> Test.Test"
           },
           {
-            "name": "assertionList",
-            "comment": " Given a list of values and another list of expected values, generates a\nlist of assertions that these values are equal.\n",
-            "type": "List a -> List a -> List ElmTest.Assertion"
+            "name": "fuzz",
+            "comment": " Take a function that produces a test, and calls it several (usually 100) times, using a randomly-generated input\nfrom a [`Fuzzer`](http://package.elm-lang.org/packages/elm-community/elm-test/latest/Fuzz) each time. This allows you to\ntest that a property that should always be true is indeed true under a wide variety of conditions. The function also\ntakes a string describing the test.\n\nThese are called \"[fuzz tests](https://en.wikipedia.org/wiki/Fuzz_testing)\" because of the randomness.\nYou may find them elsewhere called [property-based tests](http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html),\n[generative tests](http://www.pivotaltracker.com/community/tracker-blog/generative-testing), or\n[QuickCheck-style tests](https://en.wikipedia.org/wiki/QuickCheck).\n\n    import Test exposing (fuzz)\n    import Fuzz exposing (list, int)\n    import Expect\n\n\n    fuzz (list int) \"List.length should always be positive\" <|\n        -- This anonymous function will be run 100 times, each time with a\n        -- randomly-generated fuzzList value.\n        \\fuzzList ->\n            fuzzList\n                |> List.length\n                |> Expect.atLeast 0\n",
+            "type": "Fuzz.Fuzzer a -> String -> (a -> Expect.Expectation) -> Test.Test"
           },
           {
-            "name": "consoleRunner",
-            "comment": " Run a test or a test suite with `laszlopandy/elm-console` and return an\n`IO ()` action which outputs the test results to console.\n",
-            "type": "ElmTest.Test -> String"
+            "name": "fuzz2",
+            "comment": " Run a [fuzz test](#fuzz) using two random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple`](../Fuzz#tuple).\n\nSee [`fuzzWith`](#fuzzWith) for an example of writing this in tuple style.\n\n    import Test exposing (fuzz2)\n    import Fuzz exposing (list, int)\n\n\n    fuzz2 (list int) int \"List.reverse never influences List.member\" <|\n        \\nums target ->\n            List.member target (List.reverse nums)\n                |> Expect.toEqual (List.member target nums)\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> String -> (a -> b -> Expect.Expectation) -> Test.Test"
           },
           {
-            "name": "defaultTest",
-            "comment": " Create a `Test` with a default name automatically chosen based on the inputs.\nFor example, `defaultTest (assertEqual 5 5)` will be named \"5 == 5\".\n",
-            "type": "ElmTest.Assertion -> ElmTest.Test"
+            "name": "fuzz3",
+            "comment": " Run a [fuzz test](#fuzz) using three random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple3`](../Fuzz#tuple3).\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> String -> (a -> b -> c -> Expect.Expectation) -> Test.Test"
           },
           {
-            "name": "equals",
-            "comment": " Create a `Test` which asserts equality between two expressions.\nFor example, `(7 + 10) `equals` (1 + 16)` will create a `Test` which tests for\nequality between the statements `(7 + 10)` and `(1 + 16)`.\n",
-            "type": "a -> a -> ElmTest.Test"
+            "name": "fuzz4",
+            "comment": " Run a [fuzz test](#fuzz) using four random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple4`](../Fuzz#tuple4).\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> String -> (a -> b -> c -> d -> Expect.Expectation) -> Test.Test"
           },
           {
-            "name": "fail",
-            "comment": " Create an assertion that always fails, for reasons described by the given\nstring.\n",
-            "type": "String -> ElmTest.Assertion"
+            "name": "fuzz5",
+            "comment": " Run a [fuzz test](#fuzz) using four random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple5`](../Fuzz#tuple5).\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> Fuzz.Fuzzer e -> String -> (a -> b -> c -> d -> e -> Expect.Expectation) -> Test.Test"
           },
           {
-            "name": "lazyAssert",
-            "comment": " A lazy version of `assert`. Delays execution of the expression until tests\nare run.\n",
-            "type": "(() -> Bool) -> ElmTest.Assertion"
-          },
-          {
-            "name": "pass",
-            "comment": " An assertion that always passes. This is useful when you have test results\nfrom another library but want to use ElmTest runners.\n",
-            "type": "ElmTest.Assertion"
-          },
-          {
-            "name": "runSuite",
-            "comment": " run a suite as a program\n",
-            "type": "ElmTest.Test -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "runSuiteHtml",
-            "comment": " Run a suite as program with Html output.\n",
-            "type": "ElmTest.Test -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "stringRunner",
-            "comment": " Run a test or a test suite and return the results as a `String`. Mostly\nuseful if you want to implement a different type of output for your test\nresults. If you aren't sure whether or not to use this function, you should\nprobably use either `elementRunner` or `consoleRunner`.\n",
-            "type": "ElmTest.Test -> String"
-          },
-          {
-            "name": "suite",
-            "comment": " Convert a list of `Test`s to a test suite. Test suites are used to group\ntests into logical units, simplifying the management and running of many tests.\nTakes a name and a list of `Test`s. Since suites are also of type `Test`, they\ncan contain other suites, allowing for a more complex tree structure.\n",
-            "type": "String -> List ElmTest.Test -> ElmTest.Test"
+            "name": "fuzzWith",
+            "comment": " Run a [`fuzz`](#fuzz) test with the given [`FuzzOptions`](#FuzzOptions).\n\nNote that there is no `fuzzWith2`, but you can always pass more fuzz values in\nusing [`Fuzz.tuple`](../Fuzz#tuple), [`Fuzz.tuple3`](../Fuzz#tuple3),\nfor example like this:\n\n    import Test exposing (fuzzWith)\n    import Fuzz exposing (tuple, list, int)\n    import Expect\n\n\n    fuzzWith { runs = 4200 }\n        (tuple ( list int, int ))\n        \"List.reverse never influences List.member\" <|\n            \\(nums, target) ->\n                List.member target (List.reverse nums)\n                    |> Expect.toEqual (List.member target nums)\n",
+            "type": "Test.FuzzOptions -> Fuzz.Fuzzer a -> String -> (a -> Expect.Expectation) -> Test.Test"
           },
           {
             "name": "test",
-            "comment": " A basic function to create a `Test`. Takes a name and an `Assertion`.\n",
-            "type": "String -> ElmTest.Assertion -> ElmTest.Test"
+            "comment": " Return a [`Test`](#Test) that evaluates a single\n[`Expectation`](../Expect#Expectation).\n\n    import Test exposing (fuzz)\n    import Expect\n\n\n    test \"the empty list has 0 length\" <|\n        \\() ->\n            List.length []\n                |> Expect.toEqual 0\n",
+            "type": "String -> (() -> Expect.Expectation) -> Test.Test"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Expect",
+        "comment": " A library to create `Expectation`s, which describe a claim to be tested.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
+        "aliases": [
+          {
+            "name": "Expectation",
+            "comment": " The result of a single test run: either a [`pass`](#pass) or a\n[`fail`](#fail).\n",
+            "args": [],
+            "type": "Test.Expectation.Expectation"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "atLeast",
+            "comment": " Passes if the second argument is greater than or equal to the first.\n\n    Expect.atLeast -2 (List.length [])\n\n    -- Passes because (0 >= -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 >= 3) is False\n    List.length []\n        |> Expect.atLeast 3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atLeast\n    ╵\n    3\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "atMost",
+            "comment": " Passes if the second argument is less than or equal to the first.\n\n    Expect.atMost 1 (List.length [])\n\n    -- Passes because (0 <= 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 <= -3) is False\n    List.length []\n        |> Expect.atMost -3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atMost\n    ╵\n    -3\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "equal",
+            "comment": " Passes if the arguments are equal.\n\n    Expect.equal 0 (List.length [])\n\n    -- Passes because (0 == 0) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because the expected value didn't split the space in \"Betty Botter\"\n    String.split \" \" \"Betty Botter bought some butter\"\n        |> Expect.equal [ \"Betty Botter\", \"bought\", \"some\", \"butter\" ]\n\n    {-\n\n    [ \"Betty\", \"Botter\", \"bought\", \"some\", \"butter\" ]\n    ╷\n    │ Expect.equal\n    ╵\n    [ \"Betty Botter\", \"bought\", \"some\", \"butter\" ]\n\n    -}\n",
+            "type": "a -> a -> Expect.Expectation"
+          },
+          {
+            "name": "fail",
+            "comment": " Fails with the given message.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
+            "type": "String -> Expect.Expectation"
+          },
+          {
+            "name": "false",
+            "comment": " Passes if the argument is 'False', and otherwise fails with the given message.\n\n    Expect.false \"Expected the list not to be empty.\" (List.isEmpty [ 42 ])\n\n    -- Passes because (List.isEmpty [ 42 ]) is False\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (List.isEmpty []) is True\n    List.isEmpty []\n        |> Expect.false \"Expected the list not to be empty.\"\n\n    {-\n\n    Expected the list not to be empty.\n\n    -}\n",
+            "type": "String -> Bool -> Expect.Expectation"
+          },
+          {
+            "name": "getFailure",
+            "comment": " Return `Nothing` if the given [`Expectation`](#Expectation) is a [`pass`](#pass).\n\nIf it is a [`fail`](#fail), return a record containing the failure message,\nalong with the given inputs if it was a fuzz test. (If no inputs were involved,\nthe record's `given` field will be `\"\"`).\n\nFor example, if a fuzz test generates random integers, this might return\n`{ message = \"it was supposed to be positive\", given = \"-1\" }`\n\n    getFailure (Expect.fail \"this failed\")\n    -- Just { message = \"this failed\", given = \"\" }\n\n    getFailure (Expect.pass)\n    -- Nothing\n",
+            "type": "Expect.Expectation -> Maybe.Maybe { given : String, message : String }"
+          },
+          {
+            "name": "greaterThan",
+            "comment": " Passes if the second argument is greater than the first.\n\n    Expect.greaterThan -2 List.length []\n\n    -- Passes because (0 > -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 > 1) is False\n    List.length []\n        |> Expect.greaterThan 1\n\n    {-\n\n    0\n    ╷\n    │ Expect.greaterThan\n    ╵\n    1\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "lessThan",
+            "comment": " Passes if the second argument is less than the first.\n\n    Expect.lessThan 1 (List.length [])\n\n    -- Passes because (0 < 1) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 < -1) is False\n    List.length []\n        |> Expect.lessThan -1\n\n\n    {-\n\n    0\n    ╷\n    │ Expect.lessThan\n    ╵\n    -1\n\n    -}\n",
+            "type": "comparable -> comparable -> Expect.Expectation"
+          },
+          {
+            "name": "notEqual",
+            "comment": " Passes if the arguments are not equal.\n\n    -- Passes because (11 /= 100) is True\n    90 + 10\n        |> Expect.notEqual 11\n\n\n    -- Fails because (100 /= 100) is False\n    90 + 10\n        |> Expect.notEqual 100\n\n    {-\n\n    100\n    ╷\n    │ Expect.notEqual\n    ╵\n    100\n\n    -}\n",
+            "type": "a -> a -> Expect.Expectation"
+          },
+          {
+            "name": "onFail",
+            "comment": " If the given expectation fails, replace its failure message with a custom one.\n\n    \"something\"\n        |> Expect.equal \"something else\"\n        |> Expect.onFail \"thought those two strings would be the same\"\n",
+            "type": "String -> Expect.Expectation -> Expect.Expectation"
+          },
+          {
+            "name": "pass",
+            "comment": " Always passes.\n\n    import Json.Decode exposing (decodeString, int)\n    import Test exposing (test)\n    import Expect\n\n\n    test \"Json.Decode.int can decode the number 42.\" <|\n        \\() ->\n            case decodeString int \"42\" of\n                Ok _ ->\n                    Expect.pass\n\n                Err err ->\n                    Expect.fail err\n",
+            "type": "Expect.Expectation"
+          },
+          {
+            "name": "true",
+            "comment": " Passes if the argument is 'True', and otherwise fails with the given message.\n\n    Expect.true \"Expected the list to be empty.\" (List.isEmpty [])\n\n    -- Passes because (List.isEmpty []) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because List.isEmpty returns False, but we expect True.\n    List.isEmpty [ 42 ]\n        |> Expect.true \"Expected the list to be empty.\"\n\n    {-\n\n    Expected the list to be empty.\n\n    -}\n",
+            "type": "String -> Bool -> Expect.Expectation"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Fuzz",
+        "comment": " This is a library of *fuzzers* you can use to supply values to your fuzz\ntests. You can typically pick out which ones you need according to their types.\n\nA `Fuzzer a` knows how to create values of type `a` in two different ways. It\ncan create them randomly, so that your test's expectations are run against many\nvalues. Fuzzers will often generate edge cases likely to find bugs. If the\nfuzzer can make your test fail, it also knows how to \"shrink\" that failing input\ninto more minimal examples, some of which might also cause the tests to fail. In\nthis way, fuzzers can usually find the smallest or simplest input that\nreproduces a bug.\n\n## Common Fuzzers\n@docs bool, int, intRange, float, floatRange, percentage, string, maybe, result, list, array\n\n## Working with Fuzzers\n@docs Fuzzer, map, frequency, frequencyOrCrash\n\n## Tuple Fuzzers\nInstead of using a tuple, consider using `fuzzN`.\n@docs tuple, tuple3, tuple4, tuple5\n\n## Uncommon Fuzzers\n@docs custom, char, unit, order\n\n",
+        "aliases": [
+          {
+            "name": "Fuzzer",
+            "comment": " The representation of fuzzers is opaque. Conceptually, a `Fuzzer a`\nconsists of a way to randomly generate values of type `a`, and a way to shrink\nthose values.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Fuzz.Internal.Fuzzer a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "array",
+            "comment": " Given a fuzzer of a type, create a fuzzer of an array of that type.\nGenerates random arrays of varying length, favoring shorter arrays.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Array.Array a)"
+          },
+          {
+            "name": "bool",
+            "comment": " A fuzzer for bool values.\n",
+            "type": "Fuzz.Fuzzer Bool"
+          },
+          {
+            "name": "char",
+            "comment": " A fuzzer for char values. Generates random ascii chars disregarding the control\ncharacters.\n",
+            "type": "Fuzz.Fuzzer Char"
+          },
+          {
+            "name": "custom",
+            "comment": " Build a custom `Fuzzer a` by providing a `Generator a` and a `Shrinker a`.\nGenerators are defined by [`mgold/elm-random-pcg`](http://package.elm-lang.org/packages/mgold/elm-random-pcg/latest),\nwhich is not core's Random module but has a compatible interface. Shrinkers are\ndefined in [`elm-community/shrink`](http://package.elm-lang.org/packages/elm-community/shrink/latest/).\n\nHere is an example for a record:\n\n    import Random.Pcg as Random\n    import Shrink\n\n    type alias Position =\n        { x : Int, y : Int }\n\n\n    position : Fuzzer Position\n    position =\n        Fuzz.custom\n            (Random.map2 Position (Random.int -100 100) (Random.int -100 100))\n            (\\{ x, y } -> Shrink.map Position (Shrink.int x) `Shrink.andMap` (Shrink.int y))\n\nHere is an example for a custom union type:\n\n    type Question\n        = Name String\n        | Age Int\n\n\n    question =\n        let\n            generator =\n                Random.bool `Random.andThen` (\\b ->\n                    if b then\n                        Random.map Name string.generator\n                    else\n                        Random.map Age (Random.int 0 120)\n                 )\n\n            shrinker question =\n                case question of\n                    Name n ->\n                        Shrink.string n |> Shrink.map Name\n\n                    Age i ->\n                        Shrink.int i |> Shrink.map Age\n        in\n            Fuzz.custom generator shrinker\n",
+            "type": "Random.Pcg.Generator a -> Shrink.Shrinker a -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "float",
+            "comment": " A fuzzer for float values. It will never produce `NaN`, `Infinity`, or `-Infinity`.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "floatRange",
+            "comment": " A fuzzer for float values within between a given minimum and maximum\nvalue, inclusive. Shrunken values will also be within the range.\n",
+            "type": "Float -> Float -> Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "frequency",
+            "comment": " Create a new fuzzer by providing a list of fuzzers to pick from. Each fuzzer\nis associated with a `Float` weight; larger numbers mean the fuzzer in more\nlikely to get picked from.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.freuqency\n        [ ( 1, Fuzz.intRange -100 -1 )\n        , ( 3, Fuzz.intRange 1 100 )\n        ]\n\nThis function returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to an `Err`, with a `String` explaining what went wrong.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Result.Result String (Fuzz.Fuzzer a)"
+          },
+          {
+            "name": "frequencyOrCrash",
+            "comment": " Calls `frequency` and handles `Err` results by crashing with the given\nerror message.\n\nThis is useful in tests, where a crash will simply cause the test run to fail.\nThere is no danger to a production system there.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "int",
+            "comment": " A fuzzer for int values.\n",
+            "type": "Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "intRange",
+            "comment": " A fuzzer for int values within between a given minimum and maximum value,\ninclusive. Shrunken values will also be within the range.\n",
+            "type": "Int -> Int -> Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "list",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a list of that type.\nGenerates random lists of varying length, favoring shorter lists.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (List a)"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function over a fuzzer. Due to technical limitations, the resulting\nfuzzer performs no shrinking.\n",
+            "type": "(a -> b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "maybe",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a maybe for that type.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Maybe.Maybe a)"
+          },
+          {
+            "name": "order",
+            "comment": " A fuzzer for order values.\n",
+            "type": "Fuzz.Fuzzer Basics.Order"
+          },
+          {
+            "name": "percentage",
+            "comment": " A fuzzer for percentage values. Generates random floats between `0.0` and\n`1.0`. It will test zero and one about 10% of the time each.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "result",
+            "comment": " Given fuzzers for an error type and a success type, create a fuzzer for\na result.\n",
+            "type": "Fuzz.Fuzzer error -> Fuzz.Fuzzer value -> Fuzz.Fuzzer (Result.Result error value)"
+          },
+          {
+            "name": "string",
+            "comment": " A fuzzer for string values. Generates random printable ascii strings whose\nlength is between 0 and 10.\n",
+            "type": "Fuzz.Fuzzer String"
+          },
+          {
+            "name": "tuple",
+            "comment": " Turn a tuple of fuzzers into a fuzzer of tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b ) -> Fuzz.Fuzzer ( a, b )"
+          },
+          {
+            "name": "tuple3",
+            "comment": " Turn a 3-tuple of fuzzers into a fuzzer of 3-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c ) -> Fuzz.Fuzzer ( a, b, c )"
+          },
+          {
+            "name": "tuple4",
+            "comment": " Turn a 4-tuple of fuzzers into a fuzzer of 4-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c, Fuzz.Fuzzer d ) -> Fuzz.Fuzzer ( a, b, c, d )"
+          },
+          {
+            "name": "tuple5",
+            "comment": " Turn a 5-tuple of fuzzers into a fuzzer of 5-tuples.\n",
+            "type": "( Fuzz.Fuzzer a , Fuzz.Fuzzer b , Fuzz.Fuzzer c , Fuzz.Fuzzer d , Fuzz.Fuzzer e ) -> Fuzz.Fuzzer ( a, b, c, d, e )"
+          },
+          {
+            "name": "unit",
+            "comment": " A fuzzer for the unit value. Unit is a type with only one value, commonly\nused as a placeholder.\n",
+            "type": "Fuzz.Fuzzer ()"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -57952,6 +58193,67 @@
     ]
   },
   {
+    "name": "overminddl1/program-ex",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "ProgramEx",
+        "comment": "\n@docs programExBuilderWithFlags, programExBuilderWithFlagsAndNavigation\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "programExBuilderWithFlags",
+            "comment": "\nPass in the usual callbacks and it returns a built callback set.\n\nThis can be used via Html.App.programWithFlags like:\n\n    Html.App.programWithFlags\n      ( programExBuilderWithFlags\n        { init=init\n        , filter=filter\n        , update=update\n        , view=view\n        , subscriptions=subscriptions\n        }\n      )\n",
+            "type": "{ init : flags -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg } -> { init : flags -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg }"
+          },
+          {
+            "name": "programExBuilderWithFlagsAndNavigation",
+            "comment": "\nPass in the usual callbacks and it returns a built callback set.\n\nThis can be used via Html.App.programWithFlags like:\n\n    Navigation.programWithFlags urlParser\n      { programExBuilderWithFlagsAndNavigation\n        { init=init\n        , filter=filter\n        , update=update\n        , view=view\n        , subscriptions=subscriptions\n        , urlUpdate=urlUpdate\n        }\n      }\n",
+            "type": "{ init : flags -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg , urlUpdate : data -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) } -> { init : flags -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg , urlUpdate : data -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) }"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "ProgramEx.States",
+        "comment": "\n@docs States, default, doUpdate, doSubscriptions, doView\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "States",
+            "comment": " Holds the State information\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "default",
+            "comment": " Gets the default state set, everything is allowed\n",
+            "type": "ProgramEx.States.States"
+          },
+          {
+            "name": "doSubscriptions",
+            "comment": " Gets from the state if the subscriptions callback should be run\n",
+            "type": "ProgramEx.States.States -> Bool"
+          },
+          {
+            "name": "doUpdate",
+            "comment": " Gets from the state if the update callback should be run\n",
+            "type": "ProgramEx.States.States -> Bool"
+          },
+          {
+            "name": "doView",
+            "comment": " Gets from the state if the view callback should be run\n",
+            "type": "ProgramEx.States.States -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "paramanders/elm-hexagon",
     "version": "2.0.0",
     "docs": [
@@ -61712,23 +62014,18 @@
   },
   {
     "name": "project-fuzzball/node",
-    "version": "3.1.0",
+    "version": "4.0.0",
     "docs": [
       {
-        "name": "Test.Runner.Node",
-        "comment": " # Node Runner\n\nRuns a test and outputs its results to the console. Exit code is 0 if tests\npassed and 1 if any failed.\n\n@docs run, runWithOptions\n",
+        "name": "Deprecated",
+        "comment": " DEPRECATED - This has been replaced by rtfeldman/node-test-runner\n@docs deprecated\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "run",
-            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
-            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "runWithOptions",
-            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
-            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+            "name": "deprecated",
+            "comment": " DEPRECATED - This has been replaced by rtfeldman/node-test-runner\n",
+            "type": "String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -61819,37 +62116,18 @@
   },
   {
     "name": "project-fuzzball/test-runner",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "docs": [
       {
-        "name": "Test.Runner.Html",
-        "comment": " HTML Runner\n\nRuns tests in a browser and reports the results in the DOM. You can bring up\none of these tests in elm-reactor to have it run and show outputs.\n\n@docs run, runWithOptions\n\n",
+        "name": "Deprecated",
+        "comment": " DEPRECATED - This has been replaced by rtfeldman/html-test-runner\n@docs deprecated\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "run",
-            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
-            "type": "Test.Test -> Platform.Program Basics.Never"
-          },
-          {
-            "name": "runWithOptions",
-            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
-            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Test -> Platform.Program Basics.Never"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Test.Runner.Html.App",
-        "comment": " Test runner for a Html.App\n\n@docs run\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "run",
-            "comment": " Run the tests and render the results as a Web page.\n",
-            "type": "Test.Runner.Html.App.RunnerOptions -> Test.Runner.Html.App.AppOptions msg model -> Test.Test -> Platform.Program Basics.Never"
+            "name": "deprecated",
+            "comment": " DEPRECATED - This has been replaced by rtfeldman/html-test-runner\n",
+            "type": "String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -66985,6 +67263,45 @@
     ]
   },
   {
+    "name": "rtfeldman/html-test-runner",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Html",
+        "comment": " HTML Runner\n\nRuns tests in a browser and reports the results in the DOM. You can bring up\none of these tests in elm-reactor to have it run and show outputs.\n\n@docs run, runWithOptions\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
+            "type": "Test.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
+            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Test.Runner.Html.App",
+        "comment": " Test runner for a Html.App\n\n@docs run\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the tests and render the results as a Web page.\n",
+            "type": "Test.Runner.Html.App.RunnerOptions -> Test.Runner.Html.App.AppOptions msg model -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "rtfeldman/legacy-elm-test",
     "version": "1.0.0",
     "docs": [
@@ -67093,6 +67410,31 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "rtfeldman/node-test-runner",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Test.Runner.Node",
+        "comment": " # Node Runner\n\nRuns a test and outputs its results to the console. Exit code is 0 if tests\npassed and 1 if any failed.\n\n@docs run, runWithOptions\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "run",
+            "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
+            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "runWithOptions",
+            "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
+            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
