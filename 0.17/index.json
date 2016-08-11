@@ -7894,8 +7894,144 @@
   },
   {
     "name": "JeremyBellows/elm-bootstrapify",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "docs": [
+      {
+        "name": "Bootstrap.Page",
+        "comment": " Bootstrap page functions\n\n# Page\n@docs pullRight, pageHeader, jumbotron\n\n# Automation\n@docs automationTag\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "automationTag",
+            "comment": " This is for being able to write UI Automation selectors efficiently\n\n    button [ automationTag \"btn\" \"submit\" ] []\n",
+            "type": "String -> String -> Html.Attribute msg"
+          },
+          {
+            "name": "jumbotron",
+            "comment": " Generates a jumbotron html element\n\n    jumbotron [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "pageHeader",
+            "comment": " Generates a page header html element\n\n    pageHeader [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "pullRight",
+            "comment": " Generates a div with the pull-right class\n\n    pullRight [] []\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.Forms",
+        "comment": " Bootstrap functions pertaining to forms\n\n# Forms\n@docs FormAlignmentOption, form, formGroup, FormGroupOption, formLabel, formInput, formTextArea\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "FormAlignmentOption",
+            "comment": " Options for Form Alignment\n\n    case formAlignmentOption of\n      FormDefault -> \"\"\n      FormHorizontal -> \"form-horizontal\"\n      FormInline -> \"form-inline\"\n",
+            "args": [],
+            "cases": [
+              [
+                "FormDefault",
+                []
+              ],
+              [
+                "FormHorizontal",
+                []
+              ],
+              [
+                "FormInline",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "FormGroupOption",
+            "comment": "\n  A set of different Form group options\n",
+            "args": [],
+            "cases": [
+              [
+                "FormGroupDefault",
+                []
+              ],
+              [
+                "FormGroupSmall",
+                []
+              ],
+              [
+                "FormGroupLarge",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "form",
+            "comment": " Generates a form with the supplied alignment\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n     ]\n",
+            "type": "Bootstrap.Forms.FormAlignmentOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formGroup",
+            "comment": " Generates a formGroup html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n        ]\n     ]\n",
+            "type": "Bootstrap.Forms.FormGroupOption -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formInput",
+            "comment": " Generates a formInput html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formInput [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formLabel",
+            "comment": " Generates a formLabel html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formLabel [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "formTextArea",
+            "comment": " Generates a form text area html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formTextArea [] []\n        ]\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.Wells",
+        "comment": " Functions for generating bootstrap wells\n\n# Wells\n@docs WellOption, well\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "WellOption",
+            "comment": "\n  Different Size Wells!\n",
+            "args": [],
+            "cases": [
+              [
+                "WellNormal",
+                []
+              ],
+              [
+                "WellSmall",
+                []
+              ],
+              [
+                "WellLarge",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "well",
+            "comment": " Generates a well html element\n\n    well WellLarge [] []\n",
+            "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
       {
         "name": "Bootstrap.Panels",
         "comment": " Functions for generating bootstrap panels\n\n# Panels\n@docs PanelType, panelGroup, panel, panelHeading, panelBody\n\n# Panel Headings\n@docs PanelHeadingTitleType, panelHeading\n\n",
@@ -8001,25 +8137,77 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Bootstrap.Wells",
-        "comment": " Functions for generating bootstrap wells\n\n# Wells\n@docs WellOption, well\n\n",
+        "name": "Bootstrap.Buttons",
+        "comment": " Functions for bootstrap buttons\n\n# Buttons\n@docs ButtonOption, ButtonSizeModifier, ButtonModifier, btn\n\n",
         "aliases": [],
         "types": [
           {
-            "name": "WellOption",
-            "comment": "\n  Different Size Wells!\n",
+            "name": "ButtonModifier",
+            "comment": "\n  Modifiers for button attributes\n",
             "args": [],
             "cases": [
               [
-                "WellNormal",
+                "BtnCollapse",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "ButtonOption",
+            "comment": "\n  A set of options for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnDefault",
                 []
               ],
               [
-                "WellSmall",
+                "BtnPrimary",
                 []
               ],
               [
-                "WellLarge",
+                "BtnSuccess",
+                []
+              ],
+              [
+                "BtnWarning",
+                []
+              ],
+              [
+                "BtnInfo",
+                []
+              ],
+              [
+                "BtnDanger",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "ButtonSizeModifier",
+            "comment": "\n  A set of sizes for rendering a btn\n",
+            "args": [],
+            "cases": [
+              [
+                "BtnLarge",
+                []
+              ],
+              [
+                "BtnBlock",
+                []
+              ],
+              [
+                "BtnSmall",
+                []
+              ],
+              [
+                "BtnExtraSmall",
+                []
+              ],
+              [
+                "NavbarBtn",
                 []
               ]
             ]
@@ -8027,38 +8215,136 @@
         ],
         "values": [
           {
-            "name": "well",
-            "comment": " Generates a well html element\n\n    well WellLarge [] []\n",
-            "type": "Bootstrap.Wells.WellOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "btn",
+            "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [ BtnCollapse \"#idOfElement, .orClass\" ] [] [ text \"Hello world!\" ]\n",
+            "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List Bootstrap.Buttons.ButtonModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Bootstrap.Page",
-        "comment": " Bootstrap page functions\n\n# Page\n@docs pullRight, pageHeader, jumbotron\n\n# Automation\n@docs automationTag\n\n",
+        "name": "Bootstrap.ListGroup",
+        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "automationTag",
-            "comment": " This is for being able to write UI Automation selectors efficiently\n\n    button [ automationTag \"btn\" \"submit\" ] []\n",
-            "type": "String -> String -> Html.Attribute msg"
+            "name": "listGroup",
+            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "jumbotron",
-            "comment": " Generates a jumbotron html element\n\n    jumbotron [] []\n",
+            "name": "listGroupItem",
+            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bootstrap.Navbar",
+        "comment": " Functions for generating Bootstrap navbar elements\n\n# Navbar\n@docs NavbarType, navbar, navbarHeader, navbarBrand\n\n# Navbar List\n@docs NavbarListAdjustment, NavbarPillsOptions, NavbarOptions, navbarList\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "NavbarListAdjustment",
+            "comment": " A set of options for adjusting a navbar list\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarDefault",
+                []
+              ],
+              [
+                "NavbarRight",
+                []
+              ],
+              [
+                "NavbarLeft",
+                []
+              ],
+              [
+                "NavbarJustified",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarOptions",
+            "comment": "\n  A set of Navbar Options\n",
+            "args": [],
+            "cases": [
+              [
+                "NavbarNav",
+                []
+              ],
+              [
+                "NavbarTabs",
+                []
+              ],
+              [
+                "NavbarPills",
+                [
+                  "Bootstrap.Navbar.NavbarPillsOptions"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "NavbarPillsOptions",
+            "comment": "\n  Option for Navbar Pills\n",
+            "args": [],
+            "cases": [
+              [
+                "PillsNotStacked",
+                []
+              ],
+              [
+                "PillsStacked",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "NavbarType",
+            "comment": "\n  Different types of Navbar styles\n",
+            "args": [],
+            "cases": [
+              [
+                "DefaultNavbar",
+                []
+              ],
+              [
+                "InverseNavbar",
+                []
+              ],
+              [
+                "FormNavbar",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "navbar",
+            "comment": " Generates a navbar html element\n\n    navbar DefaultNavbar [] []\n",
+            "type": "Bootstrap.Navbar.NavbarType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "navbarBrand",
+            "comment": " Generates a navbarBrand html element\n\n    navbarBrand [] []\n",
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "pageHeader",
-            "comment": " Generates a page header html element\n\n    pageHeader [] []\n",
+            "name": "navbarHeader",
+            "comment": " Generates a navbar header html element\n\n    navbarHeader [] []\n",
             "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "pullRight",
-            "comment": " Generates a div with the pull-right class\n\n    pullRight [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "navbarList",
+            "comment": " Generates a navbarList html element\n\n    navbarList (NavbarPills PillsStacked) NavbarRight []\n     [\n     ]\n",
+            "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -8178,276 +8464,263 @@
           }
         ],
         "generated-with-elm-version": "0.17.1"
-      },
+      }
+    ]
+  },
+  {
+    "name": "Kwarrtz/render",
+    "version": "1.0.0",
+    "docs": [
       {
-        "name": "Bootstrap.Forms",
-        "comment": " Bootstrap functions pertaining to forms\n\n# Forms\n@docs FormAlignmentOption, form, formGroup, FormGroupOption, formLabel, formInput, formTextArea\n\n",
-        "aliases": [],
+        "name": "Graphics.Render",
+        "comment": " This library provides a toolkit for rendering and manipulating \ngraphics primitives such as lines, polygons, text, images, etc.\nIt is intended primarily for projects that are too complex for \nthe manual manipulation of  an SVG or HTML5 canvas element, but too\nsimple for a fully blown graphics engine such as WebGL (a motivating\nexample would be a simple 2D game).\n\nIn theory, the structure of this library allows for multiple easily\ninterchangable backend rendering targets (i.e. SVG, HTML5 canvas), but\nthe only backend supported at present is SVG.\n\n# Forms\n@docs Form, Point\n\n# Shapes\n@docs Shape, polygon, rectangle, ellipse, circle\n\n# Lines\n@docs Line, polyline, segment\n\n# Images\n@docs image\n\n# Rendering\n@docs svg\n\n# Grouping\n@docs group\n\n# Turning Things into Forms\n\n## Shapes\n@docs solidFill, solidFillWithBorder, textureFill, textureFillWithBorder\n\n## Lines\n@docs solid, dashed, dotted\n\n## Text\n@docs plain, bold, italic, underlined\n\n## HTML\n@docs html\n\n# Modifying Forms\n@docs position, angle, size, opacity, move, rotate, scale\n\n# Custom Styling\n\n## Shapes\n@docs shape, ShapeStyle, FillStyle\n\n## Lines\n@docs line, LineStyle, LineCap, LineJoin\n\n## Text\n@docs text, TextStyle\n",
+        "aliases": [
+          {
+            "name": "Form",
+            "comment": " Anything that can be rendered on the screen. A `Form` could be a \nred circle, a line of text, or an arbitrary HTML element.\n\n    redCircle : Form\n    redCircle = circle 10 |> solidFill (rgb 255 0 0) |> position (-20,0)\n\n    blueCircle : Form\n    blueCircle = circle 10 |> solidFill (rgb 0 0 255)\n\n    circles : Form\n    circles = group [redCircle, blueCircle]\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ x : Float , y : Float , theta : Float , scale : Float , alpha : Float , form : Graphics.Render.BasicForm a }"
+          },
+          {
+            "name": "LineStyle",
+            "comment": " Speficies the styling (color, width, dashing, etc.) of a line.\n\n    -- defines a red, dashed line with a width of 5px\n    { color = rgb 255 20 20\n    , width = 5\n    , cap = Flat\n    , join = Sharp\n    , dashing = [8,4]\n    , dashOffset = 0\n    }\n",
+            "args": [],
+            "type": "{ color : Color.Color , width : Float , cap : Graphics.Render.LineCap , join : Graphics.Render.LineJoin , dashing : List Int , dashOffset : Int }"
+          },
+          {
+            "name": "Point",
+            "comment": " A 2-tuple of `Float`s representing a 2D point.\n",
+            "args": [],
+            "type": "( Float, Float )"
+          },
+          {
+            "name": "ShapeStyle",
+            "comment": " Specifies the styling (color, border, etc.) of a shape.\n",
+            "args": [],
+            "type": "{ fill : Graphics.Render.FillStyle , border : Graphics.Render.LineStyle }"
+          },
+          {
+            "name": "TextStyle",
+            "comment": " Specifies the styling (color, font, weight, etc.) of text\n",
+            "args": [],
+            "type": "{ color : Color.Color , fontSize : Int , fontFamily : String , italic : Bool , bold : Bool , underlined : Bool }"
+          }
+        ],
         "types": [
           {
-            "name": "FormAlignmentOption",
-            "comment": " Options for Form Alignment\n\n    case formAlignmentOption of\n      FormDefault -> \"\"\n      FormHorizontal -> \"form-horizontal\"\n      FormInline -> \"form-inline\"\n",
+            "name": "FillStyle",
+            "comment": " Describes the fill texture of a shape. It can be a solid color,\ngradient, or tiled texture.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Line",
+            "comment": " A segment of a line or curve. Only describes the shape of the line.\nPosition, color, width, etc. are all specified later.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "LineCap",
+            "comment": " Describes the cap style of a line. `Flat` capped lines have\nno endings, `Square` capped lines have flat endings that extend\nslightly past the end of the line, and `Round` capped lines have\nhemispherical endings.\n",
             "args": [],
             "cases": [
               [
-                "FormDefault",
+                "Round",
                 []
               ],
               [
-                "FormHorizontal",
+                "Square",
                 []
               ],
               [
-                "FormInline",
+                "Flat",
                 []
               ]
             ]
           },
           {
-            "name": "FormGroupOption",
-            "comment": "\n  A set of different Form group options\n",
+            "name": "LineJoin",
+            "comment": " Describes the join style of a line. \n",
             "args": [],
             "cases": [
               [
-                "FormGroupDefault",
+                "Smooth",
                 []
               ],
               [
-                "FormGroupSmall",
+                "Sharp",
                 []
               ],
               [
-                "FormGroupLarge",
+                "Bevel",
                 []
               ]
             ]
+          },
+          {
+            "name": "Shape",
+            "comment": " A polygon or an ellipse. Only describes the size and shape of the figure.\nPosition, color, width, etc. are all specified later.\n",
+            "args": [],
+            "cases": []
           }
         ],
         "values": [
           {
-            "name": "form",
-            "comment": " Generates a form with the supplied alignment\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n     ]\n",
-            "type": "Bootstrap.Forms.FormAlignmentOption -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "angle",
+            "comment": " Sets the angle of a `Form`. The argument is in radians.\n",
+            "type": "Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
           },
           {
-            "name": "formGroup",
-            "comment": " Generates a formGroup html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n        ]\n     ]\n",
-            "type": "Bootstrap.Forms.FormGroupOption -> List (Html.Html msg) -> Html.Html msg"
+            "name": "bold",
+            "comment": " A line of bold text. The arguments specify the text's\nfont size, family and color respectively.\n",
+            "type": "Int -> String -> Color.Color -> String -> Graphics.Render.Form msg"
           },
           {
-            "name": "formInput",
-            "comment": " Generates a formInput html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formInput [] []\n        ]\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "circle",
+            "comment": " A circle.\n",
+            "type": "Float -> Graphics.Render.Shape"
           },
           {
-            "name": "formLabel",
-            "comment": " Generates a formLabel html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formLabel [] []\n        ]\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "dashed",
+            "comment": " The same as `solid`, except the line is dashed.\n",
+            "type": "Float -> Color.Color -> Graphics.Render.Line -> Graphics.Render.Form msg"
           },
           {
-            "name": "formTextArea",
-            "comment": " Generates a form text area html element\n\n    form FormDefault [ onSubmit SomeMsg ]\n     [\n      formGroup FormGroupDefault\n        [\n         formTextArea [] []\n        ]\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Bootstrap.ListGroup",
-        "comment": " Functions for generating List group html\n\n# List Group\n@docs listGroup, listGroupItem\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "listGroup",
-            "comment": " Generates a list group html element\n\n    listGroup [] []\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
+            "name": "dotted",
+            "comment": " The same as `solid`, except the line is dotted.\n",
+            "type": "Float -> Color.Color -> Graphics.Render.Line -> Graphics.Render.Form msg"
           },
           {
-            "name": "listGroupItem",
-            "comment": " Generates a list group item html element\n\n    listGroup []\n     [\n      listGroupItem [] []\n     ]\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Bootstrap.Buttons",
-        "comment": " Functions for bootstrap buttons\n\n# Buttons\n@docs ButtonOption, ButtonSizeModifier, btn\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "ButtonOption",
-            "comment": "\n  A set of options for rendering a btn\n",
-            "args": [],
-            "cases": [
-              [
-                "BtnDefault",
-                []
-              ],
-              [
-                "BtnPrimary",
-                []
-              ],
-              [
-                "BtnSuccess",
-                []
-              ],
-              [
-                "BtnWarning",
-                []
-              ],
-              [
-                "BtnInfo",
-                []
-              ],
-              [
-                "BtnDanger",
-                []
-              ]
-            ]
+            "name": "ellipse",
+            "comment": " An ellipse. The arugments specify the vertical and horizontal radii,\nrespectively.\n",
+            "type": "Float -> Float -> Graphics.Render.Shape"
           },
           {
-            "name": "ButtonSizeModifier",
-            "comment": "\n  A set of sizes for rendering a btn\n",
-            "args": [],
-            "cases": [
-              [
-                "BtnLarge",
-                []
-              ],
-              [
-                "BtnBlock",
-                []
-              ],
-              [
-                "BtnSmall",
-                []
-              ],
-              [
-                "BtnExtraSmall",
-                []
-              ],
-              [
-                "NavbarBtn",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "btn",
-            "comment": " Generates a button html element\n\n    btn BtnPrimary [ BtnBlock, BtnLarge ] [] [ text \"Hello world!\" ]\n",
-            "type": "Bootstrap.Buttons.ButtonOption -> List Bootstrap.Buttons.ButtonSizeModifier -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Bootstrap.Navbar",
-        "comment": " Functions for generating Bootstrap navbar elements\n\n# Navbar\n@docs NavbarType, navbar, navbarHeader, navbarBrand\n\n# Navbar List\n@docs NavbarListAdjustment, NavbarPillsOptions, NavbarOptions, navbarList\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "NavbarListAdjustment",
-            "comment": " A set of options for adjusting a navbar list\n",
-            "args": [],
-            "cases": [
-              [
-                "NavbarDefault",
-                []
-              ],
-              [
-                "NavbarRight",
-                []
-              ],
-              [
-                "NavbarLeft",
-                []
-              ],
-              [
-                "NavbarJustified",
-                []
-              ]
-            ]
+            "name": "group",
+            "comment": " Takes a list of `Form`s and combines them into a single\n`Form`.\n",
+            "type": "List (Graphics.Render.Form msg) -> Graphics.Render.Form msg"
           },
           {
-            "name": "NavbarOptions",
-            "comment": "\n  A set of Navbar Options\n",
-            "args": [],
-            "cases": [
-              [
-                "NavbarNav",
-                []
-              ],
-              [
-                "NavbarTabs",
-                []
-              ],
-              [
-                "NavbarPills",
-                [
-                  "Bootstrap.Navbar.NavbarPillsOptions"
-                ]
-              ]
-            ]
+            "name": "html",
+            "comment": " Creates a `Form` from an arbitrary `Html` element. The\nresulting form is subject to all of the regular manipulations.\nNote that if you are compiling to SVG, then this functionality\nis not supported in Internet Explorer.\n",
+            "type": "Html.Html msg -> Graphics.Render.Form msg"
           },
           {
-            "name": "NavbarPillsOptions",
-            "comment": "\n  Option for Navbar Pills\n",
-            "args": [],
-            "cases": [
-              [
-                "PillsNotStacked",
-                []
-              ],
-              [
-                "PillsStacked",
-                []
-              ]
-            ]
+            "name": "image",
+            "comment": " An image. The arguments specify the image's width, height and url.\n",
+            "type": "Float -> Float -> String -> Graphics.Render.Form msg"
           },
           {
-            "name": "NavbarType",
-            "comment": "\n  Different types of Navbar styles\n",
-            "args": [],
-            "cases": [
-              [
-                "DefaultNavbar",
-                []
-              ],
-              [
-                "InverseNavbar",
-                []
-              ],
-              [
-                "FormNavbar",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "navbar",
-            "comment": " Generates a navbar html element\n\n    navbar DefaultNavbar [] []\n",
-            "type": "Bootstrap.Navbar.NavbarType -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "italic",
+            "comment": " A line of italic text. The arguments specify the text's\nfont size, family and color respectively.\n",
+            "type": "Int -> String -> Color.Color -> String -> Graphics.Render.Form msg"
           },
           {
-            "name": "navbarBrand",
-            "comment": " Generates a navbarBrand html element\n\n    navbarBrand [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "line",
+            "comment": " Similar to the shape function, line allows you\nto apply any LineStyle to a Line when converting it\nto a form, giving you more fine grained control than\nother similar functions.\n",
+            "type": "Graphics.Render.Line -> Graphics.Render.LineStyle -> Graphics.Render.Form msg"
           },
           {
-            "name": "navbarHeader",
-            "comment": " Generates a navbar header html element\n\n    navbarHeader [] []\n",
-            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "move",
+            "comment": " Modifies the position of a `Form`.\n",
+            "type": "Float -> Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
           },
           {
-            "name": "navbarList",
-            "comment": " Generates a navbarList html element\n\n    navbarList (NavbarPills PillsStacked) NavbarRight []\n     [\n     ]\n",
-            "type": "Bootstrap.Navbar.NavbarOptions -> Bootstrap.Navbar.NavbarListAdjustment -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+            "name": "opacity",
+            "comment": " Sets the opacity of a `Form`.\n",
+            "type": "Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "plain",
+            "comment": " A line of plain text. The arguments specify the text's\nfont size, family and color respectively.\n",
+            "type": "Int -> String -> Color.Color -> String -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "polygon",
+            "comment": " `polygon points` is a polygon bounded by `points`.\n",
+            "type": "List Graphics.Render.Point -> Graphics.Render.Shape"
+          },
+          {
+            "name": "polyline",
+            "comment": " `polyline points` is a polyline with vertices\nat `points`. (A polyline is a collection of connected\nline segments. It can be thought of as drawing a \n\"connect-the-dots\" line through a list of points.)\n",
+            "type": "List Graphics.Render.Point -> Graphics.Render.Line"
+          },
+          {
+            "name": "position",
+            "comment": " Sets the position of a `Form`.\n\n    -- 'circle' is now centered at (50,50)\n    circle = position (50,50) circle\n",
+            "type": "Graphics.Render.Point -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "rectangle",
+            "comment": " A rectangle. Arguments specify width and height, respectively.\n",
+            "type": "Float -> Float -> Graphics.Render.Shape"
+          },
+          {
+            "name": "rotate",
+            "comment": " Modifies the angle of a `Form`. \n",
+            "type": "Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "scale",
+            "comment": " Modifies the scale of a `Form`.\n",
+            "type": "Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "segment",
+            "comment": " `segment (x1,y1) (x2,y2)` is a line segment with\nendpoints at `(x1,y1)` and `(x2,y2)`.\n",
+            "type": "Graphics.Render.Point -> Graphics.Render.Point -> Graphics.Render.Line"
+          },
+          {
+            "name": "shape",
+            "comment": " The `*Fill` and `*FillWithBorder` functions\nallow you to add styling to your shapes and conver them\ninto forms, but sometimes those functions don't offer \nenough flexibility. What if you want a dashed border\ninstead of a solid one? Or how about a beveled join on\nthe border? For this you must turn to the shape function.\nThe `shape` function takes a `Shape` and *any* `ShapeStyle`\nand converts them into a `Form`, giving you total control\nover the styling of the shape.\n",
+            "type": "Graphics.Render.Shape -> Graphics.Render.ShapeStyle -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "size",
+            "comment": " Sets the scale of a `Form`. \n",
+            "type": "Float -> Graphics.Render.Form msg -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "solid",
+            "comment": " `solid width color line` is a solid line of width `width` \nand color `color` whose path is described by `line`.\n",
+            "type": "Float -> Color.Color -> Graphics.Render.Line -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "solidFill",
+            "comment": " Fills a shape with a solid color.\n",
+            "type": "Color.Color -> Graphics.Render.Shape -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "solidFillWithBorder",
+            "comment": " Fills a shape with a solid color and borders it with a solid line.\nArguments specify fill color, border width and border color, respectively.\n",
+            "type": "Color.Color -> Float -> Color.Color -> Graphics.Render.Shape -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "svg",
+            "comment": " Takes a `Form` and renders it to usable HTML, in this case\nin the form of an SVG element. The first two arguments determine\nthe height and width of the SVG viewbox in pixels.\n",
+            "type": "Float -> Float -> Graphics.Render.Form msg -> Html.Html msg"
+          },
+          {
+            "name": "text",
+            "comment": " Similar to `shape` and `line`, the `text` function \nwill take a string and any `TextStyle` and convert them\ninto a form. It is useful for when functions like `plain`\nand `bold` don't offer enough flexibility and you need\nmore control over the styling of your text.\n",
+            "type": "String -> Graphics.Render.TextStyle -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "textureFill",
+            "comment": " Tiles a shape with a repeated image. The arguments specify the image width,\nheight and url respectively.\n",
+            "type": "Float -> Float -> String -> Graphics.Render.Shape -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "textureFillWithBorder",
+            "comment": " Tiles a shape with a repeated image and borders it with a solid line. The\narguments specify the url width, height and url, followed by the border width and\ncolor.\n",
+            "type": "Float -> Float -> String -> Float -> Color.Color -> Graphics.Render.Shape -> Graphics.Render.Form msg"
+          },
+          {
+            "name": "underlined",
+            "comment": " A line of underlined text. The arguments specify the text's\nfont size, family and color respectively.\n",
+            "type": "Int -> String -> Color.Color -> String -> Graphics.Render.Form msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -22025,7 +22298,7 @@
   },
   {
     "name": "elm-community/elm-check",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Check.Test",
@@ -22036,10 +22309,10 @@
           {
             "name": "evidenceToTest",
             "comment": " Convert elm-check's Evidence into an elm-test Test. You can use elm-test's\nrunners to view the results of your property-based tests, alongside the results\nof unit tests.\n",
-            "type": "Check.Evidence -> ElmTest.Test"
+            "type": "Check.Evidence -> Test.Test"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Check",
@@ -22154,7 +22427,7 @@
             "type": "((a -> Bool) -> (a -> Bool) -> Check.Producer.Producer a -> Check.Claim) -> (a -> Bool) -> Check.Producer.Producer a -> Check.Claim"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Check.Producer",
@@ -22297,7 +22570,7 @@
             "type": "Check.Producer.Producer Char"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -34049,7 +34322,7 @@
   },
   {
     "name": "elm-lang/core",
-    "version": "4.0.4",
+    "version": "4.0.5",
     "docs": [
       {
         "name": "Random",
@@ -34353,175 +34626,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Time",
-        "comment": " Library for working with time.\n\n# Time\n@docs Time, now, every\n\n# Units\n@docs millisecond, second, minute, hour,\n  inMilliseconds, inSeconds, inMinutes, inHours\n\n",
-        "aliases": [
-          {
-            "name": "Time",
-            "comment": " Type alias to make it clearer when you are working with time values.\nUsing the `Time` helpers like `second` and `inSeconds` instead of raw numbers\nis very highly recommended.\n",
-            "args": [],
-            "type": "Float"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "every",
-            "comment": " Subscribe to the current time. First you provide an interval describing how\nfrequently you want updates. Second, you give a tagger that turns a time into a\nmessage for your `update` function. So if you want to hear about the current\ntime every second, you would say something like this:\n\n    type Msg = Tick Time | ...\n\n    subscriptions model =\n      every second Tick\n\nCheck out the [Elm Architecture Tutorial][arch] for more info on how\nsubscriptions work.\n\n[arch]: https://github.com/evancz/elm-architecture-tutorial/\n\n**Note:** this function is not for animation! You need to use something based\non `requestAnimationFrame` to get smooth animations. This is based on\n`setInterval` which is better for recurring tasks like “check on something\nevery 30 seconds”.\n",
-            "type": "Time.Time -> (Time.Time -> msg) -> Platform.Sub.Sub msg"
-          },
-          {
-            "name": "hour",
-            "comment": "",
-            "type": "Time.Time"
-          },
-          {
-            "name": "inHours",
-            "comment": "",
-            "type": "Time.Time -> Float"
-          },
-          {
-            "name": "inMilliseconds",
-            "comment": "",
-            "type": "Time.Time -> Float"
-          },
-          {
-            "name": "inMinutes",
-            "comment": "",
-            "type": "Time.Time -> Float"
-          },
-          {
-            "name": "inSeconds",
-            "comment": "",
-            "type": "Time.Time -> Float"
-          },
-          {
-            "name": "millisecond",
-            "comment": " Units of time, making it easier to specify things like a half-second\n`(500 * millisecond)` without remembering Elm&rsquo;s underlying units of time.\n",
-            "type": "Time.Time"
-          },
-          {
-            "name": "minute",
-            "comment": "",
-            "type": "Time.Time"
-          },
-          {
-            "name": "now",
-            "comment": " Get the `Time` at the moment when this task is run.\n",
-            "type": "Task.Task x Time.Time"
-          },
-          {
-            "name": "second",
-            "comment": "",
-            "type": "Time.Time"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Set",
-        "comment": " A set of unique values. The values can be any comparable type. This\nincludes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists\nof comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Sets\n@docs Set\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Set",
-            "comment": " Represents a set of unique values. So `(Set Int)` is a set of integers and\n`(Set String)` is a set of strings.\n",
-            "args": [
-              "t"
-            ],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "diff",
-            "comment": " Get the difference between the first set and the second. Keeps values\nthat do not appear in the second set.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "empty",
-            "comment": " Create an empty set.\n",
-            "type": "Set.Set a"
-          },
-          {
-            "name": "filter",
-            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
-            "type": "(comparable -> Bool) -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "foldl",
-            "comment": " Fold over the values in a set, in order from lowest to highest.\n",
-            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
-          },
-          {
-            "name": "foldr",
-            "comment": " Fold over the values in a set, in order from highest to lowest.\n",
-            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
-          },
-          {
-            "name": "fromList",
-            "comment": " Convert a list into a set, removing any duplicates.\n",
-            "type": "List comparable -> Set.Set comparable"
-          },
-          {
-            "name": "insert",
-            "comment": " Insert a value into a set.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "intersect",
-            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "isEmpty",
-            "comment": " Determine if a set is empty.\n",
-            "type": "Set.Set a -> Bool"
-          },
-          {
-            "name": "map",
-            "comment": " Map a function onto a set, creating a new set with no duplicates.\n",
-            "type": "(comparable -> comparable') -> Set.Set comparable -> Set.Set comparable'"
-          },
-          {
-            "name": "member",
-            "comment": " Determine if a value is in a set.\n",
-            "type": "comparable -> Set.Set comparable -> Bool"
-          },
-          {
-            "name": "partition",
-            "comment": " Create two new sets; the first consisting of elements which satisfy a\npredicate, the second consisting of elements which do not.\n",
-            "type": "(comparable -> Bool) -> Set.Set comparable -> ( Set.Set comparable, Set.Set comparable )"
-          },
-          {
-            "name": "remove",
-            "comment": " Remove a value from a set. If the value is not found, no changes are made.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "singleton",
-            "comment": " Create a set with one value.\n",
-            "type": "comparable -> Set.Set comparable"
-          },
-          {
-            "name": "size",
-            "comment": " Determine the number of elements in a set.\n",
-            "type": "Set.Set a -> Int"
-          },
-          {
-            "name": "toList",
-            "comment": " Convert a set into a list, sorted from lowest to highest.\n",
-            "type": "Set.Set comparable -> List comparable"
-          },
-          {
-            "name": "union",
-            "comment": " Get the union of two sets. Keep all values.\n",
-            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Json.Decode",
         "comment": " A way to turn Json values into Elm values. A `Decoder a` represents a\ndecoding operation that will either produce a value of type `a`, or fail.\n\n# Decoders\n@docs Decoder, Value\n\n# Run a Decoder\n@docs decodeString, decodeValue\n\n# Primitives\n@docs string, int, float, bool, null\n\n# Arrays\n@docs list, array,\n  tuple1, tuple2, tuple3, tuple4, tuple5, tuple6, tuple7, tuple8\n\n# Objects\n@docs (:=), at,\n  object1, object2, object3, object4, object5, object6, object7, object8,\n  keyValuePairs, dict\n\n# Oddly Shaped Values\n@docs maybe, oneOf, map, fail, succeed, andThen\n\n# \"Creative\" Values\n@docs value, customDecoder\n",
         "aliases": [
@@ -34732,6 +34836,236 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Set",
+        "comment": " A set of unique values. The values can be any comparable type. This\nincludes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists\nof comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Sets\n@docs Set\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Set",
+            "comment": " Represents a set of unique values. So `(Set Int)` is a set of integers and\n`(Set String)` is a set of strings.\n",
+            "args": [
+              "t"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Get the difference between the first set and the second. Keeps values\nthat do not appear in the second set.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty set.\n",
+            "type": "Set.Set a"
+          },
+          {
+            "name": "filter",
+            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
+            "type": "(comparable -> Bool) -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the values in a set, in order from lowest to highest.\n",
+            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the values in a set, in order from highest to lowest.\n",
+            "type": "(comparable -> b -> b) -> b -> Set.Set comparable -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list into a set, removing any duplicates.\n",
+            "type": "List comparable -> Set.Set comparable"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a value into a set.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "intersect",
+            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a set is empty.\n",
+            "type": "Set.Set a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function onto a set, creating a new set with no duplicates.\n",
+            "type": "(comparable -> comparable') -> Set.Set comparable -> Set.Set comparable'"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a value is in a set.\n",
+            "type": "comparable -> Set.Set comparable -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Create two new sets; the first consisting of elements which satisfy a\npredicate, the second consisting of elements which do not.\n",
+            "type": "(comparable -> Bool) -> Set.Set comparable -> ( Set.Set comparable, Set.Set comparable )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a value from a set. If the value is not found, no changes are made.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a set with one value.\n",
+            "type": "comparable -> Set.Set comparable"
+          },
+          {
+            "name": "size",
+            "comment": " Determine the number of elements in a set.\n",
+            "type": "Set.Set a -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into a list, sorted from lowest to highest.\n",
+            "type": "Set.Set comparable -> List comparable"
+          },
+          {
+            "name": "union",
+            "comment": " Get the union of two sets. Keep all values.\n",
+            "type": "Set.Set comparable -> Set.Set comparable -> Set.Set comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Time",
+        "comment": " Library for working with time.\n\n# Time\n@docs Time, now, every\n\n# Units\n@docs millisecond, second, minute, hour,\n  inMilliseconds, inSeconds, inMinutes, inHours\n\n",
+        "aliases": [
+          {
+            "name": "Time",
+            "comment": " Type alias to make it clearer when you are working with time values.\nUsing the `Time` helpers like `second` and `inSeconds` instead of raw numbers\nis very highly recommended.\n",
+            "args": [],
+            "type": "Float"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "every",
+            "comment": " Subscribe to the current time. First you provide an interval describing how\nfrequently you want updates. Second, you give a tagger that turns a time into a\nmessage for your `update` function. So if you want to hear about the current\ntime every second, you would say something like this:\n\n    type Msg = Tick Time | ...\n\n    subscriptions model =\n      every second Tick\n\nCheck out the [Elm Architecture Tutorial][arch] for more info on how\nsubscriptions work.\n\n[arch]: https://github.com/evancz/elm-architecture-tutorial/\n\n**Note:** this function is not for animation! You need to use something based\non `requestAnimationFrame` to get smooth animations. This is based on\n`setInterval` which is better for recurring tasks like “check on something\nevery 30 seconds”.\n",
+            "type": "Time.Time -> (Time.Time -> msg) -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "hour",
+            "comment": "",
+            "type": "Time.Time"
+          },
+          {
+            "name": "inHours",
+            "comment": "",
+            "type": "Time.Time -> Float"
+          },
+          {
+            "name": "inMilliseconds",
+            "comment": "",
+            "type": "Time.Time -> Float"
+          },
+          {
+            "name": "inMinutes",
+            "comment": "",
+            "type": "Time.Time -> Float"
+          },
+          {
+            "name": "inSeconds",
+            "comment": "",
+            "type": "Time.Time -> Float"
+          },
+          {
+            "name": "millisecond",
+            "comment": " Units of time, making it easier to specify things like a half-second\n`(500 * millisecond)` without remembering Elm&rsquo;s underlying units of time.\n",
+            "type": "Time.Time"
+          },
+          {
+            "name": "minute",
+            "comment": "",
+            "type": "Time.Time"
+          },
+          {
+            "name": "now",
+            "comment": " Get the `Time` at the moment when this task is run.\n",
+            "type": "Task.Task x Time.Time"
+          },
+          {
+            "name": "second",
+            "comment": "",
+            "type": "Time.Time"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Json.Encode",
+        "comment": " Library for turning Elm values into Json values.\n\n# Encoding\n@docs encode, Value\n\n# Primitives\n@docs string, int, float, bool, null\n\n# Arrays\n@docs list, array\n\n# Objects\n@docs object\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Value",
+            "comment": " Represents a JavaScript value.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "array",
+            "comment": "",
+            "type": "Array.Array Json.Encode.Value -> Json.Encode.Value"
+          },
+          {
+            "name": "bool",
+            "comment": "",
+            "type": "Bool -> Json.Encode.Value"
+          },
+          {
+            "name": "encode",
+            "comment": " Convert a `Value` into a prettified string. The first argument specifies\nthe amount of indentation in the resulting string.\n\n    person =\n        object\n          [ (\"name\", string \"Tom\")\n          , (\"age\", int 42)\n          ]\n\n    compact = encode 0 person\n    -- {\"name\":\"Tom\",\"age\":42}\n\n    readable = encode 4 person\n    -- {\n    --     \"name\": \"Tom\",\n    --     \"age\": 42\n    -- }\n",
+            "type": "Int -> Json.Encode.Value -> String"
+          },
+          {
+            "name": "float",
+            "comment": " Encode a Float. `Infinity` and `NaN` are encoded as `null`.\n",
+            "type": "Float -> Json.Encode.Value"
+          },
+          {
+            "name": "int",
+            "comment": "",
+            "type": "Int -> Json.Encode.Value"
+          },
+          {
+            "name": "list",
+            "comment": "",
+            "type": "List Json.Encode.Value -> Json.Encode.Value"
+          },
+          {
+            "name": "null",
+            "comment": "",
+            "type": "Json.Encode.Value"
+          },
+          {
+            "name": "object",
+            "comment": "",
+            "type": "List ( String, Json.Encode.Value ) -> Json.Encode.Value"
+          },
+          {
+            "name": "string",
+            "comment": "",
+            "type": "String -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Dict",
         "comment": " A dictionary mapping unique keys to values. The keys can be any comparable\ntype. This includes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or\nlists of comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time.\n\n# Dictionaries\n@docs Dict\n\n# Build\n@docs empty, singleton, insert, update, remove\n\n# Query\n@docs isEmpty, member, get, size\n\n# Lists\n@docs keys, values, toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n# Combine\n@docs union, intersect, diff, merge\n\n",
         "aliases": [],
@@ -34861,62 +35195,213 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Json.Encode",
-        "comment": " Library for turning Elm values into Json values.\n\n# Encoding\n@docs encode, Value\n\n# Primitives\n@docs string, int, float, bool, null\n\n# Arrays\n@docs list, array\n\n# Objects\n@docs object\n",
+        "name": "Task",
+        "comment": " Tasks make it easy to describe asynchronous operations that may fail, like\nHTTP requests or writing to a database. For more information, see the [Elm\ndocumentation on Tasks](http://guide.elm-lang.org/error_handling/task.html).\n\n# Basics\n@docs Task, succeed, fail\n\n# Mapping\n@docs map, map2, map3, map4, map5, andMap\n\n# Chaining\n@docs andThen, sequence\n\n# Errors\n@docs onError, mapError, toMaybe, fromMaybe, toResult, fromResult\n\n# Commands\n@docs perform\n\n",
+        "aliases": [
+          {
+            "name": "Task",
+            "comment": " Represents asynchronous effects that may fail. It is useful for stuff like\nHTTP.\n\nFor example, maybe we have a task with the type (`Task String User`). This means\nthat when we perform the task, it will either fail with a `String` message or\nsucceed with a `User`. So this could represent a task that is asking a server\nfor a certain user.\n",
+            "args": [
+              "err",
+              "ok"
+            ],
+            "type": "Platform.Task err ok"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "andMap",
+            "comment": " Put the results of two tasks together. If either task fails, the whole\nthing fails. It also runs in order so the first task will be completely\nfinished before the second task starts.\n\nThis function makes it possible to chain tons of tasks together and pipe them\nall into a single function.\n\n    (f `map` task1 `andMap` task2 `andMap` task3) -- map3 f task1 task2 task3\n",
+            "type": "Task.Task x (a -> b) -> Task.Task x a -> Task.Task x b"
+          },
+          {
+            "name": "andThen",
+            "comment": " Chain together a task and a callback. The first task will run, and if it is\nsuccessful, you give the result to the callback resulting in another task. This\ntask then gets run.\n\n    succeed 2 `andThen` (\\n -> succeed (n + 2)) -- succeed 4\n\nThis is useful for chaining tasks together. Maybe you need to get a user from\nyour servers *and then* lookup their picture once you know their name.\n",
+            "type": "Task.Task x a -> (a -> Task.Task x b) -> Task.Task x b"
+          },
+          {
+            "name": "fail",
+            "comment": " A task that fails immediately when run.\n\n    fail \"file not found\" : Task String a\n",
+            "type": "x -> Task.Task x a"
+          },
+          {
+            "name": "fromMaybe",
+            "comment": " If you are chaining together a bunch of tasks, it may be useful to treat\na maybe value like a task.\n\n    fromMaybe \"file not found\" Nothing   -- fail \"file not found\"\n    fromMaybe \"file not found\" (Just 42) -- succeed 42\n",
+            "type": "x -> Maybe.Maybe a -> Task.Task x a"
+          },
+          {
+            "name": "fromResult",
+            "comment": " If you are chaining together a bunch of tasks, it may be useful to treat\na result like a task.\n\n    fromResult (Err \"file not found\") -- fail \"file not found\"\n    fromResult (Ok 42)                -- succeed 42\n",
+            "type": "Result.Result x a -> Task.Task x a"
+          },
+          {
+            "name": "map",
+            "comment": " Transform a task.\n\n    map sqrt (succeed 9) -- succeed 3\n",
+            "type": "(a -> b) -> Task.Task x a -> Task.Task x b"
+          },
+          {
+            "name": "map2",
+            "comment": " Put the results of two tasks together. If either task fails, the whole\nthing fails. It also runs in order so the first task will be completely\nfinished before the second task starts.\n\n    map2 (+) (succeed 9) (succeed 3) -- succeed 12\n",
+            "type": "(a -> b -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x result"
+          },
+          {
+            "name": "map3",
+            "comment": "",
+            "type": "(a -> b -> c -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x result"
+          },
+          {
+            "name": "map4",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x d -> Task.Task x result"
+          },
+          {
+            "name": "map5",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x d -> Task.Task x e -> Task.Task x result"
+          },
+          {
+            "name": "mapError",
+            "comment": " Transform the error value. This can be useful if you need a bunch of error\ntypes to match up.\n\n    type Error = Http Http.Error | WebGL WebGL.Error\n\n    getResources : Task Error Resource\n    getResources =\n      sequence [ mapError Http serverTask, mapError WebGL textureTask ]\n",
+            "type": "(x -> y) -> Task.Task x a -> Task.Task y a"
+          },
+          {
+            "name": "onError",
+            "comment": " Recover from a failure in a task. If the given task fails, we use the\ncallback to recover.\n\n    fail \"file not found\" `onError` (\\msg -> succeed 42) -- succeed 42\n    succeed 9 `onError` (\\msg -> succeed 42)             -- succeed 9\n",
+            "type": "Task.Task x a -> (x -> Task.Task y a) -> Task.Task y a"
+          },
+          {
+            "name": "perform",
+            "comment": " Command the runtime system to perform a task. The most important argument\nis the `Task` which describes what you want to happen. But you also need to\nprovide functions to tag the two possible outcomes of the task. It can fail or\nsucceed, but either way, you need to have a message to feed back into your\napplication.\n",
+            "type": "(x -> msg) -> (a -> msg) -> Task.Task x a -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "sequence",
+            "comment": " Start with a list of tasks, and turn them into a single task that returns a\nlist. The tasks will be run in order one-by-one and if any task fails the whole\nsequence fails.\n\n    sequence [ succeed 1, succeed 2 ] -- succeed [ 1, 2 ]\n\nThis can be useful if you need to make a bunch of HTTP requests one-by-one.\n",
+            "type": "List (Task.Task x a) -> Task.Task x (List a)"
+          },
+          {
+            "name": "succeed",
+            "comment": " A task that succeeds immediately when run.\n\n    succeed 42    -- results in 42\n",
+            "type": "a -> Task.Task x a"
+          },
+          {
+            "name": "toMaybe",
+            "comment": " Translate a task that can fail into a task that can never fail, by\nconverting any failure into `Nothing` and any success into `Just` something.\n\n    toMaybe (fail \"file not found\") -- succeed Nothing\n    toMaybe (succeed 42)            -- succeed (Just 42)\n\nThis means you can handle the error with the `Maybe` module instead.\n",
+            "type": "Task.Task x a -> Task.Task never (Maybe.Maybe a)"
+          },
+          {
+            "name": "toResult",
+            "comment": " Translate a task that can fail into a task that can never fail, by\nconverting any failure into `Err` something and any success into `Ok` something.\n\n    toResult (fail \"file not found\") -- succeed (Err \"file not found\")\n    toResult (succeed 42)            -- succeed (Ok 42)\n\nThis means you can handle the error with the `Result` module instead.\n",
+            "type": "Task.Task x a -> Task.Task never (Result.Result x a)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Array",
+        "comment": " A library for fast immutable arrays. The elements in an array must have the\nsame type. The arrays are implemented in Relaxed Radix Balanced-Trees for fast\nreads, updates, and appends.\n\n# Arrays\n@docs Array\n\n# Creating Arrays\n@docs empty, repeat, initialize, fromList\n\n# Basics\n@docs isEmpty, length, push, append\n\n# Get and Set\n@docs get, set\n\n# Taking Arrays Apart\n@docs slice, toList, toIndexedList\n\n# Mapping, Filtering, and Folding\n@docs map, indexedMap, filter, foldl, foldr\n",
         "aliases": [],
         "types": [
           {
-            "name": "Value",
-            "comment": " Represents a JavaScript value.\n",
-            "args": [],
+            "name": "Array",
+            "comment": " Representation of fast immutable arrays. You can create arrays of integers\n(`Array Int`) or strings (`Array String`) or any other type of value you can\ndream up.\n",
+            "args": [
+              "a"
+            ],
             "cases": []
           }
         ],
         "values": [
           {
-            "name": "array",
-            "comment": "",
-            "type": "Array.Array Json.Encode.Value -> Json.Encode.Value"
+            "name": "append",
+            "comment": " Append two arrays to a new one.\n\n    append (repeat 2 42) (repeat 3 81) == fromList [42,42,81,81,81]\n",
+            "type": "Array.Array a -> Array.Array a -> Array.Array a"
           },
           {
-            "name": "bool",
-            "comment": "",
-            "type": "Bool -> Json.Encode.Value"
+            "name": "empty",
+            "comment": " Return an empty array.\n\n    length empty == 0\n",
+            "type": "Array.Array a"
           },
           {
-            "name": "encode",
-            "comment": " Convert a `Value` into a prettified string. The first argument specifies\nthe amount of indentation in the resulting string.\n\n    person =\n        object\n          [ (\"name\", string \"Tom\")\n          , (\"age\", int 42)\n          ]\n\n    compact = encode 0 person\n    -- {\"name\":\"Tom\",\"age\":42}\n\n    readable = encode 4 person\n    -- {\n    --     \"name\": \"Tom\",\n    --     \"age\": 42\n    -- }\n",
-            "type": "Int -> Json.Encode.Value -> String"
+            "name": "filter",
+            "comment": " Keep only elements that satisfy the predicate:\n\n    filter isEven (fromList [1..6]) == (fromList [2,4,6])\n",
+            "type": "(a -> Bool) -> Array.Array a -> Array.Array a"
           },
           {
-            "name": "float",
-            "comment": " Encode a Float. `Infinity` and `NaN` are encoded as `null`.\n",
-            "type": "Float -> Json.Encode.Value"
+            "name": "foldl",
+            "comment": " Reduce an array from the left. Read `foldl` as &ldquo;fold from the left&rdquo;.\n\n    foldl (::) [] (fromList [1,2,3]) == [3,2,1]\n",
+            "type": "(a -> b -> b) -> b -> Array.Array a -> b"
           },
           {
-            "name": "int",
-            "comment": "",
-            "type": "Int -> Json.Encode.Value"
+            "name": "foldr",
+            "comment": " Reduce an array from the right. Read `foldr` as &ldquo;fold from the right&rdquo;.\n\n    foldr (+) 0 (repeat 3 5) == 15\n",
+            "type": "(a -> b -> b) -> b -> Array.Array a -> b"
           },
           {
-            "name": "list",
-            "comment": "",
-            "type": "List Json.Encode.Value -> Json.Encode.Value"
+            "name": "fromList",
+            "comment": " Create an array from a list.\n",
+            "type": "List a -> Array.Array a"
           },
           {
-            "name": "null",
-            "comment": "",
-            "type": "Json.Encode.Value"
+            "name": "get",
+            "comment": " Return Just the element at the index or Nothing if the index is out of range.\n\n    get  0 (fromList [0,1,2]) == Just 0\n    get  2 (fromList [0,1,2]) == Just 2\n    get  5 (fromList [0,1,2]) == Nothing\n    get -1 (fromList [0,1,2]) == Nothing\n\n",
+            "type": "Int -> Array.Array a -> Maybe.Maybe a"
           },
           {
-            "name": "object",
-            "comment": "",
-            "type": "List ( String, Json.Encode.Value ) -> Json.Encode.Value"
+            "name": "indexedMap",
+            "comment": " Apply a function on every element with its index as first argument.\n\n    indexedMap (*) (fromList [5,5,5]) == fromList [0,5,10]\n",
+            "type": "(Int -> a -> b) -> Array.Array a -> Array.Array b"
           },
           {
-            "name": "string",
-            "comment": "",
-            "type": "String -> Json.Encode.Value"
+            "name": "initialize",
+            "comment": " Initialize an array. `initialize n f` creates an array of length `n` with\nthe element at index `i` initialized to the result of `(f i)`.\n\n    initialize 4 identity    == fromList [0,1,2,3]\n    initialize 4 (\\n -> n*n) == fromList [0,1,4,9]\n    initialize 4 (always 0)  == fromList [0,0,0,0]\n",
+            "type": "Int -> (Int -> a) -> Array.Array a"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if an array is empty.\n\n    isEmpty empty == True\n",
+            "type": "Array.Array a -> Bool"
+          },
+          {
+            "name": "length",
+            "comment": " Return the length of an array.\n\n    length (fromList [1,2,3]) == 3\n",
+            "type": "Array.Array a -> Int"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function on every element in an array.\n\n    map sqrt (fromList [1,4,9]) == fromList [1,2,3]\n",
+            "type": "(a -> b) -> Array.Array a -> Array.Array b"
+          },
+          {
+            "name": "push",
+            "comment": " Push an element to the end of an array.\n\n    push 3 (fromList [1,2]) == fromList [1,2,3]\n",
+            "type": "a -> Array.Array a -> Array.Array a"
+          },
+          {
+            "name": "repeat",
+            "comment": " Creates an array with a given length, filled with a default element.\n\n    repeat 5 0     == fromList [0,0,0,0,0]\n    repeat 3 \"cat\" == fromList [\"cat\",\"cat\",\"cat\"]\n\nNotice that `repeat 3 x` is the same as `initialize 3 (always x)`.\n",
+            "type": "Int -> a -> Array.Array a"
+          },
+          {
+            "name": "set",
+            "comment": " Set the element at a particular index. Returns an updated array.\nIf the index is out of range, the array is unaltered.\n\n    set 1 7 (fromList [1,2,3]) == fromList [1,7,3]\n",
+            "type": "Int -> a -> Array.Array a -> Array.Array a"
+          },
+          {
+            "name": "slice",
+            "comment": " Get a sub-section of an array: `(slice start end array)`. The `start` is a\nzero-based index where we will start our slice. The `end` is a zero-based index\nthat indicates the end of the slice. The slice extracts up to but not including\n`end`.\n\n    slice  0  3 (fromList [0,1,2,3,4]) == fromList [0,1,2]\n    slice  1  4 (fromList [0,1,2,3,4]) == fromList [1,2,3]\n\nBoth the `start` and `end` indexes can be negative, indicating an offset from\nthe end of the array.\n\n    slice  1 -1 (fromList [0,1,2,3,4]) == fromList [1,2,3]\n    slice -2  5 (fromList [0,1,2,3,4]) == fromList [3,4]\n\nThis makes it pretty easy to `pop` the last element off of an array: `slice 0 -1 array`\n",
+            "type": "Int -> Int -> Array.Array a -> Array.Array a"
+          },
+          {
+            "name": "toIndexedList",
+            "comment": " Create an indexed list from an array. Each element of the array will be\npaired with its index.\n\n    toIndexedList (fromList [\"cat\",\"dog\"]) == [(0,\"cat\"), (1,\"dog\")]\n",
+            "type": "Array.Array a -> List ( Int, a )"
+          },
+          {
+            "name": "toList",
+            "comment": " Create a list of elements from an array.\n\n    toList (fromList [3,5,8]) == [3,5,8]\n",
+            "type": "Array.Array a -> List a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -35136,370 +35621,53 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Task",
-        "comment": " Tasks make it easy to describe asynchronous operations that may fail, like\nHTTP requests or writing to a database. For more information, see the [Elm\ndocumentation on Tasks](http://guide.elm-lang.org/error_handling/task.html).\n\n# Basics\n@docs Task, succeed, fail\n\n# Mapping\n@docs map, map2, map3, map4, map5, andMap\n\n# Chaining\n@docs andThen, sequence\n\n# Errors\n@docs onError, mapError, toMaybe, fromMaybe, toResult, fromResult\n\n# Commands\n@docs perform\n\n",
-        "aliases": [
+        "name": "Platform",
+        "comment": "\n\n# Programs\n@docs Program\n\n# Platform Internals\n\n## Tasks and Processes\n@docs Task, ProcessId\n\n## Effect Manager Helpers\n\nAn extremely tiny portion of library authors should ever write effect managers.\nFundamentally, Elm needs maybe 10 of them total. I get that people are smart,\ncurious, etc. but that is not a substitute for a legitimate reason to make an\neffect manager. Do you have an *organic need* this fills? Or are you just\ncurious? Public discussions of your explorations should be framed accordingly.\n\n@docs Router, sendToApp, sendToSelf\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ProcessId",
+            "comment": " Head over to the documentation for the [`Process`](Process) module for\ninformation on this. It is only defined here because it is a platform\nprimitive.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Program",
+            "comment": " Every Elm project will define `main` to be some sort of `Program`. A\n`Program` value captures all the details needed to manage your application,\nincluding how to initialize things, how to respond to events, etc.\n\nThe type of a `Program` includes a `flags` type variable which describes the\ndata we need to start a program. So say our program needs to be given a `userID`\nand `token` to get started:\n\n    MyApp.main : Program { userID : String, token : Int }\n\nSo when we initialize this program in JavaScript, we can give the necessary flags\nreally easily!\n\n```javascript\nElm.MyApp.fullscreen({\n    userID: \"Tom\",\n    token: 42\n});\n```\n",
+            "args": [
+              "flags"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Router",
+            "comment": " An effect manager has access to a “router” that routes messages between\nthe main app and your individual effect manager.\n",
+            "args": [
+              "appMsg",
+              "selfMsg"
+            ],
+            "cases": []
+          },
           {
             "name": "Task",
-            "comment": " Represents asynchronous effects that may fail. It is useful for stuff like\nHTTP.\n\nFor example, maybe we have a task with the type (`Task String User`). This means\nthat when we perform the task, it will either fail with a `String` message or\nsucceed with a `User`. So this could represent a task that is asking a server\nfor a certain user.\n",
+            "comment": " Head over to the documentation for the [`Task`](Task) module for more\ninformation on this. It is only defined here because it is a platform\nprimitive.\n",
             "args": [
               "err",
               "ok"
             ],
-            "type": "Platform.Task err ok"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "andMap",
-            "comment": " Put the results of two tasks together. If either task fails, the whole\nthing fails. It also runs in order so the first task will be completely\nfinished before the second task starts.\n\nThis function makes it possible to chain tons of tasks together and pipe them\nall into a single function.\n\n    (f `map` task1 `andMap` task2 `andMap` task3) -- map3 f task1 task2 task3\n",
-            "type": "Task.Task x (a -> b) -> Task.Task x a -> Task.Task x b"
-          },
-          {
-            "name": "andThen",
-            "comment": " Chain together a task and a callback. The first task will run, and if it is\nsuccessful, you give the result to the callback resulting in another task. This\ntask then gets run.\n\n    succeed 2 `andThen` (\\n -> succeed (n + 2)) -- succeed 4\n\nThis is useful for chaining tasks together. Maybe you need to get a user from\nyour servers *and then* lookup their picture once you know their name.\n",
-            "type": "Task.Task x a -> (a -> Task.Task x b) -> Task.Task x b"
-          },
-          {
-            "name": "fail",
-            "comment": " A task that fails immediately when run.\n\n    fail \"file not found\" : Task String a\n",
-            "type": "x -> Task.Task x a"
-          },
-          {
-            "name": "fromMaybe",
-            "comment": " If you are chaining together a bunch of tasks, it may be useful to treat\na maybe value like a task.\n\n    fromMaybe \"file not found\" Nothing   -- fail \"file not found\"\n    fromMaybe \"file not found\" (Just 42) -- succeed 42\n",
-            "type": "x -> Maybe.Maybe a -> Task.Task x a"
-          },
-          {
-            "name": "fromResult",
-            "comment": " If you are chaining together a bunch of tasks, it may be useful to treat\na result like a task.\n\n    fromResult (Err \"file not found\") -- fail \"file not found\"\n    fromResult (Ok 42)                -- succeed 42\n",
-            "type": "Result.Result x a -> Task.Task x a"
-          },
-          {
-            "name": "map",
-            "comment": " Transform a task.\n\n    map sqrt (succeed 9) -- succeed 3\n",
-            "type": "(a -> b) -> Task.Task x a -> Task.Task x b"
-          },
-          {
-            "name": "map2",
-            "comment": " Put the results of two tasks together. If either task fails, the whole\nthing fails. It also runs in order so the first task will be completely\nfinished before the second task starts.\n\n    map2 (+) (succeed 9) (succeed 3) -- succeed 12\n",
-            "type": "(a -> b -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x result"
-          },
-          {
-            "name": "map3",
-            "comment": "",
-            "type": "(a -> b -> c -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x result"
-          },
-          {
-            "name": "map4",
-            "comment": "",
-            "type": "(a -> b -> c -> d -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x d -> Task.Task x result"
-          },
-          {
-            "name": "map5",
-            "comment": "",
-            "type": "(a -> b -> c -> d -> e -> result) -> Task.Task x a -> Task.Task x b -> Task.Task x c -> Task.Task x d -> Task.Task x e -> Task.Task x result"
-          },
-          {
-            "name": "mapError",
-            "comment": " Transform the error value. This can be useful if you need a bunch of error\ntypes to match up.\n\n    type Error = Http Http.Error | WebGL WebGL.Error\n\n    getResources : Task Error Resource\n    getResources =\n      sequence [ mapError Http serverTask, mapError WebGL textureTask ]\n",
-            "type": "(x -> y) -> Task.Task x a -> Task.Task y a"
-          },
-          {
-            "name": "onError",
-            "comment": " Recover from a failure in a task. If the given task fails, we use the\ncallback to recover.\n\n    fail \"file not found\" `onError` (\\msg -> succeed 42) -- succeed 42\n    succeed 9 `onError` (\\msg -> succeed 42)             -- succeed 9\n",
-            "type": "Task.Task x a -> (x -> Task.Task y a) -> Task.Task y a"
-          },
-          {
-            "name": "perform",
-            "comment": " Command the runtime system to perform a task. The most important argument\nis the `Task` which describes what you want to happen. But you also need to\nprovide functions to tag the two possible outcomes of the task. It can fail or\nsucceed, but either way, you need to have a message to feed back into your\napplication.\n",
-            "type": "(x -> msg) -> (a -> msg) -> Task.Task x a -> Platform.Cmd.Cmd msg"
-          },
-          {
-            "name": "sequence",
-            "comment": " Start with a list of tasks, and turn them into a single task that returns a\nlist. The tasks will be run in order one-by-one and if any task fails the whole\nsequence fails.\n\n    sequence [ succeed 1, succeed 2 ] -- succeed [ 1, 2 ]\n\nThis can be useful if you need to make a bunch of HTTP requests one-by-one.\n",
-            "type": "List (Task.Task x a) -> Task.Task x (List a)"
-          },
-          {
-            "name": "succeed",
-            "comment": " A task that succeeds immediately when run.\n\n    succeed 42    -- results in 42\n",
-            "type": "a -> Task.Task x a"
-          },
-          {
-            "name": "toMaybe",
-            "comment": " Translate a task that can fail into a task that can never fail, by\nconverting any failure into `Nothing` and any success into `Just` something.\n\n    toMaybe (fail \"file not found\") -- succeed Nothing\n    toMaybe (succeed 42)            -- succeed (Just 42)\n\nThis means you can handle the error with the `Maybe` module instead.\n",
-            "type": "Task.Task x a -> Task.Task never (Maybe.Maybe a)"
-          },
-          {
-            "name": "toResult",
-            "comment": " Translate a task that can fail into a task that can never fail, by\nconverting any failure into `Err` something and any success into `Ok` something.\n\n    toResult (fail \"file not found\") -- succeed (Err \"file not found\")\n    toResult (succeed 42)            -- succeed (Ok 42)\n\nThis means you can handle the error with the `Result` module instead.\n",
-            "type": "Task.Task x a -> Task.Task never (Result.Result x a)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Array",
-        "comment": " A library for fast immutable arrays. The elements in an array must have the\nsame type. The arrays are implemented in Relaxed Radix Balanced-Trees for fast\nreads, updates, and appends.\n\n# Arrays\n@docs Array\n\n# Creating Arrays\n@docs empty, repeat, initialize, fromList\n\n# Basics\n@docs isEmpty, length, push, append\n\n# Get and Set\n@docs get, set\n\n# Taking Arrays Apart\n@docs slice, toList, toIndexedList\n\n# Mapping, Filtering, and Folding\n@docs map, indexedMap, filter, foldl, foldr\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Array",
-            "comment": " Representation of fast immutable arrays. You can create arrays of integers\n(`Array Int`) or strings (`Array String`) or any other type of value you can\ndream up.\n",
-            "args": [
-              "a"
-            ],
             "cases": []
           }
         ],
         "values": [
           {
-            "name": "append",
-            "comment": " Append two arrays to a new one.\n\n    append (repeat 2 42) (repeat 3 81) == fromList [42,42,81,81,81]\n",
-            "type": "Array.Array a -> Array.Array a -> Array.Array a"
+            "name": "sendToApp",
+            "comment": " Send the router a message for the main loop of your app. This message will\nbe handled by the overall `update` function, just like events from `Html`.\n",
+            "type": "Platform.Router msg a -> msg -> Platform.Task x ()"
           },
           {
-            "name": "empty",
-            "comment": " Return an empty array.\n\n    length empty == 0\n",
-            "type": "Array.Array a"
-          },
-          {
-            "name": "filter",
-            "comment": " Keep only elements that satisfy the predicate:\n\n    filter isEven (fromList [1..6]) == (fromList [2,4,6])\n",
-            "type": "(a -> Bool) -> Array.Array a -> Array.Array a"
-          },
-          {
-            "name": "foldl",
-            "comment": " Reduce an array from the left. Read `foldl` as &ldquo;fold from the left&rdquo;.\n\n    foldl (::) [] (fromList [1,2,3]) == [3,2,1]\n",
-            "type": "(a -> b -> b) -> b -> Array.Array a -> b"
-          },
-          {
-            "name": "foldr",
-            "comment": " Reduce an array from the right. Read `foldr` as &ldquo;fold from the right&rdquo;.\n\n    foldr (+) 0 (repeat 3 5) == 15\n",
-            "type": "(a -> b -> b) -> b -> Array.Array a -> b"
-          },
-          {
-            "name": "fromList",
-            "comment": " Create an array from a list.\n",
-            "type": "List a -> Array.Array a"
-          },
-          {
-            "name": "get",
-            "comment": " Return Just the element at the index or Nothing if the index is out of range.\n\n    get  0 (fromList [0,1,2]) == Just 0\n    get  2 (fromList [0,1,2]) == Just 2\n    get  5 (fromList [0,1,2]) == Nothing\n    get -1 (fromList [0,1,2]) == Nothing\n\n",
-            "type": "Int -> Array.Array a -> Maybe.Maybe a"
-          },
-          {
-            "name": "indexedMap",
-            "comment": " Apply a function on every element with its index as first argument.\n\n    indexedMap (*) (fromList [5,5,5]) == fromList [0,5,10]\n",
-            "type": "(Int -> a -> b) -> Array.Array a -> Array.Array b"
-          },
-          {
-            "name": "initialize",
-            "comment": " Initialize an array. `initialize n f` creates an array of length `n` with\nthe element at index `i` initialized to the result of `(f i)`.\n\n    initialize 4 identity    == fromList [0,1,2,3]\n    initialize 4 (\\n -> n*n) == fromList [0,1,4,9]\n    initialize 4 (always 0)  == fromList [0,0,0,0]\n",
-            "type": "Int -> (Int -> a) -> Array.Array a"
-          },
-          {
-            "name": "isEmpty",
-            "comment": " Determine if an array is empty.\n\n    isEmpty empty == True\n",
-            "type": "Array.Array a -> Bool"
-          },
-          {
-            "name": "length",
-            "comment": " Return the length of an array.\n\n    length (fromList [1,2,3]) == 3\n",
-            "type": "Array.Array a -> Int"
-          },
-          {
-            "name": "map",
-            "comment": " Apply a function on every element in an array.\n\n    map sqrt (fromList [1,4,9]) == fromList [1,2,3]\n",
-            "type": "(a -> b) -> Array.Array a -> Array.Array b"
-          },
-          {
-            "name": "push",
-            "comment": " Push an element to the end of an array.\n\n    push 3 (fromList [1,2]) == fromList [1,2,3]\n",
-            "type": "a -> Array.Array a -> Array.Array a"
-          },
-          {
-            "name": "repeat",
-            "comment": " Creates an array with a given length, filled with a default element.\n\n    repeat 5 0     == fromList [0,0,0,0,0]\n    repeat 3 \"cat\" == fromList [\"cat\",\"cat\",\"cat\"]\n\nNotice that `repeat 3 x` is the same as `initialize 3 (always x)`.\n",
-            "type": "Int -> a -> Array.Array a"
-          },
-          {
-            "name": "set",
-            "comment": " Set the element at a particular index. Returns an updated array.\nIf the index is out of range, the array is unaltered.\n\n    set 1 7 (fromList [1,2,3]) == fromList [1,7,3]\n",
-            "type": "Int -> a -> Array.Array a -> Array.Array a"
-          },
-          {
-            "name": "slice",
-            "comment": " Get a sub-section of an array: `(slice start end array)`. The `start` is a\nzero-based index where we will start our slice. The `end` is a zero-based index\nthat indicates the end of the slice. The slice extracts up to but not including\n`end`.\n\n    slice  0  3 (fromList [0,1,2,3,4]) == fromList [0,1,2]\n    slice  1  4 (fromList [0,1,2,3,4]) == fromList [1,2,3]\n\nBoth the `start` and `end` indexes can be negative, indicating an offset from\nthe end of the array.\n\n    slice  1 -1 (fromList [0,1,2,3,4]) == fromList [1,2,3]\n    slice -2  5 (fromList [0,1,2,3,4]) == fromList [3,4]\n\nThis makes it pretty easy to `pop` the last element off of an array: `slice 0 -1 array`\n",
-            "type": "Int -> Int -> Array.Array a -> Array.Array a"
-          },
-          {
-            "name": "toIndexedList",
-            "comment": " Create an indexed list from an array. Each element of the array will be\npaired with its index.\n\n    toIndexedList (fromList [\"cat\",\"dog\"]) == [(0,\"cat\"), (1,\"dog\")]\n",
-            "type": "Array.Array a -> List ( Int, a )"
-          },
-          {
-            "name": "toList",
-            "comment": " Create a list of elements from an array.\n\n    toList (fromList [3,5,8]) == [3,5,8]\n",
-            "type": "Array.Array a -> List a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Result",
-        "comment": " A `Result` is the result of a computation that may fail. This is a great\nway to manage errors in Elm.\n\n# Type and Constructors\n@docs Result\n\n# Mapping\n@docs map, map2, map3, map4, map5\n\n# Chaining\n@docs andThen\n\n# Handling Errors\n@docs withDefault, toMaybe, fromMaybe, formatError\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Result",
-            "comment": " A `Result` is either `Ok` meaning the computation succeeded, or it is an\n`Err` meaning that there was some failure.\n",
-            "args": [
-              "error",
-              "value"
-            ],
-            "cases": [
-              [
-                "Ok",
-                [
-                  "value"
-                ]
-              ],
-              [
-                "Err",
-                [
-                  "error"
-                ]
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "andThen",
-            "comment": " Chain together a sequence of computations that may fail. It is helpful\nto see its definition:\n\n    andThen : Result e a -> (a -> Result e b) -> Result e b\n    andThen result callback =\n        case result of\n          Ok value -> callback value\n          Err msg -> Err msg\n\nThis means we only continue with the callback if things are going well. For\nexample, say you need to use (`toInt : String -> Result String Int`) to parse\na month and make sure it is between 1 and 12:\n\n    toValidMonth : Int -> Result String Int\n    toValidMonth month =\n        if month >= 1 && month <= 12\n            then Ok month\n            else Err \"months must be between 1 and 12\"\n\n    toMonth : String -> Result String Int\n    toMonth rawString =\n        toInt rawString `andThen` toValidMonth\n\n    -- toMonth \"4\" == Ok 4\n    -- toMonth \"9\" == Ok 9\n    -- toMonth \"a\" == Err \"cannot parse to an Int\"\n    -- toMonth \"0\" == Err \"months must be between 1 and 12\"\n\nThis allows us to come out of a chain of operations with quite a specific error\nmessage. It is often best to create a custom type that explicitly represents\nthe exact ways your computation may fail. This way it is easy to handle in your\ncode.\n",
-            "type": "Result.Result x a -> (a -> Result.Result x b) -> Result.Result x b"
-          },
-          {
-            "name": "formatError",
-            "comment": " Format the error value of a result. If the result is `Ok`, it stays exactly\nthe same, but if the result is an `Err` we will format the error. For example,\nsay the errors we get have too much information:\n\n    parseInt : String -> Result ParseError Int\n\n    type alias ParseError =\n        { message : String\n        , code : Int\n        , position : (Int,Int)\n        }\n\n    formatError .message (parseInt \"123\") == Ok 123\n    formatError .message (parseInt \"abc\") == Err \"char 'a' is not a number\"\n",
-            "type": "(error -> error') -> Result.Result error a -> Result.Result error' a"
-          },
-          {
-            "name": "fromMaybe",
-            "comment": " Convert from a simple `Maybe` to interact with some code that primarily\nuses `Results`.\n\n    parseInt : String -> Maybe Int\n\n    resultParseInt : String -> Result String Int\n    resultParseInt string =\n        fromMaybe (\"error parsing string: \" ++ toString string) (parseInt string)\n",
-            "type": "x -> Maybe.Maybe a -> Result.Result x a"
-          },
-          {
-            "name": "map",
-            "comment": " Apply a function to a result. If the result is `Ok`, it will be converted.\nIf the result is an `Err`, the same error value will propagate through.\n\n    map sqrt (Ok 4.0)          == Ok 2.0\n    map sqrt (Err \"bad input\") == Err \"bad input\"\n",
-            "type": "(a -> value) -> Result.Result x a -> Result.Result x value"
-          },
-          {
-            "name": "map2",
-            "comment": " Apply a function to two results, if both results are `Ok`. If not,\nthe first argument which is an `Err` will propagate through.\n\n    map2 (+) (String.toInt \"1\") (String.toInt \"2\") == Ok 3\n    map2 (+) (String.toInt \"1\") (String.toInt \"y\") == Err \"could not convert string 'y' to an Int\"\n    map2 (+) (String.toInt \"x\") (String.toInt \"y\") == Err \"could not convert string 'x' to an Int\"\n",
-            "type": "(a -> b -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x value"
-          },
-          {
-            "name": "map3",
-            "comment": "",
-            "type": "(a -> b -> c -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x value"
-          },
-          {
-            "name": "map4",
-            "comment": "",
-            "type": "(a -> b -> c -> d -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x d -> Result.Result x value"
-          },
-          {
-            "name": "map5",
-            "comment": "",
-            "type": "(a -> b -> c -> d -> e -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x d -> Result.Result x e -> Result.Result x value"
-          },
-          {
-            "name": "toMaybe",
-            "comment": " Convert to a simpler `Maybe` if the actual error message is not needed or\nyou need to interact with some code that primarily uses maybes.\n\n    parseInt : String -> Result ParseError Int\n\n    maybeParseInt : String -> Maybe Int\n    maybeParseInt string =\n        toMaybe (parseInt string)\n",
-            "type": "Result.Result x a -> Maybe.Maybe a"
-          },
-          {
-            "name": "withDefault",
-            "comment": " If the result is `Ok` return the value, but if the result is an `Err` then\nreturn a given default value. The following examples try to parse integers.\n\n    Result.withDefault 0 (String.toInt \"123\") == 123\n    Result.withDefault 0 (String.toInt \"abc\") == 0\n",
-            "type": "a -> Result.Result x a -> a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Regex",
-        "comment": " A library for working with regular expressions. It uses [the\nsame kind of regular expressions accepted by JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions).\n\n# Create\n@docs Regex, regex, escape, caseInsensitive\n\n# Helpful Data Structures\n\nThese data structures are needed to help define functions like [`find`](#find)\nand [`replace`](#replace).\n\n@docs HowMany, Match\n\n# Use\n@docs contains, find, replace, split\n\n",
-        "aliases": [
-          {
-            "name": "Match",
-            "comment": " A `Match` represents all of the details about a particular match in a string.\nHere are details on each field:\n\n  * `match` &mdash; the full string of the match.\n  * `submatches` &mdash; a regex might have [subpatterns, surrounded by\n    parentheses](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Parenthesized_Substring_Matches).\n    If there are N subpatterns, there will be N elements in the `submatches` list.\n    Each submatch in this list is a `Maybe` because not all subpatterns may trigger.\n    For example, `(regex \"(a+)|(b+)\")` will either match many `a`&rsquo;s or\n    many `b`&rsquo;s, but never both.\n  * `index` &mdash; the index of the match in the original string.\n  * `number` &mdash; if you find many matches, you can think of each one\n    as being labeled with a `number` starting at one. So the first time you\n    find a match, that is match `number` one. Second time is match `number` two.\n    This is useful when paired with `replace All` if replacement is dependent on how\n    many times a pattern has appeared before.\n",
-            "args": [],
-            "type": "{ match : String , submatches : List (Maybe.Maybe String) , index : Int , number : Int }"
-          }
-        ],
-        "types": [
-          {
-            "name": "HowMany",
-            "comment": " `HowMany` is used to specify how many matches you want to make. So\n`replace All` would replace every match, but `replace (AtMost 2)` would\nreplace at most two matches (i.e. zero, one, two, but never three or more).\n",
-            "args": [],
-            "cases": [
-              [
-                "All",
-                []
-              ],
-              [
-                "AtMost",
-                [
-                  "Int"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "Regex",
-            "comment": " A regular expression, describing a certain set of strings.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "caseInsensitive",
-            "comment": " Make a regex case insensitive ",
-            "type": "Regex.Regex -> Regex.Regex"
-          },
-          {
-            "name": "contains",
-            "comment": " Check to see if a Regex is contained in a string.\n\n    contains (regex \"123\") \"12345\" == True\n    contains (regex \"b+\") \"aabbcc\" == True\n\n    contains (regex \"789\") \"12345\" == False\n    contains (regex \"z+\") \"aabbcc\" == False\n",
-            "type": "Regex.Regex -> String -> Bool"
-          },
-          {
-            "name": "escape",
-            "comment": " Escape strings to be regular expressions, making all special characters\nsafe. So `regex (escape \"^a+\")` will match exactly `\"^a+\"` instead of a series\nof `a`&rsquo;s that start at the beginning of the line.\n",
-            "type": "String -> String"
-          },
-          {
-            "name": "find",
-            "comment": " Find matches in a string:\n\n    findTwoCommas = find (AtMost 2) (regex \",\")\n\n      -- map .index (findTwoCommas \"a,b,c,d,e\") == [1,3]\n      -- map .index (findTwoCommas \"a b c d e\") == []\n\n    places = find All (regex \"[oi]n a (\\\\w+)\") \"I am on a boat in a lake.\"\n\n      -- map .match places == [\"on a boat\", \"in a lake\"]\n      -- map .submatches places == [ [Just \"boat\"], [Just \"lake\"] ]\n",
-            "type": "Regex.HowMany -> Regex.Regex -> String -> List Regex.Match"
-          },
-          {
-            "name": "regex",
-            "comment": " Create a Regex that matches patterns [as specified in JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Writing_a_Regular_Expression_Pattern).\n\nBe careful to escape backslashes properly! For example, `\"\\w\"` is escaping the\nletter `w` which is probably not what you want. You probably want `\"\\\\w\"`\ninstead, which escapes the backslash.\n",
-            "type": "String -> Regex.Regex"
-          },
-          {
-            "name": "replace",
-            "comment": " Replace matches. The function from `Match` to `String` lets\nyou use the details of a specific match when making replacements.\n\n    devowel = replace All (regex \"[aeiou]\") (\\_ -> \"\")\n\n      -- devowel \"The quick brown fox\" == \"Th qck brwn fx\"\n\n    reverseWords = replace All (regex \"\\\\w+\") (\\{match} -> String.reverse match)\n\n      -- reverseWords \"deliver mined parts\" == \"reviled denim strap\"\n",
-            "type": "Regex.HowMany -> Regex.Regex -> (Regex.Match -> String) -> String -> String"
-          },
-          {
-            "name": "split",
-            "comment": " Split a string, using the regex as the separator.\n\n    split (AtMost 1) (regex \",\") \"tom,99,90,85\" == [\"tom\",\"99,90,85\"]\n\n    split All (regex \",\") \"a,b,c,d\" == [\"a\",\"b\",\"c\",\"d\"]\n",
-            "type": "Regex.HowMany -> Regex.Regex -> String -> List String"
+            "name": "sendToSelf",
+            "comment": " Send the router a message for your effect manager. This message will\nbe routed to the `onSelfMsg` function, where you can update the state of your\neffect manager as necessary.\n\nAs an example, the effect manager for web sockets\n",
+            "type": "Platform.Router a msg -> msg -> Platform.Task x ()"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -35691,58 +35859,6 @@
             "name": "unzip",
             "comment": " Decompose a list of tuples into a tuple of lists.\n\n    unzip [(0, True), (17, False), (1337, True)] == ([0,17,1337], [True,False,True])\n",
             "type": "List ( a, b ) -> ( List a, List b )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Platform",
-        "comment": "\n\n# Programs\n@docs Program\n\n# Platform Internals\n\n## Tasks and Processes\n@docs Task, ProcessId\n\n## Effect Manager Helpers\n\nAn extremely tiny portion of library authors should ever write effect managers.\nFundamentally, Elm needs maybe 10 of them total. I get that people are smart,\ncurious, etc. but that is not a substitute for a legitimate reason to make an\neffect manager. Do you have an *organic need* this fills? Or are you just\ncurious? Public discussions of your explorations should be framed accordingly.\n\n@docs Router, sendToApp, sendToSelf\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "ProcessId",
-            "comment": " Head over to the documentation for the [`Process`](Process) module for\ninformation on this. It is only defined here because it is a platform\nprimitive.\n",
-            "args": [],
-            "cases": []
-          },
-          {
-            "name": "Program",
-            "comment": " Every Elm project will define `main` to be some sort of `Program`. A\n`Program` value captures all the details needed to manage your application,\nincluding how to initialize things, how to respond to events, etc.\n\nThe type of a `Program` includes a `flags` type variable which describes the\ndata we need to start a program. So say our program needs to be given a `userID`\nand `token` to get started:\n\n    MyApp.main : Program { userID : String, token : Int }\n\nSo when we initialize this program in JavaScript, we can give the necessary flags\nreally easily!\n\n```javascript\nElm.MyApp.fullscreen({\n    userID: \"Tom\",\n    token: 42\n});\n```\n",
-            "args": [
-              "flags"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Router",
-            "comment": " An effect manager has access to a “router” that routes messages between\nthe main app and your individual effect manager.\n",
-            "args": [
-              "appMsg",
-              "selfMsg"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Task",
-            "comment": " Head over to the documentation for the [`Task`](Task) module for more\ninformation on this. It is only defined here because it is a platform\nprimitive.\n",
-            "args": [
-              "err",
-              "ok"
-            ],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "sendToApp",
-            "comment": " Send the router a message for the main loop of your app. This message will\nbe handled by the overall `update` function, just like events from `Html`.\n",
-            "type": "Platform.Router msg a -> msg -> Platform.Task x ()"
-          },
-          {
-            "name": "sendToSelf",
-            "comment": " Send the router a message for your effect manager. This message will\nbe routed to the `onSelfMsg` function, where you can update the state of your\neffect manager as necessary.\n\nAs an example, the effect manager for web sockets\n",
-            "type": "Platform.Router a msg -> msg -> Platform.Task x ()"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -36056,97 +36172,29 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Platform.Sub",
-        "comment": "\n\n@docs Sub, map, batch, none\n",
+        "name": "Result",
+        "comment": " A `Result` is the result of a computation that may fail. This is a great\nway to manage errors in Elm.\n\n# Type and Constructors\n@docs Result\n\n# Mapping\n@docs map, map2, map3, map4, map5\n\n# Chaining\n@docs andThen\n\n# Handling Errors\n@docs withDefault, toMaybe, fromMaybe, formatError\n",
         "aliases": [],
         "types": [
           {
-            "name": "Sub",
-            "comment": " A subscription is a way of telling Elm, “Hey, let me know if anything\ninteresting happens over there!” So if you want listen for messages on a web\nsocket, you would tell Elm to create a subscription. If you want to get clock\nticks, you would tell Elm to subscribe to that. The cool thing here is that\nthis means *Elm* manages all the details of subscriptions instead of *you*.\nSo if a web socket goes down, *you* do not need to manually reconnect with an\nexponential backoff strategy, *Elm* does this all for you behind the scenes!\n\nEvery `Sub` specifies (1) which effects you need access to and (2) the type of\nmessages that will come back into your application.\n\n**Note:** Do not worry if this seems confusing at first! As with every Elm user\never, subscriptions will make more sense as you work through [the Elm Architecture\nTutorial](http://guide.elm-lang.org/architecture/index.html) and see how they fit\ninto a real application!\n",
+            "name": "Result",
+            "comment": " A `Result` is either `Ok` meaning the computation succeeded, or it is an\n`Err` meaning that there was some failure.\n",
             "args": [
-              "msg"
-            ],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "batch",
-            "comment": "",
-            "type": "List (Platform.Sub.Sub msg) -> Platform.Sub.Sub msg"
-          },
-          {
-            "name": "map",
-            "comment": "",
-            "type": "(a -> msg) -> Platform.Sub.Sub a -> Platform.Sub.Sub msg"
-          },
-          {
-            "name": "none",
-            "comment": "",
-            "type": "Platform.Sub.Sub msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Platform.Cmd",
-        "comment": "\n\n# Effects\n\nElm has **managed effects**, meaning that things like HTTP requests or writing\nto disk are all treated as *data* in Elm. When this data is given to the Elm\nruntime system, it can do some “query optimization” before actually performing\nthe effect. Perhaps unexpectedly, this managed effects idea is the heart of why\nElm is so nice for testing, reuse, reproducibility, etc.\n\nThere are two kinds of managed effects you will use in your programs: commands\nand subscriptions.\n\n@docs Cmd, map, batch, none, (!)\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Cmd",
-            "comment": " A command is a way of telling Elm, “Hey, I want you to do this thing!”\nSo if you want to send an HTTP request, you would need to command Elm to do it.\nOr if you wanted to ask for geolocation, you would need to command Elm to go\nget it.\n\nEvery `Cmd` specifies (1) which effects you need access to and (2) the type of\nmessages that will come back into your application.\n\n**Note:** Do not worry if this seems confusing at first! As with every Elm user\never, commands will make more sense as you work through [the Elm Architecture\nTutorial](http://guide.elm-lang.org/architecture/index.html) and see how they\nfit into a real application!\n",
-            "args": [
-              "msg"
-            ],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "!",
-            "comment": "",
-            "type": "model -> List (Platform.Cmd.Cmd msg) -> ( model, Platform.Cmd.Cmd msg )"
-          },
-          {
-            "name": "batch",
-            "comment": "",
-            "type": "List (Platform.Cmd.Cmd msg) -> Platform.Cmd.Cmd msg"
-          },
-          {
-            "name": "map",
-            "comment": "",
-            "type": "(a -> msg) -> Platform.Cmd.Cmd a -> Platform.Cmd.Cmd msg"
-          },
-          {
-            "name": "none",
-            "comment": "",
-            "type": "Platform.Cmd.Cmd msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Maybe",
-        "comment": " This library fills a bunch of important niches in Elm. A `Maybe` can help\nyou with optional arguments, error handling, and records with optional fields.\n\n# Definition\n@docs Maybe\n\n# Common Helpers\n@docs withDefault, oneOf, map, map2, map3, map4, map5\n\n# Chaining Maybes\n@docs andThen\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Maybe",
-            "comment": " Represent values that may or may not exist. It can be useful if you have a\nrecord field that is only filled in sometimes. Or if a function takes a value\nsometimes, but does not absolutely need it.\n\n    -- A person, but maybe we do not know their age.\n    type alias Person =\n        { name : String\n        , age : Maybe Int\n        }\n\n    tom = { name = \"Tom\", age = Just 42 }\n    sue = { name = \"Sue\", age = Nothing }\n",
-            "args": [
-              "a"
+              "error",
+              "value"
             ],
             "cases": [
               [
-                "Just",
+                "Ok",
                 [
-                  "a"
+                  "value"
                 ]
               ],
               [
-                "Nothing",
-                []
+                "Err",
+                [
+                  "error"
+                ]
               ]
             ]
           }
@@ -36154,106 +36202,128 @@
         "values": [
           {
             "name": "andThen",
-            "comment": " Chain together many computations that may fail. It is helpful to see its\ndefinition:\n\n    andThen : Maybe a -> (a -> Maybe b) -> Maybe b\n    andThen maybe callback =\n        case maybe of\n            Just value ->\n                callback value\n\n            Nothing ->\n                Nothing\n\nThis means we only continue with the callback if things are going well. For\nexample, say you need to use (`head : List Int -> Maybe Int`) to get the\nfirst month from a `List` and then make sure it is between 1 and 12:\n\n    toValidMonth : Int -> Maybe Int\n    toValidMonth month =\n        if month >= 1 && month <= 12 then\n            Just month\n        else\n            Nothing\n\n    getFirstMonth : List Int -> Maybe Int\n    getFirstMonth months =\n        head months `andThen` toValidMonth\n\nIf `head` fails and results in `Nothing` (because the `List` was `empty`),\nthis entire chain of operations will short-circuit and result in `Nothing`.\nIf `toValidMonth` results in `Nothing`, again the chain of computations\nwill result in `Nothing`.\n",
-            "type": "Maybe.Maybe a -> (a -> Maybe.Maybe b) -> Maybe.Maybe b"
+            "comment": " Chain together a sequence of computations that may fail. It is helpful\nto see its definition:\n\n    andThen : Result e a -> (a -> Result e b) -> Result e b\n    andThen result callback =\n        case result of\n          Ok value -> callback value\n          Err msg -> Err msg\n\nThis means we only continue with the callback if things are going well. For\nexample, say you need to use (`toInt : String -> Result String Int`) to parse\na month and make sure it is between 1 and 12:\n\n    toValidMonth : Int -> Result String Int\n    toValidMonth month =\n        if month >= 1 && month <= 12\n            then Ok month\n            else Err \"months must be between 1 and 12\"\n\n    toMonth : String -> Result String Int\n    toMonth rawString =\n        toInt rawString `andThen` toValidMonth\n\n    -- toMonth \"4\" == Ok 4\n    -- toMonth \"9\" == Ok 9\n    -- toMonth \"a\" == Err \"cannot parse to an Int\"\n    -- toMonth \"0\" == Err \"months must be between 1 and 12\"\n\nThis allows us to come out of a chain of operations with quite a specific error\nmessage. It is often best to create a custom type that explicitly represents\nthe exact ways your computation may fail. This way it is easy to handle in your\ncode.\n",
+            "type": "Result.Result x a -> (a -> Result.Result x b) -> Result.Result x b"
+          },
+          {
+            "name": "formatError",
+            "comment": " Format the error value of a result. If the result is `Ok`, it stays exactly\nthe same, but if the result is an `Err` we will format the error. For example,\nsay the errors we get have too much information:\n\n    parseInt : String -> Result ParseError Int\n\n    type alias ParseError =\n        { message : String\n        , code : Int\n        , position : (Int,Int)\n        }\n\n    formatError .message (parseInt \"123\") == Ok 123\n    formatError .message (parseInt \"abc\") == Err \"char 'a' is not a number\"\n",
+            "type": "(error -> error') -> Result.Result error a -> Result.Result error' a"
+          },
+          {
+            "name": "fromMaybe",
+            "comment": " Convert from a simple `Maybe` to interact with some code that primarily\nuses `Results`.\n\n    parseInt : String -> Maybe Int\n\n    resultParseInt : String -> Result String Int\n    resultParseInt string =\n        fromMaybe (\"error parsing string: \" ++ toString string) (parseInt string)\n",
+            "type": "x -> Maybe.Maybe a -> Result.Result x a"
           },
           {
             "name": "map",
-            "comment": " Transform a `Maybe` value with a given function:\n\n    map sqrt (Just 9) == Just 3\n    map sqrt Nothing == Nothing\n",
-            "type": "(a -> b) -> Maybe.Maybe a -> Maybe.Maybe b"
+            "comment": " Apply a function to a result. If the result is `Ok`, it will be converted.\nIf the result is an `Err`, the same error value will propagate through.\n\n    map sqrt (Ok 4.0)          == Ok 2.0\n    map sqrt (Err \"bad input\") == Err \"bad input\"\n",
+            "type": "(a -> value) -> Result.Result x a -> Result.Result x value"
           },
           {
             "name": "map2",
-            "comment": " Apply a function if all the arguments are `Just` a value.\n\n    map2 (+) (Just 3) (Just 4) == Just 7\n    map2 (+) (Just 3) Nothing == Nothing\n    map2 (+) Nothing (Just 4) == Nothing\n",
-            "type": "(a -> b -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe value"
+            "comment": " Apply a function to two results, if both results are `Ok`. If not,\nthe first argument which is an `Err` will propagate through.\n\n    map2 (+) (String.toInt \"1\") (String.toInt \"2\") == Ok 3\n    map2 (+) (String.toInt \"1\") (String.toInt \"y\") == Err \"could not convert string 'y' to an Int\"\n    map2 (+) (String.toInt \"x\") (String.toInt \"y\") == Err \"could not convert string 'x' to an Int\"\n",
+            "type": "(a -> b -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x value"
           },
           {
             "name": "map3",
             "comment": "",
-            "type": "(a -> b -> c -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe value"
+            "type": "(a -> b -> c -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x value"
           },
           {
             "name": "map4",
             "comment": "",
-            "type": "(a -> b -> c -> d -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe value"
+            "type": "(a -> b -> c -> d -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x d -> Result.Result x value"
           },
           {
             "name": "map5",
             "comment": "",
-            "type": "(a -> b -> c -> d -> e -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe e -> Maybe.Maybe value"
+            "type": "(a -> b -> c -> d -> e -> value) -> Result.Result x a -> Result.Result x b -> Result.Result x c -> Result.Result x d -> Result.Result x e -> Result.Result x value"
           },
           {
-            "name": "oneOf",
-            "comment": " Pick the first `Maybe` that actually has a value. Useful when you want to\ntry a couple different things, but there is no default value.\n\n    oneOf [ Nothing, Just 42, Just 71 ] == Just 42\n    oneOf [ Nothing, Nothing, Just 71 ] == Just 71\n    oneOf [ Nothing, Nothing, Nothing ] == Nothing\n",
-            "type": "List (Maybe.Maybe a) -> Maybe.Maybe a"
+            "name": "toMaybe",
+            "comment": " Convert to a simpler `Maybe` if the actual error message is not needed or\nyou need to interact with some code that primarily uses maybes.\n\n    parseInt : String -> Result ParseError Int\n\n    maybeParseInt : String -> Maybe Int\n    maybeParseInt string =\n        toMaybe (parseInt string)\n",
+            "type": "Result.Result x a -> Maybe.Maybe a"
           },
           {
             "name": "withDefault",
-            "comment": " Provide a default value, turning an optional value into a normal\nvalue.  This comes in handy when paired with functions like\n[`Dict.get`](Dict#get) which gives back a `Maybe`.\n\n    withDefault 100 (Just 42)   -- 42\n    withDefault 100 Nothing     -- 100\n\n    withDefault \"unknown\" (Dict.get \"Tom\" Dict.empty)   -- \"unknown\"\n\n",
-            "type": "a -> Maybe.Maybe a -> a"
+            "comment": " If the result is `Ok` return the value, but if the result is an `Err` then\nreturn a given default value. The following examples try to parse integers.\n\n    Result.withDefault 0 (String.toInt \"123\") == 123\n    Result.withDefault 0 (String.toInt \"abc\") == 0\n",
+            "type": "a -> Result.Result x a -> a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Debug",
-        "comment": " This library is for investigating bugs or performance problems. It should\n*not* be used in production code.\n\n# Debugging\n@docs log, crash\n",
-        "aliases": [],
-        "types": [],
-        "values": [
+        "name": "Regex",
+        "comment": " A library for working with regular expressions. It uses [the\nsame kind of regular expressions accepted by JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions).\n\n# Create\n@docs Regex, regex, escape, caseInsensitive\n\n# Helpful Data Structures\n\nThese data structures are needed to help define functions like [`find`](#find)\nand [`replace`](#replace).\n\n@docs HowMany, Match\n\n# Use\n@docs contains, find, replace, split\n\n",
+        "aliases": [
           {
-            "name": "crash",
-            "comment": " Crash the program with an error message. This is an uncatchable error,\nintended for code that is soon-to-be-implemented. For example, if you are\nworking with a large ADT and have partially completed a case expression, it may\nmake sense to do this:\n\n    type Entity = Ship | Fish | Captain | Seagull\n\n    drawEntity entity =\n      case entity of\n        Ship ->\n          ...\n\n        Fish ->\n          ...\n\n        _ ->\n          Debug.crash \"TODO\"\n\nThe Elm compiler recognizes each `Debug.crash` and when you run into it at\nruntime, the error will point to the corresponding module name and line number.\nFor `case` expressions that ends with a wildcard pattern and a crash, it will\nalso show the value that snuck through. In our example, that'd be `Captain` or\n`Seagull`.\n\n**Use this if** you want to do some testing while you are partway through\nwriting a function.\n\n**Do not use this if** you want to do some typical try-catch exception handling.\nUse the [`Maybe`](Maybe) or [`Result`](Result) libraries instead.\n",
-            "type": "String -> a"
-          },
-          {
-            "name": "log",
-            "comment": " Log a tagged value on the developer console, and then return the value.\n\n    1 + log \"number\" 1        -- equals 2, logs \"number: 1\"\n    length (log \"start\" [])   -- equals 0, logs \"start: []\"\n\nNotice that `log` is not a pure function! It should *only* be used for\ninvestigating bugs or performance problems.\n",
-            "type": "String -> a -> a"
+            "name": "Match",
+            "comment": " A `Match` represents all of the details about a particular match in a string.\nHere are details on each field:\n\n  * `match` &mdash; the full string of the match.\n  * `submatches` &mdash; a regex might have [subpatterns, surrounded by\n    parentheses](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Parenthesized_Substring_Matches).\n    If there are N subpatterns, there will be N elements in the `submatches` list.\n    Each submatch in this list is a `Maybe` because not all subpatterns may trigger.\n    For example, `(regex \"(a+)|(b+)\")` will either match many `a`&rsquo;s or\n    many `b`&rsquo;s, but never both.\n  * `index` &mdash; the index of the match in the original string.\n  * `number` &mdash; if you find many matches, you can think of each one\n    as being labeled with a `number` starting at one. So the first time you\n    find a match, that is match `number` one. Second time is match `number` two.\n    This is useful when paired with `replace All` if replacement is dependent on how\n    many times a pattern has appeared before.\n",
+            "args": [],
+            "type": "{ match : String , submatches : List (Maybe.Maybe String) , index : Int , number : Int }"
           }
         ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Bitwise",
-        "comment": " Library for [bitwise operations](http://en.wikipedia.org/wiki/Bitwise_operation).\n\n# Basic Operations\n\n@docs and, or, xor, complement\n\n# Bit Shifts\n\n@docs shiftLeft, shiftRight, shiftRightLogical\n",
-        "aliases": [],
-        "types": [],
+        "types": [
+          {
+            "name": "HowMany",
+            "comment": " `HowMany` is used to specify how many matches you want to make. So\n`replace All` would replace every match, but `replace (AtMost 2)` would\nreplace at most two matches (i.e. zero, one, two, but never three or more).\n",
+            "args": [],
+            "cases": [
+              [
+                "All",
+                []
+              ],
+              [
+                "AtMost",
+                [
+                  "Int"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Regex",
+            "comment": " A regular expression, describing a certain set of strings.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
         "values": [
           {
-            "name": "and",
-            "comment": " Bitwise AND\n",
-            "type": "Int -> Int -> Int"
+            "name": "caseInsensitive",
+            "comment": " Make a regex case insensitive ",
+            "type": "Regex.Regex -> Regex.Regex"
           },
           {
-            "name": "complement",
-            "comment": " Flip each bit individually, often called bitwise NOT\n",
-            "type": "Int -> Int"
+            "name": "contains",
+            "comment": " Check to see if a Regex is contained in a string.\n\n    contains (regex \"123\") \"12345\" == True\n    contains (regex \"b+\") \"aabbcc\" == True\n\n    contains (regex \"789\") \"12345\" == False\n    contains (regex \"z+\") \"aabbcc\" == False\n",
+            "type": "Regex.Regex -> String -> Bool"
           },
           {
-            "name": "or",
-            "comment": " Bitwise OR\n",
-            "type": "Int -> Int -> Int"
+            "name": "escape",
+            "comment": " Escape strings to be regular expressions, making all special characters\nsafe. So `regex (escape \"^a+\")` will match exactly `\"^a+\"` instead of a series\nof `a`&rsquo;s that start at the beginning of the line.\n",
+            "type": "String -> String"
           },
           {
-            "name": "shiftLeft",
-            "comment": " Shift bits to the left by a given offset, filling new bits with zeros.\nThis can be used to multiply numbers by powers of two.\n\n    8 `shiftLeft` 1 == 16\n    8 `shiftLeft` 2 == 32\n",
-            "type": "Int -> Int -> Int"
+            "name": "find",
+            "comment": " Find matches in a string:\n\n    findTwoCommas = find (AtMost 2) (regex \",\")\n\n      -- map .index (findTwoCommas \"a,b,c,d,e\") == [1,3]\n      -- map .index (findTwoCommas \"a b c d e\") == []\n\n    places = find All (regex \"[oi]n a (\\\\w+)\") \"I am on a boat in a lake.\"\n\n      -- map .match places == [\"on a boat\", \"in a lake\"]\n      -- map .submatches places == [ [Just \"boat\"], [Just \"lake\"] ]\n",
+            "type": "Regex.HowMany -> Regex.Regex -> String -> List Regex.Match"
           },
           {
-            "name": "shiftRight",
-            "comment": " Shift bits to the right by a given offset, filling new bits with\nwhatever is the topmost bit. This can be used to divide numbers by powers of two.\n\n     32 `shiftRight` 1 == 16\n     32 `shiftRight` 2 == 8\n    -32 `shiftRight` 1 == -16\n\nThis is called an [arithmetic right\nshift](http://en.wikipedia.org/wiki/Bitwise_operation#Arithmetic_shift),\noften written (>>), and sometimes called a sign-propagating\nright shift because it fills empty spots with copies of the highest bit.\n",
-            "type": "Int -> Int -> Int"
+            "name": "regex",
+            "comment": " Create a Regex that matches patterns [as specified in JavaScript](https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Writing_a_Regular_Expression_Pattern).\n\nBe careful to escape backslashes properly! For example, `\"\\w\"` is escaping the\nletter `w` which is probably not what you want. You probably want `\"\\\\w\"`\ninstead, which escapes the backslash.\n",
+            "type": "String -> Regex.Regex"
           },
           {
-            "name": "shiftRightLogical",
-            "comment": " Shift bits to the right by a given offset, filling new bits with\nzeros.\n\n     32 `shiftRightLogical` 1 == 16\n     32 `shiftRightLogical` 2 == 8\n    -32 `shiftRightLogical` 1 == 2147483632\n\nThis is called an [logical right\nshift](http://en.wikipedia.org/wiki/Bitwise_operation#Logical_shift), often written (>>>),\nand sometimes called a zero-fill right shift because it fills empty spots\nwith zeros.\n",
-            "type": "Int -> Int -> Int"
+            "name": "replace",
+            "comment": " Replace matches. The function from `Match` to `String` lets\nyou use the details of a specific match when making replacements.\n\n    devowel = replace All (regex \"[aeiou]\") (\\_ -> \"\")\n\n      -- devowel \"The quick brown fox\" == \"Th qck brwn fx\"\n\n    reverseWords = replace All (regex \"\\\\w+\") (\\{match} -> String.reverse match)\n\n      -- reverseWords \"deliver mined parts\" == \"reviled denim strap\"\n",
+            "type": "Regex.HowMany -> Regex.Regex -> (Regex.Match -> String) -> String -> String"
           },
           {
-            "name": "xor",
-            "comment": " Bitwise XOR\n",
-            "type": "Int -> Int -> Int"
+            "name": "split",
+            "comment": " Split a string, using the regex as the separator.\n\n    split (AtMost 1) (regex \",\") \"tom,99,90,85\" == [\"tom\",\"99,90,85\"]\n\n    split All (regex \",\") \"a,b,c,d\" == [\"a\",\"b\",\"c\",\"d\"]\n",
+            "type": "Regex.HowMany -> Regex.Regex -> String -> List String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -36631,6 +36701,209 @@
             "type": "Bool -> Bool -> Bool",
             "associativity": "right",
             "precedence": 2
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Platform.Sub",
+        "comment": "\n\n@docs Sub, map, batch, none\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Sub",
+            "comment": " A subscription is a way of telling Elm, “Hey, let me know if anything\ninteresting happens over there!” So if you want listen for messages on a web\nsocket, you would tell Elm to create a subscription. If you want to get clock\nticks, you would tell Elm to subscribe to that. The cool thing here is that\nthis means *Elm* manages all the details of subscriptions instead of *you*.\nSo if a web socket goes down, *you* do not need to manually reconnect with an\nexponential backoff strategy, *Elm* does this all for you behind the scenes!\n\nEvery `Sub` specifies (1) which effects you need access to and (2) the type of\nmessages that will come back into your application.\n\n**Note:** Do not worry if this seems confusing at first! As with every Elm user\never, subscriptions will make more sense as you work through [the Elm Architecture\nTutorial](http://guide.elm-lang.org/architecture/index.html) and see how they fit\ninto a real application!\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "batch",
+            "comment": "",
+            "type": "List (Platform.Sub.Sub msg) -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "map",
+            "comment": "",
+            "type": "(a -> msg) -> Platform.Sub.Sub a -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "none",
+            "comment": "",
+            "type": "Platform.Sub.Sub msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Platform.Cmd",
+        "comment": "\n\n# Effects\n\nElm has **managed effects**, meaning that things like HTTP requests or writing\nto disk are all treated as *data* in Elm. When this data is given to the Elm\nruntime system, it can do some “query optimization” before actually performing\nthe effect. Perhaps unexpectedly, this managed effects idea is the heart of why\nElm is so nice for testing, reuse, reproducibility, etc.\n\nThere are two kinds of managed effects you will use in your programs: commands\nand subscriptions.\n\n@docs Cmd, map, batch, none, (!)\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Cmd",
+            "comment": " A command is a way of telling Elm, “Hey, I want you to do this thing!”\nSo if you want to send an HTTP request, you would need to command Elm to do it.\nOr if you wanted to ask for geolocation, you would need to command Elm to go\nget it.\n\nEvery `Cmd` specifies (1) which effects you need access to and (2) the type of\nmessages that will come back into your application.\n\n**Note:** Do not worry if this seems confusing at first! As with every Elm user\never, commands will make more sense as you work through [the Elm Architecture\nTutorial](http://guide.elm-lang.org/architecture/index.html) and see how they\nfit into a real application!\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "!",
+            "comment": "",
+            "type": "model -> List (Platform.Cmd.Cmd msg) -> ( model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "batch",
+            "comment": "",
+            "type": "List (Platform.Cmd.Cmd msg) -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "map",
+            "comment": "",
+            "type": "(a -> msg) -> Platform.Cmd.Cmd a -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "none",
+            "comment": "",
+            "type": "Platform.Cmd.Cmd msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Debug",
+        "comment": " This library is for investigating bugs or performance problems. It should\n*not* be used in production code.\n\n# Debugging\n@docs log, crash\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "crash",
+            "comment": " Crash the program with an error message. This is an uncatchable error,\nintended for code that is soon-to-be-implemented. For example, if you are\nworking with a large ADT and have partially completed a case expression, it may\nmake sense to do this:\n\n    type Entity = Ship | Fish | Captain | Seagull\n\n    drawEntity entity =\n      case entity of\n        Ship ->\n          ...\n\n        Fish ->\n          ...\n\n        _ ->\n          Debug.crash \"TODO\"\n\nThe Elm compiler recognizes each `Debug.crash` and when you run into it at\nruntime, the error will point to the corresponding module name and line number.\nFor `case` expressions that ends with a wildcard pattern and a crash, it will\nalso show the value that snuck through. In our example, that'd be `Captain` or\n`Seagull`.\n\n**Use this if** you want to do some testing while you are partway through\nwriting a function.\n\n**Do not use this if** you want to do some typical try-catch exception handling.\nUse the [`Maybe`](Maybe) or [`Result`](Result) libraries instead.\n",
+            "type": "String -> a"
+          },
+          {
+            "name": "log",
+            "comment": " Log a tagged value on the developer console, and then return the value.\n\n    1 + log \"number\" 1        -- equals 2, logs \"number: 1\"\n    length (log \"start\" [])   -- equals 0, logs \"start: []\"\n\nNotice that `log` is not a pure function! It should *only* be used for\ninvestigating bugs or performance problems.\n",
+            "type": "String -> a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Maybe",
+        "comment": " This library fills a bunch of important niches in Elm. A `Maybe` can help\nyou with optional arguments, error handling, and records with optional fields.\n\n# Definition\n@docs Maybe\n\n# Common Helpers\n@docs withDefault, oneOf, map, map2, map3, map4, map5\n\n# Chaining Maybes\n@docs andThen\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Maybe",
+            "comment": " Represent values that may or may not exist. It can be useful if you have a\nrecord field that is only filled in sometimes. Or if a function takes a value\nsometimes, but does not absolutely need it.\n\n    -- A person, but maybe we do not know their age.\n    type alias Person =\n        { name : String\n        , age : Maybe Int\n        }\n\n    tom = { name = \"Tom\", age = Just 42 }\n    sue = { name = \"Sue\", age = Nothing }\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Just",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Nothing",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Chain together many computations that may fail. It is helpful to see its\ndefinition:\n\n    andThen : Maybe a -> (a -> Maybe b) -> Maybe b\n    andThen maybe callback =\n        case maybe of\n            Just value ->\n                callback value\n\n            Nothing ->\n                Nothing\n\nThis means we only continue with the callback if things are going well. For\nexample, say you need to use (`head : List Int -> Maybe Int`) to get the\nfirst month from a `List` and then make sure it is between 1 and 12:\n\n    toValidMonth : Int -> Maybe Int\n    toValidMonth month =\n        if month >= 1 && month <= 12 then\n            Just month\n        else\n            Nothing\n\n    getFirstMonth : List Int -> Maybe Int\n    getFirstMonth months =\n        head months `andThen` toValidMonth\n\nIf `head` fails and results in `Nothing` (because the `List` was `empty`),\nthis entire chain of operations will short-circuit and result in `Nothing`.\nIf `toValidMonth` results in `Nothing`, again the chain of computations\nwill result in `Nothing`.\n",
+            "type": "Maybe.Maybe a -> (a -> Maybe.Maybe b) -> Maybe.Maybe b"
+          },
+          {
+            "name": "map",
+            "comment": " Transform a `Maybe` value with a given function:\n\n    map sqrt (Just 9) == Just 3\n    map sqrt Nothing == Nothing\n",
+            "type": "(a -> b) -> Maybe.Maybe a -> Maybe.Maybe b"
+          },
+          {
+            "name": "map2",
+            "comment": " Apply a function if all the arguments are `Just` a value.\n\n    map2 (+) (Just 3) (Just 4) == Just 7\n    map2 (+) (Just 3) Nothing == Nothing\n    map2 (+) Nothing (Just 4) == Nothing\n",
+            "type": "(a -> b -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe value"
+          },
+          {
+            "name": "map3",
+            "comment": "",
+            "type": "(a -> b -> c -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe value"
+          },
+          {
+            "name": "map4",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe value"
+          },
+          {
+            "name": "map5",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> value) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c -> Maybe.Maybe d -> Maybe.Maybe e -> Maybe.Maybe value"
+          },
+          {
+            "name": "oneOf",
+            "comment": " Pick the first `Maybe` that actually has a value. Useful when you want to\ntry a couple different things, but there is no default value.\n\n    oneOf [ Nothing, Just 42, Just 71 ] == Just 42\n    oneOf [ Nothing, Nothing, Just 71 ] == Just 71\n    oneOf [ Nothing, Nothing, Nothing ] == Nothing\n",
+            "type": "List (Maybe.Maybe a) -> Maybe.Maybe a"
+          },
+          {
+            "name": "withDefault",
+            "comment": " Provide a default value, turning an optional value into a normal\nvalue.  This comes in handy when paired with functions like\n[`Dict.get`](Dict#get) which gives back a `Maybe`.\n\n    withDefault 100 (Just 42)   -- 42\n    withDefault 100 Nothing     -- 100\n\n    withDefault \"unknown\" (Dict.get \"Tom\" Dict.empty)   -- \"unknown\"\n\n",
+            "type": "a -> Maybe.Maybe a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Bitwise",
+        "comment": " Library for [bitwise operations](http://en.wikipedia.org/wiki/Bitwise_operation).\n\n# Basic Operations\n\n@docs and, or, xor, complement\n\n# Bit Shifts\n\n@docs shiftLeft, shiftRight, shiftRightLogical\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "and",
+            "comment": " Bitwise AND\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "complement",
+            "comment": " Flip each bit individually, often called bitwise NOT\n",
+            "type": "Int -> Int"
+          },
+          {
+            "name": "or",
+            "comment": " Bitwise OR\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "shiftLeft",
+            "comment": " Shift bits to the left by a given offset, filling new bits with zeros.\nThis can be used to multiply numbers by powers of two.\n\n    8 `shiftLeft` 1 == 16\n    8 `shiftLeft` 2 == 32\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "shiftRight",
+            "comment": " Shift bits to the right by a given offset, filling new bits with\nwhatever is the topmost bit. This can be used to divide numbers by powers of two.\n\n     32 `shiftRight` 1 == 16\n     32 `shiftRight` 2 == 8\n    -32 `shiftRight` 1 == -16\n\nThis is called an [arithmetic right\nshift](http://en.wikipedia.org/wiki/Bitwise_operation#Arithmetic_shift),\noften written (>>), and sometimes called a sign-propagating\nright shift because it fills empty spots with copies of the highest bit.\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "shiftRightLogical",
+            "comment": " Shift bits to the right by a given offset, filling new bits with\nzeros.\n\n     32 `shiftRightLogical` 1 == 16\n     32 `shiftRightLogical` 2 == 8\n    -32 `shiftRightLogical` 1 == 2147483632\n\nThis is called an [logical right\nshift](http://en.wikipedia.org/wiki/Bitwise_operation#Logical_shift), often written (>>>),\nand sometimes called a zero-fill right shift because it fills empty spots\nwith zeros.\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "xor",
+            "comment": " Bitwise XOR\n",
+            "type": "Int -> Int -> Int"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -46975,22 +47248,28 @@
   },
   {
     "name": "jweir/elm-iso8601",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "ISO8601",
-        "comment": " This package provides functionality for working with time and strings based\non the ISO 8601 standard i.e. `2016-03-31T12:13:14.22-04:00`\n\n# Time record\n@docs Time, DayOfWeek\n\n# Parsing\n@docs fromString, toString\n\n# Time conversion\n@docs toTime, fromTime, dayOfWeek\n",
+        "comment": " This package provides functionality for working with time and strings based\non the ISO 8601 standard i.e. `2016-03-31T12:13:14.22-04:00`\n\n# Time record\n@docs Time, Weekday, Offset\n\n# Accessors\n@docs year, month, day, hour, minute, second, millisecond, offset, weekday\n\n# Parsing\n@docs fromString, toString\n\n# Time conversion\n@docs toTime, fromTime\n",
         "aliases": [
+          {
+            "name": "Offset",
+            "comment": " Offset represents the hour and minute timezone offset from UTC.\n\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
           {
             "name": "Time",
             "comment": " Record representing the time. Offset is tuple representing the hour and minute ± from UTC.\n\n",
             "args": [],
-            "type": "{ year : Int , month : Int , day : Int , hour : Int , minute : Int , second : Int , millisecond : Int , offset : ( Int, Int ) }"
+            "type": "ISO8601.Model"
           }
         ],
         "types": [
           {
-            "name": "DayOfWeek",
+            "name": "Weekday",
             "comment": " Represents one of the seven days of the week\n",
             "args": [],
             "cases": [
@@ -47027,9 +47306,9 @@
         ],
         "values": [
           {
-            "name": "dayOfWeek",
-            "comment": " Returns the day of the week from the Time record\n",
-            "type": "ISO8601.Time -> ISO8601.DayOfWeek"
+            "name": "day",
+            "comment": " return the day\n",
+            "type": "ISO8601.Time -> Int"
           },
           {
             "name": "fromString",
@@ -47042,6 +47321,36 @@
             "type": "Int -> ISO8601.Time"
           },
           {
+            "name": "hour",
+            "comment": " return the hour\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "millisecond",
+            "comment": " return the millisecond\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "minute",
+            "comment": " return the minute\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "month",
+            "comment": " return the month\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "offset",
+            "comment": " return the offset\n",
+            "type": "ISO8601.Time -> ISO8601.Offset"
+          },
+          {
+            "name": "second",
+            "comment": " return the secon\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
             "name": "toString",
             "comment": " Converts a Time record to an ISO 8601 formated string.\n",
             "type": "ISO8601.Time -> String"
@@ -47050,9 +47359,19 @@
             "name": "toTime",
             "comment": " Converts the Time to milliseconds relative to the Unix epoch: `1970-01-01T00:00:00Z`\n",
             "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "weekday",
+            "comment": " Returns the day of the week from the Time record\n",
+            "type": "ISO8601.Time -> ISO8601.Weekday"
+          },
+          {
+            "name": "year",
+            "comment": " return the year\n",
+            "type": "ISO8601.Time -> Int"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -57066,7 +57385,7 @@
   },
   {
     "name": "noahzgordon/elm-jsonapi",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "JsonApi.Decode",
@@ -57085,7 +57404,46 @@
             "type": "Json.Decode.Decoder (List JsonApi.ErrorObject)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "JsonApi",
+        "comment": " A library for processing and working with JSON API payloads.\n\n# Generic Data Types\n@docs Document, Resource, Links, Meta, ErrorObject\n\n",
+        "aliases": [
+          {
+            "name": "Document",
+            "comment": " Data type representing the entire JsonApi document.\n",
+            "args": [],
+            "type": "JsonApi.Data.Document"
+          },
+          {
+            "name": "ErrorObject",
+            "comment": " Data type describing the types of problems that can be encountered when processing a JSON API payload.\n\n",
+            "args": [],
+            "type": "{ id : Maybe.Maybe String , links : Maybe.Maybe JsonApi.Data.ErrorLinks , status : Maybe.Maybe String , code : Maybe.Maybe String , title : Maybe.Maybe String , detail : Maybe.Maybe String , source : Maybe.Maybe JsonApi.Data.Source , meta : JsonApi.Meta }"
+          },
+          {
+            "name": "Links",
+            "comment": " Data type representing a JsonApi links object.\n    See: jsonapi.org/format/#document-links\n",
+            "args": [],
+            "type": "JsonApi.Data.Links"
+          },
+          {
+            "name": "Meta",
+            "comment": " Data type representing a JsonApi meta object. Alias for Json.Encode.Value.\n    See: jsonapi.org/format/#document-meta\n",
+            "args": [],
+            "type": "JsonApi.Data.Meta"
+          },
+          {
+            "name": "Resource",
+            "comment": " Data type representing a single JsonApi resource.\n",
+            "args": [],
+            "type": "JsonApi.Data.Resource"
+          }
+        ],
+        "types": [],
+        "values": [],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "JsonApi.Resources",
@@ -57134,7 +57492,7 @@
             "type": "String -> JsonApi.Data.Resource -> Result.Result String (List JsonApi.Data.Resource)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "JsonApi.Documents",
@@ -57168,46 +57526,7 @@
             "type": "JsonApi.Data.Document -> Result.Result String (List JsonApi.Data.Resource)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "JsonApi",
-        "comment": " A library for processing and working with JSON API payloads.\n\n# Generic Data Types\n@docs Document, Resource, Links, Meta, ErrorObject\n\n",
-        "aliases": [
-          {
-            "name": "Document",
-            "comment": " Data type representing the entire JsonApi document.\n",
-            "args": [],
-            "type": "JsonApi.Data.Document"
-          },
-          {
-            "name": "ErrorObject",
-            "comment": " Data type describing the types of problems that can be encountered when processing a JSON API payload.\n\n+ BadFormat: The JSON API payload received from the server is formatted incorrectly.\n+ ServerProblem: A problem was encountered on the server and reported in the document's top-level 'errors' list.\n\n",
-            "args": [],
-            "type": "{ id : Maybe.Maybe String , links : Maybe.Maybe JsonApi.Data.ErrorLinks , status : Maybe.Maybe String , code : Maybe.Maybe String , title : Maybe.Maybe String , detail : Maybe.Maybe String , source : Maybe.Maybe JsonApi.Data.Source , meta : JsonApi.Meta }"
-          },
-          {
-            "name": "Links",
-            "comment": " Data type representing a JsonApi links object.\n    See: jsonapi.org/format/#document-links\n",
-            "args": [],
-            "type": "JsonApi.Data.Links"
-          },
-          {
-            "name": "Meta",
-            "comment": " Data type representing a JsonApi meta object. Alias for Json.Encode.Value.\n    See: jsonapi.org/format/#document-meta\n",
-            "args": [],
-            "type": "JsonApi.Data.Meta"
-          },
-          {
-            "name": "Resource",
-            "comment": " Data type representing a single JsonApi resource.\n",
-            "args": [],
-            "type": "JsonApi.Data.Resource"
-          }
-        ],
-        "types": [],
-        "values": [],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -58194,7 +58513,7 @@
   },
   {
     "name": "overminddl1/program-ex",
-    "version": "1.0.0",
+    "version": "2.0.3",
     "docs": [
       {
         "name": "ProgramEx",
@@ -58205,48 +58524,125 @@
           {
             "name": "programExBuilderWithFlags",
             "comment": "\nPass in the usual callbacks and it returns a built callback set.\n\nThis can be used via Html.App.programWithFlags like:\n\n    Html.App.programWithFlags\n      ( programExBuilderWithFlags\n        { init=init\n        , filter=filter\n        , update=update\n        , view=view\n        , subscriptions=subscriptions\n        }\n      )\n",
-            "type": "{ init : flags -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg } -> { init : flags -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg }"
+            "type": "{ init : flags -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States userModel userMsg ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg } -> { init : flags -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg }"
           },
           {
             "name": "programExBuilderWithFlagsAndNavigation",
-            "comment": "\nPass in the usual callbacks and it returns a built callback set.\n\nThis can be used via Html.App.programWithFlags like:\n\n    Navigation.programWithFlags urlParser\n      { programExBuilderWithFlagsAndNavigation\n        { init=init\n        , filter=filter\n        , update=update\n        , view=view\n        , subscriptions=subscriptions\n        , urlUpdate=urlUpdate\n        }\n      }\n",
-            "type": "{ init : flags -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg , urlUpdate : data -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) } -> { init : flags -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg , urlUpdate : data -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) }"
+            "comment": "\nPass in the usual callbacks and it returns a built callback set.\n\nThis can be used via Html.App.programWithFlags like:\n\n    Navigation.programWithFlags urlParser\n      ( programExBuilderWithFlagsAndNavigation\n        { init=init\n        , filter=filter\n        , update=update\n        , view=view\n        , subscriptions=subscriptions\n        , urlUpdate=urlUpdate\n        }\n      )\n",
+            "type": "{ init : flags -> navParseResult -> ( userModel, Platform.Cmd.Cmd userMsg ) , filters : userMsg -> userModel -> ( userMsg, ProgramEx.States.States userModel userMsg ) , update : userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) , view : userModel -> Html.Html userMsg , subscriptions : userModel -> Platform.Sub.Sub userMsg , urlUpdate : navData -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg ) } -> { init : flags -> navParseResult -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , update : userMsg -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) , view : ProgramEx.Model userModel userMsg -> Html.Html userMsg , subscriptions : ProgramEx.Model userModel userMsg -> Platform.Sub.Sub userMsg , urlUpdate : navData -> ProgramEx.Model userModel userMsg -> ( ProgramEx.Model userModel userMsg, Platform.Cmd.Cmd userMsg ) }"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "ProgramEx.States",
-        "comment": "\n@docs States, default, doUpdate, doSubscriptions, doView\n",
-        "aliases": [],
+        "comment": "\nThis module handles the States structure that controls how callbacks will be called\n\nExample usage via in a filter callback:\n\n    filters : Msg -> Model -> ( Msg, States Model Msg )\n    filters msg model =\n        let\n            log =\n                debug_log (model.programFlags.debug_log |> Maybe.withDefault False) \"filters\" ( msg, model )\n        in\n            case msg of\n                Helpers helpersMsg ->\n                    ( msg\n                    , States.enableAll |> States.delegate (helpers_delegate Helpers helpersMsg)\n                    )\n\n                Mdl mdlMsg ->\n                    ( msg\n                    , States.enableAll\n                        |> States.delegate\n                            { key = \"Mdl\"\n                            , update = Just (\\_ o -> Material.update mdlMsg o)\n                            , subscriptions = Just (\\o -> Material.subscriptions Mdl o)\n                            }\n                    )\n\n                MesgList_Scroll scrolled ->\n                    case model.loc of\n                        RoomLocation rid _ ->\n                            let\n                                doLoad : Bool\n                                doLoad =\n                                    (model.firstMessageReached == False)\n                                        && (scrolled.pos < 16)\n                                        && (model.isLoadingOlder == False)\n                                        && ((Dict.size model.active_room_msgs) >= 10)\n                            in\n                                if doLoad then\n                                    ( MesgList_LoadOlder rid, States.enableAll )\n                                else\n                                    ( msg, States.disableAll )\n\n                        _ ->\n                            ( msg, States.disableAll )\n\n                _ ->\n                    ( msg, States.enableAll )\n\n\n@docs States, Callbacks, Delegates\n@docs defaultOn, defaultOff\n@docs enableAll, disableAll\n@docs enableOnly, disableOnly\n@docs enable, disable\n@docs delegate\n@docs doUpdate, doSubscriptions, doView, getDelegates\n",
+        "aliases": [
+          {
+            "name": "Delegates",
+            "comment": " Delegate record, fill this in to specify delegates for a module\n",
+            "args": [
+              "userModel",
+              "userMsg"
+            ],
+            "type": "{ key : String , update : Maybe.Maybe (userMsg -> userModel -> ( userModel, Platform.Cmd.Cmd userMsg )) , subscriptions : Maybe.Maybe (userModel -> Platform.Sub.Sub userMsg) }"
+          }
+        ],
         "types": [
+          {
+            "name": "Callbacks",
+            "comment": " Various supported states that can be allowed or denied\n",
+            "args": [],
+            "cases": [
+              [
+                "Update",
+                []
+              ],
+              [
+                "Subscriptions",
+                []
+              ],
+              [
+                "View",
+                []
+              ]
+            ]
+          },
           {
             "name": "States",
             "comment": " Holds the State information\n",
-            "args": [],
+            "args": [
+              "userModel",
+              "userMsg"
+            ],
             "cases": []
           }
         ],
         "values": [
           {
-            "name": "default",
-            "comment": " Gets the default state set, everything is allowed\n",
-            "type": "ProgramEx.States.States"
+            "name": "defaultOff",
+            "comment": " Gets the default state set, everything is disabled\n",
+            "type": "ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "defaultOn",
+            "comment": " Gets the default state set, everything is enabled\n",
+            "type": "ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "delegate",
+            "comment": " Changes the callback functions for these callbacks to the specified ones, useful for TEA modules delegation\n\nExample use:\n\n    filters : Msg -> Model -> ( Msg, States )\n    filters msg model =\n      case msg of\n        Material\n",
+            "type": "ProgramEx.States.Delegates userModel userMsg -> ProgramEx.States.States userModel userMsg -> ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "disable",
+            "comment": " Returns a new state from an old disabling a specific callback\n",
+            "type": "ProgramEx.States.Callbacks -> ProgramEx.States.States userModel userMsg -> ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "disableAll",
+            "comment": " Runs no callbacks at all, same as `defaultOff`\n",
+            "type": "ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "disableOnly",
+            "comment": " Returns a State that will only allow all callbacks except the ones specified\n",
+            "type": "List ProgramEx.States.Callbacks -> ProgramEx.States.States userModel userMsg"
           },
           {
             "name": "doSubscriptions",
             "comment": " Gets from the state if the subscriptions callback should be run\n",
-            "type": "ProgramEx.States.States -> Bool"
+            "type": "ProgramEx.States.States userModel userMsg -> Bool"
           },
           {
             "name": "doUpdate",
             "comment": " Gets from the state if the update callback should be run\n",
-            "type": "ProgramEx.States.States -> Bool"
+            "type": "ProgramEx.States.States userModel userMsg -> Bool"
           },
           {
             "name": "doView",
             "comment": " Gets from the state if the view callback should be run\n",
-            "type": "ProgramEx.States.States -> Bool"
+            "type": "ProgramEx.States.States userModel userMsg -> Bool"
+          },
+          {
+            "name": "enable",
+            "comment": " Returns a new state from an old enabling a specific callback\n",
+            "type": "ProgramEx.States.Callbacks -> ProgramEx.States.States userModel userMsg -> ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "enableAll",
+            "comment": " Runs all callbacks as expected, same as `defaultOn`\n",
+            "type": "ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "enableOnly",
+            "comment": " Returns a State that will only allow these callbacks to run\n",
+            "type": "List ProgramEx.States.Callbacks -> ProgramEx.States.States userModel userMsg"
+          },
+          {
+            "name": "getDelegates",
+            "comment": " Gets the delegates for this state\n",
+            "type": "ProgramEx.States.States userModel userMsg -> Maybe.Maybe (ProgramEx.States.Delegates userModel userMsg)"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -67303,7 +67699,7 @@
   },
   {
     "name": "rtfeldman/legacy-elm-test",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Legacy.Check.Test",
@@ -67317,7 +67713,7 @@
             "type": "Check.Evidence -> Legacy.ElmTest.Test"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Legacy.ElmTest",
@@ -67327,7 +67723,7 @@
             "name": "Assertion",
             "comment": " The basic unit of testability.\n",
             "args": [],
-            "type": "Assert.Assertion"
+            "type": "Expect.Expectation"
           },
           {
             "name": "Test",
@@ -67350,7 +67746,7 @@
           },
           {
             "name": "assertNotEqual",
-            "comment": " Basic function to assser that two expressions are not equal.\n",
+            "comment": " Basic function to assert that two expressions are not equal.\n",
             "type": "a -> a -> Legacy.ElmTest.Assertion"
           },
           {
@@ -67409,7 +67805,7 @@
             "type": "String -> Legacy.ElmTest.Assertion -> Legacy.ElmTest.Test"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -69038,6 +69434,115 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "sh4r3m4n/elm-piano",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Piano",
+        "comment": " A customizable piano component\n\n# Model\n@docs Model\n@docs initialModel\n@docs Note\n\n# Messages and updates\n@docs update\n@docs Msg\n\n# Keyboard size helpers\n@docs keyboard12Keys\n@docs keyboard25Keys\n@docs keyboard49Keys\n@docs keyboard61Keys\n@docs keyboard76Keys\n@docs keyboard88Keys\n\n# HTML rendering\n@docs view\n\n# Note helpers\n@docs noteName\n@docs isNatural\n@docs octave\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " The model of the component.\n\nnotes is the set of currently pressed notes.\n\nnoteRange determines the first and last notes of the keyboard.\n\nIf interactive is True, the component will generate KeyUp and KeyDown messages\nwhen the user clicks on a note. (Now this mode is experimental and has some\nUI issues).\n\nIf showSizeSelector is True a button group will be shown to select the keyboard\nsize.\n\nIf debugNotes is True a text will appear, showin the note names of each\ncurrently pressed note.\n",
+            "args": [],
+            "type": "{ notes : Set.Set Piano.Note , noteRange : ( Piano.Note, Piano.Note ) , interactive : Bool , showSizeSelector : Bool , debugNotes : Bool }"
+          },
+          {
+            "name": "Note",
+            "comment": " Represents a note giving its MIDI Note Number\n\nSee http://www.electronics.dit.ie/staff/tscarff/Music_technology/midi/midi_note_numbers_for_octaves.htm for more information\n",
+            "args": [],
+            "type": "Int"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Messages received when clicking a key or\nchanging the keyboard's size\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "initialModel",
+            "comment": " Common initial configuration for the component\n\nNow it starts with no keys being pressed in a 25-key keyboard, in interactive\nmode and with the size selector and the note debugger.\n",
+            "type": "Piano.Model"
+          },
+          {
+            "name": "isNatural",
+            "comment": " Return False is note is a flat or sharp, True otherwise\n",
+            "type": "Piano.Note -> Bool"
+          },
+          {
+            "name": "keyboard12Keys",
+            "comment": " Note range of a 12-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "keyboard25Keys",
+            "comment": " Note range of a 25-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "keyboard49Keys",
+            "comment": " Note range of a 49-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "keyboard61Keys",
+            "comment": " Note range of a 61-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "keyboard76Keys",
+            "comment": " Note range of a 76-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "keyboard88Keys",
+            "comment": " Note range of a 88-key keyboard\n",
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "noteName",
+            "comment": " Represent a note number as a string\n",
+            "type": "Piano.Note -> String"
+          },
+          {
+            "name": "octave",
+            "comment": " Octave number of a note\n",
+            "type": "Piano.Note -> Int"
+          },
+          {
+            "name": "update",
+            "comment": " Handle the messages by updating model.notes or model.noteRange\n",
+            "type": "Piano.Msg -> Piano.Model -> Piano.Model"
+          },
+          {
+            "name": "view",
+            "comment": " Show the Piano component and, if set in the model, the debug text and the\nkeyboard size changer.\n",
+            "type": "Piano.Model -> Html.Html Piano.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Piano.PianoStyle",
+        "comment": "\nExposes a single string with the correct CSS styles for the component.\n\nThis was made an extra module to avoid long CSS styles in the main script.\n\n@docs css\n\nBased on javascript-piano by michaelemp\nhttps://github.com/michaelmp/js-piano\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "css",
+            "comment": " CSS style\n",
+            "type": "String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
