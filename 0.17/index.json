@@ -8469,7 +8469,7 @@
   },
   {
     "name": "Kwarrtz/render",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "Graphics.Render",
@@ -8491,7 +8491,7 @@
           },
           {
             "name": "Point",
-            "comment": " A 2-tuple of `Float`s representing a 2D point.\n",
+            "comment": " A 2-tuple of `Float`s representing a 2D point. `(0,0)` represents\na point in the middle of the viewport.\n",
             "args": [],
             "type": "( Float, Float )"
           },
@@ -9155,17 +9155,17 @@
   },
   {
     "name": "NoRedInk/elm-decode-pipeline",
-    "version": "1.1.2",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Json.Decode.Pipeline",
-        "comment": " ## Design Principles\n\n* Introduce functions that work well with the [`(|>)`](http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Basics#|>) operator\n* Don't introduce any custom infix operators\n* Don't introduce any functions that are intended to be called using backticks\n\n@docs required, requiredAt, optional, optionalAt, hardcoded, custom, resolveResult, decode\n",
+        "comment": " # Json.Decode.Pipeline\n\nUse the `(|>)` operator to build JSON decoders.\n\n## Decoding fields\n\n@docs required, requiredAt, optional, optionalAt, hardcoded, custom, nullable\n\n## Beginning and ending pipelines\n\n@docs decode, resolveResult\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "custom",
-            "comment": " Run the given decoder and feed its result into the pipeline at this point.\n\nConsider this example.\n\n    import Json.Decode exposing (int, string, at, Decoder)\n    import Json.Decode.Pipeline exposing (decode, required, custom)\n\n\n    type alias User =\n      { id : Int\n      , name : String\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      decode User\n        |> required \"id\" int\n        |> custom (at [ \"profile\", \"name\" ])\n        |> required \"email\" string\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\n            \"id\": 123,\n            \"email\": \"sam@example.com\",\n            \"profile\": {\"name\": \"Sam\"}\n          }\n        \"\"\"\n    -- Ok { id = 123, name = \"Sam\", email = \"sam@example.com\" }\n",
+            "comment": " Run the given decoder and feed its result into the pipeline at this point.\n\nConsider this example.\n\n    import Json.Decode exposing (int, string, at, Decoder)\n    import Json.Decode.Pipeline exposing (decode, required, custom)\n\n\n    type alias User =\n      { id : Int\n      , name : String\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      decode User\n        |> required \"id\" int\n        |> custom (at [ \"profile\", \"name\" ] string)\n        |> required \"email\" string\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\n            \"id\": 123,\n            \"email\": \"sam@example.com\",\n            \"profile\": {\"name\": \"Sam\"}\n          }\n        \"\"\"\n    -- Ok { id = 123, name = \"Sam\", email = \"sam@example.com\" }\n",
             "type": "Json.Decode.Decoder a -> Json.Decode.Decoder (a -> b) -> Json.Decode.Decoder b"
           },
           {
@@ -9179,8 +9179,13 @@
             "type": "a -> Json.Decode.Decoder (a -> b) -> Json.Decode.Decoder b"
           },
           {
+            "name": "nullable",
+            "comment": " Extract a value that might be `null`.\n\nIf the value is `null`, decodes to `Nothing`.\nIf the value is not `null`, runs the given decoder on it and...\n\n* ...If that decoder succeeds, wraps its success value in a `Just`.\n* ...If it fails, the entire decoding operation fails.\n\n\n    import Json.Decode exposing (int, string, float, Decoder)\n    import Json.Decode.Pipeline exposing (decode, required, optional)\n\n\n    type alias User =\n      { id : Int\n      , email : String\n      , name : Maybe String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      decode User\n        |> required \"id\" int\n        |> required \"email\" string\n        |> required \"name\" (nullable string)\n\nIn the above example,\n\n* If `name` is `null`, it will successfully decode to `Nothing`\n* If `name` is `\"Lee\"` it will successfully decode to `Just \"Lee\"`\n* If `name` is not present, the whole decoder will fail.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder (Maybe.Maybe a)"
+          },
+          {
             "name": "optional",
-            "comment": " Decode a field that may or may not be present. If the field is present,\nuse the specified decoder on it. If the field is not present, successfully\ndecode to the given fallback value.\n\n    import Json.Decode exposing (int, string, Decoder)\n    import Json.Decode.Pipeline exposing (decode, required, optional)\n\n\n    type alias User =\n      { id : Int\n      , name : String\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      decode User\n        |> required \"id\" int\n        |> optional \"name\" string \"blah\"\n        |> required \"email\" string\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\"id\": 123, \"email\": \"sam@example.com\" }\n        \"\"\"\n    -- Ok { id = 123, name = \"blah\", email = \"sam@example.com\" }\n\n",
+            "comment": " Decode a field that may be missing or have a null value. If the field is\nmissing, then it decodes as the `fallback` value. If the field is present,\nthen `valDecoder` is used to decode its value. If `valDecoder` fails on a\n`null` value, then the `fallback` is used as if the field were missing\nentirely.\n\n    import Json.Decode exposing (int, string, null, oneOf, Decoder)\n    import Json.Decode.Pipeline exposing (decode, required, optional)\n\n\n    type alias User =\n      { id : Int\n      , name : String\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      decode User\n        |> required \"id\" int\n        |> optional \"name\" string \"blah\"\n        |> required \"email\" string\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\"id\": 123, \"email\": \"sam@example.com\" }\n        \"\"\"\n    -- Ok { id = 123, name = \"blah\", email = \"sam@example.com\" }\n\nBecause `valDecoder` is given an opportunity to decode `null` values before\nresorting to the `fallback`, you can distinguish between missing and `null`\nvalues if you need to:\n\n    userDecoder2 =\n        decode User\n            |> required \"id\" int\n            |> optional \"name\" (oneOf [ string, null \"NULL\" ]) \"MISSING\"\n            |> required \"email\" string\n\n",
             "type": "String -> Json.Decode.Decoder a -> a -> Json.Decode.Decoder (a -> b) -> Json.Decode.Decoder b"
           },
           {
@@ -9200,11 +9205,11 @@
           },
           {
             "name": "resolveResult",
-            "comment": " Convert a `Decoder (Result x a)` into a `Decoder a`. Useful when you want\nto perform some custom processing just before completing the decoding operation.\n\n    import Json.Decode exposing (int, string, float, Decoder)\n    import Json.Decode.Pipeline exposing\n      (decode, required, resolveResult)\n\n\n    type alias User =\n      { id : Int\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      let\n        -- asResult gets run *after* all the\n        -- (|> required ...) steps are done.\n        asResult Int -> String -> Int -> Result String User\n        asResult id email version =\n          if version > 2 then\n            Ok (User id email)\n          else\n            Err \"This JSON is from a deprecated source. Please upgrade!\"\n      in\n        decode asResult\n          |> required \"id\" int\n          |> required \"email\" string\n          |> required \"version\" int -- version is part of asResult,\n          |> resolveResult          -- but it is not a part of User\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\"id\": 123, \"email\": \"sam@example.com\", \"version\": 1}\n        \"\"\"\n    -- Err \"This JSON is from a deprecated source. Please upgrade!\"\n",
+            "comment": " Convert a `Decoder (Result x a)` into a `Decoder a`. Useful when you want\nto perform some custom processing just before completing the decoding operation.\n\n    import Json.Decode exposing (int, string, float, Decoder)\n    import Json.Decode.Pipeline exposing\n      (decode, required, resolveResult)\n\n\n    type alias User =\n      { id : Int\n      , email : String\n      }\n\n\n    userDecoder : Decoder User\n    userDecoder =\n      let\n        -- asResult gets run *after* all the\n        -- (|> required ...) steps are done.\n        asResult : Int -> String -> Int -> Result String User\n        asResult id email version =\n          if version > 2 then\n            Ok (User id email)\n          else\n            Err \"This JSON is from a deprecated source. Please upgrade!\"\n      in\n        decode asResult\n          |> required \"id\" int\n          |> required \"email\" string\n          |> required \"version\" int -- version is part of asResult,\n          |> resolveResult          -- but it is not a part of User\n\n\n    result : Result String User\n    result =\n      Json.Decode.decodeString\n        userDecoder\n        \"\"\"\n          {\"id\": 123, \"email\": \"sam@example.com\", \"version\": 1}\n        \"\"\"\n    -- Err \"This JSON is from a deprecated source. Please upgrade!\"\n",
             "type": "Json.Decode.Decoder (Result.Result String a) -> Json.Decode.Decoder a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -18644,7 +18649,7 @@
   },
   {
     "name": "debois/elm-dom",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "docs": [
       {
         "name": "DOM",
@@ -18661,7 +18666,7 @@
         "values": [
           {
             "name": "boundingClientRect",
-            "comment": " Approximation of the method\n[getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Floaterface/nsIDOMClientRect),\nbased off\n[this stackoverflow answer](https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element).\n\nNB! This decoder is likely computationally expensive and may produce results\nthat differ slightly from `getBoundingClientRect` in browser-dependent ways.\n\n(I don't get to call getBoundingClientRect directly from Elm without going\nnative or using ports; my packages don't get to go native and I can find no\nsolution with ports. So we do it like in the bad old days with an O(lg n)\ntraversal of the DOM, only now through presumably expensive JSON decoders.\nIt's 2007 forever, baby!)\n",
+            "comment": " Approximation of the method\n[getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Floaterface/nsIDOMClientRect),\nbased off\n[this stackoverflow answer](https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element).\n\nNB! This decoder produces wrong results if a parent element is scrolled and\ndoes not have explicit positioning (e.g., `position: relative;`); see\n[this issue](https://github.com/debois/elm-dom/issues/4). \n\nAlso note that this decoder is likely computationally expensive and may produce\nresults that differ slightly from `getBoundingClientRect` in browser-dependent\nways.\n\n(I don't get to call getBoundingClientRect directly from Elm without going\nnative or using ports; my packages don't get to go native and I can find no\nsolution with ports. So we do it like in the bad old days with an O(lg n)\ntraversal of the DOM, browser-dependencies and CSS quirks, only now through\npresumably expensive JSON decoders.  It's 2007 forever, baby!)\n",
             "type": "Json.Decode.Decoder DOM.Rectangle"
           },
           {
@@ -18731,17 +18736,17 @@
           },
           {
             "name": "target",
-            "comment": " Get the target DOM element of an event. You will usually start with this\ndecoder. E.g., to make a button which when clicked emit an Action that carries\nthe width of the button:\n\n    import DOM exposing (target, offsetWidth)\n\n    type Action = Click Float\n\n    myButton : Signal.Address Action -> Html\n    myButton addr =\n      button\n        [ on \"click\" (target offsetWidth) (Click >> Signal.message addr) ]\n        [ text \"Click me!\" ]\n",
+            "comment": " Get the target DOM element of an event. You will usually start with this\ndecoder. E.g., to make a button which when clicked emit an Action that carries\nthe width of the button:\n\n    import DOM exposing (target, offsetWidth)\n\n    myButton : Html Float\n    myButton =\n      button\n        [ on \"click\" (target offsetWidth) ]\n        [ text \"Click me!\" ]\n",
             "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
   {
     "name": "debois/elm-mdl",
-    "version": "7.3.0",
+    "version": "7.4.0",
     "docs": [
       {
         "name": "Material",
@@ -18928,6 +18933,85 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Material.List",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#lists-section):\n\n> Lists present multiple line items vertically as a single continuous element.\n> Refer the Material Design Spec to know more about the content options.\n\nSee also the\n[Material Design Specification]([https://material.google.com/components/lists.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#lists)\nfor a live demo and example code.\n\n# List and item containers\n@docs ul, li\n\n# Primary content\n@docs content\n@docs subtitle, withSubtitle, body, withBody\n\n## Icons & avatars\n@docs avatarIcon, avatarImage, avatar, icon\n\n# Secondary content\n@docs content2, action2, info2\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "action2",
+            "comment": " Defines the secondary action sub-division. (The primary action is clicking\nthe primary content.)\n",
+            "type": "Material.Options.Property a m"
+          },
+          {
+            "name": "avatar",
+            "comment": " If you need fine-grained control of the avatar, specify whatever element\nyou want, then add this property. (You may want to use this in conjunction with\n  `Options.img`.)\n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "avatarIcon",
+            "comment": " Set an avatar icon. Like `Icon.view`. \n",
+            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
+          },
+          {
+            "name": "avatarImage",
+            "comment": " Set an avatar image. `src` is a value for `Html.Attributes.src`.\n",
+            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
+          },
+          {
+            "name": "body",
+            "comment": " Defines the text-body sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withBody` to `li` if you use this. \nMutually exclusive with `subtitle`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "content",
+            "comment": " Defines the primary content sub-division. Use within `li`. \n",
+            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "content2",
+            "comment": " Defines the secondary content sub-division.\tUse within `li`. \n",
+            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "icon",
+            "comment": " Set an icon. Refer to `Icon.view`. \n",
+            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
+          },
+          {
+            "name": "info2",
+            "comment": " Defines the information sub-division.\tApplicable only within `content2`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "li",
+            "comment": " List-item, no secondary content. (Use this rather than `Html.li`.)\n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "subtitle",
+            "comment": " Defines the subtitle sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withSubtitle` to `li` if you use this. \nMutually exclusive with `body`. \n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "ul",
+            "comment": " Container for list items. (Use this rather than `Html.ul`.)\n",
+            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "withBody",
+            "comment": " Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set\nboth this and `withSubtitle`. \n",
+            "type": "Material.Options.Property c m"
+          },
+          {
+            "name": "withSubtitle",
+            "comment": " Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.\nDon't set both this and `withBody`.\n",
+            "type": "Material.Options.Property c m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Material.Layout",
         "comment": " From the\n[Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):\n\n> The Material Design Lite (MDL) layout component is a comprehensive approach to\n> page layout that uses MDL development tenets, allows for efficient use of MDL\n> components, and automatically adapts to different browsers, screen sizes, and\n> devices.\n>\n> Appropriate and accessible layout is a critical feature of all user interfaces,\n> regardless of a site's content or function. Page design and presentation is\n> therefore an important factor in the overall user experience. See the layout\n> component's\n> [Material Design specifications page](https://www.google.com/design/spec/layout/structure.html#structure-system-bars)\n> for details.\n>\n> Use of MDL layout principles simplifies the creation of scalable pages by\n> providing reusable components and encourages consistency across environments by\n> establishing recognizable visual elements, adhering to logical structural\n> grids, and maintaining appropriate spacing across multiple platforms and screen\n> sizes. MDL layout is extremely powerful and dynamic, allowing for great\n> consistency in outward appearance and behavior while maintaining development\n> flexibility and ease of use.\n\nRefer to [this site](https://debois.github.io/elm-mdl/#layout)\nfor a live demo and example code.\n\n# Subscriptions\n\nThe layout needs to be initialised with and subscribe to changes in viewport\nsizes. Example initialisation of containing app: \n\n    import Material.Layout as Layout\n    import Material\n\n    type Model = \n      { ...\n      , mdl : Material.Model -- Boilerplate\n      }\n\n    type Msg = \n      ...\n      | Mdl Material.Msg -- Boilerplate\n\n    ...\n\n    App.program \n      { init = ( model, Layout.sub0 Mdl )\n      , view = view\n      , subscriptions = Layout.subs Mdl model\n      , update = update\n      }\n\n## Tabs width \n\n\nTabs display chevrons when the viewport is too small to show all tabs\nsimultaneously. Unfortunately, Elm currently does not give us a way to\nautomatically detect the width of the tabs at app launch. If you have tabs, \nto make the chevron display correctly at app lauch, you must set \n`model.tabScrollState.width` manually in `init`. If you're using parts, \nuse `setTabScrollState` to accomplish this. Initialisation would in this case\nbe (assuming a tab width of 1384 pixels):\n\n    App.program \n      { init = \n          ( { model | mdl = Layout.setTabsWidth 1384 model.mdl }\n            , Layout.sub0 Mdl \n          )\n      , view = view\n      , subscriptions = .mdl >> Layout.subs Mdl\n      , update = update\n      }\n\n\n@docs sub0, subs\n\n# Render\n@docs Contents, render, toggleDrawer\n\n# Options\n@docs Property\n\n## Tabs\n@docs fixedTabs, rippleTabs\n@docs selectedTab, setTabsWidth \n\n## Header\n@docs fixedHeader, fixedDrawer\n@docs waterfall, seamed, scrolling\n@docs transparentHeader\n\n## Events\n@docs onSelectTab\n\n# Sub-views\n@docs row, spacer, title, navigation, link, onClick, href\n\n# Elm architecture\n@docs view, Msg, Model, defaultModel, update, init, subscriptions\n\n\n",
         "aliases": [
@@ -19107,85 +19191,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.List",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#lists-section):\n\n> Lists present multiple line items vertically as a single continuous element.\n> Refer the Material Design Spec to know more about the content options.\n\nSee also the\n[Material Design Specification]([https://material.google.com/components/lists.html).\n\nRefer to [this site](http://debois.github.io/elm-mdl/#lists)\nfor a live demo and example code.\n\n# List and item containers\n@docs ul, li\n\n# Primary content\n@docs content\n@docs subtitle, withSubtitle, body, withBody\n\n## Icons & avatars\n@docs avatarIcon, avatarImage, avatar, icon\n\n# Secondary content\n@docs content2, action2, info2\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "action2",
-            "comment": " Defines the secondary action sub-division. (The primary action is clicking\nthe primary content.)\n",
-            "type": "Material.Options.Property a m"
-          },
-          {
-            "name": "avatar",
-            "comment": " If you need fine-grained control of the avatar, specify whatever element\nyou want, then add this property. (You may want to use this in conjunction with\n  `Options.img`.)\n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "avatarIcon",
-            "comment": " Set an avatar icon. Like `Icon.view`. \n",
-            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
-          },
-          {
-            "name": "avatarImage",
-            "comment": " Set an avatar image. `src` is a value for `Html.Attributes.src`.\n",
-            "type": "String -> List (Material.Options.Property a m) -> Html.Html m"
-          },
-          {
-            "name": "body",
-            "comment": " Defines the text-body sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withBody` to `li` if you use this. \nMutually exclusive with `subtitle`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "content",
-            "comment": " Defines the primary content sub-division. Use within `li`. \n",
-            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "content2",
-            "comment": " Defines the secondary content sub-division.\tUse within `li`. \n",
-            "type": "List (Material.Options.Property a m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "icon",
-            "comment": " Set an icon. Refer to `Icon.view`. \n",
-            "type": "String -> List (Material.Icon.Property m) -> Html.Html m"
-          },
-          {
-            "name": "info2",
-            "comment": " Defines the information sub-division.\tApplicable only within `content2`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "li",
-            "comment": " List-item, no secondary content. (Use this rather than `Html.li`.)\n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "subtitle",
-            "comment": " Defines the subtitle sub-division.\tUse within `content`. You need to \nadjust list-item spacing by applying `withSubtitle` to `li` if you use this. \nMutually exclusive with `body`. \n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "ul",
-            "comment": " Container for list items. (Use this rather than `Html.ul`.)\n",
-            "type": "List (Material.Options.Property c m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "withBody",
-            "comment": " Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set\nboth this and `withSubtitle`. \n",
-            "type": "Material.Options.Property c m"
-          },
-          {
-            "name": "withSubtitle",
-            "comment": " Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.\nDon't set both this and `withBody`.\n",
-            "type": "Material.Options.Property c m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Material.Progress",
         "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section):\n\n> The Material Design Lite (MDL) progress component is a visual indicator of\n> background activity in a web page or application. A progress indicator\n> consists of a (typically) horizontal bar containing some animation that\n> conveys a sense of motion. While some progress devices indicate an\n> approximate or specific percentage of completion, the MDL progress component\n> simply communicates the fact that an activity is ongoing and is not yet\n> complete.\n\n> Progress indicators are an established but non-standardized feature in user\n> interfaces, and provide users with a visual clue to an application's status.\n> Their design and use is therefore an important factor in the overall user\n> experience. See the progress component's Material Design specifications page\n> for details.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n# Render\n@docs indeterminate, progress, buffered\n\n",
         "aliases": [],
@@ -19322,85 +19327,91 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Tabs",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/tabs):\r\n\r\n> The Material Design Lite (MDL) tab component is a user interface element that\r\n> allows different content blocks to share the same screen space in a mutually\r\n> exclusive manner. Tabs are always presented in sets of two or more, and they\r\n> make it easy to explore and switch among different views or functional aspects\r\n> of an app, or to browse categorized data sets individually. Tabs serve as\r\n> \"headings\" for their respective content; the active tab — the one whose content\r\n> is currently displayed — is always visually distinguished from the others so the\r\n> user knows which heading the current content belongs to.\r\n>\r\n> Tabs are an established but non-standardized feature in user interfaces, and\r\n> allow users to view different, but often related, blocks of content (often\r\n> called panels). Tabs save screen real estate and provide intuitive and logical\r\n> access to data while reducing navigation and associated user confusion. Their\r\n> design and use is an important factor in the overall user experience. See the\r\n> tab component's Material Design specifications page for details.\r\n\r\nSee also the\r\n[Material Design Specification](https://material.google.com/components/tabs.html#tabs-usage).\r\n\r\nRefer to [this site](http://debois.github.io/elm-mdl/#tabs)\r\nfor a live demo.\r\n\r\n# Types\r\n@docs Label\r\n@docs Property\r\n\r\n# Render\r\n\r\n@docs render\r\n\r\n\r\n# Events\r\n\r\n@docs onSelectTab, activeTab\r\n\r\n\r\n# Appearance\r\n\r\n@docs ripple\r\n\r\n\r\n# Content\r\n\r\n@docs label\r\n@docs textLabel\r\n\r\n\r\n# Elm architecture\r\n\r\n@docs Model, defaultModel\r\n@docs Msg\r\n@docs update\r\n@docs view\r\n\r\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " Component model.\r\n",
-            "args": [],
-            "type": "{ ripples : Dict.Dict Int Material.Ripple.Model }"
-          },
-          {
-            "name": "Property",
-            "comment": " Tab options.\r\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property (Material.Tabs.Config m) m"
-          }
-        ],
+        "name": "Material.Table",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#tables-section):\n\n> The Material Design Lite (MDL) data-table component is an enhanced version of\n> the standard HTML <table>. A data-table consists of rows and columns of\n> well-formatted data, presented with appropriate user interaction\n> capabilities.\n\n> Tables are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the data-table component's\n> Material Design specifications page for details.\n\n> The available row/column/cell types in a data-table are mostly\n> self-formatting; that is, once the data-table is defined, the individual\n> cells require very little specific attention. For example, the rows exhibit\n> shading behavior on mouseover and selection, numeric values are automatically\n> formatted by default, and the addition of a single class makes the table rows\n> individually or collectively selectable. This makes the data-table component\n> convenient and easy to code for the developer, as well as attractive and\n> intuitive for the user.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/data-tables.html).\n\nRefer to\n[this this](https://debois.github.io/elm-mdl/#tables)\nfor a live demo.\n\n# HTML\n@docs table, thead, tbody, tfoot\n@docs tr, th, td\n\n# Options\n@docs onClick\n\n## Sorting options. \nThe following options have effect only when applied in the header row. \n@docs ascending, descending, numeric, Order, sorted, selected\n",
+        "aliases": [],
         "types": [
           {
-            "name": "Label",
-            "comment": " Opaque `Label` type\r\n",
-            "args": [
-              "m"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Msg",
-            "comment": " Component action.\r\n",
+            "name": "Order",
+            "comment": " Possible orderings \n",
             "args": [],
-            "cases": []
+            "cases": [
+              [
+                "Ascending",
+                []
+              ],
+              [
+                "Descending",
+                []
+              ]
+            ]
           }
         ],
         "values": [
           {
-            "name": "activeTab",
-            "comment": " Set the active tab.\r\n",
-            "type": "Int -> Material.Tabs.Property m"
+            "name": "ascending",
+            "comment": " Containing column should be sorted ascendingly\n",
+            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
           },
           {
-            "name": "defaultModel",
-            "comment": " Default component model constructor.\r\n",
-            "type": "Material.Tabs.Model"
+            "name": "descending",
+            "comment": " Containing column should be sorted descendingly\n",
+            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
           },
           {
-            "name": "label",
-            "comment": " Create tab `label`\r\n",
-            "type": "List (Material.Tabs.Property m) -> List (Html.Html m) -> Material.Tabs.Label m"
+            "name": "numeric",
+            "comment": " Containing column is interpreted as numeric when used as sorting key\n",
+            "type": "Material.Options.Property { a | numeric : Bool } m"
           },
           {
-            "name": "onSelectTab",
-            "comment": " Receieve notification when tab `k` is selected.\r\n",
-            "type": "(Int -> m) -> Material.Tabs.Property m"
+            "name": "onClick",
+            "comment": " Dispatch given message when cell is clicked. \n",
+            "type": "m -> Material.Options.Property { a | onClick : Maybe.Maybe (Html.Attribute m) } m"
           },
           {
-            "name": "render",
-            "comment": " Component render.\r\n",
-            "type": "(Parts.Msg (Material.Tabs.Container c) m -> m) -> Parts.Index -> Material.Tabs.Container c -> List (Material.Tabs.Property m) -> List (Material.Tabs.Label m) -> List (Html.Html m) -> Html.Html m"
+            "name": "selected",
+            "comment": " Mark row as selected. \n",
+            "type": "Material.Options.Property { a | selected : Bool } m"
           },
           {
-            "name": "ripple",
-            "comment": " Make tabs ripple when clicked.\r\n",
-            "type": "Material.Tabs.Property m"
+            "name": "sorted",
+            "comment": " Containing column should be sorted by given order\n",
+            "type": "Material.Table.Order -> Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
           },
           {
-            "name": "textLabel",
-            "comment": " Create tab `label` with simple text.\r\nMost often the labels are just text so this is a\r\nutility function to help create labels with just text.\r\n",
-            "type": "List (Material.Tabs.Property m) -> String -> Material.Tabs.Label m"
+            "name": "table",
+            "comment": " Main table constructor. Example use: \n\n    table []\n      [ thead []\n          [ tr []\n              [ th [ ascending ] [ text \"Material\" ]\n              , th [ numeric ] [ text \"Quantity\" ]\n              , th [ numeric ] [ text \"Unit Price\" ]\n              ]\n          ]\n      , tbody []\n          [ tr []\n              [ td [] [ text \"Acrylic (Transparent)\" ]\n              , td [ numeric ] [ text \"25\" ]\n              , td [ numeric ] [ text \"$2.90\" ]\n              ]\n          {- ... -}\n          ]\n      ]\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
           },
           {
-            "name": "update",
-            "comment": " Component update.\r\n",
-            "type": "Material.Tabs.Msg -> Material.Tabs.Model -> ( Material.Tabs.Model, Platform.Cmd.Cmd Material.Tabs.Msg )"
+            "name": "tbody",
+            "comment": " Define table body\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
           },
           {
-            "name": "view",
-            "comment": " Component view.\r\n",
-            "type": "(Material.Tabs.Msg -> m) -> Material.Tabs.Model -> List (Material.Tabs.Property m) -> List (Material.Tabs.Label m) -> List (Html.Html m) -> Html.Html m"
+            "name": "td",
+            "comment": " Define table cell \n",
+            "type": "List (Material.Options.Property Material.Table.Cell m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "tfoot",
+            "comment": " Define table footer row(s)\n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "th",
+            "comment": " Define cell in table header \n",
+            "type": "List (Material.Options.Property (Material.Table.Header m) m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "thead",
+            "comment": " Define table header row(s) \n",
+            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "tr",
+            "comment": " Table row \n",
+            "type": "List (Material.Options.Property Material.Table.Row m) -> List (Html.Html m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -19542,91 +19553,129 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Table",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#tables-section):\n\n> The Material Design Lite (MDL) data-table component is an enhanced version of\n> the standard HTML <table>. A data-table consists of rows and columns of\n> well-formatted data, presented with appropriate user interaction\n> capabilities.\n\n> Tables are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the data-table component's\n> Material Design specifications page for details.\n\n> The available row/column/cell types in a data-table are mostly\n> self-formatting; that is, once the data-table is defined, the individual\n> cells require very little specific attention. For example, the rows exhibit\n> shading behavior on mouseover and selection, numeric values are automatically\n> formatted by default, and the addition of a single class makes the table rows\n> individually or collectively selectable. This makes the data-table component\n> convenient and easy to code for the developer, as well as attractive and\n> intuitive for the user.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/data-tables.html).\n\nRefer to\n[this this](https://debois.github.io/elm-mdl/#tables)\nfor a live demo.\n\n# HTML\n@docs table, thead, tbody, tfoot\n@docs tr, th, td\n\n# Options\n@docs onClick\n\n## Sorting options. \nThe following options have effect only when applied in the header row. \n@docs ascending, descending, numeric, Order, sorted, selected\n",
-        "aliases": [],
+        "name": "Material.Tabs",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/tabs):\r\n\r\n> The Material Design Lite (MDL) tab component is a user interface element that\r\n> allows different content blocks to share the same screen space in a mutually\r\n> exclusive manner. Tabs are always presented in sets of two or more, and they\r\n> make it easy to explore and switch among different views or functional aspects\r\n> of an app, or to browse categorized data sets individually. Tabs serve as\r\n> \"headings\" for their respective content; the active tab — the one whose content\r\n> is currently displayed — is always visually distinguished from the others so the\r\n> user knows which heading the current content belongs to.\r\n>\r\n> Tabs are an established but non-standardized feature in user interfaces, and\r\n> allow users to view different, but often related, blocks of content (often\r\n> called panels). Tabs save screen real estate and provide intuitive and logical\r\n> access to data while reducing navigation and associated user confusion. Their\r\n> design and use is an important factor in the overall user experience. See the\r\n> tab component's Material Design specifications page for details.\r\n\r\nSee also the\r\n[Material Design Specification](https://material.google.com/components/tabs.html#tabs-usage).\r\n\r\nRefer to [this site](http://debois.github.io/elm-mdl/#tabs)\r\nfor a live demo.\r\n\r\n# Types\r\n@docs Label\r\n@docs Property\r\n\r\n# Render\r\n\r\n@docs render\r\n\r\n\r\n# Events\r\n\r\n@docs onSelectTab, activeTab\r\n\r\n\r\n# Appearance\r\n\r\n@docs ripple\r\n\r\n\r\n# Content\r\n\r\n@docs label\r\n@docs textLabel\r\n\r\n\r\n# Elm architecture\r\n\r\n@docs Model, defaultModel\r\n@docs Msg\r\n@docs update\r\n@docs view\r\n\r\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Component model.\r\n",
+            "args": [],
+            "type": "{ ripples : Dict.Dict Int Material.Ripple.Model }"
+          },
+          {
+            "name": "Property",
+            "comment": " Tab options.\r\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Tabs.Config m) m"
+          }
+        ],
         "types": [
           {
-            "name": "Order",
-            "comment": " Possible orderings \n",
+            "name": "Label",
+            "comment": " Opaque `Label` type\r\n",
+            "args": [
+              "m"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Component action.\r\n",
             "args": [],
-            "cases": [
-              [
-                "Ascending",
-                []
-              ],
-              [
-                "Descending",
-                []
-              ]
-            ]
+            "cases": []
           }
         ],
         "values": [
           {
-            "name": "ascending",
-            "comment": " Containing column should be sorted ascendingly\n",
-            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+            "name": "activeTab",
+            "comment": " Set the active tab.\r\n",
+            "type": "Int -> Material.Tabs.Property m"
           },
           {
-            "name": "descending",
-            "comment": " Containing column should be sorted descendingly\n",
-            "type": "Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+            "name": "defaultModel",
+            "comment": " Default component model constructor.\r\n",
+            "type": "Material.Tabs.Model"
           },
           {
-            "name": "numeric",
-            "comment": " Containing column is interpreted as numeric when used as sorting key\n",
-            "type": "Material.Options.Property { a | numeric : Bool } m"
+            "name": "label",
+            "comment": " Create tab `label`\r\n",
+            "type": "List (Material.Tabs.Property m) -> List (Html.Html m) -> Material.Tabs.Label m"
           },
           {
-            "name": "onClick",
-            "comment": " Dispatch given message when cell is clicked. \n",
-            "type": "m -> Material.Options.Property { a | onClick : Maybe.Maybe (Html.Attribute m) } m"
+            "name": "onSelectTab",
+            "comment": " Receieve notification when tab `k` is selected.\r\n",
+            "type": "(Int -> m) -> Material.Tabs.Property m"
           },
           {
-            "name": "selected",
-            "comment": " Mark row as selected. \n",
-            "type": "Material.Options.Property { a | selected : Bool } m"
+            "name": "render",
+            "comment": " Component render.\r\n",
+            "type": "(Parts.Msg (Material.Tabs.Container c) m -> m) -> Parts.Index -> Material.Tabs.Container c -> List (Material.Tabs.Property m) -> List (Material.Tabs.Label m) -> List (Html.Html m) -> Html.Html m"
           },
           {
-            "name": "sorted",
-            "comment": " Containing column should be sorted by given order\n",
-            "type": "Material.Table.Order -> Material.Options.Property { a | sorted : Maybe.Maybe Material.Table.Order } m"
+            "name": "ripple",
+            "comment": " Make tabs ripple when clicked.\r\n",
+            "type": "Material.Tabs.Property m"
           },
           {
-            "name": "table",
-            "comment": " Main table constructor. Example use: \n\n    table []\n      [ thead []\n          [ tr []\n              [ th [ ascending ] [ text \"Material\" ]\n              , th [ numeric ] [ text \"Quantity\" ]\n              , th [ numeric ] [ text \"Unit Price\" ]\n              ]\n          ]\n      , tbody []\n          [ tr []\n              [ td [] [ text \"Acrylic (Transparent)\" ]\n              , td [ numeric ] [ text \"25\" ]\n              , td [ numeric ] [ text \"$2.90\" ]\n              ]\n          {- ... -}\n          ]\n      ]\n",
-            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+            "name": "textLabel",
+            "comment": " Create tab `label` with simple text.\r\nMost often the labels are just text so this is a\r\nutility function to help create labels with just text.\r\n",
+            "type": "List (Material.Tabs.Property m) -> String -> Material.Tabs.Label m"
           },
           {
-            "name": "tbody",
-            "comment": " Define table body\n",
-            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+            "name": "update",
+            "comment": " Component update.\r\n",
+            "type": "Material.Tabs.Msg -> Material.Tabs.Model -> ( Material.Tabs.Model, Platform.Cmd.Cmd Material.Tabs.Msg )"
           },
           {
-            "name": "td",
-            "comment": " Define table cell \n",
-            "type": "List (Material.Options.Property Material.Table.Cell m) -> List (Html.Html m) -> Html.Html m"
+            "name": "view",
+            "comment": " Component view.\r\n",
+            "type": "(Material.Tabs.Msg -> m) -> Material.Tabs.Model -> List (Material.Tabs.Property m) -> List (Material.Tabs.Label m) -> List (Html.Html m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Material.Spinner",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):\n\n> The Material Design Lite (MDL) spinner component is an enhanced replacement\n> for the classic \"wait cursor\" (which varies significantly among hardware and\n> software versions) and indicates that there is an ongoing process, the\n> results of which are not yet available. A spinner consists of an open circle\n> that changes colors as it animates in a clockwise direction, and clearly\n> communicates that a process has been started but not completed.\n\n> A spinner performs no action itself, either by its display nor when the user\n> clicks or touches it, and does not indicate a process's specific progress or\n> degree of completion. The MDL spinner component provides various types of\n> spinners, and allows you to add display effects.\n\n> Spinners are a fairly new feature of most user interfaces, and provide users\n> with a consistent visual cue about ongoing activity, regardless of hardware\n> device, operating system, or browser environment. Their design and use is an\n> important factor in the overall user experience.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n@docs spinner, active, singleColor\n@docs Property, Config, defaultConfig\n\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Spinner config\n",
+            "args": [],
+            "type": "{ active : Bool, singleColor : Bool }"
           },
           {
-            "name": "tfoot",
-            "comment": " Define table footer row(s)\n",
-            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+            "name": "Property",
+            "comment": " A spinner's property.\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property Material.Spinner.Config m"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "active",
+            "comment": " Make a spinner visible\n",
+            "type": "Bool -> Material.Spinner.Property m"
           },
           {
-            "name": "th",
-            "comment": " Define cell in table header \n",
-            "type": "List (Material.Options.Property (Material.Table.Header m) m) -> List (Html.Html m) -> Html.Html m"
+            "name": "defaultConfig",
+            "comment": " Spinner default config is not `active`, not `singleColor`.\n",
+            "type": "Material.Spinner.Config"
           },
           {
-            "name": "thead",
-            "comment": " Define table header row(s) \n",
-            "type": "List (Material.Options.Property {} m) -> List (Html.Html m) -> Html.Html m"
+            "name": "singleColor",
+            "comment": " Make a spinner a single color (the active color) of the stylesheet.\n",
+            "type": "Bool -> Material.Spinner.Property m"
           },
           {
-            "name": "tr",
-            "comment": " Table row \n",
-            "type": "List (Material.Options.Property Material.Table.Row m) -> List (Html.Html m) -> Html.Html m"
+            "name": "spinner",
+            "comment": " A spinner is a loading indicator that by default changes color and is\ninvisible. Example use: \n\n    spinner [ active ] []\n",
+            "type": "List (Material.Spinner.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -19680,50 +19729,6 @@
             "name": "view",
             "comment": " A slider consists of a horizontal line upon which sits a small, movable\r\ndisc (the thumb) and, typically, text that clearly communicates a value that\r\nwill be set when the user moves it. Example use:\r\n\r\n    import Material.Slider as Slider\r\n\r\n    slider : Model -> Html Msg\r\n    slider model =\r\n      p [ style [ (\"width\", \"300px\") ] ]\r\n        [ Slider.view\r\n            [ Slider.onChange SliderMsg\r\n            , Slider.value model.value\r\n            ]\r\n        ]\r\n",
             "type": "List (Material.Slider.Property m) -> Html.Html m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Spinner",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):\n\n> The Material Design Lite (MDL) spinner component is an enhanced replacement\n> for the classic \"wait cursor\" (which varies significantly among hardware and\n> software versions) and indicates that there is an ongoing process, the\n> results of which are not yet available. A spinner consists of an open circle\n> that changes colors as it animates in a clockwise direction, and clearly\n> communicates that a process has been started but not completed.\n\n> A spinner performs no action itself, either by its display nor when the user\n> clicks or touches it, and does not indicate a process's specific progress or\n> degree of completion. The MDL spinner component provides various types of\n> spinners, and allows you to add display effects.\n\n> Spinners are a fairly new feature of most user interfaces, and provide users\n> with a consistent visual cue about ongoing activity, regardless of hardware\n> device, operating system, or browser environment. Their design and use is an\n> important factor in the overall user experience.\n\nRefer to\n[this site](https://debois.github.io/elm-mdl/#loading)\nfor a live demo.\n\n@docs spinner, active, singleColor\n@docs Property, Config, defaultConfig\n\n",
-        "aliases": [
-          {
-            "name": "Config",
-            "comment": " Spinner config\n",
-            "args": [],
-            "type": "{ active : Bool, singleColor : Bool }"
-          },
-          {
-            "name": "Property",
-            "comment": " A spinner's property.\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property Material.Spinner.Config m"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "active",
-            "comment": " Make a spinner visible\n",
-            "type": "Bool -> Material.Spinner.Property m"
-          },
-          {
-            "name": "defaultConfig",
-            "comment": " Spinner default config is not `active`, not `singleColor`.\n",
-            "type": "Material.Spinner.Config"
-          },
-          {
-            "name": "singleColor",
-            "comment": " Make a spinner a single color (the active color) of the stylesheet.\n",
-            "type": "Bool -> Material.Spinner.Property m"
-          },
-          {
-            "name": "spinner",
-            "comment": " A spinner is a loading indicator that by default changes color and is\ninvisible. Example use: \n\n    spinner [ active ] []\n",
-            "type": "List (Material.Spinner.Property m) -> Html.Html m"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -20231,6 +20236,50 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Material.Dialog",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) dialog component allows for verification of user\n> actions, simple data input, and alerts to provide extra information to users.\n>\n> To use the dialog component, you must be using a browser that supports the\n> dialog element. Only Chrome and Opera have native support at the time of\n> writing. For other browsers you will need to include the dialog polyfill\n> or create your own.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#dialog)\nfor a live demo.\n\n@docs view\n\n# Contents\n@docs title, content, actions, fullWidth\n\n# Opening & closing\n@docs openOn, closeOn\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "actions",
+            "comment": " Generate an actions content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "closeOn",
+            "comment": " Close the dialog. The dialog must be open. Use like this: \n\n    Button.render Mdl [1] model.mdl\n      [ Dialog.closeOn \"click\" ]\n      [ text \"Close\" ] \n",
+            "type": "String -> Material.Options.Property c m"
+          },
+          {
+            "name": "content",
+            "comment": " Generate a supporting text content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "fullWidth",
+            "comment": " Option to `actions`. If set, each control takes up the full width of the\ndialog. \n",
+            "type": "Material.Options.Style a"
+          },
+          {
+            "name": "openOn",
+            "comment": " Open dialog in response to given DOM event. The DOM must also contain a\n`dialog` produced using `Dialog.view`.  Use like this: \n\n    Button.render Mdl [0] model.mdl\n      [ Dialog.openOn \"click\" ] \n      [ text \"Open dialog\" ]\n",
+            "type": "String -> Material.Options.Property c m"
+          },
+          {
+            "name": "title",
+            "comment": " Generate a title content block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
+          },
+          {
+            "name": "view",
+            "comment": " Construct a dialog. \n\n- If you target browser not supporting\n`<dialog>` natively, you will need to load [this\npolyfill](https://github.com/GoogleChrome/dialog-polyfill).\n- Using this polyfill [places\nrestrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on\nwhere in the DOM you can put the output of this function.\n- The elm-mdl library currently support only one dialog pr. application. \nInstalling more than one dialog will result in a random one showing. \n",
+            "type": "List (Material.Options.Style a) -> List (Material.Dialog.Block a) -> Html.Html a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Material.Elevation",
         "comment": " From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)\n\n> The Material Design Lite (MDL) shadow is not a component in the same sense as\n> an MDL card, menu, or textbox; it is a visual effect that can be assigned to a\n> user interface element. The effect simulates a three-dimensional positioning of\n> the element, as though it is slightly raised above the surface it rests upon —\n> a positive z-axis value, in user interface terms. The shadow starts at the\n> edges of the element and gradually fades outward, providing a realistic 3-D\n> effect.\n> \n> Shadows are a convenient and intuitive means of distinguishing an element from\n> its surroundings. A shadow can draw the user's eye to an object and emphasize\n> the object's importance, uniqueness, or immediacy.\n> \n> Shadows are a well-established feature in user interfaces, and provide users\n> with a visual clue to an object's intended use or value. Their design and use\n> is an important factor in the overall user experience.)\n\nThe [Material Design Specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html#elevation-shadows-elevation-android-)\npre-defines appropriate elevation for most UI elements; you need to manually\nassign shadows only to your own elements. \n\nYou are encouraged to visit the\n[Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)\nfor details about appropriate use of shadows. \n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#elevation)\nfor a live demo. \n  \n\n# Elevations\nEach of the values below denote an elevation of a certain heigh, e.g., \n`e4` will cast a shadow indicating an elevation of 4dp. The default elevation\nis `e0`, no elevation.\n@docs e0, e2, e3, e4, e6, e8, e16, e24\n@docs elevations\n\n# Transitions\n@docs transition\n\n",
         "aliases": [],
@@ -20285,109 +20334,6 @@
             "name": "transition",
             "comment": " Add a CSS-transition to changes in elevation. Supply a transition\nduration in milliseconds as argument. \n\nNB! This Property a m is dictated by neither MDL nor the Material Design\nSpecification. \n",
             "type": "Float -> Material.Options.Property a m"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Dialog",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) dialog component allows for verification of user\n> actions, simple data input, and alerts to provide extra information to users.\n>\n> To use the dialog component, you must be using a browser that supports the\n> dialog element. Only Chrome and Opera have native support at the time of\n> writing. For other browsers you will need to include the dialog polyfill\n> or create your own.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#dialog)\nfor a live demo.\n\n@docs view\n\n# Contents\n@docs title, content, actions, fullWidth\n\n# Opening & closing\n@docs openOn, closeOn\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "actions",
-            "comment": " Generate an actions content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "closeOn",
-            "comment": " Close the dialog. The dialog must be open. Use like this: \n\n    Button.render Mdl [1] model.mdl\n      [ Dialog.closeOn \"click\" ]\n      [ text \"Close\" ] \n",
-            "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "content",
-            "comment": " Generate a supporting text content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "fullWidth",
-            "comment": " Option to `actions`. If set, each control takes up the full width of the\ndialog. \n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "openOn",
-            "comment": " Open dialog in response to given DOM event. The DOM must also contain a\n`dialog` produced using `Dialog.view`.  Use like this: \n\n    Button.render Mdl [0] model.mdl\n      [ Dialog.openOn \"click\" ] \n      [ text \"Open dialog\" ]\n",
-            "type": "String -> Material.Options.Property c m"
-          },
-          {
-            "name": "title",
-            "comment": " Generate a title content block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Dialog.Block a"
-          },
-          {
-            "name": "view",
-            "comment": " Construct a dialog. \n\n- If you target browser not supporting\n`<dialog>` natively, you will need to load [this\npolyfill](https://github.com/GoogleChrome/dialog-polyfill).\n- Using this polyfill [places\nrestrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on\nwhere in the DOM you can put the output of this function.\n- The elm-mdl library currently support only one dialog pr. application. \nInstalling more than one dialog will result in a random one showing. \n",
-            "type": "List (Material.Options.Style a) -> List (Material.Dialog.Block a) -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Material.Card",
-        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) card component is a user interface element\n> representing a virtual piece of paper that contains related data — such as a\n> photo, some text, and a link — that are all about a single subject.\n>\n> Cards are a convenient means of coherently displaying related block that is\n> composed of different types of objects. They are also well-suited for presenting\n> similar objects whose size or supported actions can vary considerably, like\n> photos with captions of variable length. Cards have a constant width and a\n> variable height, depending on their block.\n>\n> Cards are a fairly new feature in user interfaces, and allow users an access\n> point to more complex and detailed information. Their design and use is an\n> important factor in the overall user experience. See the card component's\n> Material Design specifications page for details.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#cards)\nfor a live demo.\n\n# Render\n@docs view\n\n# Content blocks\n@docs title, media, text, actions\n\n## Title block\n@docs subhead, head\n\n# Misc\n@docs expand, border, menu\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "actions",
-            "comment": " Generate an actions block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "border",
-            "comment": " Separate given content block from others by adding a thin border.\n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "expand",
-            "comment": " Set given content block to expand or compress vertically as necessary.\n",
-            "type": "Material.Options.Style a"
-          },
-          {
-            "name": "head",
-            "comment": " Head for title block. (This is called \"title\" in the Material Design\nSpecification.)\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "media",
-            "comment": " Generate a media block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "menu",
-            "comment": " Generate a menu block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "subhead",
-            "comment": " Sub-head for title block. (This is called \"subtitle\" in the Material Design\nSpecification.\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "text",
-            "comment": " Generate a supporting text block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "title",
-            "comment": " Generate a title block\n",
-            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
-          },
-          {
-            "name": "view",
-            "comment": " Construct a card.\n\nNotes. Google's MDL implementation sets `min-height: 200px`; this precludes a\nnumber of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),\nso the elm-mdl implementation sets `min-height: 0px`. Add `css \"min-height\" \"200px\"` as an option to `view`\nto adhere to the MDL implementation. \n",
-            "type": "List (Material.Options.Style a) -> List (Material.Card.Block a) -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -20630,111 +20576,60 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Material.Button",
-        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):\n\n> The Material Design Lite (MDL) button component is an enhanced version of the\n> standard HTML `<button>` element. A button consists of text and/or an image that\n> clearly communicates what action will occur when the user clicks or touches it.\n> The MDL button component provides various types of buttons, and allows you to\n> add both display and click effects.\n>\n> Buttons are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the button component's Material\n> Design specifications page for details.\n>\n> The available button display types are flat (default), raised, fab, mini-fab,\n> and icon; any of these types may be plain (light gray) or colored, and may be\n> initially or programmatically disabled. The fab, mini-fab, and icon button\n> types typically use a small image as their caption rather than text.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#buttons) \nfor a live demo. \n\n# Render\n@docs render\n\n# Options\n\n@docs Property\n\n## Appearance\n@docs plain, colored, primary, accent\n@docs ripple, disabled\n  \n## Events\n@docs onClick\n\n## Type \nRefer to the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html)\nfor details about what type of buttons are appropriate for which situations.\n@docs flat, raised, fab, minifab, icon\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update, view\n\n\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " \n",
-            "args": [],
-            "type": "Material.Ripple.Model"
-          },
-          {
-            "name": "Msg",
-            "comment": " Component action.\n",
-            "args": [],
-            "type": "Material.Ripple.Msg"
-          },
-          {
-            "name": "Property",
-            "comment": " Properties for Button options.\n",
-            "args": [
-              "m"
-            ],
-            "type": "Material.Options.Property (Material.Button.Config m) m"
-          }
-        ],
+        "name": "Material.Card",
+        "comment": " From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):\n\n> The Material Design Lite (MDL) card component is a user interface element\n> representing a virtual piece of paper that contains related data — such as a\n> photo, some text, and a link — that are all about a single subject.\n>\n> Cards are a convenient means of coherently displaying related block that is\n> composed of different types of objects. They are also well-suited for presenting\n> similar objects whose size or supported actions can vary considerably, like\n> photos with captions of variable length. Cards have a constant width and a\n> variable height, depending on their block.\n>\n> Cards are a fairly new feature in user interfaces, and allow users an access\n> point to more complex and detailed information. Their design and use is an\n> important factor in the overall user experience. See the card component's\n> Material Design specifications page for details.\n\nRefer to [this site](http://debois.github.io/elm-mdl/#cards)\nfor a live demo.\n\n# Render\n@docs view\n\n# Content blocks\n@docs title, media, text, actions\n\n## Title block\n@docs subhead, head\n\n# Misc\n@docs expand, border, menu\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "accent",
-            "comment": " Color button with accent color. \n",
-            "type": "Material.Button.Property m"
+            "name": "actions",
+            "comment": " Generate an actions block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
           },
           {
-            "name": "colored",
-            "comment": " Color button with primary or accent color depending on button type.\n",
-            "type": "Material.Button.Property m"
+            "name": "border",
+            "comment": " Separate given content block from others by adding a thin border.\n",
+            "type": "Material.Options.Style a"
           },
           {
-            "name": "defaultModel",
-            "comment": "\n",
-            "type": "Material.Button.Model"
+            "name": "expand",
+            "comment": " Set given content block to expand or compress vertically as necessary.\n",
+            "type": "Material.Options.Style a"
           },
           {
-            "name": "disabled",
-            "comment": " Set button to \"disabled\".\n",
-            "type": "Material.Button.Property m"
+            "name": "head",
+            "comment": " Head for title block. (This is called \"title\" in the Material Design\nSpecification.)\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
           },
           {
-            "name": "fab",
-            "comment": " Floating Msg Button. From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons-floating-action-button.html):\n\n> Floating action buttons are used for a promoted action. They are distinguished\n> by a circled icon floating above the UI and have motion behaviors that include\n> morphing, launching, and a transferring anchor point.\n>\n> Floating action buttons come in two sizes:\n>\n>  - Default size: For most use cases\n>  - Mini size: Only used to create visual continuity with other screen elements\n\nThis constructor produces the default size, use `minifab` to get the mini-size.\n\nExample use (colored with a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    fabButton : Html\n    fabButton = fab addr model Colored [Icon.i \"add\"]\n",
-            "type": "Material.Button.Property m"
+            "name": "media",
+            "comment": " Generate a media block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
           },
           {
-            "name": "flat",
-            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-flat-buttons):\n\n> Flat buttons are printed on material. They do not lift, but fill with color on\n> press.\n>\n> Use flat buttons in the following locations:\n>\n>  - On toolbars\n>  - In dialogs, to unify the button action with the dialog content\n>  - Inline, with padding, so the user can easily find them\n\nExample use (uncolored flat button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    flatButton : Html\n    flatButton = Button.flat addr model Button.Plain [text \"Click me!\"]\n\n",
-            "type": "Material.Button.Property m"
+            "name": "menu",
+            "comment": " Generate a menu block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
           },
           {
-            "name": "icon",
-            "comment": " The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)\nalso offers an \"icon button\", which we\nre-implement here. See also\n[Material Design Specification](http://www.google.com/design/spec/components/buttons.html#buttons-toggle-buttons).\nExample use (no color, displaying a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    iconButton : Html\n    iconButton = icon addr model Plain [Icon.i \"add\"]\n",
-            "type": "Material.Button.Property m"
+            "name": "subhead",
+            "comment": " Sub-head for title block. (This is called \"subtitle\" in the Material Design\nSpecification.\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Html.Html a"
           },
           {
-            "name": "minifab",
-            "comment": " Mini-sized variant of a Floating Msg Button; refer to `fab`.\n",
-            "type": "Material.Button.Property m"
+            "name": "text",
+            "comment": " Generate a supporting text block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
           },
           {
-            "name": "onClick",
-            "comment": " Add an `on \"click\"` handler to a button. \n",
-            "type": "m -> Material.Button.Property m"
-          },
-          {
-            "name": "plain",
-            "comment": " Plain, uncolored button (default). \n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "primary",
-            "comment": " Color button with primary color.\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "raised",
-            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-raised-buttons):\n\n> Raised buttons add dimension to mostly flat layouts. They emphasize functions\n> on busy or wide spaces.\n>\n> Raised buttons behave like a piece of material resting on another sheet –\n> they lift and fill with color on press.\n\nExample use (colored raised button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    raisedButton : Html\n    raisedButton = Button.raised addr model Button.Colored [text \"Click me!\"]\n\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "render",
-            "comment": " Component render.  Below is an example, assuming boilerplate setup as\nindicated in `Material`, and a user message `PollMsg`.\n    Button.render Mdl [0] model.mdl\n      [ Button.raised\n      , Button.ripple\n      , Button.onClick PollMsg\n      ]\n      [ text \"Fetch new\"]\n",
-            "type": "(Parts.Msg (Material.Button.Container c) m -> m) -> Parts.Index -> Material.Button.Container c -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
-          },
-          {
-            "name": "ripple",
-            "comment": " Set button to ripple when clicked.\n",
-            "type": "Material.Button.Property m"
-          },
-          {
-            "name": "update",
-            "comment": " Component update.\n",
-            "type": "Material.Button.Msg -> Material.Button.Model -> ( Material.Button.Model, Platform.Cmd.Cmd Material.Button.Msg )"
+            "name": "title",
+            "comment": " Generate a title block\n",
+            "type": "List (Material.Options.Style a) -> List (Html.Html a) -> Material.Card.Block a"
           },
           {
             "name": "view",
-            "comment": " Component view function.\n",
-            "type": "(Material.Button.Msg -> m) -> Material.Button.Model -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+            "comment": " Construct a card.\n\nNotes. Google's MDL implementation sets `min-height: 200px`; this precludes a\nnumber of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),\nso the elm-mdl implementation sets `min-height: 0px`. Add `css \"min-height\" \"200px\"` as an option to `view`\nto adhere to the MDL implementation. \n",
+            "type": "List (Material.Options.Style a) -> List (Material.Card.Block a) -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -20793,6 +20688,116 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Material.Button",
+        "comment": " From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):\n\n> The Material Design Lite (MDL) button component is an enhanced version of the\n> standard HTML `<button>` element. A button consists of text and/or an image that\n> clearly communicates what action will occur when the user clicks or touches it.\n> The MDL button component provides various types of buttons, and allows you to\n> add both display and click effects.\n>\n> Buttons are a ubiquitous feature of most user interfaces, regardless of a\n> site's content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the button component's Material\n> Design specifications page for details.\n>\n> The available button display types are flat (default), raised, fab, mini-fab,\n> and icon; any of these types may be plain (light gray) or colored, and may be\n> initially or programmatically disabled. The fab, mini-fab, and icon button\n> types typically use a small image as their caption rather than text.\n\nSee also the\n[Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).\n\nRefer to \n[this site](https://debois.github.io/elm-mdl/#buttons) \nfor a live demo. \n\n# Render\n@docs render\n\n# Options\n\n@docs Property\n\n## Appearance\n@docs plain, colored, primary, accent\n@docs ripple, disabled\n  \n## Events\n@docs onClick\n\n## Type \nRefer to the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html)\nfor details about what type of buttons are appropriate for which situations.\n@docs flat, raised, fab, minifab, icon\n\n# Elm architecture\n@docs Model, defaultModel, Msg, update, view\n\n\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " \n",
+            "args": [],
+            "type": "Material.Ripple.Model"
+          },
+          {
+            "name": "Msg",
+            "comment": " Component action.\n",
+            "args": [],
+            "type": "Material.Ripple.Msg"
+          },
+          {
+            "name": "Property",
+            "comment": " Properties for Button options.\n",
+            "args": [
+              "m"
+            ],
+            "type": "Material.Options.Property (Material.Button.Config m) m"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "accent",
+            "comment": " Color button with accent color. \n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "colored",
+            "comment": " Color button with primary or accent color depending on button type.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "defaultModel",
+            "comment": "\n",
+            "type": "Material.Button.Model"
+          },
+          {
+            "name": "disabled",
+            "comment": " Set button to \"disabled\".\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "fab",
+            "comment": " Floating Msg Button. From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons-floating-action-button.html):\n\n> Floating action buttons are used for a promoted action. They are distinguished\n> by a circled icon floating above the UI and have motion behaviors that include\n> morphing, launching, and a transferring anchor point.\n>\n> Floating action buttons come in two sizes:\n>\n>  - Default size: For most use cases\n>  - Mini size: Only used to create visual continuity with other screen elements\n\nThis constructor produces the default size, use `minifab` to get the mini-size.\n\nExample use (colored with a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    fabButton : Model -> Html\n    fabButton model =\n      Button.render Mdl [0] model.mdl\n        [ Button.fab ]\n        [ Icon.i \"add\" ]\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "flat",
+            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-flat-buttons):\n\n> Flat buttons are printed on material. They do not lift, but fill with color on\n> press.\n>\n> Use flat buttons in the following locations:\n>\n>  - On toolbars\n>  - In dialogs, to unify the button action with the dialog content\n>  - Inline, with padding, so the user can easily find them\n\nExample use (uncolored flat button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    flatButton : Model -> Html\n    flatButton model =\n      Button.render Mdl [0] model.mdl\n        [ Button.flat ]\n        [ text \"Click me!\" ]\n\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "icon",
+            "comment": " The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)\nalso offers an \"icon button\", which we\nre-implement here. See also\n[Material Design Specification](http://www.google.com/design/spec/components/buttons.html#buttons-toggle-buttons).\nExample use (no color, displaying a '+' icon):\n\n    import Material.Button as Button\n    import Material.Icon as Icon\n\n    iconButton : Html\n    iconButton =\n      Button.render Mdl [0] model.mdl\n        [ Button.icon ]\n        [ Icon.i \"add\" ]\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "minifab",
+            "comment": " Mini-sized variant of a Floating Msg Button; refer to `fab`.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "onClick",
+            "comment": " Add an `on \"click\"` handler to a button. \n",
+            "type": "m -> Material.Button.Property m"
+          },
+          {
+            "name": "plain",
+            "comment": " Plain, uncolored button (default). \n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "primary",
+            "comment": " Color button with primary color.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "raised",
+            "comment": " From the\n[Material Design Specification](https://www.google.com/design/spec/components/buttons.html#buttons-raised-buttons):\n\n> Raised buttons add dimension to mostly flat layouts. They emphasize functions\n> on busy or wide spaces.\n>\n> Raised buttons behave like a piece of material resting on another sheet –\n> they lift and fill with color on press.\n\nExample use (colored raised button, assuming properly setup model):\n\n    import Material.Button as Button\n\n    raisedButton : Model -> Html\n    raisedButton model =\n      Button.render Mdl [0] model.mdl\n        [ Button.raised ]\n        [ text \"Click me!\" ]\n\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "render",
+            "comment": " Component render.  Below is an example, assuming boilerplate setup as\nindicated in `Material`, and a user message `PollMsg`.\n    Button.render Mdl [0] model.mdl\n      [ Button.raised\n      , Button.ripple\n      , Button.onClick PollMsg\n      ]\n      [ text \"Fetch new\"]\n",
+            "type": "(Parts.Msg (Material.Button.Container c) m -> m) -> Parts.Index -> Material.Button.Container c -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "ripple",
+            "comment": " Set button to ripple when clicked.\n",
+            "type": "Material.Button.Property m"
+          },
+          {
+            "name": "update",
+            "comment": " Component update.\n",
+            "type": "Material.Button.Msg -> Material.Button.Model -> ( Material.Button.Model, Platform.Cmd.Cmd Material.Button.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " Component view function.\n",
+            "type": "(Material.Button.Msg -> m) -> Material.Button.Model -> List (Material.Button.Property m) -> List (Html.Html m) -> Html.Html m"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Material.Options",
         "comment": " Setting options for Material components. \n\nHere is a standard use of an elm-mdl Textfield: \n\n    Textfield.render MDL [0] model.mdl\n      [ Textfield.floatingLabel\n      , Textfield.label \"name\"\n      , css \"width\" \"96px\"\n      , cs \"my-name-textfield\"\n      ]\n\nThe above code renders a textfield, setting the optional properties\n`floatingLabel` and `label \"name\"` on the textfield; as well as adding\nadditional (CSS) styling `width: 96px;` and the HTML class `my-name-textfield`. \n\nThis module defines the type `Property c m` of such optional properties, the\nelements of the last argument in the above call to `Textfield.render`.\nIndividual components, such as Textfield usually instantiate the `c` to avoid\ninadvertently applying, say, a Textfield property to a Button. \n\nSome optional properties apply to all components, see the `Typography`,\n`Elevation`, `Badge`, and `Color` modules. Such universally applicable\noptional properties can _also_ be applied to standard `Html` elements \nsuch as `Html.div`; see `style` et. al. below. This is convenient, e.g., for\napplying MDL typography or color to standard elements. \n\n\n@docs Property\n\n# Constructors\n@docs cs, css, data, many, nop, when, maybe\n\n# Html\n@docs Style, styled, styled'\n\n## Elements\n@docs div, span, img\n@docs stylesheet\n\n## Attributes\n@docs attribute\n@docs center, scrim, disabled\n\n# Internal\nThe following types and values are used internally in the library. \n@docs Summary, apply, collect, set\n\n",
         "aliases": [
@@ -20832,7 +20837,7 @@
           },
           {
             "name": "attribute",
-            "comment": " Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not \ngeneral Properties. \n",
+            "comment": " Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not \ngeneral Properties. Use like this:\n\n    Options.div \n      [ Options.attribute <| Html.onClick MyClickEvent ]\n      [ ... ]\n",
             "type": "Html.Attribute m -> Material.Options.Style m"
           },
           {
@@ -21014,7 +21019,7 @@
       },
       {
         "name": "Material.Helpers",
-        "comment": " Convenience functions. These are mostly trivial functions that are used\ninternally in the library; you might\nfind some of them useful. \n\n# HTML & Events\n@docs filter, blurOn, noAttr\n\n# Cmd\n@docs pure, effect, delay, cmd, cssTransitionStep\n\n# Tuples\n@docs map1st, map2nd\n\n# Elm architecture\n@docs Update, Update', lift, lift'\n",
+        "comment": " Convenience functions. These are mostly trivial functions that are used\ninternally in the library; you might\nfind some of them useful. \n\n# HTML & Events\n@docs filter, blurOn, noAttr, aria\n\n# Cmd\n@docs pure, effect, delay, cmd, cssTransitionStep\n\n# Tuples\n@docs map1st, map2nd\n\n# Elm architecture\n@docs Update, Update', lift, lift'\n",
         "aliases": [
           {
             "name": "Update",
@@ -21038,6 +21043,11 @@
         ],
         "types": [],
         "values": [
+          {
+            "name": "aria",
+            "comment": " Install aria-* attributes, conspicuously missing from elm-lang/html.\n",
+            "type": "String -> Bool -> Html.Attribute a"
+          },
           {
             "name": "blurOn",
             "comment": " Attribute which causes element to blur on given event. Example use\n\n    myButton : Html\n    myButton = \n      button \n        [ blurOn \"mouseleave\" ]\n        [ text \"Click me!\" ]\n",
@@ -31600,11 +31610,11 @@
   },
   {
     "name": "elm-community/list-extra",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "List.Extra",
-        "comment": " Convenience functions for working with List\n\n# Basics\n@docs last, init, getAt, (!!), uncons, maximumBy, minimumBy, andMap, andThen, takeWhile, dropWhile, unique, uniqueBy, replaceIf, setAt, remove, updateIf, updateAt, updateIfIndex, singleton, removeAt, filterNot\n\n# List transformations\n@docs intercalate, transpose, subsequences, permutations, interweave\n\n# Folds\n@docs foldl1, foldr1\n\n# Building lists\n@docs scanl1, scanr, scanr1, unfoldr, iterate\n\n# Sublists\n@docs splitAt, takeWhileRight, dropWhileRight, span, break, stripPrefix, group, groupWhile, groupWhileTransitively, inits, tails, select, selectSplit\n\n# Predicates\n@docs isPrefixOf, isSuffixOf, isInfixOf, isSubsequenceOf, isPermutationOf\n\n# Searching\n@docs notMember, find, elemIndex, elemIndices, findIndex, findIndices\n\n# Zipping\n@docs zip, zip3, zip4, zip5\n\n# Lift functions onto multiple lists of arguments\n@docs lift2, lift3, lift4\n\n# Split to groups of given size\n@docs groupsOf, groupsOfWithStep, greedyGroupsOf, greedyGroupsOfWithStep\n",
+        "comment": " Convenience functions for working with List\n\n# Basics\n@docs last, init, getAt, (!!), uncons, maximumBy, minimumBy, andMap, andThen, takeWhile, dropWhile, unique, uniqueBy, replaceIf, setAt, remove, updateIf, updateAt, updateIfIndex, singleton, removeAt, filterNot\n\n# List transformations\n@docs intercalate, transpose, subsequences, permutations, interweave\n\n# Folds\n@docs foldl1, foldr1, indexedFoldl, indexedFoldr\n\n# Building lists\n@docs scanl1, scanr, scanr1, unfoldr, iterate\n\n# Sublists\n@docs splitAt, takeWhileRight, dropWhileRight, span, break, stripPrefix, group, groupWhile, groupWhileTransitively, inits, tails, select, selectSplit\n\n# Predicates\n@docs isPrefixOf, isSuffixOf, isInfixOf, isSubsequenceOf, isPermutationOf\n\n# Searching\n@docs notMember, find, elemIndex, elemIndices, findIndex, findIndices\n\n# Zipping\n@docs zip, zip3, zip4, zip5\n\n# Lift functions onto multiple lists of arguments\n@docs lift2, lift3, lift4\n\n# Split to groups of given size\n@docs groupsOf, groupsOfWithStep, greedyGroupsOf, greedyGroupsOfWithStep\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -31717,6 +31727,16 @@
             "name": "groupsOfWithStep",
             "comment": " Split list into groups of size given by the first argument.  After each group, drop a number of elements given by the second argument before starting the next group.\n\n    groupsOfWithStep 2 1 [1..4]\n      == [[1,2],[2,3],[3,4]]\n",
             "type": "Int -> Int -> List a -> List (List a)"
+          },
+          {
+            "name": "indexedFoldl",
+            "comment": " Variant of `foldl` that passes the index of the current element to the step function. `indexedFoldl` is to `List.foldl` as `List.indexedMap` is to `List.map`.\n",
+            "type": "(Int -> a -> b -> b) -> b -> List a -> b"
+          },
+          {
+            "name": "indexedFoldr",
+            "comment": " Variant of `foldr` that passes the index of the current element to the step function. `indexedFoldr` is to `List.foldr` as `List.indexedMap` is to `List.map`.\n",
+            "type": "(Int -> a -> b -> b) -> b -> List a -> b"
           },
           {
             "name": "init",
@@ -46879,6 +46899,107 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "joneshf/elm-proxy",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Proxy",
+        "comment": "\nA module that allow you to pass around type level information for compile-time verification.\n\n@docs Proxy, reproxy\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Proxy",
+            "comment": "\nRoughly equivalent to `()` with type level information.\n\nCan be used to disambiguate between values at the type level.\nCan also be used to pass \"dummy\" values to functions.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Proxy",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "reproxy",
+            "comment": "\nUseful for easily changing the type of a proxy value.\n\nFor example, if you needed to enforce a different invariant in an algorithm,\nyou could `reproxy` the current invariant without headache.\n",
+            "type": "Proxy.Proxy a -> Proxy.Proxy b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "joneshf/elm-tagged",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Tagged",
+        "comment": "\n\nA module that allows you to \"tag\" a value.\n\n@docs Tagged, tag, retag, untag, map, ap, bind, extend\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Tagged",
+            "comment": "\nA Type that pairs a `value` with a `tag`.\n\nThe `tag` is ignored at runtime as evidenced by the only value constructor:\n\n```elm\nTagged : value -> Tagged tag value\n```\n",
+            "args": [
+              "tag",
+              "value"
+            ],
+            "cases": [
+              [
+                "Tagged",
+                [
+                  "value"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "ap",
+            "comment": "\nUseful for composing functions together infix:\n\n```elm\nfoo =\n  Array.set `map` index `ap` value `ap` arr\n```\n",
+            "type": "Tagged.Tagged tag (oldValue -> newValue) -> Tagged.Tagged tag oldValue -> Tagged.Tagged tag newValue"
+          },
+          {
+            "name": "bind",
+            "comment": "\nUseful for restricting the tag created in a polymorphic function.\n",
+            "type": "(oldValue -> Tagged.Tagged tag newValue) -> Tagged.Tagged tag oldValue -> Tagged.Tagged tag newValue"
+          },
+          {
+            "name": "extend",
+            "comment": "\nUseful when you have a function that throws away a tag prematurely,\nbut you still need the tag later.\n",
+            "type": "(Tagged.Tagged tag oldValue -> newValue) -> Tagged.Tagged tag oldValue -> Tagged.Tagged tag newValue"
+          },
+          {
+            "name": "map",
+            "comment": "\nUseful for composing functions together infix:\n\n```elm\nfoo =\n  Array.set `map` index `ap` value `ap` arr\n```\n",
+            "type": "(oldValue -> newValue) -> Tagged.Tagged tag oldValue -> Tagged.Tagged tag newValue"
+          },
+          {
+            "name": "retag",
+            "comment": "\nExplicitly changes the tag of a value.\n\nForces you to recognize that the value is being interpreted differently from before.\n",
+            "type": "Tagged.Tagged oldTag value -> Tagged.Tagged newTag value"
+          },
+          {
+            "name": "tag",
+            "comment": "\nAn alias for the `Tagged` value constructor.\n",
+            "type": "value -> Tagged.Tagged tag value"
+          },
+          {
+            "name": "untag",
+            "comment": "\nWe can remove the tag when we're done making additional compile-time assertions.\n",
+            "type": "Tagged.Tagged tag value -> value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -72675,6 +72796,44 @@
     ]
   },
   {
+    "name": "tiziano88/elm-tfl",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Tfl",
+        "comment": " This is a wrapper for the TfL (Transport for London) public API.\n\nThe API is described at https://api.tfl.gov.uk and https://api-portal.tfl.gov.uk/docs.\n\n# Predictions\n\n@docs Prediction, getPredictions\n\n# StopPoint\n\n@docs StopPoint, getStopPoint\n\n",
+        "aliases": [
+          {
+            "name": "Prediction",
+            "comment": " A Prediction for a single line and platform.\n",
+            "args": [],
+            "type": "{ destinationName : String , expectedArrival : Time.Time , lineName : String , platformName : String , stationName : String , towards : String , modeName : String , timestamp : Time.Time }"
+          },
+          {
+            "name": "StopPoint",
+            "comment": " A stop point.\n",
+            "args": [],
+            "type": "{ commonName : String , latitude : Float , longitude : Float , modes : List String }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "getPredictions",
+            "comment": " Get the list of arrival predictions for given line id.\n\nSee:\n\n- https://api.tfl.gov.uk/#StopPoint\n- https://api.tfl.gov.uk/#/StopPoint/{id}/Arrivals .\n",
+            "type": "String -> Task.Task Http.Error (List Tfl.Prediction)"
+          },
+          {
+            "name": "getStopPoint",
+            "comment": " Get the StopPoint corresponding to the given stop id.\n\nSee:\n\n- https://api.tfl.gov.uk/#StopPoint\n- https://api.tfl.gov.uk/#/StopPoint/{id} .\n",
+            "type": "String -> Task.Task Http.Error Tfl.StopPoint"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "tomjkidd/elm-multiway-tree-zipper",
     "version": "1.9.0",
     "docs": [
@@ -73911,6 +74070,41 @@
             "name": "slidesDefaultOptions",
             "comment": " Default configuration options.\n    It is named `slidesDefaultOptions` instead than just `defaultOptions` because you can't use `{ Slides.defaultOptions | whatever... }`\n    so at least it is possible to `import Slides exposing (slidesDefaultOptions)` that does not pollute the scope.\n\n    ```\n    { slidePixelSize =\n        { height = 700\n        , width = 960\n        }\n\n    , easingFunction =\n        Ease.inOutCubic\n\n    , animationDuration =\n        500 * Time.millisecond\n\n    , slideAttributes =\n        slideAttributesScroll\n\n    , fragmentAttributes =\n        fragmentAttributesOpacity\n\n    , keyCodesToMessage =\n        [   { message = First\n            , keyCodes = [36] -- Home\n            }\n        ,   { message = Last\n            , keyCodes = [35] -- End\n            }\n        ,   { message = Next\n            , keyCodes = [13, 32, 39, 76, 68] -- Enter, Spacebar, Arrow Right, l, d\n            }\n        ,   { message = Prev\n            , keyCodes = [37, 72, 65] -- Arrow Left, h, a\n            }\n        ,   { message = PauseAnimation\n            , keyCodes = [80]\n            }\n        ]\n    }\n    ```\n",
             "type": "Slides.Options"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "zaidan/elm-collision",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Collision",
+        "comment": " this module provides an implementation of the\nGilbert-Johnson-Keerthi (GJK) collision detection algorith for\nconvex objects in 2D. To deal with concave objects, simply\nbreak your larger object into smaller convex shapes.\n\nIt is very efficient, usually converging in one or two iterations.\n\n# Definitions\n@docs Pt, Mink\n\n\n# API\n@docs collision\n\n",
+        "aliases": [
+          {
+            "name": "Mink",
+            "comment": " Simple alias for boundary objects bundled with a support function\n",
+            "args": [
+              "a"
+            ],
+            "type": "( a, a -> Collision.Pt -> Maybe.Maybe Collision.Pt )"
+          },
+          {
+            "name": "Pt",
+            "comment": " Simple alias for a two dimentional point\n",
+            "args": [],
+            "type": "( Float, Float )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "collision",
+            "comment": " Determine if there is a collision between two objects.\nObject information is given as a pair of: a boundary representation\nof type a, and a support function for that representaion f : a -> Pt -> Pt\nwhich takes the boundary representation and a direction vector, and\nreturns the point of the boundary furthest along the direction.\nPt here is used as an alias for (Float, Float). The first argument\nto collision is max recursion depth, which might come in handy in\nthe case where you are writing your own support functions.\n\n    poly1 = [(-15,-10),(0,15),(12,-5)] \n    poly2 = [(-9,13),(6,13),(-2,22)] \n\n    collision 10 (poly1, polySupport) (poly2, polySupport) == Just True\n",
+            "type": "Int -> Collision.Mink a -> Collision.Mink b -> Maybe.Maybe Bool"
           }
         ],
         "generated-with-elm-version": "0.17.1"
