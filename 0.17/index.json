@@ -11282,6 +11282,125 @@
     ]
   },
   {
+    "name": "alltonp/elm-driveby",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Driveby",
+        "comment": " This library is for defining scripts to test simple elm web applications using phantomjs\n\n# Definition\n@docs Suite, Script, Request, Response, Command, Condition, Context, Step\n\n# Common Helpers\n@docs suite, script, serve, stub, goto, gotoLocal, click, enter, assert, textContains, textEquals\n\n",
+        "aliases": [
+          {
+            "name": "Command",
+            "comment": " A Command to execute ",
+            "args": [],
+            "type": "{ name : String, args : List String }"
+          },
+          {
+            "name": "Condition",
+            "comment": " A Condition to check ",
+            "args": [],
+            "type": "{ description : String, args : List String }"
+          },
+          {
+            "name": "Context",
+            "comment": " The Context of an executing Script ",
+            "args": [],
+            "type": "{ localPort : Int , browserId : Int , scriptId : Int , stepId : Int , updated : String }"
+          },
+          {
+            "name": "Request",
+            "comment": " A Request sent to phantomjs ",
+            "args": [],
+            "type": "{ context : Driveby.Context, step : Driveby.Step }"
+          },
+          {
+            "name": "Response",
+            "comment": " A Response sent from phantomjs ",
+            "args": [],
+            "type": "{ context : Driveby.Context, failures : List String }"
+          },
+          {
+            "name": "Script",
+            "comment": " A Script of Commands to execute ",
+            "args": [],
+            "type": "{ name : String, commands : List Driveby.Command }"
+          },
+          {
+            "name": "Step",
+            "comment": " A Step holding a Command to execute ",
+            "args": [],
+            "type": "{ id : Int, command : Driveby.Command, executed : Bool }"
+          },
+          {
+            "name": "Suite",
+            "comment": " A Suite of Scripts ",
+            "args": [],
+            "type": "{ name : String, scripts : List Driveby.Script }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "assert",
+            "comment": " assert this condition ",
+            "type": "Driveby.Condition -> Driveby.Command"
+          },
+          {
+            "name": "click",
+            "comment": " click this element id ",
+            "type": "String -> Driveby.Command"
+          },
+          {
+            "name": "enter",
+            "comment": " type value into this element id ",
+            "type": "String -> String -> Driveby.Command"
+          },
+          {
+            "name": "goto",
+            "comment": " navigate to this url (for externally hosted) ",
+            "type": "String -> Driveby.Command"
+          },
+          {
+            "name": "gotoLocal",
+            "comment": " navigate to this relative path (for content hosted by 'serve') ",
+            "type": "String -> Driveby.Command"
+          },
+          {
+            "name": "script",
+            "comment": " create Script from supplied Commands ",
+            "type": "String -> List Driveby.Command -> Driveby.Script"
+          },
+          {
+            "name": "serve",
+            "comment": " serve the content under given directory path ",
+            "type": "String -> Driveby.Command"
+          },
+          {
+            "name": "stub",
+            "comment": " stub the content for the requests matching relative path ",
+            "type": "String -> String -> Driveby.Command"
+          },
+          {
+            "name": "suite",
+            "comment": " create Suite from supplied Scripts ",
+            "type": "String -> List Driveby.Script -> Driveby.Suite"
+          },
+          {
+            "name": "textContains",
+            "comment": " check element id text contains expected value ",
+            "type": "String -> String -> Driveby.Condition"
+          },
+          {
+            "name": "textEquals",
+            "comment": " check element id text equals expected value ",
+            "type": "String -> String -> Driveby.Condition"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "apuchenkin/elm-nested-router",
     "version": "3.0.1",
     "docs": [
@@ -29978,7 +30097,7 @@
   },
   {
     "name": "elm-community/elm-test",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Test.Runner",
@@ -30093,7 +30212,7 @@
           },
           {
             "name": "fuzz5",
-            "comment": " Run a [fuzz test](#fuzz) using four random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple5`](../Fuzz#tuple5).\n",
+            "comment": " Run a [fuzz test](#fuzz) using five random inputs.\n\nThis is a convenicence function that lets you skip calling [`Fuzz.tuple5`](../Fuzz#tuple5).\n",
             "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> Fuzz.Fuzzer e -> String -> (a -> b -> c -> d -> e -> Expect.Expectation) -> Test.Test"
           },
           {
@@ -30232,7 +30351,7 @@
           },
           {
             "name": "frequency",
-            "comment": " Create a new fuzzer by providing a list of fuzzers to pick from. Each fuzzer\nis associated with a `Float` weight; larger numbers mean the fuzzer in more\nlikely to get picked from.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.freuqency\n        [ ( 1, Fuzz.intRange -100 -1 )\n        , ( 3, Fuzz.intRange 1 100 )\n        ]\n\nThis function returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to an `Err`, with a `String` explaining what went wrong.\n",
+            "comment": " Create a new fuzzer by providing a list of fuzzers to pick from. Each fuzzer\nis associated with a `Float` weight; larger numbers mean the fuzzer in more\nlikely to get picked from.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.frequency\n        [ ( 1, Fuzz.intRange -100 -1 )\n        , ( 3, Fuzz.intRange 1 100 )\n        ]\n\nThis function returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to an `Err`, with a `String` explaining what went wrong.\n",
             "type": "List ( Float, Fuzz.Fuzzer a ) -> Result.Result String (Fuzz.Fuzzer a)"
           },
           {
@@ -47067,6 +47186,114 @@
     ]
   },
   {
+    "name": "joneshf/elm-proof",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Don't.Worry.I.Know.What.I'm.Doing",
+        "comment": "\nSometimes you need to tell the compiler that everything will be alright.\n\nUsually this happens when you are case matching on something,\nyou can prove that certain cases cannot happen,\nbut elm still wants you to handle the cases that cannot happen anyway.\n\n@docs believe_me\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "believe_me",
+            "comment": "\nThis is just [`Debug.crash`](http://package.elm-lang.org/packages/elm-lang/core/latest/Debug#crash) with a prefixed error message.\n\nIf you use this, pass in a string of your module name and the name of the function where you think you're smarter than the compiler.\n",
+            "type": "String -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Equality",
+        "comment": "\nA module providing primitives for proving type equalities.\n\nType equality is stronger than type equivalence.\nWith equivalence, we assert that there is some way to get from one type to the other (and back again).\nWith equality, we assert that there is exactly one type we're even talking about!\n\n@docs Equal, refl, symm, trans, inj, symmInj, cast, symmCast\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Equal",
+            "comment": "\nA type that expresses two types being equal.\n\nThe only reason this works is that the value constructor is not exposed from the module.\nIf the value constructor is exposed, we end up with only being able to express equivalence.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "cast",
+            "comment": "\nIf we know that `a` is equal to `b`, and we have an `a`,\nthen we can get a `b`.\n",
+            "type": "Equality.Equal a b -> a -> b"
+          },
+          {
+            "name": "inj",
+            "comment": "\nType equalities are injective.\n\nIf we know `a` is equal to `c`, and if we know `b` is equal to `c`,\nthen we also know `a` is equal to `b`.\n",
+            "type": "Equality.Equal a c -> Equality.Equal b c -> Equality.Equal a b"
+          },
+          {
+            "name": "refl",
+            "comment": "\nType equalities are reflexive.\n\nTrivially, every type is equal to itself.\n",
+            "type": "Equality.Equal a a"
+          },
+          {
+            "name": "symm",
+            "comment": "\nType equalities are symmetric.\n\nIf we know `a` is equal to `b`, then we also know `b` is equal to `a`.\n",
+            "type": "Equality.Equal a b -> Equality.Equal b a"
+          },
+          {
+            "name": "symmCast",
+            "comment": "\nIf we know that `a` is equal to `b`, and we have a `b`,\nthen we can get an `a`.\n",
+            "type": "Equality.Equal a b -> b -> a"
+          },
+          {
+            "name": "symmInj",
+            "comment": "\nType equalities are injective in a symmetric way.\n\nIf we know `a` is equal to `b`, and if we know `a` is equal to `c`,\nthen we also know `b` is equal to `c`.\n",
+            "type": "Equality.Equal a b -> Equality.Equal a c -> Equality.Equal b c"
+          },
+          {
+            "name": "trans",
+            "comment": "\nType equalities are transitive.\n\nIf we know `a` is equal to `b`, and if we know `b` is equal to `c`,\nthen we also know `a` is equal to `c`.\n",
+            "type": "Equality.Equal a b -> Equality.Equal b c -> Equality.Equal a c"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Equivalence",
+        "comment": "\nA module providing primitives for proving type equivalence.\n\n@docs Equiv, refl, symm, trans\n",
+        "aliases": [
+          {
+            "name": "Equiv",
+            "comment": "\nWe represent type equivalence by a type isomorphism.\n\nIf we want to say two types are equivalent,\nwe need to provide a way to convert between them.\n\nN.B. This is different from type equality in important ways.\nFor more information, see:\nParametricity, Type Equality and Higher-order Polymorphism (Vytiniotis, Weirich)\nhttp://repository.upenn.edu/cgi/viewcontent.cgi?article=1675&context=cis_papers\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "( a -> b, b -> a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "refl",
+            "comment": "\nType equivalences are reflexive.\n\nEvery type is equivalent to itself.\n\nThat is to say:\n`Int` is equivalent to `Int`,\n`Maybe a` is equivalent to `Maybe a`,\nand so on.\n",
+            "type": "Equivalence.Equiv a a"
+          },
+          {
+            "name": "symm",
+            "comment": "\nType equivalences are symmetric.\n\nIf we know `a` is equivalent to `b`, then we also know `b` is equivalent to `a`.\n",
+            "type": "Equivalence.Equiv a b -> Equivalence.Equiv b a"
+          },
+          {
+            "name": "trans",
+            "comment": "\nType equivalences are transitive.\n\nIf we know `a` is equivalent to `b`, and if we know `b` is equivalent to `c`,\nthen we also know `a` is equivalent to `c`.\n",
+            "type": "Equivalence.Equiv a b -> Equivalence.Equiv b c -> Equivalence.Equiv a c"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "joneshf/elm-proxy",
     "version": "1.0.0",
     "docs": [
@@ -51139,6 +51366,92 @@
             "name": "youtube_square",
             "comment": "",
             "type": "Color.Color -> Int -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "knledg/touch-events",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "TouchEvents",
+        "comment": " The is a library to provide touch event helpers\n\n# Types\n@docs TouchEvent, Direction, Touch\n\n# Helpers\n@docs emptyTouch, getDirectionX\n\n# Event Handlers\n@docs onTouchEvent, onTouchEnd, onTouchStart\n\n",
+        "aliases": [
+          {
+            "name": "Touch",
+            "comment": " Type alias for the touch record on the touch event object\n",
+            "args": [],
+            "type": "{ clientX : Float, clientY : Float }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Direction",
+            "comment": " Supported touch directions\n",
+            "args": [],
+            "cases": [
+              [
+                "Left",
+                []
+              ],
+              [
+                "Right",
+                []
+              ],
+              [
+                "Up",
+                []
+              ],
+              [
+                "Down",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "TouchEvent",
+            "comment": " Supported touch event types\n",
+            "args": [],
+            "cases": [
+              [
+                "TouchStart",
+                []
+              ],
+              [
+                "TouchEnd",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "emptyTouch",
+            "comment": " Returns a `Touch` record with 0 as default values\n",
+            "type": "TouchEvents.Touch"
+          },
+          {
+            "name": "getDirectionX",
+            "comment": " Gets the direction of the swipe on the x axis (`Left` or `Right`)\n",
+            "type": "Float -> Float -> TouchEvents.Direction"
+          },
+          {
+            "name": "onTouchEnd",
+            "comment": " Lower level \"touchend\" event handler\n\nTakes the application `Msg` type which should take `TouchEvents.Touch`\nas a payload\n\n```\ntype Msg\n  = UserSwipeEnd TouchEvents.Touch\n\nview model =\n  div\n    [ TouchEvents.onTouchEnd UserSwipeEnd\n    ]\n    []\n```\n",
+            "type": "(TouchEvents.Touch -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onTouchEvent",
+            "comment": " Higher level touch event handler\n\nThis takes a TouchEvent type and application `Msg` type.\nThe `Msg` type should take a `TouchEvent.Touch` type.\n\n```\ntype Msg\n  = UserSwipeStart TouchEvents.Touch\n\nview model =\n  div\n    [ TouchEvents.onTouchEvent TouchEvents.TouchStart UserSwipeStart\n    ]\n    []\n```\n",
+            "type": "TouchEvents.TouchEvent -> (TouchEvents.Touch -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onTouchStart",
+            "comment": " Lower level \"touchstart\" event handler\n\nTakes the application `Msg` type which should take `TouchEvents.Touch`\nas a payload\n\n```\ntype Msg\n  = UserSwipeStart TouchEvents.Touch\n\nview model =\n  div\n    [ TouchEvents.onTouchStart UserSwipeStart\n    ]\n    []\n```\n",
+            "type": "(TouchEvents.Touch -> msg) -> Html.Attribute msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -56983,7 +57296,7 @@
   },
   {
     "name": "mgold/elm-random-pcg",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Random.Pcg.Interop",
@@ -57001,7 +57314,7 @@
       },
       {
         "name": "Random.Pcg",
-        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model.\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed, step, generate\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice, choices, frequency\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
+        "comment": " Generate psuedo-random numbers and values, by constructing\n[generators](#Generator) for them. There are a bunch of basic generators like\n[`bool`](#bool) and [`int`](#int) that you can build up into fancier generators\nwith functions like [`list`](#list) and [`map`](#map).\n\nYou run a `Generator` by calling the [`step`](#step) function, which\nalso takes a random [`Seed`](#Seed), and passes back a new seed. You should\nnever use the same seed twice because you will get the same result! If you need\nrandom values over time, you should store the most recent seed in your model.\nAlternatively, use [`generate`](#generate) to obtain random values from the Elm\nruntime.\n\nThis is an implementation of [PCG](http://www.pcg-random.org/) by M. E. O'Neil,\nand is not cryptographically secure.\n\n# Getting Started\n@docs initialSeed, step, generate\n\n# Basic Generators\n@docs Generator, bool, int, float, oneIn, sample\n\n# Combining Generators\n@docs pair, list, maybe, choice, choices, frequency\n\n# Custom Generators\n@docs constant, map, map2, map3, map4, map5, andMap, andThen, filter\n\n# Working With Seeds\n@docs Seed, independentSeed, fastForward, toJson, fromJson\n\n# Constants\n@docs minInt, maxInt\n",
         "aliases": [],
         "types": [
           {
@@ -57142,7 +57455,7 @@
           },
           {
             "name": "oneIn",
-            "comment": " Produce `True` one-in-n times on average.\n\nDo not pass a value less then one to this function.\n\n    flippedHeads = oneIn 2\n    rolled6 = oneIn 6\n",
+            "comment": " Produce `True` one-in-n times on average.\n\nDo not pass a value less then one to this function.\n\n    flippedHeads = oneIn 2\n    rolled6 = oneIn 6\n    criticalHit = oneIn 20\n",
             "type": "Int -> Random.Pcg.Generator Bool"
           },
           {
