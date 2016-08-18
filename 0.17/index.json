@@ -18152,23 +18152,17 @@
   },
   {
     "name": "damienklinnert/elm-spinner",
-    "version": "1.0.2",
+    "version": "2.0.2",
     "docs": [
       {
         "name": "Spinner",
-        "comment": " A highly configurable, efficiently rendered spinner component.\n\nCheck the [README for a general introduction into this module](http://package.elm-lang.org/packages/damienklinnert/elm-spinner/latest/).\n\n# The Elm Architecture\n@docs Model, Msg, subscriptions, init, update, view\n\n# Custom Spinners\n@docs Direction, Config, defaultConfig\n",
+        "comment": " A highly configurable, efficiently rendered spinner component.\n\nCheck the [README for a general introduction into this module](http://package.elm-lang.org/packages/damienklinnert/elm-spinner/latest/).\n\n# The Elm Architecture\n@docs Model, Msg, subscription, init, update, view\n\n# Custom Spinners\n@docs Direction, Config, defaultConfig\n",
         "aliases": [
           {
             "name": "Config",
             "comment": " A type describing how your spinner looks like.\n\n - `lines`: Number of lines (a value from 5 to 17, default is 13)\n - `length`: line length (a value from 0 to 56, default is 28)\n - `width`: line width (a value from 2 to 52, default is 14)\n - `radius`: distance from origin to beginning of lines (a value from 0 to 84, default is 42)\n - `scale`: scale for the whole spinner (a value from 0 to 5, default is 1)\n - `corners`: roundness of corners (a value from 0 to 1, default is 1)\n - `opacity`: minimum opacity of inactive lines (a value from 0 to 1, default is 0.25)\n - `rotate`: rotate the spinner by some degrees (a value from 0 to 90, default is 0)\n - `direction`: spinner direction (default is Clockwise)\n - `speed`: (a value from 0.5 (slowest), 2.2 (fastest), default is 1)\n - `trail`: how long is the trail after the active line (a value from 10 to 100, default is 60)\n - `translateX`: moves the spinner horizontally (a value from 0 to 100, default is 50)\n - `translateY`: moves the spinner vertically (a value from 0 to 100, default is 50)\n - `shadow`: adds a box shadow (default is True)\n - `hwaccel`: enables hardware acceleration for lines (default is False)\n\n",
             "args": [],
             "type": "{ lines : Float , length : Float , width : Float , radius : Float , scale : Float , corners : Float , opacity : Float , rotate : Float , direction : Spinner.Direction , speed : Float , trail : Float , translateX : Float , translateY : Float , shadow : Bool , hwaccel : Bool }"
-          },
-          {
-            "name": "Model",
-            "comment": " Contains the current state and the configuration for the spinner.\n",
-            "args": [],
-            "type": "{ time : Time.Time, cfg : Spinner.Config }"
           }
         ],
         "types": [
@@ -18188,6 +18182,12 @@
             ]
           },
           {
+            "name": "Model",
+            "comment": " Contains the current state for the spinner.\n",
+            "args": [],
+            "cases": []
+          },
+          {
             "name": "Msg",
             "comment": " `Msg` messages need to be passed through your application.\n",
             "args": [],
@@ -18202,23 +18202,23 @@
           },
           {
             "name": "init",
-            "comment": " Defines an initial value for the `Model` type using the `defaultConfiguration`.\n",
+            "comment": " Defines an initial value for the `Model` type.\n",
             "type": "Spinner.Model"
           },
           {
-            "name": "subscriptions",
+            "name": "subscription",
             "comment": " Add this to your `program`s subscriptions to animate the spinner.\n",
-            "type": "Spinner.Model -> Platform.Sub.Sub Spinner.Msg"
+            "type": "Platform.Sub.Sub Spinner.Msg"
           },
           {
             "name": "update",
             "comment": " Accepts `Msg` and `Model` and computes a new `Model`.\n",
-            "type": "Spinner.Msg -> Spinner.Model -> ( Spinner.Model, Platform.Cmd.Cmd Spinner.Msg )"
+            "type": "Spinner.Msg -> Spinner.Model -> Spinner.Model"
           },
           {
             "name": "view",
             "comment": " The actual spinner component.\n",
-            "type": "Spinner.Model -> Html.Html Spinner.Msg"
+            "type": "Spinner.Config -> Spinner.Model -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -22835,11 +22835,11 @@
   },
   {
     "name": "elm-community/elm-lazy-list",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Lazy.List",
-        "comment": " Lazy list implementation in Elm.\n\n# Types\n@docs LazyList, LazyListView\n\n# Constructors\n@docs cons, empty, singleton\n\n# Query operations\n@docs isEmpty, head, tail, headAndTail, member, length\n\n# Conversions\n@docs toList, fromList, toArray, fromArray\n\n# Map-reduce et al.\n@docs map, zip, reduce, flatten, flatMap, append, foldl, foldr\n\n# Common operations\n@docs intersperse, interleave, reverse, cycle, iterate, repeat, take, takeWhile, drop, dropWhile\n\n# Filtering operations\n@docs keepIf, dropIf, unique\n\n# Chaining operations\n@docs andMap, andThen\n\n# Useful stuff\n@docs numbers, sum, product\n\n# All the maps!\n@docs map2, map3, map4, map5\n\n# All the zips!\n@docs zip3, zip4, zip5\n\n# Infix Operators\n@docs (:::), (+++)\n\n",
+        "comment": " Lazy list implementation in Elm.\n\n# Types\n@docs LazyList, LazyListView\n\n# Constructors\n@docs cons, empty, singleton\n\n# Query operations\n@docs isEmpty, head, tail, headAndTail, member, length\n\n# Conversions\n@docs toList, fromList, toArray, fromArray\n\n# Map-reduce et al.\n@docs map, zip, reduce, flatten, flatMap, append, foldl, foldr\n\n# Common operations\n@docs intersperse, interleave, reverse, cycle, iterate, repeat, take, takeWhile, drop, dropWhile\n\n# Filtering operations\n@docs keepIf, dropIf, filterMap, unique\n\n# Chaining operations\n@docs andMap, andThen\n\n# Useful stuff\n@docs numbers, sum, product\n\n# All the maps!\n@docs map2, map3, map4, map5\n\n# All the zips!\n@docs zip3, zip4, zip5\n\n# Infix Operators\n@docs (:::), (+++)\n\n",
         "aliases": [
           {
             "name": "LazyList",
@@ -22931,6 +22931,11 @@
             "name": "empty",
             "comment": " Create an empty list.\n",
             "type": "Lazy.List.LazyList a"
+          },
+          {
+            "name": "filterMap",
+            "comment": " Map a function that may fail over a lazy list, keeping only\nthe values that were successfully transformed.\n",
+            "type": "(a -> Maybe.Maybe b) -> Lazy.List.LazyList a -> Lazy.List.LazyList b"
           },
           {
             "name": "flatMap",
@@ -42003,7 +42008,7 @@
   },
   {
     "name": "etaque/elm-simple-form",
-    "version": "3.0.2",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "Form.Input",
@@ -42034,7 +42039,7 @@
           {
             "name": "dumpErrors",
             "comment": " Dump all form errors in a `<pre>` tag. Useful for debugging.\n",
-            "type": "Form.Form e o -> Html.Html Form.Msg"
+            "type": "Form.Form e o -> Html.Html msg"
           },
           {
             "name": "passwordInput",
@@ -42179,7 +42184,7 @@
       },
       {
         "name": "Form.Validate",
-        "comment": " Form validation.\n\n# Combinators\n@docs Validation, get, map, succeed, andThen, pipeTo, apply, customError, defaultValue\n\n# Fixed-size forms\n@docs form1, form2, form3, form4, form5, form6, form7, form8\n\n# Type extractors\n@docs string, int, float, bool, date, maybe, email, url, emptyString\n\n# Common filters\n@docs minInt, maxInt, minFloat, maxFloat, minLength, maxLength, nonEmpty, format, includedIn\n\n# Custom validations\n@docs fail, succeed, customValidation, oneOf\n",
+        "comment": " Form validation.\n\n# Combinators\n@docs Validation, get, map, succeed, andThen, pipeTo, apply, customError, defaultValue, formatError\n\n# Fixed-size forms\n@docs form1, form2, form3, form4, form5, form6, form7, form8\n\n# Type extractors\n@docs string, int, float, bool, date, maybe, email, url, emptyString\n\n# Common filters\n@docs minInt, maxInt, minFloat, maxFloat, minLength, maxLength, nonEmpty, format, includedIn\n\n# Custom validations\n@docs fail, succeed, customValidation, oneOf\n",
         "aliases": [
           {
             "name": "Validation",
@@ -42294,6 +42299,11 @@
             "type": "Regex.Regex -> String -> Form.Validate.Validation e String"
           },
           {
+            "name": "formatError",
+            "comment": " Call Result.formatError on validation result.\n",
+            "type": "(Form.Error.Error e -> Form.Error.Error e) -> Form.Validate.Validation e a -> Form.Validate.Validation e a"
+          },
+          {
             "name": "get",
             "comment": " Access the given field in the group.\n\n    get \"name\" string\n",
             "type": "String -> Form.Validate.Validation e a -> Form.Validate.Validation e a"
@@ -42310,7 +42320,7 @@
           },
           {
             "name": "map",
-            "comment": " Map over the result of the validation.\n\n    string `map` String.trim\n",
+            "comment": " Map over the result of the validation.\n\n    get \"myfield\" (string |> map String.trim)\n",
             "type": "(a -> b) -> Form.Validate.Validation e a -> Form.Validate.Validation e b"
           },
           {
@@ -42377,6 +42387,83 @@
             "name": "url",
             "comment": " Check if the string is a valid URL.\n",
             "type": "Form.Validate.Validation e String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Form.Field",
+        "comment": " Read and write field values.\n\n# Constructors\n@docs Field, group\n\n# Value readers\n@docs at, asString, asBool\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Field",
+            "comment": " Form field. Can either be a group of named fields, or a final field.\n",
+            "args": [],
+            "cases": [
+              [
+                "Group",
+                [
+                  "Dict.Dict String Form.Field.Field"
+                ]
+              ],
+              [
+                "Text",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Textarea",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Select",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Radio",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Check",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "EmptyField",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "asBool",
+            "comment": " Get field value as boolean.\n",
+            "type": "Form.Field.Field -> Maybe.Maybe Bool"
+          },
+          {
+            "name": "asString",
+            "comment": " Get field value as string.\n",
+            "type": "Form.Field.Field -> Maybe.Maybe String"
+          },
+          {
+            "name": "at",
+            "comment": " Get field at name, for nested forms.\n",
+            "type": "String -> Form.Field.Field -> Maybe.Maybe Form.Field.Field"
+          },
+          {
+            "name": "group",
+            "comment": " Build a group of values, for nested forms.\n",
+            "type": "List ( String, Form.Field.Field ) -> Form.Field.Field"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -42489,83 +42576,6 @@
             "name": "getAt",
             "comment": " Get error at name, for nested errors.\n",
             "type": "String -> Form.Error.Error e -> Maybe.Maybe (Form.Error.Error e)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Form.Field",
-        "comment": " Read and write field values.\n\n# Constructors\n@docs Field, group\n\n# Value readers\n@docs at, asString, asBool\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Field",
-            "comment": " Form field. Can either be a group of named fields, or a final field.\n",
-            "args": [],
-            "cases": [
-              [
-                "Group",
-                [
-                  "Dict.Dict String Form.Field.Field"
-                ]
-              ],
-              [
-                "Text",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "Textarea",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "Select",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "Radio",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "Check",
-                [
-                  "Bool"
-                ]
-              ],
-              [
-                "EmptyField",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "asBool",
-            "comment": " Get field value as boolean.\n",
-            "type": "Form.Field.Field -> Maybe.Maybe Bool"
-          },
-          {
-            "name": "asString",
-            "comment": " Get field value as string.\n",
-            "type": "Form.Field.Field -> Maybe.Maybe String"
-          },
-          {
-            "name": "at",
-            "comment": " Get field at name, for nested forms.\n",
-            "type": "String -> Form.Field.Field -> Maybe.Maybe Form.Field.Field"
-          },
-          {
-            "name": "group",
-            "comment": " Build a group of values, for nested forms.\n",
-            "type": "List ( String, Form.Field.Field ) -> Form.Field.Field"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -45103,6 +45113,50 @@
     ]
   },
   {
+    "name": "ggb/elm-trend",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Seasonal",
+        "comment": " Contains functions to create a seasonal forecast based on the Holt-Winters method for seasonal forecasting.\n\n@docs forecast, forecastWith\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "forecast",
+            "comment": " Creates a forecast with default parameters (alpha = 0.5, beta = 0.4, gamma = 0.6, number of forecasted values = length of period). You only need to specify the length of a season (number of values per season). \n",
+            "type": "Int -> List Float -> Maybe.Maybe (List Float)"
+          },
+          {
+            "name": "forecastWith",
+            "comment": " Creates a seasonal forecast. Set the following parameters:\n\n* alpha: overall smoothing parameter (between 0 and 1)\n* beta: seasonal smoothing parameter (between 0 and 1)\n* gamma: trend smoothing parameter (between 0 and 1)\n* m: number of values to forecast (between 0 and period)\n* period: values per season (length of period) in the historical data\n* data: list of float values with historical data\n",
+            "type": "Float -> Float -> Float -> Int -> Int -> List Float -> Maybe.Maybe (List Float)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Linear",
+        "comment": " Contains functions to create a linear forecast, i. e. a simple trend line.\n\n@docs regression, forecast\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "forecast",
+            "comment": " Creates a list of tuples with forecasted values. The first parameter indicates how many values.\n\nPlease note that this function expects to get a sorted list of points. It will create a range based on the last point. \n\n    vals = [(0, 0), (0.5, 0.25), (1, 0.5), (3, 1.5)]\n    \n    forecast 3 vals == [(4, 2), (5, 2.5), (6, 3)]\n",
+            "type": "Int -> List ( Float, Float ) -> List ( Float, Float )"
+          },
+          {
+            "name": "regression",
+            "comment": " Expects a list of Float-tuples, where the first element is the x- and the second element is the y-coordinate of a point. It returns a linear function, that gets a Float and emits new values.\n\n    vals = [(0, 0), (1, 0.5), (2, 1), (3, 1.5)]\n    regressionFunction = regression vals\n\n    regressionFunction 4 == 2\n",
+            "type": "List ( Float, Float ) -> Float -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
     "name": "ggb/numeral-elm",
     "version": "1.2.1",
     "docs": [
@@ -45254,7 +45308,7 @@
   },
   {
     "name": "halfzebra/elm-sierpinski",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "Sierpinski",
@@ -68409,7 +68463,7 @@
   },
   {
     "name": "rtfeldman/node-test-runner",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Test.Runner.Node",
@@ -68420,12 +68474,12 @@
           {
             "name": "run",
             "comment": " Run the test and report the results.\n\nFuzz tests use a default run count of 100, and an initial seed based on the\nsystem time when the test runs begin.\n",
-            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+            "type": "Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Json.Encode.Value"
           },
           {
             "name": "runWithOptions",
             "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
-            "type": "Maybe.Maybe Int -> Maybe.Maybe Random.Pcg.Seed -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Basics.Never"
+            "type": "Test.Runner.Node.Options -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Json.Encode.Value"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -70037,7 +70091,7 @@
   },
   {
     "name": "sh4r3m4n/elm-piano",
-    "version": "1.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Piano",
@@ -70061,7 +70115,26 @@
             "name": "Msg",
             "comment": " Messages received when clicking a key or\nchanging the keyboard's size\n",
             "args": [],
-            "cases": []
+            "cases": [
+              [
+                "KeyUp",
+                [
+                  "Piano.Note"
+                ]
+              ],
+              [
+                "KeyDown",
+                [
+                  "Piano.Note"
+                ]
+              ],
+              [
+                "ChangeNoteRange",
+                [
+                  "( Int, Int )"
+                ]
+              ]
+            ]
           }
         ],
         "values": [
