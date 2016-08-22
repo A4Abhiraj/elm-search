@@ -8468,6 +8468,272 @@
     ]
   },
   {
+    "name": "JoeyEremondi/array-multidim",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Array.MultiDim",
+        "comment": "\n\nA class for multi-dimensional arrays, which stores the number of coordinates\nat type-level.\n\nInternally, the array is represented as a 1D array, so lookups\nshould be quite fast. However, we provide a safe, clean\ninterface for multi-dimensional lookups and updates.\n\nTo create an array, use a safe-list with the array dimensions:\n\n    import List.SafeList exposing (cons, null)\n    --Creates a 4x6x2 array of zeroes\n    myArray =\n      repeat (4 `cons` 6 `cons` 2 `cons` null ) 0\n\nAccesses and updates use SafeList as well:\n\n    import List.SafeList exposing (cons, null)\n    updatedArray =\n      case get (3 `cons` 1 `cons` 1 `cons` null ) myArray of\n        Nothing -> myArray\n        Just x ->\n          set (3 `cons` 1 `cons` 1 `cons` null ) (2*x) myArray\n\nIf you ever give the wrong number of coordinates, you get a type error:\n\n    --Won't compile\n    updatedArray =\n      case get (3 `cons` 1 `cons` 1 `cons` null ) myArray of\n        Nothing -> myArray\n        Just x ->\n          set (3 `cons` 1 `cons` 1 `cons` null ) (2*x) myArray\n\nWe don't yet support any operations which change the size of the array,\nsuch as push or append. For operations like `foldl` and `foldr`,\nuse the `toFlatArray` function, then the corresponding functions\non Array.Array.\n\n#The Array type and creation functions\n@docs MultiDim, repeat, initialize\n\n#Get array info\n@docs inBounds, dims\n\n#Access and update\n@docs get, set\n\n#Convting to flat List or Array\n@docs toIndexedList, toFlatArray\n\n#Mapping functions\n@docs map, indexedMap\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "MultiDim",
+            "comment": " Opaque type for `n`-dimensional arrays containing type `a`\n",
+            "args": [
+              "a",
+              "n"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "dims",
+            "comment": " Get the dimensions of an array\n",
+            "type": "Array.MultiDim.MultiDim a n -> List.SafeList.SafeList Int n"
+          },
+          {
+            "name": "get",
+            "comment": " Return Just the element if all given coordinates\nare within the array's bounds. Otherwise, return nothing.\n",
+            "type": "List.SafeList.SafeList Int n -> Array.MultiDim.MultiDim a n -> Maybe.Maybe a"
+          },
+          {
+            "name": "inBounds",
+            "comment": " Given array dimensions, and coordinates,\ndetermine if the coordinates are in bounds for the dimensions.\n",
+            "type": "List.SafeList.SafeList Int n -> List.SafeList.SafeList Int n -> Bool"
+          },
+          {
+            "name": "indexedMap",
+            "comment": " Apply a function on every element in an array,\nwith access to the coordinates of each element.\n",
+            "type": "(List.SafeList.SafeList Int n -> a -> b) -> Array.MultiDim.MultiDim a n -> Array.MultiDim.MultiDim b n"
+          },
+          {
+            "name": "initialize",
+            "comment": " Given a SafeList of array dimensions,\nand a function to generate an element for each coordinate,\ncreate a new array with the given elements\n",
+            "type": "List.SafeList.SafeList Int n -> (List.SafeList.SafeList Int n -> a) -> Array.MultiDim.MultiDim a n"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function on every element in an array\n",
+            "type": "(a -> b) -> Array.MultiDim.MultiDim a n -> Array.MultiDim.MultiDim b n"
+          },
+          {
+            "name": "repeat",
+            "comment": " Given a SafeList [n1, n2, ...] of array dimensions,\ncreate an n1 x n2 x ... multi-dimensional array\n",
+            "type": "List.SafeList.SafeList Int n -> a -> Array.MultiDim.MultiDim a n"
+          },
+          {
+            "name": "set",
+            "comment": " Set the element at the given coordinates, if they all\nare within the array's bounds. Otherwise, return the original array.\n",
+            "type": "List.SafeList.SafeList Int n -> a -> Array.MultiDim.MultiDim a n -> Array.MultiDim.MultiDim a n"
+          },
+          {
+            "name": "toFlatArray",
+            "comment": " Convert this array to a 1-dimensional array\nwith elements in lexigraphical order\n",
+            "type": "Array.MultiDim.MultiDim a n -> Array.Array a"
+          },
+          {
+            "name": "toIndexedList",
+            "comment": " Generate a list of the array's elements,\npaired with their coordinates.\n",
+            "type": "Array.MultiDim.MultiDim a n -> List ( List.SafeList.SafeList Int n, a )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "JoeyEremondi/safelist",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "List.SafeList",
+        "comment": "\nThis module provides a form of list which encode their length\nin their type, using the TypeNats library. For example:\n\n    someLength3 : List.SafeList Int (OnePlus (OnePlus (OnePlus (Zero))) )\n    someLength3 = 2 `cons` 3 `cons` 4 `cons` null\n\nList whose length doesn't match their type are forbidden.\nFor example:\n\n    --Gives type mismatch\n    badLength3 : SafeList Int (OnePlus (OnePlus  (Zero)) )\n    badLength3 = 2 `cons` 3 `cons` 4 `cons` null\n\nBecause Elm doesn't have GADTs or DataKinds, it's impossible\nto pattern match on SafeLists. Instead, we provide an \"uncons\"\nfunction, which splits a list which we know to be non-empty\ninto its head and tail.\n\nFor example:\n\n    sumFirstLast =\n      let\n        (h1, t1) = uncons someLength3\n        (_, t2) = uncons t1\n        (h3, t3) = uncons t2\n        tailCheck : SafeList Int Zero\n        tailCheck = t3\n      in\n        h1 + h3\n\nThis notation is awkward, so it's assumed this library\nwill be used on small lists only.\n\n\nAs well, many functions on List.List have been ported over,\nthough filter, foldl and foldr are notably absent, as they\ndo not preserve the length of the list.\n\nBecause Elm is not a higher-kinded language, it is not generally\npossible to use this library when you don't know your list size in advance,\nunless only generic functions like `map` are used.\n\n# Our main type and pseudo-constructors\n@docs SafeList, null, cons\n\n# In lieu of pattern matching:\n@docs uncons, toList, fromList\n\n# The usual map functions\n@docs map, map2, map3, map4, map5, unzip\n\n# Length-preserving fold-like functions\n@docs mapl, mapr, reverseMapr, scanl\n\n# Functions for non-empty lists\n@docs maximum, minimum, head, tail, last\n\n# Utility functions\n@docs  member, reverse, all, any\n\n#Length-preserving sorting functions\n@docs sort, sortBy, sortWith\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "SafeList",
+            "comment": " A list with length encoded in its type,\nsupporting a restricted set of operations.\n",
+            "args": [
+              "a",
+              "n"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "all",
+            "comment": " ",
+            "type": "(a -> Bool) -> List.SafeList.SafeList a n -> Bool"
+          },
+          {
+            "name": "any",
+            "comment": " ",
+            "type": "(a -> Bool) -> List.SafeList.SafeList a n -> Bool"
+          },
+          {
+            "name": "cons",
+            "comment": " Given a new element and a list of length n, make a list of length n+1.\nHas the same infix precedence as (::)\n",
+            "type": "a -> List.SafeList.SafeList a n -> List.SafeList.SafeList a (TypeNat.OnePlus n)",
+            "associativity": "right",
+            "precedence": 5
+          },
+          {
+            "name": "fromList",
+            "comment": " Given a some SafeList, try to convert\na normal list into a SafeList of the same length\n",
+            "type": "List.SafeList.SafeList a n -> List b -> Maybe.Maybe (List.SafeList.SafeList b n)"
+          },
+          {
+            "name": "head",
+            "comment": " SafeList way to get the first element of a list\n",
+            "type": "List.SafeList.SafeList a (TypeNat.OnePlus n) -> a"
+          },
+          {
+            "name": "last",
+            "comment": " SafeList way to get the last element of a list\n",
+            "type": "List.SafeList.SafeList a (TypeNat.OnePlus n) -> a"
+          },
+          {
+            "name": "map",
+            "comment": " Works as List.map\n",
+            "type": "(a -> b) -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n"
+          },
+          {
+            "name": "map2",
+            "comment": " ",
+            "type": "(a -> b -> c) -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n -> List.SafeList.SafeList c n"
+          },
+          {
+            "name": "map3",
+            "comment": " ",
+            "type": "(a -> b -> c -> d) -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n -> List.SafeList.SafeList c n -> List.SafeList.SafeList d n"
+          },
+          {
+            "name": "map4",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e) -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n -> List.SafeList.SafeList c n -> List.SafeList.SafeList d n -> List.SafeList.SafeList e n"
+          },
+          {
+            "name": "map5",
+            "comment": " ",
+            "type": "(a -> b -> c -> d -> e -> f) -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n -> List.SafeList.SafeList c n -> List.SafeList.SafeList d n -> List.SafeList.SafeList e n -> List.SafeList.SafeList f n"
+          },
+          {
+            "name": "mapl",
+            "comment": "\nGiven a mapping function and an initial context value,\ntraverse the list left to right, applying our map function with the previously\ncomputed context as argument.\nGeneral folds don't preserve the length of a list, so we use\nthis restricted form of a fold.\n",
+            "type": "(( a, c ) -> ( b, c )) -> c -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n"
+          },
+          {
+            "name": "mapr",
+            "comment": "\nGiven a mapping function and an initial context value,\ntraverse the list right to left, applying our map function with the previously\ncomputed context as argument.\nGeneral folds don't preserve the length of a list, so we use\nthis restricted form of a fold.\n",
+            "type": "(( a, c ) -> ( b, c )) -> c -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n"
+          },
+          {
+            "name": "maximum",
+            "comment": " Given a list of comparable containing at least one element,\n  return its largest element\n",
+            "type": "List.SafeList.SafeList comparable (TypeNat.OnePlus n) -> comparable"
+          },
+          {
+            "name": "member",
+            "comment": "\nLength-preserving list functions, identical to operations on List.List\n",
+            "type": "a -> List.SafeList.SafeList a n -> Bool"
+          },
+          {
+            "name": "minimum",
+            "comment": " Given a list of comparable containing at least one element,\nreturn its smallest element\n",
+            "type": "List.SafeList.SafeList comparable (TypeNat.OnePlus n) -> comparable"
+          },
+          {
+            "name": "null",
+            "comment": " A list of length 0\n",
+            "type": "List.SafeList.SafeList a TypeNat.Zero"
+          },
+          {
+            "name": "reverse",
+            "comment": " ",
+            "type": "List.SafeList.SafeList a n -> List.SafeList.SafeList a n"
+          },
+          {
+            "name": "reverseMapr",
+            "comment": "\nLike mapr, but the resulting elements are in reverse order.\nGenerally faster than mapr, use this when order doesn't matter.\n",
+            "type": "(( a, c ) -> ( b, c )) -> c -> List.SafeList.SafeList a n -> List.SafeList.SafeList b n"
+          },
+          {
+            "name": "scanl",
+            "comment": "\nJust like List.scanl, except we now have a guarantee that we increase the list lenght\nby exactly one, since we always put our initial value in the list.\n",
+            "type": "(a -> b -> b) -> b -> List.SafeList.SafeList a n -> List.SafeList.SafeList b (TypeNat.OnePlus n)"
+          },
+          {
+            "name": "sort",
+            "comment": " Just like List.sort, but with a guarantee that length is preserved\n",
+            "type": "List.SafeList.SafeList comparable n -> List.SafeList.SafeList comparable n"
+          },
+          {
+            "name": "sortBy",
+            "comment": " Sort based on comparable representatives\n",
+            "type": "(a -> comparable) -> List.SafeList.SafeList a n -> List.SafeList.SafeList a n"
+          },
+          {
+            "name": "sortWith",
+            "comment": " Sort based on an arbitrary comparison of elements\n",
+            "type": "(a -> a -> Basics.Order) -> List.SafeList.SafeList a n -> List.SafeList.SafeList a n"
+          },
+          {
+            "name": "tail",
+            "comment": " SafeList way to remove the first element of a list\n",
+            "type": "List.SafeList.SafeList a (TypeNat.OnePlus n) -> List.SafeList.SafeList a n"
+          },
+          {
+            "name": "toList",
+            "comment": " Drop type-level information about this list\n",
+            "type": "List.SafeList.SafeList a n -> List a"
+          },
+          {
+            "name": "uncons",
+            "comment": " Split a non-empty list into a head and a tail\n",
+            "type": "List.SafeList.SafeList a (TypeNat.OnePlus n) -> ( a, List.SafeList.SafeList a n )"
+          },
+          {
+            "name": "unzip",
+            "comment": " ",
+            "type": "List.SafeList.SafeList ( a, b ) n -> ( List.SafeList.SafeList a n, List.SafeList.SafeList b n )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "JoeyEremondi/typenats",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "TypeNat",
+        "comment": "\nEasy to remember names for type-level natural numbers.\nThese are intended only to be used as \"phantom types:\"\nthat is, there are no values of type `Zero` or `OnePlus a`.\nInstead, they should be arguments to other type constructors.\n\nElm doesn't have DataKinds, so please don't do anything silly like\n`OnePlus (OnePlus (OnePlus (List (Int, Int))))`\ni.e. please only give another TypeNat as the argument to\nOnePlus.\n\n@docs Zero, OnePlus\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "OnePlus",
+            "comment": " A phantom type constructor to increment a TypeNat,\ncreating a larger TypeNat.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Zero",
+            "comment": " A phantom type for 0, our base TypeNat.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "Kwarrtz/render",
     "version": "1.0.1",
     "docs": [
@@ -13094,7 +13360,7 @@
   },
   {
     "name": "benansell/elm-geometric-transformation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "Transformer2D",
@@ -22950,6 +23216,86 @@
             "name": "upperCaseChar",
             "comment": " A producer for uppercase char values.\n",
             "type": "Check.Producer.Producer Char"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "elm-community/elm-function-extra",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Function.Extra",
+        "comment": " Higher-order helpers for working with functions.\n\n# Higher-order helpers\n@docs map, map2, map3, map4\n@docs apply, andThen\n@docs curry3, curry4, curry5\n@docs uncurry3, uncurry4, uncurry5\n@docs on\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Connect the result `a` of the first function to the first argument of the second function to form a pipeline.\nThen, send `x` into each function along the pipeline in order to execute it in a sequential manner.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `andThen` to repeatedly read from the environment `x` and send the result into to the next function, which in turn reads from the environment `x` again and so forth.\n\n    (f `andThen` g `andThen` h) x == (h (g (f x) x) x)\n",
+            "type": "(x -> a) -> (a -> x -> b) -> x -> b"
+          },
+          {
+            "name": "apply",
+            "comment": " Incrementally apply more functions, similar to `map`*N* where *N* is not fixed.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `apply` to read an arbitrary number of arguments from the same environment `x`.\n\n    (f `apply` ga `apply` gb `apply` gc) x == f x (ga x) (gb x) (gc x)\n                                           == (map4 identity f ga gb gc) x\n                                           == (identity `map` f `apply` ga `apply` gb `apply` gc) x\n\n    (f' `map` ga `apply` gb `apply` gc) x  == f' (ga x) (gb x) (gc x) x\n                                           == (map3 f' ga gb gc) x\n\nAlso notice the type signatures...\n\n    ga                                   : x -> a\n    gb                                   : x -> b\n    gc                                   : x -> c\n\n    f                                    : x -> a -> b -> c -> d\n    (f `apply` ga)                       : x -> b -> c -> d\n    (f `apply` ga `apply` gb)            : x -> c -> d\n    (f `apply` ga `apply` gb `apply` gc) : x -> d\n\n    f'                                   : a -> b -> c -> d\n    (f' `map` ga)                        : x -> b -> c -> d\n    (f' `map` ga `apply` gb)             : x -> c -> d\n    (f' `map` ga `apply` gb `apply` gc)  : x -> d\n\n",
+            "type": "(x -> a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "curry3",
+            "comment": " Change how arguments are passed to a function.\nThis splits 3-tupled arguments into three separate arguments.\n",
+            "type": "(( a, b, c ) -> x) -> a -> b -> c -> x"
+          },
+          {
+            "name": "curry4",
+            "comment": " Change how arguments are passed to a function.\nThis splits 4-tupled arguments into four separate arguments.\n",
+            "type": "(( a, b, c, d ) -> x) -> a -> b -> c -> d -> x"
+          },
+          {
+            "name": "curry5",
+            "comment": " Change how arguments are passed to a function.\nThis splits 5-tupled arguments into five separate arguments.\n",
+            "type": "(( a, b, c, d, e ) -> x) -> a -> b -> c -> d -> e -> x"
+          },
+          {
+            "name": "map",
+            "comment": " Map into a function with a fixed input `x`. This function is just an alias for `(<<)`, the function composition operator.\n\n    (f `map` g `map` h) == (f << g << h) -- Note that `map` refers to Function.map not List.map!\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map` to transform a *\"reader\"* that produces an `a` into a *\"reader\"* that produces a `b`.\n",
+            "type": "(a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "map2",
+            "comment": " Send a single argument `x` into a binary function using two intermediate mappings.\n\n    (map2 f ga gb) x == (f (ga x) (gb x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map2` to read two variables from the environment `x` before applying them to a binary function `f`.\n",
+            "type": "(a -> b -> c) -> (x -> a) -> (x -> b) -> x -> c"
+          },
+          {
+            "name": "map3",
+            "comment": " Send a single argument `x` into a ternary function using three intermediate mappings.\n\n    (map3 f ga gb gc) x == (f (ga x) (gb x) (gc x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map3` to read three variables from the environment `x` before applying them to a ternary function `f`.\n",
+            "type": "(a -> b -> c -> d) -> (x -> a) -> (x -> b) -> (x -> c) -> x -> d"
+          },
+          {
+            "name": "map4",
+            "comment": " Send a single argument `x` into a quaternary function using four intermediate mappings.\nUse `apply` as an infix combinator in order to deal with a larger numbers of arguments.\n\n    (map4 f ga gb gc gd) x == (f (ga x) (gb x) (gc x) (gd x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map4` to read four variables from the environment `x` before applying them to a quaternary function `f`.\n",
+            "type": "(a -> b -> c -> d -> e) -> (x -> a) -> (x -> b) -> (x -> c) -> (x -> d) -> x -> e"
+          },
+          {
+            "name": "on",
+            "comment": " Apply a binary function using a transformation on both input parameters.\n\n    (*) `on` f == \\x y -> f x * f y\n    sortBy (compare `on` fst) == sortBy (\\x y -> fst x `compare` fst y)\n",
+            "type": "(b -> b -> c) -> (a -> b) -> a -> a -> c"
+          },
+          {
+            "name": "uncurry3",
+            "comment": " Change how arguments are passed to a function.\nThis combines three arguments into a single 3-tuple.\n",
+            "type": "(a -> b -> c -> x) -> ( a, b, c ) -> x"
+          },
+          {
+            "name": "uncurry4",
+            "comment": " Change how arguments are passed to a function.\nThis combines four arguments into a single 4-tuple.\n",
+            "type": "(a -> b -> c -> d -> x) -> ( a, b, c, d ) -> x"
+          },
+          {
+            "name": "uncurry5",
+            "comment": " Change how arguments are passed to a function.\nThis combines five arguments into a single 5-tuple.\n",
+            "type": "(a -> b -> c -> d -> e -> x) -> ( a, b, c, d, e ) -> x"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -55308,6 +55654,212 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "maksar/elm-function-extra",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Function.Extra",
+        "comment": " Higher-order helpers for working with functions.\n\n# Higher-order helpers\n@docs map, map2, map3, map4, twice\n@docs apply, andThen\n@docs curry3, curry4, curry5\n@docs uncurry3, uncurry4, uncurry5\n@docs on\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Connect the result `a` of the first function to the first argument of the second function to form a pipeline.\nThen, send `x` into each function along the pipeline in order to execute it in a sequential manner.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `andThen` to repeatedly read from the environment `x` and send the result into to the next function, which in turn reads from the environment `x` again and so forth.\n\n    (f `andThen` g `andThen` h) x == (h (g (f x) x) x)\n",
+            "type": "(x -> a) -> (a -> x -> b) -> x -> b"
+          },
+          {
+            "name": "apply",
+            "comment": " Incrementally apply more functions, similar to `map`*N* where *N* is not fixed.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `apply` to read an arbitrary number of arguments from the same environment `x`.\n\n    (f `apply` ga `apply` gb `apply` gc) x == f x (ga x) (gb x) (gc x)\n                                           == (map4 identity f ga gb gc) x\n                                           == (identity `map` f `apply` ga `apply` gb `apply` gc) x\n\n    (f' `map` ga `apply` gb `apply` gc) x  == f' (ga x) (gb x) (gc x) x\n                                           == (map3 f' ga gb gc) x\n\nAlso notice the type signatures...\n\n    ga                                   : x -> a\n    gb                                   : x -> b\n    gc                                   : x -> c\n\n    f                                    : x -> a -> b -> c -> d\n    (f `apply` ga)                       : x -> b -> c -> d\n    (f `apply` ga `apply` gb)            : x -> c -> d\n    (f `apply` ga `apply` gb `apply` gc) : x -> d\n\n    f'                                   : a -> b -> c -> d\n    (f' `map` ga)                        : x -> b -> c -> d\n    (f' `map` ga `apply` gb)             : x -> c -> d\n    (f' `map` ga `apply` gb `apply` gc)  : x -> d\n\n",
+            "type": "(x -> a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "curry3",
+            "comment": " Change how arguments are passed to a function.\nThis splits 3-tupled arguments into three separate arguments.\n",
+            "type": "(( a, b, c ) -> x) -> a -> b -> c -> x"
+          },
+          {
+            "name": "curry4",
+            "comment": " Change how arguments are passed to a function.\nThis splits 4-tupled arguments into four separate arguments.\n",
+            "type": "(( a, b, c, d ) -> x) -> a -> b -> c -> d -> x"
+          },
+          {
+            "name": "curry5",
+            "comment": " Change how arguments are passed to a function.\nThis splits 5-tupled arguments into five separate arguments.\n",
+            "type": "(( a, b, c, d, e ) -> x) -> a -> b -> c -> d -> e -> x"
+          },
+          {
+            "name": "map",
+            "comment": " Map into a function with a fixed input `x`. This function is just an alias for `(<<)`, the function composition operator.\n\n    (f `map` g `map` h) == (f << g << h) -- Note that `map` refers to Function.map not List.map!\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map` to transform a *\"reader\"* that produces an `a` into a *\"reader\"* that produces a `b`.\n",
+            "type": "(a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "map2",
+            "comment": " Send a single argument `x` into a binary function using two intermediate mappings.\n\n    (map2 f ga gb) x == (f (ga x) (gb x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map2` to read two variables from the environment `x` before applying them to a binary function `f`.\n",
+            "type": "(a -> b -> c) -> (x -> a) -> (x -> b) -> x -> c"
+          },
+          {
+            "name": "map3",
+            "comment": " Send a single argument `x` into a ternary function using three intermediate mappings.\n\n    (map3 f ga gb gc) x == (f (ga x) (gb x) (gc x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map3` to read three variables from the environment `x` before applying them to a ternary function `f`.\n",
+            "type": "(a -> b -> c -> d) -> (x -> a) -> (x -> b) -> (x -> c) -> x -> d"
+          },
+          {
+            "name": "map4",
+            "comment": " Send a single argument `x` into a quaternary function using four intermediate mappings.\nUse `apply` as an infix combinator in order to deal with a larger numbers of arguments.\n\n    (map4 f ga gb gc gd) x == (f (ga x) (gb x) (gc x) (gd x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map4` to read four variables from the environment `x` before applying them to a quaternary function `f`.\n",
+            "type": "(a -> b -> c -> d -> e) -> (x -> a) -> (x -> b) -> (x -> c) -> (x -> d) -> x -> e"
+          },
+          {
+            "name": "on",
+            "comment": " Apply a binary function using a transformation on both input parameters.\n\n    (*) `on` f == \\x y -> f x * f y\n    sortBy (compare `on` fst) == sortBy (\\x y -> fst x `compare` fst y)\n",
+            "type": "(b -> b -> c) -> (a -> b) -> a -> a -> c"
+          },
+          {
+            "name": "twice",
+            "comment": " Applies given function `f` twice.\n\n    (twice f) == (f << f)\n",
+            "type": "(a -> a) -> a -> a"
+          },
+          {
+            "name": "uncurry3",
+            "comment": " Change how arguments are passed to a function.\nThis combines three arguments into a single 3-tuple.\n",
+            "type": "(a -> b -> c -> x) -> ( a, b, c ) -> x"
+          },
+          {
+            "name": "uncurry4",
+            "comment": " Change how arguments are passed to a function.\nThis combines four arguments into a single 4-tuple.\n",
+            "type": "(a -> b -> c -> d -> x) -> ( a, b, c, d ) -> x"
+          },
+          {
+            "name": "uncurry5",
+            "comment": " Change how arguments are passed to a function.\nThis combines five arguments into a single 5-tuple.\n",
+            "type": "(a -> b -> c -> d -> e -> x) -> ( a, b, c, d, e ) -> x"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "maksar/elm-workflow",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Workflow",
+        "comment": " Workflow simulates voting process on multiple steps.\n    Each step has a threshold value.\n    To proceed to the next step, it's necessary to get threshold number of votes.\n    Power users can force skip one step.\n    User with ar least `VOTE` permission can `reject` the curren step (previous step re-starts).\n    Inactive users canot `approve` or `reject`. User can only vote once on the same step.\n\n# Definition\n@docs Workflow\n\n# Creating Workflow\n@docs init\n\n# Interactions\n@docs approve, reject\n\n# Inspecting state\n@docs finished\n",
+        "aliases": [
+          {
+            "name": "Workflow",
+            "comment": " Record representing workflow status. Consists of:\n    `stepsConfig` - array, containing step's threshold values;\n    `currentStep` integer - number of the current workflow step;\n    `votes` - array of votes on each step.\n",
+            "args": [],
+            "type": "{ stepsConfig : Array.Array Int , currentStep : Int , votes : Array.Array (GenericSet.GenericSet User.User) }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "approve",
+            "comment": " Performs approve (vote) operation from given `User` on a `Workflow`.\n\n    init [ 1, 2 ] |> approve (create \"Bob\" True [VOTE]) == { stepsConfig = Array.fromList [1,2], currentStep = 1, votes = Array.fromList [Set.fromList [User { name = \"Bob\", active = True, permissions = Array.fromList [VOTE] }],Set.fromList []] }\n",
+            "type": "User.User -> Workflow.Workflow -> Workflow.Workflow"
+          },
+          {
+            "name": "finished",
+            "comment": " Returns high-level `Workflow` completion status. `Workflow` becomes completed after going through all its steps.\n",
+            "type": "Workflow.Workflow -> Bool"
+          },
+          {
+            "name": "init",
+            "comment": " Creates `Workflow` from provided list of threshold values.\n\n    init [ 1, 2 ] == { stepsConfig = Array.fromList [1,2], currentStep = 0, votes = Array.fromList [Set.fromList [],Set.fromList []] }\n",
+            "type": "List Int -> Workflow.Workflow"
+          },
+          {
+            "name": "reject",
+            "comment": " Performs reject operation from given `User` on a `Workflow`.\n",
+            "type": "User.User -> Workflow.Workflow -> Workflow.Workflow"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "User",
+        "comment": " User type, instances of which should be used in `Workflow`s\n\n# Definition\n@docs User\n\n# Creating User\n@docs create\n\n# Taking User Apart\n@docs name, active, inactive, permissions\n\n# Getting Permission for a step\n@docs permission\n\n# Comparing Users\n@docs compare\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "User",
+            "comment": " Container for all attributes, required by `Workflow` to operate. ",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "active",
+            "comment": " Extracts operational status from `User` instance.\n\n    active <| create \"Bob\" True [ NONE, VOTE ] == True\n",
+            "type": "User.User -> Bool"
+          },
+          {
+            "name": "compare",
+            "comment": " Compare names of the two given users, returning `Order`. No other attributes are taken into account.\n\n    compare (create \"Bob\" True [ NONE ]) (create \"Alice\" True [ NONE ]) == False\n    compare (create \"Bob\" True [ NONE ]) (create \"Bob\" False [ ]) == True\n",
+            "type": "User.User -> User.User -> Basics.Order"
+          },
+          {
+            "name": "create",
+            "comment": " Creates instance of the `User` by name, operational status, and list of Permissions for each step.\n\n    create \"Bob\" True [ NONE, VOTE ] == User \"Bob\" True Array.fromList [ NONE, VOTE ]\n",
+            "type": "String -> Bool -> List Permission.Permission -> User.User"
+          },
+          {
+            "name": "inactive",
+            "comment": " Extracts operational status from `User` instance.\n\n    inactive <| create \"Bob\" False [ NONE, VOTE ] == True\n",
+            "type": "User.User -> Bool"
+          },
+          {
+            "name": "name",
+            "comment": " Extracts name from `User` instance.\n\n    name <| create \"Bob\" True [ NONE, VOTE ] == \"Bob\"\n",
+            "type": "User.User -> String"
+          },
+          {
+            "name": "permission",
+            "comment": " Gets permission from a user to a particular step of the `Workflow`.\n    If permission wasn't found, `NONE` will be returned.\n\n    permission 0 <| create \"Bob\" True [ NONE, VOTE ] == NONE\n    permission 1 <| create \"Bob\" True [ NONE, VOTE ] == VOTE\n    permission 2 <| create \"Bob\" True [ NONE, VOTE ] == NONE\n",
+            "type": "Int -> User.User -> Permission.Permission"
+          },
+          {
+            "name": "permissions",
+            "comment": " Extracts list of `Permission`s from `User` instance.\n\n    permissions <| create \"Bob\" True [ NONE, VOTE ] == [ NONE, VOTE ]\n",
+            "type": "User.User -> List Permission.Permission"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Permission",
+        "comment": " Permission type dictating what `User` can do on particular `Workflow` step.\n\n# Definition\n@docs Permission\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Permission",
+            "comment": " User can vote (having `VOTE` permission) on particular step of the `Workflow` or completely skip the whole step\n    (having `FORCE` permission). Without any permissions (`NONE`), `User` cannot affect the `Workflow`.\n",
+            "args": [],
+            "cases": [
+              [
+                "VOTE",
+                []
+              ],
+              [
+                "FORCE",
+                []
+              ],
+              [
+                "NONE",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
