@@ -13445,11 +13445,11 @@
   },
   {
     "name": "benansell/elm-geometric-transformation",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Transformer2D",
-        "comment": " A library for manipulating points by applying geometric transformations\nusing homogeneous coordinates which can be useful in\n[`2D computer graphics`](https://en.wikipedia.org/wiki/2D_computer_graphics)\n\n# Example\nTo rotate a any shape (list of points) by an angle around the origin:\n\n    rotateShape : List Point -> Float -> List Point\n    rotateShape points angle =\n        let\n            transform =\n                rotate Clockwise angle\n                    |> apply\n        in\n            List.map transform points\n\nMore complicated transforms can be created by using combine - as illustrated\nin the [elm-webpack-seed](https://github.com/benansell/elm-webpack-seed) project.\n\n# Working with Points\n@docs Point, toPoint, fromPoint\n\n# Creating Transformations\n@docs Transformation, identity, rotate, scale, scaleUniform, shear, translate\n\n# Applying and Combining Transformations\n@docs apply, combine\n\n# Misc\n@docs RotateDirection, ShearDirection\n\n\n",
+        "comment": " A library for manipulating points by applying geometric transformations\nusing homogeneous coordinates which can be useful in\n[`2D computer graphics`](https://en.wikipedia.org/wiki/2D_computer_graphics)\n\nMore complicated transforms can be created by using combine - as illustrated\nin the [elm-webpack-seed](https://github.com/benansell/elm-webpack-seed) project.\n\n# Working with Points\n@docs Point, toPoint, fromPoint\n\n# Creating Transformations\n@docs Transformation, identity, rotate, scale, scaleUniform, shear, translate\n\n# Applying and Combining Transformations\n@docs apply, combine\n\n# Misc\n@docs RotateDirection, ShearDirection\n\n\n",
         "aliases": [
           {
             "name": "Point",
@@ -13499,12 +13499,12 @@
         "values": [
           {
             "name": "apply",
-            "comment": " Apply the transformation to the point.\n",
+            "comment": " Apply the transformation to a point.\n",
             "type": "Transformer2D.Transformation -> Transformer2D.Point -> Transformer2D.Point"
           },
           {
             "name": "combine",
-            "comment": " Combine two transformations\n",
+            "comment": " Combine ([compose](https://en.wikipedia.org/wiki/Transformation_matrix#Composing_and_inverting_transformations)) two transformations:\n\n    complexShapeMovement : ( Float, Float ) -> Float -> List Point -> List Point\n    complexShapeMovement offset angle points =\n        let\n            transform =\n                combine (translate offset) (rotate Clockwise angle)\n                    |> apply\n        in\n            List.map transform points\n\n",
             "type": "Transformer2D.Transformation -> Transformer2D.Transformation -> Transformer2D.Transformation"
           },
           {
@@ -13519,12 +13519,12 @@
           },
           {
             "name": "rotate",
-            "comment": " Creates a transformation that will rotate each point around the origin\nby the specified direction and angle.\n",
+            "comment": " Creates a transformation that will rotate each point around the origin\nby the specified direction and angle:\n\n    rotateShape : Float -> List Point -> List Point\n    rotateShape angle points =\n        let\n            transform =\n                rotate Clockwise angle\n                    |> apply\n        in\n            List.map transform points\n\n",
             "type": "Transformer2D.RotateDirection -> Float -> Transformer2D.Transformation"
           },
           {
             "name": "scale",
-            "comment": " Creates a transformation that will scale each point x value by the width and\ny value by the height relative to the origin\n",
+            "comment": " Creates a transformation that will scale each point x value by the width and\ny value by the height relative to the origin:\n\n    scaleShape : Float -> Float -> List Point -> List Point\n    scaleShape width height points =\n        let\n            transform =\n                scale width height\n                    |> apply\n        in\n            List.map transform points\n\n",
             "type": "Float -> Float -> Transformer2D.Transformation"
           },
           {
