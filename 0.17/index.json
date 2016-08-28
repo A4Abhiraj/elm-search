@@ -12497,6 +12497,31 @@
     ]
   },
   {
+    "name": "athanclark/elm-param-parsing-2",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Query",
+        "comment": "\nThis library works with URI query strings; a string that's\neither empty, or, beginning with `?` (question mark), is followed by\none or more strings, each of which separated by a `&` (ampersand).\nThese strings may or may not be split between a `=` (equals sign).\n\n> In this library, we consider only the **first** `=` as the split,\n> and all further occurances remain intact in the resulting `Just v` value.\n\nIf there is at least one `=` in the string, then the resulting split\nwill be `(k, Just v)`. Likewise, if there is no `=`, then the\nresult will just be `(k, Nothing)`. Critically, if the `=` is included,\nbut there is no string before the next `&` (i.e. `...&foo=&...`), then\nthe result will be `(\"foo\", Just \"\")`. Empty strings (i.e. `...&&...`)\nare represented as `(\"\", Nothing)`.\n\nWe then have a list of pairs of strings with a nullable right value.\nThis is a precise type denoting the query string, opposed to a `Dict` -\nit retains both the ordering information of the query strings, and their\npossible value. A more general type might be `List String`, so the resulting\ntype would be a list of lists `List (List String)`, but this library is\nintended to assume a more practical use case.\n\n## Laws:\n\n### Isomorphism\n\nforall query strings `x:String` (i.e. `x-www-uriencode` formatted strings, separated\nby `=` and `&`, beginning with a `?`):\n\n```\nprintQuery (parseQuery x) == x\n```\n\nand likewise, forall query string sets `xs:[(String, Maybe String)]`:\n\n```\nparseQuery (printQuery xs) == xs\n```\n\n> If you can think of others, please let me know!\n\n@docs parseQuery, printQuery\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "parseQuery",
+            "comment": "\nParse everything after the path and before the fragment,\nspecifically `/path/to/resource.foo...#fragment`. This\nfunction's behaviour is unspecified if you give this whole\nstring, and not only the portion marked as `...`, usually\nin the form of `?foo=bar&baz&qux=2` *including* the initial `?`.\nNote that this also decodes the `x-www-uriencode` data as well\nwith `Http.uriDecode`.\n",
+            "type": "String -> List ( String, Maybe.Maybe String )"
+          },
+          {
+            "name": "printQuery",
+            "comment": "\nPrints out the query Dict such that a `?` is placed\nonly if the Dict is _non-empty_. Also uses `Http.uriEncode` from\n[evancz's http package](https://package.elm-lang.org/packages/evancz/elm-http),\nand does _not_ place a `&` if the value is `Nothing`.\n",
+            "type": "List ( String, Maybe.Maybe String ) -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "athanclark/elm-threading",
     "version": "2.0.0",
     "docs": [
@@ -22045,6 +22070,202 @@
     ]
   },
   {
+    "name": "doodledood/elm-split-pane",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "SplitPane",
+        "comment": "\n\nThis is a split pane view library. Can be used to split views into multiple parts with a splitter between them.\n\nCheck out the [examples][] to see how it works.\n\n[examples]: https://github.com/doodledood/elm-split-pane/tree/master/examples\n\n# View\n\n@docs view\n\n# Model\n\n@docs Model, Orientation, Px, Size\n\n# Init\n\n@docs init\n\n# Update\n\n@docs update, WhatHappened, Msg\n\n# Subscriptions\n\n@docs subscriptions\n\n# Helpers\nThere are helper functions to help you with modifying and inspecting the state:\n\n## State modification\n\nUse these functions to modify the state of the pane\n\n@docs startAt, draggable, withFirstViewMinSize, withSecondViewMinSize, changeOrientationTo, changeWidth, changeHeight, moveSplitterTo\n\n## Inspecting the pane's state\n\nUse these functions to inspect the state\n\n@docs splitterPosition, width, height, orientation\n\n# Customization\n\nApart for the simple view, there is a way to provide your own custom splitter:\n\n@docs viewWithCustomSplitter, customSplitter, CustomSplitter, HtmlDetails\n\n",
+        "aliases": [
+          {
+            "name": "HtmlDetails",
+            "comment": " Lets you specify attributes such as style and children for the splitter element\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ attributes : List (Html.Attribute msg) , children : List (Html.Html msg) }"
+          },
+          {
+            "name": "Px",
+            "comment": " Size in pixels.\n",
+            "args": [],
+            "type": "Int"
+          }
+        ],
+        "types": [
+          {
+            "name": "CustomSplitter",
+            "comment": " Decribes a custom splitter\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Model",
+            "comment": " Tracks state of pane.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Used to track SplitterMoves.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Orientation",
+            "comment": " Orientation of pane.\n",
+            "args": [],
+            "cases": [
+              [
+                "Horizontal",
+                []
+              ],
+              [
+                "Vertical",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Size",
+            "comment": " Size in either pixels or percentage.\n",
+            "args": [],
+            "cases": [
+              [
+                "Px",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Percentage",
+                [
+                  "Float"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "WhatHappened",
+            "comment": " Describes what happened. (after update)\n",
+            "args": [],
+            "cases": [
+              [
+                "ResizeStarted",
+                []
+              ],
+              [
+                "Resized",
+                [
+                  "SplitPane.Px"
+                ]
+              ],
+              [
+                "ResizeEnded",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "changeHeight",
+            "comment": " Change the height of the pane.\n\n        newModel = model.pane |> changeHeight 400\n",
+            "type": "SplitPane.Px -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "changeOrientationTo",
+            "comment": " Set the orientation of the pane.\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> changeOrientationTo Vertical\n",
+            "type": "SplitPane.Orientation -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "changeWidth",
+            "comment": " Change the width of the pane.\n\n        newModel = model.pane |> changeWidth 600\n",
+            "type": "SplitPane.Px -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "customSplitter",
+            "comment": " Creates a custom splitter.\n\n        myCustomSplitter : CustomSplitter Msg\n        myCustomSplitter =\n            customSplitter PaneMsg\n                { attributes =\n                    [ style\n                        [ ( \"width\", \"20px\" )\n                        , ( \"height\", \"20px\" )\n                        ]\n                    ]\n                , children =\n                    []\n                }\n",
+            "type": "(SplitPane.Msg -> msg) -> SplitPane.HtmlDetails msg -> SplitPane.CustomSplitter msg"
+          },
+          {
+            "name": "draggable",
+            "comment": " Make pane splitter draggable or not\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> draggable False\n",
+            "type": "Bool -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "height",
+            "comment": " Retrieves current height of the pane from the model.\n",
+            "type": "SplitPane.Model -> SplitPane.Px"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize a new model.\n\n        init\n            { paneWidth = 600\n            , paneHeight = 600\n            }\n",
+            "type": "{ a | paneHeight : SplitPane.Px, paneWidth : SplitPane.Px } -> SplitPane.Model"
+          },
+          {
+            "name": "moveSplitterTo",
+            "comment": " Moves the splitter to the requested location (relative to the edge of the pane)\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> moveSplitterTo (Percentage 0.33)\n",
+            "type": "SplitPane.Size -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "orientation",
+            "comment": " Retrieves current orientation of the pane from the model.\n",
+            "type": "SplitPane.Model -> SplitPane.Orientation"
+          },
+          {
+            "name": "splitterPosition",
+            "comment": " Retrieves current splitter position in pixels from the model (relative to the edge of the pane).\n",
+            "type": "SplitPane.Model -> SplitPane.Px"
+          },
+          {
+            "name": "startAt",
+            "comment": " Sets the starting position for the splitter (relative to the edge of the pane).\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> startAt 300\n",
+            "type": "SplitPane.Size -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "subscriptions",
+            "comment": " Subscribes to relevant events for resizing\n",
+            "type": "SplitPane.Model -> Platform.Sub.Sub SplitPane.Msg"
+          },
+          {
+            "name": "update",
+            "comment": " Updates internal model.\n",
+            "type": "SplitPane.Msg -> SplitPane.Model -> ( SplitPane.Model, Maybe.Maybe SplitPane.WhatHappened )"
+          },
+          {
+            "name": "view",
+            "comment": " Default pane with two views\n\n        view : Model -> Html Msg\n        view model =\n            SplitPane.view PaneMsg firstView secondView model.pane\n\n\n        firstView : Html a\n        firstView =\n            img [ src \"http://4.bp.blogspot.com/-s3sIvuCfg4o/VP-82RkCOGI/AAAAAAAALSY/509obByLvNw/s1600/baby-cat-wallpaper.jpg\" ] []\n\n\n        secondView : Html a\n        secondView =\n            img [ src \"http://2.bp.blogspot.com/-pATX0YgNSFs/VP-82AQKcuI/AAAAAAAALSU/Vet9e7Qsjjw/s1600/Cat-hd-wallpapers.jpg\" ] []\n",
+            "type": "(SplitPane.Msg -> msg) -> Html.Html msg -> Html.Html msg -> SplitPane.Model -> Html.Html msg"
+          },
+          {
+            "name": "viewWithCustomSplitter",
+            "comment": " A pane with custom splitter.\n\n        view : Model -> Html Msg\n        view =\n            SplitPane.viewWithCustomSplitter myCustomSplitter firstView secondView\n\n\n        myCustomSplitter : CustomSplitter Msg\n        myCustomSplitter =\n            customSplitter PaneMsg\n                { attributes =\n                    [ style\n                        [ ( \"width\", \"20px\" )\n                        , ( \"height\", \"20px\" )\n                        ]\n                    ]\n                , children =\n                    []\n                }\n\n        firstView : Html a\n        firstView =\n            img [ src \"http://4.bp.blogspot.com/-s3sIvuCfg4o/VP-82RkCOGI/AAAAAAAALSY/509obByLvNw/s1600/baby-cat-wallpaper.jpg\" ] []\n\n\n        secondView : Html a\n        secondView =\n            img [ src \"http://2.bp.blogspot.com/-pATX0YgNSFs/VP-82AQKcuI/AAAAAAAALSU/Vet9e7Qsjjw/s1600/Cat-hd-wallpapers.jpg\" ] []\n",
+            "type": "SplitPane.CustomSplitter msg -> Html.Html msg -> Html.Html msg -> SplitPane.Model -> Html.Html msg"
+          },
+          {
+            "name": "width",
+            "comment": " Retrieves current width of the pane from the model.\n",
+            "type": "SplitPane.Model -> SplitPane.Px"
+          },
+          {
+            "name": "withFirstViewMinSize",
+            "comment": " Set minimum size for the first view.\n    When the pane is horizontal, this is the left view.\n    When the pane is vertical, this is the top view.\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> withFirstViewMinSize (Percentage 0.2)\n",
+            "type": "SplitPane.Size -> SplitPane.Model -> SplitPane.Model"
+          },
+          {
+            "name": "withSecondViewMinSize",
+            "comment": " Set minimum size for the second view.\n    When the pane is horizontal, this is the right view.\n    When the pane is vertical, this is the bottom view.\n\n        SplitPane.init\n            { paneWidth = 800\n            , paneHeight = 600\n            }\n            |> withSecondViewMinSize (Px 100)\n",
+            "type": "SplitPane.Size -> SplitPane.Model -> SplitPane.Model"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "eeue56/elm-all-dict",
     "version": "1.1.2",
     "docs": [
@@ -22764,26 +22985,31 @@
   },
   {
     "name": "elm-community/basics-extra",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Basics.Extra",
-        "comment": " Additional basic functions.\n\n@docs never, (=>)\n",
+        "comment": " Additional basic functions.\n\n# Never\n@docs never\n\n# Tuples\n@docs (=>), swap\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "=>",
-            "comment": " A shorthand for writing 2-tuples.  Very commonly used when expressing key/value pairs\nin CSS or Json encoders.\n",
+            "comment": " A shorthand for writing 2-tuples. Very commonly used when expressing key/value pairs\nin CSS or Json encoders.\n",
             "type": "a -> b -> ( a, b )"
           },
           {
             "name": "never",
-            "comment": " The empty function.\nThis converts a value of type\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\ninto a value of any type, which is safe because there are no values of\ntype `Never`. Useful in certain situations as argument to\n[`Task.perform`](http://package.elm-lang.org/packages/elm-lang/core/latest/Task#perform)\nand\n[`Html.App.map`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-App#map).\n\n*Note:* To use this function, its argument need not be literally of type `Never`.\nIt suffices if it is a fully polymorphic value. For example, this works:\n`Process.sleep >> Task.perform never (\\() -> ...)`, because the output of\n[`Process.sleep`](http://package.elm-lang.org/packages/elm-lang/core/latest/Process#sleep)\nis fully polymorphic in the `x` of `Task x ()`. \n",
+            "comment": " The empty function.\nThis converts a value of type\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\ninto a value of any type, which is safe because there are no values of\ntype `Never`. Useful in certain situations as argument to\n[`Task.perform`](http://package.elm-lang.org/packages/elm-lang/core/latest/Task#perform)\nand\n[`Html.App.map`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-App#map).\n\n*Note:* To use this function, its argument need not be literally of type `Never`.\nIt suffices if it is a fully polymorphic value. For example, this works:\n`Process.sleep >> Task.perform never (\\() -> ...)`, because the output of\n[`Process.sleep`](http://package.elm-lang.org/packages/elm-lang/core/latest/Process#sleep)\nis fully polymorphic in the `x` of `Task x ()`.\n",
             "type": "Basics.Never -> a"
+          },
+          {
+            "name": "swap",
+            "comment": " Swaps the elements in a tuple.\n\n    swap ( 1, 2 ) == ( 2, 1 )\n\n",
+            "type": "( a, b ) -> ( b, a )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -64158,6 +64384,60 @@
     ]
   },
   {
+    "name": "r31gN/elm-dropdown",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Dropdown",
+        "comment": " A customizable Dropdown component.\n\nThis Dropdown has a dynamic list of items.\n\nThe Dropdown consists of a div containing a value, a caret and a list of\npossible values.\n\nSee `Examples` folder for further details.\n\n# Definition\n@docs Dropdown, Msg\n\n# Init\n@docs init\n\n# Update\n@docs update\n\n# View\n@docs view, renderDropdownHtml\n\n# API\n@docs getValue\n\n",
+        "aliases": [
+          {
+            "name": "Dropdown",
+            "comment": " The Dropdown model. ",
+            "args": [],
+            "type": "{ value : String , valuesList : List String , placeholder : String , isOpen : Bool }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Different message types the Dropdown can receive. ",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "getValue",
+            "comment": " Get the model value. ",
+            "type": "Dropdown.Dropdown -> String"
+          },
+          {
+            "name": "init",
+            "comment": " Initializing the model. ",
+            "type": "String -> List String -> String -> Dropdown.Dropdown"
+          },
+          {
+            "name": "renderDropdownHtml",
+            "comment": " Dropdown HTML creator method. ",
+            "type": "Dropdown.Dropdown -> Html.Html Dropdown.Msg"
+          },
+          {
+            "name": "update",
+            "comment": " Elm architecture reducer. ",
+            "type": "Dropdown.Msg -> Dropdown.Dropdown -> Dropdown.Dropdown"
+          },
+          {
+            "name": "view",
+            "comment": " Dropdown view. ",
+            "type": "Dropdown.Dropdown -> Html.Html Dropdown.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "rainteller/elm-capitalize",
     "version": "1.0.1",
     "docs": [
@@ -75518,6 +75798,315 @@
           }
         ],
         "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "yotamDvir/elm-pivot",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Pivot",
+        "comment": " A pivot is a list upgraded with a center and sides. However, a pivot\ncan never be empty, so it is better to think of it an upgraded cons list.\n\nIn this library, we suffix functions with letters to denote their context,\nas follows.\n\n* The __C__enter\n* Both __S__ides\n* The __L__eft side\n* The __R__ight side\n* __A__ll the members\n\nThis way you can guess a function's name easily.\nSee the different `map*` functions.\n\nFor example, `getL` gets the left side of a pivot.\n\n# Type\n@docs Pivot\n\n# To & Fro\nSo you want to use a pivot? Better know how to create one, and get stuff back!\n\n## Create\n@docs fromList, fromCons, pure\n\n## Get\n@docs getC, getL, getR, getA, hasL, hasR\n\n# Movement\nHandle the position of the center.\nThese functions do not mutate the underlying list.\nThat is, if you apply functions fromList here and then apply `getA`,\nyou'd get the same thing you would by applying `getA` beforehand.\n\n## Position\n@docs lengthL, lengthR, lengthA\n\n## Momentum\n@docs goR, goL, goBy, goTo, goToStart, goToEnd\n\n## Find\n@docs firstWith, lastWith, findR, findL, findCR, findCL\n\n# Modify\nNow we start seeing functions that can actually change the underlying list.\n\n## Set\n@docs setC, setL, setR\n\n## Add\n@docs addL, addR, addGoL, addGoR\n\n## Remove\nRemoving is not guaranteed to work,\nfor the simple reason that a pivot cannot be empty.\n@docs removeGoL, removeGoR\n\n## Switch\nSwitch places with other members.\n@docs switchL, switchR\n\n## Sort\n@docs sort, sortWith\n\n# Maps\nLists can be mapped over, and so can pivots.\nHowever, since a pivot is made up of three distinct objects at any time,\nit makes sense that you may want to apply different transformations to\nthe different objects.\n\n## Maps\n@docs mapCLR, mapCRL, mapCS, mapA\n\n## Constraint Maps\nIf you want to map only over some of the pivot,\nthen you must retain the type.\n@docs mapC, mapS, mapL, mapR\n\n## As a whole\nSome `List a -> List a` functions cannot be made from `a -> a` functions.\nThis is why these maps may be of importance.\nJust add `'` to a `map*` function to use functions on lists instead of values.\n@docs mapCLR', mapCRL', mapCS', mapS', mapL', mapR'\n\n## Special\n@docs apply\n\n# Utilities\n@docs reverse, mirror, mirrorM, assert, withRollback\n",
+        "aliases": [
+          {
+            "name": "Pivot",
+            "comment": " Pivot is an opaque data type.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Pivot.Types.Pivot a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "addGoL",
+            "comment": " Add a member to the left of the center and immediately move left.\nWe know that `addL >> goL` cannot really fail, but it still results in a\n`Maybe` type. This avoids this issue.\n\n    addGoL >> Just == addL >> goL\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addGoR",
+            "comment": " Add a member to the right of the center and immediately move right.\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addL",
+            "comment": " Add a member to the left of the center\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addR",
+            "comment": " Add a member to the right of the center\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "apply",
+            "comment": " Apply functions in a pivot on values in another Pivot.\nThe center gets applied to the center,\nand each side gets applied to each side.\nBut how does a list of functions get applied on a list of values?\nWell, each function maps over the complete list of values,\nand then all the lists created from these applications are concatinated.\n\n    mapCLR onC onL onR == (pure onC |> setL [onL] |> setR [onR] |> apply)\n",
+            "type": "Pivot.Pivot (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "assert",
+            "comment": " Takes a pivot full of possible values, and realizes it only if all\nthe values are real. That is, if all the values are `Just a`, then we get\n`Just (Pivot a)`. Otherwise, we get `Nothing`.\nThis is great for composing with the different map functions.\nFor example, you could define\n\n    mapAM : (a -> Maybe b) -> Pivot a -> Maybe (Pivot b)\n    mapAM f = mapA f >> assert\n",
+            "type": "Pivot.Pivot (Maybe.Maybe a) -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findCL",
+            "comment": " Like `findL`, but checks the center first as well.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findCR",
+            "comment": " Like `findR`, but checks the center first as well.\n\n_Fails if and only if there are no such members._\n\n    firstWith == \\pred -> goToStart >> findCR pred\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findL",
+            "comment": " Find the first member to the center's left satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findR",
+            "comment": " Find the first member to the center's right satisfying some predicate.\n\n_Fails if and only if there are no such members._\n\n    findR ((==) 3) (fromCons 1 [2..4]) == (pure 3 |> setL [1, 2] |> setR [4])\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "firstWith",
+            "comment": " Find the first member of a pivot satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "fromCons",
+            "comment": " Like `fromList`, but by specifying the center explicitly, it cannot fail.\n\n    getC (fromCons \"well\" [\"hello\", \"world\"]) == \"well\"\n    getL (fromCons \"well\" [\"hello\", \"world\"]) == []\n    getR (fromCons \"well\" [\"hello\", \"world\"]) == [\"hello\", \"world\"]\n    Just (fromCons 1 [2..4]) == fromList [1..4]\n",
+            "type": "a -> List a -> Pivot.Pivot a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Make a pivot fromList a list with empty left side.\n\n_Fails if and only if the list given is empty._\n\n    fromList [] == Nothing\n",
+            "type": "List a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "getA",
+            "comment": " Make the pivot into a list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "getC",
+            "comment": " Get the center member.\n\n    pure >> getC == identity\n",
+            "type": "Pivot.Pivot a -> a"
+          },
+          {
+            "name": "getL",
+            "comment": " Get the left side list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "getR",
+            "comment": " Get the right side list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "goBy",
+            "comment": " Move right by some number of steps. Negative number moves left instead.\n\n_Fails if and only if the movement goes out of bounds._\n",
+            "type": "Int -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goL",
+            "comment": " Move one step left.\n\n_Fails if and only if the left side is empty._\n\n    goL (fromCons 1 [2..4]) == Nothing\n    withRollback goL (fromCons 1 [2..4]) == fromCons 1 [2..4]\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goR",
+            "comment": " Move one step right.\n\n_Fails if and only if the right side is empty._\n\nTip: You can avoid the failure using `withRollback`,\nand instead have a possible no-op. See __Utilities__.\n\n    fromCons 1 [2..4] |> goR /= Nothing\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goTo",
+            "comment": " Go to a specific position fromList the left. Starts with 0.\n\n_Fails if and only if the position given doesn't exist._\n",
+            "type": "Int -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goToEnd",
+            "comment": " Go to starting position.\n\n    goToEnd >> lengthR == 0\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "goToStart",
+            "comment": " Go to starting position.\n\n    goToStart >> lengthL == 0\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "hasL",
+            "comment": " Check if the left side is not empty.\n",
+            "type": "Pivot.Pivot a -> Bool"
+          },
+          {
+            "name": "hasR",
+            "comment": " Check if the right side is not empty.\n",
+            "type": "Pivot.Pivot a -> Bool"
+          },
+          {
+            "name": "lastWith",
+            "comment": " Find the last member of a pivot satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "lengthA",
+            "comment": " Length of the pivot.\n\n    lengthA == \\p -> lengthL p + 1 + lengthR p\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "lengthL",
+            "comment": " Position fromList the left side. Starts with 0.\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "lengthR",
+            "comment": " Position fromList the right side. Starts with 0.\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "mapA",
+            "comment": " Like `mapCS`, but you provide one function for all members.\nThis is exactly like `List.map` for the underlying list.\n\n    mapA ((==) 3) (fromCons 1 [2..4]) == fromCons False [False, True, False]\n",
+            "type": "(a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapC",
+            "comment": " Like `mapA`, but only the center is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapCLR",
+            "comment": " Provide functions that control what happens to the center,\nthe left members and the right member separately,\nand get a function that acts on pivots.\n",
+            "type": "(a -> b) -> (a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCLR'",
+            "comment": " Like `mapCLR`, but the functions for the left and right act on the\nlists as a whole, and not on each member separately.\n",
+            "type": "(a -> b) -> (List a -> List b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCRL",
+            "comment": " Like `mapCLR`, but provide the function for the right before the left.\n",
+            "type": "(a -> b) -> (a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCRL'",
+            "comment": " See `mapCLR'`.\n",
+            "type": "(a -> b) -> (List a -> List b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCS",
+            "comment": " Like `mapCLR`, but you provide one function for both sides.\n",
+            "type": "(a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCS'",
+            "comment": " See `mapCLR'`.\n",
+            "type": "(a -> b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapL",
+            "comment": " Like `mapA`, but only the left is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapL'",
+            "comment": " See `mapCLR'`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapR",
+            "comment": " Like `mapA`, but only the right is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapR'",
+            "comment": " See `mapCLR'`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapS",
+            "comment": " Like `mapA`, but the center is __not__ affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapS'",
+            "comment": " See `mapCLR'`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mirror",
+            "comment": " Reverse a function's notion of left and right.\nUsed in many of this library's functions under the hood\n",
+            "type": "(Pivot.Pivot a -> Pivot.Pivot b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mirrorM",
+            "comment": " Reverse a possibly-failing-function's notion of left and right.\nUsed in many of this library's functions under the hood\n",
+            "type": "(Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot b)) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot b)"
+          },
+          {
+            "name": "pure",
+            "comment": " Like `fromCons`, but without the list. That is, we specify only the center.\n\n    pure == flip fromCons []\n",
+            "type": "a -> Pivot.Pivot a"
+          },
+          {
+            "name": "removeGoL",
+            "comment": " Replace center with member nearest to the left.\n\n_Fails if and only if left side is empty._\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "removeGoR",
+            "comment": " Replace center with member nearest to the right.\n\n_Fails if and only if right side is empty._\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "reverse",
+            "comment": " Reverse a pivot, like a list. You could also think of it as mirroring\nleft and right.\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setC",
+            "comment": " Replace the center.\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setL",
+            "comment": " Replace the left.\n",
+            "type": "List a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setR",
+            "comment": " Replace the right.\n",
+            "type": "List a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "sort",
+            "comment": " Sort a pivot while keeping the center as center.\n\nIt does not simply sort each side separately!\n\n    sort >> getA == getA >> List.sort\n    getC == sort >> getC\n",
+            "type": "Pivot.Pivot comparable -> Pivot.Pivot comparable"
+          },
+          {
+            "name": "sortWith",
+            "comment": " Like `sort`, but with a costum comparator.\n\n    sort == sortWith compare\n",
+            "type": "(a -> a -> Basics.Order) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "switchL",
+            "comment": " Switch places with member nearest to the left\n\n_Fails if and only if left side is empty_\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "switchR",
+            "comment": " Switch places with member nearest to the right\n\n_Fails if and only if right side is empty_\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "withRollback",
+            "comment": " Replace a possibly-failing-function with a possibly-does-nothing-function.\nFor example, if you try to `goR` a pivot,\nyou may fail since there is nothing to the right.\nBut if you `withRollback goR` a pivot,\nthe worst that could happen is that nothing happens.\n\nUse it, don't abuse it. That is, only use it when it makes sense to ignore\na failure, or when you are __certain__ a possibly-failing-function cannot\nreally fail. For example,\n\n    addGoR == addR >> withRollback goR\n\nIt might be useful to define infix operators as such.\n\n    (!>) = flip withRollback\n    infixl 0 !>\n\n    (<!) = withRollback\n    infixr 0 <!\n\n    goR <! pvt == withRollback goR pvt\n",
+            "type": "(a -> Maybe.Maybe a) -> a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
       }
     ]
   },
