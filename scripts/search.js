@@ -9594,23 +9594,38 @@ var _klaftertief$elm_search$Docs_Type$buildFunction = F3(
 		while (true) {
 			var _p9 = remainingTypes;
 			if (_p9.ctor === '[]') {
-				return _elm_lang$core$List$isEmpty(args) ? currentType : A2(
-					_klaftertief$elm_search$Docs_Type$Function,
-					_elm_lang$core$List$reverse(args),
-					currentType);
+				if (_elm_lang$core$List$isEmpty(args)) {
+					return currentType;
+				} else {
+					var _p10 = currentType;
+					if (_p10.ctor === 'Function') {
+						return A2(
+							_klaftertief$elm_search$Docs_Type$Function,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$List$reverse(args),
+								_p10._0),
+							_p10._1);
+					} else {
+						return A2(
+							_klaftertief$elm_search$Docs_Type$Function,
+							_elm_lang$core$List$reverse(args),
+							currentType);
+					}
+				}
 			} else {
-				var _v7 = A2(_elm_lang$core$List_ops['::'], currentType, args),
-					_v8 = _p9._0,
-					_v9 = _p9._1;
-				args = _v7;
-				currentType = _v8;
-				remainingTypes = _v9;
+				var _v8 = A2(_elm_lang$core$List_ops['::'], currentType, args),
+					_v9 = _p9._0,
+					_v10 = _p9._1;
+				args = _v8;
+				currentType = _v9;
+				remainingTypes = _v10;
 				continue buildFunction;
 			}
 		}
 	});
 var _klaftertief$elm_search$Docs_Type$tipe = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p10) {
+	function (_p11) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
 			_klaftertief$elm_search$Docs_Type$buildFunction(
@@ -9620,7 +9635,7 @@ var _klaftertief$elm_search$Docs_Type$tipe = _klaftertief$elm_search$Parse_Combi
 			_klaftertief$elm_search$Docs_Type$arrowTerms);
 	});
 var _klaftertief$elm_search$Docs_Type$arrowTerms = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p11) {
+	function (_p12) {
 		return _klaftertief$elm_search$Parse_Combinators$zeroOrMore(
 			A4(
 				_klaftertief$elm_search$Parse_Combinators$ignore3,
@@ -9630,13 +9645,13 @@ var _klaftertief$elm_search$Docs_Type$arrowTerms = _klaftertief$elm_search$Parse
 				_klaftertief$elm_search$Docs_Type$tipeTerm));
 	});
 var _klaftertief$elm_search$Docs_Type$tipeTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p12) {
+	function (_p13) {
 		return _klaftertief$elm_search$Parse_Combinators$oneOf(
 			_elm_lang$core$Native_List.fromArray(
 				[_klaftertief$elm_search$Docs_Type$var, _klaftertief$elm_search$Docs_Type$apply, _klaftertief$elm_search$Docs_Type$record, _klaftertief$elm_search$Docs_Type$parenTipe]));
 	});
 var _klaftertief$elm_search$Docs_Type$apply = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p13) {
+	function (_p14) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
 			_klaftertief$elm_search$Docs_Type$Apply,
@@ -9645,7 +9660,7 @@ var _klaftertief$elm_search$Docs_Type$apply = _klaftertief$elm_search$Parse_Comb
 				A2(_klaftertief$elm_search$Parse_Combinators$ignore1, _klaftertief$elm_search$Docs_Type$spaces, _klaftertief$elm_search$Docs_Type$applyTerm)));
 	});
 var _klaftertief$elm_search$Docs_Type$applyTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p14) {
+	function (_p15) {
 		return _klaftertief$elm_search$Parse_Combinators$oneOf(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -9665,7 +9680,7 @@ var _klaftertief$elm_search$Docs_Type$applyTerm = _klaftertief$elm_search$Parse_
 				]));
 	});
 var _klaftertief$elm_search$Docs_Type$parenTipe = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p15) {
+	function (_p16) {
 		return A2(
 			_klaftertief$elm_search$Parse_Combinators$map,
 			_klaftertief$elm_search$Docs_Type$tuplize,
@@ -9698,7 +9713,7 @@ var _klaftertief$elm_search$Docs_Type$parenTipe = _klaftertief$elm_search$Parse_
 						_elm_lang$core$Native_Utils.chr(')')))));
 	});
 var _klaftertief$elm_search$Docs_Type$record = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p16) {
+	function (_p17) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$middle,
 			A2(
@@ -9728,7 +9743,7 @@ var _klaftertief$elm_search$Docs_Type$record = _klaftertief$elm_search$Parse_Com
 	});
 var _klaftertief$elm_search$Docs_Type$recordHelp = function (lowerName) {
 	return _klaftertief$elm_search$Parse_Combinators$lazy(
-		function (_p17) {
+		function (_p18) {
 			return A2(
 				_klaftertief$elm_search$Parse_Combinators$ignore1,
 				_klaftertief$elm_search$Docs_Type$spaces,
@@ -9779,7 +9794,7 @@ var _klaftertief$elm_search$Docs_Type$recordHelp = function (lowerName) {
 		});
 };
 var _klaftertief$elm_search$Docs_Type$field = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p18) {
+	function (_p19) {
 		return A3(
 			_klaftertief$elm_search$Parse_Combinators$map2,
 			F2(
@@ -9804,8 +9819,8 @@ var _klaftertief$elm_search$Docs_Type$App = {ctor: 'App'};
 var _klaftertief$elm_search$Docs_Type$Func = {ctor: 'Func'};
 var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 	function (context, tipe) {
-		var _p19 = tipe;
-		switch (_p19.ctor) {
+		var _p20 = tipe;
+		switch (_p20.ctor) {
 			case 'Function':
 				var argsHtml = A2(
 					_elm_lang$core$List$concatMap,
@@ -9815,10 +9830,10 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 							A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, arg),
 							_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$arrow));
 					},
-					_p19._0);
+					_p20._0);
 				var maybeAddParens = function () {
-					var _p20 = context;
-					switch (_p20.ctor) {
+					var _p21 = context;
+					switch (_p21.ctor) {
 						case 'Func':
 							return _klaftertief$elm_search$Utils_Code$addParens;
 						case 'App':
@@ -9831,17 +9846,17 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						argsHtml,
-						A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, _p19._1)));
+						A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, _p20._1)));
 			case 'Var':
 				return _elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text(_p19._0)
+						_elm_lang$html$Html$text(_p20._0)
 					]);
 			case 'Apply':
-				if (_p19._1.ctor === '[]') {
+				if (_p20._1.ctor === '[]') {
 					return _elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html$text(_p19._0.name)
+							_elm_lang$html$Html$text(_p20._0.name)
 						]);
 				} else {
 					var argsHtml = A2(
@@ -9852,10 +9867,10 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 								_klaftertief$elm_search$Utils_Code$space,
 								A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$App, arg));
 						},
-						_p19._1);
+						_p20._1);
 					var maybeAddParens = function () {
-						var _p21 = context;
-						switch (_p21.ctor) {
+						var _p22 = context;
+						switch (_p22.ctor) {
 							case 'Func':
 								return _elm_lang$core$Basics$identity;
 							case 'App':
@@ -9867,7 +9882,7 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 					return maybeAddParens(
 						A2(
 							_elm_lang$core$List_ops['::'],
-							_elm_lang$html$Html$text(_p19._0.name),
+							_elm_lang$html$Html$text(_p20._0.name),
 							argsHtml));
 				}
 			case 'Tuple':
@@ -9882,7 +9897,7 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 							A2(
 								_elm_lang$core$List$map,
 								_klaftertief$elm_search$Docs_Type$toHtml(_klaftertief$elm_search$Docs_Type$Other),
-								_p19._0))));
+								_p20._0))));
 			default:
 				var fieldsHtml = _elm_lang$core$List$concat(
 					A2(
@@ -9891,15 +9906,15 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 							[
 								_elm_lang$html$Html$text(', ')
 							]),
-						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Docs_Type$fieldToHtml, _p19._0)));
+						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Docs_Type$fieldToHtml, _p20._0)));
 				var recordInsides = function () {
-					var _p22 = _p19._1;
-					if (_p22.ctor === 'Nothing') {
+					var _p23 = _p20._1;
+					if (_p23.ctor === 'Nothing') {
 						return fieldsHtml;
 					} else {
 						return A2(
 							_elm_lang$core$List_ops['::'],
-							_elm_lang$html$Html$text(_p22._0),
+							_elm_lang$html$Html$text(_p23._0),
 							A2(
 								_elm_lang$core$List_ops['::'],
 								_elm_lang$html$Html$text(' | '),
@@ -9918,11 +9933,11 @@ var _klaftertief$elm_search$Docs_Type$toHtml = F2(
 							])));
 		}
 	});
-var _klaftertief$elm_search$Docs_Type$fieldToHtml = function (_p23) {
-	var _p24 = _p23;
+var _klaftertief$elm_search$Docs_Type$fieldToHtml = function (_p24) {
+	var _p25 = _p24;
 	return A2(
 		_elm_lang$core$List_ops['::'],
-		_elm_lang$html$Html$text(_p24._0),
+		_elm_lang$html$Html$text(_p25._0),
 		A2(
 			_elm_lang$core$List_ops['::'],
 			_klaftertief$elm_search$Utils_Code$space,
@@ -9932,22 +9947,22 @@ var _klaftertief$elm_search$Docs_Type$fieldToHtml = function (_p23) {
 				A2(
 					_elm_lang$core$List_ops['::'],
 					_klaftertief$elm_search$Utils_Code$space,
-					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, _p24._1)))));
+					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, _p25._1)))));
 };
 var _klaftertief$elm_search$Docs_Type$length = F2(
 	function (context, tipe) {
-		var _p25 = tipe;
-		switch (_p25.ctor) {
+		var _p26 = tipe;
+		switch (_p26.ctor) {
 			case 'Function':
 				var argLengths = A2(
 					_elm_lang$core$List$map,
 					function (t) {
 						return 4 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, t);
 					},
-					_p25._0);
+					_p26._0);
 				var parens = function () {
-					var _p26 = context;
-					switch (_p26.ctor) {
+					var _p27 = context;
+					switch (_p27.ctor) {
 						case 'Func':
 							return 2;
 						case 'App':
@@ -9956,12 +9971,12 @@ var _klaftertief$elm_search$Docs_Type$length = F2(
 							return 0;
 					}
 				}();
-				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, _p25._1);
+				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, _p26._1);
 			case 'Var':
-				return _elm_lang$core$String$length(_p25._0);
+				return _elm_lang$core$String$length(_p26._0);
 			case 'Apply':
-				if (_p25._1.ctor === '[]') {
-					return _elm_lang$core$String$length(_p25._0.name);
+				if (_p26._1.ctor === '[]') {
+					return _elm_lang$core$String$length(_p26._0.name);
 				} else {
 					var argsLength = _elm_lang$core$List$sum(
 						A2(
@@ -9969,10 +9984,10 @@ var _klaftertief$elm_search$Docs_Type$length = F2(
 							function (t) {
 								return 1 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$App, t);
 							},
-							_p25._1));
+							_p26._1));
 					var parens = function () {
-						var _p27 = context;
-						switch (_p27.ctor) {
+						var _p28 = context;
+						switch (_p28.ctor) {
 							case 'Func':
 								return 0;
 							case 'App':
@@ -9981,7 +9996,7 @@ var _klaftertief$elm_search$Docs_Type$length = F2(
 								return 0;
 						}
 					}();
-					return (parens + _elm_lang$core$String$length(_p25._0.name)) + argsLength;
+					return (parens + _elm_lang$core$String$length(_p26._0.name)) + argsLength;
 				}
 			case 'Tuple':
 				return _elm_lang$core$List$sum(
@@ -9990,19 +10005,19 @@ var _klaftertief$elm_search$Docs_Type$length = F2(
 						function (t) {
 							return 2 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, t);
 						},
-						_p25._0));
+						_p26._0));
 			default:
 				var extLength = function () {
-					var _p28 = _p25._1;
-					if (_p28.ctor === 'Nothing') {
+					var _p29 = _p26._1;
+					if (_p29.ctor === 'Nothing') {
 						return 0;
 					} else {
-						return 2 + _elm_lang$core$String$length(_p28._0);
+						return 2 + _elm_lang$core$String$length(_p29._0);
 					}
 				}();
-				var fieldLength = function (_p29) {
-					var _p30 = _p29;
-					return (_elm_lang$core$String$length(_p30._0) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, _p30._1);
+				var fieldLength = function (_p30) {
+					var _p31 = _p30;
+					return (_elm_lang$core$String$length(_p31._0) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, _p31._1);
 				};
 				var recordLength = 2 + _elm_lang$core$List$sum(
 					A2(
@@ -10010,7 +10025,7 @@ var _klaftertief$elm_search$Docs_Type$length = F2(
 						function (ft) {
 							return 2 + fieldLength(ft);
 						},
-						_p25._0));
+						_p26._0));
 				return recordLength + extLength;
 		}
 	});
