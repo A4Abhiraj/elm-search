@@ -10561,9 +10561,9 @@ var _klaftertief$elm_search$Search_Distance$distanceApply = F2(
 var _klaftertief$elm_search$Search_Distance$distanceList = F2(
 	function (needle, hay) {
 		var hayLength = _elm_lang$core$List$length(hay);
-		var needelLength = _elm_lang$core$List$length(needle);
-		var sharedLength = A2(_elm_lang$core$Basics$min, needelLength, hayLength);
-		var maxLength = A2(_elm_lang$core$Basics$max, needelLength, hayLength);
+		var needleLength = _elm_lang$core$List$length(needle);
+		var sharedLength = A2(_elm_lang$core$Basics$min, needleLength, hayLength);
+		var maxLength = A2(_elm_lang$core$Basics$max, needleLength, hayLength);
 		var diffLength = maxLength - sharedLength;
 		return A3(
 			_elm_lang$core$Basics$flip,
@@ -10572,8 +10572,7 @@ var _klaftertief$elm_search$Search_Distance$distanceList = F2(
 					return x / y;
 				}),
 			_elm_lang$core$Basics$toFloat(maxLength),
-			A3(
-				_elm_lang$core$Basics$flip,
+			A2(
 				F2(
 					function (x, y) {
 						return x + y;
