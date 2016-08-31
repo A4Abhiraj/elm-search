@@ -47617,388 +47617,18 @@
   },
   {
     "name": "john-kelly/elm-rest",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
-        "name": "Rest.Adapters",
-        "comment": " Rest.Adapters\n# Adapters\n@docs postgRest\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "postgRest",
-            "comment": " ",
-            "type": "Rest.Types.RestRequest schema -> Http.Request"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Rest",
-        "comment": " DEPRECATED: Renamed to http://package.elm-lang.org/john-kelly/query\n# Types\n@docs Resource, Property, RestRequest, Filter, OrderBy\n# Functions\n@docs resource, property, nested, read, send, select, filter, like, eq, gte, gt, lte, lt, neq, ilike, in', notin, is, isnot, contains, not', order, asc, desc, paginate, offset, limit, singular, count\n",
-        "aliases": [
-          {
-            "name": "Filter",
-            "comment": " ",
-            "args": [],
-            "type": "Rest.Types.Filter"
-          },
-          {
-            "name": "OrderBy",
-            "comment": " ",
-            "args": [],
-            "type": "Rest.Types.OrderBy"
-          },
-          {
-            "name": "Property",
-            "comment": " ",
-            "args": [],
-            "type": "Rest.Types.Property"
-          },
-          {
-            "name": "Resource",
-            "comment": " ",
-            "args": [
-              "schema"
-            ],
-            "type": "Rest.Types.Resource schema"
-          },
-          {
-            "name": "RestRequest",
-            "comment": " ",
-            "args": [
-              "schema"
-            ],
-            "type": "Rest.Types.RestRequest schema"
-          }
-        ],
+        "comment": " DEPRECATED: Renamed to http://package.elm-lang.org/john-kelly/elm-query\n# Functions\n@docs deprecated\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "asc",
+            "name": "deprecated",
             "comment": " ",
-            "type": "(schema -> Rest.Property) -> schema -> Rest.OrderBy"
-          },
-          {
-            "name": "contains",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "count",
-            "comment": " ",
-            "type": "Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "desc",
-            "comment": " ",
-            "type": "(schema -> Rest.Property) -> schema -> Rest.OrderBy"
-          },
-          {
-            "name": "eq",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "filter",
-            "comment": " ",
-            "type": "List (schema -> Rest.Filter) -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "gt",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "gte",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "ilike",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "in'",
-            "comment": " ",
-            "type": "List String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "is",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "isnot",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "like",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "limit",
-            "comment": " ",
-            "type": "List ( Rest.Resource schema, Int ) -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "lt",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "lte",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "neq",
-            "comment": " ",
-            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "nested",
-            "comment": " ",
-            "type": "Rest.Resource schema1 -> List (schema1 -> Rest.Property) -> schema2 -> Rest.Property"
-          },
-          {
-            "name": "not'",
-            "comment": " ",
-            "type": "(a -> (schema -> Rest.Property) -> schema -> Rest.Filter) -> a -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "notin",
-            "comment": " ",
-            "type": "List String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
-          },
-          {
-            "name": "offset",
-            "comment": " ",
-            "type": "Int -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "order",
-            "comment": " ",
-            "type": "List (schema -> Rest.OrderBy) -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "paginate",
-            "comment": " ",
-            "type": "Int -> Int -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "property",
-            "comment": " ",
-            "type": "String -> Rest.Property"
-          },
-          {
-            "name": "read",
-            "comment": " ",
-            "type": "String -> Rest.Resource schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "resource",
-            "comment": " ",
-            "type": "String -> schema -> Rest.Resource schema"
-          },
-          {
-            "name": "select",
-            "comment": " ",
-            "type": "List (schema -> Rest.Property) -> Rest.RestRequest schema -> Rest.RestRequest schema"
-          },
-          {
-            "name": "send",
-            "comment": " ",
-            "type": "(Rest.RestRequest schema -> Http.Request) -> Http.Settings -> Rest.RestRequest schema -> Task.Task Http.RawError Http.Response"
-          },
-          {
-            "name": "singular",
-            "comment": " ",
-            "type": "Rest.RestRequest schema -> Rest.RestRequest schema"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Rest.Types",
-        "comment": " Rest.Types\n# Types\n@docs Resource, Property, RestRequest, Condition, Filter, OrderBy\n# Functions\n@docs unwrapResource, unwrapRestRequest\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Condition",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "LikeFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "ILikeFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "EqFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "GteFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "GtFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "LteFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "LtFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "InFilter",
-                [
-                  "Rest.Types.Property",
-                  "List String"
-                ]
-              ],
-              [
-                "IsFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ],
-              [
-                "ContainsFilter",
-                [
-                  "Rest.Types.Property",
-                  "String"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "Filter",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "Filter",
-                [
-                  "Bool",
-                  "Rest.Types.Condition"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "OrderBy",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "Ascending",
-                [
-                  "Rest.Types.Property"
-                ]
-              ],
-              [
-                "Descending",
-                [
-                  "Rest.Types.Property"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "Property",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "SimpleProperty",
-                [
-                  "String"
-                ]
-              ],
-              [
-                "NestedResource",
-                [
-                  "String",
-                  "List Rest.Types.Property"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "Resource",
-            "comment": " ",
-            "args": [
-              "schema"
-            ],
-            "cases": [
-              [
-                "Resource",
-                [
-                  "String",
-                  "schema"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "RestRequest",
-            "comment": " ",
-            "args": [
-              "schema"
-            ],
-            "cases": [
-              [
-                "RestRequest",
-                [
-                  "{ properties : List Rest.Types.Property , filters : List Rest.Types.Filter , orders : List Rest.Types.OrderBy , limits : List ( Rest.Types.Resource schema, Int ) , offset : Int , singular : Bool , suppressCount : Bool , verb : String , resource : Rest.Types.Resource schema , url : String }"
-                ]
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "unwrapResource",
-            "comment": " helper to assist with opaque Resource type\n",
-            "type": "Rest.Types.Resource schema -> ( String, schema )"
-          },
-          {
-            "name": "unwrapRestRequest",
-            "comment": " helper to assist with opaque RestRequest type\n",
-            "type": "Rest.Types.RestRequest schema -> { properties : List Rest.Types.Property , filters : List Rest.Types.Filter , orders : List Rest.Types.OrderBy , limits : List ( Rest.Types.Resource schema, Int ) , offset : Int , singular : Bool , suppressCount : Bool , verb : String , resource : Rest.Types.Resource schema , url : String }"
+            "type": "Int"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -48767,6 +48397,89 @@
             "name": "these",
             "comment": "\nDestroy the structure of a [These a b](#These).\n\nThe first two functions are applied to the `This a` and `That b` values, respectively.\nThe third function is applied to the `These a b` value.\n",
             "type": "(a -> c) -> (b -> c) -> (a -> b -> c) -> These.These a b -> c"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "jtojnar/elm-json-tape",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Codec.JsonTape.Encode",
+        "comment": " This module provides JSON encoder of a directory tree.\n\n@docs dirTree\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dirTree",
+            "comment": " JSON encoder to json-tape format.\n",
+            "type": "Codec.JsonTape.DirTree -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Codec.JsonTape.Decode",
+        "comment": " This module provides JSON decoder of a directory tree.\n\n@docs dirTree\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dirTree",
+            "comment": " JSON decoder of json-tape format.\n",
+            "type": "Json.Decode.Decoder Codec.JsonTape.DirTree"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Codec.JsonTape",
+        "comment": " This module describes data structures representing files and directories and functions for manipulating them.\n\n# Data structure\n@docs DirTree\n\n# File manipulation\n@docs getObject, readFileRaw, readFile\n\n# Helpers\n@docs getName\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "DirTree",
+            "comment": " Data structure representing a directory tree.\n",
+            "args": [],
+            "cases": [
+              [
+                "Dir",
+                [
+                  "{ name : Codec.JsonTape.FileName , contents : List Codec.JsonTape.DirTree }"
+                ]
+              ],
+              [
+                "File",
+                [
+                  "{ name : Codec.JsonTape.FileName, file : String }"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "getName",
+            "comment": " Auxilliary function for circumventing the type system.\n",
+            "type": "Codec.JsonTape.DirTree -> Codec.JsonTape.FileName"
+          },
+          {
+            "name": "getObject",
+            "comment": " Traverse the directory tree along path and return the seeked object.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String Codec.JsonTape.DirTree"
+          },
+          {
+            "name": "readFile",
+            "comment": " Traverse the directory tree along path and return the content of the found file after base64 decoding it.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String String"
+          },
+          {
+            "name": "readFileRaw",
+            "comment": " Traverse the directory tree along path and return the content of the found file.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -70088,7 +69801,7 @@
   },
   {
     "name": "rtfeldman/node-test-runner",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Test.Runner.Node",
@@ -70105,6 +69818,31 @@
             "name": "runWithOptions",
             "comment": " Run the test using the provided options. If `Nothing` is provided for either\n`runs` or `seed`, it will fall back on the options used in [`run`](#run).\n",
             "type": "Test.Runner.Node.Options -> Test.Runner.Node.Emitter Test.Runner.Node.Msg -> Test.Test -> Platform.Program Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "scottcorgan/elm-css-normalize",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Css.Normalize",
+        "comment": " This library is mostly a direct port of [normalize.css](https://github.com/necolas/normalize.css).\nCompile it with your elm-css code to have easier cross-browser styling experience.\n\n# Normalizing CSS Stylesheet\n@docs css\n\n# Css Snippets\n@docs snippets\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "css",
+            "comment": " A [Stylesheet](https://github.com/rtfeldman/elm-css/blob/master/Tutorial.md) to rest values to make them more consistent across most browsers. You can\ninclude this stylesheet in your elm-css compilation file.\n\n    port module Stylesheets exposing (..)\n\n    import String\n\n    import Css exposing (..)\n    import Css.File exposing (..)\n    import Html exposing (div)\n    import Html.App as Html\n\n    import Css.Normalize\n    import My.Styles\n\n    port files : CssFileStructure -> Cmd msg\n\n\n    styles : List Css.Stylesheet\n    styles =\n        [ Css.Normalize.css\n        , My.Styles\n        ]\n\n\n    cssFiles : CssFileStructure\n    cssFiles =\n        toFileStructure [ (\"dist/styles.css\", compileMany styles) ]\n\n    {- Helper function to compile many stylesheets -}\n    compileMany : List Css.Stylesheet -> { warnings: List String, css: String }\n    compileMany styles =\n        let\n            results =\n                List.map Css.compile styles\n        in\n            { warnings = List.concatMap .warnings results\n            , css = String.join \"\\n\\n\" (List.map .css results)\n            }\n\n\n    main : Program Never\n    main =\n        Html.program\n            { init = ( (), files cssFiles )\n            , view = \\_ -> (div [] [])\n            , update = \\_ _ -> ( (), Cmd.none )\n            , subscriptions = \\_ -> Sub.none\n            }\n",
+            "type": "Css.Stylesheet"
+          },
+          {
+            "name": "snippets",
+            "comment": " The snippets used to generate the normalizing stylesheet. Use this if you want to append\nthese to your own style sheet. This is useful if you prefer to use inline styles over\ngenerator a stylesheet with the [elm-css preprocessor](https://www.npmjs.com/package/elm-css)\n\n    module MyModule exposing (..)\n\n    import Css exposing (..)\n    import Css.Elements exposing (..)\n    import Css.Namespace exposing (namespace)\n    import Css.Normalize\n\n    css : Css.Stylesheet\n    css =\n        (Css.stylesheet << namespace \"my-styels\")\n            List.append\n                Css.Normalize.snippets\n                [ everything\n                    [ boxSizing borderBox ]\n                ]\n",
+            "type": "List Css.Snippet"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -75010,11 +74748,11 @@
   },
   {
     "name": "toastal/either",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Either",
-        "comment": "\nA generic structure for a type with two possibilities: a `Left a` or\na `Right b`.\n\nAn `Either` is right-biased, so most operations will be applied to\nthe `Right`.\n\nThis is similar to `Result` type in `core`, but is more generic.\nIf your looking for a data type to do error handling, you should\nuse `Result` instead.\n\n\n# Definition\n@docs Either\n\n# Mapping\n@docs map, map2, map3, mapLeft, mapRight, mapBoth, mapDefault\n\n# Singleton & Applying\n@docs singleton, andMap\n\n# Chaining\n@docs andThen\n\n# List Helpers\n@docs lefts, rights, partition\n\n# Maybe Helpers\n@docs toMaybe, leftToMaybe, rightToMaybe, fromMaybe, leftFromMaybe, rightFromMaybe\n\n# Result Helpers\n@docs toResult, fromResult\n\n# Rest of the Helpers\n@docs isLeft, isRight, fromLeft, fromRight, withDefault, elim, either, swap\n",
+        "comment": "\nA generic structure for a type with two possibilities: a `Left a` or\na `Right b`.\n\n\n# Definition\n@docs Either\n\n# Mapping\n@docs map, map2, map3, mapLeft, mapRight, mapBoth, mapDefault\n\n# Singleton & Applying\n@docs singleton, andMap, andMapLeft, andMapRight\n\n# Chaining\n@docs andThen, andThenLeft, andThenRight\n\n# List Helpers\n@docs lefts, rights, partition\n\n# Maybe Helpers\n@docs toMaybe, leftToMaybe, rightToMaybe, fromMaybe, leftFromMaybe, rightFromMaybe\n\n# Result Helpers\n@docs toResult, fromResult\n\n# Rest of the Helpers\n@docs isLeft, isRight, fromLeft, fromRight, withDefault, elim, either, swap\n",
         "aliases": [],
         "types": [
           {
@@ -75047,8 +74785,28 @@
             "type": "Either.Either x (a -> b) -> Either.Either x a -> Either.Either x b"
           },
           {
+            "name": "andMapLeft",
+            "comment": " Apply the function that is inside `Either` to a value that is inside\n`Either`. Return the result inside `Either`. If one of the `Either`\narguments is `Right x`, return `Right x`. Also known as `apply`.\n\n    Left (flip (++) \"!!\" ) `andMap` Left \"Hello\" == Left \"Hello!!\"\n    Left (flip (++) \"!!\" ) `andMap` Right 2 == Right 2\n    Right 99 `andMap` Left \"World\" == Right 99\n    Right 99 `andMap` Right 2 == Right 99\n",
+            "type": "Either.Either (a -> b) x -> Either.Either a x -> Either.Either b x"
+          },
+          {
+            "name": "andMapRight",
+            "comment": " Alias for `andMap`.\n",
+            "type": "Either.Either x (a -> b) -> Either.Either x a -> Either.Either x b"
+          },
+          {
             "name": "andThen",
             "comment": " Chain together in many computations that will stop computing if\na chain is on a `Left`. Also known as `bind`.\n\n    Left \"Hello\" `andThen` ((+) 1 >> Right) == Left \"Hello\"\n    Right 2 `andThen` ((+) 1 >> Right) == Right 3\n",
+            "type": "Either.Either x a -> (a -> Either.Either x b) -> Either.Either x b"
+          },
+          {
+            "name": "andThenLeft",
+            "comment": " Chain together in many computations that will stop computing if\na chain is on a `Right`. Also known as `bind`.\n\n    Left \"Hello\" `andThen` (flip (++) \"!!\" >> Left) == Left \"Hello!!\"\n    Right 2 `andThen` (flip (++) \"!!\" >> Left) == Right 2\n",
+            "type": "Either.Either a x -> (a -> Either.Either b x) -> Either.Either b x"
+          },
+          {
+            "name": "andThenRight",
+            "comment": " Alias for `andThen`.\n",
             "type": "Either.Either x a -> (a -> Either.Either x b) -> Either.Either x b"
           },
           {
@@ -75123,7 +74881,7 @@
           },
           {
             "name": "mapBoth",
-            "comment": " Apply the first argument function to a `Left` and the second\nargument function to a `Right` of an `Either`.\n\n    mapBoth (flip (++) \"!\") ((+) 1) <| Left \"Hello\" == Left \"Hello!\"\n    mapBoth (flip (++) \"!\") ((+) 1) <| Right 2 == Right 3\n",
+            "comment": " Apply the first argument function to a `Left` and the second\nargument function to a `Right` of an `Either`.\n\n    mapBoth (flip (++) \"!!\") ((+) 1) <| Left \"Hello\" == Left \"Hello!!\"\n    mapBoth (flip (++) \"!!\") ((+) 1) <| Right 2 == Right 3\n",
             "type": "(a -> b) -> (c -> d) -> Either.Either a c -> Either.Either b d"
           },
           {
@@ -75183,7 +74941,7 @@
           },
           {
             "name": "withDefault",
-            "comment": " Alias for `fromRight`\n",
+            "comment": " Alias for `fromRight`.\n",
             "type": "b -> Either.Either a b -> b"
           }
         ],
@@ -76172,11 +75930,11 @@
   },
   {
     "name": "willnwhite/bigratio",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "BigRatio",
-        "comment": " A module providing a ratio type for big rational numbers. Forked from Izzy Meckler's [Ratio](https://github.com/imeckler/ratio) and dependent on Javier Casas' [elm-integer](https://github.com/javcasas/elm-integer). will@willwhite.website\n\n# Types\n@docs BigRational\n\n# Introduction\n@docs over\n\n# From/To\n@docs fromInt, fromString, toFloat, toDecimal\n\n# Operations\n@docs add, multiply, divide, negate\n\n# Elimination\n@docs numerator, denominator, split\n\n# Util\n@docs gcd\n\n# Value\n@docs isNegative\n\n# Common numbers\n@docs zero\n\n",
+        "comment": " A module providing a ratio type for big rational numbers. Forked from Izzy Meckler's [Ratio](https://github.com/imeckler/ratio) and dependent on Javier Casas' [elm-integer](https://github.com/javcasas/elm-integer).\n\nwill@willwhite.website\n\n# Types\n@docs BigRational\n\n# Introduction\n@docs over\n\n# From/To\n@docs fromInt, fromString, toFloat, toDecimal\n\n# Operations\n@docs add, subtract, multiply, divide, negate\n\n# Elimination\n@docs numerator, denominator, split\n\n# Util\n@docs gcd\n\n# Value\n@docs isNegative\n\n# Common numbers\n@docs zero\n\n",
         "aliases": [],
         "types": [
           {
@@ -76248,8 +76006,13 @@
             "type": "BigRatio.BigRational -> ( Data.Integer.Integer, Data.Integer.Integer )"
           },
           {
+            "name": "subtract",
+            "comment": " Subtract\n",
+            "type": "BigRatio.BigRational -> BigRatio.BigRational -> BigRatio.BigRational"
+          },
+          {
             "name": "toDecimal",
-            "comment": " 1 -> (BigRatio 1 4) -> \"0.2\"\n    100 -> (BigRatio 1 4) -> \"0.25\"\n",
+            "comment": "\n    1 -> (BigRatio 1 4) -> \"0.2\"\n    100 -> (BigRatio 1 4) -> \"0.25\"\n",
             "type": "Int -> BigRatio.BigRational -> String"
           },
           {
