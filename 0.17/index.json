@@ -42090,7 +42090,7 @@
   },
   {
     "name": "eskimoblood/elm-color-extra",
-    "version": "3.0.4",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "Color.Gradient",
@@ -42166,7 +42166,7 @@
       },
       {
         "name": "Color.Manipulate",
-        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale\n\n",
+        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale, scaleHsl, scaleRgb\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -42209,6 +42209,65 @@
             "name": "saturate",
             "comment": " Increase the saturation of a color\n",
             "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "scaleHsl",
+            "comment": " Fluidly scale saturation, lightness and alpha channel.\n\n    That means that lightening an already-light color with `scaleHsl` won’t change the lightness much, but lightening\n    a dark color by the same amount will change it more dramatically.\n\n    For example, the lightness of a color can be anywhere between 0 and 1.0. If `scaleHsl (0, 0.4, 0) color` is called,\n    the resulting color’s lightness will be 40% of the way between its original lightness and 1.0. If\n    `scaleHsl (0, -0.4, 0) color` is called instead, the lightness will be 40% of the way between the original\n    and 0.\n\n    The values of the supplied tuple scale saturation, lightness, and opacity, respectively, and have a valid range of\n    -1.0 to 1.0.\n\n    This function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
+            "type": "( Float, Float, Float ) -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "scaleRgb",
+            "comment": " Fluidly scale red, green, blue, and alpha channels.\n\n    That means that reddening a already-red color with `scaleRgb` won’t change the redness much, but reddening a color\n    with little or no red by the same amount will change it more dramatically.\n\n    For example, the redness of a color can be anywhere between 0 and 255. If `scaleRgb (0.4, 0, 0, 0) color` is called,\n    the resulting color’s redness will be 40% of the way between its original redness and 255. If\n    `scaleRgb (-0.4, 0, 0, 0) color` is called instead, the redness will be 40% of the way between the original\n    and 0.\n\n    The values of the supplied tuple scale red, green, blue, and alpha channels, respectively, and have a valid range of\n    -1.0 to 1.0.\n\n    This function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
+            "type": "( Float, Float, Float, Float ) -> Color.Color -> Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Color.Convert",
+        "comment": "\n#Convert\nConvert colors to differnt string formats and hexadecimal strings to colors.\n\n@docs colorToCssRgb, colorToCssRgba, colorToCssHsl, colorToCssHsla, colorToHex, hexToColor, colorToLab, labToColor\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "colorToCssHsl",
+            "comment": "\nConverts a color to an css hsl string.\n\n    colorToCssRgb (hsl 1 1 0.5) -- \"hsl(1, 1, 0.5)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssHsla",
+            "comment": "\nConverts a color to an css hsla string.\n\n    colorToCssRgb (hsla 1 1 0.5 1) -- \"hsla(56, 100%, 50%, 1)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssRgb",
+            "comment": "\nConverts a color to an css rgb string.\n\n    colorToCssRgb (rgb 255 0 0 ) -- \"rgb(255, 0, 0)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToCssRgba",
+            "comment": "\nConverts a color to an css rgba string.\n\n    colorToCssRgb (rgba 255 0 0 0.5) -- \"rgb(255, 0, 0, 0.5)\"\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToHex",
+            "comment": "\nConverts a color to a hexadecimal string.\n\n    hexToColor (rgb 255 0 0) -- \"#ff0000\"\n\n",
+            "type": "Color.Color -> String"
+          },
+          {
+            "name": "colorToLab",
+            "comment": " Convert color to CIELAB- color space\n",
+            "type": "Color.Color -> { l : Float, a : Float, b : Float }"
+          },
+          {
+            "name": "hexToColor",
+            "comment": "\nConverts a string to `Maybe` of color.\n\n    hexToColor \"#ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"1234\" -- \"Nothing\"\n\n",
+            "type": "String -> Maybe.Maybe Color.Color"
+          },
+          {
+            "name": "labToColor",
+            "comment": " Convert a color in CIELAB- color space to Elm `Color`\n",
+            "type": "{ l : Float, a : Float, b : Float } -> Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -42273,55 +42332,6 @@
             "name": "softlight",
             "comment": "\nDarkens or lightens the colors, depending on the source color value.\nThe effect is similar to shining a diffused spotlight on the backdrop.\n",
             "type": "Color.Color -> Color.Color -> Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Color.Convert",
-        "comment": "\n#Convert\nConvert colors to differnt string formats and hexadecimal strings to colors.\n\n@docs colorToCssRgb, colorToCssRgba, colorToCssHsl, colorToCssHsla, colorToHex, hexToColor, colorToLab, labToColor\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "colorToCssHsl",
-            "comment": "\nConverts a color to an css hsl string.\n\n    colorToCssRgb (hsl 1 1 0.5) -- \"hsl(1, 1, 0.5)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssHsla",
-            "comment": "\nConverts a color to an css hsla string.\n\n    colorToCssRgb (hsla 1 1 0.5 1) -- \"hsla(56, 100%, 50%, 1)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssRgb",
-            "comment": "\nConverts a color to an css rgb string.\n\n    colorToCssRgb (rgb 255 0 0 ) -- \"rgb(255, 0, 0)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToCssRgba",
-            "comment": "\nConverts a color to an css rgba string.\n\n    colorToCssRgb (rgba 255 0 0 0.5) -- \"rgb(255, 0, 0, 0.5)\"\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToHex",
-            "comment": "\nConverts a color to a hexadecimal string.\n\n    hexToColor (rgb 255 0 0) -- \"#ff0000\"\n\n",
-            "type": "Color.Color -> String"
-          },
-          {
-            "name": "colorToLab",
-            "comment": " Convert color to CIELAB- color space\n",
-            "type": "Color.Color -> { l : Float, a : Float, b : Float }"
-          },
-          {
-            "name": "hexToColor",
-            "comment": "\nConverts a string to `Maybe` of color.\n\n    hexToColor \"#ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"ff0000\" -- \"Just RGB 255 0 0\"\n    hexToColor \"1234\" -- \"Nothing\"\n\n",
-            "type": "String -> Maybe.Maybe Color.Color"
-          },
-          {
-            "name": "labToColor",
-            "comment": " Convert a color in CIELAB- color space to Elm `Color`\n",
-            "type": "{ l : Float, a : Float, b : Float } -> Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -47607,7 +47617,7 @@
   },
   {
     "name": "john-kelly/elm-rest",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Rest.Adapters",
@@ -47618,14 +47628,14 @@
           {
             "name": "postgRest",
             "comment": " ",
-            "type": "Rest.Types.RestRequest a -> Http.Request"
+            "type": "Rest.Types.RestRequest schema -> Http.Request"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Rest",
-        "comment": " Rest\n# Types\n@docs Resource, Property, RestRequest, Filter, OrderBy\n# Functions\n@docs resource, property, nested, read, send, select, filter, like, eq, gte, gt, lte, lt, neq, ilike, in', notin, is, isnot, contains, not', order, asc, desc, paginate, offset, limit, singular, suppressCount\n",
+        "comment": " DEPRECATED: Renamed to http://package.elm-lang.org/john-kelly/query\n# Types\n@docs Resource, Property, RestRequest, Filter, OrderBy\n# Functions\n@docs resource, property, nested, read, send, select, filter, like, eq, gte, gt, lte, lt, neq, ilike, in', notin, is, isnot, contains, not', order, asc, desc, paginate, offset, limit, singular, count\n",
         "aliases": [
           {
             "name": "Filter",
@@ -47649,17 +47659,17 @@
             "name": "Resource",
             "comment": " ",
             "args": [
-              "a"
+              "schema"
             ],
-            "type": "Rest.Types.Resource a"
+            "type": "Rest.Types.Resource schema"
           },
           {
             "name": "RestRequest",
             "comment": " ",
             "args": [
-              "a"
+              "schema"
             ],
-            "type": "Rest.Types.RestRequest a"
+            "type": "Rest.Types.RestRequest schema"
           }
         ],
         "types": [],
@@ -47667,112 +47677,117 @@
           {
             "name": "asc",
             "comment": " ",
-            "type": "(a -> Rest.Property) -> a -> Rest.OrderBy"
+            "type": "(schema -> Rest.Property) -> schema -> Rest.OrderBy"
           },
           {
             "name": "contains",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
+          },
+          {
+            "name": "count",
+            "comment": " ",
+            "type": "Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "desc",
             "comment": " ",
-            "type": "(a -> Rest.Property) -> a -> Rest.OrderBy"
+            "type": "(schema -> Rest.Property) -> schema -> Rest.OrderBy"
           },
           {
             "name": "eq",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "filter",
             "comment": " ",
-            "type": "List (a -> Rest.Filter) -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "List (schema -> Rest.Filter) -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "gt",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "gte",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "ilike",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "in'",
             "comment": " ",
-            "type": "List String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "List String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "is",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "isnot",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "like",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "limit",
             "comment": " ",
-            "type": "List ( Rest.Resource a, Int ) -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "List ( Rest.Resource schema, Int ) -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "lt",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "lte",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "neq",
             "comment": " ",
-            "type": "String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "nested",
             "comment": " ",
-            "type": "Rest.Resource a -> List (a -> Rest.Property) -> b -> Rest.Property"
+            "type": "Rest.Resource schema1 -> List (schema1 -> Rest.Property) -> schema2 -> Rest.Property"
           },
           {
             "name": "not'",
             "comment": " ",
-            "type": "(a -> (b -> Rest.Property) -> b -> Rest.Filter) -> a -> (b -> Rest.Property) -> b -> Rest.Filter"
+            "type": "(a -> (schema -> Rest.Property) -> schema -> Rest.Filter) -> a -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "notin",
             "comment": " ",
-            "type": "List String -> (a -> Rest.Property) -> a -> Rest.Filter"
+            "type": "List String -> (schema -> Rest.Property) -> schema -> Rest.Filter"
           },
           {
             "name": "offset",
             "comment": " ",
-            "type": "Int -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "Int -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "order",
             "comment": " ",
-            "type": "List (a -> Rest.OrderBy) -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "List (schema -> Rest.OrderBy) -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "paginate",
             "comment": " ",
-            "type": "Int -> Int -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "Int -> Int -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "property",
@@ -47782,32 +47797,27 @@
           {
             "name": "read",
             "comment": " ",
-            "type": "String -> Rest.Resource a -> Rest.RestRequest a"
+            "type": "String -> Rest.Resource schema -> Rest.RestRequest schema"
           },
           {
             "name": "resource",
             "comment": " ",
-            "type": "String -> a -> Rest.Resource a"
+            "type": "String -> schema -> Rest.Resource schema"
           },
           {
             "name": "select",
             "comment": " ",
-            "type": "List (a -> Rest.Property) -> Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "List (schema -> Rest.Property) -> Rest.RestRequest schema -> Rest.RestRequest schema"
           },
           {
             "name": "send",
             "comment": " ",
-            "type": "(Rest.RestRequest a -> Http.Request) -> Http.Settings -> Rest.RestRequest a -> Task.Task Http.RawError Http.Response"
+            "type": "(Rest.RestRequest schema -> Http.Request) -> Http.Settings -> Rest.RestRequest schema -> Task.Task Http.RawError Http.Response"
           },
           {
             "name": "singular",
             "comment": " ",
-            "type": "Rest.RestRequest a -> Rest.RestRequest a"
-          },
-          {
-            "name": "suppressCount",
-            "comment": " ",
-            "type": "Rest.RestRequest a -> Rest.RestRequest a"
+            "type": "Rest.RestRequest schema -> Rest.RestRequest schema"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -47983,12 +47993,12 @@
           {
             "name": "unwrapResource",
             "comment": " helper to assist with opaque Resource type\n",
-            "type": "Rest.Types.Resource a -> ( String, a )"
+            "type": "Rest.Types.Resource schema -> ( String, schema )"
           },
           {
             "name": "unwrapRestRequest",
             "comment": " helper to assist with opaque RestRequest type\n",
-            "type": "Rest.Types.RestRequest a -> { properties : List Rest.Types.Property , filters : List Rest.Types.Filter , orders : List Rest.Types.OrderBy , limits : List ( Rest.Types.Resource a, Int ) , offset : Int , singular : Bool , suppressCount : Bool , verb : String , resource : Rest.Types.Resource a , url : String }"
+            "type": "Rest.Types.RestRequest schema -> { properties : List Rest.Types.Property , filters : List Rest.Types.Filter , orders : List Rest.Types.OrderBy , limits : List ( Rest.Types.Resource schema, Int ) , offset : Int , singular : Bool , suppressCount : Bool , verb : String , resource : Rest.Types.Resource schema , url : String }"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -49129,7 +49139,7 @@
   },
   {
     "name": "jweir/elm-iso8601",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "ISO8601",
@@ -74999,6 +75009,189 @@
     ]
   },
   {
+    "name": "toastal/either",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Either",
+        "comment": "\nA generic structure for a type with two possibilities: a `Left a` or\na `Right b`.\n\nAn `Either` is right-biased, so most operations will be applied to\nthe `Right`.\n\nThis is similar to `Result` type in `core`, but is more generic.\nIf your looking for a data type to do error handling, you should\nuse `Result` instead.\n\n\n# Definition\n@docs Either\n\n# Mapping\n@docs map, map2, map3, mapLeft, mapRight, mapBoth, mapDefault\n\n# Singleton & Applying\n@docs singleton, andMap\n\n# Chaining\n@docs andThen\n\n# List Helpers\n@docs lefts, rights, partition\n\n# Maybe Helpers\n@docs toMaybe, leftToMaybe, rightToMaybe, fromMaybe, leftFromMaybe, rightFromMaybe\n\n# Result Helpers\n@docs toResult, fromResult\n\n# Rest of the Helpers\n@docs isLeft, isRight, fromLeft, fromRight, withDefault, elim, either, swap\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Either",
+            "comment": " ",
+            "args": [
+              "a",
+              "b"
+            ],
+            "cases": [
+              [
+                "Left",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Right",
+                [
+                  "b"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "andMap",
+            "comment": " Apply the function that is inside `Either` to a value that is inside\n`Either`. Return the result inside `Either`. If one of the `Either`\narguments is `Left x`, return `Left x`. Also known as `apply`.\n\n    Left \"Hello\" `andMap` Left \"World\" == Left \"Hello\"\n    Left \"Hello\" `andMap` Right 2 == Left \"Hello\"\n    Right ((+) 1) `andMap` Left \"World\" == Left \"World\"\n    Right ((+) 1) `andMap` Right 2 == Right 3\n",
+            "type": "Either.Either x (a -> b) -> Either.Either x a -> Either.Either x b"
+          },
+          {
+            "name": "andThen",
+            "comment": " Chain together in many computations that will stop computing if\na chain is on a `Left`. Also known as `bind`.\n\n    Left \"Hello\" `andThen` ((+) 1 >> Right) == Left \"Hello\"\n    Right 2 `andThen` ((+) 1 >> Right) == Right 3\n",
+            "type": "Either.Either x a -> (a -> Either.Either x b) -> Either.Either x b"
+          },
+          {
+            "name": "either",
+            "comment": " Alias for `elim`.\n",
+            "type": "(a -> c) -> (b -> c) -> Either.Either a b -> c"
+          },
+          {
+            "name": "elim",
+            "comment": " Given a function for both `Left` and `Right` to to type a generic\ntype `c`, collapse down the `Either` to a value of that type.\n\n    elim identity toString <| Left \"World\" == \"World\"\n    elim identity toString <| Right 2 == \"2\"\n",
+            "type": "(a -> c) -> (b -> c) -> Either.Either a b -> c"
+          },
+          {
+            "name": "fromLeft",
+            "comment": " Extract left value or a default.\n\n    fromLeft \"World\" <| Left \"Hello\" == \"Hello\"\n    fromLeft \"World\" <| Right 2 == \"World\"\n",
+            "type": "a -> Either.Either a b -> a"
+          },
+          {
+            "name": "fromMaybe",
+            "comment": " Convert from a `Maybe` to `Either` with a default value\nfor `Left` for `Nothing`.\n\n    fromMaybe \"Hello\" <| Just 2 == Right 2\n    fromMaybe \"Hello\" Nothing == Left \"Hello\"\n",
+            "type": "a -> Maybe.Maybe b -> Either.Either a b"
+          },
+          {
+            "name": "fromResult",
+            "comment": " Convert from `Result` to `Either`.\n\n    fromResult <| Err \"World\" == Left \"World\"\n    fromResult <| Ok 2 == Right 2\n",
+            "type": "Result.Result a b -> Either.Either a b"
+          },
+          {
+            "name": "fromRight",
+            "comment": " Extract right value or a default.\n\n    fromRight 3 <| Left \"Hello\" == 3\n    fromRight 3 <| Right 2 == 2\n",
+            "type": "b -> Either.Either a b -> b"
+          },
+          {
+            "name": "isLeft",
+            "comment": " Returns `True` if argument is `Left _`\n\n    isLeft <| Left \"World\" == True\n    isLeft <| Right 2 == False\n",
+            "type": "Either.Either a b -> Bool"
+          },
+          {
+            "name": "isRight",
+            "comment": " Returns `True` if argument is `Right _`\n\n    isRight <| Left \"World\" == False\n    isRight <| Right 2 == True\n",
+            "type": "Either.Either a b -> Bool"
+          },
+          {
+            "name": "leftFromMaybe",
+            "comment": " Convert from a `Maybe` to `Either` with a default value\nfor `Right` for `Nothing`.\n\n    leftFromMaybe 3 <| Just \"World\" == Left \"World\"\n    leftFromMaybe 3 Nothing == Right 3\n",
+            "type": "b -> Maybe.Maybe a -> Either.Either a b"
+          },
+          {
+            "name": "leftToMaybe",
+            "comment": " `Maybe` get the `Left` side of an `Either`.\n\n    leftToMaybe <| Left \"World\" == Just \"World\"\n    leftToMaybe <| Right 2 == Nothing\n",
+            "type": "Either.Either a x -> Maybe.Maybe a"
+          },
+          {
+            "name": "lefts",
+            "comment": " Converts a `List` of `Either a x` to a List of `a`.\n\n    lefts [ Left \"Hello\", Right 2 ] == [ \"Hello\" ]\n",
+            "type": "List (Either.Either a x) -> List a"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to an `Either`. If the argument is `Right`, it\nwill be converted.  If the argument is an `Left`, the same left value\nwill propogate through.\n\n    map ((+) 1) <| Left \"Hello\" == Left \"Hello\"\n    map ((+) 1) <| Right 2 == Right 3\n",
+            "type": "(a -> b) -> Either.Either x a -> Either.Either x b"
+          },
+          {
+            "name": "map2",
+            "comment": " Apply a function to two eithers, if both arguments are `Right`.\nIf not, the first argument which is a `Left` will propagate through.\nAlso known as `liftA2`.\n\n    map2 (+) (Left \"Hello\") <| Left \"World\" == Left \"Hello\"\n    map2 (+) (Left \"Hello\") <| Right 3 == Left \"Hello\"\n    map2 (+) (Right 2) <| Left \"World\" == Left \"World\"\n    map2 (+) (Right 2) <| Right 3 == Right 5\n",
+            "type": "(a -> b -> c) -> Either.Either x a -> Either.Either x b -> Either.Either x c"
+          },
+          {
+            "name": "map3",
+            "comment": " Like `map2`, but with 3 eithers. Also known as `liftA3`\n",
+            "type": "(a -> b -> c -> d) -> Either.Either x a -> Either.Either x b -> Either.Either x c -> Either.Either x d"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Apply the first argument function to a `Left` and the second\nargument function to a `Right` of an `Either`.\n\n    mapBoth (flip (++) \"!\") ((+) 1) <| Left \"Hello\" == Left \"Hello!\"\n    mapBoth (flip (++) \"!\") ((+) 1) <| Right 2 == Right 3\n",
+            "type": "(a -> b) -> (c -> d) -> Either.Either a c -> Either.Either b d"
+          },
+          {
+            "name": "mapDefault",
+            "comment": " Apply a function to `Right` value. If argument was a `Left` use the\ndefault value. Equivalent to `Either.map >> Either.fromRight`.\n\n    mapDefault 99 ((+) 1) <| Left \"Hello\" == 99\n    mapDefault 99 ((+) 1) <| Right 2 == 3\n",
+            "type": "c -> (b -> c) -> Either.Either x b -> c"
+          },
+          {
+            "name": "mapLeft",
+            "comment": " Apply a function to the `Left` of an `Either`.\n\n    mapLeft ((+) 1) <| Left 2 == Left 3\n    mapLeft ((+) 1) <| Right 2 == Right 2\n",
+            "type": "(a -> b) -> Either.Either a x -> Either.Either b x"
+          },
+          {
+            "name": "mapRight",
+            "comment": " Alias for `map`.\n",
+            "type": "(a -> b) -> Either.Either x a -> Either.Either x b"
+          },
+          {
+            "name": "partition",
+            "comment": " Converts a `List` of `Either a b`, into a tuple2 where\nthe first value is a `List a` and the second is `List b`.\n\n    partition [ Left \"Hello\", Right 2 ] == ( [ \"Hello\" ], [ 2 ] )\n",
+            "type": "List (Either.Either a b) -> ( List a, List b )"
+          },
+          {
+            "name": "rightFromMaybe",
+            "comment": " Alias for `fromMaybe`.\n",
+            "type": "a -> Maybe.Maybe b -> Either.Either a b"
+          },
+          {
+            "name": "rightToMaybe",
+            "comment": " Alias for `toMaybe`.\n",
+            "type": "Either.Either x b -> Maybe.Maybe b"
+          },
+          {
+            "name": "rights",
+            "comment": " Converts a `List` of `Either x b` to a List of `b`.\n\n    rights [ Left \"Hello\", Right 2 ] == [ 2 ]\n",
+            "type": "List (Either.Either x b) -> List b"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a `singleton` from a value to an `Either` with a `Right`\nof the same type.  Also known as `pure`.\n\n    singleton 2 == Right 2\n",
+            "type": "b -> Either.Either x b"
+          },
+          {
+            "name": "swap",
+            "comment": " Swap the `Left` and `Right` sides of an `Either`.\n\n    swap <| Left \"World\" == Right \"World\"\n    swap <| Right 2 == Left 2\n",
+            "type": "Either.Either a b -> Either.Either b a"
+          },
+          {
+            "name": "toMaybe",
+            "comment": " `Maybe` get the `Right` side of an `Either`.\n\n    toMaybe <| Left \"World\" == Nothing\n    toMaybe <| Right 2 == Just 2\n",
+            "type": "Either.Either x b -> Maybe.Maybe b"
+          },
+          {
+            "name": "toResult",
+            "comment": " Convert from `Either` to `Result`.\n\n    toResult <| Left \"World\" == Err \"World\"\n    toResult <| Right 2 == Ok 2\n",
+            "type": "Either.Either a b -> Result.Result a b"
+          },
+          {
+            "name": "withDefault",
+            "comment": " Alias for `fromRight`\n",
+            "type": "b -> Either.Either a b -> b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "tomjkidd/elm-multiway-tree-zipper",
     "version": "1.9.0",
     "docs": [
@@ -76361,11 +76554,11 @@
   },
   {
     "name": "yotamDvir/elm-pivot",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "Pivot",
-        "comment": " A pivot is a list upgraded with a center and sides. However, a pivot\ncan never be empty, so it is better to think of it an upgraded cons list.\n\nIn this library, we suffix functions with letters to denote their context,\nas follows.\n\n* The __C__enter\n* Both __S__ides\n* The __L__eft side\n* The __R__ight side\n* __A__ll the members\n\nThis way you can guess a function's name easily.\nSee the different `map*` functions.\n\nFor example, `getL` gets the left side of a pivot.\n\n# Type\n@docs Pivot\n\n# To & Fro\nSo you want to use a pivot? Better know how to create one, and get stuff back!\n\n## Create\n@docs fromList, fromCons, pure\n\n## Get\n@docs getC, getL, getR, getA, hasL, hasR\n\n# Movement\nHandle the position of the center.\nThese functions do not mutate the underlying list.\nThat is, if you apply functions fromList here and then apply `getA`,\nyou'd get the same thing you would by applying `getA` beforehand.\n\n## Position\n@docs lengthL, lengthR, lengthA\n\n## Momentum\n@docs goR, goL, goBy, goTo, goToStart, goToEnd\n\n## Find\n@docs firstWith, lastWith, findR, findL, findCR, findCL\n\n# Modify\nNow we start seeing functions that can actually change the underlying list.\n\n## Set\n@docs setC, setL, setR\n\n## Add\n@docs addL, addR, addGoL, addGoR\n\n## Remove\nRemoving is not guaranteed to work,\nfor the simple reason that a pivot cannot be empty.\n@docs removeGoL, removeGoR\n\n## Switch\nSwitch places with other members.\n@docs switchL, switchR\n\n## Sort\n@docs sort, sortWith\n\n# Maps\nLists can be mapped over, and so can pivots.\nHowever, since a pivot is made up of three distinct objects at any time,\nit makes sense that you may want to apply different transformations to\nthe different objects.\n\n## Maps\n@docs mapCLR, mapCRL, mapCS, mapA\n\n## Constraint Maps\nIf you want to map only over some of the pivot,\nthen you must retain the type.\n@docs mapC, mapS, mapL, mapR\n\n## As a whole\nSome `List a -> List a` functions cannot be made from `a -> a` functions.\nThis is why these maps may be of importance.\nJust add `'` to a `map*` function to use functions on lists instead of values.\n@docs mapCLR', mapCRL', mapCS', mapS', mapL', mapR'\n\n## Special\n@docs apply\n\n# Utilities\n@docs reverse, mirror, mirrorM, assert, withRollback\n",
+        "comment": " A pivot is a list upgraded with a center and sides. However, a pivot\ncan never be empty, so it is better to think of it an upgraded cons list.\n\nIn this library, we suffix functions with letters to denote their context,\nas follows.\n\n* The __C__enter\n* Both __S__ides\n* The __L__eft side\n* The __R__ight side\n* __A__ll the members\n\nThis way you can guess a function's name easily.\nSee the different `map*` functions.\n\nFor example, `getL` gets the left side of a pivot.\n\n# Type\n@docs Pivot\n\n# To & Fro\nSo you want to use a pivot? Better know how to create one, and get stuff back!\n\n## Create\n@docs fromList, fromCons, pure\n\n## Get\n@docs getC, getL, getR, getA, hasL, hasR\n\n# Movement\nHandle the position of the center.\nThese functions do not mutate the underlying list.\nThat is, if you apply functions from here and then apply `getA`,\nyou'd get the same thing you would by applying `getA` beforehand.\n\n## Position\n@docs lengthL, lengthR, lengthA\n\n## Momentum\n@docs goR, goL, goBy, goTo, goToStart, goToEnd\n\n## Find\n@docs firstWith, lastWith, findR, findL, findCR, findCL\n\n# Modify\nNow we start seeing functions that can actually change the underlying list.\n\n## Set\n@docs setC, setL, setR\n\n## Add\n@docs addL, addR, addGoL, addGoR\n\n## Remove\nRemoving is not guaranteed to work,\nfor the simple reason that a pivot cannot be empty.\n@docs removeGoL, removeGoR\n\n## Switch\nSwitch places with other members.\n@docs switchL, switchR\n\n## Sort\n@docs sort, sortWith\n\n# Maps\nLists can be mapped over, and so can pivots.\nHowever, since a pivot is made up of three distinct objects at any time,\nit makes sense that you may want to apply different transformations to\nthe different objects.\n\n## Maps\n@docs mapCLR, mapCRL, mapCS, mapA\n\n## Constraint Maps\nIf you want to map only over some of the pivot,\nthen you must retain the type.\n@docs mapC, mapS, mapL, mapR\n\n## As a whole\nSome `List a -> List a` functions cannot be made from `a -> a` functions.\nThis is why these maps may be of importance.\nJust add `'` to a `map*` function to use functions on lists instead of values.\n@docs mapCLR', mapCRL', mapCS', mapS', mapL', mapR'\n\n## Special\n@docs apply\n\n# Utilities\n@docs reverse, mirror, mirrorM, assert, withRollback\n",
         "aliases": [
           {
             "name": "Pivot",
@@ -76440,7 +76633,7 @@
           },
           {
             "name": "fromList",
-            "comment": " Make a pivot fromList a list with empty left side.\n\n_Fails if and only if the list given is empty._\n\n    fromList [] == Nothing\n",
+            "comment": " Make a pivot from a list with empty left side.\n\n_Fails if and only if the list given is empty._\n\n    fromList [] == Nothing\n",
             "type": "List a -> Maybe.Maybe (Pivot.Pivot a)"
           },
           {
@@ -76480,7 +76673,7 @@
           },
           {
             "name": "goTo",
-            "comment": " Go to a specific position fromList the left. Starts with 0.\n\n_Fails if and only if the position given doesn't exist._\n",
+            "comment": " Go to a specific position from the left. Starts with 0.\n\n_Fails if and only if the position given doesn't exist._\n",
             "type": "Int -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
           },
           {
@@ -76515,12 +76708,12 @@
           },
           {
             "name": "lengthL",
-            "comment": " Position fromList the left side. Starts with 0.\n",
+            "comment": " Position from the left side. Starts with 0.\n",
             "type": "Pivot.Pivot a -> Int"
           },
           {
             "name": "lengthR",
-            "comment": " Position fromList the right side. Starts with 0.\n",
+            "comment": " Position from the right side. Starts with 0.\n",
             "type": "Pivot.Pivot a -> Int"
           },
           {
