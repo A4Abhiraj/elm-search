@@ -10565,7 +10565,7 @@ var _klaftertief$elm_search$Search_Distance$distanceList = F2(
 		var sharedLength = A2(_elm_lang$core$Basics$min, needleLength, hayLength);
 		var maxLength = A2(_elm_lang$core$Basics$max, needleLength, hayLength);
 		var diffLength = maxLength - sharedLength;
-		return A3(
+		return (_elm_lang$core$Native_Utils.cmp(diffLength, 1) > 0) ? _klaftertief$elm_search$Search_Distance$maxPenalty : A3(
 			_elm_lang$core$Basics$flip,
 			F2(
 				function (x, y) {
@@ -10731,7 +10731,7 @@ var _klaftertief$elm_search$Search_Model$runFilter = F2(
 						_klaftertief$elm_search$Search_Model$prioritizeChunks(
 							A2(
 								_klaftertief$elm_search$Search_Model$filterByDistance,
-								_klaftertief$elm_search$Search_Distance$lowPenalty,
+								_klaftertief$elm_search$Search_Distance$lowPenalty / 2,
 								A2(
 									_elm_lang$core$List$map,
 									function (_p22) {
