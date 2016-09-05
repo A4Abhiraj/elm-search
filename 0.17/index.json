@@ -53044,11 +53044,11 @@
   },
   {
     "name": "krisajenkins/elm-cdn",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "docs": [
       {
         "name": "CDN",
-        "comment": " CDN provides handy links to the web CSS frameworks you want at-hand.\n\nTo use, just put the stylesheet you want in your top-level view function, like so:\n\n    import CDN exposing (bootstrap)\n\n    rootView model =\n        div []\n            [ bootstrap.css\n            , ...\n            ]\n\n@docs bootstrap\n@docs skeleton\n@docs reset\n@docs foundation\n@docs fontAwesome\n",
+        "comment": " CDN provides handy links to the web CSS frameworks you want at-hand.\n\nTo use, just put the stylesheet you want in your top-level view function, like so:\n\n    import CDN exposing (bootstrap)\n\n    rootView model =\n        div []\n            [ bootstrap.css\n            , ...\n            ]\n\n@docs bootstrap\n@docs skeleton\n@docs reset\n@docs foundation\n@docs fontAwesome\n@docs bulma\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -53056,6 +53056,11 @@
             "name": "bootstrap",
             "comment": " [Bootstrap 3](http://getbootstrap.com/)\n",
             "type": "{ css : Html.Html msg, theme : Html.Html msg, js : Html.Html msg }"
+          },
+          {
+            "name": "bulma",
+            "comment": " [Bulma 0.1.2](http://bulma.io/)\n",
+            "type": "{ css : Html.Html msg }"
           },
           {
             "name": "fontAwesome",
