@@ -19464,11 +19464,11 @@
   },
   {
     "name": "danyx23/elm-uuid",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Uuid",
-        "comment": " This modules provides an opaque type for Uuids, helpers to serialize\nfrom and to String and helpers to generate new Uuids using Max Goldsteins\nRandom.PCG pseudo-random generator library.\n\nUuids are Universally Unique IDentifiers. They are 128 bit ids that are\ndesigned to be extremely unlikely to collide with other Uuids.\n\nThis library only supports generating Version 4 Uuid (those generated using\nrandom numbers, as opposed to hashing. See\n[Wikipedia on Uuids](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29)\nfor more details). Version 4 Uuids are constructed using 122 pseudo random bits.\n\nDisclaimer: If you use this Library to generate Uuids, please be advised\nthat it does not use a cryptographically secure pseudo random number generator.\nWhile Random.PCG is a definite improvement over Elms native RNG, depending\non your use case the randomness provided may not be enough.\n\nThis library is split into two Modules. Uuid (this module) wraps Uuids in\nan opaque type for improved type safety. If you prefer to simply get strings\nyou can use the Uuid.Barebones module which provides methods to generate\nand verify Uuid as plain Strings.\n\nUuids can be generated either by parsing them from the canonical string representation\n(see fromString) or by generating them. If you are unfamiliar with random number generation\nin pure functional languages, this can be a bit confusing. The gist of it is that:\n\n1. you need a good random seed and this has to come from outside our wonderfully\npredictable Elm code (meaning you have to create an incoming port and feed in\nsome initial randomness)\n\n2. every call to generate a new Uuid will give you a tuple of a Uuid and a new\nseed. It is very important that whenever you generate a new Uuid you store this\nseed you get back into your model and use this one for the next Uuid generation.\nIf you reuse a seed, you will create the same Uuid twice!\n\nHere is a complete example that shows how to initialize the random number seed\nand how to carry the returned seed forward to the next Uuid generation.\n\n    import Uuid\n    import Random.PCG exposing (generate, Seed, initialSeed2)\n    import StartApp.Simple exposing (start)\n    import Html exposing (Html, div, button, text)\n    import Html.Events exposing (onClick)\n\n    -- 1.: Plumbing code to get a good initial random seed from Javascript\n    --     via a port (As described in the docs of mgold/elm-random-pcg)\n    port randomSeed : (Int, Int)\n\n    seed0 : Seed\n    seed0 = (uncurry initialSeed2) randomSeed\n\n    -- attention, this has to go in your Javascript code\n    -- Begin JS code\n    Elm.fullscreen(Elm.ModuleName,\n      {randomSeed: [Math.floor(Math.random()*0xFFFFFFFF),\n                    Math.floor(Math.random()*0xFFFFFFFF)] })\n    -- End JS code\n\n    -- 2.: In your elm code, store the seed and update it every time you\n    --     create a new Uuid\n    type alias Model =\n      { currentSeed : Seed\n      , currentUuid : Maybe Uuid.Uuid\n      }\n\n    type Action = NewUuid\n\n    update : Action -> Model -> Model\n    update action model =\n      case action of\n        NewUuid ->\n          let\n            (newUuid, newSeed) = generate Uuid.uuidGenerator model.currentSeed\n          in\n          { model\n          | currentUuid = Just newUuid\n          , currentSeed = newSeed\n          }\n\n    view : Signal.Address Action -> Model -> Html\n    view address model =\n      let\n        uuidText = case model.currentUuid of\n                    Nothing ->\n                      \"No Uuid was created so far\"\n                    Just uuid ->\n                        \"Current Uuid: \" ++ Uuid.toString uuid\n      in\n        div []\n          [ button [ onClick address NewUuid ] [ text \"Create a new Uuid!\" ]\n          , text uuidText\n          ]\n\n    main =\n      start\n        { model = { currentSeed = seed0, currentUuid = Nothing }\n        , update = update\n        , view = view\n        }\n\n@docs Uuid, uuidGenerator, fromString, toString\n",
+        "comment": " This modules provides an opaque type for Uuids, helpers to serialize\nfrom and to String and helpers to generate new Uuids using Max Goldsteins\nRandom.PCG pseudo-random generator library.\n\nUuids are Universally Unique IDentifiers. They are 128 bit ids that are\ndesigned to be extremely unlikely to collide with other Uuids.\n\nThis library only supports generating Version 4 Uuid (those generated using\nrandom numbers, as opposed to hashing. See\n[Wikipedia on Uuids](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_.28random.29)\nfor more details). Version 4 Uuids are constructed using 122 pseudo random bits.\n\nDisclaimer: If you use this Library to generate Uuids, please be advised\nthat it does not use a cryptographically secure pseudo random number generator.\nWhile Random.PCG is a definite improvement over Elms native RNG, depending\non your use case the randomness provided may not be enough.\n\nThis library is split into two Modules. Uuid (this module) wraps Uuids in\nan opaque type for improved type safety. If you prefer to simply get strings\nyou can use the Uuid.Barebones module which provides methods to generate\nand verify Uuid as plain Strings.\n\nUuids can be generated either by parsing them from the canonical string representation\n(see fromString) or by generating them. If you are unfamiliar with random number generation\nin pure functional languages, this can be a bit confusing. The gist of it is that:\n\n1. you need a good random seed and this has to come from outside our wonderfully\npredictable Elm code (meaning you have to create an incoming port and feed in\nsome initial randomness)\n\n2. every call to generate a new Uuid will give you a tuple of a Uuid and a new\nseed. It is very important that whenever you generate a new Uuid you store this\nseed you get back into your model and use this one for the next Uuid generation.\nIf you reuse a seed, you will create the same Uuid twice!\n\nHave a look at the examples in the package to see how to use it!\n\n@docs Uuid, uuidGenerator, fromString, toString\n",
         "aliases": [],
         "types": [
           {
@@ -19495,7 +19495,7 @@
             "type": "Random.Pcg.Generator Uuid.Uuid"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Uuid.Barebones",
@@ -19514,7 +19514,7 @@
             "type": "Random.Pcg.Generator String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -31197,7 +31197,7 @@
   },
   {
     "name": "elm-community/elm-test",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Test.Runner",
@@ -31329,6 +31329,169 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Fuzz",
+        "comment": " This is a library of *fuzzers* you can use to supply values to your fuzz\ntests. You can typically pick out which ones you need according to their types.\n\nA `Fuzzer a` knows how to create values of type `a` in two different ways. It\ncan create them randomly, so that your test's expectations are run against many\nvalues. Fuzzers will often generate edge cases likely to find bugs. If the\nfuzzer can make your test fail, it also knows how to \"shrink\" that failing input\ninto more minimal examples, some of which might also cause the tests to fail. In\nthis way, fuzzers can usually find the smallest or simplest input that\nreproduces a bug.\n\n## Common Fuzzers\n@docs bool, int, intRange, float, floatRange, percentage, string, maybe, result, list, array\n\n## Working with Fuzzers\n@docs Fuzzer, constant, map, map2, map3,map4, map5, andMap, andThen, frequency, frequencyOrCrash\n\n## Tuple Fuzzers\nInstead of using a tuple, consider using `fuzzN`.\n@docs tuple, tuple3, tuple4, tuple5\n\n## Uncommon Fuzzers\n@docs custom, char, unit, order\n\n",
+        "aliases": [
+          {
+            "name": "Fuzzer",
+            "comment": " The representation of fuzzers is opaque. Conceptually, a `Fuzzer a`\nconsists of a way to randomly generate values of type `a`, and a way to shrink\nthose values.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Fuzz.Internal.Fuzzer a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "andMap",
+            "comment": " Map over many fuzzers. This can act as mapN for N > 5.\n",
+            "type": "Fuzz.Fuzzer (a -> b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "andThen",
+            "comment": " Create a fuzzer based on the result of another fuzzer.\n",
+            "type": "(a -> Fuzz.Fuzzer b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "array",
+            "comment": " Given a fuzzer of a type, create a fuzzer of an array of that type.\nGenerates random arrays of varying length, favoring shorter arrays.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Array.Array a)"
+          },
+          {
+            "name": "bool",
+            "comment": " A fuzzer for bool values.\n",
+            "type": "Fuzz.Fuzzer Bool"
+          },
+          {
+            "name": "char",
+            "comment": " A fuzzer for char values. Generates random ascii chars disregarding the control\ncharacters.\n",
+            "type": "Fuzz.Fuzzer Char"
+          },
+          {
+            "name": "constant",
+            "comment": " Create a fuzzer that only and always returns the value provided, and performs no shrinking. This is hardly random,\nand so this function is best used as a helper when creating more complicated fuzzers.\n",
+            "type": "a -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "custom",
+            "comment": " Build a custom `Fuzzer a` by providing a `Generator a` and a `Shrinker a`.\nGenerators are defined in [`mgold/elm-random-pcg`](http://package.elm-lang.org/packages/mgold/elm-random-pcg/latest),\nwhich is not core's Random module but has a compatible interface. Shrinkers are\ndefined in [`elm-community/shrink`](http://package.elm-lang.org/packages/elm-community/shrink/latest/).\n\nHere is an example for a record:\n\n    import Random.Pcg as Random\n    import Shrink\n\n    type alias Position =\n        { x : Int, y : Int }\n\n    position : Fuzzer Position\n    position =\n        Fuzz.custom\n            (Random.map2 Position (Random.int -100 100) (Random.int -100 100))\n            (\\{ x, y } -> Shrink.map Position (Shrink.int x) `Shrink.andMap` (Shrink.int y))\n\nHere is an example for a custom union type, assuming there is already a `genName : Generator String` defined:\n\n    type Question\n        = Name String\n        | Age Int\n\n    question =\n        let\n            generator =\n                Random.bool `Random.andThen` (\\b ->\n                    if b then\n                        Random.map Name genName\n                    else\n                        Random.map Age (Random.int 0 120)\n                 )\n\n            shrinker question =\n                case question of\n                    Name n ->\n                        Shrink.string n |> Shrink.map Name\n                    Age i ->\n                        Shrink.int i |> Shrink.map Age\n        in\n            Fuzz.custom generator shrinker\n\nIt is not possible to extract the generator and shrinker from an existing fuzzer.\n",
+            "type": "Random.Pcg.Generator a -> Shrink.Shrinker a -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "float",
+            "comment": " A fuzzer for float values. It will never produce `NaN`, `Infinity`, or `-Infinity`.\n\n\nIt's possible for this fuzzer to generate any other floating-point value, but it\nfavors numbers between -50 and 50, numbers between -1 and 1, and especially zero.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "floatRange",
+            "comment": " A fuzzer for float values within between a given minimum and maximum\nvalue, inclusive. Shrunken values will also be within the range.\n",
+            "type": "Float -> Float -> Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "frequency",
+            "comment": " Create a new `Fuzzer` by providing a list of probabilistic weights to use\nwith other fuzzers.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.frequency\n        [ ( 1, Fuzz.intRange -100 -1 )\n        , ( 3, Fuzz.intRange 1 100 )\n        ]\n\nThis returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to a result of `Err`, with a `String` explaining what\nwent wrong.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Result.Result String (Fuzz.Fuzzer a)"
+          },
+          {
+            "name": "frequencyOrCrash",
+            "comment": " Calls `frequency` and handles `Err` results by crashing with the given\nerror message.\n\nThis is useful in tests, where a crash will simply cause the test run to fail.\nThere is no danger to a production system there.\n",
+            "type": "List ( Float, Fuzz.Fuzzer a ) -> Fuzz.Fuzzer a"
+          },
+          {
+            "name": "int",
+            "comment": " A fuzzer for int values. It will never produce `NaN`, `Infinity`, or `-Infinity`.\n\nIt's possible for this fuzzer to generate any 32-bit integer, but it favors\nnumbers between -50 and 50 and especially zero.\n",
+            "type": "Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "intRange",
+            "comment": " A fuzzer for int values within between a given minimum and maximum value,\ninclusive. Shrunken values will also be within the range.\n",
+            "type": "Int -> Int -> Fuzz.Fuzzer Int"
+          },
+          {
+            "name": "list",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a list of that type.\nGenerates random lists of varying length, favoring shorter lists.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (List a)"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function over a fuzzer. This applies to both the generated and the shruken values.\n",
+            "type": "(a -> b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
+          },
+          {
+            "name": "map2",
+            "comment": " Map over two fuzzers.\n",
+            "type": "(a -> b -> c) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c"
+          },
+          {
+            "name": "map3",
+            "comment": " Map over three fuzzers.\n",
+            "type": "(a -> b -> c -> d) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d"
+          },
+          {
+            "name": "map4",
+            "comment": " Map over four fuzzers.\n",
+            "type": "(a -> b -> c -> d -> e) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> Fuzz.Fuzzer e"
+          },
+          {
+            "name": "map5",
+            "comment": " Map over five fuzzers.\n",
+            "type": "(a -> b -> c -> d -> e -> f) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b -> Fuzz.Fuzzer c -> Fuzz.Fuzzer d -> Fuzz.Fuzzer e -> Fuzz.Fuzzer f"
+          },
+          {
+            "name": "maybe",
+            "comment": " Given a fuzzer of a type, create a fuzzer of a maybe for that type.\n",
+            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Maybe.Maybe a)"
+          },
+          {
+            "name": "order",
+            "comment": " A fuzzer for order values.\n",
+            "type": "Fuzz.Fuzzer Basics.Order"
+          },
+          {
+            "name": "percentage",
+            "comment": " A fuzzer for percentage values. Generates random floats between `0.0` and\n`1.0`. It will test zero and one about 10% of the time each.\n",
+            "type": "Fuzz.Fuzzer Float"
+          },
+          {
+            "name": "result",
+            "comment": " Given fuzzers for an error type and a success type, create a fuzzer for\na result.\n",
+            "type": "Fuzz.Fuzzer error -> Fuzz.Fuzzer value -> Fuzz.Fuzzer (Result.Result error value)"
+          },
+          {
+            "name": "string",
+            "comment": " Generates random printable ASCII strings of up to 1000 characters.\n\nShorter strings are more common, especially the empty string.\n",
+            "type": "Fuzz.Fuzzer String"
+          },
+          {
+            "name": "tuple",
+            "comment": " Turn a tuple of fuzzers into a fuzzer of tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b ) -> Fuzz.Fuzzer ( a, b )"
+          },
+          {
+            "name": "tuple3",
+            "comment": " Turn a 3-tuple of fuzzers into a fuzzer of 3-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c ) -> Fuzz.Fuzzer ( a, b, c )"
+          },
+          {
+            "name": "tuple4",
+            "comment": " Turn a 4-tuple of fuzzers into a fuzzer of 4-tuples.\n",
+            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c, Fuzz.Fuzzer d ) -> Fuzz.Fuzzer ( a, b, c, d )"
+          },
+          {
+            "name": "tuple5",
+            "comment": " Turn a 5-tuple of fuzzers into a fuzzer of 5-tuples.\n",
+            "type": "( Fuzz.Fuzzer a , Fuzz.Fuzzer b , Fuzz.Fuzzer c , Fuzz.Fuzzer d , Fuzz.Fuzzer e ) -> Fuzz.Fuzzer ( a, b, c, d, e )"
+          },
+          {
+            "name": "unit",
+            "comment": " A fuzzer for the unit value. Unit is a type with only one value, commonly\nused as a placeholder.\n",
+            "type": "Fuzz.Fuzzer ()"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Expect",
         "comment": " A library to create `Expectation`s, which describe a claim to be tested.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
         "aliases": [
@@ -31400,134 +31563,6 @@
             "name": "true",
             "comment": " Passes if the argument is 'True', and otherwise fails with the given message.\n\n    Expect.true \"Expected the list to be empty.\" (List.isEmpty [])\n\n    -- Passes because (List.isEmpty []) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because List.isEmpty returns False, but we expect True.\n    List.isEmpty [ 42 ]\n        |> Expect.true \"Expected the list to be empty.\"\n\n    {-\n\n    Expected the list to be empty.\n\n    -}\n",
             "type": "String -> Bool -> Expect.Expectation"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Fuzz",
-        "comment": " This is a library of *fuzzers* you can use to supply values to your fuzz\ntests. You can typically pick out which ones you need according to their types.\n\nA `Fuzzer a` knows how to create values of type `a` in two different ways. It\ncan create them randomly, so that your test's expectations are run against many\nvalues. Fuzzers will often generate edge cases likely to find bugs. If the\nfuzzer can make your test fail, it also knows how to \"shrink\" that failing input\ninto more minimal examples, some of which might also cause the tests to fail. In\nthis way, fuzzers can usually find the smallest or simplest input that\nreproduces a bug.\n\n## Common Fuzzers\n@docs bool, int, intRange, float, floatRange, percentage, string, maybe, result, list, array\n\n## Working with Fuzzers\n@docs Fuzzer, map, frequency, frequencyOrCrash\n\n## Tuple Fuzzers\nInstead of using a tuple, consider using `fuzzN`.\n@docs tuple, tuple3, tuple4, tuple5\n\n## Uncommon Fuzzers\n@docs custom, char, unit, order\n\n",
-        "aliases": [
-          {
-            "name": "Fuzzer",
-            "comment": " The representation of fuzzers is opaque. Conceptually, a `Fuzzer a`\nconsists of a way to randomly generate values of type `a`, and a way to shrink\nthose values.\n",
-            "args": [
-              "a"
-            ],
-            "type": "Fuzz.Internal.Fuzzer a"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "array",
-            "comment": " Given a fuzzer of a type, create a fuzzer of an array of that type.\nGenerates random arrays of varying length, favoring shorter arrays.\n",
-            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Array.Array a)"
-          },
-          {
-            "name": "bool",
-            "comment": " A fuzzer for bool values.\n",
-            "type": "Fuzz.Fuzzer Bool"
-          },
-          {
-            "name": "char",
-            "comment": " A fuzzer for char values. Generates random ascii chars disregarding the control\ncharacters.\n",
-            "type": "Fuzz.Fuzzer Char"
-          },
-          {
-            "name": "custom",
-            "comment": " Build a custom `Fuzzer a` by providing a `Generator a` and a `Shrinker a`.\nGenerators are defined by [`mgold/elm-random-pcg`](http://package.elm-lang.org/packages/mgold/elm-random-pcg/latest),\nwhich is not core's Random module but has a compatible interface. Shrinkers are\ndefined in [`elm-community/shrink`](http://package.elm-lang.org/packages/elm-community/shrink/latest/).\n\nHere is an example for a record:\n\n    import Random.Pcg as Random\n    import Shrink\n\n    type alias Position =\n        { x : Int, y : Int }\n\n\n    position : Fuzzer Position\n    position =\n        Fuzz.custom\n            (Random.map2 Position (Random.int -100 100) (Random.int -100 100))\n            (\\{ x, y } -> Shrink.map Position (Shrink.int x) `Shrink.andMap` (Shrink.int y))\n\nHere is an example for a custom union type:\n\n    type Question\n        = Name String\n        | Age Int\n\n\n    question =\n        let\n            generator =\n                Random.bool `Random.andThen` (\\b ->\n                    if b then\n                        Random.map Name string.generator\n                    else\n                        Random.map Age (Random.int 0 120)\n                 )\n\n            shrinker question =\n                case question of\n                    Name n ->\n                        Shrink.string n |> Shrink.map Name\n\n                    Age i ->\n                        Shrink.int i |> Shrink.map Age\n        in\n            Fuzz.custom generator shrinker\n",
-            "type": "Random.Pcg.Generator a -> Shrink.Shrinker a -> Fuzz.Fuzzer a"
-          },
-          {
-            "name": "float",
-            "comment": " A fuzzer for float values. It will never produce `NaN`, `Infinity`, or `-Infinity`.\n",
-            "type": "Fuzz.Fuzzer Float"
-          },
-          {
-            "name": "floatRange",
-            "comment": " A fuzzer for float values within between a given minimum and maximum\nvalue, inclusive. Shrunken values will also be within the range.\n",
-            "type": "Float -> Float -> Fuzz.Fuzzer Float"
-          },
-          {
-            "name": "frequency",
-            "comment": " Create a new fuzzer by providing a list of fuzzers to pick from. Each fuzzer\nis associated with a `Float` weight; larger numbers mean the fuzzer in more\nlikely to get picked from.\n\nFor example, to create a `Fuzzer` that has a 1/4 chance of generating an int\nbetween -1 and -100, and a 3/4 chance of generating one between 1 and 100,\nyou could do this:\n\n    Fuzz.frequency\n        [ ( 1, Fuzz.intRange -100 -1 )\n        , ( 3, Fuzz.intRange 1 100 )\n        ]\n\nThis function returns a `Result` because it can fail in a few ways:\n\n* If you provide an empy list of frequencies\n* If any of the weights are less than 0\n* If the weights sum to 0\n\nAny of these will lead to an `Err`, with a `String` explaining what went wrong.\n",
-            "type": "List ( Float, Fuzz.Fuzzer a ) -> Result.Result String (Fuzz.Fuzzer a)"
-          },
-          {
-            "name": "frequencyOrCrash",
-            "comment": " Calls `frequency` and handles `Err` results by crashing with the given\nerror message.\n\nThis is useful in tests, where a crash will simply cause the test run to fail.\nThere is no danger to a production system there.\n",
-            "type": "List ( Float, Fuzz.Fuzzer a ) -> Fuzz.Fuzzer a"
-          },
-          {
-            "name": "int",
-            "comment": " A fuzzer for int values.\n",
-            "type": "Fuzz.Fuzzer Int"
-          },
-          {
-            "name": "intRange",
-            "comment": " A fuzzer for int values within between a given minimum and maximum value,\ninclusive. Shrunken values will also be within the range.\n",
-            "type": "Int -> Int -> Fuzz.Fuzzer Int"
-          },
-          {
-            "name": "list",
-            "comment": " Given a fuzzer of a type, create a fuzzer of a list of that type.\nGenerates random lists of varying length, favoring shorter lists.\n",
-            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (List a)"
-          },
-          {
-            "name": "map",
-            "comment": " Map a function over a fuzzer. Due to technical limitations, the resulting\nfuzzer performs no shrinking.\n",
-            "type": "(a -> b) -> Fuzz.Fuzzer a -> Fuzz.Fuzzer b"
-          },
-          {
-            "name": "maybe",
-            "comment": " Given a fuzzer of a type, create a fuzzer of a maybe for that type.\n",
-            "type": "Fuzz.Fuzzer a -> Fuzz.Fuzzer (Maybe.Maybe a)"
-          },
-          {
-            "name": "order",
-            "comment": " A fuzzer for order values.\n",
-            "type": "Fuzz.Fuzzer Basics.Order"
-          },
-          {
-            "name": "percentage",
-            "comment": " A fuzzer for percentage values. Generates random floats between `0.0` and\n`1.0`. It will test zero and one about 10% of the time each.\n",
-            "type": "Fuzz.Fuzzer Float"
-          },
-          {
-            "name": "result",
-            "comment": " Given fuzzers for an error type and a success type, create a fuzzer for\na result.\n",
-            "type": "Fuzz.Fuzzer error -> Fuzz.Fuzzer value -> Fuzz.Fuzzer (Result.Result error value)"
-          },
-          {
-            "name": "string",
-            "comment": " A fuzzer for string values. Generates random printable ascii strings whose\nlength is between 0 and 10.\n",
-            "type": "Fuzz.Fuzzer String"
-          },
-          {
-            "name": "tuple",
-            "comment": " Turn a tuple of fuzzers into a fuzzer of tuples.\n",
-            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b ) -> Fuzz.Fuzzer ( a, b )"
-          },
-          {
-            "name": "tuple3",
-            "comment": " Turn a 3-tuple of fuzzers into a fuzzer of 3-tuples.\n",
-            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c ) -> Fuzz.Fuzzer ( a, b, c )"
-          },
-          {
-            "name": "tuple4",
-            "comment": " Turn a 4-tuple of fuzzers into a fuzzer of 4-tuples.\n",
-            "type": "( Fuzz.Fuzzer a, Fuzz.Fuzzer b, Fuzz.Fuzzer c, Fuzz.Fuzzer d ) -> Fuzz.Fuzzer ( a, b, c, d )"
-          },
-          {
-            "name": "tuple5",
-            "comment": " Turn a 5-tuple of fuzzers into a fuzzer of 5-tuples.\n",
-            "type": "( Fuzz.Fuzzer a , Fuzz.Fuzzer b , Fuzz.Fuzzer c , Fuzz.Fuzzer d , Fuzz.Fuzzer e ) -> Fuzz.Fuzzer ( a, b, c, d, e )"
-          },
-          {
-            "name": "unit",
-            "comment": " A fuzzer for the unit value. Unit is a type with only one value, commonly\nused as a placeholder.\n",
-            "type": "Fuzz.Fuzzer ()"
           }
         ],
         "generated-with-elm-version": "0.17.1"
