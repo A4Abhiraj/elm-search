@@ -12244,7 +12244,8 @@ var _klaftertief$elm_search$Search_Model$initialResult = {
 var _klaftertief$elm_search$Search_Model$initialFilter = {
 	queryString: '',
 	query: _elm_lang$core$Native_List.fromArray(
-		[])
+		[]),
+	lastQuery: ''
 };
 var _klaftertief$elm_search$Search_Model$initialIndex = {
 	chunks: _elm_lang$core$Native_List.fromArray(
@@ -12258,9 +12259,9 @@ var _klaftertief$elm_search$Search_Model$Model = F3(
 var _klaftertief$elm_search$Search_Model$Index = function (a) {
 	return {chunks: a};
 };
-var _klaftertief$elm_search$Search_Model$Filter = F2(
-	function (a, b) {
-		return {queryString: a, query: b};
+var _klaftertief$elm_search$Search_Model$Filter = F3(
+	function (a, b, c) {
+		return {queryString: a, query: b, lastQuery: c};
 	});
 var _klaftertief$elm_search$Search_Model$Result = function (a) {
 	return {chunks: a};
@@ -12347,8 +12348,6 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 						{filter: _p0._0});
 				case 'SetFilterQueryString':
 					var _p1 = _p0._0;
-					var resultChunks = _elm_lang$core$String$isEmpty(_p1) ? _elm_lang$core$Native_List.fromArray(
-						[]) : model.result.chunks;
 					var filterFacts = model.filter;
 					var filter = _elm_lang$core$Native_Utils.update(
 						filterFacts,
@@ -12358,10 +12357,7 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 						});
 					return _elm_lang$core$Native_Utils.update(
 						model,
-						{
-							filter: filter,
-							result: {chunks: resultChunks}
-						});
+						{filter: filter});
 				case 'SetFilterQueryStringAndRunFilter':
 					var _v1 = _klaftertief$elm_search$Search_Model$RunFilter,
 						_v2 = A2(
@@ -12372,10 +12368,16 @@ var _klaftertief$elm_search$Search_Update$update = F2(
 					model = _v2;
 					continue update;
 				default:
+					var newFilter = function (filter) {
+						return _elm_lang$core$Native_Utils.update(
+							filter,
+							{lastQuery: model.filter.queryString});
+					};
 					return _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							result: A2(_klaftertief$elm_search$Search_Model$runFilter, model.filter, model.index)
+							result: A2(_klaftertief$elm_search$Search_Model$runFilter, model.filter, model.index),
+							filter: newFilter(model.filter)
 						});
 			}
 		}
@@ -12607,13 +12609,44 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 };
 var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p4) {
 	var _p5 = _p4;
+	var _p6 = _p5.result;
+	var viewChunks = _elm_lang$core$Basics$not(
+		_elm_lang$core$List$isEmpty(_p6.chunks)) ? A2(_elm_lang$core$List$map, _klaftertief$elm_search$Search_View$viewChunk, _p6.chunks) : _elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$p,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('No Results Found.')
+				]))
+		]);
+	var viewQuery = A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('searchQuery')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Showing results for: '),
+				A2(
+				_elm_lang$html$Html$b,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(_p5.filter.lastQuery)
+					]))
+			]));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$class('searchResult')
 			]),
-		A2(_elm_lang$core$List$map, _klaftertief$elm_search$Search_View$viewChunk, _p5.result.chunks));
+		A2(_elm_lang$core$List_ops['::'], viewQuery, viewChunks));
 };
 var _klaftertief$elm_search$Search_View$viewSearchIntro = function () {
 	var exampleSearchItem = function (query) {
@@ -12683,7 +12716,7 @@ var _klaftertief$elm_search$Search_View$viewSearchIntro = function () {
 			]));
 }();
 var _klaftertief$elm_search$Search_View$viewSearchBody = function (model) {
-	var searchBody = _elm_lang$core$String$isEmpty(model.filter.queryString) ? _klaftertief$elm_search$Search_View$viewSearchIntro : _klaftertief$elm_search$Search_View$viewSearchResults(model);
+	var searchBody = _elm_lang$core$String$isEmpty(model.filter.lastQuery) ? _klaftertief$elm_search$Search_View$viewSearchIntro : _klaftertief$elm_search$Search_View$viewSearchResults(model);
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -12693,9 +12726,9 @@ var _klaftertief$elm_search$Search_View$viewSearchBody = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[searchBody]));
 };
-var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p6) {
-	var _p7 = _p6;
-	var isDisabled = _elm_lang$core$List$isEmpty(_p7.index.chunks);
+var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p7) {
+	var _p8 = _p7;
+	var isDisabled = _elm_lang$core$List$isEmpty(_p8.index.chunks);
 	return A2(
 		_elm_lang$html$Html$form,
 		_elm_lang$core$Native_List.fromArray(
@@ -12718,7 +12751,7 @@ var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p6) {
 						_elm_lang$html$Html_Attributes$name('q'),
 						_elm_lang$html$Html_Attributes$type$('search'),
 						_elm_lang$html$Html_Events$onInput(_klaftertief$elm_search$Search_Model$SetFilterQueryString),
-						_elm_lang$html$Html_Attributes$value(_p7.filter.queryString),
+						_elm_lang$html$Html_Attributes$value(_p8.filter.queryString),
 						_elm_lang$html$Html_Attributes$disabled(isDisabled)
 					]),
 				_elm_lang$core$Native_List.fromArray(
@@ -12808,7 +12841,7 @@ var _klaftertief$elm_search$Web_Model$parseSearchString = function (searchString
 			'',
 			A2(_elm_lang$core$Dict$get, 'q', parts));
 		var query = _klaftertief$elm_search$Search_Model$queryListFromString(queryString);
-		return {queryString: queryString, query: query};
+		return {queryString: queryString, query: query, lastQuery: ''};
 	} else {
 		return _klaftertief$elm_search$Search_Model$initialFilter;
 	}
