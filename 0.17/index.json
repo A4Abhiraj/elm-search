@@ -429,16 +429,16 @@
   },
   {
     "name": "Bogdanp/elm-route",
-    "version": "2.0.3",
+    "version": "3.0.2",
     "docs": [
       {
         "name": "Route",
-        "comment": " This module exposes combinators for creating route parsers.\n\n@docs Route, Router\n\n## Routing\n@docs route, (:=), router, child, match, reverse\n\n## Route combinators\n@docs prefix, (<//>), and, (</>), suffix, (<>), static, custom, string, int\n",
+        "comment": " This module exposes combinators for creating route parsers.\n\n@docs Route, Router\n\n## Routing\n@docs route, (:=), router, match, reverse\n\n## Route combinators\n@docs static, custom, string, int, and, (</>), map\n",
         "aliases": [],
         "types": [
           {
             "name": "Route",
-            "comment": " Routes represent concrete parsers for paths. Routes can be combined\nand they keep track of their path components in order to provide\nautomatic reverse routing.\n ",
+            "comment": " Routes represent concrete parsers for paths. Routes can be combined\nand they keep track of their path components in order to provide\nautomatic reverse routing.\n",
             "args": [
               "a"
             ],
@@ -446,7 +446,7 @@
           },
           {
             "name": "Router",
-            "comment": " A Router is, at its core, a List of Routes.\n\n    sitemap = router [routeA, routeB]\n\n ",
+            "comment": " A Router is, at its core, a List of Routes.\n\n    sitemap : Router a\n    sitemap = router [routeA, routeB]\n\n",
             "args": [
               "a"
             ],
@@ -456,103 +456,79 @@
         "values": [
           {
             "name": ":=",
-            "comment": " A synonym for `route`.\n\n    type Sitemap\n      = HomeR ()\n\n    homeR : Route Sitemap\n    homeR = HomeR := static \"\"\n\n ",
-            "type": "(a -> res) -> Route.Route a -> Route.Route res",
+            "comment": " A synonym for `route`.\n\n    type Sitemap\n      = HomeR\n\n    homeR : Route Sitemap\n    homeR = HomeR := static \"\"\n\n",
+            "type": "a -> Route.Route (a -> b) -> Route.Route b",
             "associativity": "left",
             "precedence": 7
           },
           {
-            "name": "<//>",
-            "comment": " A synonym for `prefix`.\n\n    type Sitemap\n      = UserR Int\n\n    userR = UserR := \"users\" <//> int\n    sitemap = router [userR]\n\n    > match sitemap \"/users/\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe.Maybe Sitemap\n\n ",
-            "type": "String -> Route.Route res -> Route.Route res",
-            "associativity": "right",
-            "precedence": 9
-          },
-          {
             "name": "</>",
-            "comment": " A synonym for `and`.\n\n    type Sitemap\n      = AddR (Int, Int)\n\n    addR = AddR := int </> int\n    sitemap = router [addR]\n\n    > match sitemap \"/1/2\"\n    Just (AddR (1,2)) : Maybe.Maybe Sitemap\n\n ",
-            "type": "Route.Route a -> Route.Route b -> Route.Route ( a, b )",
+            "comment": " A synonym for `and`.\n\n    type Sitemap\n      = AddR Int Int\n\n    addR = AddR := int </> int\n    sitemap = router [addR]\n\n    > match sitemap \"/1/2\"\n    Just (AddR 1 2) : Maybe Sitemap\n\n",
+            "type": "Route.Route (a -> b) -> Route.Route (b -> c) -> Route.Route (a -> c)",
             "associativity": "left",
             "precedence": 8
           },
           {
-            "name": "<>",
-            "comment": " A synonym for `suffix`.\n\n    type Sitemap\n      = UserEmailsR Int\n      = UserEmailsR' (Int, ())\n\n    userEmailsR = UserEmailsR := \"users\" <//> int <> \"emails\"\n    userEmailsR' = UserEmailsR' := \"users\" <//> int </> static \"emails\"\n    sitemap = router [userEmailsR, userEmailsR']\n\n    > match sitemap \"/users/1/emails\"\n    Just (UserEmailsR 1) : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/1/emails-static\"\n    Just (UserEmailsR' (1,())) : Maybe.Maybe Sitemap\n\n ",
-            "type": "Route.Route res -> String -> Route.Route res",
-            "associativity": "right",
-            "precedence": 9
-          },
-          {
             "name": "and",
-            "comment": " Compose two Routes.\n\n    type Sitemap\n      = AddR (Int, Int)\n\n    addR = AddR := int `and` int\n    sitemap = router [addR]\n\n    > match sitemap \"/1/2\"\n    Just (AddR (1,2)) : Maybe.Maybe Sitemap\n\n ",
-            "type": "Route.Route a -> Route.Route b -> Route.Route ( a, b )"
-          },
-          {
-            "name": "child",
-            "comment": " Routers may be nested. This function is useful in situations\nwhere you want to split your routes into multiple types while still\nmaintaining a single top-level \"site map\".\n\n    type AdminSitemap\n      = AdminHomeR ()\n      | AdminUsersR ()\n\n    adminHomeR = AdminHomeR := static \"admin\"\n    adminUsersR = AdminHomeR := \"admin\" <//> static \"users\"\n    adminSitemap = router [adminHomeR, adminUsersR]\n\n    type Sitemap\n      = HomeR ()\n      | BlogR ()\n      | AdminR AdminSitemap\n\n    homeR = HomeR := static \"\"\n    blogR = BlogR := static \"blog\"\n    sitemap = router [homeR, blogR, child AdminR adminSitemap]\n\nSee `examples/Reuse.elm` for a more advanced use case of this.\n\n ",
-            "type": "(a -> b) -> Route.Router a -> Route.Route b"
+            "comment": " Compose two Routes.\n\n    type Sitemap\n      = AddR Int Int\n\n    addR = AddR := int `and` int\n    sitemap = router [addR]\n\n    > match sitemap \"/1/2\"\n    Just (AddR 1 2) : Maybe Sitemap\n\n",
+            "type": "Route.Route (a -> b) -> Route.Route (b -> c) -> Route.Route (a -> c)"
           },
           {
             "name": "custom",
-            "comment": " Create a Route with a custom Parser.\n\n    import Combine exposing (..)\n    import Combine.Infix exposing (..)\n\n    type Category\n      = Snippet\n      | Post\n\n    type Sitemap\n      = CategoryR Category\n\n    categoryR = CategoryR := \"categories\" <//> custom categoryParser\n    sitemap = router [categoryR]\n\n    > match sitemap \"/categories/a\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/categories/Post\"\n    Just (CategoryR Post) : Maybe.Maybe Sitemap\n\n    > match sitemap \"/categories/Snippet\"\n    Just (CategoryR Snippet) : Maybe.Maybe Sitemap\n\nSee `examples/Custom.elm` for a complete example.\n\n ",
-            "type": "Combine.Parser a -> Route.Route a"
+            "comment": " Create a Route with a custom Parser.\n\n    import Combine exposing (..)\n    import Combine.Infix exposing (..)\n\n    type Category\n      = Snippet\n      | Post\n\n    type Sitemap\n      = CategoryR Category\n\n    categoryR = CategoryR := static \"categories\" </> custom categoryParser\n    sitemap = router [categoryR]\n\n    > match sitemap \"/categories/a\"\n    Nothing : Maybe Sitemap\n\n    > match sitemap \"/categories/Post\"\n    Just (CategoryR Post) : Maybe Sitemap\n\n    > match sitemap \"/categories/Snippet\"\n    Just (CategoryR Snippet) : Maybe Sitemap\n\nSee `examples/Custom.elm` for a complete example.\n\n",
+            "type": "Combine.Parser a -> Route.Route ((a -> b) -> b)"
           },
           {
             "name": "int",
-            "comment": " A Route that matches any integer.\n\n    type Sitemap\n      = UserR Int\n\n    userR = UserR := \"users\" <//> int\n    sitemap = router [userR]\n\n    > match sitemap \"/users/a\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/-1\"\n    Just (UserR -1) : Maybe.Maybe Sitemap\n\n ",
-            "type": "Route.Route Int"
+            "comment": " A Route that matches any integer.\n\n    type Sitemap\n      = UserR Int\n\n    userR = UserR := static \"users\" </> int\n    sitemap = router [userR]\n\n    > match sitemap \"/users/a\"\n    Nothing : Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe Sitemap\n\n    > match sitemap \"/users/-1\"\n    Just (UserR -1) : Maybe Sitemap\n\n",
+            "type": "Route.Route ((Int -> a) -> a)"
+          },
+          {
+            "name": "map",
+            "comment": " Routers may be maped. This function is useful in situations\nwhere you want to split your routes into multiple types while still\nmaintaining a single top-level \"site map\".\n\n    type AdminSitemap\n      = AdminHomeR\n      | AdminUsersR\n\n    adminHomeR = AdminHomeR := static \"admin\"\n    adminUsersR = AdminHomeR := static \"admin/users\"\n    adminSitemap = router [adminHomeR, adminUsersR]\n\n    type Sitemap\n      = HomeR\n      | BlogR\n      | AdminR AdminSitemap\n\n    homeR = HomeR := static \"\"\n    blogR = BlogR := static \"blog\"\n    sitemap = router [homeR, blogR, map AdminR adminSitemap]\n\nSee `examples/Reuse.elm` for a more advanced use case of this.\n\n",
+            "type": "(a -> b) -> Route.Router a -> Route.Route b"
           },
           {
             "name": "match",
-            "comment": " Given a Router and an arbitrary String representing a path, this\nfunction will return the first Route that matches that path.\n\n    type Sitemap\n      = HomeR ()\n      | UsersR ()\n      | UserR Int\n\n    homeR = HomeR := static \"\"\n    usersR = UsersR := static \"users\"\n    usersR = UserR := \"users\" <//> int\n    sitemap = router [homeR, userR, usersR]\n\n    > match siteMap \"/a\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match siteMap \"/\"\n    Just (HomeR ()) : Maybe.Maybe Sitemap\n\n    > match siteMap \"/users\"\n    Just (UsersR ()) : Maybe.Maybe Sitemap\n\n    > match siteMap \"/users/1\"\n    Just (UserR 1) : Maybe.Maybe Sitemap\n\n    > match siteMap \"/users/1\"\n    Just (UserR 1) : Maybe.Maybe Sitemap\n\n ",
+            "comment": " Given a Router and an arbitrary String representing a path, this\nfunction will return the first Route that matches that path.\n\n    type Sitemap\n      = HomeR\n      | UsersR\n      | UserR Int\n\n    homeR = HomeR := static \"\"\n    usersR = UsersR := static \"users\"\n    usersR = UserR := static \"users\" </> int\n    sitemap = router [homeR, userR, usersR]\n\n    > match sitemap \"/a\"\n    Nothing : Maybe Sitemap\n\n    > match sitemap \"/\"\n    Just HomeR : Maybe Sitemap\n\n    > match sitemap \"/users\"\n    Just UsersR : Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe Sitemap\n\n",
             "type": "Route.Router a -> String -> Maybe.Maybe a"
           },
           {
-            "name": "prefix",
-            "comment": " Prefix a `Route` with a string.\n\n    type Sitemap\n      = UserR Int\n\n    userR = UserR := prefix \"users\" int\n    sitemap = router [userR]\n\n    > match sitemap \"/users/\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/1\"\n    Just (UserR 1) : Maybe.Maybe Sitemap\n\n ",
-            "type": "String -> Route.Route res -> Route.Route res"
-          },
-          {
             "name": "reverse",
-            "comment": " Render a path given a route and a list of route components.\n\n    type Sitemap\n      = HomeR ()\n      | UsersR ()\n      | UserR Int\n\n    homeR = HomeR := static \"\"\n    usersR = UsersR := static \"users\"\n    usersR = UserR := \"users\" <//> int\n    sitemap = router [homeR, userR, usersR]\n\n    > reverse homeR []\n    \"/\"\n\n    > reverse usersR []\n    \"/users\"\n\n    > reverse userR [\"1\"]\n    \"/users/1\"\n\nIf you are willing to write some boilerplate, this function can be used\nto construct a reasonably-safe reverse routing function specific to your\napplication:\n\n    render : Sitemap -> String\n    render r =\n      case r of\n        HomeR () -> reverse homeR []\n        UsersR () -> reverse usersR []\n        UserR uid -> reverse userR [toString uid]\n\n    > render (HomeR ())\n    \"/\"\n\n    > render (UsersR ())\n    \"/users\"\n\n    > render (UserR 1)\n    \"/users/1\"\n\nThis function will crash at runtime if there is a mismatch between the\nroute and the list of arguments that is passed in. For example:\n\n    > reverse deepR []\n    Error: Ran into a `Debug.crash` in module `Route`\n\n    This was caused by the `case` expression between lines 145 and 175.\n    One of the branches ended with a crash and the following value got through:\n\n        ([],[CInt,CInt,CInt])\n\n    The message provided by the code author is:\n\n        'reverse' called with an unexpected number of arguments\n\n    > reverse deepR [\"a\"]\n    Error: Ran into a `Debug.crash` in module `Route`\n\n    This was caused by the `case` expression between lines 171 and 176.\n    One of the branches ended with a crash and the following value got through:\n\n        Err (\"could not convert string 'a' to an Int\")\n\n    The message provided by the code author is:\n\n        could not convert string 'a' to an Int in a call to 'reverse'\n\n ",
+            "comment": " Render a path given a Route and a list of route components.\n\n    type Sitemap\n      = HomeR\n      | UsersR\n      | UserR Int\n\n    homeR = HomeR := static \"\"\n    usersR = UsersR := static \"users\"\n    usersR = UserR := static \"users\" </> int\n    sitemap = router [homeR, userR, usersR]\n\n    > reverse homeR []\n    \"/\"\n\n    > reverse usersR []\n    \"/users\"\n\n    > reverse userR [\"1\"]\n    \"/users/1\"\n\nIf you are willing to write some boilerplate, `reverse` can be used to\nconstruct a type safe reverse routing function specific to your\napplication:\n\n    toString : Sitemap -> String\n    toString r =\n      case r of\n        HomeR  -> reverse homeR []\n        UsersR  -> reverse usersR []\n        UserR uid -> reverse userR [toString uid]\n\n    > toString HomeR\n    \"/\"\n\n    > toString UsersR\n    \"/users\"\n\n    > toString (UserR 1)\n    \"/users/1\"\n\n`reverse` will crash at runtime if there is a mismatch between the\nroute and the list of arguments that is passed in. For example:\n\n    > reverse deepR []\n    Error: Ran into a `Debug.crash` in module `Route`\n\n    This was caused by the `case` expression between lines 145 and 175.\n    One of the branches ended with a crash and the following value got through:\n\n        ([],[CInt,CInt,CInt])\n\n    The message provided by the code author is:\n\n        'reverse' called with an unexpected number of arguments\n\n    > reverse deepR [\"a\"]\n    Error: Ran into a `Debug.crash` in module `Route`\n\n    This was caused by the `case` expression between lines 171 and 176.\n    One of the branches ended with a crash and the following value got through:\n\n        Err (\"could not convert string 'a' to an Int\")\n\n    The message provided by the code author is:\n\n        could not convert string 'a' to an Int in a call to 'reverse'\n\n",
             "type": "Route.Route a -> List String -> String"
           },
           {
             "name": "route",
-            "comment": " Declare a Route.\n\n    type Sitemap\n      = HomeR ()\n\n    homeR : Route Sitemap\n    homeR = route HomeR (static \"\")\n\n ",
-            "type": "(a -> res) -> Route.Route a -> Route.Route res"
+            "comment": " Declare a Route.\n\n    type Sitemap\n      = HomeR\n\n    homeR : Route Sitemap\n    homeR = route HomeR (static \"\")\n\n",
+            "type": "a -> Route.Route (a -> b) -> Route.Route b"
           },
           {
             "name": "router",
-            "comment": " Construct a Router from a list of Routes.\n\n    type Sitemap\n      = HomeR ()\n      | BlogR ()\n\n    homeR = HomeR := static \"\"\n    blogR = BlogR := static \"blog\"\n    sitemap = router [homeR, blogR]\n\n ",
+            "comment": " Construct a Router from a list of Routes.\n\n    type Sitemap\n      = HomeR\n      | BlogR\n\n    homeR = HomeR := static \"\"\n    blogR = BlogR := static \"blog\"\n    sitemap = router [homeR, blogR]\n\n",
             "type": "List (Route.Route a) -> Route.Router a"
           },
           {
             "name": "static",
-            "comment": " Create a Route that matches a static String.\n\n    type Sitemap\n      = BlogR ()\n\n    blogR = BlogR := static \"blog\"\n    sitemap = router [blogR]\n\n    > match sitemap \"/blog\"\n    Just (BlogR ()) : Maybe.Maybe Sitemap\n\n ",
-            "type": "String -> Route.Route ()"
+            "comment": " Create a Route that matches a static String.\n\n    type Sitemap\n      = BlogR\n\n    blogR = BlogR := static \"blog\"\n    sitemap = router [blogR]\n\n    > match sitemap \"/blog\"\n    Just BlogR : Maybe Sitemap\n\n",
+            "type": "String -> Route.Route (a -> a)"
           },
           {
             "name": "string",
-            "comment": " A Route that matches any string.\n\n    type Sitemap\n      = PostR String\n\n    postR = PostR := \"posts\" <//> string\n    sitemap = router [postR]\n\n    > match sitemap \"/posts/\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/posts/hello-world/test\"\n    Nothing : Maybe.Maybe Sitemap\n\n    > match sitemap \"/posts/hello-world\"\n    Just (PostR \"hello-world\") : Maybe.Maybe Sitemap\n\n ",
-            "type": "Route.Route String"
-          },
-          {
-            "name": "suffix",
-            "comment": " Suffix a `Route` with a string. This can be used in place\nof `static` when there are static path components at the end of a\npath.\n\n    type Sitemap\n      = UserEmailsR Int\n      = UserEmailsR' (Int, ())\n\n    userEmailsR = UserEmailsR := suffix \"emails\" (prefix \"users\" int)\n    userEmailsR' = UserEmailsR' := prefix \"users\" int `and` static \"emails-static\"\n    sitemap = router [userEmailsR, userEmailsR']\n\n    > match sitemap \"/users/1/emails\"\n    Just (UserEmailsR 1) : Maybe.Maybe Sitemap\n\n    > match sitemap \"/users/1/emails-static\"\n    Just (UserEmailsR' (1,())) : Maybe.Maybe Sitemap\n\n ",
-            "type": "String -> Route.Route res -> Route.Route res"
+            "comment": " A Route that matches any string.\n\n    type Sitemap\n      = PostR String\n\n    postR = PostR := static \"posts\" </> string\n    sitemap = router [postR]\n\n    > match sitemap \"/posts/\"\n    Nothing : Maybe Sitemap\n\n    > match sitemap \"/posts/hello-world/test\"\n    Nothing : Maybe Sitemap\n\n    > match sitemap \"/posts/hello-world\"\n    Just (PostR \"hello-world\") : Maybe Sitemap\n\n",
+            "type": "Route.Route ((String -> a) -> a)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Route.QueryString",
-        "comment": " This module exposes functions for working with query strings.\n\nYou can manipulate query strings:\n\n    empty\n      |> add \"a\" \"hello\"\n      |> add \"a\" \"goodbye\"\n      |> add \"b\" \"1\"\n      |> render\n\nAnd you can parse and extract their parameters:\n\n    let\n      qs = parse \"?a=1&a=2&a=test&b=hello\"\n      a = many int qs\n      b = one string qs |> Maybe.withDefault \"goodbye\"\n    in\n      (a, b)\n\n## Types\n@docs QueryString\n\n## Constructing QueryStrings\n@docs parse, empty\n\n## Manipulating parameters\n@docs render, add, remove, filter\n\n## Extracting parameters\n@docs all, one, many\n\n### Parsers\n@docs string, int\n",
+        "comment": " This module exposes functions for working with query strings.\n\nYou can manipulate `QueryString`s:\n\n    > empty\n    |   |> add \"a\" \"hello\"\n    |   |> add \"a\" \"goodbye\"\n    |   |> add \"b\" \"1\"\n    |   |> render\n    \"?a=hello&a=goodbye&b=1\" : String\n\nAnd you can parse and extract their parameters:\n\n    > let\n    |   qs = parse \"?a=1&a=2&a=test&b=hello\"\n    |   a = qs |> many int \"a\"\n    |   b = qs |> one string \"b\" |> Maybe.withDefault \"goodbye\"\n    | in\n    |   (a, b)\n    ([1, 2], \"hello\") : (List Int, String)\n\n## Types\n@docs QueryString\n\n## Constructing QueryStrings\n@docs parse, empty\n\n## Manipulating parameters\n@docs render, add, remove, filter\n\n## Extracting parameters\n@docs all, one, many\n\n### Parsers\n@docs string, int\n",
         "aliases": [],
         "types": [
           {
             "name": "QueryString",
-            "comment": " Represents a parsed query string. ",
+            "comment": " Represents a parsed query string.\n",
             "args": [],
             "cases": []
           }
@@ -560,61 +536,61 @@
         "values": [
           {
             "name": "add",
-            "comment": " Add a value to a key.\n\n    > parse \"?a=1&b=a&a=c\" |> add \"a\" \"2\" |> render\n    \"?a=2&a=1&a=c&b=a\" : String\n\n    > parse \"?a=1&b=a&a=c\" |> add \"d\" \"hello\" |> render\n    \"?a=1&a=c&b=a&d=hello\" : String\n\n ",
+            "comment": " Add a value to a key.\n\n    > parse \"?a=1&b=a&a=c\"\n    |   |> add \"a\" \"2\"\n    |   |> render\n    \"?a=2&a=1&a=c&b=a\" : String\n\n    > parse \"?a=1&b=a&a=c\"\n    |   |> add \"d\" \"hello\"\n    |   |> render\n    \"?a=1&a=c&b=a&d=hello\" : String\n\n",
             "type": "String -> String -> Route.QueryString.QueryString -> Route.QueryString.QueryString"
           },
           {
             "name": "all",
-            "comment": " Retrieve all of the values for a given key.\n\n    > parse \"?a=1&a=2\" |> all \"a\"\n    [\"1\",\"2\"] : List String\n\n    > parse \"?a=1&a=2\" |> all \"b\"\n    [] : List String\n\n ",
+            "comment": " Retrieve all of the values for a given key.\n\n    > parse \"?a=1&a=2\"\n    |   |> all \"a\"\n    [\"1\",\"2\"] : List String\n\n    > parse \"?a=1&a=2\"\n    |   |> all \"b\"\n    [] : List String\n\n",
             "type": "String -> Route.QueryString.QueryString -> List String"
           },
           {
             "name": "empty",
-            "comment": " Construct an empty QueryString. ",
+            "comment": " Construct an empty QueryString.\n",
             "type": "Route.QueryString.QueryString"
           },
           {
             "name": "filter",
-            "comment": " Filter a key's values.\n\n    > parse \"?a=1&b=a&a=c\" |> filter \"a\" ((==) \"1\") |> render\n    \"?a=1&b=a\" : String\n\n ",
+            "comment": " Filter a key's values.\n\n    > parse \"?a=1&b=a&a=c\"\n    |   |> filter \"a\" ((==) \"1\")\n    |   |> render\n    \"?a=1&b=a\" : String\n\n",
             "type": "String -> (String -> Bool) -> Route.QueryString.QueryString -> Route.QueryString.QueryString"
           },
           {
             "name": "int",
-            "comment": " A Parser that accepts any integer. ",
+            "comment": " A Parser that accepts any integer.\n",
             "type": "Combine.Parser Int"
           },
           {
             "name": "many",
-            "comment": " Retrieve zero or more values for some key. Values are funneled\nthrough the given parser before being returned.\n\n    > parse \"?a=1&a=c&a=2\" |> many int \"a\"\n    [1,2] : List Int\n\n ",
+            "comment": " Retrieve zero or more values for some key. Values are funneled\nthrough the given parser before being returned.\n\n    > parse \"?a=1&a=c&a=2\"\n    |   |> many int \"a\"\n    [1,2] : List Int\n\n",
             "type": "Combine.Parser a -> String -> Route.QueryString.QueryString -> List a"
           },
           {
             "name": "one",
-            "comment": " Retrieve a single value for a given key. Values are funneled through\nthe given parser before being returned.\n\n    > parse \"?a=1&a=2\" |> one string \"a\"\n    Just \"2\" : Maybe.Maybe String\n\n    > parse \"?a=1&a=2\" |> one int \"a\"\n    Just 2 : Maybe.Maybe Int\n\n    > parse \"?a=1&a=c\" |> one int \"a\"\n    Just 1 : Maybe.Maybe Int\n\n ",
+            "comment": " Retrieve a single value for a given key. Values are funneled through\nthe given parser before being returned.\n\n    > parse \"?a=1&a=2\"\n    |   |> one string \"a\"\n    Just \"2\" : Maybe.Maybe String\n\n    > parse \"?a=1&a=2\"\n    |   |> one int \"a\"\n    Just 2 : Maybe.Maybe Int\n\n    > parse \"?a=1&a=c\"\n    |   |> one int \"a\"\n    Just 1 : Maybe.Maybe Int\n\n",
             "type": "Combine.Parser a -> String -> Route.QueryString.QueryString -> Maybe.Maybe a"
           },
           {
             "name": "parse",
-            "comment": " Turn a String into a QueryString. The initial `?` is optional.\n\n    > parse \"\"\n    QueryString (Dict.fromList []) : Route.QueryString.QueryString\n\n    > parse \"?a=1&b=c&a=2\"\n    QueryString (Dict.fromList [(\"a\",[\"1\",\"2\"]),(\"b\",[\"c\"])])\n        : Route.QueryString.QueryString\n\n    > parse \"a=1&b=c&a=2\"\n    QueryString (Dict.fromList [(\"a\",[\"1\",\"2\"]),(\"b\",[\"c\"])])\n        : Route.QueryString.QueryString\n\n ",
+            "comment": " Turn a String into a QueryString. The initial `?` is optional.\n\n    > parse \"\"\n    QueryString (Dict.fromList []) : QueryString\n\n    > parse \"?a=1&b=c&a=2\"\n    QueryString (Dict.fromList [(\"a\",[\"1\",\"2\"]),(\"b\",[\"c\"])])\n        : QueryString\n\n    > parse \"a=1&b=c&a=2\"\n    QueryString (Dict.fromList [(\"a\",[\"1\",\"2\"]),(\"b\",[\"c\"])])\n        : QueryString\n\n",
             "type": "String -> Route.QueryString.QueryString"
           },
           {
             "name": "remove",
-            "comment": " Remove a key.\n\n    > parse \"?a=1&b=a&a=c\" |> remove \"a\" |> render\n    \"?b=a\" : String\n\n    > parse \"?a=1&b=a&a=c\" |> remove \"c\" |> render\n    \"?a=1&a=c&b=a\" : String\n\n ",
+            "comment": " Remove a key.\n\n    > parse \"?a=1&b=a&a=c\"\n    |   |> remove \"a\"\n    |   |> render\n    \"?b=a\" : String\n\n    > parse \"?a=1&b=a&a=c\"\n    |   |> remove \"c\"\n    |   |> render\n    \"?a=1&a=c&b=a\" : String\n\n",
             "type": "String -> Route.QueryString.QueryString -> Route.QueryString.QueryString"
           },
           {
             "name": "render",
-            "comment": " Render a QueryString to a String.\n\n    > parse \"?a=1&b=a&a=c\" |> render\n    \"?a=1&a=c&b=a\" : String\n\n ",
+            "comment": " Render a QueryString to a String.\n\n    > render (parse \"?a=1&b=a&a=c\")\n    \"?a=1&a=c&b=a\" : String\n\n",
             "type": "Route.QueryString.QueryString -> String"
           },
           {
             "name": "string",
-            "comment": " A Parser that accepts any string. ",
+            "comment": " A Parser that accepts any string.\n",
             "type": "Combine.Parser String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -42399,7 +42375,7 @@
   },
   {
     "name": "eskimoblood/elm-color-extra",
-    "version": "3.1.1",
+    "version": "3.2.0",
     "docs": [
       {
         "name": "Color.Gradient",
@@ -42474,65 +42450,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Color.Manipulate",
-        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale, scaleHsl, scaleRgb\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "darken",
-            "comment": " Decrease the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "desaturate",
-            "comment": " Decrease the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeIn",
-            "comment": " Increase the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "fadeOut",
-            "comment": " Decrease the opacity of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "grayscale",
-            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
-            "type": "Color.Color -> Color.Color"
-          },
-          {
-            "name": "lighten",
-            "comment": " Increase the lightning of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "rotateHue",
-            "comment": " Change the hue of a color. The angle value must be in degrees\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "saturate",
-            "comment": " Increase the saturation of a color\n",
-            "type": "Float -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "scaleHsl",
-            "comment": " Fluidly scale saturation, lightness and alpha channel.\n\nThat means that lightening an already-light color with `scaleHsl` won’t change the lightness much, but lightening\na dark color by the same amount will change it more dramatically.\n\nFor example, the lightness of a color can be anywhere between 0 and 1.0. If `scaleHsl (0, 0.4, 0) color` is called,\nthe resulting color’s lightness will be 40% of the way between its original lightness and 1.0. If\n`scaleHsl (0, -0.4, 0) color` is called instead, the lightness will be 40% of the way between the original\nand 0.\n\nThe values of the supplied tuple scale saturation, lightness, and opacity, respectively, and have a valid range of\n-1.0 to 1.0.\n\nThis function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
-            "type": "( Float, Float, Float ) -> Color.Color -> Color.Color"
-          },
-          {
-            "name": "scaleRgb",
-            "comment": " Fluidly scale red, green, blue, and alpha channels.\n\nThat means that reddening a already-red color with `scaleRgb` won’t change the redness much, but reddening a color\nwith little or no red by the same amount will change it more dramatically.\n\nFor example, the redness of a color can be anywhere between 0 and 255. If `scaleRgb (0.4, 0, 0, 0) color` is called,\nthe resulting color’s redness will be 40% of the way between its original redness and 255. If\n`scaleRgb (-0.4, 0, 0, 0) color` is called instead, the redness will be 40% of the way between the original\nand 0.\n\nThe values of the supplied tuple scale red, green, blue, and alpha channels, respectively, and have a valid range of\n-1.0 to 1.0.\n\nThis function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
-            "type": "( Float, Float, Float, Float ) -> Color.Color -> Color.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Color.Blending",
         "comment": "\n# Blending\nBased on the [Compositing and Blending Level 1](https://www.w3.org/TR/compositing-1/#blending)\n\n@docs multiply, screen, overlay, difference, exclusion, hardlight, softlight, colorBurn, colorDodge, lighten, darken\n",
         "aliases": [],
@@ -42592,6 +42509,75 @@
             "name": "softlight",
             "comment": "\nDarkens or lightens the colors, depending on the source color value.\nThe effect is similar to shining a diffused spotlight on the backdrop.\n",
             "type": "Color.Color -> Color.Color -> Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Color.Manipulate",
+        "comment": " A library for creating and manipulating colors.\n\n\n# Color adjustment\n@docs darken, lighten, saturate, desaturate, rotateHue, fadeIn, fadeOut, grayscale, scaleHsl, scaleRgb, mix, weightedMix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "darken",
+            "comment": " Decrease the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "desaturate",
+            "comment": " Decrease the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeIn",
+            "comment": " Increase the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "fadeOut",
+            "comment": " Decrease the opacity of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "grayscale",
+            "comment": " Convert the color to a greyscale version, aka set saturation to 0\n",
+            "type": "Color.Color -> Color.Color"
+          },
+          {
+            "name": "lighten",
+            "comment": " Increase the lightning of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "mix",
+            "comment": " Mixes two colors together.  This is the same as calling `weightedMix` with a weight of 0.5.\n",
+            "type": "Color.Color -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "rotateHue",
+            "comment": " Change the hue of a color. The angle value must be in degrees\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "saturate",
+            "comment": " Increase the saturation of a color\n",
+            "type": "Float -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "scaleHsl",
+            "comment": " Fluidly scale saturation, lightness and alpha channel.\n\nThat means that lightening an already-light color with `scaleHsl` won’t change the lightness much, but lightening\na dark color by the same amount will change it more dramatically.\n\nFor example, the lightness of a color can be anywhere between 0 and 1.0. If `scaleHsl (0, 0.4, 0) color` is called,\nthe resulting color’s lightness will be 40% of the way between its original lightness and 1.0. If\n`scaleHsl (0, -0.4, 0) color` is called instead, the lightness will be 40% of the way between the original\nand 0.\n\nThe values of the supplied tuple scale saturation, lightness, and opacity, respectively, and have a valid range of\n-1.0 to 1.0.\n\nThis function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
+            "type": "( Float, Float, Float ) -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "scaleRgb",
+            "comment": " Fluidly scale red, green, blue, and alpha channels.\n\nThat means that reddening a already-red color with `scaleRgb` won’t change the redness much, but reddening a color\nwith little or no red by the same amount will change it more dramatically.\n\nFor example, the redness of a color can be anywhere between 0 and 255. If `scaleRgb (0.4, 0, 0, 0) color` is called,\nthe resulting color’s redness will be 40% of the way between its original redness and 255. If\n`scaleRgb (-0.4, 0, 0, 0) color` is called instead, the redness will be 40% of the way between the original\nand 0.\n\nThe values of the supplied tuple scale red, green, blue, and alpha channels, respectively, and have a valid range of\n-1.0 to 1.0.\n\nThis function is inspired by the Sass function [scale-color](http://sass-lang.com/documentation/Sass/Script/Functions.html#scale_color-instance_method).\n",
+            "type": "( Float, Float, Float, Float ) -> Color.Color -> Color.Color"
+          },
+          {
+            "name": "weightedMix",
+            "comment": " Mixes two colors together.\n\nThis function takes the average of each of the RGB components, weighted by a provided value between 0 and 1.0. The\nopacity of the colors is also considered when weighting the components.\n\nThe weight specifies the amount of the first color that should be included in the returned color. For example, a weight\nof 0.5 means that half the first color and half the second color should be used. A weight of 0.25 means that a quarter\nof the first color and three quarters of the second color should be used.\n\nThis function uses the same algorithm as the [mix](http://sass-lang.com/documentation/Sass/Script/Functions.html#mix-instance_method) function in Sass.\n",
+            "type": "Color.Color -> Color.Color -> Float -> Color.Color"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -55902,11 +55888,11 @@
   },
   {
     "name": "krisajenkins/remotedata",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "docs": [
       {
         "name": "RemoteData",
-        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\nAnd that's it. A more accurate model of what's happening leads to a better UI.\n\n@docs RemoteData\n@docs WebData\n@docs map\n@docs mapFailure\n@docs mapBoth\n@docs andThen\n@docs withDefault\n@docs fromResult\n@docs toMaybe\n@docs asCmd\n@docs fromTask\n@docs append\n@docs isSuccess\n@docs update\n@docs pure\n@docs apply\n@docs (<$>)\n@docs (<*>)\n\n",
+        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\nAnd that's it. A more accurate model of what's happening leads to a better UI.\n\n@docs RemoteData\n@docs WebData\n@docs map\n@docs mapFailure\n@docs mapBoth\n@docs andThen\n@docs withDefault\n@docs fromResult\n@docs toMaybe\n@docs asCmd\n@docs fromTask\n@docs append\n@docs isSuccess\n@docs update\n@docs pure\n@docs apply\n@docs (<$>)\n@docs (<*>)\n@docs prism\n\n",
         "aliases": [
           {
             "name": "WebData",
@@ -56009,6 +55995,11 @@
             "name": "mapFailure",
             "comment": " Map a function into the `Failure` value.\n",
             "type": "(e -> f) -> RemoteData.RemoteData e a -> RemoteData.RemoteData f a"
+          },
+          {
+            "name": "prism",
+            "comment": " A monocle-compatible Prism.\n\nIf you use Monocle, you'll want this, otherwise you can ignore it.\n\nThe type signature is actually:\n\n    prism : Prism (RemoteData e a) a\n\n...but we use the more verbose type here to avoid introducing a dependency on Monocle.\n",
+            "type": "{ getOption : RemoteData.RemoteData e a -> Maybe.Maybe a , reverseGet : a -> RemoteData.RemoteData e a }"
           },
           {
             "name": "pure",
@@ -59734,7 +59725,7 @@
   },
   {
     "name": "mgold/elm-random-pcg",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "docs": [
       {
         "name": "Random.Pcg.Interop",
@@ -73572,156 +73563,96 @@
   },
   {
     "name": "sporto/hop",
-    "version": "5.1.0",
+    "version": "6.0.0",
     "docs": [
       {
         "name": "Hop",
-        "comment": " Navigation and routing utilities for single page applications. See [readme](https://github.com/sporto/hop) for usage.\n\n# Create URLs\n@docs makeUrl, makeUrlFromLocation\n\n# Match current URL\n@docs matchUrl\n\n# Reverse Routing\n@docs matcherToPath\n\n# Change query string\n@docs addQuery, setQuery, removeQuery, clearQuery\n\n",
+        "comment": " Navigation and routing utilities for single page applications. See [readme](https://github.com/sporto/hop) for usage.\n\n# Consuming an URL from the browser\n@docs ingest, makeResolver\n\n# Preparing a URL for changing the browser location\n@docs output, outputFromPath\n\n# Work with an Address record\n@docs pathFromAddress, queryFromAddress\n\n# Modify the query string\n@docs addQuery, setQuery, removeQuery, clearQuery\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "addQuery",
-            "comment": "\nAdd query string values (patches any existing values) to a location record.\n\n    addQuery query location\n\n    addQuery (Dict.Singleton \"b\" \"2\") { path = [], query = Dict.fromList [(\"a\", \"1\")] }\n\n    ==\n\n    { path = [], query = Dict.fromList [(\"a\", \"1\"), (\"b\", \"2\")] }\n\n- query is a dictionary with keys to add\n- location is a record representing the current location\n\nTo remove a value set the value to \"\"\n",
-            "type": "Hop.Types.Query -> Hop.Types.Location -> Hop.Types.Location"
+            "comment": "\nAdd query string values (patches any existing values) to an Address record.\n\n    addQuery query address\n\n    addQuery (Dict.Singleton \"b\" \"2\") { path = [], query = Dict.fromList [(\"a\", \"1\")] }\n\n    ==\n\n    { path = [], query = Dict.fromList [(\"a\", \"1\"), (\"b\", \"2\")] }\n\n- query is a dictionary with keys to add\n\nTo remove a key / value pair set the value to \"\"\n",
+            "type": "Hop.Types.Query -> Hop.Types.Address -> Hop.Types.Address"
           },
           {
             "name": "clearQuery",
-            "comment": " Clear all query string values\n\n    clearQuery location\n",
-            "type": "Hop.Types.Location -> Hop.Types.Location"
+            "comment": " Clear all query string values\n\n    clearQuery address\n",
+            "type": "Hop.Types.Address -> Hop.Types.Address"
           },
           {
-            "name": "makeUrl",
-            "comment": "\nMake a URL from a string, this will add # or the base path as necessary.\n\n    makeUrl config \"/users\"\n\n    ==\n\n    \"#/users\"\n",
-            "type": "Hop.Types.Config route -> String -> String"
+            "name": "ingest",
+            "comment": "\nConvert a raw url to an Address record. Use this function for 'normalizing' the URL before parsing it.\nThis conversion will take in account your basePath and hash configuration.\n\nE.g. with path routing\n\n    config =\n        { basePath = \"\"\n        , hash = False\n        }\n\n    ingest config \"http://localhost:3000/app/languages/1?k=1\"\n    -->\n    { path = [\"app\", \"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n\nE.g. with path routing and base path\n\n    config =\n        { basePath = \"/app/v1\"\n        , hash = False\n        }\n\n    ingest config \"http://localhost:3000/app/v1/languages/1?k=1\"\n    -->\n    { path = [\"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n\nE.g. with hash routing\n\n    config =\n        { basePath = \"\"\n        , hash = True\n        }\n\n    ingest config \"http://localhost:3000/app#/languages/1?k=1\"\n    -->\n    { path = [\"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n",
+            "type": "Hop.Types.Config -> String -> Hop.Types.Address"
           },
           {
-            "name": "makeUrlFromLocation",
-            "comment": "\nMake a URL from a location record.\n\n    makeUrlFromLocation config { path = [\"users\", \"1\"], query = Dict.empty }\n\n    ==\n\n    \"#/users/1\"\n\n",
-            "type": "Hop.Types.Config route -> Hop.Types.Location -> String"
+            "name": "makeResolver",
+            "comment": "\n`makeResolver` normalizes the URL using your config and then gives that normalised URL to your parser.\n\nUse this for creating a function to give to `Navigation.makeParser`. \nSee examples in `docs/matching-routes.md`.\n\n    Hop.makeResolver hopConfig parse\n\n`makeResolver` takes 2 arguments.\n\n### Config e.g.\n\n    { basePath = \"\"\n    , hash = False\n    }\n\n### Parse function\n\nA function that receives the normalised path and returns the result of parsing it.\n\n    parse path =\n        path\n            |> UrlParser.parse identity routes\n            |> Result.withDefault NotFoundRoute\n\nYou parse function will receive the path like this:\n\n`http://example.com/users/1` --> 'users/1/'\n\nSo it won't have a leading /, but it will have a trailing /. This is because the way UrlParse works.\n\n### Return value from resolver\n\nAfter being called with a URL the resolver will return a tuple with `(parse result, address)` e.g.\n\n    resolver =\n        Hop.makeResolver hopConfig parse\n\n    resolver \"http://example.com/index.html#/users/2\"\n\n    -->\n\n    ( UserRoute 2, { path = [\"users\", \"2\"], query = ...} )\n\n### Example\n\nA complete example looks like:\n\n    urlParser : Navigation.Parser ( Route, Address )\n    urlParser =\n        let\n            parse path =\n                path\n                    |> UrlParser.parse identity routes\n                    |> Result.withDefault NotFoundRoute\n\n            resolver =\n                Hop.makeResolver hopConfig parse\n        in\n            Navigation.makeParser (.href >> resolver)\n\n",
+            "type": "Hop.Types.Config -> (String -> result) -> String -> ( result, Hop.Types.Address )"
           },
           {
-            "name": "matchUrl",
-            "comment": "\nMatch a URL.\nThis function returns a tuple with the first element being the matched route and the second a location record.\nConfig is the router Config record.\n\n    matchUrl config \"/users/1\"\n\n    ==\n\n    (User 1, { path = [\"users\", \"1\"], query = Dict.fromList [] })\n\n",
-            "type": "Hop.Types.Config route -> String -> ( route, Hop.Types.Location )"
+            "name": "output",
+            "comment": "\nConvert an Address record to an URL to feed the browser.\nThis will take in account your basePath and hash config.\n\nE.g. with path routing\n\n    output config { path = [\"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n    -->\n    \"/languages/1?k=1\"\n\nE.g. with hash routing\n\n    output config { path = [\"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n    -->\n    \"#/languages/1?k=1\"\n",
+            "type": "Hop.Types.Config -> Hop.Types.Address -> String"
           },
           {
-            "name": "matcherToPath",
-            "comment": "\nGenerates a path from a matcher. Use this for reverse routing.\n\nThe last parameters is a list of strings. You need to pass one string for each dynamic parameter that this route takes.\n\n    matcherToPath bookReviewMatcher [\"1\", \"2\"]\n\n    ==\n\n    \"/books/1/reviews/2\"\n",
-            "type": "Hop.Types.PathMatcher a -> List String -> String"
+            "name": "outputFromPath",
+            "comment": "\nConvert a string to an URL to feed the browser.\nThis will take in account your basePath and hash config.\n\nE.g. with path routing\n\n    outputFromPath config \"/languages/1?k=1\"\n    -->\n    \"/languages/1?k=1\"\n\nE.g. with path routing + basePath\n\n    outputFromPath config \"/languages/1?k=1\"\n    -->\n    \"/app/languages/1?k=1\"\n\nE.g. with hash routing\n\n    output config \"/languages/1?k=1\"\n    -->\n    \"#/languages/1?k=1\"\n",
+            "type": "Hop.Types.Config -> String -> String"
+          },
+          {
+            "name": "pathFromAddress",
+            "comment": "\nGet the path as a string from an Address record.\n\n    address = { path = [\"languages\", \"1\" ], query = Dict.singleton \"k\" \"1\" }\n\n    pathFromAddress address\n    -->\n    \"/languages/1\"\n",
+            "type": "Hop.Types.Address -> String"
+          },
+          {
+            "name": "queryFromAddress",
+            "comment": "\nGet the query as a string from an Address record.\n\n    address = { path = [\"app\"], query = Dict.singleton \"k\" \"1\" }\n\n    queryFromAddress address\n    -->\n    \"?k=1\"\n",
+            "type": "Hop.Types.Address -> String"
           },
           {
             "name": "removeQuery",
-            "comment": "\nRemove one key from the query string\n\n    removeQuery key location\n",
-            "type": "String -> Hop.Types.Location -> Hop.Types.Location"
+            "comment": "\nRemove one key from the query string\n\n    removeQuery key address\n",
+            "type": "String -> Hop.Types.Address -> Hop.Types.Address"
           },
           {
             "name": "setQuery",
-            "comment": "\nSet query string values (removes existing values).\n\n    setQuery query location\n",
-            "type": "Hop.Types.Query -> Hop.Types.Location -> Hop.Types.Location"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Hop.Matchers",
-        "comment": "\nFunctions for building matchers\n\n# Building matchers\n@docs match1, match2, match3, match4, nested1, nested2, int, str, regex\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "int",
-            "comment": " Parameter matcher that matches an integer\n\n    match2 User \"/users/\" int\n",
-            "type": "Combine.Parser Int"
-          },
-          {
-            "name": "match1",
-            "comment": "\nCreate a matcher with one static segment.\n\n    type Route = Books\n\n    match1 Books \"/books\"\n\nThis will match exactly\n\n    \"/books\"\n",
-            "type": "route -> String -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "match2",
-            "comment": "\nCreate a matcher with one static segment and one dynamic parameter.\n\n    type Route = Book Str\n\n    match2 Book \"/books/\" str\n\nThis will match a path like\n\n    \"/books/abc\"\n",
-            "type": "(param1 -> route) -> String -> Combine.Parser param1 -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "match3",
-            "comment": " Create a matcher with three segments.\n\n    type Route = BookReviews Int\n\n    match3 BookReviews \"/books/\" int \"/reviews\"\n\nThis will match a path like\n\n    \"/books/1/reviews\"\n",
-            "type": "(param1 -> route) -> String -> Combine.Parser param1 -> String -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "match4",
-            "comment": " Create a matcher with four segments.\n\n    type Route = BookChapter Int String\n\n    match4 BookChapter \"/books/\" int \"/chapters/\" str\n\nThis will match a path like\n\n    \"/books/1/chapters/abc\"\n\n",
-            "type": "(param1 -> param2 -> route) -> String -> Combine.Parser param1 -> String -> Combine.Parser param2 -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "nested1",
-            "comment": " Create a matcher with two segments and nested routes\n\n    type CategoriesRoute = Games | Business | Product Int\n    type Route = ShopCategories CategoriesRoute\n\n    nested1 ShopCategories \"/shop\" categoriesRoutes\n\nThis could match paths like (depending on the nested routes)\n\n    \"/shop/games\"\n    \"/shop/business\"\n    \"/shop/product/1\"\n\n",
-            "type": "(subRoute -> route) -> String -> List (Hop.Types.PathMatcher subRoute) -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "nested2",
-            "comment": " Create a matcher with two segments and nested routes\n\n    type ReviewsRoutes = Reviews | Review Int\n    type Route = BookReviews ReviewsRoutes\n\n    nested2 BookReviews \"/books/\" int reviewsRoutes\n\nThis could match paths like (depending on the nested routes)\n\n    \"/books/1/reviews\"\n    \"/books/1/reviews/3\"\n\n",
-            "type": "(param1 -> subRoute -> route) -> String -> Combine.Parser param1 -> List (Hop.Types.PathMatcher subRoute) -> Hop.Types.PathMatcher route"
-          },
-          {
-            "name": "regex",
-            "comment": " Build your own string matcher using a regex\n\n    match2 CatchAllRoute \"/\" (regex \".+\")\n",
-            "type": "String -> Combine.Parser String"
-          },
-          {
-            "name": "str",
-            "comment": " Parameter matcher that matches a string, except /\n\n    match2 Token \"/token/\" str\n",
-            "type": "Combine.Parser String"
+            "comment": "\nSet the whole query string (removes any existing values).\n\n    setQuery query address\n",
+            "type": "Hop.Types.Query -> Hop.Types.Address -> Hop.Types.Address"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
         "name": "Hop.Types",
-        "comment": "\n\n# Types\n@docs Config, Router, PathMatcher, Query, Location\n\n# Create\n@docs newLocation, newQuery\n",
+        "comment": " Types used in Hop\n\n#Types\n@docs Config, Address, Query\n\n#Factories\n@docs newQuery, newAddress\n",
         "aliases": [
           {
-            "name": "Config",
-            "comment": " Configuration input for Hop.new\n\n- basePath: Only for pushState routing (not hash). e.g. \"/app\". All routing and matching is done after this basepath.\n- hash: True for hash routing, False for pushState routing.\n- matchers: A List of route matchers.\n- notFound: Route that will match when a location is not found.\n\n",
-            "args": [
-              "route"
-            ],
-            "type": "{ basePath : String , hash : Bool , matchers : List (Hop.Types.PathMatcher route) , notFound : route }"
-          },
-          {
-            "name": "Location",
-            "comment": " A Record that represents the current location\nIncludes a `path` and a `query`\n\n    {\n      path: String,\n      query: Query\n    }\n",
+            "name": "Address",
+            "comment": " A Record that represents the current location\nIncludes a `path` and a `query`\n\n    {\n      path: List String,\n      query: Query\n    }\n",
             "args": [],
             "type": "{ path : List String, query : Hop.Types.Query }"
           },
           {
-            "name": "PathMatcher",
-            "comment": " A path matcher\n",
-            "args": [
-              "action"
-            ],
-            "type": "{ parser : Combine.Parser action, segments : List String }"
+            "name": "Config",
+            "comment": " Hop Configuration\n\n- basePath: Only for pushState routing (not hash). e.g. \"/app\".\n- hash: True for hash routing, False for pushState routing.\n\n",
+            "args": [],
+            "type": "{ basePath : String, hash : Bool }"
           },
           {
             "name": "Query",
             "comment": " A Dict that holds query parameters\n\n    Dict.Dict String String\n",
             "args": [],
             "type": "Dict.Dict String String"
-          },
-          {
-            "name": "Router",
-            "comment": " Router record created by Hop.new\n",
-            "args": [],
-            "type": "{ run : Task.Task () () }"
           }
         ],
         "types": [],
         "values": [
           {
-            "name": "newLocation",
-            "comment": "\nCreate a empty Location record\n",
-            "type": "Hop.Types.Location"
+            "name": "newAddress",
+            "comment": "\nCreate an empty Address record\n",
+            "type": "Hop.Types.Address"
           },
           {
             "name": "newQuery",
@@ -76410,11 +76341,11 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
-        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild, goTo\n\n# Update API\n@docs updateDatum, replaceDatum, insertChild, appendChild\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
+        "comment": " A library for navigating and updating immutable trees. The elements in\nthe tree must have the same type. The trees are implemented in a Huet\nZipper fashion.\n\n# Types\n@docs Context, Breadcrumbs, Zipper\n\n# Navigation API\n@docs goToChild, goUp, goToRoot, goLeft, goRight, goToNext, goToPrevious, goToRightMostChild, goTo\n\n# Update API\n@docs updateDatum, replaceDatum, insertChild, appendChild, updateChildren\n\n# Access API\n@docs datum, maybeDatum\n\n\n# References\n[The Zipper, Gerard Huet](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)\n[Learn You A Haskell, Zippers, Miran Lipovaca](http://learnyouahaskell.com/zippers)\n\n# Future work\nMight be able to integrate existing [Rose Tree](http://package.elm-lang.org/packages/TheSeamau5/elm-rosetree) to work with the Zipper.\nWanted the first version to be self contained.\n\n",
         "aliases": [
           {
             "name": "Breadcrumbs",
@@ -76522,6 +76453,11 @@
             "name": "replaceDatum",
             "comment": " Replace the datum at the current Zipper focus. This allows complete\nreplacement of a node's datum information, ignoring the previous state of the\nnode.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> replaceDatum \"X\" -- Replaces \"b\" with \"X\"\n        &> goToRoot\n",
             "type": "a -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
+          },
+          {
+            "name": "updateChildren",
+            "comment": " Fully replace the children at the current Zipper focus.\n",
+            "type": "MultiwayTree.Forest a -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "updateDatum",
