@@ -12015,8 +12015,57 @@
   },
   {
     "name": "arturopala/elm-monocle",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "docs": [
+      {
+        "name": "Monocle.Common",
+        "comment": " Common lenses/prisms/optionals that most projects will use.\n\n@docs (=>)\n@docs maybe\n@docs array\n@docs dict\n@docs result\n@docs id\n@docs first\n@docs second\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "=>",
+            "comment": " Convenient infix operator for composing optionals.\n\n   .getOption (maybe => array 2) (Just [10..15])\n   > 12\n\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional b c -> Monocle.Optional.Optional a c"
+          },
+          {
+            "name": "array",
+            "comment": " Step into an `Array` at the given index.\n\n    array.getOption 2 (Array.fromList [10..15])\n    > Just 12\n\n    array.getOption 8 (Array.fromList [10..15])\n    > Nothing\n",
+            "type": "Int -> Monocle.Optional.Optional (Array.Array a) a"
+          },
+          {
+            "name": "dict",
+            "comment": " Step into a `Dict` with the given key.\n\n    dict.getOption \"Tom\" (Dict.fromList [(\"Tom\",\"Cat\")])\n    > Just \"Cat\"\n\n    dict.getOption \"Jerry\" (Dict.fromList [(\"Tom\",\"Cat\")])\n    > Nothing\n",
+            "type": "comparable -> Monocle.Optional.Optional (Dict.Dict comparable v) v"
+          },
+          {
+            "name": "first",
+            "comment": " Step into the first element of a pair.\n\n    first.get ('a', 'b')\n    > Just 'a'\n",
+            "type": "Monocle.Lens.Lens ( a, b ) a"
+          },
+          {
+            "name": "id",
+            "comment": " Step into a record with an `id` key.\n\n    id.get {id = 1000, name = ...}\n    > Just 1000\n\nSince records with an `id` field are incredible common, this is\nincluded for convenience. It also serves as a simple recipe for\ncreating record lenses.\n",
+            "type": "Monocle.Lens.Lens { a | id : b } b"
+          },
+          {
+            "name": "maybe",
+            "comment": " Step into a `Maybe` value.\n\n    maybe.set 5 Nothing\n    > Just 5\n",
+            "type": "Monocle.Optional.Optional (Maybe.Maybe a) a"
+          },
+          {
+            "name": "result",
+            "comment": " Step into the success value of a `Result`.\n\n    result.getOption (Ok 5)\n    > Just 5\n\n    result.getOption (Err \"500\")\n    > Nothing\n",
+            "type": "Monocle.Optional.Optional (Result.Result e a) a"
+          },
+          {
+            "name": "second",
+            "comment": " Step into the second element of a pair.\n\n    second.get ('a', 'b')\n    > Just 'b'\n",
+            "type": "Monocle.Lens.Lens ( a, b ) b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
       {
         "name": "Monocle.Optional",
         "comment": " A Optional is a weaker Lens and a weaker Prism\n\n# Definition\n@docs Optional\n\n# Derived methods\n@docs compose, composeLens, modifyOption, modify, zip\n\n# Conversion\n@docs fromPrism, fromLens\n\n# Example\n\n    addressRegionOptional : Optional Address String\n    addressRegionOptional =\n        let\n            getOption a = a.region\n\n            set r a = { a | region = Just r }\n        in\n            Optional getOption set\n",
