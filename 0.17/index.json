@@ -14349,7 +14349,7 @@
   },
   {
     "name": "ccapndave/elm-flat-map",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Maybe.FlatMap",
@@ -14388,12 +14388,68 @@
     ]
   },
   {
-    "name": "ccapndave/elm-update-extra",
-    "version": "2.1.0",
+    "name": "ccapndave/elm-list-map",
+    "version": "1.0.0",
     "docs": [
       {
+        "name": "ListMap",
+        "comment": " An Elm package that implements a key value store a a simple `List` of pairs.  Although this is horribly\ninefficient, it allows you to have any values as the key without having to worry about implementing\ncomparators or hash functions.\n\nUseful if you know that you aren't going to have a very long list.\n\n@docs ListMap, empty, get, set\n",
+        "aliases": [
+          {
+            "name": "ListMap",
+            "comment": " The ListMap type with a specified key and value.  The key can be any type.\n",
+            "args": [
+              "key",
+              "value"
+            ],
+            "type": "List ( key, value )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Return an empty ListMap\n",
+            "type": "ListMap.ListMap key value"
+          },
+          {
+            "name": "get",
+            "comment": " Look for the given key in the ListMap.  If the key can't be found this returns\nNothing.\n",
+            "type": "key -> ListMap.ListMap key value -> Maybe.Maybe value"
+          },
+          {
+            "name": "set",
+            "comment": " Replace or insert the given key value and return the updated ListMap.\n",
+            "type": "key -> value -> ListMap.ListMap key value -> ListMap.ListMap key value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "ccapndave/elm-update-extra",
+    "version": "2.2.0",
+    "docs": [
+      {
+        "name": "Update.Extra.Infix",
+        "comment": " Infix versions of functions in Update.Extra\n\n@docs (:>)\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": ":>",
+            "comment": " An infix version of Update.Extra.andThen.  Easy to remember because the\ncolon in the symbol represents piping two things through the chain (model and commands!).\n",
+            "type": "( model, Platform.Cmd.Cmd msg ) -> (model -> ( model, Platform.Cmd.Cmd msg )) -> ( model, Platform.Cmd.Cmd msg )",
+            "associativity": "left",
+            "precedence": 0
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Update.Extra",
-        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs addCmd\n@docs sequence\n@docs identity\n",
+        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs updateModel\n@docs addCmd\n@docs sequence\n@docs identity\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -14421,25 +14477,14 @@
             "name": "sequence",
             "comment": " Allows you to attach multiple messages to an update at once.\n\nFor example:\n\n    update msg model = model ! []\n      |> sequence update\n        [ AMessage\n        , AnotherMessage\n        , AThirdMessage\n        ]\n",
             "type": "(msg -> model -> ( model, Platform.Cmd.Cmd msg )) -> List msg -> ( model, Platform.Cmd.Cmd msg ) -> ( model, Platform.Cmd.Cmd msg )"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Update.Extra.Infix",
-        "comment": " Infix versions of functions in Update.Extra\n\n@docs (:>)\n",
-        "aliases": [],
-        "types": [],
-        "values": [
+          },
           {
-            "name": ":>",
-            "comment": " An infix version of Update.Extra.andThen.  Easy to remember because the\ncolon in the symbol represents piping two things through the chain (model and commands!).\n",
-            "type": "( model, Platform.Cmd.Cmd msg ) -> (model -> ( model, Platform.Cmd.Cmd msg )) -> ( model, Platform.Cmd.Cmd msg )",
-            "associativity": "left",
-            "precedence": 0
+            "name": "updateModel",
+            "comment": " Allows you to update the model in an update pipeline.\n\nFor example\n\n    update msg model = model ! []\n      |> updateModel \\model -> { model | a = 1 }\n      |> updateModel \\model -> { model | b = 2 }\n",
+            "type": "(model -> model) -> ( model, Platform.Cmd.Cmd msg ) -> ( model, Platform.Cmd.Cmd msg )"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -46243,7 +46288,7 @@
   },
   {
     "name": "freakingawesome/drunk-label",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "DrunkLabel",
@@ -46253,13 +46298,13 @@
             "name": "Model",
             "comment": " Contains the state of this component ",
             "args": [],
-            "type": "DrunkTyper.Model"
+            "type": "{ value : String , sobriety : Float , brashness : Float , minWait : Time.Time , maxWait : Time.Time , showCursor : Bool , cursorBlinkInterval : Time.Time , typoPool : Array.Array Char , internal : DrunkLabel.InternalModel }"
           }
         ],
         "types": [
           {
             "name": "Msg",
-            "comment": " You can modify the settings and sobriety on the fly by passing these messages in from the parent component.\n\nMost of these messages will cause the typist to backspace all the way to the beginning to start over.\n\n* `SetValue` changes the target value.\n* `SetSobriety` changes the accuracy percentage. It expects a value between 0 and 1.\n* `SetBrashness` changes the confidence level of the typist. The higher the value, the less likely the\ntypist is to realize they made a mistake. It expects a value between 0 and 1.\n* `SetSpeed` changes the min and max delays between each key press.\n* `ShowCursor` changes whether the cursor is visible.\n* `SetCursorBlinkInterval` changes how fast the cursor blinks\n* `SetTypoPool` changes the pool of characters from which typos are pulled\n",
+            "comment": " You can modify the settings and sobriety on the fly by passing these messages in from the parent component.\n\nMost of these messages will cause the typist to backspace all the way to the beginning to start over.\n\n* `SetValue` changes the target value.\n* `SetSobriety` changes the accuracy percentage. It expects a value between 0 and 1.\n* `SetBrashness` changes the confidence level of the typist. The higher the value, the less likely the\ntypist is to realize they made a mistake. It expects a value between 0 and 1.\n* `SetMinWait` changes the mininum delay between each key press.\n* `SetMaxWait` changes the maximum delay between each key press.\n* `ShowCursor` changes whether the cursor is visible.\n* `SetCursorBlinkInterval` changes how fast the cursor blinks\n* `SetTypoPool` changes the pool of characters from which typos are pulled\n",
             "args": [],
             "cases": [
               [
@@ -46281,9 +46326,14 @@
                 ]
               ],
               [
-                "SetSpeed",
+                "SetMinWait",
                 [
-                  "Time.Time",
+                  "Time.Time"
+                ]
+              ],
+              [
+                "SetMaxWait",
+                [
                   "Time.Time"
                 ]
               ],
@@ -47355,6 +47405,36 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "gilesbowkett/html-escape-sequences",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Unicode",
+        "comment": " Use HTML escape sequences with elm-lang/html. Supports all Unicode\ncharacters and recognizes decimal, hexadecimal and named escape sequences.\n@docs unEsc, text', txt\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "text'",
+            "comment": " Unescapes a string and then invokes `Html.text` on the result.\n\n    Html.text \"© &copy; &#169;\"  -- renders © &copy; &#169; to the page\n    text'     \"© &copy; &#169;\"  -- renders © © ©\n",
+            "type": "String -> Html.Html msg"
+          },
+          {
+            "name": "txt",
+            "comment": " Alias for `text'` that avoids apostrophes.\n",
+            "type": "String -> Html.Html msg"
+          },
+          {
+            "name": "unEsc",
+            "comment": " Unescapes all valid HTML escape sequences within a string.\n\n    unEsc \"© &COPY; &copy; &#169; &#x000A9; &cpy;\" == \"© © © © © &cpy;\"\n",
+            "type": "String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -60062,7 +60142,7 @@
   },
   {
     "name": "mgold/elm-date-format",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "docs": [
       {
         "name": "Date.Format",
@@ -60081,7 +60161,7 @@
             "type": "Date.Date -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
