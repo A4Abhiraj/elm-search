@@ -61389,11 +61389,11 @@
   },
   {
     "name": "nphollon/geo3d",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Frame",
-        "comment": " A Frame describes the difference between two coordinate systems -- the position and orientation of one reference frame relative to another.\n\n# Definition\n@docs Frame, identity\n\n# Changing Frames\n@docs setPosition, intrinsicNudge, extrinsicNudge, setOrientation, intrinsicRotate, extrinsicRotate, transformInto, transformOutOf, compose\n\n# Interop\n@docs encode, decode, toMat4\n",
+        "comment": " A Frame describes the difference between two coordinate systems -- the position and orientation of one reference frame relative to another.\n\n# Definition\n@docs Frame, identity\n\n# Changing Frames\n@docs setPosition, intrinsicNudge, extrinsicNudge, setOrientation, intrinsicRotate, extrinsicRotate, transformInto, transformOutOf, inverse, compose\n\n# Interop\n@docs encode, decode, toMat4\n",
         "aliases": [
           {
             "name": "Frame",
@@ -61443,6 +61443,11 @@
             "name": "intrinsicRotate",
             "comment": " Rotate a frame by a rotation defined within the frame.\n",
             "type": "Quaternion.Quaternion -> Frame.Frame -> Frame.Frame"
+          },
+          {
+            "name": "inverse",
+            "comment": " Given a frame A to B, return the frame B to A\n",
+            "type": "Frame.Frame -> Frame.Frame"
           },
           {
             "name": "setOrientation",
