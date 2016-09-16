@@ -13495,11 +13495,11 @@
   },
   {
     "name": "bcardiff/elm-debounce",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Debounce",
-        "comment": "\nThis modules allows easy usage of debounced events from the view.\n\n# Story\n\nSay you have an elm app where a button produce a `Clicked` message:\n\n```\ntype alias Model = { ... }\ntype Msg = Clicked | ...\n\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n\nview model = ... button [ onClick Clicked ] [ text \"click me!\" ] ...\n```\n\nwith this module you will be able to change the view using a `deb : Msg -> Msg`\nfunction that will state that the `Clicked` message should be debounced.\n\n```\nview model = ... button [ onClick (deb Clicked) ] [ text \"click me!\" ] ...\n```\n\nYou will want to specify the timeout for the debounce.\nThis is usually constant, hence, it does not belongs to the model or state of the app.\n\n```\ncfg : Debounce.Config\ncfg = ... configuration of the debounce component ...\n\ndeb : Msg -> Msg\ndeb = Debounce.debounce cfg\n```\n\nIn order to create a Debounce.Config you will need to go trough some boilerplate.\n\n1) Extend the model with `Debounce.State` (and initialize it with `Debounce.init`)\n\n```\ntype alias Model = { ... , d : Debounce.State , ... }\ninitialModel = { ... , d = Debounce.init , ... }\n-- you can choose any name for `d`\n```\n\n2) Extend Msg with a wrapper message that will be routed to Debounce module.\n\n```\ntype Msg = Clicked | Deb (Debounce.Msg Msg)\n-- you can choose any name for `Deb`\n```\n\n3) Extend `update`\n\n```\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n        Deb a ->\n            Debounce.update cfg a model\n```\n\n4) Configure the debounce component using `Debounce.config`\n\n```\ncfg : Debounce.Config\ncfg =\n    Debounce.config\n        .d                               -- getState   : Model -> Debounce.State\n        (\\model s -> { model | d = s })  -- setState   : Debounce.State -> Model -> Debounce.State\n        Deb                              -- msgWrapper : Msg a -> Msg\n        200                              -- timeout ms : Float\n```\n\n5) Enjoy!\n\nIf the message that is wanted to be debounced hold data:\n\n```\ntype Msg = UserInput String\nview model = ... input [ onInput UserInput ] [] ...\n```\n\nYou will need to use `Debounce.debounce1`\n\n```\nview model = ... input [ onInput (deb1 UserInput) ] [] ...\n\ndeb1 : (a -> Msg) -> (a -> Msg)\ndeb1 = Debounce.debounce1 cfg\n```\n\n# Functions to create `deb` `deb1` nice helpers\n\n@docs debounce\n@docs debounce1\n\n# Boilerplate functions\n\n@docs init\n@docs config\n@docs update\n\n# Opaque structures\n\n@docs Config\n@docs State\n@docs Msg\n\n",
+        "comment": "\nThis modules allows easy usage of debounced events from the view.\n\n# Story\n\nSay you have an elm app where a button produce a `Clicked` message:\n\n```\ntype alias Model = { ... }\ntype Msg = Clicked | ...\n\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n\nview model = ... button [ onClick Clicked ] [ text \"click me!\" ] ...\n```\n\nwith this module you will be able to change the view using a `deb : Msg -> Msg`\nfunction that will state that the `Clicked` message should be debounced.\n\n```\nview model = ... button [ onClick (deb Clicked) ] [ text \"click me!\" ] ...\n```\n\nYou will want to specify the timeout for the debounce.\nThis is usually constant, hence, it does not belongs to the model or state of the app.\n\n```\ncfg : Debounce.Config\ncfg = ... configuration of the debounce component ...\n\ndeb : Msg -> Msg\ndeb = Debounce.debounce cfg\n```\n\nIn order to create a Debounce.Config you will need to go trough some boilerplate.\n\n1) Extend the model with `Debounce.State` (and initialize it with `Debounce.init`)\n\n```\ntype alias Model = { ... , d : Debounce.State , ... }\ninitialModel = { ... , d = Debounce.init , ... }\n-- you can choose any name for `d`\n```\n\n2) Extend Msg with a wrapper message that will be routed to Debounce module.\n\n```\ntype Msg = Clicked | Deb (Debounce.Msg Msg)\n-- you can choose any name for `Deb`\n```\n\n3) Extend `update`\n\n```\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n        Deb a ->\n            Debounce.update cfg a model\n```\n\n4) Configure the debounce component using `Debounce.config`\n\n```\ncfg : Debounce.Config\ncfg =\n    Debounce.config\n        .d                               -- getState   : Model -> Debounce.State\n        (\\model s -> { model | d = s })  -- setState   : Debounce.State -> Model -> Debounce.State\n        Deb                              -- msgWrapper : Msg a -> Msg\n        200                              -- timeout ms : Float\n```\n\n5) Enjoy!\n\n## Debouncing messages with values (onInput)\n\nIf the message that is wanted to be debounced hold data:\n\n```\ntype Msg = UserInput String\nview model = ... input [ onInput UserInput ] [] ...\n```\n\nYou will need to use `Debounce.debounce1`\n\n```\nview model = ... input [ onInput (deb1 UserInput) ] [] ...\n\ndeb1 : (a -> Msg) -> (a -> Msg)\ndeb1 = Debounce.debounce1 cfg\n```\n\n## Debouncing messages from the update\n\nIf you want to debounce a message generated from the `update`\n\n```\nupdate msg model =\n    case msg of\n        ... s ... ->\n            ( ... , debCmd <| UserInput s )\n\n        UserInput s ->\n            ( ... , Cmd.none )\n\n        Deb a ->\n            Debounce.update cfg a model\n\ndebCmd =\n    Debounce.debounceCmd cfg\n```\n\n# Functions to create `deb` `deb1` `debCmd` nice helpers\n\n@docs debounce\n@docs debounce1\n@docs debounceCmd\n\n# Boilerplate functions\n\n@docs init\n@docs config\n@docs update\n\n# Opaque structures\n\n@docs Config\n@docs State\n@docs Msg\n\n",
         "aliases": [],
         "types": [
           {
@@ -13541,6 +13541,11 @@
             "name": "debounce1",
             "comment": "\n  Helper function for Msg with 1 parameter.\n",
             "type": "Debounce.Config model msg -> (a -> msg) -> a -> msg"
+          },
+          {
+            "name": "debounceCmd",
+            "comment": "\n  Helper function for deboucing a Cmd.\n",
+            "type": "Debounce.Config model msg -> msg -> Platform.Cmd.Cmd msg"
           },
           {
             "name": "init",
@@ -56696,11 +56701,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "3.1.2",
+    "version": "3.2.0",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs wrap\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n@docs roundTo\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs wrap\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n@docs roundTo\n@docs uriFragment\n",
         "aliases": [],
         "types": [
           {
@@ -56799,6 +56804,11 @@
             "type": "Formatting.Format r (String -> r)"
           },
           {
+            "name": "uriFragment",
+            "comment": " Format a URI fragment.\n\nFor example:\n\n    print uriFragment \"this string\"\n\n    --> \"this%20string\"\n",
+            "type": "Formatting.Format r (String -> r)"
+          },
+          {
             "name": "wrap",
             "comment": " `wrap` one string with another. It's convenient for building strings\nlike `\"Invalid key '<keyname>'.\"  For example:\n\n    print (wrap \"'\" string) \"tester\"\n\n    --> \"'tester'\"\n",
             "type": "String -> Formatting.Format r a -> Formatting.Format r a"
@@ -56861,11 +56871,11 @@
   },
   {
     "name": "krisajenkins/remotedata",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "docs": [
       {
         "name": "RemoteData",
-        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\nAnd that's it. A more accurate model of what's happening leads to a better UI.\n\n@docs RemoteData\n@docs WebData\n@docs map\n@docs mapFailure\n@docs mapBoth\n@docs andThen\n@docs withDefault\n@docs fromResult\n@docs toMaybe\n@docs asCmd\n@docs fromTask\n@docs append\n@docs isSuccess\n@docs update\n@docs pure\n@docs apply\n@docs (<$>)\n@docs (<*>)\n@docs prism\n\n",
+        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n    type alias Model =\n        { news : WebData News }\n\n\nThen add in a message that will deliver the response:\n\n\n    type alias Msg\n        = NewsResponse (WebData News)\n\n\nNow we can create an HTTP get:\n\n\n    getNews : Cmd Msg\n    getNews =\n        Http.get decodeNews \"/news\"\n            |> RemoteData.asCmd\n            |> Cmd.map NewsResponse\n\n\nWe trigger it in our `init` function:\n\n\n    init : ( Model, Cmd Msg)\n    init =\n        ( { news = Loading }\n        , getNews\n        )\n\n\nWe handle it in our `update` function:\n\n\n    update msg model =\n        case msg of\n            NewsResponse response ->\n                ( { model | news = response }\n                , Cmd.none\n                )\n\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n    view : Model -> Html msg\n    view model =\n      case model.news of\n        NotAsked -> text \"Initialising.\"\n\n        Loading -> text \"Loading.\"\n\n        Failure err -> text (\"Error: \" ++ toString err)\n\n        Success news -> viewNews news\n\n\n    viewNews : News -> Html msg\n    viewNews news =\n        div []\n            [h1 [] [text \"Here is the news.\"]\n            , ...]\n\nAnd that's it. A more accurate model of what's happening leads to a better UI.\n\n@docs RemoteData\n@docs WebData\n@docs map\n@docs mapFailure\n@docs mapBoth\n@docs andThen\n@docs withDefault\n@docs fromResult\n@docs toMaybe\n@docs asCmd\n@docs fromTask\n@docs append\n@docs isSuccess\n@docs isFailure\n@docs update\n@docs pure\n@docs apply\n@docs (<$>)\n@docs (<*>)\n@docs prism\n\n",
         "aliases": [
           {
             "name": "WebData",
@@ -56948,6 +56958,11 @@
             "name": "fromTask",
             "comment": " Convert from a `Task` that may succeed or fail, to one that always\nsucceeds with the `RemoteData` that captures any errors.\n",
             "type": "Task.Task e a -> Task.Task Basics.Never (RemoteData.RemoteData e a)"
+          },
+          {
+            "name": "isFailure",
+            "comment": " State-checking predicate. Returns true if we've failed to load some data.\n",
+            "type": "RemoteData.RemoteData e a -> Bool"
           },
           {
             "name": "isSuccess",
@@ -59404,908 +59419,581 @@
   },
   {
     "name": "mdgriffith/elm-style-animation",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
-        "name": "Style",
-        "comment": " This library is for animating css properties and is meant to work well with elm-html.\n\nThe easiest way to get started with this library is to check out the examples that are included with the [source code](https://github.com/mdgriffith/elm-style-animation).\n\nOnce you have the basic structure of how to use this library, you can refer to this documentation to fill any gaps.\n\n\n# Base Definitions\n@docs Animation\n\n# Starting an animation\n@docs animate, queue, repeat, queueRepeat, forever\n\n# Creating animations\n@docs delay, spring, duration, easing, andThen\n\n# Animating Properties\n@docs to, set, update\n\n# Render a Animation into CSS or as SVG attributes\n@docs render, renderAttr\n\n# Set the starting style\n@docs init\n\n# Managing Commands\n@docs on, tick\n\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "Animation",
-            "comment": " An Animation of CSS properties.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "andThen",
-            "comment": " Append another keyframe.  This is used for multistage animations.\n\nFor example, to cycle through colors, we'd use the following:\n\n      Style.animate\n          |> Style.to\n              [ BackgroundColor\n                    Style.toRGBA 100 100 100 1.0\n              ]\n          |> Style.andThen -- create a new keyframe\n          |> Style.duration (1*second)\n          |> Style.to\n              [ BackgroundColor\n                    Style.toRGBA 178 201 14 1.0\n              ]\n          |> Style.andThen\n          |> Style.to\n              [ BackgroundColor\n                    Style.toRGBA 58 40 69 1.0\n              ]\n          |> Style.on model.style\n",
-            "type": "Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "animate",
-            "comment": " Begin describing an animation.  This animation will cleanly interrupt any animation that is currently running.\n\n      Style.animate\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left 0 Px\n             , Opacity 1\n             ]\n         |> Style.on model.style\n\n",
-            "type": "Style.PreAction"
-          },
-          {
-            "name": "delay",
-            "comment": " Specify a delay.\nIf not specified, the default is 0.\n\n     Style.animate\n         |> Style.duration (0.4*second)\n         |> Style.delay (0.5*second)\n         |> Style.to\n             [ Left 0 Px\n             , Opacity 1\n             ]\n         |> Style.on model.style\n",
-            "type": "Time.Time -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "duration",
-            "comment": " Specify a duration.  This is ignored unless an easing is specified as well!  This is because spring functions (the default), have dynamically created durations.\n\nIf an easing is specified but no duration, the default duration is 350ms.\n\n     Style.animate\n         |> Style.easing (\\x -> x)  -- linear easing\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left 0 Px\n             , Opacity 1\n             ]\n         |> Style.on model.style\n",
-            "type": "Time.Time -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "easing",
-            "comment": " Specify an easing function.  It is expected that values should match up at the beginning and end.  So, f 0 == 0 and f 1 == 1.  The default easing is sinusoidal in-out.\n\n",
-            "type": "(Float -> Float) -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "forever",
-            "comment": " For use when defining animations that repeat forever.\n\n  import Style exposing (forever)\n\n  Style.repeat forever\n       |> Style.update\n              [ Rotate ((+) 1) Turn\n              ]\n       |> Style.on model.style\n\n",
-            "type": "Float"
-          },
-          {
-            "name": "init",
-            "comment": " Create an initial style for your init model.\n\n__Note__ All properties that you animate must be present in the init or else that property won't be animated.\n\n",
-            "type": "Style.PropertyHelpers.Style -> Style.Animation"
-          },
-          {
-            "name": "on",
-            "comment": " Apply an update to a Animation model.\n\n     Style.animate\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left 0 Px\n             , Opacity 1\n             ]\n         |> Style.on model.style\n\n",
-            "type": "Style.Animation -> Style.PreAction -> Style.Animation"
-          },
-          {
-            "name": "queue",
-            "comment": " The same as `animate` but instead of interrupting the current animation, this will queue up after the current animation is finished.\n\n      Style.queue\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n\n",
-            "type": "Style.PreAction"
-          },
-          {
-            "name": "queueRepeat",
-            "comment": " Start a repeating animation after the current animation has finished.\n\n      Style.queueRepeat 3\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n\nYou can repeat forever by providing Infinity as the number.\n\n      Style.queueRepeat forever\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n\n\n",
-            "type": "Float -> Style.PreAction"
-          },
-          {
-            "name": "render",
-            "comment": " Render into concrete css that can be directly applied to 'style' in elm-html\n\n    div [ style Style.render widget.style) ] [ ]\n\n",
-            "type": "Style.Animation -> List ( String, String )"
-          },
-          {
-            "name": "renderAttr",
-            "comment": " Render into svg attributes.\n\n    polygon (Style.renderAttr widget.style) [ ]\n\n",
-            "type": "Style.Animation -> List (Svg.Attribute msg)"
-          },
-          {
-            "name": "repeat",
-            "comment": " Interrupt the current animation and begin repeating the specified one.\n\n      Style.repeat 3\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n\nYou can repeat forever by providing Infinity as the number.\n\n      Style.repeat forever\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n\n\n",
-            "type": "Float -> Style.PreAction"
-          },
-          {
-            "name": "set",
-            "comment": " Apply a style immediately.  This takes a list of static style properties, meaning the no `Style.to` functions, only concrete numbers and values.\n\n\n    Style.animate\n         |> Style.duration (0.4*second)\n         |> Style.to\n             [ Opacity (Style.to 1)\n             ]\n      |> Style.andThen\n         |> Style.set\n             [ Display None\n             ]\n         |> Style.on model.style\n\n",
-            "type": "Style.PropertyHelpers.Style -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "spring",
-            "comment": " Animate based on spring physics.\n\nYou'll need to provide both a stiffness and a dampness to this function.\n\n__Note:__ This will cause both `duration` and `easing` to be ignored as they are now controlled by the spring.\n\n     Style.animate\n      -- |> Style.spring Style.noWobble -- set using a UI preset\n         |> Style.spring\n                { stiffness = 400\n                , damping = 28\n                }\n         |> Style.to\n             [ Left (Style.to 0) Px\n             , Opacity (Style.to 1)\n             ]\n         |> Style.on model.style\n",
-            "type": "Style.Spring.Presets.SpringProps -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "tick",
-            "comment": " Step the animation\n",
-            "type": "Float -> Style.Animation -> Style.Animation"
-          },
-          {
-            "name": "to",
-            "comment": " Animate to a statically specified style.\n\n",
-            "type": "Style.PropertyHelpers.Style -> Style.PreAction -> Style.PreAction"
-          },
-          {
-            "name": "update",
-            "comment": " Update a style based on it's previous value.\n\n     Style.animate\n          |> Style.update\n              [ Cx ((+) 1)\n              , Cy ((+) 1)\n              , Color greyscale\n              ]\n          |> Style.on model.style\n\n",
-            "type": "List Style.PropertyHelpers.Retarget -> Style.PreAction -> Style.PreAction"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Style.Spring.Presets",
-        "comment": "\n\n@docs SpringProps, noWobble, gentle, wobbly, stiff\n\n",
+        "name": "Animation",
+        "comment": " A library for animations.\n\n# Setting up an animation\n@docs State, subscription, Msg, render\n\n# Creating an animation\n@docs  interrupt, queue, wait, to, toWith, toWithEach, set, repeat, loop, update, style, styleWith, styleWithEach, spring, easing, speed\n\n# Animatable Properties\n@docs opacity, display, inline, inlineBlock, flex, inlineFlex, block, none, top, left, right, bottom, width, height, padding, paddingLeft, paddingRight, paddingTop, paddingBottom, margin, marginLeft, marginRight, marginTop, marginBottom, color, backgroundColor, borderColor, borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, borderRadius, borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius, shadow, textShadow, insetShadow\n\n# Transforms\n@docs scale, scale3d, rotate, rotate3d, translate, translate3d\n\n# Animatable CSS Filters\n@docs filterUrl, blur, brightness, contrast, grayscale, greyscale, hueRotate, invert, saturate, sepia\n\n# Animatable Svg Properties\n@docs fill, stroke, strokeWidth, x, y, cx, cy, radius, radiusX, radiusY, points\n\n# Constructing an Svg Path\n@docs path, move, moveTo, close, QuadraticCurve, curve, curveTo, CubicCurve, curve2, curve2To\n\n\n# Units\n@docs px, percent, em, rem, turn, deg, grad, rad\n\n# Advanced\n@docs custom, exactly\n\n\n\n",
         "aliases": [
           {
-            "name": "SpringProps",
-            "comment": " A type for spring properties, stiffness and damping.\n",
+            "name": "CubicCurve",
+            "comment": " ",
             "args": [],
-            "type": "{ stiffness : Float, damping : Float }"
+            "type": "{ control1 : ( Float, Float ) , control2 : ( Float, Float ) , point : ( Float, Float ) }"
+          },
+          {
+            "name": "Msg",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.Tick"
+          },
+          {
+            "name": "QuadraticCurve",
+            "comment": " ",
+            "args": [],
+            "type": "{ control : ( Float, Float ), point : ( Float, Float ) }"
+          },
+          {
+            "name": "State",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.Animation Basics.Never"
           }
         ],
         "types": [],
         "values": [
           {
-            "name": "gentle",
-            "comment": " A spring preset.\n",
-            "type": "Style.Spring.Presets.SpringProps"
+            "name": "backgroundColor",
+            "comment": " ",
+            "type": "Color.Color -> Animation.Model.Property"
           },
           {
-            "name": "noWobble",
-            "comment": " A spring preset.\n",
-            "type": "Style.Spring.Presets.SpringProps"
+            "name": "block",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
           },
           {
-            "name": "stiff",
-            "comment": " A spring preset.\n",
-            "type": "Style.Spring.Presets.SpringProps"
+            "name": "blur",
+            "comment": " Create a CSS blur filter, these stack with other filters.\n",
+            "type": "Animation.Length -> Animation.Model.Property"
           },
           {
-            "name": "wobbly",
-            "comment": " A spring preset.\n",
-            "type": "Style.Spring.Presets.SpringProps"
+            "name": "borderBottomLeftRadius",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderBottomRightRadius",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderBottomWidth",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderColor",
+            "comment": " ",
+            "type": "Color.Color -> Animation.Model.Property"
+          },
+          {
+            "name": "borderLeftWidth",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderRadius",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderRightWidth",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderTopLeftRadius",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderTopRightRadius",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderTopWidth",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "borderWidth",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "bottom",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "brightness",
+            "comment": " Create a CSS brightness filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "close",
+            "comment": " Close a Path\n",
+            "type": "Animation.Model.PathCommand"
+          },
+          {
+            "name": "color",
+            "comment": " ",
+            "type": "Color.Color -> Animation.Model.Property"
+          },
+          {
+            "name": "contrast",
+            "comment": " Create a CSS contrast filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "curve",
+            "comment": " Create a relative curve with 1 control point and a target point.\nThis is a Quadratic curve in teh svg spec.\n",
+            "type": "Animation.QuadraticCurve -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "curve2",
+            "comment": " Create a relative Curve with 2 control points and a target point.\nThis is a Cubic Curve in the svg spec.\n\n",
+            "type": "Animation.CubicCurve -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "curve2To",
+            "comment": " Create an absolute Curve with 2 control points and a target point.\nThis is a Cubic Curve in the svg spec.\n\n",
+            "type": "Animation.CubicCurve -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "curveTo",
+            "comment": " Create an absolute curve with 1 control point and a target point.\nThis is a Quadratic curve in teh svg spec.\n",
+            "type": "Animation.QuadraticCurve -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "custom",
+            "comment": " Advanced: Animate a custom property by providing it's name, a float value, and the units it should have.\n\n",
+            "type": "String -> Float -> String -> Animation.Model.Property"
+          },
+          {
+            "name": "cx",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "cy",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "deg",
+            "comment": " ",
+            "type": "Float -> Animation.Angle"
+          },
+          {
+            "name": "display",
+            "comment": " ",
+            "type": "Animation.DisplayMode -> Animation.Model.Property"
+          },
+          {
+            "name": "easing",
+            "comment": " Specify a custom Easing to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\n",
+            "type": "{ duration : Time.Time, ease : Float -> Float } -> Animation.Model.Interpolation"
+          },
+          {
+            "name": "em",
+            "comment": " ",
+            "type": "Float -> Animation.Length"
+          },
+          {
+            "name": "exactly",
+            "comment": " Set a non-numerical to an exact value.  For example\n\n```\nAnimation.set\n    [ Animation.exactly \"border-style\" \"dashed\"\n    ]\n```\n\n",
+            "type": "String -> String -> Animation.Model.Property"
+          },
+          {
+            "name": "fill",
+            "comment": " ",
+            "type": "Color.Color -> Animation.Model.Property"
+          },
+          {
+            "name": "filterUrl",
+            "comment": " Create a CSS filter-url\n",
+            "type": "String -> Animation.Model.Property"
+          },
+          {
+            "name": "flex",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "grad",
+            "comment": " ",
+            "type": "Float -> Animation.Angle"
+          },
+          {
+            "name": "grayscale",
+            "comment": " Create a CSS grayscale filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "greyscale",
+            "comment": " Create a CSS grayscale filter, these stack with other filters.  This is a spelling adjusment.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "height",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "hueRotate",
+            "comment": " Create a CSS hue-rotation filter, these stack with other filters.\n",
+            "type": "Animation.Angle -> Animation.Model.Property"
+          },
+          {
+            "name": "inline",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "inlineBlock",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "inlineFlex",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "insetShadow",
+            "comment": " ",
+            "type": "Animation.Shadow -> Animation.Model.Property"
+          },
+          {
+            "name": "interrupt",
+            "comment": " Interrupt any running animations with the following animation.\n\n",
+            "type": "List (Animation.Model.Step msg) -> Animation.Model.Animation msg -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "invert",
+            "comment": " Create a CSS invert filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "left",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "loop",
+            "comment": " Repeat a number of steps until interrupted.\n",
+            "type": "List (Animation.Model.Step msg) -> Animation.Model.Step msg"
+          },
+          {
+            "name": "margin",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "marginBottom",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "marginLeft",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "marginRight",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "marginTop",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "move",
+            "comment": "\n",
+            "type": "Float -> Float -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "moveTo",
+            "comment": " ",
+            "type": "Float -> Float -> Animation.Model.PathCommand"
+          },
+          {
+            "name": "none",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "opacity",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "padding",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "paddingBottom",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "paddingLeft",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "paddingRight",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "paddingTop",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "path",
+            "comment": " To be used with the svg path element.  Renders as the d property.\n",
+            "type": "List Animation.Model.PathCommand -> Animation.Model.Property"
+          },
+          {
+            "name": "percent",
+            "comment": " ",
+            "type": "Float -> Animation.Length"
+          },
+          {
+            "name": "points",
+            "comment": " Used with the svg polygon element\n",
+            "type": "List ( Float, Float ) -> Animation.Model.Property"
+          },
+          {
+            "name": "px",
+            "comment": " ",
+            "type": "Float -> Animation.Length"
+          },
+          {
+            "name": "queue",
+            "comment": " Add an animation to the queue, execiting once the current animation finishes\n\n",
+            "type": "List (Animation.Model.Step msg) -> Animation.Model.Animation msg -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "rad",
+            "comment": " ",
+            "type": "Float -> Animation.Angle"
+          },
+          {
+            "name": "radius",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "radiusX",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "radiusY",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "rem",
+            "comment": " ",
+            "type": "Float -> Animation.Length"
+          },
+          {
+            "name": "render",
+            "comment": " Render style properties into the style attribute and render other attributes as needed for svg.\n\nCombine \"transform\" based properties into a single css property.\n\nCombine \"filter\" based properties into a single css property.\n",
+            "type": "Animation.Model.Animation msgA -> List (Html.Attribute msgB)"
+          },
+          {
+            "name": "repeat",
+            "comment": " Repeat a number of steps `n` times.\n",
+            "type": "Int -> List (Animation.Model.Step msg) -> Animation.Model.Step msg"
+          },
+          {
+            "name": "right",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "rotate",
+            "comment": " ",
+            "type": "Animation.Angle -> Animation.Model.Property"
+          },
+          {
+            "name": "rotate3d",
+            "comment": " ",
+            "type": "Animation.Angle -> Animation.Angle -> Animation.Angle -> Animation.Model.Property"
+          },
+          {
+            "name": "saturate",
+            "comment": " Create a CSS saturate filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "scale",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "scale3d",
+            "comment": " ",
+            "type": "Float -> Float -> Float -> Animation.Model.Property"
+          },
+          {
+            "name": "sepia",
+            "comment": " Create a CSS sepia filter, these stack with other filters.\n",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "set",
+            "comment": " Immediately set properties to a value.\n",
+            "type": "List Animation.Model.Property -> Animation.Model.Step msg"
+          },
+          {
+            "name": "shadow",
+            "comment": " ",
+            "type": "Animation.Shadow -> Animation.Model.Property"
+          },
+          {
+            "name": "speed",
+            "comment": " Specify a speed to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\n",
+            "type": "{ perSecond : Float } -> Animation.Model.Interpolation"
+          },
+          {
+            "name": "spring",
+            "comment": " Specify a custom Spring to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\n",
+            "type": "{ stiffness : Float, damping : Float } -> Animation.Model.Interpolation"
+          },
+          {
+            "name": "stroke",
+            "comment": " ",
+            "type": "Color.Color -> Animation.Model.Property"
+          },
+          {
+            "name": "strokeWidth",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "style",
+            "comment": " Set an initial style for an animation.\n\nUses standard defaults for interpolation\n\n",
+            "type": "List Animation.Model.Property -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "styleWith",
+            "comment": " Set an initial style for an animation and override the standard default for interpolation.\n\n",
+            "type": "Animation.Model.Interpolation -> List Animation.Model.Property -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "styleWithEach",
+            "comment": " Set an initial style for an animation and specify the interpolation to be used for each property.\n\nAny property not listed will receive interpolation based on the standard defaults.\n",
+            "type": "List ( Animation.Model.Interpolation, Animation.Model.Property ) -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "subscription",
+            "comment": " Create a subscription to AnimationFrame.times.\n\nIt is throttled based on whether the current animation is running or not.\n\n",
+            "type": "(Animation.Msg -> msgB) -> List (Animation.Model.Animation msgA) -> Platform.Sub.Sub msgB"
+          },
+          {
+            "name": "textShadow",
+            "comment": " ",
+            "type": "Animation.Shadow -> Animation.Model.Property"
+          },
+          {
+            "name": "to",
+            "comment": " Animate to a set of target values, using the default interpolation.\n\n",
+            "type": "List Animation.Model.Property -> Animation.Model.Step msg"
+          },
+          {
+            "name": "toWith",
+            "comment": " Animate to a set of target values. Use a temporary interpolation instead of the default.\nThe interpolation will revert back to default after this step.\n",
+            "type": "Animation.Model.Interpolation -> List Animation.Model.Property -> Animation.Model.Step msg"
+          },
+          {
+            "name": "toWithEach",
+            "comment": " Animate to a set of target values. Use a temporary interpolation for each property instead of the default.\nThe interpolation will revert back to default after this step.\n",
+            "type": "List ( Animation.Model.Interpolation, Animation.Model.Property ) -> Animation.Model.Step msg"
+          },
+          {
+            "name": "top",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "translate",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "translate3d",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Length -> Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "turn",
+            "comment": " ",
+            "type": "Float -> Animation.Angle"
+          },
+          {
+            "name": "update",
+            "comment": " Update an animation.\n",
+            "type": "Animation.Msg -> Animation.Model.Animation msg -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "wait",
+            "comment": " ",
+            "type": "Time.Time -> Animation.Model.Step msg"
+          },
+          {
+            "name": "width",
+            "comment": " ",
+            "type": "Animation.Length -> Animation.Model.Property"
+          },
+          {
+            "name": "x",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
+          },
+          {
+            "name": "y",
+            "comment": " ",
+            "type": "Float -> Animation.Model.Property"
           }
         ],
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Style.Properties",
-        "comment": "\nAll animatable properties.\n\n@docs Property\n\n@docs Length, Angle, DisplayMode\n\n@docs PathCommand\n\n@docs alignStartingPoint\n\n",
-        "aliases": [],
-        "types": [
+        "name": "Animation.Messenger",
+        "comment": " Import this module if you want the ability to send a Msg at any point during your animation.\n\n@docs State, update, send\n\n",
+        "aliases": [
           {
-            "name": "Angle",
-            "comment": " Units representing angles.\n",
-            "args": [],
-            "cases": [
-              [
-                "Deg",
-                []
-              ],
-              [
-                "Grad",
-                []
-              ],
-              [
-                "Rad",
-                []
-              ],
-              [
-                "Turn",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "DisplayMode",
-            "comment": " A Display value used for the display property.\nA display mode is not animated but can be set using Html.Animation.set\n",
-            "args": [],
-            "cases": [
-              [
-                "None",
-                []
-              ],
-              [
-                "Inline",
-                []
-              ],
-              [
-                "InlineBlock",
-                []
-              ],
-              [
-                "Block",
-                []
-              ],
-              [
-                "Flex",
-                []
-              ],
-              [
-                "InlineFlex",
-                []
-              ],
-              [
-                "ListItem",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Length",
-            "comment": " Units representing length.\n",
-            "args": [],
-            "cases": [
-              [
-                "Px",
-                []
-              ],
-              [
-                "Percent",
-                []
-              ],
-              [
-                "Rem",
-                []
-              ],
-              [
-                "Em",
-                []
-              ],
-              [
-                "Ex",
-                []
-              ],
-              [
-                "Ch",
-                []
-              ],
-              [
-                "Vh",
-                []
-              ],
-              [
-                "Vw",
-                []
-              ],
-              [
-                "Vmin",
-                []
-              ],
-              [
-                "Vmax",
-                []
-              ],
-              [
-                "Mm",
-                []
-              ],
-              [
-                "Cm",
-                []
-              ],
-              [
-                "In",
-                []
-              ],
-              [
-                "Pt",
-                []
-              ],
-              [
-                "Pc",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "PathCommand",
-            "comment": " Describe a path.  To be used in conjunction with the D property for styling svg.\n\n`To` versions of the commands are absolute, while others are relative.\n\n",
+            "name": "State",
+            "comment": " An Animation State that also tracks your `Msg` type.\n",
             "args": [
-              "a"
+              "msg"
             ],
-            "cases": [
-              [
-                "Move",
-                [
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "MoveTo",
-                [
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "Line",
-                [
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "LineTo",
-                [
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "Horizontal",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "HorizontalTo",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Vertical",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "VerticalTo",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Curve",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "CurveTo",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "Quadratic",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "QuadraticTo",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "SmoothQuadratic",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "SmoothQuadraticTo",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "Smooth",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "SmoothTo",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "Arc",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "ArcTo",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "LargeArc",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "LargeArcTo",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "Close",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Property",
-            "comment": " All currently animatable properties.\n",
-            "args": [
-              "a",
-              "color"
-            ],
-            "cases": [
-              [
-                "Display",
-                [
-                  "Style.Properties.DisplayMode"
-                ]
-              ],
-              [
-                "Opacity",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Height",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Width",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Left",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Top",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Right",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Bottom",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MaxHeight",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MaxWidth",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MinHeight",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MinWidth",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Padding",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "PaddingLeft",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "PaddingRight",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "PaddingTop",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "PaddingBottom",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Margin",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MarginLeft",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MarginRight",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MarginTop",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "MarginBottom",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderWidth",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderRadius",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderTopLeftRadius",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderTopRightRadius",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderBottomLeftRadius",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BorderBottomRightRadius",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "LetterSpacing",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "LineHeight",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "BackgroundPosition",
-                [
-                  "a",
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Color",
-                [
-                  "color"
-                ]
-              ],
-              [
-                "BackgroundColor",
-                [
-                  "color"
-                ]
-              ],
-              [
-                "BorderColor",
-                [
-                  "color"
-                ]
-              ],
-              [
-                "TransformOrigin",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Matrix",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "Matrix3d",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "Translate",
-                [
-                  "a",
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Translate3d",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "TranslateX",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "TranslateY",
-                [
-                  "a",
-                  "Style.Properties.Length"
-                ]
-              ],
-              [
-                "Scale",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Scale3d",
-                [
-                  "a",
-                  "a",
-                  "a"
-                ]
-              ],
-              [
-                "ScaleX",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "ScaleY",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "ScaleZ",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Rotate",
-                [
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "Rotate3d",
-                [
-                  "a",
-                  "a",
-                  "a",
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "RotateX",
-                [
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "RotateY",
-                [
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "Skew",
-                [
-                  "a",
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "SkewX",
-                [
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "SkewY",
-                [
-                  "a",
-                  "Style.Properties.Angle"
-                ]
-              ],
-              [
-                "Perspective",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "X",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Y",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Cx",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Cy",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "R",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Rx",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "Ry",
-                [
-                  "a"
-                ]
-              ],
-              [
-                "D",
-                [
-                  "List (Style.Properties.PathCommand a)"
-                ]
-              ],
-              [
-                "Points",
-                [
-                  "List ( a, a )"
-                ]
-              ],
-              [
-                "Fill",
-                [
-                  "color"
-                ]
-              ],
-              [
-                "Stroke",
-                [
-                  "color"
-                ]
-              ]
-            ]
+            "type": "Animation.Model.Animation msg"
           }
         ],
+        "types": [],
         "values": [
           {
-            "name": "alignStartingPoint",
-            "comment": " Given two lists of coordinates, rotate the list so that the lowest coordinate is first.\n\nThis is useful to align polygon coordinates so that they can morph smoothely into each other.\n",
-            "type": "List ( Float, Float ) -> List ( Float, Float )"
+            "name": "send",
+            "comment": " An animation `Step` which will send a message.  For example\n\n    Animation.interrupt\n        [ Animation.to [Animation.opacity 0]\n        , Animation.send OpacityIsNotZero\n        ]\n\n\n",
+            "type": "msg -> Animation.Model.Step msg"
+          },
+          {
+            "name": "update",
+            "comment": " An update that returns the updated animation as well as any messages sent in `Cmd` form.\n",
+            "type": "Animation.Model.Tick -> Animation.Model.Animation msg -> ( Animation.Model.Animation msg, Platform.Cmd.Cmd msg )"
           }
         ],
         "generated-with-elm-version": "0.17.0"
