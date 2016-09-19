@@ -46357,17 +46357,17 @@
   },
   {
     "name": "freakingawesome/drunk-label",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "docs": [
       {
         "name": "DrunkLabel",
-        "comment": " Mistyping as a service\n\n# Model\n@docs Flags, defaultFlags, defaultTypoPool, Model\n\n# Customization\n@docs Msg\n\n# Wiring\n@docs init, update, view, subscriptions\n\n# Using directly from javascript\n@docs main\n",
+        "comment": " Mistyping as a service\n\n# Model\n@docs Flags, defaultFlags, defaultTypoPool, defaultCursor, Model\n\n# Customization\n@docs Msg\n\n# Wiring\n@docs init, update, view, subscriptions\n\n# Using directly from javascript\n@docs main\n",
         "aliases": [
           {
             "name": "Flags",
             "comment": " Use Flags to pass in the initial state ",
             "args": [],
-            "type": "{ value : String , sobriety : Float , brashness : Float , minWait : Time.Time , maxWait : Time.Time , showCursor : Bool , cursorBlinkInterval : Time.Time , typoPool : String , initialSeed : Int }"
+            "type": "{ value : String , sobriety : Float , brashness : Float , minWait : Time.Time , maxWait : Time.Time , showCursor : Bool , cursor : String , cursorBlinkInterval : Time.Time , typoPool : String , initialSeed : Int }"
           }
         ],
         "types": [
@@ -46379,7 +46379,7 @@
           },
           {
             "name": "Msg",
-            "comment": " You can modify the settings and sobriety on the fly by passing these messages in from the parent component.\n\nMost of these messages will cause the typist to backspace all the way to the beginning to start over.\n\n* `SetValue` changes the target value.\n* `SetSobriety` changes the accuracy percentage. It expects a value between 0 and 1.\n* `SetBrashness` changes the confidence level of the typist. The higher the value, the less likely the\ntypist is to realize they made a mistake. It expects a value between 0 and 1.\n* `SetMinWait` changes the mininum delay between each key press.\n* `SetMaxWait` changes the maximum delay between each key press.\n* `ShowCursor` changes whether the cursor is visible.\n* `SetCursorBlinkInterval` changes how fast the cursor blinks\n* `SetTypoPool` changes the pool of characters from which typos are pulled\n",
+            "comment": " You can modify the settings and sobriety on the fly by passing these messages in from the parent component.\n\nMost of these messages will cause the typist to backspace all the way to the beginning to start over.\n\n* `SetValue` changes the target value.\n* `SetSobriety` changes the accuracy percentage. It expects a value between 0 and 1.\n* `SetBrashness` changes the confidence level of the typist. The higher the value, the less likely the\ntypist is to realize they made a mistake. It expects a value between 0 and 1.\n* `SetMinWait` changes the mininum delay between each key press.\n* `SetMaxWait` changes the maximum delay between each key press.\n* `ShowCursor` changes whether the cursor is visible.\n* `SetCursor` changes the string which acts as the cursor.\n* `SetCursorBlinkInterval` changes how fast the cursor blinks\n* `SetTypoPool` changes the pool of characters from which typos are pulled\n",
             "args": [],
             "cases": [
               [
@@ -46419,6 +46419,12 @@
                 ]
               ],
               [
+                "SetCursor",
+                [
+                  "String"
+                ]
+              ],
+              [
                 "SetCursorBlinkInterval",
                 [
                   "Time.Time"
@@ -46434,6 +46440,11 @@
           }
         ],
         "values": [
+          {
+            "name": "defaultCursor",
+            "comment": " The default cursor character, char code 9608 ",
+            "type": "String"
+          },
           {
             "name": "defaultFlags",
             "comment": " Sensible teetotaling defaults ",
@@ -46451,7 +46462,7 @@
           },
           {
             "name": "main",
-            "comment": " You can use DrunkLabel directly from javascript with the exposed main function.\n\n    var Elm = require(\"dist/elm/drunk-label.js\");\n    var node = document.getElementById(\"drunk-target\");\n\n    var flags = {\n      value: \"Hello, Elm!\",\n      sobriety: 1,\n      brashness: 0,\n      minWait: 30,\n      maxWait: 200,\n      showCursor: true,\n      cursorBlinkInterval: 500,\n      typoPool: \"\", // defaults to ascii 48-122\n      initialSeed: Date.now()\n    };\n\n    var app = Elm.DrunkLabel.embed(node, flags);\n\nThe use of main is unnecessary when embedded in an Elm app.\n",
+            "comment": " You can use DrunkLabel directly from javascript with the exposed main function.\n\n    var Elm = require(\"dist/elm/drunk-label.js\");\n    var node = document.getElementById(\"drunk-target\");\n\n    var flags = {\n      value: \"Hello, Elm!\",\n      sobriety: 1,\n      brashness: 0,\n      minWait: 30,\n      maxWait: 200,\n      showCursor: true,\n      cursor: \"\", // defaults to char code 9608\n      cursorBlinkInterval: 500,\n      typoPool: \"\", // defaults to ascii 48-122\n      initialSeed: Date.now()\n    };\n\n    var app = Elm.DrunkLabel.embed(node, flags);\n\nThe use of main is unnecessary when embedded in an Elm app.\n",
             "type": "Platform.Program DrunkLabel.Flags"
           },
           {
@@ -47340,7 +47351,7 @@
   },
   {
     "name": "ggb/numeral-elm",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "docs": [
       {
         "name": "Numeral",
@@ -47359,49 +47370,7 @@
             "type": "Language.Language -> String -> Float -> String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Languages.English",
-        "comment": " English language configuration.\n\n@docs lang\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lang",
-            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=englishOrdinal\n      , currency=\n        { symbol=\"$\"\n        }\n      }\n",
-            "type": "Language.Language"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Languages.Japanese",
-        "comment": " Japanese language configuration.\n\n@docs lang\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lang",
-            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"千\"\n        , million=\"百万\"\n        , billion=\"十億\"\n        , trillion=\"兆\"\n        }\n      , ordinal=japaneseOrdinal\n      , currency=\n        { symbol=\"¥\"\n        }\n      }\n",
-            "type": "Language.Language"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Languages.French",
-        "comment": " French language configuration.\n\n@docs lang\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lang",
-            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\" \"\n        , decimal=\",\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=frenchOrdinal\n      , currency=\n        { symbol=\"€\"\n        }\n      }\n\n",
-            "type": "Language.Language"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Languages.Italian",
@@ -47415,21 +47384,7 @@
             "type": "Language.Language"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Languages.German",
-        "comment": " German language configuration.\n\n@docs lang\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "lang",
-            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\" \"\n        , decimal=\",\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=germanOrdinal\n      , currency=\n        { symbol=\"€\"\n        }\n      }\n",
-            "type": "Language.Language"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Languages.BritishEnglish",
@@ -47443,7 +47398,63 @@
             "type": "Language.Language"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Languages.Japanese",
+        "comment": " Japanese language configuration.\n\n@docs lang\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lang",
+            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"千\"\n        , million=\"百万\"\n        , billion=\"十億\"\n        , trillion=\"兆\"\n        }\n      , ordinal=japaneseOrdinal\n      , currency=\n        { symbol=\"¥\"\n        }\n      }\n",
+            "type": "Language.Language"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Languages.English",
+        "comment": " English language configuration.\n\n@docs lang\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lang",
+            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\",\"\n        , decimal=\".\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=englishOrdinal\n      , currency=\n        { symbol=\"$\"\n        }\n      }\n",
+            "type": "Language.Language"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Languages.German",
+        "comment": " German language configuration.\n\n@docs lang\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lang",
+            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\" \"\n        , decimal=\",\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=germanOrdinal\n      , currency=\n        { symbol=\"€\"\n        }\n      }\n",
+            "type": "Language.Language"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Languages.French",
+        "comment": " French language configuration.\n\n@docs lang\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lang",
+            "comment": " Configuration data.\n\n    lang =\n      { delimiters=\n        { thousands=\" \"\n        , decimal=\",\"\n        }\n      , abbreviations=\n        { thousand=\"k\"\n        , million=\"m\"\n        , billion=\"b\"\n        , trillion=\"t\"\n        }\n      , ordinal=frenchOrdinal\n      , currency=\n        { symbol=\"€\"\n        }\n      }\n\n",
+            "type": "Language.Language"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Language",
@@ -47464,7 +47475,7 @@
         ],
         "types": [],
         "values": [],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -77559,6 +77570,85 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "vipentti/elm-dispatch",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Dispatch",
+        "comment": " Dispatch multiple messages in response to a single `Html.Event`.\n\n## Dispatch\n\n@docs forward\n@docs update\n\n## Events\n\n@docs on\n@docs onWithOptions\n\n## Configuration\n\nThese are tailored for writing UI component libraries\nwith stateful components, such as `elm-mdl`. These are mostly useful\nonly if you want to have an API where users specify\noptions as lists of things and we want to accumulate event-handlers\nfor various events.\n\nTo see how they are used in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) see [collecting the handlers](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L70-L73) and [adding them as attributes](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L112-L125)\n\n@docs Config, defaultConfig, setDecoder, getDecoder, setMsg, toAttributes\n@docs add\n@docs clear\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Config",
+            "comment": " Dispatch configuration type\n ",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add an event-handler to the current configuration\n ",
+            "type": "String -> Maybe.Maybe Html.Events.Options -> Json.Decode.Decoder msg -> Dispatch.Config msg -> Dispatch.Config msg"
+          },
+          {
+            "name": "clear",
+            "comment": " Clear event handlers in current configuration\n",
+            "type": "Dispatch.Config msg -> Dispatch.Config msg"
+          },
+          {
+            "name": "defaultConfig",
+            "comment": " Empty configuration\n ",
+            "type": "Dispatch.Config msg"
+          },
+          {
+            "name": "forward",
+            "comment": " Maps messages to commands\n",
+            "type": "List msg -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "getDecoder",
+            "comment": " Get the Dispatch message constructor\n",
+            "type": "Dispatch.Config msg -> Maybe.Maybe (Json.Decode.Decoder (List msg) -> Json.Decode.Decoder msg)"
+          },
+          {
+            "name": "on",
+            "comment": " Dispatch multiple decoders for a single event.\n ",
+            "type": "String -> (List msg -> msg) -> List (Json.Decode.Decoder msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onWithOptions",
+            "comment": " Dispatch multiple decoders for a single event.\nOptions apply to the whole event.\n ",
+            "type": "String -> (List msg -> msg) -> Html.Events.Options -> List (Json.Decode.Decoder msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "setDecoder",
+            "comment": " Tell Dispatch how to convert a list of decoders into a decoder for a single message.\n",
+            "type": "(Json.Decode.Decoder (List msg) -> Json.Decode.Decoder msg) -> Dispatch.Config msg -> Dispatch.Config msg"
+          },
+          {
+            "name": "setMsg",
+            "comment": " Tell Dispatch how to convert a list of messages into a single message. Alternative\nto `setDecoder`.\n",
+            "type": "(List msg -> msg) -> Dispatch.Config msg -> Dispatch.Config msg"
+          },
+          {
+            "name": "toAttributes",
+            "comment": " Returns a list of `Html.Attribute` containing handlers that\ndispatch multiple decoders on a single `Html.Event`\n ",
+            "type": "Dispatch.Config msg -> List (Html.Attribute msg)"
+          },
+          {
+            "name": "update",
+            "comment": " Runs the given `update` on all the messages and\nreturns the updated model including batching of\nany commands returned by running the `update`.\n",
+            "type": "(msg -> model -> ( model, Platform.Cmd.Cmd obs )) -> List msg -> model -> ( model, Platform.Cmd.Cmd obs )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
