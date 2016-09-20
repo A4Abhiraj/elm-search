@@ -23506,11 +23506,11 @@
   },
   {
     "name": "elm-community/dict-extra",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "docs": [
       {
         "name": "Dict.Extra",
-        "comment": " Convenience functions for working with `Dict`\n\n# List operations\n@docs groupBy, fromListBy\n\n# Manipulation\n@docs removeWhen, removeMany, keepOnly\n",
+        "comment": " Convenience functions for working with `Dict`\n\n# List operations\n@docs groupBy, fromListBy\n\n# Manipulation\n@docs removeWhen, removeMany, keepOnly, mapKeys\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -23528,6 +23528,11 @@
             "name": "keepOnly",
             "comment": " Keep a key-value pair if its key appears in the set.\n",
             "type": "Set.Set comparable -> Dict.Dict comparable v -> Dict.Dict comparable v"
+          },
+          {
+            "name": "mapKeys",
+            "comment": " Apply a function to all keys in a dictionary\n",
+            "type": "(comparable -> comparable) -> Dict.Dict comparable v -> Dict.Dict comparable v"
           },
           {
             "name": "removeMany",
