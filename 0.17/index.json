@@ -61407,11 +61407,11 @@
   },
   {
     "name": "nphollon/geo3d",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Frame",
-        "comment": " A Frame describes the difference between two coordinate systems -- the position and orientation of one reference frame relative to another.\n\n# Definition\n@docs Frame, identity\n\n# Changing Frames\n@docs setPosition, intrinsicNudge, extrinsicNudge, setOrientation, intrinsicRotate, extrinsicRotate, transformInto, transformOutOf, inverse, compose\n\n# Interop\n@docs encode, decode, toMat4\n",
+        "comment": " A Frame describes the difference between two coordinate systems -- the position and orientation of one reference frame relative to another.\n\n# Definition\n\n@docs Frame, identity, equal\n\n# Coordinate Transformations\n@docs transformInto, transformOutOf, mul, compose, inverse\n\n# Mutating Frames\n@docs setPosition, intrinsicNudge, extrinsicNudge, setOrientation, intrinsicRotate, extrinsicRotate\n\n# Interop\n@docs encode, decode, toMat4\n",
         "aliases": [
           {
             "name": "Frame",
@@ -61436,6 +61436,11 @@
             "name": "encode",
             "comment": " Convert a frame into a [Json Value](http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Encode).\n",
             "type": "Frame.Frame -> Json.Encode.Value"
+          },
+          {
+            "name": "equal",
+            "comment": " Two frames are equal if their positions and orientations match.\n",
+            "type": "Frame.Frame -> Frame.Frame -> Bool"
           },
           {
             "name": "extrinsicNudge",
@@ -61468,6 +61473,11 @@
             "type": "Frame.Frame -> Frame.Frame"
           },
           {
+            "name": "mul",
+            "comment": " Given a frame B to C, and another frame A to B, return the frame A to C.\n    transformInto (mul a b) vec == transformInto a (transformInto b vec)\n",
+            "type": "Frame.Frame -> Frame.Frame -> Frame.Frame"
+          },
+          {
             "name": "setOrientation",
             "comment": " Set the orientation of a frame.\n",
             "type": "Quaternion.Quaternion -> Frame.Frame -> Frame.Frame"
@@ -61497,7 +61507,7 @@
       },
       {
         "name": "Quaternion",
-        "comment": " A quaternion type. Used for rotations in three dimensions.\n\n# Building\n\n@docs Quaternion, quaternion, identity, rotateX, rotateY, rotateZ, rotationFor, fromAxisAngle, fromVector, toVector\n\n# Transforming\n\n@docs compose, conjugate, rotateVector\n\n# Interop\n\n@docs encode, decode, toMat4\n",
+        "comment": " A quaternion type. Used for rotations in three dimensions.\n\n# Building\n@docs Quaternion, quaternion, identity, xRotation, yRotation, zRotation, rotationFor, fromAxisAngle, fromVector, toVector\n\n# Working With Rotations\n@docs similar, mul, compose, conjugate, rotate, reverseRotate\n\n# Interop\n@docs encode, decode, toMat4\n\n# Lesser Math\n\nThese functions are not as useful if you are just using quaternions to handle 3D rotations.\n\n@docs equal, getW, getX, getY, getZ, lengthSquared, length, add, scale\n\n",
         "aliases": [
           {
             "name": "Quaternion",
@@ -61509,8 +61519,13 @@
         "types": [],
         "values": [
           {
+            "name": "add",
+            "comment": " Add two quaternions.\n\nIf you are trying to combine rotations, you should to use `mul` or `compose` instead.\n",
+            "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Quaternion.Quaternion"
+          },
+          {
             "name": "compose",
-            "comment": " Multiply two quaternions.\n",
+            "comment": " Multiplication with the operands flipped.\n\nThis can make multiplication easier to use along with the pipe operators `|>` and `<|`\n\n    compose p q == mul q p\n",
             "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Quaternion.Quaternion"
           },
           {
@@ -61529,6 +61544,11 @@
             "type": "Quaternion.Quaternion -> Json.Encode.Value"
           },
           {
+            "name": "equal",
+            "comment": " Returns true when two quaternions are about equal (within 10^-5).\n",
+            "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Bool"
+          },
+          {
             "name": "fromAxisAngle",
             "comment": " Create a quaternion given an axis and angle of rotation. The length of the axis is ignored, but returns Nothing if the axis is the zero vector.\n",
             "type": "Vector.Vector -> Float -> Maybe.Maybe Quaternion.Quaternion"
@@ -61539,9 +61559,44 @@
             "type": "Vector.Vector -> Quaternion.Quaternion"
           },
           {
+            "name": "getW",
+            "comment": " Get scalar component.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
+            "name": "getX",
+            "comment": " Get first vector component.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
+            "name": "getY",
+            "comment": " Get second vector component.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
+            "name": "getZ",
+            "comment": " Get third vector component.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
             "name": "identity",
             "comment": " The identity quaternion corresponds to no rotation.\n\n    identity == quaternion 1 0 0 0\n",
             "type": "Quaternion.Quaternion"
+          },
+          {
+            "name": "length",
+            "comment": " The length, or norm, of the quaternion.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The square of the length.\n",
+            "type": "Quaternion.Quaternion -> Float"
+          },
+          {
+            "name": "mul",
+            "comment": " Multiply two quaternions.\n",
+            "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Quaternion.Quaternion"
           },
           {
             "name": "quaternion",
@@ -61549,29 +61604,29 @@
             "type": "Float -> Float -> Float -> Float -> Quaternion.Quaternion"
           },
           {
-            "name": "rotateVector",
-            "comment": " Rotate a vector by a quaternion.\n",
+            "name": "reverseRotate",
+            "comment": " Rotate vector in the opposite direction.\n    reverseRotate q v == rotate (conjugate q) v\n",
             "type": "Quaternion.Quaternion -> Vector.Vector -> Vector.Vector"
           },
           {
-            "name": "rotateX",
-            "comment": " Create a quaternion corresponding to a rotation about the x axis by the given angle. Rotation is counter-clockwise.\n\n    q = rotateX (degrees 90)\n    v = vector 0 1 0 -- y axis\n\n    rotateVector q v == vector 0 0 1 -- rotated into z axis\n",
-            "type": "Float -> Quaternion.Quaternion"
-          },
-          {
-            "name": "rotateY",
-            "comment": " Create a quaternion corresponding to a rotation about the y axis by the given angle.\n",
-            "type": "Float -> Quaternion.Quaternion"
-          },
-          {
-            "name": "rotateZ",
-            "comment": " Create a quaternion corresponding to a rotation about the z axis by the given angle.\n",
-            "type": "Float -> Quaternion.Quaternion"
+            "name": "rotate",
+            "comment": " Rotate a vector by a quaternion.\n\nThe quaternion does not have to be a unit quaternion. The vector length will be preserved.\n\nIf given the zero quaternion, no rotation will be performed.\n",
+            "type": "Quaternion.Quaternion -> Vector.Vector -> Vector.Vector"
           },
           {
             "name": "rotationFor",
             "comment": " Given two vectors, return the quaternion that would rotate the first vector to the second vector. The lengths of the vectors are ignored. If one or both vectors are zero, return the identity quaternion.\n",
             "type": "Vector.Vector -> Vector.Vector -> Quaternion.Quaternion"
+          },
+          {
+            "name": "scale",
+            "comment": " Multiply all of the quaternion's components by a factor.\n",
+            "type": "Float -> Quaternion.Quaternion -> Quaternion.Quaternion"
+          },
+          {
+            "name": "similar",
+            "comment": " Returns true if two quaternions represent the same rotation.\n\nRotation depends on the direction that a quaternion points in, but not its length.\n\nThe zero quaternion is only similar to itself.\n",
+            "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Bool"
           },
           {
             "name": "toMat4",
@@ -61582,6 +61637,21 @@
             "name": "toVector",
             "comment": " Convert a quaternion to a rotation vector.\n",
             "type": "Quaternion.Quaternion -> Vector.Vector"
+          },
+          {
+            "name": "xRotation",
+            "comment": " Create a quaternion corresponding to a rotation about the x axis by the given angle. Rotation is counter-clockwise.\n\n    q = xRotation (degrees 90)\n    v = vector 0 1 0 -- y axis\n\n    rotate q v == vector 0 0 1 -- rotated into z axis\n",
+            "type": "Float -> Quaternion.Quaternion"
+          },
+          {
+            "name": "yRotation",
+            "comment": " Create a quaternion corresponding to a rotation about the y axis by the given angle.\n",
+            "type": "Float -> Quaternion.Quaternion"
+          },
+          {
+            "name": "zRotation",
+            "comment": " Create a quaternion corresponding to a rotation about the z axis by the given angle.\n",
+            "type": "Float -> Quaternion.Quaternion"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -74132,6 +74202,51 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "spect88/romkan-elm",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Romkan",
+        "comment": " [Romkan](https://github.com/spect88/romkan-elm) is a library for\nconversion between Japanese Romaji and Kana.\n\nThis is just an Elm port\nof [the Haskell port](https://github.com/karlvoigtland/romkan-hs)\nof [the Python port](http://www.soimort.org/python-romkan)\nof [Ruby/Romkan](http://0xcc.net/ruby-romkan).\n\n# Kana <-> Romaji\n\n@docs toKatakana, toHiragana, toKana, toRoma\n\n# Romaji <-> Romaji\n\n@docs kunreiToHepburn, hepburnToKunrei\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "hepburnToKunrei",
+            "comment": " Convert a Hepburn Romaji (ヘボン式ローマ字) to a Kunrei-shiki Romaji (訓令式ローマ字). ",
+            "type": "String -> String"
+          },
+          {
+            "name": "kunreiToHepburn",
+            "comment": " Convert a Kunrei-shiki Romaji (訓令式ローマ字) to a Hepburn Romaji (ヘボン式ローマ字). ",
+            "type": "String -> String"
+          },
+          {
+            "name": "toHiragana",
+            "comment": " Convert a Romaji (ローマ字) to a Hiragana (平仮名). ",
+            "type": "String -> String"
+          },
+          {
+            "name": "toKana",
+            "comment": " Convert a Romaji (ローマ字) to a Katakana (片仮名). (same as toKatakana) ",
+            "type": "String -> String"
+          },
+          {
+            "name": "toKatakana",
+            "comment": " Convert a Romaji (ローマ字) to a Katakana (片仮名). ",
+            "type": "String -> String"
+          },
+          {
+            "name": "toRoma",
+            "comment": " Convert a Kana (仮名) to a Hepburn Romaji (ヘボン式ローマ字). ",
+            "type": "String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
