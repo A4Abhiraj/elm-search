@@ -9055,6 +9055,577 @@
     ]
   },
   {
+    "name": "MacCASOutreach/graphicsvg",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "GraphicSVG",
+        "comment": " A library for creating SVG graphics in a way that is compatible with Elm's\nold Graphics library. Also includes built-in functions for creating games and\nother applications including keyboard presses and mouse movements.\n# Basic Types\n@docs Stencil, Shape\n# Rendering To Screen\n@docs collage\n# Graphics App\n@docs graphicsApp\n# Notifications App\n@docs notificationsApp\n# Game App\n@docs GetKeyState, gameApp\n# Shapes\n@docs line, polygon, openPolygon, ngon, triangle, square, rect, rectangle, roundedRect, circle, oval, wedge, graphPaper\n# Filling and Outlining\n@docs filled, outlined, addOutline, rgb, rgba, hsl, hsla\n# Grouping Shapes\n@docs group\n# Curves\n@docs curve, Pull\n# Line Styles\n@docs solid, dotted, dashed, longdash, dotdash, increasing, custom\n# Text\n@docs text, size, bold, italic, underline, strikethrough, centered, sansserif, serif, fixedwidth, customFont\n# Transformations\n@docs move, rotate, scale, scaleX, scaleY, mirrorX, mirrorY\n# Notifications\n@docs notifyTap, notifyTapAt, notifyEnter, notifyEnterAt, notifyLeave, notifyLeaveAt, notifyMouseMoveAt, notifyMouseDown, notifyMouseDownAt, notifyMouseUp, notifyMouseUpAt, notifyTouchStart, notifyTouchStartAt, notifyTouchEnd, notifyTouchEndAt, notifyTouchMoveAt\n# Miscallaneous\n@docs makeTransparent, addHyperlink\n# Let there be colours!\n@docs black,blank,blue,brown,charcoal,darkBlue,darkBrown,darkCharcoal,darkGray,darkGreen,darkGrey,darkOrange,darkPurple,darkRed,darkYellow,gray,green,grey,hotPink,lightBlue,lightBrown,lightCharcoal,lightGray,lightGreen,lightGrey,lightOrange,lightPurple,lightRed,lightYellow,orange,pink,purple,red,white,yellow\n\n",
+        "aliases": [
+          {
+            "name": "GetKeyState",
+            "comment": " GetKeyState returns a triple where the first argument is of type (Keys -> KeyState)\nso you can ask if a certain key is presses. The other two are tuples of arrow keys and\nWASD keys, respectively. They're in the form (x,y) which represents the key presses\nof each player.\n",
+            "args": [],
+            "type": "( GraphicSVG.Keys -> GraphicSVG.KeyState , ( Float, Float ) , ( Float, Float ) )"
+          }
+        ],
+        "types": [
+          {
+            "name": "Pull",
+            "comment": " To make it easier to read the code defining a curve,\nand to make sure we always use the right number of curve points\nand pull points (which is one more curve point than pull points),\nwe define a special Pull type, whose first point is the point\nwe pull towards, and second point is the end point for this\ncurve segement.\n",
+            "args": [],
+            "cases": [
+              [
+                "Pull",
+                [
+                  "( Float, Float )",
+                  "( Float, Float )"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Shape",
+            "comment": " A filled object that can be drawn to the screen using collage.\n",
+            "args": [
+              "notification"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Stencil",
+            "comment": " A primitive template representing the eventual Shape you wish to draw. This must be turned into\na Shape before being drawn to the screen with collage.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "addHyperlink",
+            "comment": " Add a hyperlink to any `Shape`.\n\n    circle 10\n        |> filled red\n        |> addHyperLink \"www.redcircle.com\"\n",
+            "type": "String -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "addOutline",
+            "comment": " Add an outline to an already-filled Shape.\n\n    circle 10\n        |> filled red\n        |> outlined (solid 5) white\n",
+            "type": "GraphicSVG.LineType -> GraphicSVG.Color -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "black",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "blank",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "blue",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "bold",
+            "comment": " Apply to a Stencil to make any text in the Stencil bold.\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "brown",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "centered",
+            "comment": " Apply to a Stencil to centre any text in the Stencil.\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "charcoal",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "circle",
+            "comment": " Creates a circle with a given radius.\n",
+            "type": "Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "collage",
+            "comment": " Creates a blank canvas on which you can draw shapes. Takes a width, height and a\nlist of Shape. Use this in your \"view\" functions in the three types of Apps above.\n\n    view = collage 500 500\n        [ circle 10 |> filled red\n        ]\n",
+            "type": "Float -> Float -> List (GraphicSVG.Shape notification) -> GraphicSVG.Collage notification"
+          },
+          {
+            "name": "curve",
+            "comment": " Creates a curve starting at a point, pulled towards a point, ending at a third point.\n\n    curve (0,0) [Pull (0,10) (0,20)] - a curve starting at (0,0), pulled towards (0,10), ending at (0,20)\n\n\nThink about curves as what you get when you take a bunch of\nbendy sticks with their ends glued down to a board, and then pulling each stick\ntowards another point.\n\nYou always need an initial point and at least one Pull, but you can add as many Pulls as you want to\nadd additional curve segments, but each curve segment can only bend one way, since it is pulled in one direction.\n",
+            "type": "( Float, Float ) -> List GraphicSVG.Pull -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "custom",
+            "comment": " A custom line defined by a list of (on,off).\n\n    custom [(10,5)] 5 -- a line that with dashes 10 long and spaces 5 long\n    custom [(10,5),(20,5)] -- on for 10, off 5, on 20, off 5\n",
+            "type": "List ( Float, Float ) -> Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "customFont",
+            "comment": " Use a font of your choosing by specifying its string name. Use this sparingly as support for each font\nwill vary accross browsers and devices.\n",
+            "type": "String -> GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "darkBlue",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkBrown",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkCharcoal",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkGray",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkGreen",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkGrey",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkOrange",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkPurple",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkRed",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "darkYellow",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "dashed",
+            "comment": " Define a dashed line type with the given width.  Dashes are short line segments, versus dots which are theoretically points, but may be drawn with very sort line segments.\n",
+            "type": "Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "dotdash",
+            "comment": " Define a line type with the given width, including alternating dots and dashes.\n",
+            "type": "Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "dotted",
+            "comment": " Define a dotted line type with the given width.\n",
+            "type": "Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "filled",
+            "comment": " Fill a Stencil with a Color, creating a Shape.\n\n    circle 10\n        |> filled red\n",
+            "type": "GraphicSVG.Color -> GraphicSVG.Stencil -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "fixedwidth",
+            "comment": " Apply to a Stencil to render any text in the Stencil with a font in which every character has the same width so that that letters line up from line to line which is important in programming languages like Elm.\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "gameApp",
+            "comment": " Automatically maps time and keyboard presses to your program. This should\nbe all you need for making complex interactive games and animations.\n\ngameApp takes two parameters: one is your own type of the form (GetKeyState -> Float -> CustomMsg) and the other is\n    {\n        model = model\n    ,   view = view\n    ,   update = update\n    }\n",
+            "type": "GraphicSVG.InputHandler msgs -> GraphicSVG.GraphicsApp model msgs -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "graphPaper",
+            "comment": " Creates a graph paper with squares of a given size.\n",
+            "type": "Float -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "graphicsApp",
+            "comment": " The simplest way to render graphics to the screen. These graphics will be\nstatic (they don't move) and you can't interact with them. Great for beginners\nor for when you just need basic graphics. Note that your view function is bare,\nwith no parameters:\n\n    view = collage 500 500\n        [ circle 10 |> filled red\n        ]\n\ngraphicsApp takes a parameter like this:\n    {\n        view = view\n    }\n",
+            "type": "GraphicSVG.JustGraphics a -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "gray",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "green",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "grey",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "group",
+            "comment": " Combine n number of Shape types into one Shape that can be\ntransformed as one.\n",
+            "type": "List (GraphicSVG.Shape notification) -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "hotPink",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "hsl",
+            "comment": " Create a custom colour given its hue, saturation and light components.\n",
+            "type": "Float -> Float -> Float -> GraphicSVG.Color"
+          },
+          {
+            "name": "hsla",
+            "comment": " Create a custom colour given its hue, saturation, light and alpha components.\nAlpha is a Float from 0-1 representing the Shape's level of transparency.\nlp\n",
+            "type": "Float -> Float -> Float -> Float -> GraphicSVG.Color"
+          },
+          {
+            "name": "increasing",
+            "comment": " A line of increasing spaces from start to end with a given thickness.\n\n    increasing 1 10 5 -- increases from 1 to 10 with a thickness of 5.\n",
+            "type": "Float -> Float -> Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "italic",
+            "comment": " Apply to a Stencil to make any text in the Stencil italic (ie slanted).\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "lightBlue",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightBrown",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightCharcoal",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightGray",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightGreen",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightGrey",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightOrange",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightPurple",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightRed",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "lightYellow",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "line",
+            "comment": " Create a line from a point to a point. Use \"outlined\" to convert to a viewable\nShape.\n",
+            "type": "( Float, Float ) -> ( Float, Float ) -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "longdash",
+            "comment": " Define a dashed line type with the given width, where the dashes are longer than normal.\n",
+            "type": "Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "makeTransparent",
+            "comment": " Make a Shape transparent by the fraction given. Multiplies on top of other transparencies:\n\n    circle 10\n        |> filled red\n        |> makeTransparent 0.5\n    --results in a transparency of 0.5 (half vislible)\n\n    circle 10\n        |> filled red\n        |> makeTransparent 0.5\n        |> makeTransparent 0.5\n    --results in a transparency of 0.25 (a quarter visible)\n",
+            "type": "Float -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "mirrorX",
+            "comment": " Flip a Shape along the x-axis.\n",
+            "type": "GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "mirrorY",
+            "comment": " Flip a shape along the y-axis.\n",
+            "type": "GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "move",
+            "comment": " Move a Shape by a number of units in x and y.\n",
+            "type": "( Float, Float ) -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "ngon",
+            "comment": " Create a regular polygon with a given number of sides and radius. Examples:\n\n    ngon 3 50 - triangle\n    ngon 5 50 - pentagon\n    ngon 8 50 - octogon\n",
+            "type": "Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "notificationsApp",
+            "comment": " Like graphicsApp, but you can add interactivity to your graphics by using the\n\"notify\" functions. This allows you to learn Elm's architecture in a fun way with\ngraphics. Note that your view function needs a parameter now:\n\n    view model = collage 500 500\n        [ circle 10 |> filled red\n        ]\n\nnotificationApp takes a parameter like:\n    {\n        model = model\n    ,   view = view\n    ,   update = update\n    }\n",
+            "type": "GraphicSVG.GraphicsApp model msgs -> Platform.Program Basics.Never"
+          },
+          {
+            "name": "notifyEnter",
+            "comment": " Receive a notification when the mouse enters a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyEnterAt",
+            "comment": " Receive a notification with a tuple of position when mouse enters a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyLeave",
+            "comment": " Receive a notification when the mouse leaves a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyLeaveAt",
+            "comment": " Receive a notification with a tuple of position when the mouse leaves a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyMouseDown",
+            "comment": " Receive a notification when the mouse button is down over a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyMouseDownAt",
+            "comment": " Receive a notification with a tuple of position when the mouse button is down over a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyMouseMoveAt",
+            "comment": " Receive a notification with a tuple of position when the mouse is moved accross a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyMouseUp",
+            "comment": " Receive a notification when the mouse button goes up over a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyMouseUpAt",
+            "comment": " Receive a notification with a tuple of position when the mouse goes up over a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTap",
+            "comment": " Receive a notification when a Shape is tapped or clicked.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTapAt",
+            "comment": " Receive a notification with a tuple of position when the screen is tapped / clicked.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTouchEnd",
+            "comment": " Receive a notification when the user stops touching a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTouchEndAt",
+            "comment": " Receive a notification with a tuple of position when the user stops touching a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTouchMoveAt",
+            "comment": " Receive a notification with a tuple of position when the moves their finger over a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTouchStart",
+            "comment": " Receive a notification when the user begins touching a Shape.\n",
+            "type": "msgs -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "notifyTouchStartAt",
+            "comment": " Receive a notification with a tuple of position when the user begins touching a Shape.\n",
+            "type": "(( Float, Float ) -> msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs) -> GraphicSVG.Shape (GraphicSVG.Msg msgs)"
+          },
+          {
+            "name": "openPolygon",
+            "comment": " Create an open shape given a list of points. Unlike with polygon, the first and\nlast points will not join up automatically. Can use \"outlined\" or \"filled\" to\nconvert to a Shape.\n",
+            "type": "List ( Float, Float ) -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "orange",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "outlined",
+            "comment": " Outline a Stencil with a Linetype and Color, creating a Shape.\n\n    circle 10\n        |> outlined (solid 5) red\n",
+            "type": "GraphicSVG.LineType -> GraphicSVG.Color -> GraphicSVG.Stencil -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "oval",
+            "comment": " Creates an oval with a given width and height.\n",
+            "type": "Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "pink",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "polygon",
+            "comment": " Create a closed shape given a list of points. Can use \"outlined\" or \"filled\" to\nconvert to a Shape.\n",
+            "type": "List ( Float, Float ) -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "purple",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "rect",
+            "comment": " Creates a rectangle with a given width and height.\n",
+            "type": "Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "rectangle",
+            "comment": " Synonym for rect.\n",
+            "type": "Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "red",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "rgb",
+            "comment": " Create a custom colour given its red, green and blue components.\n",
+            "type": "Float -> Float -> Float -> GraphicSVG.Color"
+          },
+          {
+            "name": "rgba",
+            "comment": " Create a custom colour given its red, green, blue and alpha components.\nAlpha is a Float from 0-1 representing the Shape's level of transparency.\n",
+            "type": "Float -> Float -> Float -> Float -> GraphicSVG.Color"
+          },
+          {
+            "name": "rotate",
+            "comment": " Rotate a Shape by the specified degrees (in radians). Use the \"degrees\" function to convert\nfrom degrees into radians.\n",
+            "type": "Float -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "roundedRect",
+            "comment": " Creates a rectangle with a given width, height, and circular rounded\ncorners with the given radius.\n",
+            "type": "Float -> Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "sansserif",
+            "comment": " Apply to a Stencil to render any text in the Stencil with a Sans Serif font (ie one without thinner and thicker bits).\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "scale",
+            "comment": " Scale a Shape by a given factor.\n",
+            "type": "Float -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "scaleX",
+            "comment": " Scale a Shape in the x-axis by a given factor.\n",
+            "type": "Float -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "scaleY",
+            "comment": " Scale a Shape in the y-axis by a given factor.\n",
+            "type": "Float -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
+          },
+          {
+            "name": "serif",
+            "comment": " Apply to a Stencil to render any text in the Stencil with a Serif font (ie one with thinner and thicker bits).\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "size",
+            "comment": " Apply to a Stencil to render any text in the Stencil in the size given (in points), which depends on the size and type of screen used, but try 12 to start.\n",
+            "type": "Float -> GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "solid",
+            "comment": " Define a solid line type with the given width.\n",
+            "type": "Float -> GraphicSVG.LineType"
+          },
+          {
+            "name": "square",
+            "comment": " Creates a square with a given side length. (Synonym for rect s s)\n",
+            "type": "Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "strikethrough",
+            "comment": " Apply to a Stencil to draw a line through any text in the Stencil.\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "text",
+            "comment": " Creates a text stencil. You can change this stencil using the text helper\nfunctions. Note that \"filled\" or \"outlined\" must go at the *end* of the infixes\n(ie note that all these functions are Stencil -> Stencil).\n\n    text \"Hello World\"\n        |> bold\n        |> size 14\n        |> filled black\n",
+            "type": "String -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "triangle",
+            "comment": " Synonym for \"ngon 3\". Creates a triangle with a given size.\n",
+            "type": "Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "underline",
+            "comment": " Apply to a Stencil to underline any text in the Stencil.\n",
+            "type": "GraphicSVG.Stencil -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "wedge",
+            "comment": " Creates a wedge with a given radius, and a given fraction of a circle.\n\n    wedge 50 0.5 - semi-circle\n    wedge 50 0.25 - quarter-circle\n    wedge 50 0.75 - three-quarter circle\n",
+            "type": "Float -> Float -> GraphicSVG.Stencil"
+          },
+          {
+            "name": "white",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          },
+          {
+            "name": "yellow",
+            "comment": " ",
+            "type": "GraphicSVG.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "MatthewJohnHeath/elm-fingertree",
     "version": "1.1.1",
     "docs": [
@@ -14498,7 +15069,7 @@
   },
   {
     "name": "ccapndave/elm-update-extra",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "docs": [
       {
         "name": "Update.Extra.Infix",
@@ -14518,7 +15089,7 @@
       },
       {
         "name": "Update.Extra",
-        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs updateModel\n@docs addCmd\n@docs sequence\n@docs identity\n",
+        "comment": " Convenience functions for working with updates in Elm\n\n@docs andThen\n@docs filter\n@docs updateModel\n@docs addCmd\n@docs mapCmd\n@docs sequence\n@docs identity\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -14541,6 +15112,11 @@
             "name": "identity",
             "comment": " This implements the identity function with regards to update pipelines.  This is designed to be used\nwith the :> operator, allowing you to write elements in the pipeline that do nothing at all.\n\n    import Update.Extra as Update\n    import Update.Extra.Infix exposing ((:>))\n\n    update msg model =\n      model ! []\n        :> Update.identity\n\nThis can be useful when you want to implement paths through the update pipeline without having to create\na `Noop` Msg.  Its especially when working with `Maybe`s, where it can be awkward to use the `filter`\nfunction in a type-safe way.\n\n    import Update.Extra as Update\n    import Update.Extra.Infix exposing ((:>))\n    import Maybe.Extra exposing ((?))\n\n    type Msg\n      = UpdateName (Maybe String)\n      | SetupUser User\n\n    update msg model =\n      case msg of\n        UpdateName maybeAName ->\n          let\n            user : Maybe User\n            user =\n              Maybe.map createUser maybeAName\n          in\n          { model | user = user }\n              :> Maybe.map (update << SetupUser) user ? Update.identity\n",
             "type": "model -> ( model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "mapCmd",
+            "comment": " Map over the Cmd in an update pipeline\n",
+            "type": "(msg -> msg') -> ( model, Platform.Cmd.Cmd msg ) -> ( model, Platform.Cmd.Cmd msg' )"
           },
           {
             "name": "sequence",
@@ -54661,7 +55237,7 @@
   },
   {
     "name": "krisajenkins/elm-dialog",
-    "version": "3.0.2",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "Dialog",
@@ -54673,7 +55249,7 @@
             "args": [
               "msg"
             ],
-            "type": "{ closeMessage : Maybe.Maybe msg , header : Maybe.Maybe (Html.Html msg) , body : Maybe.Maybe (Html.Html msg) , footer : Maybe.Maybe (Html.Html msg) }"
+            "type": "{ closeMessage : Maybe.Maybe msg , containerClass : Maybe.Maybe String , header : Maybe.Maybe (Html.Html msg) , body : Maybe.Maybe (Html.Html msg) , footer : Maybe.Maybe (Html.Html msg) }"
           }
         ],
         "types": [],
@@ -54690,17 +55266,17 @@
           },
           {
             "name": "view",
-            "comment": " Renders a modal dialog whenever you supply a `Config msg`.\n\nTo use this, include this view in your *top-level* view function,\nright at the top of the DOM tree, like so:\n\n    type Message\n      = ...\n      | ...\n      | AcknowledgeDialog\n\n\n    view : -> Model -> Html Message\n    view model =\n      div\n        []\n        [ ...\n        , ...your regular view code....\n        , ...\n        , Dialog.view\n            (if model.shouldShowDialog then\n              Just { closeMessage = Just AcknowledgeDialog\n                   , header = Just (text \"Alert!\"\n                   , body = Just (p [] [text \"Let me tell you something important...\"])\n                   , footer = Nothing\n                   }\n             else\n              Nothing\n            )\n        ]\n\n\nIt's then up to you to replace `model.shouldShowDialog` with whatever\nlogic should cause the dialog to be displayed, and to handle an\n`AcknowledgeDialog` message with whatever logic should occur when the user\ncloses the dialog.\n\nSee the `examples/` directory for examples of how this works for apps\nlarge and small.\n\n",
+            "comment": " Renders a modal dialog whenever you supply a `Config msg`.\n\nTo use this, include this view in your *top-level* view function,\nright at the top of the DOM tree, like so:\n\n    type Message\n      = ...\n      | ...\n      | AcknowledgeDialog\n\n\n    view : -> Model -> Html Message\n    view model =\n      div\n        []\n        [ ...\n        , ...your regular view code....\n        , ...\n        , Dialog.view\n            (if model.shouldShowDialog then\n              Just { closeMessage = Just AcknowledgeDialog\n                   , containerClass = Just \"your-container-class\"\n                   , header = Just (text \"Alert!\"\n                   , body = Just (p [] [text \"Let me tell you something important...\"])\n                   , footer = Nothing\n                   }\n             else\n              Nothing\n            )\n        ]\n\n\nIt's then up to you to replace `model.shouldShowDialog` with whatever\nlogic should cause the dialog to be displayed, and to handle an\n`AcknowledgeDialog` message with whatever logic should occur when the user\ncloses the dialog.\n\nSee the `examples/` directory for examples of how this works for apps\nlarge and small.\n\n",
             "type": "Maybe.Maybe (Dialog.Config msg) -> Html.Html msg"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
   {
     "name": "krisajenkins/elm-exts",
-    "version": "25.12.0",
+    "version": "25.13.0",
     "docs": [
       {
         "name": "Exts.Html",
@@ -54717,6 +55293,65 @@
             "name": "nbsp",
             "comment": " A non-breaking space. elm-html doesn't support escape sequences\nlike `text \"&nbsp\"`, so use this string instead.\n",
             "type": "String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.List",
+        "comment": " Extensions to the core `List` library.\n\n@docs chunk\n@docs mergeBy\n@docs singleton\n@docs maybeSingleton\n@docs firstMatch\n@docs rest\n@docs unique\n@docs exactlyOne\n@docs maximumBy\n@docs minimumBy\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "chunk",
+            "comment": " Split a list into chunks of length `n`.\n\n  Be aware that the last sub-list may be smaller than `n`-items long.\n\n  For example `chunk 3 [1..10] => [[1,2,3], [4,5,6], [7,8,9], [10]]`\n",
+            "type": "Int -> List a -> List (List a)"
+          },
+          {
+            "name": "exactlyOne",
+            "comment": " Extract the first item from the `List`, demanding that there be exactly one element.\n\nFor example, `Json.Decode.customDecoder string exactlyOne` creates a\ndecoder that expects a list of strings, where there is only one\nelement in the `List`.\n\nIf you think that's weird, you haven't seen enough real-world JSON. ;-)\n",
+            "type": "List a -> Result.Result String a"
+          },
+          {
+            "name": "firstMatch",
+            "comment": " Find the first element in the `List` that matches the given predicate.\n",
+            "type": "(a -> Bool) -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maximumBy",
+            "comment": " Like `List.maximum`, but it works on non-comparable types by taking a custom function.\n",
+            "type": "(a -> comparable) -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maybeSingleton",
+            "comment": " Wrap a maybe item into a `List`. If the item is `Nothing`, the `List` is empty.\n",
+            "type": "Maybe.Maybe a -> List a"
+          },
+          {
+            "name": "mergeBy",
+            "comment": " Merge two lists. The first argument is a function which returns\nthe unique ID of each element. Where an element appears more than\nonce, the last won wins.\n",
+            "type": "(a -> comparable) -> List a -> List a -> List a"
+          },
+          {
+            "name": "minimumBy",
+            "comment": " Like `List.minimum`, but it works on non-comparable types by taking a custom function.\n",
+            "type": "(a -> comparable) -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "rest",
+            "comment": " Like List.tail, but if the list is empty it returns an empty list rather than `Nothing`.\n",
+            "type": "List a -> List a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Wrap a single item into a `List`.\n",
+            "type": "a -> List a"
+          },
+          {
+            "name": "unique",
+            "comment": " Return a new list with duplicates removed. Order is preserved.\n",
+            "type": "List comparable -> List comparable"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -54771,15 +55406,84 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.String",
-        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
+        "name": "Exts.Set",
+        "comment": " Extensions to the core `Set` library.\n\n@docs select\n@docs uniqueItems\n@docs toggle\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "removePrefix",
-            "comment": " Strip a leading string from a `String`.\n",
-            "type": "String -> String -> String"
+            "name": "select",
+            "comment": " Pull any items from a list where (f x) is in the given set.\n",
+            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
+          },
+          {
+            "name": "toggle",
+            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "uniqueItems",
+            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
+            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Maybe",
+        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust\n@docs isNothing\n@docs maybe\n@docs mappend\n@docs catMaybes\n@docs join\n@docs maybeDefault\n@docs matches\n@docs validate\n@docs when\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "catMaybes",
+            "comment": " Extract all the `Just` values from a List of Maybes.\n",
+            "type": "List (Maybe.Maybe a) -> List a"
+          },
+          {
+            "name": "isJust",
+            "comment": " Boolean checks.\n",
+            "type": "Maybe.Maybe a -> Bool"
+          },
+          {
+            "name": "isNothing",
+            "comment": " ",
+            "type": "Maybe.Maybe a -> Bool"
+          },
+          {
+            "name": "join",
+            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
+            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
+          },
+          {
+            "name": "mappend",
+            "comment": " Join two `Maybe`s together as though they were one.\n",
+            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
+          },
+          {
+            "name": "matches",
+            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
+            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "maybe",
+            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
+            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
+          },
+          {
+            "name": "maybeDefault",
+            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
+            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "validate",
+            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
+            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
+          },
+          {
+            "name": "when",
+            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
+            "type": "Bool -> a -> Maybe.Maybe a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -54968,30 +55672,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Set",
-        "comment": " Extensions to the core `Set` library.\n\n@docs select\n@docs uniqueItems\n@docs toggle\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "select",
-            "comment": " Pull any items from a list where (f x) is in the given set.\n",
-            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
-          },
-          {
-            "name": "toggle",
-            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "uniqueItems",
-            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
-            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.Result",
         "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth\n@docs isOk\n@docs isErr\n@docs fromOk\n@docs fromErr\n@docs mappend\n",
         "aliases": [],
@@ -55031,60 +55711,39 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Maybe",
-        "comment": " Extensions to the core `Maybe` library.\n\n@docs isJust\n@docs isNothing\n@docs maybe\n@docs mappend\n@docs catMaybes\n@docs join\n@docs maybeDefault\n@docs matches\n@docs validate\n@docs when\n",
+        "name": "Exts.Json.Decode",
+        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n@docs decodeTime\n@docs decodeDate\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "catMaybes",
-            "comment": " Extract all the `Just` values from a List of Maybes.\n",
-            "type": "List (Maybe.Maybe a) -> List a"
+            "name": "decodeDate",
+            "comment": " Decode a Date from a string, using the same format as the core\nfunction `Date.fromString`.\n",
+            "type": "Json.Decode.Decoder Date.Date"
           },
           {
-            "name": "isJust",
-            "comment": " Boolean checks.\n",
-            "type": "Maybe.Maybe a -> Bool"
+            "name": "decodeTime",
+            "comment": " Decode a Date from seconds-since-the-epoch.\n",
+            "type": "Json.Decode.Decoder Date.Date"
           },
           {
-            "name": "isNothing",
-            "comment": " ",
-            "type": "Maybe.Maybe a -> Bool"
-          },
+            "name": "stringIgnoringBlanks",
+            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.String",
+        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
           {
-            "name": "join",
-            "comment": " Join together two `Maybe` values using the supplied function. If\neither value is `Nothing`, the result is `Nothing`.\n",
-            "type": "(a -> b -> c) -> Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe c"
-          },
-          {
-            "name": "mappend",
-            "comment": " Join two `Maybe`s together as though they were one.\n",
-            "type": "Maybe.Maybe a -> Maybe.Maybe b -> Maybe.Maybe ( a, b )"
-          },
-          {
-            "name": "matches",
-            "comment": " Check the if value in the `Maybe` matches a predicate. If it does, pass it through, if not, return nothing.\n\n    matches isEven (Just 2) => Just 2\n    matches isEven (Just 3) => Nothing\n    matches isEven Nothing => Nothing\n",
-            "type": "(a -> Bool) -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "maybe",
-            "comment": " Apply a function to a value, returning the default if the value is `Nothing`.\n",
-            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
-          },
-          {
-            "name": "maybeDefault",
-            "comment": " If `x` is a `Just _` value, return it, otherwise return `Just default`.\n",
-            "type": "a -> Maybe.Maybe a -> Maybe.Maybe a"
-          },
-          {
-            "name": "validate",
-            "comment": " Validate a value against a predicate, returning a `Maybe`.\n\n    validate isEven 2 => Just 2\n    validate isEven 3 => Nothing\n",
-            "type": "(a -> Bool) -> a -> Maybe.Maybe a"
-          },
-          {
-            "name": "when",
-            "comment": " When `test` returns true, return `Just value`, otherwise return `Nothing`.\n",
-            "type": "Bool -> a -> Maybe.Maybe a"
+            "name": "removePrefix",
+            "comment": " Strip a leading string from a `String`.\n",
+            "type": "String -> String -> String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -55109,69 +55768,25 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.List",
-        "comment": " Extensions to the core `List` library.\n\n@docs chunk\n@docs mergeBy\n@docs singleton\n@docs maybeSingleton\n@docs firstMatch\n@docs rest\n@docs unique\n@docs exactlyOne\n",
+        "name": "Exts.Json.Encode",
+        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set\n@docs dict\n@docs tuple2\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "chunk",
-            "comment": " Split a list into chunks of length `n`.\n\n  Be aware that the last sub-list may be smaller than `n`-items long.\n\n  For example `chunk 3 [1..10] => [[1,2,3], [4,5,6], [7,8,9], [10]]`\n",
-            "type": "Int -> List a -> List (List a)"
+            "name": "dict",
+            "comment": " Encode a `Dict` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
           },
           {
-            "name": "exactlyOne",
-            "comment": " Extract the first item from the `List`, demanding that there be exactly one element.\n\nFor example, `Json.Decode.customDecoder string exactlyOne` creates a\ndecoder that expects a list of strings, where there is only one\nelement in the `List`.\n\nIf you think that's weird, you haven't seen enough real-world JSON. ;-)\n",
-            "type": "List a -> Result.Result String a"
+            "name": "set",
+            "comment": " Encode a `Set` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
           },
           {
-            "name": "firstMatch",
-            "comment": " Find the first element in the `List` that matches the given predicate.\n",
-            "type": "(a -> Bool) -> List a -> Maybe.Maybe a"
-          },
-          {
-            "name": "maybeSingleton",
-            "comment": " Wrap a maybe item into a `List`. If the item is `Nothing`, the `List` is empty.\n",
-            "type": "Maybe.Maybe a -> List a"
-          },
-          {
-            "name": "mergeBy",
-            "comment": " Merge two lists. The first argument is a function which returns\nthe unique ID of each element. Where an element appears more than\nonce, the last won wins.\n",
-            "type": "(a -> comparable) -> List a -> List a -> List a"
-          },
-          {
-            "name": "rest",
-            "comment": " Like List.tail, but if the list is empty it returns an empty list rather than `Nothing`.\n",
-            "type": "List a -> List a"
-          },
-          {
-            "name": "singleton",
-            "comment": " Wrap a single item into a `List`.\n",
-            "type": "a -> List a"
-          },
-          {
-            "name": "unique",
-            "comment": " Return a new list with duplicates removed. Order is preserved.\n",
-            "type": "List comparable -> List comparable"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Html.Events",
-        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter\n@docs onSelect\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "onEnter",
-            "comment": " Send a message when the user hits enter.\n",
-            "type": "msg -> Html.Attribute msg"
-          },
-          {
-            "name": "onSelect",
-            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
-            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
+            "name": "tuple2",
+            "comment": " Encode a pair to a JSON array .\n",
+            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -55239,54 +55854,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Json.Encode",
-        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set\n@docs dict\n@docs tuple2\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dict",
-            "comment": " Encode a `Dict` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
-          },
-          {
-            "name": "set",
-            "comment": " Encode a `Set` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
-          },
-          {
-            "name": "tuple2",
-            "comment": " Encode a pair to a JSON array .\n",
-            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Json.Decode",
-        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n@docs decodeTime\n@docs decodeDate\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "decodeDate",
-            "comment": " Decode a Date from a string, using the same format as the core\nfunction `Date.fromString`.\n",
-            "type": "Json.Decode.Decoder Date.Date"
-          },
-          {
-            "name": "decodeTime",
-            "comment": " Decode a Date from seconds-since-the-epoch.\n",
-            "type": "Json.Decode.Decoder Date.Date"
-          },
-          {
-            "name": "stringIgnoringBlanks",
-            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.Http",
         "comment": " Extensions to the `Http` library.\n\n@docs handleError\n@docs put\n@docs postContent\n@docs postForm\n@docs postJson\n@docs cgiParameters\n",
         "aliases": [],
@@ -55321,6 +55888,229 @@
             "name": "put",
             "comment": " Send a simple `PUT` request.\n",
             "type": "Json.Decode.Decoder value -> String -> Http.Body -> Task.Task Http.Error value"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Function",
+        "comment": " Extensions so generic they just operate on functions.\n\n@docs (>>>)\n@docs (<<<)\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "<<<",
+            "comment": " Right-to-left composition of functions that rely on an environment.\n",
+            "type": "(env -> b -> c) -> (env -> a -> b) -> env -> a -> c"
+          },
+          {
+            "name": ">>>",
+            "comment": " Left-to-right composition of functions that rely on an environment.\n\nExample:\n\n    quux (bar (foo model x) model) model\n\nBecomes:\n\n    (foo >>> bar >>> quux) model x\n\nThe operator `>>>` mirrors Haskell's Control.Arrow, because really\nthis is an arrow specialised to Reader.\n",
+            "type": "(env -> a -> b) -> (env -> b -> c) -> env -> a -> c"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Attributes",
+        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue\n@docs defaultString\n@docs defaultInt\n@docs defaultFloat\n@docs styleList\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultFloat",
+            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
+            "type": "Float -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultInt",
+            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
+            "type": "Int -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultString",
+            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultValue",
+            "comment": " Set a default value for an input field.\n",
+            "type": "Json.Encode.Value -> Html.Attribute msg"
+          },
+          {
+            "name": "styleList",
+            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
+            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Float",
+        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "roundTo",
+            "comment": " Round a `Float` to a given number of decimal places.\n",
+            "type": "Int -> Float -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Events",
+        "comment": " Extensions to the `Html.Events` library.\n\n@docs onEnter\n@docs onSelect\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "onEnter",
+            "comment": " Send a message when the user hits enter.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onSelect",
+            "comment": " An event handler for `<select>` tags. Set the child `<option>` tag's value to \"\" to get a `Nothing`.\n",
+            "type": "(Maybe.Maybe String -> msg) -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Html.Bootstrap",
+        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet\n@docs container\n@docs containerFluid\n@docs row\n@docs formGroup\n@docs empty\n@docs twoColumns\n@docs Ratio\n@docs video\n@docs popover\n@docs PopoverDirection\n@docs clearfix\n@docs well\n@docs jumbotron\n@docs badge\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "PopoverDirection",
+            "comment": " ",
+            "args": [],
+            "cases": [
+              [
+                "Top",
+                []
+              ],
+              [
+                "Right",
+                []
+              ],
+              [
+                "Bottom",
+                []
+              ],
+              [
+                "Left",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Ratio",
+            "comment": " Aspect ratios for responsive video embedding.\n",
+            "args": [],
+            "cases": [
+              [
+                "SixteenByNine",
+                []
+              ],
+              [
+                "FourByThree",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "badge",
+            "comment": " Bootstrap badge component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "clearfix",
+            "comment": " Bootstrap clearfix.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "container",
+            "comment": " Bootstrap grid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "containerFluid",
+            "comment": " Bootstrap grid fluid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "empty",
+            "comment": " The minimum markup - an empty span.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "formGroup",
+            "comment": " Bootstrap form group.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "jumbotron",
+            "comment": " Bootstrap jumbotron component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "popover",
+            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
+            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
+          },
+          {
+            "name": "row",
+            "comment": " Bootstrap grid row.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "stylesheet",
+            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "twoColumns",
+            "comment": " Two evenly-sized columns. Must be used within a row.\n",
+            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "video",
+            "comment": " Embed a responsive video.\n",
+            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
+          },
+          {
+            "name": "well",
+            "comment": " Bootstrap well component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Exts.Date",
+        "comment": " Extensions to the core `Date` library.\n\n@docs toISOString\n@docs toRFC3339\n@docs monthNumber\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "monthNumber",
+            "comment": " Extract the month of a given date as an `Int`. January is 1.\n",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "toISOString",
+            "comment": " Format a `Date` as an ISO-standard string.\n",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "toRFC3339",
+            "comment": " Format a `Date` as an RFC-3339 standard string\n\n  This is useful for passing a `Date` as a value to an HTML input. (See [the W3 spec](https://www.w3.org/TR/html-markup/input.date.html#input.date.attrs.value) for details.)\n",
+            "type": "Date.Date -> String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -56400,186 +57190,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Exts.Html.Attributes",
-        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue\n@docs defaultString\n@docs defaultInt\n@docs defaultFloat\n@docs styleList\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultFloat",
-            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
-            "type": "Float -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultInt",
-            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
-            "type": "Int -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultString",
-            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
-            "type": "String -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultValue",
-            "comment": " Set a default value for an input field.\n",
-            "type": "Json.Encode.Value -> Html.Attribute msg"
-          },
-          {
-            "name": "styleList",
-            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
-            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Html.Bootstrap",
-        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet\n@docs container\n@docs containerFluid\n@docs row\n@docs formGroup\n@docs empty\n@docs twoColumns\n@docs Ratio\n@docs video\n@docs popover\n@docs PopoverDirection\n@docs clearfix\n@docs well\n@docs jumbotron\n@docs badge\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "PopoverDirection",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "Top",
-                []
-              ],
-              [
-                "Right",
-                []
-              ],
-              [
-                "Bottom",
-                []
-              ],
-              [
-                "Left",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Ratio",
-            "comment": " Aspect ratios for responsive video embedding.\n",
-            "args": [],
-            "cases": [
-              [
-                "SixteenByNine",
-                []
-              ],
-              [
-                "FourByThree",
-                []
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "badge",
-            "comment": " Bootstrap badge component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "clearfix",
-            "comment": " Bootstrap clearfix.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "container",
-            "comment": " Bootstrap grid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "containerFluid",
-            "comment": " Bootstrap grid fluid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "empty",
-            "comment": " The minimum markup - an empty span.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "formGroup",
-            "comment": " Bootstrap form group.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "jumbotron",
-            "comment": " Bootstrap jumbotron component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "popover",
-            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
-            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
-          },
-          {
-            "name": "row",
-            "comment": " Bootstrap grid row.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "stylesheet",
-            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "twoColumns",
-            "comment": " Two evenly-sized columns. Must be used within a row.\n",
-            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "video",
-            "comment": " Embed a responsive video.\n",
-            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
-          },
-          {
-            "name": "well",
-            "comment": " Bootstrap well component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Float",
-        "comment": " Extensions to the core `Float` library.\n\n@docs roundTo\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "roundTo",
-            "comment": " Round a `Float` to a given number of decimal places.\n",
-            "type": "Int -> Float -> Float"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Function",
-        "comment": " Extensions so generic they just operate on functions.\n\n@docs (>>>)\n@docs (<<<)\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "<<<",
-            "comment": " Right-to-left composition of functions that rely on an environment.\n",
-            "type": "(env -> b -> c) -> (env -> a -> b) -> env -> a -> c"
-          },
-          {
-            "name": ">>>",
-            "comment": " Left-to-right composition of functions that rely on an environment.\n\nExample:\n\n    quux (bar (foo model x) model) model\n\nBecomes:\n\n    (foo >>> bar >>> quux) model x\n\nThe operator `>>>` mirrors Haskell's Control.Arrow, because really\nthis is an arrow specialised to Reader.\n",
-            "type": "(env -> a -> b) -> (env -> b -> c) -> env -> a -> c"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Exts.Dict",
         "comment": " Extensions to the core `Dict` library.\n\n@docs indexBy\n@docs groupBy\n@docs frequency\n@docs getWithDefault\n@docs foldToList\n@docs updateDict\n\n",
         "aliases": [],
@@ -56647,6 +57257,30 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
+        "name": "Exts.Basics",
+        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n@docs maxBy\n@docs minBy\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "compareBy",
+            "comment": " Like `Basics.compare`, with a custom function. For example:\n\n``` elm\ncompareBy Date.toTime earlyDate laterDate\n--> LT\n```\n",
+            "type": "(a -> comparable) -> a -> a -> Basics.Order"
+          },
+          {
+            "name": "maxBy",
+            "comment": " Like `Basics.max`, but it works on non-comparable types by taking a custom function. For example:\n\n``` elm\nmaxBy Date.toTime earlyDate laterDate\n--> laterDate\n```\n",
+            "type": "(a -> comparable) -> a -> a -> a"
+          },
+          {
+            "name": "minBy",
+            "comment": " Like `Basics.min`, but it works on non-comparable types by taking a custom function. For example:\n\n``` elm\nminBy Date.toTime earlyDate laterDate\n--> earlyDate\n```\n",
+            "type": "(a -> comparable) -> a -> a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
         "name": "Exts.Array",
         "comment": " Extensions to the core `Array` library.\n\n@docs update\n@docs delete\n@docs unzip\n@docs singleton\n",
         "aliases": [],
@@ -56671,44 +57305,6 @@
             "name": "update",
             "comment": " 'Update' the entry at position `n`, by applying `f` to it. If the\nindex is out of range, the array is unaltered.\n",
             "type": "Int -> (a -> a) -> Array.Array a -> Array.Array a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Date",
-        "comment": " Extensions to the core `Date` library.\n\n@docs toISOString\n@docs toRFC3339\n@docs monthNumber\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "monthNumber",
-            "comment": " Extract the month of a given date as an `Int`. January is 1.\n",
-            "type": "Date.Date -> Int"
-          },
-          {
-            "name": "toISOString",
-            "comment": " Format a `Date` as an ISO-standard string.\n",
-            "type": "Date.Date -> String"
-          },
-          {
-            "name": "toRFC3339",
-            "comment": " Format a `Date` as an RFC-3339 standard string\n\n  This is useful for passing a `Date` as a value to an HTML input. (See [the W3 spec](https://www.w3.org/TR/html-markup/input.date.html#input.date.attrs.value) for details.)\n",
-            "type": "Date.Date -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Exts.Basics",
-        "comment": " Extensions to the core `Basics` library.\n\n@docs compareBy\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "compareBy",
-            "comment": " Compare two things by running the supplied function of both, and comparing the results.\n\n",
-            "type": "(a -> comparable) -> a -> a -> Basics.Order"
           }
         ],
         "generated-with-elm-version": "0.17.1"
