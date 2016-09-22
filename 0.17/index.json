@@ -9056,7 +9056,7 @@
   },
   {
     "name": "MacCASOutreach/graphicsvg",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "GraphicSVG",
@@ -9072,7 +9072,7 @@
         "types": [
           {
             "name": "Pull",
-            "comment": " To make it easier to read the code defining a curve,\nand to make sure we always use the right number of curve points\nand pull points (which is one more curve point than pull points),\nwe define a special Pull type, whose first point is the point\nwe pull towards, and second point is the end point for this\ncurve segement.\n",
+            "comment": " To make it easier to read the code defining a curve,\nand to make sure we always use the right number of curve points\nand pull points (which is one more curve point than pull points),\nwe define a special Pull type, whose first point is the point\nwe pull towards, and second point is the end point for this\ncurve segmentsment.\n",
             "args": [],
             "cases": [
               [
@@ -9107,7 +9107,7 @@
           },
           {
             "name": "addOutline",
-            "comment": " Add an outline to an already-filled Shape.\n\n    circle 10\n        |> filled red\n        |> outlined (solid 5) white\n",
+            "comment": " Add an outline to an already-filled Shape.\n\n    circle 10\n        |> filled red\n        |> addOutline (solid 5) white\n",
             "type": "GraphicSVG.LineType -> GraphicSVG.Color -> GraphicSVG.Shape notification -> GraphicSVG.Shape notification"
           },
           {
@@ -75136,7 +75136,7 @@
   },
   {
     "name": "stil4m/elm-aui-css",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Aui.Dropdown",
@@ -75409,20 +75409,15 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.ProgressTracker",
-        "comment": " Functions to present AUI progress tracker.\n\n\n# Presentation\n\n@docs progressTracker, invertedProgressTracker\n\n",
+        "name": "Aui.Toggle",
+        "comment": " Functions to present AUI toggle.\n\n# Presentation\n\n@docs toggle\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "invertedProgressTracker",
-            "comment": " Create an inverted progress tracker with items and a given active index.\n",
-            "type": "List String -> Int -> Html.Html a"
-          },
-          {
-            "name": "progressTracker",
-            "comment": " Create a progress tracker with items and a given active index (zero based).\n\n    progressTracker [\"Step 1\", \"Step 2\", \"Step 3\"] 1\n",
-            "type": "List String -> Int -> Html.Html a"
+            "name": "toggle",
+            "comment": " Create a toggle with if it is enabled, a message and its state.\n\n    toggle isEnabled\n        ToggleClicked\n        isOn\n",
+            "type": "Bool -> (Bool -> a) -> Bool -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -75484,20 +75479,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Toggle",
-        "comment": " Functions to present AUI toggle.\n\n# Presentation\n\n@docs toggle\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "toggle",
-            "comment": " Create a toggle with if it is enabled, a message and its state.\n\n    toggle isEnabled\n        ToggleClicked\n        isOn\n",
-            "type": "Bool -> (Bool -> a) -> Bool -> Html.Html a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Aui.ProgressIndicator",
         "comment": " Functions to present AUI progress indicator.\n\n\n# Presentation\n\n@docs progressIndicator, activeProgressIndicator\n\n",
         "aliases": [],
@@ -75517,68 +75498,20 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Lozenge",
-        "comment": " Functions to present AUI lozenges.\n\n# Presentation\n\n@docs lozenge\n\n# Types\n\n@docs Type, generic, success, error, current, complete, moved\n\n# Presense\n\n@docs Presense, normal,subtle\n\n",
+        "name": "Aui.ProgressTracker",
+        "comment": " Functions to present AUI progress tracker.\n\n\n# Presentation\n\n@docs progressTracker, invertedProgressTracker\n\n",
         "aliases": [],
-        "types": [
-          {
-            "name": "Presense",
-            "comment": " Presense style for a lozenge\n",
-            "args": [],
-            "cases": []
-          },
-          {
-            "name": "Type",
-            "comment": " Types for a lozenge\n",
-            "args": [],
-            "cases": []
-          }
-        ],
+        "types": [],
         "values": [
           {
-            "name": "complete",
-            "comment": " Comlete type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
+            "name": "invertedProgressTracker",
+            "comment": " Create an inverted progress tracker with items and a given active index.\n",
+            "type": "List String -> Int -> Html.Html a"
           },
           {
-            "name": "current",
-            "comment": " Current type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "error",
-            "comment": " Error type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "generic",
-            "comment": " Generic type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "lozenge",
-            "comment": " Create a lozenge with presense and type\n",
-            "type": "Aui.Lozenge.Presense -> Aui.Lozenge.Type -> List (Html.Html a) -> Html.Html a"
-          },
-          {
-            "name": "moved",
-            "comment": " Moved type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
-          },
-          {
-            "name": "normal",
-            "comment": " Normal presence\n",
-            "type": "Aui.Lozenge.Presense"
-          },
-          {
-            "name": "subtle",
-            "comment": " Subtle presence\n",
-            "type": "Aui.Lozenge.Presense"
-          },
-          {
-            "name": "success",
-            "comment": " Success type for lozenge\n",
-            "type": "Aui.Lozenge.Type"
+            "name": "progressTracker",
+            "comment": " Create a progress tracker with items and a given active index (zero based).\n\n    progressTracker [\"Step 1\", \"Step 2\", \"Step 3\"] 1\n",
+            "type": "List String -> Int -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -76605,147 +76538,68 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Aui.Expander",
-        "comment": " Functions to present AUI expander.\n\n\n# Config\n\n@docs Config, withMinHeight, withMoreText, withLessText`\n\n# Model\n\n@docs Model, Msg, initialModel\n\n# Update\n\n@docs update\n\n# Presentation\n\n@docs expander\n\n# Utility\n\n@docs baseConfig\n",
-        "aliases": [
-          {
-            "name": "Model",
-            "comment": " Model for the expander comonent.\n",
-            "args": [],
-            "type": "Bool"
-          }
-        ],
-        "types": [
-          {
-            "name": "Config",
-            "comment": " Configuration record for presenting an expander.\n",
-            "args": [
-              "a"
-            ],
-            "cases": []
-          },
-          {
-            "name": "Msg",
-            "comment": " Messages being sent by the expander component.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "baseConfig",
-            "comment": " Create a default configuration with sane defaults to present an expander.\n",
-            "type": "(Aui.Expander.Msg -> a) -> Aui.Expander.Config a"
-          },
-          {
-            "name": "expander",
-            "comment": " Present a expander given a configuration, content and model.\n\n    view model =\n        expander (baseConfig ExpanderMsg)\n            \"Lorem ipsum...\"\n            model.expander\n",
-            "type": "Aui.Expander.Config a -> String -> Aui.Expander.Model -> Html.Html a"
-          },
-          {
-            "name": "initialModel",
-            "comment": " Default model for a expander component\n",
-            "type": "Aui.Expander.Model"
-          },
-          {
-            "name": "update",
-            "comment": " Update function for the expander component. This should be called from within your update function when handling `Msg`\n",
-            "type": "Aui.Expander.Msg -> Aui.Expander.Model -> Aui.Expander.Model"
-          },
-          {
-            "name": "withLessText",
-            "comment": " Set less text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
-          },
-          {
-            "name": "withMinHeight",
-            "comment": " Set less text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
-          },
-          {
-            "name": "withMoreText",
-            "comment": " Set more text for configuration\n",
-            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Avatars",
-        "comment": " Functions to present AUI avatars.\n\n\n# Types\n\n@docs Config\n\n# Presentation\n\n@docs avatar\n\n# Utiltity\n\n@docs config, xsmall, small, medium, large, xlarge, xxlarge, xxxlarge, project\n",
+        "name": "Aui.Lozenge",
+        "comment": " Functions to present AUI lozenges.\n\n# Presentation\n\n@docs lozenge\n\n# Types\n\n@docs Type, generic, success, error, current, complete, moved\n\n# Presense\n\n@docs Presense, normal,subtle\n\n",
         "aliases": [],
         "types": [
           {
-            "name": "Config",
-            "comment": " A type for rendering an avatar\n",
+            "name": "Presense",
+            "comment": " Presense style for a lozenge\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Type",
+            "comment": " Types for a lozenge\n",
             "args": [],
             "cases": []
           }
         ],
         "values": [
           {
-            "name": "avatar",
-            "comment": " Function to convert a configuration record and an source url to an HTML element\n\n    avatar {size = Large, project = False}\n        \"http://myimage.net\"\n",
-            "type": "Aui.Avatars.Config -> String -> Html.Html msg"
+            "name": "complete",
+            "comment": " Comlete type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           },
           {
-            "name": "config",
-            "comment": " Default configuration for an avatar\n",
-            "type": "Aui.Avatars.Config"
+            "name": "current",
+            "comment": " Current type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           },
           {
-            "name": "large",
-            "comment": " Set the configuration to render a large avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "error",
+            "comment": " Error type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           },
           {
-            "name": "medium",
-            "comment": " Set the configuration to render a medium avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "generic",
+            "comment": " Generic type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           },
           {
-            "name": "project",
-            "comment": " Set the configuration to render as a project avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "lozenge",
+            "comment": " Create a lozenge with presense and type\n",
+            "type": "Aui.Lozenge.Presense -> Aui.Lozenge.Type -> List (Html.Html a) -> Html.Html a"
           },
           {
-            "name": "small",
-            "comment": " Set the configuration to render a small avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "moved",
+            "comment": " Moved type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           },
           {
-            "name": "xlarge",
-            "comment": " Set the configuration to render a extra large avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "normal",
+            "comment": " Normal presence\n",
+            "type": "Aui.Lozenge.Presense"
           },
           {
-            "name": "xsmall",
-            "comment": " Set the configuration to render an extra small avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+            "name": "subtle",
+            "comment": " Subtle presence\n",
+            "type": "Aui.Lozenge.Presense"
           },
           {
-            "name": "xxlarge",
-            "comment": " Set the configuration to render a extra-extra large avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
-          },
-          {
-            "name": "xxxlarge",
-            "comment": " Set the configuration to render a extra-extra-extra large avatar\n",
-            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Aui.Badges",
-        "comment": " Functions to present AUI badges.\n\n\n# Presentation\n\n@docs badge\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "badge",
-            "comment": " Present a badge with a given content\n\n    badge \"Hello world!\"\n",
-            "type": "String -> Html.Html msg"
+            "name": "success",
+            "comment": " Success type for lozenge\n",
+            "type": "Aui.Lozenge.Type"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -76845,6 +76699,152 @@
             "name": "withStyle",
             "comment": " Add a button style to the configuration.\n\n    baseConfig |> withStyle Subtle\n",
             "type": "Aui.Buttons.Style -> Aui.Buttons.Config a -> Aui.Buttons.Config a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Avatars",
+        "comment": " Functions to present AUI avatars.\n\n\n# Types\n\n@docs Config\n\n# Presentation\n\n@docs avatar\n\n# Utiltity\n\n@docs config, xsmall, small, medium, large, xlarge, xxlarge, xxxlarge, project\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Config",
+            "comment": " A type for rendering an avatar\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "avatar",
+            "comment": " Function to convert a configuration record and an source url to an HTML element\n\n    avatar {size = Large, project = False}\n        \"http://myimage.net\"\n",
+            "type": "Aui.Avatars.Config -> String -> Html.Html msg"
+          },
+          {
+            "name": "config",
+            "comment": " Default configuration for an avatar\n",
+            "type": "Aui.Avatars.Config"
+          },
+          {
+            "name": "large",
+            "comment": " Set the configuration to render a large avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "medium",
+            "comment": " Set the configuration to render a medium avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "project",
+            "comment": " Set the configuration to render as a project avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "small",
+            "comment": " Set the configuration to render a small avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "xlarge",
+            "comment": " Set the configuration to render a extra large avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "xsmall",
+            "comment": " Set the configuration to render an extra small avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "xxlarge",
+            "comment": " Set the configuration to render a extra-extra large avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          },
+          {
+            "name": "xxxlarge",
+            "comment": " Set the configuration to render a extra-extra-extra large avatar\n",
+            "type": "Aui.Avatars.Config -> Aui.Avatars.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Expander",
+        "comment": " Functions to present AUI expander.\n\n\n# Config\n\n@docs Config, withMinHeight, withMoreText, withLessText`\n\n# Model\n\n@docs Model, Msg, initialModel\n\n# Update\n\n@docs update\n\n# Presentation\n\n@docs expander\n\n# Utility\n\n@docs baseConfig\n",
+        "aliases": [
+          {
+            "name": "Model",
+            "comment": " Model for the expander comonent.\n",
+            "args": [],
+            "type": "Bool"
+          }
+        ],
+        "types": [
+          {
+            "name": "Config",
+            "comment": " Configuration record for presenting an expander.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Messages being sent by the expander component.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "baseConfig",
+            "comment": " Create a default configuration with sane defaults to present an expander.\n",
+            "type": "(Aui.Expander.Msg -> a) -> Aui.Expander.Config a"
+          },
+          {
+            "name": "expander",
+            "comment": " Present a expander given a configuration, content and model.\n\n    view model =\n        expander (baseConfig ExpanderMsg)\n            \"Lorem ipsum...\"\n            model.expander\n",
+            "type": "Aui.Expander.Config a -> String -> Aui.Expander.Model -> Html.Html a"
+          },
+          {
+            "name": "initialModel",
+            "comment": " Default model for a expander component\n",
+            "type": "Aui.Expander.Model"
+          },
+          {
+            "name": "update",
+            "comment": " Update function for the expander component. This should be called from within your update function when handling `Msg`\n",
+            "type": "Aui.Expander.Msg -> Aui.Expander.Model -> Aui.Expander.Model"
+          },
+          {
+            "name": "withLessText",
+            "comment": " Set less text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
+          },
+          {
+            "name": "withMinHeight",
+            "comment": " Set less text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
+          },
+          {
+            "name": "withMoreText",
+            "comment": " Set more text for configuration\n",
+            "type": "String -> Aui.Expander.Config a -> Aui.Expander.Config a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Aui.Badges",
+        "comment": " Functions to present AUI badges.\n\n\n# Presentation\n\n@docs badge\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "badge",
+            "comment": " Present a badge with a given content\n\n    badge \"Hello world!\"\n",
+            "type": "String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.0"
