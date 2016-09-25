@@ -7897,6 +7897,51 @@
     ]
   },
   {
+    "name": "Fresheyeball/sprite",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Sprite",
+        "comment": "\nA few simple things for Sprite rendering with elm-html.\n\nUsage is intended to be via the `sprite` function generating\nstyles for `Html.Attributes.style`. For example\n\n```\nnode\n    \"sprite\"\n    [ style (sprite s) ]\n    []\n```\n\n@docs Sprite, Dope, sprite, advance, advanceClamp\n\n",
+        "aliases": [
+          {
+            "name": "Dope",
+            "comment": "\nThe ordered frame coordinates representing an animation\n",
+            "args": [],
+            "type": "Array.Array ( Int, Int )"
+          },
+          {
+            "name": "Sprite",
+            "comment": "\nA sprite sheet\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ a | sheet : String, rows : Int, columns : Int, size : ( Int, Int ), frame : Int, dope : Sprite.Dope }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "advance",
+            "comment": "\nMove the sprite forward one frame, such that it will loop when it reaches the end\n",
+            "type": "Sprite.Sprite a -> Sprite.Sprite a"
+          },
+          {
+            "name": "advanceClamp",
+            "comment": "\nMove the sprite forward one frame, such that it will stop when it reaches the end\n",
+            "type": "Sprite.Sprite a -> Sprite.Sprite a"
+          },
+          {
+            "name": "sprite",
+            "comment": "\nProcess a sprite into styles for application with\n`elm-html`. Styles place the sprite sheet as a `background-image`\nand animate by altering the `background-position`. `height`, `width`\nare used for sizing, along with `display:block` for custom nodes.\n",
+            "type": "Sprite.Sprite a -> List ( String, String )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "JasonGFitzpatrick/elm-router",
     "version": "1.0.1",
     "docs": [
@@ -19341,6 +19386,88 @@
             "name": "undo",
             "comment": " Try to undo one step on the current history tree.\nReturns a `Just` value containing the new history tree if it's possible,\n`Nothing` when already at the initial point of history.\n",
             "type": "HistoryTree.HistoryTree a -> Maybe.Maybe (HistoryTree.HistoryTree a)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "cobalamin/safe-int",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "SafeInt",
+        "comment": " This module is a way of explicitly representing invalid integers so that you can ensure they don't propagate to weird places in your application (for instance the view). It achieves this by internally modelling which numbers are valid integers and which aren't, and returning a `Maybe Int` from the `get` function. So in effect, you always need to explicitly handle invalid calculations at the end of a calculation chain.\n\n# Creating and retrieving\n@docs SafeInt, fromInt, get\n\n# Calculations\n@docs (+!), (-!), (*!), (//!), (%!), (^!)\n\n# Wrapping your own functions\n@docs map, map2, andThen, invalid\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "SafeInt",
+            "comment": " A type representing an explicitly valid or invalid `Int`\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "%!",
+            "comment": " A safe version of `(%)`\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "*!",
+            "comment": " A safe version of `(*)`\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "+!",
+            "comment": " A safe version of `(+)`\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "-!",
+            "comment": " A safe version of `(-)`\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "//!",
+            "comment": " A safe version of `(//)`\n\nSee the following GitHub issues as to what this treats as invalid:\n\n- https://github.com/elm-lang/core/issues/590\n- https://github.com/elm-lang/core/issues/92\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "^!",
+            "comment": " A safe version of `(^)`\n\nSee the following GitHub issues as to what this treats as invalid:\n\n- https://github.com/elm-lang/core/issues/194\n",
+            "type": "SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "andThen",
+            "comment": " Put a `SafeInt` through a function that takes a valid `Int` value and returns a new `SafeInt`.\n\nThis is useful when you want to make advanced decisions about a calculation that is not in this library, and might lead to invalid results. It's especially useful when you chain two `andThen`s together to check one of two values in a binary operation, e.g. dividing by zero can be made safe like this.\n\n    cantBe2Here : Int -> SafeInt\n    cantBe2Here x =\n        if x == 2 then\n            invalid\n        else\n            fromInt x\n\n    aSafeInt : SafeInt\n    aSafeInt = fromInt 42\n\n    result = someSafeInt `andThen` cantBe2Here\n",
+            "type": "SafeInt.SafeInt -> (Int -> SafeInt.SafeInt) -> SafeInt.SafeInt"
+          },
+          {
+            "name": "fromInt",
+            "comment": " Creates a new `SafeInt` based on an `Int` value.\n",
+            "type": "Int -> SafeInt.SafeInt"
+          },
+          {
+            "name": "get",
+            "comment": " Try to retrieve a valid `Int` from a `SafeInt`. Returns a `Just` value if the wrapped integer is valid, `Nothing` if it is invalid.\n",
+            "type": "SafeInt.SafeInt -> Maybe.Maybe Int"
+          },
+          {
+            "name": "invalid",
+            "comment": " A value representing an invalid `Int`.\n\nThis is largely only useful when writing your own calculations with `andThen` and you want to be able to say \"this would be an invalid `Int`\" yourself. See the `andThen` docs for an example.\n",
+            "type": "SafeInt.SafeInt"
+          },
+          {
+            "name": "map",
+            "comment": " Use a function operating on one `Int` value with one `SafeInt`.\n",
+            "type": "(Int -> Int) -> SafeInt.SafeInt -> SafeInt.SafeInt"
+          },
+          {
+            "name": "map2",
+            "comment": " Use a function operating on two `Int` values with two `SafeInt`s.\n\nMost safe operators in this library (`(+!)`, `(-!)`, etc.) are implemented in terms of `map2`, which can give you an idea of what it does:\n\n    (+!) = map2 (+)\n",
+            "type": "(Int -> Int -> Int) -> SafeInt.SafeInt -> SafeInt.SafeInt -> SafeInt.SafeInt"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -49695,38 +49822,19 @@
   },
   {
     "name": "john-kelly/elm-postgrest",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "docs": [
       {
-        "name": "PostgRest.Infix",
-        "comment": " PostgREST Infix Operators\n@docs (.)\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": ".",
-            "comment": " ",
-            "type": "PostgRest.Query s -> a -> PostgRest.Field"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "PostgRest",
-        "comment": " PostgREST Query Builder!\n@docs Schema, Query, Field, OrderBy, Filter, Settings, defaultSettings, schema, field, query, subQuery, select, order, filter, like, eq, gte, gt, lte, lt, ilike, in', is, not', asc, desc, postgRest\n",
-        "aliases": [
-          {
-            "name": "Settings",
-            "comment": " ",
-            "args": [],
-            "type": "{ count : Bool , singular : Bool , limit : Maybe.Maybe Int , offset : Maybe.Maybe Int }"
-          }
-        ],
+        "comment": " PostgREST Query Builder!\n@docs field, Field, Resource, Query, Select, OrderBy, Filter, resource, query, include, includeMany, select, order, filter, like, eq, gte, gt, lte, lt, ilike, in', is, not', asc, desc, list, retrieve\n",
+        "aliases": [],
         "types": [
           {
             "name": "Field",
             "comment": " ",
-            "args": [],
+            "args": [
+              "a"
+            ],
             "cases": []
           },
           {
@@ -49745,16 +49853,23 @@
             "name": "Query",
             "comment": " ",
             "args": [
-              "s"
+              "s",
+              "r"
             ],
             "cases": []
           },
           {
-            "name": "Schema",
+            "name": "Resource",
             "comment": " ",
             "args": [
-              "s"
+              "shape"
             ],
+            "cases": []
+          },
+          {
+            "name": "Select",
+            "comment": " ",
+            "args": [],
             "cases": []
           }
         ],
@@ -49762,107 +49877,112 @@
           {
             "name": "asc",
             "comment": " ",
-            "type": "(s -> PostgRest.Field) -> s -> PostgRest.OrderBy"
-          },
-          {
-            "name": "defaultSettings",
-            "comment": " ",
-            "type": "PostgRest.Settings"
+            "type": "(s -> PostgRest.Field a) -> s -> PostgRest.OrderBy"
           },
           {
             "name": "desc",
             "comment": " ",
-            "type": "(s -> PostgRest.Field) -> s -> PostgRest.OrderBy"
+            "type": "(s -> PostgRest.Field a) -> s -> PostgRest.OrderBy"
           },
           {
             "name": "eq",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "field",
             "comment": " ",
-            "type": "String -> PostgRest.Field"
+            "type": "String -> Json.Decode.Decoder a -> PostgRest.Field a"
           },
           {
             "name": "filter",
             "comment": " ",
-            "type": "List (s -> PostgRest.Filter) -> PostgRest.Query s -> PostgRest.Query s"
+            "type": "List (s -> PostgRest.Filter) -> PostgRest.Query s r -> PostgRest.Query s r"
           },
           {
             "name": "gt",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "gte",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "ilike",
             "comment": " ",
-            "type": "String -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "String -> (s -> PostgRest.Field String) -> s -> PostgRest.Filter"
           },
           {
             "name": "in'",
             "comment": " ",
-            "type": "List a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "List a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
+          },
+          {
+            "name": "include",
+            "comment": " ",
+            "type": "PostgRest.Query s2 a -> PostgRest.Query s1 (a -> b) -> PostgRest.Query s1 b"
+          },
+          {
+            "name": "includeMany",
+            "comment": " ",
+            "type": "Maybe.Maybe Int -> PostgRest.Query s2 a -> PostgRest.Query s1 (List a -> b) -> PostgRest.Query s1 b"
           },
           {
             "name": "is",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "like",
             "comment": " ",
-            "type": "String -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "String -> (s -> PostgRest.Field String) -> s -> PostgRest.Filter"
+          },
+          {
+            "name": "list",
+            "comment": " ",
+            "type": "Maybe.Maybe Int -> String -> PostgRest.Query s r -> Task.Task Http.Error (List r)"
           },
           {
             "name": "lt",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "lte",
             "comment": " ",
-            "type": "a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "not'",
             "comment": " ",
-            "type": "(a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter) -> a -> (s -> PostgRest.Field) -> s -> PostgRest.Filter"
+            "type": "(a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter) -> a -> (s -> PostgRest.Field a) -> s -> PostgRest.Filter"
           },
           {
             "name": "order",
             "comment": " ",
-            "type": "List (s -> PostgRest.OrderBy) -> PostgRest.Query s -> PostgRest.Query s"
-          },
-          {
-            "name": "postgRest",
-            "comment": " ",
-            "type": "String -> PostgRest.Settings -> PostgRest.Query s -> Http.Request"
+            "type": "List (s -> PostgRest.OrderBy) -> PostgRest.Query s r -> PostgRest.Query s r"
           },
           {
             "name": "query",
             "comment": " ",
-            "type": "PostgRest.Schema s -> PostgRest.Query s"
+            "type": "PostgRest.Resource s -> (a -> r) -> PostgRest.Query s (a -> r)"
           },
           {
-            "name": "schema",
+            "name": "resource",
             "comment": " ",
-            "type": "String -> s -> PostgRest.Schema s"
+            "type": "String -> s -> PostgRest.Resource s"
+          },
+          {
+            "name": "retrieve",
+            "comment": " ",
+            "type": "String -> PostgRest.Query s r -> Task.Task Http.Error r"
           },
           {
             "name": "select",
             "comment": " ",
-            "type": "List (s -> PostgRest.Field) -> PostgRest.Query s -> PostgRest.Query s"
-          },
-          {
-            "name": "subQuery",
-            "comment": " ",
-            "type": "PostgRest.Query s -> a -> PostgRest.Field"
+            "type": "(s -> PostgRest.Field a) -> PostgRest.Query s (a -> b) -> PostgRest.Query s b"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -61186,6 +61306,266 @@
     ]
   },
   {
+    "name": "mpizenberg/elm-image-collection",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "ImageGallery",
+        "comment": " The ImageGallery module helps displaying a gallery of images.\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Model",
+            "comment": " The model of an image gallery ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " The type of messages to interact with an image gallery ",
+            "args": [],
+            "cases": [
+              [
+                "Clear",
+                []
+              ],
+              [
+                "Add",
+                [
+                  "ImageCollection.Key",
+                  "Maybe.Maybe Image.Model",
+                  "Image.Model"
+                ]
+              ],
+              [
+                "Update",
+                [
+                  "ImageCollection.Key",
+                  "Maybe.Maybe Image.Model",
+                  "Image.Model"
+                ]
+              ],
+              [
+                "Remove",
+                [
+                  "ImageCollection.Key"
+                ]
+              ],
+              [
+                "Select",
+                [
+                  "Maybe.Maybe ImageCollection.Key"
+                ]
+              ],
+              [
+                "Coll",
+                [
+                  "ImageCollection.Msg"
+                ]
+              ],
+              [
+                "Thumb",
+                [
+                  "ImageCollection.Msg"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultView",
+            "comment": " Default view for an image gallery ",
+            "type": "Maybe.Maybe ( Int, Int ) -> Maybe.Maybe ( Int, Int ) -> ImageGallery.Model -> Html.Html ImageGallery.Msg"
+          },
+          {
+            "name": "defaultViewSelected",
+            "comment": " Default view of the currently selected image of an image gallery ",
+            "type": "Maybe.Maybe ( Int, Int ) -> ImageGallery.Model -> Html.Html ImageGallery.Msg"
+          },
+          {
+            "name": "defaultViewThumbs",
+            "comment": " Default view of the thumbnails of an image gallery ",
+            "type": "Maybe.Maybe ( Int, Int ) -> ImageGallery.Model -> Html.Html ImageGallery.Msg"
+          },
+          {
+            "name": "imageViewer",
+            "comment": " Just a viewer for 1 image ",
+            "type": "ImageCollection.ImageViewer ImageGallery.Msg"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize an empty model of an image gallery ",
+            "type": "( ImageGallery.Model, Platform.Cmd.Cmd ImageGallery.Msg )"
+          },
+          {
+            "name": "update",
+            "comment": " Update the gallery depending on the message ",
+            "type": "ImageGallery.Msg -> ImageGallery.Model -> ( ImageGallery.Model, Platform.Cmd.Cmd ImageGallery.Msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "ImageCollection",
+        "comment": " The ImageCollection module helps dealing with collections of images.\n\n@docs Key, ImageViewer\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView, viewOne\n\n",
+        "aliases": [
+          {
+            "name": "ImageViewer",
+            "comment": " Alias for readability in type definitions ",
+            "args": [
+              "msg"
+            ],
+            "type": "Maybe.Maybe Image.Class -> Maybe.Maybe ( Int, Int ) -> ImageCollection.Key -> Image.Model -> VirtualDom.Node msg"
+          },
+          {
+            "name": "Key",
+            "comment": " The key type to access images in the collection ",
+            "args": [],
+            "type": "String"
+          }
+        ],
+        "types": [
+          {
+            "name": "Model",
+            "comment": " The model for a collection of images.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " The type of messages to interact with image collections.\n",
+            "args": [],
+            "cases": [
+              [
+                "Clear",
+                []
+              ],
+              [
+                "Remove",
+                [
+                  "ImageCollection.Key"
+                ]
+              ],
+              [
+                "Add",
+                [
+                  "ImageCollection.Key",
+                  "Image.Model"
+                ]
+              ],
+              [
+                "Update",
+                [
+                  "ImageCollection.Key",
+                  "Image.Model"
+                ]
+              ],
+              [
+                "SetDefaultSize",
+                [
+                  "Maybe.Maybe ( Int, Int )"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultView",
+            "comment": " A simple default viewer putting `<img>` tags one after the other.\n",
+            "type": "ImageCollection.Model -> VirtualDom.Node msg"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize the model of a collection of images\nwith the default size of image views.\n\n    (model, msg) = init (Just (320, 240))\n",
+            "type": "Maybe.Maybe ( Int, Int ) -> ( ImageCollection.Model, Platform.Cmd.Cmd ImageCollection.Msg )"
+          },
+          {
+            "name": "update",
+            "comment": " Update the image collection.\n",
+            "type": "ImageCollection.Msg -> ImageCollection.Model -> ( ImageCollection.Model, Platform.Cmd.Cmd ImageCollection.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " The view of an image collection.\nOne can define a class for the `<div>` containing the collection,\na special function detailing the view of each image of the collection,\na class for each image tag,\nand a default size for the images.\n\n    viewer : Maybe Class -> Maybe (Int, Int) -> Key -> Image.Model -> Node msg\n    viewer class size key imageModel =\n        Image.view Image.ImgTag class size imageModel\n\n    collectionNode =\n        view (Just \"my-collection\") viewer Nothing (Just (320, 240)) model\n",
+            "type": "Maybe.Maybe Image.Class -> ImageCollection.ImageViewer msg -> Maybe.Maybe Image.Class -> Maybe.Maybe ( Int, Int ) -> ImageCollection.Model -> VirtualDom.Node msg"
+          },
+          {
+            "name": "viewOne",
+            "comment": " View only one image of the collection ",
+            "type": "Image.TagType -> Maybe.Maybe Image.Class -> Maybe.Maybe ( Int, Int ) -> ImageCollection.Key -> ImageCollection.Model -> VirtualDom.Node msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Image",
+        "comment": " This module helps you deal with images, whether for `<img>` tags\nor for `<image>` tag inside a `<svg>`.\n\n@docs Class, TagType\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView\n\n",
+        "aliases": [
+          {
+            "name": "Class",
+            "comment": " For readability purpose in type definitions.\nRefers to the class attribute of html tags.\n",
+            "args": [],
+            "type": "String"
+          }
+        ],
+        "types": [
+          {
+            "name": "Model",
+            "comment": " Model for an image.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " The type of messages the Image module may use.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "TagType",
+            "comment": " A type specifying if the image is going to be displayed\nin a classic `<img>` tag or inside a `<svg>` tag.\n",
+            "args": [],
+            "cases": [
+              [
+                "ImgTag",
+                []
+              ],
+              [
+                "SvgTag",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "defaultView",
+            "comment": " Default view for an image.\nIt is an `<img>` tag using default class \"image\" and the size of the image.\n",
+            "type": "Image.Model -> VirtualDom.Node msg"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize an image with its url, width and height.\n\n    (model, msg) = init \"img/cute_cat.png\" 320 240\n",
+            "type": "String -> Int -> Int -> ( Image.Model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "update",
+            "comment": " Update an image.\n",
+            "type": "Image.Msg -> Image.Model -> ( Image.Model, Platform.Cmd.Cmd Image.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " View an image, depending on its location.\n\n    -- Get the image in an `<img>` tag with a size of 320x240 and the class \"my-image\".\n    viewNode = view ImgTag (Just \"my-image\") (Just (320, 240)) model\n",
+            "type": "Image.TagType -> Maybe.Maybe Image.Class -> Maybe.Maybe ( Int, Int ) -> Image.Model -> VirtualDom.Node msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "mukeshsoni/elm-rope",
     "version": "1.0.0",
     "docs": [
@@ -62008,7 +62388,7 @@
   },
   {
     "name": "nphollon/geo3d",
-    "version": "2.0.0",
+    "version": "2.0.4",
     "docs": [
       {
         "name": "Frame",
@@ -62075,7 +62455,7 @@
           },
           {
             "name": "mul",
-            "comment": " Given a frame B to C, and another frame A to B, return the frame A to C.\n    transformInto (mul a b) vec == transformInto a (transformInto b vec)\n",
+            "comment": " Given a frame B to C, and another frame A to B, return the frame A to C.\n\n    transformInto (mul a b) vec == transformInto a (transformInto b vec)\n",
             "type": "Frame.Frame -> Frame.Frame -> Frame.Frame"
           },
           {
@@ -77068,6 +77448,348 @@
     ]
   },
   {
+    "name": "techanvil/key-constants",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Keyboard.Keys",
+        "comment": " Standard keyboard constants.\n\n# Data types\n@docs Key\n\n## Equality\n@docs equals\n\n# Constants\n## Function keys\nNote: undefined function keys have a conflict with the default keybindings of a well-known browser.\n\n@docs f2, f4, f8, f9, f10\n\n## Modifiers\n@docs ctrl, shift, super, meta, windows, commandLeft, commandRight\n\n## Movement\n@docs arrowRight, arrowLeft, arrowUp, arrowDown, end, home, pageUp, pageDown\n\n## Editing keys\n@docs tab, space, backspace, delete, insert, enter\n\n## Special keys\n@docs escape\n\n## Numbers\n@docs one, two, three, four, five, six, seven, eight, nine, zero\n\n## Letters\n@docs a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z\n\n\n",
+        "aliases": [
+          {
+            "name": "Key",
+            "comment": " Type alias to make it clearer what integers are supposed to represent.\n",
+            "args": [],
+            "type": "{ keyCode : Char.KeyCode, name : String }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "a",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "arrowDown",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "arrowLeft",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "arrowRight",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "arrowUp",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "b",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "backspace",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "c",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "commandLeft",
+            "comment": " A key on mac keyboards. The same keycode as the windows/super/meta keys. ",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "commandRight",
+            "comment": " A key on mac keyboards. ",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "ctrl",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "d",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "delete",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "e",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "eight",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "end",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "enter",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "equals",
+            "comment": " Two Keys are equal if their keyCodes are equal ",
+            "type": "Keyboard.Keys.Key -> Keyboard.Keys.Key -> Bool"
+          },
+          {
+            "name": "escape",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f10",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f2",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f4",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f8",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "f9",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "five",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "four",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "g",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "h",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "home",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "i",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "insert",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "j",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "k",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "l",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "m",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "meta",
+            "comment": " The super, meta & windows keys are all the same. ",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "n",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "nine",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "o",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "one",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "p",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "pageDown",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "pageUp",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "q",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "r",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "s",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "seven",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "shift",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "six",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "space",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "super",
+            "comment": " The super, meta & windows keys are all the same. ",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "t",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "tab",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "three",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "two",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "u",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "v",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "w",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "windows",
+            "comment": " The super, meta & windows keys are all the same. ",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "x",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "y",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "z",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          },
+          {
+            "name": "zero",
+            "comment": "",
+            "type": "Keyboard.Keys.Key"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "thaterikperson/elm-blackjack",
     "version": "1.1.0",
     "docs": [
@@ -77531,11 +78253,11 @@
   },
   {
     "name": "toastal/either",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Either",
-        "comment": "\nA generic structure for a type with two possibilities: a `Left a` or\na `Right b`.\n\n\n# Definition\n@docs Either\n\n# Mapping\n@docs map, map2, map3, mapLeft, mapRight, mapBoth, mapDefault\n\n# Singleton & Applying\n@docs singleton, andMap, andMapLeft, andMapRight\n\n# Chaining\n@docs andThen, andThenLeft, andThenRight\n\n# List Helpers\n@docs lefts, rights, partition\n\n# Maybe Helpers\n@docs toMaybe, leftToMaybe, rightToMaybe, fromMaybe, leftFromMaybe, rightFromMaybe\n\n# Result Helpers\n@docs toResult, fromResult\n\n# Rest of the Helpers\n@docs isLeft, isRight, fromLeft, fromRight, withDefault, elim, either, swap\n",
+        "comment": "\nA generic structure for a type with two possibilities: a `Left a` or\na `Right b`.\n\n\n# Definition\n@docs Either\n\n# Mapping (Functor)\n@docs map, map2, map3, map4, mapLeft, mapRight, mapBoth\n\n# Applying (Applicative)\n@docs singleton, andMap, andMapLeft, andMapRight\n\n\n# Folding (Foldable)\n@docs length, foldr\n\n# Chaining (Monad)\n@docs andThen, andThenLeft, andThenRight\n\n# List Helpers\n@docs lefts, rights, partition\n\n# Maybe Helpers\n@docs toMaybe, leftToMaybe, rightToMaybe, fromMaybe, leftFromMaybe, rightFromMaybe\n\n# Result Helpers\n@docs toResult, fromResult\n\n# Rest of the Helpers\n@docs isLeft, isRight, fromLeft, fromRight, withDefault, unpack, unwrap, swap\n",
         "aliases": [],
         "types": [
           {
@@ -77593,14 +78315,9 @@
             "type": "Either.Either x a -> (a -> Either.Either x b) -> Either.Either x b"
           },
           {
-            "name": "either",
-            "comment": " Alias for `elim`.\n",
-            "type": "(a -> c) -> (b -> c) -> Either.Either a b -> c"
-          },
-          {
-            "name": "elim",
-            "comment": " Given a function for both `Left` and `Right` to to type a generic\ntype `c`, collapse down the `Either` to a value of that type.\n\n    elim identity toString <| Left \"World\" == \"World\"\n    elim identity toString <| Right 2 == \"2\"\n",
-            "type": "(a -> c) -> (b -> c) -> Either.Either a b -> c"
+            "name": "foldr",
+            "comment": " Folds an `Either` over a function with an accumulator. If\nit is a `Right` the function is applied with the accumulator.\nIf it is a `Left` only the accumulator is returned.\n\n    foldr (*) 2 <| Left 3 == 2\n    foldr (*) 2 <| Right 3 == 6\n",
+            "type": "(a -> b -> b) -> b -> Either.Either a a -> b"
           },
           {
             "name": "fromLeft",
@@ -77648,6 +78365,11 @@
             "type": "List (Either.Either a x) -> List a"
           },
           {
+            "name": "length",
+            "comment": " Returns the length of an `Either`. This happens to be `0` for a\n`Left` and `1` for a `Right`.\n\n    length <| Left 2 == 0\n    length <| Right \"Sharks\" == 1\n",
+            "type": "Either.Either a b -> Int"
+          },
+          {
             "name": "map",
             "comment": " Apply a function to an `Either`. If the argument is `Right`, it\nwill be converted.  If the argument is an `Left`, the same left value\nwill propogate through.\n\n    map ((+) 1) <| Left \"Hello\" == Left \"Hello\"\n    map ((+) 1) <| Right 2 == Right 3\n",
             "type": "(a -> b) -> Either.Either x a -> Either.Either x b"
@@ -77663,14 +78385,14 @@
             "type": "(a -> b -> c -> d) -> Either.Either x a -> Either.Either x b -> Either.Either x c -> Either.Either x d"
           },
           {
+            "name": "map4",
+            "comment": " Like `map2`, but with 4 eithers. Also known as `liftA4`\n",
+            "type": "(a -> b -> c -> d -> e) -> Either.Either x a -> Either.Either x b -> Either.Either x c -> Either.Either x d -> Either.Either x e"
+          },
+          {
             "name": "mapBoth",
             "comment": " Apply the first argument function to a `Left` and the second\nargument function to a `Right` of an `Either`.\n\n    mapBoth (flip (++) \"!!\") ((+) 1) <| Left \"Hello\" == Left \"Hello!!\"\n    mapBoth (flip (++) \"!!\") ((+) 1) <| Right 2 == Right 3\n",
             "type": "(a -> b) -> (c -> d) -> Either.Either a c -> Either.Either b d"
-          },
-          {
-            "name": "mapDefault",
-            "comment": " Apply a function to `Right` value. If argument was a `Left` use the\ndefault value. Equivalent to `Either.map >> Either.fromRight`.\n\n    mapDefault 99 ((+) 1) <| Left \"Hello\" == 99\n    mapDefault 99 ((+) 1) <| Right 2 == 3\n",
-            "type": "c -> (b -> c) -> Either.Either x b -> c"
           },
           {
             "name": "mapLeft",
@@ -77704,7 +78426,7 @@
           },
           {
             "name": "singleton",
-            "comment": " Create a `singleton` from a value to an `Either` with a `Right`\nof the same type.  Also known as `pure`.\n\n    singleton 2 == Right 2\n",
+            "comment": " Create a `singleton` from a value to an `Either` with a `Right`\nof the same type.  Also known as `pure`. Use the `Left` constructor\nfor a singleton of the `Left` variety.\n\n    singleton 2 == Right 2\n",
             "type": "b -> Either.Either x b"
           },
           {
@@ -77721,6 +78443,16 @@
             "name": "toResult",
             "comment": " Convert from `Either` to `Result`.\n\n    toResult <| Left \"World\" == Err \"World\"\n    toResult <| Right 2 == Ok 2\n",
             "type": "Either.Either a b -> Result.Result a b"
+          },
+          {
+            "name": "unpack",
+            "comment": " Given a function for both `Left` and `Right` to to type a generic\ntype `c`, collapse down the `Either` to a value of that type.\n\n    unpack identity toString <| Left \"World\" == \"World\"\n    unpack identity toString <| Right 2 == \"2\"\n",
+            "type": "(a -> c) -> (b -> c) -> Either.Either a b -> c"
+          },
+          {
+            "name": "unwrap",
+            "comment": " Apply a function to `Right` value. If argument was a `Left` use the\ndefault value. Equivalent to `Either.map >> Either.fromRight`.\n\n    unwrap 99 ((+) 1) <| Left \"Hello\" == 99\n    unwrap 99 ((+) 1) <| Right 2 == 3\n",
+            "type": "c -> (b -> c) -> Either.Either x b -> c"
           },
           {
             "name": "withDefault",
@@ -78102,11 +78834,11 @@
   },
   {
     "name": "tripokey/elm-fuzzy",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "docs": [
       {
         "name": "Fuzzy",
-        "comment": " This is library for performing fuzzy string matching.\n\n#Customization\n@docs addPenalty, removePenalty, movePenalty\n\n# Matching\n@docs match, Result, Match, Key\n\n",
+        "comment": " This is library for performing fuzzy string matching.\n\n# Customization\n@docs addPenalty, removePenalty, movePenalty\n\n# Matching\n@docs match, Result, Match, Key\n\n",
         "aliases": [
           {
             "name": "Key",
@@ -78150,7 +78882,7 @@
             "type": "Int -> Fuzzy.Config"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -78286,6 +79018,90 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "turbomack/chaetree",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "ChaeTree",
+        "comment": " This library implements [RoseTree](https://en.wikipedia.org/wiki/Rose_tree) related datastructure\nand essential functions for its manipulations. `ChaeTree` (name comes from [Chaenomeles](https://en.wikipedia.org/wiki/Chaenomeles))\ncan be essential structure **for building multi level navigation browser or anything with similar hierarchic structure**.\nUnlike `RoseTree` `ChaeTree` do not have single root node which makes it more *tree like* data structure rather then regular tree.\n`ChaeTree` itself is just list of Nodes where each node is it's own `RoseTree`.\nBeside this every `Node` has its `id` which makes some useful manipulations easier.\n\n# Types\n@docs Id, Node, Tree\n\n# Common Helpers\n@docs toId, createNode, getId, unpack, pushChild, getSubTree\n\n# Common Operations\n@docs push, fromList, subTreeFor\n\n# Examples\nPlease see [example](https://github.com/turboMaCk/ChaeTree/tree/master/examples) implementations to learn more.\n\n",
+        "aliases": [
+          {
+            "name": "Id",
+            "comment": " `Id` is just alias for `String` type\n",
+            "args": [],
+            "type": "String"
+          },
+          {
+            "name": "Tree",
+            "comment": " Tree is just type alias for `List (Node a)`.\nTree is top level datastructure and is defined as:\n",
+            "args": [
+              "a"
+            ],
+            "type": "List (ChaeTree.Node a)"
+          }
+        ],
+        "types": [
+          {
+            "name": "Node",
+            "comment": " Node is single `RoseTree` like type. More `Node`s together create `ChaeTree`.\nThis is how node is defined:\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "createNode",
+            "comment": " Create `Node` for given values.\nFirst paramter is function which takes given value and return it's id.\n\n    createNode toId 1 == Node \"1\" 1 []\n    createNode toId { a = \"b\" } == Node \"{ a = \\\"b\\\" }\" { a = \"b\" } []\n    createNode (\\a -> .id a) { id = \"1\" } == Node \"1\" { id = \"1\" } []\n    createNode (\\a -> .id a |> toId ) { id = 1 } == Node \"1\" { id = 1 } []\n",
+            "type": "(a -> ChaeTree.Id) -> a -> ChaeTree.Node a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Build `Tree` from given list of items.\nFirst argument is function from item to `Id/String`.\nSecond argument is function from item to `List Id/List String`.\n\n    items =\n        [ { id = 1, name = \"first\", parentIds = [] }\n        , { id = 2, name = \"child\", parentIds = [1] }\n        , { id = 3, name = \"dep categories\", parentIds = [2] }\n        ]\n\n     itemId item =\n         toId (.id item )\n\n     itemParentIds item =\n         .parentIds item |> List.map toId\n\n     fromList itemId itemParentIds items == [Node \"1\" { id = 1, name = \"first\", parentIds = [] } ([Node \"2\" { id = 2, name = \"child\", parentIds = [1] } ([Node \"3\" { id = 3, name = \"dep categories\", parentIds = [2] } []])])]\n",
+            "type": "(a -> ChaeTree.Id) -> (a -> List ChaeTree.Id) -> List a -> ChaeTree.Tree a"
+          },
+          {
+            "name": "getId",
+            "comment": " Get id of given `Node`.\n\n    getId (createNode toId 1) == \"1\"\n    getId (createNode (\\_ -> \"uid\") { a = \"a\"} ) == \"uid\"\n",
+            "type": "ChaeTree.Node a -> ChaeTree.Id"
+          },
+          {
+            "name": "getSubTree",
+            "comment": " Get child tree of `Node`.\nThis is common way to access sub tree of given node.\n\n    getSubTree (createNode toId 1) == []\n    getSubTree (pushChild toId 2 (createNode toId 1)) == [Node \"2\" 2 []]\n",
+            "type": "ChaeTree.Node a -> ChaeTree.Tree a"
+          },
+          {
+            "name": "push",
+            "comment": " Produce new tree with given item pushed under its parent.\nFirst argument is function from item to `Id/String`.\n\nSecond argument is `Maybe Id` is ether:\n\n- `Nothing` => push to root\n- `Just parentId` => push to sub Tree\n\n    push toId Nothing 1 [] == [Node \"1\" 1 []]\n    push toId (Just (toId 1)) 2 [ createNode toId 1 ] == [Node \"1\" 1 ([Node \"2\" 2 []])]\n",
+            "type": "(a -> ChaeTree.Id) -> Maybe.Maybe ChaeTree.Id -> a -> ChaeTree.Tree a -> ChaeTree.Tree a"
+          },
+          {
+            "name": "pushChild",
+            "comment": " Return `Node` with item add as sub `Node`.\nFirst argument is function from item to `Id/String`.\n\n    pushChild toId 2 (createNode toId 1) == Node \"1\" 1 ([Node \"2\" 2 []])\n    pushChild toId 3 (pushChild toId 2 (createNode toId 1)) == Node \"1\" 1 ([Node \"3\" 3 [],Node \"2\" 2 []])\n",
+            "type": "(a -> ChaeTree.Id) -> a -> ChaeTree.Node a -> ChaeTree.Node a"
+          },
+          {
+            "name": "subTreeFor",
+            "comment": " Returns sub `Tree` and ancestors for given `Id` and `Tree`.\nFirst argument is `Maybe Id` is ether:\n\n- `Nothing` => result is given tree (with empty ancestors `List`).\n- `Just parentId` => result is sub tree for node with `id == parentId`.\n\nReturns tuple containing sub tree and list of ancestors (paratenrs of root `Node`).\n\n    items =\n        [ { id = 1, name = \"first\", parentIds = [] }\n        , { id = 2, name = \"child\", parentIds = [1] }\n        , { id = 3, name = \"dep categories\", parentIds = [2] }\n        ]\n\n     itemId item =\n         toId (.id item )\n\n     itemParentIds item =\n         .parentIds item |> List.map toId\n\n     tree =\n        fromList itemId itemParentIds items\n\n     subtreeFor Nothing tree == ([Node \"1\" { id = 1, name = \"first\", parentIds = [] } ([Node \"2\" { id = 2, name = \"child\", parentIds = [1] } ([Node \"3\" { id = 3, name = \"dep categories\", parentIds = [2] } []])])],[])\n     subtreeFor (Just \"1\") tree == ([Node \"2\" { id = 2, name = \"child\", parentIds = [1] } ([Node \"3\" { id = 3, name = \"dep categories\", parentIds = [2] } []])],[{ id = 1, name = \"first\", parentIds = [] }])\n     subtreeFor (Just \"2\") tree == ([Node \"3\" { id = 3, name = \"dep categories\", parentIds = [2] } []],[{ id = 2, name = \"child\", parentIds = [1] },{ id = 1, name = \"first\", parentIds = [] }])\n",
+            "type": "Maybe.Maybe ChaeTree.Id -> ChaeTree.Tree a -> ( ChaeTree.Tree a, List a )"
+          },
+          {
+            "name": "toId",
+            "comment": " Convert any value to `Id` type.\nThis is just alias for `toString` function.\n\n    toId \"str\" = \"str\"\n    toId 1 = \"1\"\n    toId = \"{ a = \\\"a\\\" }\"\n",
+            "type": "a -> ChaeTree.Id"
+          },
+          {
+            "name": "unpack",
+            "comment": " Turns `Node` back to value it was created from.\n\nThis function provide recommended way to access user space data while working with tree.\n\n    unpack (createNode toId \"Elm\") == \"Elm\"\n    unpack (createNode (\\i -> .id i) { id = \"1\", name = \"Elm\" }) == { id = \"1\", name = \"Elm\" }\n",
+            "type": "ChaeTree.Node a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -78797,6 +79613,104 @@
           }
         ],
         "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "wernerdegroot/listzipper",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "List.Zipper",
+        "comment": " A zipper for `List`.\n\n# The `Zipper` type\n@docs Zipper\n\n# Constructing a `Zipper`\n@docs fromList\n\n# Accessors\n@docs before, get, after, toList\n\n# Updating\n@docs updateBefore, update, updateAfter\n\n# Moving around\n@docs first, previous, next, last, find\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Zipper",
+            "comment": " The `Zipper` type. ",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Zipper",
+                [
+                  "List a",
+                  "a",
+                  "List a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "after",
+            "comment": " Returns all elements after the element the `Zipper` is focussed on ",
+            "type": "List.Zipper.Zipper a -> List a"
+          },
+          {
+            "name": "before",
+            "comment": " Returns all elements before the element the `Zipper` is focussed on. ",
+            "type": "List.Zipper.Zipper a -> List a"
+          },
+          {
+            "name": "find",
+            "comment": " Returns a `Zipper` focussed on the first element for which the predicate returns `True` (starting from a given `Zipper`). ",
+            "type": "(a -> Bool) -> List.Zipper.Zipper a -> Maybe.Maybe (List.Zipper.Zipper a)"
+          },
+          {
+            "name": "first",
+            "comment": " Move the focus to the first element of the list. ",
+            "type": "List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Construct a `Zipper` from a list. The `Zipper` will focus on the first element (if there is a first element). ",
+            "type": "List a -> Maybe.Maybe (List.Zipper.Zipper a)"
+          },
+          {
+            "name": "get",
+            "comment": " Returns the element the `Zipper` is focussed on. ",
+            "type": "List.Zipper.Zipper a -> a"
+          },
+          {
+            "name": "last",
+            "comment": " Move the focus to the last element of the list. ",
+            "type": "List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          },
+          {
+            "name": "next",
+            "comment": " Move the focus to the element after the element the `Zipper` is currently focussed on (if there is such an element). ",
+            "type": "List.Zipper.Zipper a -> Maybe.Maybe (List.Zipper.Zipper a)"
+          },
+          {
+            "name": "previous",
+            "comment": " Move the focus to the element before the element the `Zipper` is currently focussed on (if there is such an element). ",
+            "type": "List.Zipper.Zipper a -> Maybe.Maybe (List.Zipper.Zipper a)"
+          },
+          {
+            "name": "toList",
+            "comment": " Reconstruct the list. ",
+            "type": "List.Zipper.Zipper a -> List a"
+          },
+          {
+            "name": "update",
+            "comment": " Updat the element the `Zipper` is focussed on. ",
+            "type": "(a -> a) -> List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          },
+          {
+            "name": "updateAfter",
+            "comment": " Update all elements after the element the `Zipper` is focussed on. ",
+            "type": "(List a -> List a) -> List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          },
+          {
+            "name": "updateBefore",
+            "comment": " Update all elements before the element the `Zipper` is focussed on. ",
+            "type": "(List a -> List a) -> List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
       }
     ]
   },
