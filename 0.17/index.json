@@ -62396,7 +62396,7 @@
   },
   {
     "name": "nphollon/geo3d",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "docs": [
       {
         "name": "Frame",
@@ -62413,7 +62413,7 @@
         "values": [
           {
             "name": "compose",
-            "comment": " Given a frame A to B, and another frame B to C, return the frame A to C.\n",
+            "comment": " Given a frame A to B, and another frame B to C, return the frame A to C.\n\n    transformOutOf (compose a b) == transformOutOf b >> transformOutOf a\n    transformInto (compose a b) == transformInto a >> transformInto b\n",
             "type": "Frame.Frame -> Frame.Frame -> Frame.Frame"
           },
           {
@@ -62463,7 +62463,7 @@
           },
           {
             "name": "mul",
-            "comment": " Given a frame B to C, and another frame A to B, return the frame A to C.\n\n    transformInto (mul a b) vec == transformInto a (transformInto b vec)\n",
+            "comment": " Given a frame B to C, and another frame A to B, return the frame A to C.\n",
             "type": "Frame.Frame -> Frame.Frame -> Frame.Frame"
           },
           {
