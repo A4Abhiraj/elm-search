@@ -9101,11 +9101,11 @@
   },
   {
     "name": "MacCASOutreach/graphicsvg",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "GraphicSVG",
-        "comment": " A library for creating SVG graphics in a way that is compatible with Elm's\nold Graphics library. Also includes built-in functions for creating games and\nother applications including keyboard presses and mouse movements.\n# Basic Types\n@docs Stencil, Shape\n# Rendering To Screen\n@docs collage\n# Graphics App\n@docs graphicsApp\n# Notifications App\n@docs notificationsApp\n# Game App\n@docs GetKeyState, gameApp\n# Shapes\n@docs line, polygon, openPolygon, ngon, triangle, square, rect, rectangle, roundedRect, circle, oval, wedge, graphPaper\n# Filling and Outlining\n@docs filled, outlined, addOutline, rgb, rgba, hsl, hsla\n# Grouping Shapes\n@docs group\n# Curves\n@docs curve, Pull\n# Line Styles\n@docs solid, dotted, dashed, longdash, dotdash, increasing, custom\n# Text\n@docs text, size, bold, italic, underline, strikethrough, centered, sansserif, serif, fixedwidth, customFont\n# Transformations\n@docs move, rotate, scale, scaleX, scaleY, mirrorX, mirrorY\n# Notifications\n@docs notifyTap, notifyTapAt, notifyEnter, notifyEnterAt, notifyLeave, notifyLeaveAt, notifyMouseMoveAt, notifyMouseDown, notifyMouseDownAt, notifyMouseUp, notifyMouseUpAt, notifyTouchStart, notifyTouchStartAt, notifyTouchEnd, notifyTouchEndAt, notifyTouchMoveAt\n# Miscallaneous\n@docs makeTransparent, addHyperlink\n# Let there be colours!\n@docs black,blank,blue,brown,charcoal,darkBlue,darkBrown,darkCharcoal,darkGray,darkGreen,darkGrey,darkOrange,darkPurple,darkRed,darkYellow,gray,green,grey,hotPink,lightBlue,lightBrown,lightCharcoal,lightGray,lightGreen,lightGrey,lightOrange,lightPurple,lightRed,lightYellow,orange,pink,purple,red,white,yellow\n\n",
+        "comment": " A library for creating SVG graphics in a way that is compatible with Elm's\nold Graphics library. Also includes built-in functions for creating games and\nother applications including keyboard presses and mouse movements.\n# Basic Types\n@docs Stencil, Shape\n# Rendering To Screen\n@docs collage\n# Graphics App\n@docs graphicsApp\n# Notifications App\n@docs notificationsApp\n# Game App\n@docs GetKeyState, Keys, KeyState, gameApp\n# Stencils\n@docs line, polygon, openPolygon, ngon, triangle, square, rect, rectangle, roundedRect, circle, oval, wedge, graphPaper\n# Creating Shapes by Filling and Outlining Stencils\n@docs filled, outlined, addOutline, rgb, rgba, hsl, hsla\n# Grouping Shapes\n@docs group\n# Curves\n@docs curve, Pull\n# Line Styles\n@docs solid, dotted, dashed, longdash, dotdash, increasing, custom\n# Text\n@docs text, size, bold, italic, underline, strikethrough, centered, sansserif, serif, fixedwidth, customFont\n# Transformations\n@docs move, rotate, scale, scaleX, scaleY, mirrorX, mirrorY\n# Notifications\n@docs notifyTap, notifyTapAt, notifyEnter, notifyEnterAt, notifyLeave, notifyLeaveAt, notifyMouseMoveAt, notifyMouseDown, notifyMouseDownAt, notifyMouseUp, notifyMouseUpAt, notifyTouchStart, notifyTouchStartAt, notifyTouchEnd, notifyTouchEndAt, notifyTouchMoveAt\n# Miscallaneous\n@docs makeTransparent, addHyperlink\n# Let there be colours!\n@docs black,blank,blue,brown,charcoal,darkBlue,darkBrown,darkCharcoal,darkGray,darkGreen,darkGrey,darkOrange,darkPurple,darkRed,darkYellow,gray,green,grey,hotPink,lightBlue,lightBrown,lightCharcoal,lightGray,lightGreen,lightGrey,lightOrange,lightPurple,lightRed,lightYellow,orange,pink,purple,red,white,yellow\n\n",
         "aliases": [
           {
             "name": "GetKeyState",
@@ -9115,6 +9115,94 @@
           }
         ],
         "types": [
+          {
+            "name": "KeyState",
+            "comment": " The possible states when you ask for a key's state.\n\n    JustDown is the frame after the key went down (will show up exactly once per press)\n    Down is a press that is continuing for more than one frame\n    JustUp is the frame after the key went up / stopped being pressed (will show up exactly once per press)\n    Up means the key is not currently being pressed nor was it recently released.\n",
+            "args": [],
+            "cases": [
+              [
+                "JustDown",
+                []
+              ],
+              [
+                "Down",
+                []
+              ],
+              [
+                "JustUp",
+                []
+              ],
+              [
+                "Up",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Keys",
+            "comment": " Includes all the regular keys. Ask for letters and numbers using \"Key String.\"\n",
+            "args": [],
+            "cases": [
+              [
+                "Key",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Backspace",
+                []
+              ],
+              [
+                "Tab",
+                []
+              ],
+              [
+                "Enter",
+                []
+              ],
+              [
+                "Shift",
+                []
+              ],
+              [
+                "Ctrl",
+                []
+              ],
+              [
+                "Alt",
+                []
+              ],
+              [
+                "Caps",
+                []
+              ],
+              [
+                "LeftArrow",
+                []
+              ],
+              [
+                "UpArrow",
+                []
+              ],
+              [
+                "RightArrow",
+                []
+              ],
+              [
+                "DownArrow",
+                []
+              ],
+              [
+                "Delete",
+                []
+              ],
+              [
+                "Space",
+                []
+              ]
+            ]
+          },
           {
             "name": "Pull",
             "comment": " To make it easier to read the code defining a curve,\nand to make sure we always use the right number of curve points\nand pull points (which is one more curve point than pull points),\nwe define a special Pull type, whose first point is the point\nwe pull towards, and second point is the end point for this\ncurve segmentsment.\n",
@@ -9532,7 +9620,7 @@
           },
           {
             "name": "outlined",
-            "comment": " Outline a Stencil with a Linetype and Color, creating a Shape.\n\n    circle 10\n        |> outlined (solid 5) red\n",
+            "comment": " Outline a Stencil with a LineType and Color, creating a Shape.\n\n    circle 10\n        |> outlined (solid 5) red\n",
             "type": "GraphicSVG.LineType -> GraphicSVG.Color -> GraphicSVG.Stencil -> GraphicSVG.Shape notification"
           },
           {
@@ -10523,8 +10611,141 @@
   },
   {
     "name": "NoRedInk/nri-elm-css",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "docs": [
+      {
+        "name": "Nri.Fonts",
+        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "baseFont",
+            "comment": " Font for instructions, headers, and pretty much everything else\n",
+            "type": "Css.Mixin"
+          },
+          {
+            "name": "quizFont",
+            "comment": " Font for question sentences, or most interactable or graded fields\n",
+            "type": "Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Colors",
+        "comment": " Helper module for working with colors\n\n@docs black, blue, blueDark, blueDark5, blueDark70, blueLighter, coral, coralLighter, coralLightest, gray, grayDark, grayDarker, grayLighter, grayLightest, turquoise, turquoiseLighter, turquoiseLightest, yellowDark, purple, green, white\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "black",
+            "comment": " black\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blue",
+            "comment": " blue\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark",
+            "comment": " blueDark\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark5",
+            "comment": " blueDark5\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark70",
+            "comment": " blueDark70\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueLighter",
+            "comment": " blueLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coral",
+            "comment": " coral\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coralLighter",
+            "comment": " coralLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coralLightest",
+            "comment": " coralLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "gray",
+            "comment": " gray\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayDark",
+            "comment": " grayDark\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayDarker",
+            "comment": " grayDarker\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayLighter",
+            "comment": " grayLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayLightest",
+            "comment": " grayLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "green",
+            "comment": " green\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "purple",
+            "comment": " purple\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoise",
+            "comment": " turquoise\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoiseLighter",
+            "comment": " turquoiseLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoiseLightest",
+            "comment": " turquoiseLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "white",
+            "comment": " white\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "yellowDark",
+            "comment": " yellowDark\n",
+            "type": "Css.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
       {
         "name": "Nri.Stylers",
         "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
@@ -10537,21 +10758,7 @@
             "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Nri.Colors",
-        "comment": " Helper module for working with colors\n@docs grayDarker\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "grayDarker",
-            "comment": " Darkest gray\n",
-            "type": "Css.Color"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Nri",
@@ -10565,7 +10772,7 @@
             "type": "String"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -34298,11 +34505,11 @@
   },
   {
     "name": "elm-community/maybe-extra",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Maybe.Extra",
-        "comment": " Convenience functions for Maybe.\n\n# Common helpers\n@docs (?), join, isNothing, isJust, mapDefault, filter\n\n# Applicative functions\n@docs andMap, next, prev, or\n\n# List and array functions\n@docs maybeToList, maybeToArray, traverse, combine, traverseArray, combineArray\n",
+        "comment": " Convenience functions for Maybe.\n\n# Common helpers\n@docs (?), join, isNothing, isJust, unwrap, unpack, filter\n\n# Applicative functions\n@docs andMap, next, prev\n\n# Alternatives\n@docs or, orLazy, orElseLazy, orElse\n\n# List and array functions\n@docs maybeToList, maybeToArray, traverse, combine, traverseArray, combineArray\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -34343,13 +34550,8 @@
           },
           {
             "name": "join",
-            "comment": " Flattens nested Maybes\n\n    join (Just (Just 1)) == Just 1\n    join (Just Nothing)  == Nothing\n    join Nothing         == Nothing\n",
+            "comment": " Flattens nested `Maybe`s\n\n    join (Just (Just 1)) == Just 1\n    join (Just Nothing)  == Nothing\n    join Nothing         == Nothing\n",
             "type": "Maybe.Maybe (Maybe.Maybe a) -> Maybe.Maybe a"
-          },
-          {
-            "name": "mapDefault",
-            "comment": " Take a default value, a function and a `Maybe`.\nReturn the default value if the `Maybe` is `Nothing`.\nIf the `Maybe` is `Just a`, apply the function on `a` and return the `b`.\nThat is, `mapDefault d f` is equivalent to `Maybe.map f >> Maybe.withDefault d`.\n",
-            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
           },
           {
             "name": "maybeToArray",
@@ -34368,8 +34570,23 @@
           },
           {
             "name": "or",
-            "comment": "\n  Like the boolean '||' this will return the first value that is positive ('Just').\n\n    Just 4 `or` Just 5    == Just 4\n    Just 4 `or` Nothing   == Just 4\n    Nothing `or` Just 5   == Just 5\n    Nothing `or` Nothing  == Nothing\n\n  This function sort of works like 'oneOf' but on single 'Maybe's.\n\n  Advanced functional programmers will recognize this as the implementation of 'mplus' for Maybes from the 'MonadPlus' Typeclass.\n",
+            "comment": " Like the boolean `||` this will return the first value that is\npositive (`Just`). However, unlike with `||`, both values will be\ncomputed anyway (there is no short-circuiting).\n\n    Just 4 `or` Just 5    == Just 4\n    Just 4 `or` Nothing   == Just 4\n    Nothing `or` Just 5   == Just 5\n    Nothing `or` Nothing  == Nothing\n\nThis function sort of works like `oneOf` but on single `Maybe`s.\n\nAdvanced functional programmers will recognize this as the\nimplementation of `mplus` for `Maybe`s from the `MonadPlus` type\nclass.\n",
             "type": "Maybe.Maybe a -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "orElse",
+            "comment": " Strict version of `orElseLazy` (and at the same time,\npiping-friendly version of `or`).\n\n    orElse (Just 4) (Just 5)  == Just 5  -- crucial difference from `or`\n    orElse (Just 4) Nothing   == Just 4\n    orElse Nothing  (Just 5)  == Just 5\n    orElse Nothing  Nothing   == Nothing\n\nAlso:\n\n    List.head []\n    |> orElse (List.head [4])\n",
+            "type": "Maybe.Maybe a -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "orElseLazy",
+            "comment": " Piping-friendly version of `orLazy`. The first argument will only\nbe evaluated if the second argument is `Nothing`. Example use:\n\n    List.head []\n    |> orElseLazy (\\() -> List.head [4])\n",
+            "type": "(() -> Maybe.Maybe a) -> Maybe.Maybe a -> Maybe.Maybe a"
+          },
+          {
+            "name": "orLazy",
+            "comment": " Non-strict version of `or`. The second argument will only be\nevaluated if the first argument is `Nothing`.\n",
+            "type": "Maybe.Maybe a -> (() -> Maybe.Maybe a) -> Maybe.Maybe a"
           },
           {
             "name": "prev",
@@ -34385,9 +34602,19 @@
             "name": "traverseArray",
             "comment": " ",
             "type": "(a -> Maybe.Maybe b) -> Array.Array a -> Maybe.Maybe (Array.Array b)"
+          },
+          {
+            "name": "unpack",
+            "comment": " A version of `unwrap` that is non-strict in the default value (by\nhaving it passed in a thunk).\n",
+            "type": "(() -> b) -> (a -> b) -> Maybe.Maybe a -> b"
+          },
+          {
+            "name": "unwrap",
+            "comment": " Take a default value, a function and a `Maybe`.\nReturn the default value if the `Maybe` is `Nothing`.\nIf the `Maybe` is `Just a`, apply the function on `a` and return the `b`.\nThat is, `unwrap d f` is equivalent to `Maybe.map f >> Maybe.withDefault d`.\n",
+            "type": "b -> (a -> b) -> Maybe.Maybe a -> b"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -35943,11 +36170,11 @@
   },
   {
     "name": "elm-community/result-extra",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Result.Extra",
-        "comment": " Convenience functions for working with Result\n\n# Common Helpers\n@docs isOk, isErr, extract, mapBoth, combine\n\n",
+        "comment": " Convenience functions for working with `Result`.\n\n# Common Helpers\n@docs isOk, isErr, extract, unwrap, unpack, mapBoth, combine\n\n# Alternatives\n@docs or, orLazy, orElseLazy, orElse\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -35973,11 +36200,41 @@
           },
           {
             "name": "mapBoth",
-            "comment": " Convert a `Result e a` to a `b` by applying either a function\nif the `Result` is an `Err` or a function if the `Result` is `Ok`.\nBoth of these functions must return the same type.\n",
+            "comment": " Apply the first argument function to an `Err` and the second\nargument function to an `Ok` of a `Result`.\n",
+            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
+          },
+          {
+            "name": "or",
+            "comment": " Like the Boolean `||` this will return the first value that is\npositive (`Ok`). However, unlike with `||`, both values will be\ncomputed anyway (there is no short-circuiting).\n\n    Ok 4      `or` Ok 5      == Ok 4\n    Err \"Oh!\" `or` Ok 5      == Ok 5\n    Ok 4      `or` Err \"No!\" == Ok 4\n    Err \"Oh!\" `or` Err \"No!\" == Err \"No!\"\n\nAs the last example line shows, the second error is returned if both\nresults are erroneous.\n",
+            "type": "Result.Result e a -> Result.Result e a -> Result.Result e a"
+          },
+          {
+            "name": "orElse",
+            "comment": " Strict version of `orElseLazy` (and at the same time,\npiping-friendly version of `or`).\n\n    orElse (Ok 4)      (Ok 5)      == Ok 5  -- crucial difference from `or`\n    orElse (Err \"Oh!\") (Ok 5)      == Ok 5\n    orElse (Ok 4)      (Err \"No!\") == Ok 4\n    orElse (Err \"Oh!\") (Err \"No!\") == Err \"Oh!\"  -- also different from `or`\n\nAlso:\n\n    String.toInt \"Hello\"\n    |> orElse (String.toInt \"42\")\n",
+            "type": "Result.Result e a -> Result.Result e a -> Result.Result e a"
+          },
+          {
+            "name": "orElseLazy",
+            "comment": " Piping-friendly version of `orLazy`. The first argument will only\nbe evaluated if the second argument is an `Err`. Example use:\n\n    String.toInt \"Hello\"\n    |> orElseLazy (\\() -> String.toInt \"42\")\n",
+            "type": "(() -> Result.Result e a) -> Result.Result e a -> Result.Result e a"
+          },
+          {
+            "name": "orLazy",
+            "comment": " Non-strict version of `or`. The second argument will only be\nevaluated if the first argument is an `Err`.\n",
+            "type": "Result.Result e a -> (() -> Result.Result e a) -> Result.Result e a"
+          },
+          {
+            "name": "unpack",
+            "comment": " Convert a `Result e a` to a `b` by applying either the first \nfunction if the `Result` is an `Err` or the second function if the \n`Result` is `Ok`. Both of these functions must return the same type.\n",
             "type": "(e -> b) -> (a -> b) -> Result.Result e a -> b"
+          },
+          {
+            "name": "unwrap",
+            "comment": " Convert a `Result e a` to a `b` by applying a function if \nthe `Result` is `Ok` or using the provided default value if it\nis an `Err`.\n",
+            "type": "b -> (a -> b) -> Result.Result e a -> b"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -60889,7 +61146,7 @@
   },
   {
     "name": "mgold/elm-date-format",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "docs": [
       {
         "name": "Date.Format",
@@ -61314,12 +61571,190 @@
     ]
   },
   {
+    "name": "mpizenberg/elm-image-annotation",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "DrawingArea",
+        "comment": " The DrawingArea module aims at collecting annotations.\n\n# Model\n@docs Tool, Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, viewWithImage, selectHtml, selectToolView\n\n# Exporters\n@docs exportAnnotations, exportSelectionsPaths\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Model",
+            "comment": " The model to manipulate drawing areas ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " The messages used to Manipulate a DrawingArea ",
+            "args": [],
+            "cases": [
+              [
+                "ZoomIn",
+                []
+              ],
+              [
+                "ZoomOut",
+                []
+              ],
+              [
+                "Wheel",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "ChangeZoomLevel",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "ChangeOrigin",
+                [
+                  "( Float, Float )"
+                ]
+              ],
+              [
+                "Center",
+                [
+                  "( Float, Float )"
+                ]
+              ],
+              [
+                "Down",
+                [
+                  "( Int, Int )"
+                ]
+              ],
+              [
+                "Move",
+                [
+                  "( Int, Int )"
+                ]
+              ],
+              [
+                "Up",
+                []
+              ],
+              [
+                "ChangeImage",
+                [
+                  "Maybe.Maybe Image.Model"
+                ]
+              ],
+              [
+                "CenterImage",
+                [
+                  "( Int, Int )"
+                ]
+              ],
+              [
+                "CreateAnnotation",
+                []
+              ],
+              [
+                "DeleteAnnotation",
+                []
+              ],
+              [
+                "ResetAnnotation",
+                []
+              ],
+              [
+                "SelectAnnotation",
+                [
+                  "Maybe.Maybe Int"
+                ]
+              ],
+              [
+                "SelectTool",
+                [
+                  "DrawingArea.Tool"
+                ]
+              ],
+              [
+                "Annotations",
+                [
+                  "AnnotationSet.Msg"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Tool",
+            "comment": " The type of tool that can be used to draw selections ",
+            "args": [],
+            "cases": [
+              [
+                "NoTool",
+                []
+              ],
+              [
+                "RectangleTool",
+                []
+              ],
+              [
+                "OutlineTool",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "exportAnnotations",
+            "comment": " Export the complete model of the annotation set to a JS object ",
+            "type": "DrawingArea.Model -> Json.Encode.Value"
+          },
+          {
+            "name": "exportSelectionsPaths",
+            "comment": " Export only the seletions paths to a JS object ",
+            "type": "DrawingArea.Model -> Json.Encode.Value"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize a DrawingArea.Model ",
+            "type": "( DrawingArea.Model, Platform.Cmd.Cmd DrawingArea.Msg )"
+          },
+          {
+            "name": "selectHtml",
+            "comment": " Create a select form tag to change dynamically the current annotation ",
+            "type": "DrawingArea.Model -> Html.Html DrawingArea.Msg"
+          },
+          {
+            "name": "selectToolView",
+            "comment": " A select form tag to change dynamically the current Tool ",
+            "type": "DrawingArea.Model -> Html.Html DrawingArea.Msg"
+          },
+          {
+            "name": "update",
+            "comment": " Update a DrawingArea model ",
+            "type": "DrawingArea.Msg -> DrawingArea.Model -> ( DrawingArea.Model, Platform.Cmd.Cmd DrawingArea.Msg )"
+          },
+          {
+            "name": "view",
+            "comment": " View the svg tag representing the DrawingArea model ",
+            "type": "DrawingArea.Model -> Svg.Svg DrawingArea.Msg"
+          },
+          {
+            "name": "viewWithImage",
+            "comment": " Same as view but with a background image given as argument ",
+            "type": "Maybe.Maybe Image.Model -> DrawingArea.Model -> Svg.Svg DrawingArea.Msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "mpizenberg/elm-image-collection",
-    "version": "1.1.0",
+    "version": "2.2.0",
     "docs": [
       {
         "name": "ImageGallery",
-        "comment": " The ImageGallery module helps displaying a gallery of images.\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected\n\n",
+        "comment": " The ImageGallery module helps displaying a gallery of images.\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs defaultView, imageViewer, defaultViewThumbs, defaultViewSelected\n\n# Outputs\n@docs selectedImage\n\n",
         "aliases": [],
         "types": [
           {
@@ -61404,19 +61839,24 @@
           {
             "name": "init",
             "comment": " Initialize an empty model of an image gallery ",
-            "type": "( ImageGallery.Model, Platform.Cmd.Cmd ImageGallery.Msg )"
+            "type": "( ImageGallery.Model , Platform.Cmd.Cmd ImageGallery.Msg , Maybe.Maybe ImageCollection.Key )"
+          },
+          {
+            "name": "selectedImage",
+            "comment": " Return currently selected image ",
+            "type": "ImageGallery.Model -> Maybe.Maybe Image.Model"
           },
           {
             "name": "update",
             "comment": " Update the gallery depending on the message ",
-            "type": "ImageGallery.Msg -> ImageGallery.Model -> ( ImageGallery.Model, Platform.Cmd.Cmd ImageGallery.Msg )"
+            "type": "ImageGallery.Msg -> ImageGallery.Model -> ( ImageGallery.Model , Platform.Cmd.Cmd ImageGallery.Msg , Maybe.Maybe ImageCollection.Key )"
           }
         ],
         "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "ImageCollection",
-        "comment": " The ImageCollection module helps dealing with collections of images.\n\n@docs Key, ImageViewer\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView, viewOne\n\n",
+        "comment": " The ImageCollection module helps dealing with collections of images.\n\n@docs Key, ImageViewer\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView, viewOne\n\n# Outputs\n@docs getImage\n\n",
         "aliases": [
           {
             "name": "ImageViewer",
@@ -61485,6 +61925,11 @@
             "type": "ImageCollection.Model -> VirtualDom.Node msg"
           },
           {
+            "name": "getImage",
+            "comment": " Return the corresponding image ",
+            "type": "ImageCollection.Key -> ImageCollection.Model -> Maybe.Maybe Image.Model"
+          },
+          {
             "name": "init",
             "comment": " Initialize the model of a collection of images\nwith the default size of image views.\n\n    (model, msg) = init (Just (320, 240))\n",
             "type": "Maybe.Maybe ( Int, Int ) -> ( ImageCollection.Model, Platform.Cmd.Cmd ImageCollection.Msg )"
@@ -61509,7 +61954,7 @@
       },
       {
         "name": "Image",
-        "comment": " This module helps you deal with images, whether for `<img>` tags\nor for `<image>` tag inside a `<svg>`.\n\n@docs Class, TagType\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView\n\n",
+        "comment": " This module helps you deal with images, whether for `<img>` tags\nor for `<image>` tag inside a `<svg>`.\n\n@docs Class, TagType\n\n# Model\n@docs Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, defaultView\n\n# Outputs\n@docs size\n\n",
         "aliases": [
           {
             "name": "Class",
@@ -61557,6 +62002,11 @@
             "name": "init",
             "comment": " Initialize an image with its url, width and height.\n\n    (model, msg) = init \"img/cute_cat.png\" 320 240\n",
             "type": "String -> Int -> Int -> ( Image.Model, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "size",
+            "comment": " Return the size of an Image ",
+            "type": "Image.Model -> ( Int, Int )"
           },
           {
             "name": "update",
@@ -61644,6 +62094,203 @@
             "name": "toString",
             "comment": "\nReturns the string which the rope has encoded.\n",
             "type": "Rope.Rope -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "mxgrn/elm-phoenix-socket",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Phoenix.Socket",
+        "comment": "\n\n# Socket\n@docs Socket, Msg, init, withDebug, update, listen\n\n# Channels\n@docs join, leave\n\n# Events\n@docs on, off\n\n# Sending messages\n@docs push\n\n",
+        "aliases": [
+          {
+            "name": "Socket",
+            "comment": " Stores channels, event handlers, and configuration options\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ path : String , debug : Bool , channels : Dict.Dict String (Phoenix.Channel.Channel msg) , events : Dict.Dict ( String, String ) (Json.Encode.Value -> msg) , pushes : Dict.Dict Int (Phoenix.Push.Push msg) , ref : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " ",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initializes a `Socket` with the given path\n",
+            "type": "String -> Phoenix.Socket.Socket msg"
+          },
+          {
+            "name": "join",
+            "comment": " Joins a channel\n\n    payload = Json.Encode.object [ (\"user_id\", Json.Encode.string \"123\") ]\n    channel = Channel.init \"rooms:lobby\" |> Channel.withPayload payload\n    (socket', cmd) = join channel socket\n\n",
+            "type": "Phoenix.Channel.Channel msg -> Phoenix.Socket.Socket msg -> ( Phoenix.Socket.Socket msg , Platform.Cmd.Cmd (Phoenix.Socket.Msg msg) )"
+          },
+          {
+            "name": "leave",
+            "comment": " Leaves a channel\n\n    (socket', cmd) = leave \"rooms:lobby\" socket\n\n",
+            "type": "String -> Phoenix.Socket.Socket msg -> ( Phoenix.Socket.Socket msg , Platform.Cmd.Cmd (Phoenix.Socket.Msg msg) )"
+          },
+          {
+            "name": "listen",
+            "comment": " Listens for phoenix messages and converts them into type `msg`\n",
+            "type": "Phoenix.Socket.Socket msg -> (Phoenix.Socket.Msg msg -> msg) -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "off",
+            "comment": " Removes an event handler\n\n    socket\n      |> off \"new:msg\" \"rooms:lobby\"\n      |> off \"alert:msg\" \"rooms:lobby\"\n\n",
+            "type": "String -> String -> Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          },
+          {
+            "name": "on",
+            "comment": " Registers an event handler\n\n    socket\n      |> on \"new:msg\" \"rooms:lobby\" ReceiveChatMessage\n      |> on \"alert:msg\" \"rooms:lobby\" ReceiveAlertMessage\n\n",
+            "type": "String -> String -> (Json.Encode.Value -> msg) -> Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          },
+          {
+            "name": "push",
+            "comment": " Pushes a message\n\n    push' = Phoenix.Push.init \"new:msg\" \"rooms:lobby\"\n    (socket', cmd) = push push' socket\n\n",
+            "type": "Phoenix.Push.Push msg -> Phoenix.Socket.Socket msg -> ( Phoenix.Socket.Socket msg , Platform.Cmd.Cmd (Phoenix.Socket.Msg msg) )"
+          },
+          {
+            "name": "update",
+            "comment": " ",
+            "type": "Phoenix.Socket.Msg msg -> Phoenix.Socket.Socket msg -> ( Phoenix.Socket.Socket msg , Platform.Cmd.Cmd (Phoenix.Socket.Msg msg) )"
+          },
+          {
+            "name": "withDebug",
+            "comment": " When enabled, prints all incoming Phoenix messages to the console\n",
+            "type": "Phoenix.Socket.Socket msg -> Phoenix.Socket.Socket msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Phoenix.Push",
+        "comment": "\n\n@docs Push, init, withPayload, onError, onOk\n\n",
+        "aliases": [
+          {
+            "name": "Push",
+            "comment": " Represents a message being pushed to the server\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ event : String , channel : String , payload : Json.Encode.Value , onOk : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initializes a push with the given event and channel\n\n    init \"new:msg\" \"rooms:lobby\"\n\n",
+            "type": "String -> String -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onError",
+            "comment": " Attaches an error handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onError HandlePushError\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "onOk",
+            "comment": " Attaches a success handler\n\n    init \"new:msg\" \"rooms:lobby\"\n      |> onOk HandlePushOk\n\n",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          },
+          {
+            "name": "withPayload",
+            "comment": " Attaches a payload\n\n    payload = JE.object [ (\"body\", JE.string \"Hello World!\") ]\n    init \"new:msg\" \"rooms:lobby\"\n      |> withPayload payload\n\n",
+            "type": "Json.Encode.Value -> Phoenix.Push.Push msg -> Phoenix.Push.Push msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Phoenix.Channel",
+        "comment": "\n\n@docs Channel, State, init, withPayload, onError, onClose, onJoin, onJoinError, setState\n\n",
+        "aliases": [
+          {
+            "name": "Channel",
+            "comment": " Represents a phoenix channel\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ name : String , payload : Json.Encode.Value , state : Phoenix.Channel.State , onClose : Maybe.Maybe (Json.Encode.Value -> msg) , onError : Maybe.Maybe (Json.Encode.Value -> msg) , onJoin : Maybe.Maybe (Json.Encode.Value -> msg) , onJoinError : Maybe.Maybe (Json.Encode.Value -> msg) , joinRef : Int , leaveRef : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "State",
+            "comment": " All possible states a channel can be in\n",
+            "args": [],
+            "cases": [
+              [
+                "Closed",
+                []
+              ],
+              [
+                "Errored",
+                []
+              ],
+              [
+                "Joined",
+                []
+              ],
+              [
+                "Joining",
+                []
+              ],
+              [
+                "Leaving",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Initializes a channel\n\n    init \"rooms:lobby\"\n\n",
+            "type": "String -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "onClose",
+            "comment": " ",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "onError",
+            "comment": " ",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "onJoin",
+            "comment": " ",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "onJoinError",
+            "comment": " ",
+            "type": "(Json.Encode.Value -> msg) -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "setState",
+            "comment": " Sets the state of a channel. Internal use only.\n",
+            "type": "Phoenix.Channel.State -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
+          },
+          {
+            "name": "withPayload",
+            "comment": " Attaches a payload that's used for authentication\n\n    payload = JE.object [ (\"user_id\", JE.string \"123\") ]\n    init \"rooms:lobby\"\n      |> withPayload payload\n\n",
+            "type": "Json.Encode.Value -> Phoenix.Channel.Channel msg -> Phoenix.Channel.Channel msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -62255,7 +62902,7 @@
   },
   {
     "name": "nphollon/collision",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Collision",
@@ -62263,7 +62910,7 @@
         "aliases": [
           {
             "name": "Body",
-            "comment": " An object that is positioned and oriented in three-dimensional space. The bounds of the object are given in the body's reference frame. Before testing for a collision, we use the position and orientation to move the bounds into the world's reference frame.\n\nThis way, we can move our objects through the world, but we don't have to re-compute the bounds (as long as the object does not change shape).\n",
+            "comment": " An object that is positioned and oriented in three-dimensional space. The bounds of the object are given in the body's reference frame. The `Frame` type is defined in [nphollon/geo3d](package.elm-lang.org/packages/nphollon/geo3d/latest/Frame).\n\nBefore testing for a collision, we use the position and orientation to move the bounds into the world's reference frame. This way, we can move our objects through the world, but we don't have to re-compute the bounds (as long as the object does not change shape).\n",
             "args": [
               "a"
             ],
@@ -62283,7 +62930,7 @@
           },
           {
             "name": "Face",
-            "comment": " A triangle. The surface of your colliding objects is described by a collection of triangular faces.\n",
+            "comment": " A triangle. The surface of your colliding objects is described by a collection of triangular faces. The `Vector` type is defined in [nphollon/geo3d](package.elm-lang.org/packages/nphollon/geo3d/latest/Vector).\n",
             "args": [],
             "type": "{ p : Vector.Vector, q : Vector.Vector, r : Vector.Vector }"
           }
@@ -62330,7 +62977,7 @@
       },
       {
         "name": "Collision.Tree",
-        "comment": " This module defines the tree structure used in the `Bounds` type. You don't need to import this module if you are just doing collision detection. But you may find it useful for debugging.\n\n# Definition\n\n@docs Tree\n\n# Inspecting\n\n@docs depth, leaves, internals, subtreeAt, toTheLeft, toTheRight\n\n",
+        "comment": " This module defines the tree structure used in the `Bounds` type. You don't need to import this module if you are just doing collision detection. But you may find it useful for debugging.\n\nWe identify nodes in the tree using a two-dimensional coordinate system. The first coordinate measures distance from the root node. The second coordinate measures how far \"from the left\" the node is. So the root node is at (0,0), its two children are (1,0) and (1,1), their children are (2,0) through (2,3), and so on.\n\n# Definition\n\n@docs Tree\n\n# Inspecting\n\n@docs depth, leaves, internals, subtreeAt, toTheLeft, toTheRight\n\n",
         "aliases": [],
         "types": [
           {
@@ -62396,7 +63043,7 @@
   },
   {
     "name": "nphollon/geo3d",
-    "version": "2.0.5",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Frame",
@@ -62496,7 +63143,7 @@
       },
       {
         "name": "Quaternion",
-        "comment": " A quaternion type. Used for rotations in three dimensions.\n\n# Building\n@docs Quaternion, quaternion, identity, xRotation, yRotation, zRotation, rotationFor, fromAxisAngle, fromVector, toVector\n\n# Working With Rotations\n@docs similar, mul, compose, conjugate, rotate, reverseRotate\n\n# Interop\n@docs encode, decode, toMat4\n\n# Lesser Math\n\nThese functions are not as useful if you are just using quaternions to handle 3D rotations.\n\n@docs equal, getW, getX, getY, getZ, lengthSquared, length, add, scale\n\n",
+        "comment": " A quaternion type. Used for rotations in three dimensions.\n\n# Building\n@docs Quaternion, quaternion, identity, xRotation, yRotation, zRotation, rotationFor, fromAxisAngle, fromVector, toVector\n\n# Working With Rotations\n@docs similar, mul, compose, conjugate, rotate, reverseRotate\n\n# Interop\n@docs encode, decode, toMat4\n\n# Lesser Math\n\nThese functions are not as useful if you are just using quaternions to handle 3D rotations.\n\n@docs equal, getW, getX, getY, getZ, normalize, lengthSquared, length, add, scale\n\n",
         "aliases": [
           {
             "name": "Quaternion",
@@ -62586,6 +63233,11 @@
             "name": "mul",
             "comment": " Multiply two quaternions.\n",
             "type": "Quaternion.Quaternion -> Quaternion.Quaternion -> Quaternion.Quaternion"
+          },
+          {
+            "name": "normalize",
+            "comment": " Return the unit quaternion that points in the same direction as the given quaternion. Return Nothing if given the zero quaternion.\n",
+            "type": "Quaternion.Quaternion -> Maybe.Maybe Quaternion.Quaternion"
           },
           {
             "name": "quaternion",
@@ -67511,6 +68163,26 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "piotrdubiel/elm-art-in-pi",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "ArtInPi",
+        "comment": " View showing π as colourful lines.\n\n@docs main\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "main",
+            "comment": " Initialize program\n",
+            "type": "Platform.Program Basics.Never"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
