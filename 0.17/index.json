@@ -1,5 +1,408 @@
 [
   {
+    "name": "Bogdanp/elm-ast",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Ast",
+        "comment": " This module exposes functions for parsing Elm code.\n\n# Parsers\n@docs parseExpression, parseStatement, parseOpTable, parseModule, parse\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "parse",
+            "comment": " Parse an Elm module, scanning for infix declarations first. ",
+            "type": "String -> ( Result.Result (List String) (List Ast.Statement.Statement) , Combine.Context )"
+          },
+          {
+            "name": "parseExpression",
+            "comment": " Parse an Elm expression. ",
+            "type": "Ast.BinOp.OpTable -> String -> ( Result.Result (List String) Ast.Expression.Expression , Combine.Context )"
+          },
+          {
+            "name": "parseModule",
+            "comment": " Parse an Elm module. ",
+            "type": "Ast.BinOp.OpTable -> String -> ( Result.Result (List String) (List Ast.Statement.Statement) , Combine.Context )"
+          },
+          {
+            "name": "parseOpTable",
+            "comment": " Parse an OpTable from a module. ",
+            "type": "Ast.BinOp.OpTable -> String -> ( Result.Result (List String) Ast.BinOp.OpTable, Combine.Context )"
+          },
+          {
+            "name": "parseStatement",
+            "comment": " Parse an Elm statement. ",
+            "type": "Ast.BinOp.OpTable -> String -> ( Result.Result (List String) Ast.Statement.Statement , Combine.Context )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Ast.Statement",
+        "comment": " This module exposes parsers for Elm statements.\n\n# Types\n@docs ExportSet, Type, Statement\n\n# Parsers\n@docs statement, statements, infixStatements, opTable\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ExportSet",
+            "comment": " Representations for modules' exports. ",
+            "args": [],
+            "cases": [
+              [
+                "AllExport",
+                []
+              ],
+              [
+                "SubsetExport",
+                [
+                  "List Ast.Statement.ExportSet"
+                ]
+              ],
+              [
+                "FunctionExport",
+                [
+                  "Ast.Helpers.Name"
+                ]
+              ],
+              [
+                "TypeExport",
+                [
+                  "Ast.Helpers.Name",
+                  "Maybe.Maybe Ast.Statement.ExportSet"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Statement",
+            "comment": " Representations for Elm's statements. ",
+            "args": [],
+            "cases": [
+              [
+                "ModuleDeclaration",
+                [
+                  "Ast.Helpers.ModuleName",
+                  "Ast.Statement.ExportSet"
+                ]
+              ],
+              [
+                "PortModuleDeclaration",
+                [
+                  "Ast.Helpers.ModuleName",
+                  "Ast.Statement.ExportSet"
+                ]
+              ],
+              [
+                "ImportStatement",
+                [
+                  "Ast.Helpers.ModuleName",
+                  "Maybe.Maybe Ast.Helpers.Alias",
+                  "Maybe.Maybe Ast.Statement.ExportSet"
+                ]
+              ],
+              [
+                "TypeAliasDeclaration",
+                [
+                  "Ast.Statement.Type",
+                  "Ast.Statement.Type"
+                ]
+              ],
+              [
+                "TypeDeclaration",
+                [
+                  "Ast.Statement.Type",
+                  "List Ast.Statement.Type"
+                ]
+              ],
+              [
+                "PortTypeDeclaration",
+                [
+                  "Ast.Helpers.Name",
+                  "Ast.Statement.Type"
+                ]
+              ],
+              [
+                "PortDeclaration",
+                [
+                  "Ast.Helpers.Name",
+                  "List Ast.Helpers.Name",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "FunctionTypeDeclaration",
+                [
+                  "Ast.Helpers.Name",
+                  "Ast.Statement.Type"
+                ]
+              ],
+              [
+                "FunctionDeclaration",
+                [
+                  "Ast.Helpers.Name",
+                  "List Ast.Helpers.Name",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "InfixDeclaration",
+                [
+                  "Ast.BinOp.Assoc",
+                  "Int",
+                  "Ast.Helpers.Name"
+                ]
+              ],
+              [
+                "Comment",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Type",
+            "comment": " Representations for Elm's type syntax. ",
+            "args": [],
+            "cases": [
+              [
+                "TypeConstructor",
+                [
+                  "Ast.Helpers.QualifiedType",
+                  "List Ast.Statement.Type"
+                ]
+              ],
+              [
+                "TypeVariable",
+                [
+                  "Ast.Helpers.Name"
+                ]
+              ],
+              [
+                "TypeRecordConstructor",
+                [
+                  "Ast.Statement.Type",
+                  "List ( Ast.Helpers.Name, Ast.Statement.Type )"
+                ]
+              ],
+              [
+                "TypeRecord",
+                [
+                  "List ( Ast.Helpers.Name, Ast.Statement.Type )"
+                ]
+              ],
+              [
+                "TypeTuple",
+                [
+                  "List Ast.Statement.Type"
+                ]
+              ],
+              [
+                "TypeApplication",
+                [
+                  "Ast.Statement.Type",
+                  "Ast.Statement.Type"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "infixStatements",
+            "comment": " A scanner for infix statements. This is useful for performing a\nfirst pass over a module to find all of the infix declarations in it.\n",
+            "type": "Combine.Parser (List Ast.Statement.Statement)"
+          },
+          {
+            "name": "opTable",
+            "comment": " A scanner that returns an updated OpTable based on the infix\ndeclarations in the input. ",
+            "type": "Ast.BinOp.OpTable -> Combine.Parser Ast.BinOp.OpTable"
+          },
+          {
+            "name": "statement",
+            "comment": " A parser for stand-alone Elm statements. ",
+            "type": "Ast.BinOp.OpTable -> Combine.Parser Ast.Statement.Statement"
+          },
+          {
+            "name": "statements",
+            "comment": " A parser for a series of Elm statements. ",
+            "type": "Ast.BinOp.OpTable -> Combine.Parser (List Ast.Statement.Statement)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Ast.Expression",
+        "comment": " This module exposes parsers for Elm expressions.\n\n# Types\n@docs Expression\n\n# Parsers\n@docs expression\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Expression",
+            "comment": " Representations for Elm's expressions. ",
+            "args": [],
+            "cases": [
+              [
+                "Character",
+                [
+                  "Char"
+                ]
+              ],
+              [
+                "String",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Integer",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Float",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "Variable",
+                [
+                  "List Ast.Helpers.Name"
+                ]
+              ],
+              [
+                "Range",
+                [
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "List",
+                [
+                  "List Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "Access",
+                [
+                  "Ast.Expression.Expression",
+                  "List Ast.Helpers.Name"
+                ]
+              ],
+              [
+                "Record",
+                [
+                  "List ( Ast.Helpers.Name, Ast.Expression.Expression )"
+                ]
+              ],
+              [
+                "RecordUpdate",
+                [
+                  "Ast.Helpers.Name",
+                  "List ( Ast.Helpers.Name, Ast.Expression.Expression )"
+                ]
+              ],
+              [
+                "If",
+                [
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "Let",
+                [
+                  "List ( Ast.Helpers.Name, Ast.Expression.Expression )",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "Case",
+                [
+                  "Ast.Expression.Expression",
+                  "List ( Ast.Expression.Expression, Ast.Expression.Expression )"
+                ]
+              ],
+              [
+                "Lambda",
+                [
+                  "List Ast.Helpers.Name",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "Application",
+                [
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression"
+                ]
+              ],
+              [
+                "BinOp",
+                [
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression",
+                  "Ast.Expression.Expression"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "expression",
+            "comment": " A parser for Elm expressions. ",
+            "type": "Ast.BinOp.OpTable -> Combine.Parser Ast.Expression.Expression"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Ast.BinOp",
+        "comment": " This module exposes functions and types for working with operator\nprecedence tables.\n\n# Types\n@docs Assoc, OpTable\n\n# Misc\n@docs operators\n\n",
+        "aliases": [
+          {
+            "name": "OpTable",
+            "comment": " FIXME ",
+            "args": [],
+            "type": "Dict.Dict Ast.Helpers.Name ( Ast.BinOp.Assoc, Int )"
+          }
+        ],
+        "types": [
+          {
+            "name": "Assoc",
+            "comment": " FIXME ",
+            "args": [],
+            "cases": [
+              [
+                "N",
+                []
+              ],
+              [
+                "L",
+                []
+              ],
+              [
+                "R",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "operators",
+            "comment": " The default operator precedence table. ",
+            "type": "Ast.BinOp.OpTable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "Bogdanp/elm-combine",
     "version": "2.2.1",
     "docs": [
@@ -11367,6 +11770,49 @@
             "name": "hashString",
             "comment": " Takes a seed and a string. Produces a hash (integer).\nGiven the same seed and string, it will always produce the same hash.\n\n    hashString 1234 \"Turn me into a hash\" == 4138100590\n",
             "type": "Int -> String -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "TheDahv/doctari",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Doctari",
+        "comment": " This library exposes a component following the Elm Architecture that offers\nan ordered, organizable live-Markdown document editor that can serialize its\ncontents to JSON.\n\nThat is certainly a mouthful, but the idea is to offer users to create documents\nin a structured and organized way. Headings group related and supporting ideas\nthat can be re-organized or re-emphasized as the document evolves.\n\nAgain, since the component designs around the Elm Architecture, clients should\nbe able to weave it in to the existing Model/Update/View scaffolding of their\napplication.\n\nProbably the most annoying part is:\n\n- setting up a model\n- grafting the component action `Msg`s into that of your application\n\nFor the first issue, Doctari exposes an `empty` value that offers a good\nstarting point for the component's states with sane defaults.\n\nFor the second issue, I'd like to come up with a way to keep `Msg` values with\nno relevance to the outside world internally contained. Until I figure that\nout, they are emitted, mapped, and rerouted back into the component by the\nconsuming app:\n\n    type Msg = DoctariMsg Doctari.Msg\n\n    update msg model =\n        case msg of\n            DoctariMsg msg ->\n                { model |\n                    doctariModel =\n                        Doctari.update msg model.doctariModel\n                }\n\n    view : Model -> Html Msg\n    view model =\n        div [] [ App.map DoctariMsg Doctari.view ]\n\nYou can see more complete usage in the [example][].\n\nTODO:\n\n- Find the most intelligent way to ask for a serialized version of the\ncurrent value of the component's state\n- Find a decent way to create a component with an initial serialized state\n    (useful for rendering a version of the document stored on the server)\n\n[example]: https://github.com/thedahv/doctari/tree/master/examples/basic/main.elm\n\n# Model\n@docs Model\n@docs empty\n\n# Update\n@docs Msg\n@docs update\n\n# View\n@docs view\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Model",
+            "comment": " The most important part of Doctari's state is the representation of its\ncontents. The `document` field models a heading's ID, title, content, and\nlist of children (which also happen to have the same structure).\n\nThe rest of the fields represent changes in the organization of the headings\nwithin the document structure.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Msg represents all the user actions to request changes to the document\ncontent or structure\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " The empty document has a sample document title that the user can change,\nand no children. Users of this component should initialize it with this value.\n",
+            "type": "Doctari.Model"
+          },
+          {
+            "name": "update",
+            "comment": " update follows the standard pattern of producing a new version of the\ndocument contents and/or structure based on user action.\n",
+            "type": "Doctari.Msg -> Doctari.Model -> Doctari.Model"
+          },
+          {
+            "name": "view",
+            "comment": " view renders a document based on its contents and structure, as well as\nuser controls to manipulate the document\n",
+            "type": "Doctari.Model -> Html.Html Doctari.Msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -44393,7 +44839,7 @@
   },
   {
     "name": "etaque/elm-simple-form",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "docs": [
       {
         "name": "Form.Input",
@@ -44456,7 +44902,7 @@
       },
       {
         "name": "Form",
-        "comment": " Simple forms made easy: A Dict implementation of the core `Json.Decode` API,\nwith state lifecycle and input helpers for the views.\n\n# Types\n@docs Msg, Form, FieldState\n\n# Init/update lifecyle\n@docs initial, update\n\n# Field state accessors\n@docs getFieldAsString, getFieldAsBool\n\n# Global state accessors\n@docs getFocus, isSubmitted, getErrors, getOutput\n",
+        "comment": " Simple forms made easy: A Dict implementation of the core `Json.Decode` API,\nwith state lifecycle and input helpers for the views.\n\n# Types\n@docs Msg, Form, FieldState\n\n# Init/update lifecyle\n@docs initial, update\n\n# Field state accessors\n@docs getFieldAsString, getFieldAsBool\n\n# Global state accessors\n@docs getFocus, isSubmitted, getErrors, getOutput, getChangedFields\n",
         "aliases": [
           {
             "name": "FieldState",
@@ -44525,6 +44971,11 @@
         ],
         "values": [
           {
+            "name": "getChangedFields",
+            "comment": " Get set of changed fields.\n",
+            "type": "Form.Form e o -> Set.Set String"
+          },
+          {
             "name": "getErrors",
             "comment": " Get list of errors on qualified paths.\n",
             "type": "Form.Form e o -> List ( String, Form.Error.Error e )"
@@ -44569,7 +45020,7 @@
       },
       {
         "name": "Form.Validate",
-        "comment": " Form validation.\n\n# Combinators\n@docs Validation, get, map, succeed, andThen, pipeTo, apply, customError, defaultValue, formatError\n\n# Fixed-size forms\n@docs form1, form2, form3, form4, form5, form6, form7, form8\n\n# Type extractors\n@docs string, int, float, bool, date, maybe, email, url, emptyString\n\n# Common filters\n@docs minInt, maxInt, minFloat, maxFloat, minLength, maxLength, nonEmpty, format, includedIn\n\n# Custom validations\n@docs fail, succeed, customValidation, oneOf\n",
+        "comment": " Form validation.\n\n# Combinators\n@docs Validation, get, map, succeed, andThen, pipeTo, apply, customError, defaultValue, formatError, withCustomError\n\n# Fixed-size forms\n@docs form1, form2, form3, form4, form5, form6, form7, form8\n\n# Type extractors\n@docs string, int, float, bool, date, maybe, email, url, emptyString\n\n# Common filters\n@docs minInt, maxInt, minFloat, maxFloat, minLength, maxLength, nonEmpty, format, includedIn\n\n# Custom validations\n@docs fail, succeed, customValidation, oneOf\n",
         "aliases": [
           {
             "name": "Validation",
@@ -44686,7 +45137,7 @@
           {
             "name": "formatError",
             "comment": " Call Result.formatError on validation result.\n",
-            "type": "(Form.Error.Error e -> Form.Error.Error e) -> Form.Validate.Validation e a -> Form.Validate.Validation e a"
+            "type": "(Form.Error.Error e1 -> Form.Error.Error e2) -> Form.Validate.Validation e1 a -> Form.Validate.Validation e2 a"
           },
           {
             "name": "get",
@@ -44772,6 +45223,11 @@
             "name": "url",
             "comment": " Check if the string is a valid URL.\n",
             "type": "Form.Validate.Validation e String"
+          },
+          {
+            "name": "withCustomError",
+            "comment": " Arrange that if a validation fails, it has the given custom error.\n\n    get \"customerId\" (V.int\n          `andThen` minInt 1\n          `andThen` maxInt 9999\n          |> withCustomError InvalidIdentity)\n",
+            "type": "customErr -> Form.Validate.Validation e a -> Form.Validate.Validation customErr a"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -48578,6 +49034,31 @@
             "name": "toPolygon",
             "comment": " Convert Triangle in to polygon Shape.\n\n    toPolygon (Triangle (Point 0 0) (Point 5 5) (Point 0 5))\n",
             "type": "Sierpinski.Triangle -> Collage.Shape"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "hendore/elm-adorable-avatars",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "AdorableAvatars",
+        "comment": " Simple, elegant and adorable avatars provided by\n[http://avatars.adorable.io](http://avatars.adorable.io/).\n\n# Urls\n@docs buildUrl\n\n# View Helpers\n@docs img\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "buildUrl",
+            "comment": " Builds a url to an adorable avatar from *size* and *identifier*.\n\n    buildUrl 128 \"foobar\" == \"https://api.adorable.io/avatars/128/foobar\"\n",
+            "type": "Int -> String -> String"
+          },
+          {
+            "name": "img",
+            "comment": " View helper for creating an img node.\n\n    basic =\n        img [] 128 \"foobar\"\n\n    withAttributes =\n        img [ class \"round-img\", alt \"Foobars avatar\" ] 128 \"foobar\"\n",
+            "type": "List (Html.Attribute msg) -> Int -> String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -60430,11 +60911,11 @@
   },
   {
     "name": "mdgriffith/elm-style-animation",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "Animation",
-        "comment": " A library for animations.\n\n# Setting up an animation\n@docs State, subscription, Msg, render\n\n# Creating an animation\n@docs  interrupt, queue, wait, to, toWith, toWithEach, set, repeat, loop, update, style, styleWith, styleWithEach, spring, easing, speed\n\n# Animatable Properties\n@docs opacity, display, inline, inlineBlock, flex, inlineFlex, block, none, top, left, right, bottom, width, height, padding, paddingLeft, paddingRight, paddingTop, paddingBottom, margin, marginLeft, marginRight, marginTop, marginBottom, color, backgroundColor, borderColor, borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, borderRadius, borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius, shadow, textShadow, insetShadow\n\n# Transforms\n@docs scale, scale3d, rotate, rotate3d, translate, translate3d\n\n# Animatable CSS Filters\n@docs filterUrl, blur, brightness, contrast, grayscale, greyscale, hueRotate, invert, saturate, sepia\n\n# Animatable Svg Properties\n@docs fill, stroke, strokeWidth, x, y, cx, cy, radius, radiusX, radiusY, points\n\n# Constructing an Svg Path\n@docs path, move, moveTo, close, QuadraticCurve, curve, curveTo, CubicCurve, curve2, curve2To\n\n\n# Units\n@docs px, percent, em, rem, turn, deg, grad, rad\n\n# Advanced\n@docs custom, exactly\n\n\n\n",
+        "comment": " A library for animations.\n\n# Setting up an animation\n@docs State, subscription, Msg, render\n\n# Creating an animation\n@docs interrupt, queue, wait, to, toWith, toWithEach, set, repeat, loop, update, style, styleWith, styleWithEach, Interpolation, spring, easing, speed\n\n# Animatable Properties\n@docs Property, opacity, top, left, right, bottom, width, height, padding, paddingLeft, paddingRight, paddingTop, paddingBottom, margin, marginLeft, marginRight, marginTop, marginBottom, color, backgroundColor, borderColor, borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, borderRadius, borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius, shadow, textShadow, insetShadow, display, inline, inlineBlock, flex, inlineFlex, block, none, listItem\n\n# Transforms\n@docs scale, scale3d, rotate, rotate3d, translate, translate3d\n\n# Animatable CSS Filters\n@docs filterUrl, blur, brightness, contrast, grayscale, greyscale, hueRotate, invert, saturate, sepia\n\n# Animatable Svg Properties\n@docs viewBox, fill, stroke, strokeWidth, stopColor, offset, x, y, cx, cy, radius, radiusX, radiusY, points\n\n# Constructing an Svg Path\n@docs path, PathStep, move, moveTo, close, QuadraticCurve, curve, curveTo, CubicCurve, curve2, curve2To\n\n# Units\n@docs px, percent, em, rem, turn, deg, grad, rad\n\n# Advanced\n@docs custom, custom2, customColor, exactly\n\n",
         "aliases": [
           {
             "name": "CubicCurve",
@@ -60443,10 +60924,28 @@
             "type": "{ control1 : ( Float, Float ) , control2 : ( Float, Float ) , point : ( Float, Float ) }"
           },
           {
+            "name": "Interpolation",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.Interpolation"
+          },
+          {
             "name": "Msg",
             "comment": " ",
             "args": [],
             "type": "Animation.Model.Tick"
+          },
+          {
+            "name": "PathStep",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.PathCommand"
+          },
+          {
+            "name": "Property",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.Property"
           },
           {
             "name": "QuadraticCurve",
@@ -60580,8 +61079,18 @@
           },
           {
             "name": "custom",
-            "comment": " Advanced: Animate a custom property by providing it's name, a float value, and the units it should have.\n\n",
+            "comment": " Animate a custom property by providing it's name, a float value, and the units it should have.\n\n\n",
             "type": "String -> Float -> String -> Animation.Model.Property"
+          },
+          {
+            "name": "custom2",
+            "comment": " Animate a custom property with two values by providing it's name, and a pair of tuples with (value, unit).\n\n\n",
+            "type": "String -> ( Float, String ) -> ( Float, String ) -> Animation.Model.Property"
+          },
+          {
+            "name": "customColor",
+            "comment": " We convert the rgb channels to a float because that allows us to use the motion type without parametricity.\nWhen rendering we convert them back to ints because CSS does not recognize rgb as floats.\n\n",
+            "type": "String -> Color.Color -> Animation.Model.Property"
           },
           {
             "name": "cx",
@@ -60615,7 +61124,7 @@
           },
           {
             "name": "exactly",
-            "comment": " Set a non-numerical to an exact value.  For example\n\n```\nAnimation.set\n    [ Animation.exactly \"border-style\" \"dashed\"\n    ]\n```\n\n",
+            "comment": " Set a non-numerical to an exact value.  This is generally only used with `Animation.set`.\n\nFor example\n\n```\nAnimation.set\n    [ Animation.exactly \"border-style\" \"dashed\"\n    ]\n```\n\n",
             "type": "String -> String -> Animation.Model.Property"
           },
           {
@@ -60694,6 +61203,11 @@
             "type": "Animation.Length -> Animation.Model.Property"
           },
           {
+            "name": "listItem",
+            "comment": " ",
+            "type": "Animation.DisplayMode"
+          },
+          {
             "name": "loop",
             "comment": " Repeat a number of steps until interrupted.\n",
             "type": "List (Animation.Model.Step msg) -> Animation.Model.Step msg"
@@ -60737,6 +61251,11 @@
             "name": "none",
             "comment": " ",
             "type": "Animation.DisplayMode"
+          },
+          {
+            "name": "offset",
+            "comment": " Used for svg gradients.  Accepts a number between 0 and 1.\n",
+            "type": "Float -> Animation.Model.Property"
           },
           {
             "name": "opacity",
@@ -60875,13 +61394,18 @@
           },
           {
             "name": "speed",
-            "comment": " Specify a speed to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\n",
+            "comment": " Specify a speed to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\nGenerally be sure you don't want `Animation.spring` or `Animation.easing` instead as they are more powerful.\n\n",
             "type": "{ perSecond : Float } -> Animation.Model.Interpolation"
           },
           {
             "name": "spring",
-            "comment": " Specify a custom Spring to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\n",
+            "comment": " Specify a custom Spring to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\nThis should be your preferred interpolation to use.\n\n",
             "type": "{ stiffness : Float, damping : Float } -> Animation.Model.Interpolation"
+          },
+          {
+            "name": "stopColor",
+            "comment": " Used for svg gradients\n",
+            "type": "Color.Color -> Animation.Model.Property"
           },
           {
             "name": "stroke",
@@ -60957,6 +61481,11 @@
             "name": "update",
             "comment": " Update an animation.\n",
             "type": "Animation.Msg -> Animation.Model.Animation msg -> Animation.Model.Animation msg"
+          },
+          {
+            "name": "viewBox",
+            "comment": " ",
+            "type": "Float -> Float -> Float -> Float -> Animation.Model.Property"
           },
           {
             "name": "wait",
@@ -61586,11 +62115,11 @@
   },
   {
     "name": "mpizenberg/elm-image-annotation",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "docs": [
       {
         "name": "DrawingArea",
-        "comment": " The DrawingArea module aims at collecting annotations.\n\n# Model\n@docs Tool, Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, viewWithImage, selectHtml, selectToolView\n\n# Exporters\n@docs exportAnnotations, exportSelectionsPaths\n\n",
+        "comment": " The DrawingArea module aims at collecting annotations.\n\n# Model\n@docs Tool, Model, init\n\n# Update\n@docs Msg, update\n\n# View\n@docs view, viewWithImage, selectHtml, selectToolView\n\n# Outputs\n@docs exportAnnotations, exportSelectionsPaths\n\n# Other\n@docs hasSelection\n\n",
         "aliases": [],
         "types": [
           {
@@ -61728,6 +62257,11 @@
             "type": "DrawingArea.Model -> Json.Encode.Value"
           },
           {
+            "name": "hasSelection",
+            "comment": " Indicates if the drawing area has at least one selection ",
+            "type": "DrawingArea.Model -> Bool"
+          },
+          {
             "name": "init",
             "comment": " Initialize a DrawingArea.Model ",
             "type": "( DrawingArea.Model, Platform.Cmd.Cmd DrawingArea.Msg )"
@@ -61764,7 +62298,7 @@
   },
   {
     "name": "mpizenberg/elm-image-collection",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "docs": [
       {
         "name": "ImageGallery",
@@ -68956,7 +69490,7 @@
   },
   {
     "name": "rluiten/elm-date-extra",
-    "version": "8.0.0",
+    "version": "8.1.1",
     "docs": [
       {
         "name": "Date.Extra.Utils",
@@ -69317,8 +69851,50 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
+        "name": "Date.Extra.Config.Config_pl_pl",
+        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for pl-pl. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_ro_ro",
+        "comment": " This is the Romanian config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Cezar Halmagean\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for ro_ro. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_fi_fi",
+        "comment": " This is the Finnish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for fi-fi. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Date.Extra.Period",
-        "comment": " Period is a fixed length of time.\n\nName of type concept copied from NodaTime.\n\nThis module has no concept of Months or Years which have variable lenghts of time.\nFor that see Duration.\n\n@docs add\n@docs diff\n@docs Period\n@docs DeltaRecord\n@docs zeroDelta\n@docs toTicks\n\nCopyright (c) 2016 Robin Luiten\n",
+        "comment": " Period is a fixed length of time. It is an elapsed time concept, which\ndoes not include the concept of Years Months or Daylight saving variations.\n\nName of type concept copied from NodaTime.\n\n@docs add\n@docs diff\n@docs Period\n@docs DeltaRecord\n@docs zeroDelta\n@docs toTicks\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [
           {
             "name": "DeltaRecord",
@@ -69461,20 +70037,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_en_us",
-        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for en-us. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.Config.Config_en_au",
         "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
@@ -69503,28 +70065,14 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.Config.Config_pl_pl",
-        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "config",
-            "comment": " Config for pl-pl. ",
-            "type": "Date.Extra.Config.Config"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
-        "name": "Date.Extra.Config.Config_fi_fi",
-        "comment": " This is the Finnish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Ossi Hanhinen\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "config",
-            "comment": " Config for fi-fi. ",
+            "comment": " Config for en-us. ",
             "type": "Date.Extra.Config.Config"
           }
         ],
@@ -69540,6 +70088,74 @@
             "name": "config",
             "comment": " Config for fr-fr. ",
             "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_pl_pl",
+        "comment": " Polish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " This may not do anything in French ",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_fi_fi",
+        "comment": " Finnish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " This may not do anything in Finish ",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -69733,40 +70349,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_pl_pl",
-        "comment": " Polish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Bartosz Sokół\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dayName",
-            "comment": " Day full name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "dayOfMonthWithSuffix",
-            "comment": " This may not do anything in French ",
-            "type": "Bool -> Int -> String"
-          },
-          {
-            "name": "dayShort",
-            "comment": " Day short name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "monthName",
-            "comment": " Month full name. ",
-            "type": "Date.Month -> String"
-          },
-          {
-            "name": "monthShort",
-            "comment": " Month short name. ",
-            "type": "Date.Month -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.Config",
         "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [
@@ -69782,40 +70364,6 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Date.Extra.I18n.I_fi_fi",
-        "comment": " Finnish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Ossi Hanhinen\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dayName",
-            "comment": " Day full name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "dayOfMonthWithSuffix",
-            "comment": " This may not do anything in Finish ",
-            "type": "Bool -> Int -> String"
-          },
-          {
-            "name": "dayShort",
-            "comment": " Day short name. ",
-            "type": "Date.Day -> String"
-          },
-          {
-            "name": "monthName",
-            "comment": " Month full name. ",
-            "type": "Date.Month -> String"
-          },
-          {
-            "name": "monthShort",
-            "comment": " Month short name. ",
-            "type": "Date.Month -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.17.0"
-      },
-      {
         "name": "Date.Extra.I18n.I_fr_fr",
         "comment": " French values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Bruno Girin\n",
         "aliases": [],
@@ -69828,7 +70376,7 @@
           },
           {
             "name": "dayOfMonthWithSuffix",
-            "comment": " This may not do anything in French ",
+            "comment": " Returns a common French idiom for days of month.\nPad indicates space pad the day of month value so single\ndigit outputs have space padding to make them same\nlength as double digit days of month.\n\nNote that the French idiom is to use the ordinal number\nfor the first day of the month (1er janvier) and\ncardinal numbers for all other days (15 janvier). This\nmethod doesn't pad the value on the right even if the\n`pad` argument is `true`.\n",
             "type": "Bool -> Int -> String"
           },
           {
@@ -69853,11 +70401,11 @@
   },
   {
     "name": "rluiten/elm-text-search",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "ElmTextSearch",
-        "comment": " A full text indexer written in Elm language inspired by lunr.js.\n\nA useful article about lunr.js\nhttps://www.new-bamboo.co.uk/blog/2013/02/26/full-text-search-in-your-browser/\n\n## Create Index\n@docs new\n@docs newWith\n\n## Modify Index\n@docs add\n@docs addDocs\n@docs remove\n@docs update\n\n## Query Index\n@docs search\n\n## Types\n@docs Index\n@docs Config\n@docs SimpleConfig\n\n## Save and Load an Index\n\n* You can save an index using [`ElmTextSearch.Json.Encoder.encoder`](ElmTextSearch.Json.Encoder#encoder)\n* You can load a saved index using\n  [`ElmTextSearch.Json.Decoder.decoder`](ElmTextSearch.Json.Decoder#decoder)\n  to produce a [`Index.Model.CodecIndexRecord`](Index.Model#CodecIndexRecord).\n* You can save a [`Index.Model.CodecIndexRecord`](Index.Model#CodecIndexRecord)\n  using [`ElmTextSearch.Json.Encoder.codecIndexRecordEncoder`](ElmTextSearch.Json.Encoder#codecIndexRecordEncoder)\n* ** Modifying an index outside of ElmTextSearch using the Decoder and Encoder directly\nmay cause it to not work correctly loaded into ElmTextSearch. **\n\n@docs storeToValue\n@docs storeToString\n@docs fromString\n@docs fromValue\n@docs fromStringWith\n@docs fromValueWith\n\nCopyright (c) 2016 Robin Luiten\n",
+        "comment": " A full text indexer written in Elm language inspired by lunr.js.\n\nA useful article about lunr.js\nhttps://www.new-bamboo.co.uk/blog/2013/02/26/full-text-search-in-your-browser/\n\n## Create Index\n@docs new\n@docs newWith\n\n## Modify Index\n@docs add\n@docs addDocs\n@docs remove\n@docs update\n@docs addOrUpdate\n\n## Query Index\n@docs search\n\n## Types\n@docs Index\n@docs Config\n@docs SimpleConfig\n\n## Save and Load an Index\n\n* You can save an index using [`ElmTextSearch.Json.Encoder.encoder`](ElmTextSearch.Json.Encoder#encoder)\n* You can load a saved index using\n  [`ElmTextSearch.Json.Decoder.decoder`](ElmTextSearch.Json.Decoder#decoder)\n  to produce a [`Index.Model.CodecIndexRecord`](Index.Model#CodecIndexRecord).\n* You can save a [`Index.Model.CodecIndexRecord`](Index.Model#CodecIndexRecord)\n  using [`ElmTextSearch.Json.Encoder.codecIndexRecordEncoder`](ElmTextSearch.Json.Encoder#codecIndexRecordEncoder)\n* ** Modifying an index outside of ElmTextSearch using the Decoder and Encoder directly\nmay cause it to not work correctly loaded into ElmTextSearch. **\n\n@docs storeToValue\n@docs storeToString\n@docs fromString\n@docs fromValue\n@docs fromStringWith\n@docs fromValueWith\n\nCopyright (c) 2016 Robin Luiten\n",
         "aliases": [
           {
             "name": "Config",
@@ -69895,6 +70443,11 @@
             "name": "addDocs",
             "comment": " Add multiple documents. Tries to add all docs and collects errors..\nIt does not stop adding at first error encountered.\n\nThe result part List (Int, String) is the list of document index\nand the error string message result of adding.\nReturns the index unchanged if all documents error when added.\nReturns the updated index after adding the documents.\n",
             "type": "List doc -> ElmTextSearch.Index doc -> ( ElmTextSearch.Index doc, List ( Int, String ) )"
+          },
+          {
+            "name": "addOrUpdate",
+            "comment": " Add or Update a document in an index.\nThis removes the document first if it is allready in index then adds it.\n",
+            "type": "doc -> ElmTextSearch.Index doc -> Result.Result String (ElmTextSearch.Index doc)"
           },
           {
             "name": "fromString",
@@ -78485,7 +79038,7 @@
   },
   {
     "name": "thaterikperson/elm-blackjack",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "docs": [
       {
         "name": "Blackjack",
