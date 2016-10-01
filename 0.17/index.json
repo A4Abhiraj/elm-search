@@ -23986,7 +23986,7 @@
   },
   {
     "name": "doodledood/elm-split-pane",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "docs": [
       {
         "name": "SplitPane",
@@ -49385,7 +49385,7 @@
   },
   {
     "name": "hugobessaa/elm-logoot",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "docs": [
       {
         "name": "Logoot",
@@ -50526,11 +50526,11 @@
   },
   {
     "name": "jinjor/elm-html-parser",
-    "version": "1.0.3",
+    "version": "1.1.1",
     "docs": [
       {
         "name": "HtmlParser.Util",
-        "comment": " Utility functions that may help you digging into the contents.\n\n```elm\ntable = \"\"\"\n  <table border=0 cellpadding=0 cellspacing=0 width=216 style='border-collapse:\n   collapse;width:162pt'>\n  <!--StartFragment-->\n   <col width=72 span=3 style='width:54pt'>\n   <tr height=18 style='height:13.5pt'>\n    <td height=18 align=right width=72 style='height:13.5pt;width:54pt'>1</td>\n    <td align=right width=72 style='width:54pt'>2</td>\n    <td align=right width=72 style='width:54pt'>3</td>\n   </tr>\n   <tr height=18 style='height:13.5pt'>\n    <td height=18 class=xl69 align=right style='height:13.5pt'>2</td>\n    <td class=xl66 align=right>3</td>\n    <td align=right>4</td>\n   </tr>\n  <!--EndFragment-->\n  </table>\n\"\"\"\n\n( parse table\n  |> getElementsByTagName \"tr\"\n  |> mapElements\n    (\\_ _ innerTr ->\n      innerTr\n        |> mapElements (\\_ _ innerTd -> textContent innerTd)\n        |> String.join \"\\t\"\n        |> String.trim\n    )\n  |> String.join \"\\n\"\n) == \"1\\t2\\t3\\n2\\t3\\t4\"\n```\n\n# Query\n@docs getElementById, getElementsByTagName, getElementsByClassName\n\n# Optimize\n@docs createIdDict, createTagDict, createClassDict\n\n# Custom Query\n@docs findElement, findElements\n\n# Mapping\n@docs mapElements, filterElements, filterMapElements\n\n# Attributes\n@docs getValue, getId, getClassList\n\n# Get Content\n@docs textContent\n\n# Virtual DOM\n@docs toVirtualDom\n",
+        "comment": " Utility functions that may help you digging into the contents.\n\n```elm\ntable = \"\"\"\n  <table border=0 cellpadding=0 cellspacing=0 width=216 style='border-collapse:\n   collapse;width:162pt'>\n  <!--StartFragment-->\n   <col width=72 span=3 style='width:54pt'>\n   <tr height=18 style='height:13.5pt'>\n    <td height=18 align=right width=72 style='height:13.5pt;width:54pt'>1</td>\n    <td align=right width=72 style='width:54pt'>2</td>\n    <td align=right width=72 style='width:54pt'>3</td>\n   </tr>\n   <tr height=18 style='height:13.5pt'>\n    <td height=18 class=xl69 align=right style='height:13.5pt'>2</td>\n    <td class=xl66 align=right>3</td>\n    <td align=right>4</td>\n   </tr>\n  <!--EndFragment-->\n  </table>\n\"\"\"\n\n( parse table\n  |> getElementsByTagName \"tr\"\n  |> mapElements\n    (\\_ _ innerTr ->\n      innerTr\n        |> mapElements (\\_ _ innerTd -> textContent innerTd)\n        |> String.join \"\\t\"\n        |> String.trim\n    )\n  |> String.join \"\\n\"\n) == \"1\\t2\\t3\\n2\\t3\\t4\"\n```\n\n# Query\n@docs getElementById, getElementsByTagName, getElementsByClassName\n\n# Optimize\n@docs createIdDict, createTagDict, createClassDict\n\n# Custom Query\n@docs findElement, findElements\n\n# Mapping\n@docs mapElements, filterElements, filterMapElements\n\n# Attributes\n@docs getValue, getId, getClassList\n\n# Get Content\n@docs textContent\n\n# Virtual DOM\n@docs toVirtualDom, toVirtualDomSvg\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -50613,6 +50613,11 @@
             "name": "toVirtualDom",
             "comment": " Converts nodes to virtual dom nodes.\n",
             "type": "List HtmlParser.Node -> List (Html.Html msg)"
+          },
+          {
+            "name": "toVirtualDomSvg",
+            "comment": " Converts nodes to virtual dom SVG nodes.\n\nNote: If node list contains `<svg>` tag, you can use `toVirtualDom` instead.\nOtherwise, use this function.\n\n```elm\nsvg : Svg msg\nsvg =\n  parse \"\"\"<circle cx=\"40\" cy=\"40\" r=\"24\" style=\"stroke:#006600; fill:#00cc00\"/>\"\"\"\n  |> toVirtualDomSvg\n  |> Svg.svg []\n```\n\n",
+            "type": "List HtmlParser.Node -> List (Svg.Svg msg)"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -52390,7 +52395,7 @@
   },
   {
     "name": "justinmimbs/elm-date-selector",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "DateSelectorDropdown",
@@ -81030,11 +81035,11 @@
   },
   {
     "name": "wernerdegroot/listzipper",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "List.Zipper",
-        "comment": " A zipper for `List`.\n\n# The `Zipper` type\n@docs Zipper\n\n# Constructing a `Zipper`\n@docs fromList\n\n# Accessors\n@docs before, get, after, toList\n\n# Updating\n@docs updateBefore, update, updateAfter\n\n# Moving around\n@docs first, previous, next, last, find\n\n",
+        "comment": " A zipper for `List`.\n\n# The `Zipper` type\n@docs Zipper\n\n# Constructing a `Zipper`\n@docs singleton, fromList, withDefault\n\n# Accessors\n@docs before, current, after, toList\n\n# Updating\n@docs updateBefore, update, updateAfter\n\n# Moving around\n@docs first, previous, next, last, find\n\n",
         "aliases": [],
         "types": [
           {
@@ -81067,6 +81072,11 @@
             "type": "List.Zipper.Zipper a -> List a"
           },
           {
+            "name": "current",
+            "comment": " Returns the element the `Zipper` is currently focussed on. ",
+            "type": "List.Zipper.Zipper a -> a"
+          },
+          {
             "name": "find",
             "comment": " Returns a `Zipper` focussed on the first element for which the predicate returns `True` (starting from a given `Zipper`). ",
             "type": "(a -> Bool) -> List.Zipper.Zipper a -> Maybe.Maybe (List.Zipper.Zipper a)"
@@ -81080,11 +81090,6 @@
             "name": "fromList",
             "comment": " Construct a `Zipper` from a list. The `Zipper` will focus on the first element (if there is a first element). ",
             "type": "List a -> Maybe.Maybe (List.Zipper.Zipper a)"
-          },
-          {
-            "name": "get",
-            "comment": " Returns the element the `Zipper` is focussed on. ",
-            "type": "List.Zipper.Zipper a -> a"
           },
           {
             "name": "last",
@@ -81102,13 +81107,18 @@
             "type": "List.Zipper.Zipper a -> Maybe.Maybe (List.Zipper.Zipper a)"
           },
           {
+            "name": "singleton",
+            "comment": " Construct a `Zipper` focussed on the first element of a singleton list. ",
+            "type": "a -> List.Zipper.Zipper a"
+          },
+          {
             "name": "toList",
             "comment": " Reconstruct the list. ",
             "type": "List.Zipper.Zipper a -> List a"
           },
           {
             "name": "update",
-            "comment": " Updat the element the `Zipper` is focussed on. ",
+            "comment": " Update the element the `Zipper` is focussed on. ",
             "type": "(a -> a) -> List.Zipper.Zipper a -> List.Zipper.Zipper a"
           },
           {
@@ -81120,6 +81130,11 @@
             "name": "updateBefore",
             "comment": " Update all elements before the element the `Zipper` is focussed on. ",
             "type": "(List a -> List a) -> List.Zipper.Zipper a -> List.Zipper.Zipper a"
+          },
+          {
+            "name": "withDefault",
+            "comment": " Provide an alternative when constructing a `Zipper` fails. ",
+            "type": "a -> Maybe.Maybe (List.Zipper.Zipper a) -> List.Zipper.Zipper a"
           }
         ],
         "generated-with-elm-version": "0.17.0"
