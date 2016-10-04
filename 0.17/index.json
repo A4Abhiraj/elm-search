@@ -59697,6 +59697,43 @@
     ]
   },
   {
+    "name": "knewter/elm-rfc5988-parser",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "RFC5988",
+        "comment": " A parser for [the draft for the replacement of RFC5988](https://mnot.github.io/I-D/rfc5988bis/)\n\n@docs Link\n\n# Constructing links\n@docs emptyLink\n\n# Parsers\n@docs rfc5988, rfc5988s\n",
+        "aliases": [
+          {
+            "name": "Link",
+            "comment": " Defined here: https://mnot.github.io/I-D/rfc5988bis/\n",
+            "args": [],
+            "type": "{ context : RFC5988.IRI , target : RFC5988.IRI , relationType : String , targetAttributes : Dict.Dict String String }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "emptyLink",
+            "comment": " Produce an empty link.\n",
+            "type": "RFC5988.Link"
+          },
+          {
+            "name": "rfc5988",
+            "comment": " Parser for a link\n\n      parse rfc5988 \"<http://urbit.org>; rel=\\\"start\\\"\" ==\n      ( Ok { context = \"\", target = \"http://urbit.org\", relationType = \"start\", targetAttributes = Dict.empty }\n      , { input = \"\", position = 31 }\n      )\n\n",
+            "type": "Combine.Parser RFC5988.Link"
+          },
+          {
+            "name": "rfc5988s",
+            "comment": " Parser for a list of links\n",
+            "type": "Combine.Parser (List RFC5988.Link)"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "knledg/touch-events",
     "version": "1.0.1",
     "docs": [
@@ -61948,11 +61985,11 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "docs": [
       {
         "name": "Formatting",
-        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs float\n@docs any\n@docs wrap\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n@docs roundTo\n@docs uriFragment\n",
+        "comment": " A type-safe string formatting library. It fulfils the need for\nstring-interpolation or a `printf` function, without sacrificing Elm's\nruntime guarantees or requiring any language-level changes. It also\ncomposes well, to make building up complex formatters easy.\n\nExample:\n\n    import Formatting exposing (..)\n\n    greeting =\n        s \"Hello \" <> string <> s \"!\"\n\n    print greeting \"Kris\"\n\n    --> \"Hello Kris!\"\n\n@docs Format\n@docs (<>)\n@docs map\n@docs premap\n@docs apply\n@docs print\n@docs html\n@docs s\n@docs string\n@docs int\n@docs bool\n@docs float\n@docs any\n@docs wrap\n@docs pad\n@docs padLeft\n@docs padRight\n@docs dp\n@docs roundTo\n@docs uriFragment\n",
         "aliases": [],
         "types": [
           {
@@ -61984,6 +62021,16 @@
             "name": "any",
             "comment": " A placeholder for any value that we can call `toString` on.\n\n\nEagle-eyed readers of the source will notice that we use this same\nfunction to define `int` and `float`, since `toString` gives us the\nright result for both of those types.\n\nThe sole difference is, `int` and `float` have more restrictive type\nsignatures.\n",
             "type": "Formatting.Format r (a -> r)"
+          },
+          {
+            "name": "apply",
+            "comment": " Apply an argument to a Formatter. Useful when you want to supply\nan argument, but don't yet want to convert your formatter to a plain\nol' function (with `print`).\n",
+            "type": "Formatting.Format r (a -> b -> r) -> a -> Formatting.Format r (b -> r)"
+          },
+          {
+            "name": "bool",
+            "comment": " A placeholder for an `Bool` argument.\n",
+            "type": "Formatting.Format r (Bool -> r)"
           },
           {
             "name": "dp",
