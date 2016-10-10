@@ -14422,41 +14422,8 @@
   },
   {
     "name": "NoRedInk/nri-elm-css",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "docs": [
-      {
-        "name": "Nri.Stylers",
-        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "makeFont",
-            "comment": "\ntakes a size and a color and creates a font\n",
-            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Nri.Fonts",
-        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "baseFont",
-            "comment": " Font for instructions, headers, and pretty much everything else\n",
-            "type": "Css.Mixin"
-          },
-          {
-            "name": "quizFont",
-            "comment": " Font for question sentences, or most interactable or graded fields\n",
-            "type": "Css.Mixin"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
       {
         "name": "Nri.Colors",
         "comment": " Helper module for working with colors\n\n@docs black, blue, blueDark, blueDark5, blueDark70, blueLighter, coral, coralLighter, coralLightest, gray, grayDark, grayDarker, grayLighter, grayLightest, green, greenLighter, greenLightest, linkBlue, orange, orangeDark, orangeLighter, purple, purpleLighter, purpleLightest, turquoise, turquoiseLighter, turquoiseLightest,  white, yellowDark\n\n",
@@ -14607,6 +14574,53 @@
             "name": "yellowDark",
             "comment": " yellowDark\n",
             "type": "Css.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Css.Extra",
+        "comment": " Put helper functions, properties, mixins, and anything else that might be missing from elm-css. If it gets used enough and the use case is in the scope of elm-css, we can open PRs/Issues to discuss or add the features to that package.\n\n@docs lineHeightNum\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lineHeightNum",
+            "comment": " Use a Css.Num value for line height\n",
+            "type": "Float -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Stylers",
+        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "makeFont",
+            "comment": "\ntakes a size and a color and creates a font\n",
+            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Fonts",
+        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "baseFont",
+            "comment": " Font for instructions, headers, and pretty much everything else\n",
+            "type": "Css.Mixin"
+          },
+          {
+            "name": "quizFont",
+            "comment": " Font for question sentences, or most interactable or graded fields\n",
+            "type": "Css.Mixin"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -28120,6 +28134,191 @@
     ]
   },
   {
+    "name": "edvail/elm-polymer",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Polymer.Events",
+        "comment": "\n@docs onIronSelect\n@docs onSelectedChanged\n@docs onTap\n@docs onValueChanged\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "onIronSelect",
+            "comment": " ",
+            "type": "(String -> Result.Result String a) -> (a -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onSelectedChanged",
+            "comment": " ",
+            "type": "(String -> Result.Result String a) -> (a -> msg) -> Html.Attribute msg"
+          },
+          {
+            "name": "onTap",
+            "comment": " ",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onValueChanged",
+            "comment": " ",
+            "type": "(String -> msg) -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Polymer.Paper",
+        "comment": "\n@docs iconButton\n@docs item\n@docs input\n@docs itemBody\n@docs fab\n@docs menu\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "fab",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "iconButton",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "input",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "item",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "itemBody",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "menu",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Polymer.App",
+        "comment": "\n@docs drawer\n@docs drawerLayout\n@docs header\n@docs headerLayout\n@docs route\n@docs toolbar\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "drawer",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "drawerLayout",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "header",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "headerLayout",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "route",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "toolbar",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Polymer.Firebase",
+        "comment": "\n@docs app\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "app",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Polymer.Attributes",
+        "comment": "\n@docs attrForSelected\n@docs boolProperty\n@docs icon\n@docs label\n@docs path\n@docs selected\n@docs stringProperty\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "attrForSelected",
+            "comment": " ",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "boolProperty",
+            "comment": " ",
+            "type": "String -> Bool -> Html.Attribute msg"
+          },
+          {
+            "name": "icon",
+            "comment": " ",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "label",
+            "comment": " ",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "path",
+            "comment": " ",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "selected",
+            "comment": " ",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "stringProperty",
+            "comment": " ",
+            "type": "String -> String -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Polymer.Iron",
+        "comment": "\n@docs selector\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "selector",
+            "comment": " ",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
     "name": "eeue56/elm-all-dict",
     "version": "1.1.2",
     "docs": [
@@ -28546,7 +28745,7 @@
   },
   {
     "name": "eeue56/elm-flat-matrix",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Matrix.Extra",
@@ -28610,7 +28809,7 @@
             "type": "Matrix.Matrix number -> Matrix.Matrix number -> Maybe.Maybe (Matrix.Matrix number)"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       },
       {
         "name": "Matrix",
@@ -28713,7 +28912,7 @@
             "type": "Matrix.Matrix a -> Int"
           }
         ],
-        "generated-with-elm-version": "0.17.0"
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -60474,7 +60673,7 @@
   },
   {
     "name": "krisajenkins/elm-dialog",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "docs": [
       {
         "name": "Dialog",
@@ -62550,7 +62749,7 @@
   },
   {
     "name": "krisajenkins/formatting",
-    "version": "3.3.0",
+    "version": "4.0.1",
     "docs": [
       {
         "name": "Formatting",
@@ -62600,7 +62799,7 @@
           {
             "name": "dp",
             "comment": " *DEPRECATED*: Use `roundTo` instead.\n",
-            "type": "number -> Formatting.Format a (Float -> a)"
+            "type": "Int -> Formatting.Format r (Float -> r)"
           },
           {
             "name": "float",
@@ -62650,7 +62849,7 @@
           {
             "name": "roundTo",
             "comment": " A float rounded to `n` decimal places.\n",
-            "type": "number -> Formatting.Format a (Float -> a)"
+            "type": "Int -> Formatting.Format r (Float -> r)"
           },
           {
             "name": "s",
