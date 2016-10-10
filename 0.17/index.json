@@ -24120,7 +24120,7 @@
   },
   {
     "name": "danielnarey/elm-modular-design",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "ModularDesign.FormInput",
@@ -24720,7 +24720,7 @@
           },
           {
             "name": "withId",
-            "comment": " Convenience function to add an `id` attribute to the root element of an\n`HtmlTree`. Calls `withAttributes`.\n\n    welcomeMessage\n      |> withId \"welcomeMessage\"\n",
+            "comment": " Convenience function to add an `id` attribute to the root element of an\n`HtmlTree`. Calls `addAttribute`.\n\n    welcomeMessage\n      |> withId \"welcomeMessage\"\n",
             "type": "String -> ModularDesign.HtmlTree msg -> ModularDesign.HtmlTree msg"
           },
           {
@@ -53535,11 +53535,11 @@
   },
   {
     "name": "hugobessaa/elm-logoot",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "docs": [
       {
         "name": "Logoot",
-        "comment": " Simple Logoot implementation\n\nLogoot is a [Conflict-free Replicated Data Type][crdt] (CRDT) created to be used by\ndistributed systems that want to achieve Strong Eventual Consistency (SEC).\n\n[crdt]: https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type\n\nInsert and remove operations in Logoot are idempotent, commutative and associative.\nThis means two replicas can exchange operations made in their local Logoot over a\nnetwork without having to garantee the order of messages, enabling their use with\ndistributed networks such as P2P.\n\nThis is an implementation of [Logoot-undo][logoot] propose by Stéphane Weiss,\nPascal Urso and Pascal Molli. It still lacks support for undo operations.\n\n[logoot]: https://pdfs.semanticscholar.org/75e4/5cd9cae6d0da1faeae11732e39a4c1c7a17b.pdf\n\nThere are a lot of missing pieces here, help us sending PRs to the GitHub [repository]!\n\n[repository]: https://github.com/hugobessaa/elm-logoot\n\n## Types\n\n@docs Logoot, Pid, PidContent, Positions, Position, Line, Site, Clock\n\n## Build\n\n@docs empty, insert, remove, insertAfter, posBetween\n\n## Query\n\n@docs isEmpty, member, get, size\n\n## Dictionaries\n\n@docs toDict, fromDict\n\n## Lists\n\n@docs keys, values, toList, fromList, diffList, intersectList\n\n## Sort and compare\n\n@docs sortPids, comparePid, comparePos\n\n",
+        "comment": " Simple Logoot implementation.\n\nInsert and remove operations in Logoot are idempotent, commutative and associative.\nThis means two replicas can exchange operations made in their local Logoot over a\nnetwork without having to garantee the order of messages, enabling their use with\ndistributed networks such as P2P.\n\nHere are various functions to deal with the Logoot document. There are a lot of\nmissing pieces here, help us sending PRs to the GitHub [repository]!\n\n[repository]: https://github.com/hugobessaa/elm-logoot\n\n## Types\n\n@docs Logoot, Pid, PidContent, Positions, Position, Line, Site, Clock\n\n## Build\n\n@docs empty, insert, remove, insertAfter, posBetween\n\n## Query\n\n@docs isEmpty, member, get, size\n\n## Dictionaries\n\n@docs toDict, fromDict\n\n## Lists\n\n@docs keys, values, toList, fromList, diffList, intersectList\n\n## Sort and compare\n\n@docs sortPids, comparePid, comparePos\n\n",
         "aliases": [
           {
             "name": "Clock",
@@ -53587,7 +53587,7 @@
         "types": [
           {
             "name": "Logoot",
-            "comment": " A Logoot.\n\n`Logoot` implementation details are hidden from the public API.\n\nYou should use the provided functions to transform a `Logoot`.\n",
+            "comment": " A Logoot.\n\n`Logoot` implementation details are hidden from the public API.\n\nYou should use the provided functions to create and transform a `Logoot`.\n",
             "args": [],
             "cases": []
           }
@@ -53610,7 +53610,7 @@
           },
           {
             "name": "empty",
-            "comment": " Return an empty `Logoot`.\n\nAn empty `Logoot` come with the first and last `Pid` in place. They should not be removed.\n\n    toDict empty == Dict.fromList\n      [ (([(0,0)],0), \"\")\n      , (([(maxInt,0)],0), \"\") \n      ]\n",
+            "comment": " Return an empty `Logoot`.\n\nAn empty `Logoot` come with the first and last `Pid` in place. They can not be modified.\n\n    toDict empty == Dict.fromList\n      [ (([(0,0)],0), \"\")\n      , (([(32000,0)],0), \"\") \n      ]\n",
             "type": "Logoot.Logoot"
           },
           {
@@ -65381,11 +65381,47 @@
   },
   {
     "name": "mdgriffith/elm-style-animation",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "docs": [
       {
+        "name": "Animation.Messenger",
+        "comment": " Import this module if you want the ability to send a Msg at any point during your animation.\n\n@docs State, update, send, Step\n\n",
+        "aliases": [
+          {
+            "name": "State",
+            "comment": " An Animation State that also tracks your `Msg` type.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Animation.Model.Animation msg"
+          },
+          {
+            "name": "Step",
+            "comment": " ",
+            "args": [
+              "msg"
+            ],
+            "type": "Animation.Model.Step msg"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "send",
+            "comment": " An animation `Step` which will send a message.  For example\n\n    Animation.interrupt\n        [ Animation.to [Animation.opacity 0]\n        , Animation.send OpacityIsNotZero\n        ]\n\n\n",
+            "type": "msg -> Animation.Model.Step msg"
+          },
+          {
+            "name": "update",
+            "comment": " An update that returns the updated animation as well as any messages sent in `Cmd` form.\n",
+            "type": "Animation.Model.Tick -> Animation.Model.Animation msg -> ( Animation.Model.Animation msg, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.17.0"
+      },
+      {
         "name": "Animation",
-        "comment": " A library for animations.\n\n# Setting up an animation\n@docs State, subscription, Msg, render\n\n# Creating an animation\n@docs interrupt, queue, wait, to, toWith, toWithEach, set, repeat, loop, update, style, styleWith, styleWithEach, Interpolation, spring, easing, speed\n\n# Animatable Properties\n@docs Property, opacity, top, left, right, bottom, width, height, padding, paddingLeft, paddingRight, paddingTop, paddingBottom, margin, marginLeft, marginRight, marginTop, marginBottom, color, backgroundColor, borderColor, borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, borderRadius, borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius, shadow, textShadow, insetShadow, display, inline, inlineBlock, flex, inlineFlex, block, none, listItem\n\n# Transforms\n@docs scale, scale3d, rotate, rotate3d, translate, translate3d\n\n# Animatable CSS Filters\n@docs filterUrl, blur, brightness, contrast, grayscale, greyscale, hueRotate, invert, saturate, sepia\n\n# Animatable Svg Properties\n@docs viewBox, fill, stroke, strokeWidth, stopColor, offset, x, y, cx, cy, radius, radiusX, radiusY, points\n\n# Constructing an Svg Path\n@docs path, PathStep, move, moveTo, close, QuadraticCurve, curve, curveTo, CubicCurve, curve2, curve2To\n\n# Units\n@docs px, percent, em, rem, turn, deg, grad, rad\n\n# Advanced\n@docs custom, custom2, customColor, exactly\n\n",
+        "comment": " A library for animations.\n\n# Setting up an animation\n@docs State, subscription, Msg, render\n\n# Creating an animation\n@docs interrupt, queue, Step, wait, to, toWith, toWithEach, set, repeat, loop, update, style, styleWith, styleWithEach, Interpolation, spring, easing, speed\n\n# Animatable Properties\n@docs Property, opacity, top, left, right, bottom, width, height, padding, paddingLeft, paddingRight, paddingTop, paddingBottom, margin, marginLeft, marginRight, marginTop, marginBottom, color, backgroundColor, borderColor, borderWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, borderRadius, borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius, shadow, textShadow, insetShadow, display, inline, inlineBlock, flex, inlineFlex, block, none, listItem\n\n# Transforms\n@docs scale, scale3d, rotate, rotate3d, translate, translate3d\n\n# Animatable CSS Filters\n@docs filterUrl, blur, brightness, contrast, grayscale, greyscale, hueRotate, invert, saturate, sepia, dropShadow\n\n# Animatable Svg Properties\n@docs viewBox, fill, stroke, strokeWidth, stopColor, offset, x, y, cx, cy, radius, radiusX, radiusY, points\n\n# Constructing an Svg Path\n@docs path, PathStep, move, moveTo, close, QuadraticCurve, curve, curveTo, CubicCurve, curve2, curve2To\n\n# Units\n@docs px, percent, em, rem, turn, deg, grad, rad\n\n# Advanced\n@docs exactly, custom, custom2, customColor, attr, attr2, attr3, attr4, attrColor\n\n",
         "aliases": [
           {
             "name": "CubicCurve",
@@ -65428,10 +65464,41 @@
             "comment": " ",
             "args": [],
             "type": "Animation.Model.Animation Basics.Never"
+          },
+          {
+            "name": "Step",
+            "comment": " ",
+            "args": [],
+            "type": "Animation.Model.Step Basics.Never"
           }
         ],
         "types": [],
         "values": [
+          {
+            "name": "attr",
+            "comment": " Animate a custom attribute by providing it's name, a float value, and the units it should have.\n\n\n",
+            "type": "String -> Float -> String -> Animation.Model.Property"
+          },
+          {
+            "name": "attr2",
+            "comment": "\n\n",
+            "type": "String -> ( Float, String ) -> ( Float, String ) -> Animation.Model.Property"
+          },
+          {
+            "name": "attr3",
+            "comment": "\n",
+            "type": "String -> ( Float, String ) -> ( Float, String ) -> ( Float, String ) -> Animation.Model.Property"
+          },
+          {
+            "name": "attr4",
+            "comment": "\n",
+            "type": "String -> ( Float, String ) -> ( Float, String ) -> ( Float, String ) -> ( Float, String ) -> Animation.Model.Property"
+          },
+          {
+            "name": "attrColor",
+            "comment": "\n",
+            "type": "String -> Color.Color -> Animation.Model.Property"
+          },
           {
             "name": "backgroundColor",
             "comment": " ",
@@ -65549,17 +65616,17 @@
           },
           {
             "name": "custom",
-            "comment": " Animate a custom property by providing it's name, a float value, and the units it should have.\n\n\n",
+            "comment": " Animate a custom _style_ property by providing it's name, a float value, and the units it should have.\n",
             "type": "String -> Float -> String -> Animation.Model.Property"
           },
           {
             "name": "custom2",
-            "comment": " Animate a custom property with two values by providing it's name, and a pair of tuples with (value, unit).\n\n\n",
+            "comment": "\n",
             "type": "String -> ( Float, String ) -> ( Float, String ) -> Animation.Model.Property"
           },
           {
             "name": "customColor",
-            "comment": " We convert the rgb channels to a float because that allows us to use the motion type without parametricity.\nWhen rendering we convert them back to ints because CSS does not recognize rgb as floats.\n\n",
+            "comment": "\n",
             "type": "String -> Color.Color -> Animation.Model.Property"
           },
           {
@@ -65581,6 +65648,11 @@
             "name": "display",
             "comment": " ",
             "type": "Animation.DisplayMode -> Animation.Model.Property"
+          },
+          {
+            "name": "dropShadow",
+            "comment": " Drop shadows will ignore the shadow's `size` value.   This is just one of the bizarre quirks of CSS.\n",
+            "type": "Animation.Shadow -> Animation.Model.Property"
           },
           {
             "name": "easing",
@@ -65864,7 +65936,7 @@
           },
           {
             "name": "speed",
-            "comment": " Specify a speed to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\nGenerally be sure you don't want `Animation.spring` or `Animation.easing` instead as they are more powerful.\n\n",
+            "comment": " Specify a speed to animate with.  To be used in conjunction with `StyleWith`, `StyleWithEach`, `toWith`, and `toWithEach`.\n\nGenerally you don't want this.  It's used in the special case of the default interpolation for rotation.\n\nUse `Animation.spring` or `Animation.easing` instead as they are more powerful.\n\n",
             "type": "{ perSecond : Float } -> Animation.Model.Interpolation"
           },
           {
@@ -65909,7 +65981,7 @@
           },
           {
             "name": "textShadow",
-            "comment": " ",
+            "comment": " Text shadows will ignore the shadow's `size` value.   This is just one of the bizarre quirks of CSS.\n",
             "type": "Animation.Shadow -> Animation.Model.Property"
           },
           {
@@ -65981,29 +66053,32 @@
         "generated-with-elm-version": "0.17.0"
       },
       {
-        "name": "Animation.Messenger",
-        "comment": " Import this module if you want the ability to send a Msg at any point during your animation.\n\n@docs State, update, send\n\n",
+        "name": "Animation.Spring.Presets",
+        "comment": "\nSpring presets to be used with `Animation.styleWith` and `Animation.toWith`\n\n@docs Spring, zippy, wobbly, stiff\n\n",
         "aliases": [
           {
-            "name": "State",
-            "comment": " An Animation State that also tracks your `Msg` type.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "Animation.Model.Animation msg"
+            "name": "Spring",
+            "comment": "\n",
+            "args": [],
+            "type": "{ stiffness : Float, damping : Float }"
           }
         ],
         "types": [],
         "values": [
           {
-            "name": "send",
-            "comment": " An animation `Step` which will send a message.  For example\n\n    Animation.interrupt\n        [ Animation.to [Animation.opacity 0]\n        , Animation.send OpacityIsNotZero\n        ]\n\n\n",
-            "type": "msg -> Animation.Model.Step msg"
+            "name": "stiff",
+            "comment": "\n",
+            "type": "Animation.Spring.Presets.Spring"
           },
           {
-            "name": "update",
-            "comment": " An update that returns the updated animation as well as any messages sent in `Cmd` form.\n",
-            "type": "Animation.Model.Tick -> Animation.Model.Animation msg -> ( Animation.Model.Animation msg, Platform.Cmd.Cmd msg )"
+            "name": "wobbly",
+            "comment": "\n",
+            "type": "Animation.Spring.Presets.Spring"
+          },
+          {
+            "name": "zippy",
+            "comment": " The default used by elm-style-animation.\n",
+            "type": "Animation.Spring.Presets.Spring"
           }
         ],
         "generated-with-elm-version": "0.17.0"
@@ -88270,6 +88345,101 @@
             "name": "withDefault",
             "comment": " Alias for `fromRight`.\n",
             "type": "b -> Either.Either a b -> b"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      }
+    ]
+  },
+  {
+    "name": "toastal/trinary",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Trinary",
+        "comment": "\nTrinary logic using `T`, `M`, `F` for `True`, `Maybe`, `False`.\nInfixes are prefixed with `#` because `Shift + 3`.\n\n# Definition\n@docs Trit\n\n# Logic\n@docs not, and, or, implies, eq\n\n# Infixes\n@docs (#!), (#&), (#|), (#>), (#=)\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Trit",
+            "comment": " Trinary logic has three truth values. The first letter is used\nbecause `True` and `False` are reserved and `Maybe` is a default\nimport.\n",
+            "args": [],
+            "cases": [
+              [
+                "T",
+                []
+              ],
+              [
+                "M",
+                []
+              ],
+              [
+                "F",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "#!",
+            "comment": " Infix for `not`\n",
+            "type": "Trinary.Trit -> Trinary.Trit",
+            "associativity": "left",
+            "precedence": 2
+          },
+          {
+            "name": "#&",
+            "comment": " Infix for `and`\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit",
+            "associativity": "left",
+            "precedence": 2
+          },
+          {
+            "name": "#=",
+            "comment": " Infix for `eq`\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit",
+            "associativity": "left",
+            "precedence": 2
+          },
+          {
+            "name": "#>",
+            "comment": " Infix for `implies`\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit",
+            "associativity": "left",
+            "precedence": 2
+          },
+          {
+            "name": "#|",
+            "comment": " Infix for `or`\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit",
+            "associativity": "left",
+            "precedence": 2
+          },
+          {
+            "name": "and",
+            "comment": "\n```\n| ∧     | True  | Maybe | False |\n| ----- | ----- | ----- | ----- |\n| True  | True  | Maybe | False |\n| Maybe | Maybe | Maybe | False |\n| False | False | False | False |\n```\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit"
+          },
+          {
+            "name": "eq",
+            "comment": "\n```\n| ≡     | True  | Maybe | False |\n| ----- | ----- | ----- | ----- |\n| True  | True  | Maybe | False |\n| Maybe | Maybe | Maybe | Maybe |\n| False | False | Maybe | True  |\n```\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit"
+          },
+          {
+            "name": "implies",
+            "comment": "\n```\n| ⊃     | True | Maybe | False |\n|------ | ---- | ----- |------ |\n| True  | True | Maybe | False |\n| Maybe | True | Maybe | Maybe |\n| False | True | True  | True  |\n```\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit"
+          },
+          {
+            "name": "not",
+            "comment": "\n```\n| ¬             |\n| ------------- |\n| True  | False |\n| Maybe | Maybe |\n| False | True  |\n```\n",
+            "type": "Trinary.Trit -> Trinary.Trit"
+          },
+          {
+            "name": "or",
+            "comment": "\n```\n| ∨     | True | Maybe | False |\n| ----- | ---- | ----- | ----- |\n| True  | True | True  | True  |\n| Maybe | True | Maybe | Maybe |\n| False | True | Maybe | False |\n```\n",
+            "type": "Trinary.Trit -> Trinary.Trit -> Trinary.Trit"
           }
         ],
         "generated-with-elm-version": "0.17.1"
