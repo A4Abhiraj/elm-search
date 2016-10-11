@@ -14422,8 +14422,55 @@
   },
   {
     "name": "NoRedInk/nri-elm-css",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "docs": [
+      {
+        "name": "Nri.Stylers",
+        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "makeFont",
+            "comment": "\ntakes a size and a color and creates a font\n",
+            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Fonts",
+        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "baseFont",
+            "comment": " Font for instructions, headers, and pretty much everything else\n",
+            "type": "Css.Mixin"
+          },
+          {
+            "name": "quizFont",
+            "comment": " Font for question sentences, or most interactable or graded fields\n",
+            "type": "Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Nri.Css.Extra",
+        "comment": " Put helper functions, properties, mixins, and anything else that might be missing from elm-css. If it gets used enough and the use case is in the scope of elm-css, we can open PRs/Issues to discuss or add the features to that package.\n\n@docs lineHeightNum\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lineHeightNum",
+            "comment": " Use a Css.Num value for line height\n",
+            "type": "Float -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
       {
         "name": "Nri.Colors",
         "comment": " Helper module for working with colors\n\n@docs black, blue, blueDark, blueDark5, blueDark70, blueLighter, coral, coralLighter, coralLightest, gray, grayDark, grayDarker, grayLighter, grayLightest, green, greenLighter, greenLightest, linkBlue, orange, orangeDark, orangeLighter, purple, purpleLighter, purpleLightest, turquoise, turquoiseLighter, turquoiseLightest,  white, yellowDark\n\n",
@@ -14579,48 +14626,15 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Nri.Css.Extra",
-        "comment": " Put helper functions, properties, mixins, and anything else that might be missing from elm-css. If it gets used enough and the use case is in the scope of elm-css, we can open PRs/Issues to discuss or add the features to that package.\n\n@docs lineHeightNum\n\n",
+        "name": "Nri",
+        "comment": " A collection of helpers for working with NoRedInk projects\n@docs name\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "lineHeightNum",
-            "comment": " Use a Css.Num value for line height\n",
-            "type": "Float -> Css.Mixin"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Nri.Stylers",
-        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "makeFont",
-            "comment": "\ntakes a size and a color and creates a font\n",
-            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Nri.Fonts",
-        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "baseFont",
-            "comment": " Font for instructions, headers, and pretty much everything else\n",
-            "type": "Css.Mixin"
-          },
-          {
-            "name": "quizFont",
-            "comment": " Font for question sentences, or most interactable or graded fields\n",
-            "type": "Css.Mixin"
+            "name": "name",
+            "comment": " NoRedInk's name!\n",
+            "type": "String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -14635,20 +14649,6 @@
             "name": "invisibleText",
             "comment": "\ninvisibleText is most frequently useful on labels.\n\nFor instance, if there's an input element with a placeholder,\nsomeone on a screenreader would miss the content of that placeholder.\n\nWith invisibleText, we can avoid redundancy across visible label\nand placeholder, but maintain semantic meaning of the input for other users.\n",
             "type": "Css.Mixin"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
-        "name": "Nri",
-        "comment": " A collection of helpers for working with NoRedInk projects\n@docs name\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "name",
-            "comment": " NoRedInk's name!\n",
-            "type": "String"
           }
         ],
         "generated-with-elm-version": "0.17.1"
@@ -15737,6 +15737,284 @@
           }
         ],
         "generated-with-elm-version": "0.17.0"
+      }
+    ]
+  },
+  {
+    "name": "Zinggi/elm-2d-game",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Game.TwoD",
+        "comment": "\nA set of functions used to embed a 2d game into a web page.\nThese functions specify the size and attributes passed to the canvas element.\n\nYou need to pass along the time, size and camera, as these are needed for rendering.\n\nsuggested import:\n\n    import Game.TwoD as Game\n\n@docs RenderConfig\n\n## Canvas element only\n@docs render\n@docs renderWithOptions\n\n## Embedded in a div\n@docs renderCentered\n@docs renderCenteredWithOptions\n",
+        "aliases": [
+          {
+            "name": "RenderConfig",
+            "comment": "\nThis is used by all the functions below, it represents all the shared state needed to render stuff.\nIf you don't use sprite animations you can use `0` for the time parameter.\n",
+            "args": [],
+            "type": "{ time : Float , size : ( Int, Int ) , camera : Game.TwoD.Camera.Camera }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "render",
+            "comment": "\nCreates a canvas element that renders the given Renderables.\n\nIf you don't use animated sprites, you can use `0` for the time parameter.\n\n    render { time = time, size = (800, 600), camera = state.camera }\n        [ Background.render\n        , Player.render state.Player\n        ]\n",
+            "type": "Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html x"
+          },
+          {
+            "name": "renderCentered",
+            "comment": "\nSame as `render`, but wrapped in a div and nicely centered on the page using flexbox\n",
+            "type": "Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html x"
+          },
+          {
+            "name": "renderCenteredWithOptions",
+            "comment": "\nSame as above, but you can specify attributes for the container div and the canvas.\n\n    renderCenteredWithOptions\n        containerAttributes\n        canvasAttributes\n        renderConfig\n        renderables\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Attribute msg) -> Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html msg"
+          },
+          {
+            "name": "renderWithOptions",
+            "comment": "\nSame as above, but you can specify additional attributes that will be passed to the canvas element.\nA useful trick to save some gpu processing at the cost of image quality is\nto use a smaller `size` argument and than scale the canvas with css. e.g.\n\n    renderWithOptions [style [(\"width\", \"800px\"), (\"height\", \"600px\")]]\n        { time = time, size = (400, 300), camera = camera }\n        (World.render model.world)\n",
+            "type": "List (Html.Attribute msg) -> Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Game.TwoD.Render",
+        "comment": "\n# 2D rendering module\nThis module provides a way to render commonly used objects in 2d games\nlike simple sprites and sprite animations.\n\nIt also provides colored rectangles which can be great during prototyping.\nThe simple rectangles can easily be replaced by nicer looking textures later.\n\nsuggested import:\n\n    import Game.TwoD.Render as Render exposing (Renderable)\n\n\nMost functions to render something come in 3 forms:\n\n    thing, thingZ, thingWithOptions\n\nThe first is the most common one where you can specify\nthe size, the position in 2d and some more.\n\n\nThe second one is the same as the first, but with a 3d position.\nThe z position goes from -1 to 1, everything outside this will be invisible.\nThis can be used to put something in front or behind regardless of the render order.\n\n\nThe last one gives you all possible options, e.g. the rotation\n, the pivot point of the rotation (normalized from 0 to 1), etc.\n\nTODO: insert picture to visualize coordinate system.\n\n@docs Renderable\n\n## Rectangles\n@docs rectangle\n@docs rectangleZ\n@docs rectangleWithOptions\n\n### With texture\n\nTextures are `Maybe` values because you can never have a texture at the start of your game.\nYou first have to load your textures. In case you pass a `Nothing` as a value for a texture,\nA gray rectangle will be displayed instead.\n\nFor loading textures I suggest using the [game-resources library](http://package.elm-lang.org/packages/Zinggi/elm-game-resources/latest).\n\n**NOTE**: Texture dimensions have to be in a power of 2, e.g. (2^n)x(2^m), like 4x16, 16x16, 512x256, etc.\nIf you try to use a non power of two texture, WebGL will spit out a bunch of warnings and display a black rectangle.\n\n@docs sprite\n@docs spriteZ\n@docs spriteWithOptions\n\n### Animated\n@docs animatedSprite\n@docs animatedSpriteZ\n@docs animatedSpriteWithOptions\n\n### Background\n@docs parallaxScroll\n@docs parallaxScrollWithOptions\n\n## Custom\nThese are useful if you want to write your own GLSL shaders.\nWhen writing your own shaders, you might want to look at\nGame.TwoD.Shaders and Game.TwoD.Shapes for reusable parts.\n\n\n@docs customFragment\n@docs MakeUniformsFunc\n@docs veryCustom\n@docs toWebGl\n",
+        "aliases": [
+          {
+            "name": "MakeUniformsFunc",
+            "comment": "\nJust an alias for this crazy function, needed when you want to use customFragment\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ cameraProj : Math.Matrix4.Mat4 , time : Float , transform : Math.Matrix4.Mat4 } -> { a | cameraProj : Math.Matrix4.Mat4, transform : Math.Matrix4.Mat4 }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Renderable",
+            "comment": "\nA representation of something that can be rendered.\nTo actually render a `Renderable` onto a web page use the `Game.TwoD.*` functions\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "animatedSprite",
+            "comment": "\nAn animated sprite. `bottomLeft` and `topRight` define a sub area from a texture\nwhere the animation frames are located. It's a normalized coordinate from 0 to 1.\n\nTODO: picture!\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float2, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "animatedSpriteWithOptions",
+            "comment": " the same with rotation\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "animatedSpriteZ",
+            "comment": "\nThe same with 3d position\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "customFragment",
+            "comment": "\nThis allows you to write your own custom fragment shader.\nThe type signature may look terrifying,\nbut this is still easier than using veryCustom or using WebGL directly.\nIt handles the vertex shader for you, e.g. your object will appear at the expected location once rendered.\n\nFor the fragment shader, you have the `vec2 varying vcoord;` variable available,\nwhich can be used to sample a texture (`texture2D(texture, vcoord);`)\n\nThe `MakeUniformsFunc` allows you to pass along any additional uniforms you may need.\nIn practice, this might look something like this:\n\n    makeUniforms {cameraProj, transform, time} =\n        {cameraProj=cameraProj, transform=transform, time=time, myUniform=someVector}\n\n    render =\n        customFragment makeUniforms { fragmentShader=frag, position=p, size=s, rotation=0, pivot=(0,0) }\n\n    frag =\n        [|glsl\n\n    precision mediump float;\n\n    varying vec2 vcoord;\n    uniform vec2 myUniform;\n\n    void main () {\n      gl_FragColor = vcoord.yx + myUniform;\n    }\n    |]\n\nDon't pass the time along if your shader doesn't need it.\n",
+            "type": "Game.TwoD.Render.MakeUniformsFunc u -> { b | fragmentShader : WebGL.Shader {} { u | cameraProj : Math.Matrix4.Mat4, transform : Math.Matrix4.Mat4 } { vcoord : Math.Vector2.Vec2 }, pivot : Game.Helpers.Float2, position : Game.Helpers.Float3, rotation : Float, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "parallaxScroll",
+            "comment": "\nUsed for scrolling backgrounds.\nThis probably wont satisfy all possible needs for a scrolling background,\nbut it can give you something that looks nice quickly.\n",
+            "type": "{ o | scrollSpeed : Game.Helpers.Float2, z : Float, tileWH : Game.Helpers.Float2, texture : Maybe.Maybe WebGL.Texture } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "parallaxScrollWithOptions",
+            "comment": "\nSame but with an offset parameter that you can use to position the background.\n",
+            "type": "{ o | scrollSpeed : Game.Helpers.Float2, z : Float, tileWH : Game.Helpers.Float2, offset : Game.Helpers.Float2, texture : Maybe.Maybe WebGL.Texture } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangle",
+            "comment": "\nA colored rectangle, great for prototyping\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float2, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangleWithOptions",
+            "comment": "\nA colored rectangle, that can also be rotated\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float3, size : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangleZ",
+            "comment": "\nThe same, but with 3d position.\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float3, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "sprite",
+            "comment": "\nA sprite.\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float2, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "spriteWithOptions",
+            "comment": "\nA sprite with tiling and rotation.\n\n    spriteWithOptions {config | tiling = (3,5)}\n\nwill create a sprite with a texture that repeats itself 3 times horizontally and 5 times vertically.\nTODO: picture!\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, tiling : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "spriteZ",
+            "comment": "\nA sprite with 3d position\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "toWebGl",
+            "comment": "\nConverts a Renderable to a WebGL.Renderable.\nYou don't need this unless you want to slowely introduce\nthis library in a project that currently uses WebGL directly.\n\n    toWebGl time camera (w, h) cameraProj renderable\n",
+            "type": "Float -> Game.TwoD.Camera.Camera -> Game.Helpers.Float2 -> Math.Matrix4.Mat4 -> Game.TwoD.Render.Renderable -> WebGL.Renderable"
+          },
+          {
+            "name": "veryCustom",
+            "comment": "\nThis allows you to specify your own attributes, vertex shader and fragment shader by using the WebGL library directly.\nIf you use this you have to calculate your transformations yourself. (You can use Shaders.makeTransform)\n\nIf you need a square as attributes, you can take the one from Game.TwoD.Shapes\n\n    veryCustom (\\{cameraProj, time} ->\n        WebGL.render vert frag Shapes.unitSquare\n          { u_crazyFrog = frogTexture\n          , transform = Shaders.makeTransform (x, y, z) 0 (2, 4) (0, 0)\n          , camera = cameraProj\n          }\n    )\n",
+            "type": "({ cameraProj : Math.Matrix4.Mat4, time : Float } -> WebGL.Renderable) -> Game.TwoD.Render.Renderable"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Game.TwoD.Shaders",
+        "comment": "\n# Standard shaders for WebGL rendering.\n\nYou don't need this module,\nunless you want to write your own vertex or fragment shader\nand a shader from here already provides one half.\n\nOr if you're using WebGL directly.\n\n## Vertex shaders\n@docs vertColoredRect, vertTexturedRect, vertParallaxScroll\n\n## Fragment shaders\n@docs fragTextured, fragAnimTextured, fragUniColor\n\n---\n### useful helper functions\n@docs colorToRGBAVector, colorToRGBVector, makeTransform\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "colorToRGBAVector",
+            "comment": " ",
+            "type": "Color.Color -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "colorToRGBVector",
+            "comment": " ",
+            "type": "Color.Color -> Math.Vector3.Vec3"
+          },
+          {
+            "name": "fragAnimTextured",
+            "comment": "\nA shader to render spritesheet animations.\nIt assumes that the animation frames are in one horizontal line\n",
+            "type": "WebGL.Shader {} { u | texture : WebGL.Texture, bottomLeft : Math.Vector2.Vec2, topRight : Math.Vector2.Vec2, numberOfFrames : Int, duration : Float, time : Float } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "fragTextured",
+            "comment": "\nDisplay a tiled texture.\nTileWH specifies how many times the texture should be tiled.\n",
+            "type": "WebGL.Shader {} { u | texture : WebGL.Texture, tileWH : Math.Vector2.Vec2 } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "fragUniColor",
+            "comment": "\nA very simple shader, coloring the whole area in a single color\n",
+            "type": "WebGL.Shader {} { u | color : Math.Vector3.Vec3 } {}"
+          },
+          {
+            "name": "makeTransform",
+            "comment": " Creates a transformation matrix usually used in the fragment shader.\n\n    makeTransform ( x, y, z ) rotation ( w, h ) ( px, py )\n",
+            "type": "Game.Helpers.Float3 -> Float -> Game.Helpers.Float2 -> Game.Helpers.Float2 -> Math.Matrix4.Mat4"
+          },
+          {
+            "name": "vertColoredRect",
+            "comment": "\nThe most basic shader, renders a rectangle.\nSince it doesn't even pass along the texture coordinates,\nit's only use is to create a colored rectangle.\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { a | transform : Math.Matrix4.Mat4, cameraProj : Math.Matrix4.Mat4 } {}"
+          },
+          {
+            "name": "vertParallaxScroll",
+            "comment": "\nA shader that scrolls it's texture when the camera moves, but at not at the same speed.\nGood for background images.\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { u | cameraPos : Math.Vector2.Vec2, cameraSize : Math.Vector2.Vec2, scrollSpeed : Math.Vector2.Vec2, z : Float, offset : Math.Vector2.Vec2 } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "vertTexturedRect",
+            "comment": "\nA simple shader that passes the texture coordinates along for the fragment shader.\nCan be generally used if the fragment shader needs to display texture(s).\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { u | transform : Math.Matrix4.Mat4, cameraProj : Math.Matrix4.Mat4 } { vcoord : Math.Vector2.Vec2 }"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Game.TwoD.Camera",
+        "comment": "\nThis provides a basic camera.\n\nYou can also create your own camera type if you wish.\nTo do so, have a look at the source of this file.\n\n## camera creation\n@docs Camera, fixedArea, fixedWidth, fixedHeight, custom\n\n## manipulate camera\n@docs getPosition, moveBy, moveTo, follow\n\n---\n@docs view, getViewSize\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Camera",
+            "comment": "\nA camera represents how to render the virtual world.\nIt's essentially a transformation from virtual game coordinates to pixel coordinates on the screen.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "custom",
+            "comment": "\nThe custom camera allows you to use a function\nthat maps viewport size (in pixel) to game units.\nE.g. here's an implementation of the fixedWidth camera using custom:\n\n    fixedWidth width =\n        custom (\\(w, h) -> (width, width * h / w))\n\n",
+            "type": "(( Float, Float ) -> ( Float, Float )) -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedArea",
+            "comment": "\nA camera that always shows the same area.\nThis is useful in a top down game.\nThis means that you probably want to specify the area property like this:\n\n    fixedArea (16*10) (x, y)\n\nThis would show 16 by 10 units IF the game is displayed in a 16:10 viewport.\nBut in a 4:3 viewport it would show sqrt(16*10*4/3)=14.6 by sqrt(16*10*3/4)=10.95 units.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedHeight",
+            "comment": "\nA camera that always shows `height` units of your game vertically.\nWell suited for a vertical scroller.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedWidth",
+            "comment": "\nA camera that always shows `width` units of your game horizontally.\nWell suited for a side-scroller.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "follow",
+            "comment": "\nSmoothly follow the given target. Use this in your tick function.\n\n    follow 1.5 dt target camera\n\n",
+            "type": "Float -> Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "getPosition",
+            "comment": "\n",
+            "type": "Game.TwoD.Camera.Camera -> ( Float, Float )"
+          },
+          {
+            "name": "getViewSize",
+            "comment": "\nGiven the screen size, gets the width and height in game units\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> ( Float, Float )"
+          },
+          {
+            "name": "moveBy",
+            "comment": "\nMove a camera by the given vector *relative* to the camera.\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "moveTo",
+            "comment": "\nMove a camera to the given location. In *absolute* coordinates.\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "view",
+            "comment": "\nGets the transformation that represents how to transform the camera back to the origin.\nThe result of this is used in the vertex shader.\n",
+            "type": "Game.TwoD.Camera.Camera -> ( Float, Float ) -> Math.Matrix4.Mat4"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Game.TwoD.Shapes",
+        "comment": "\n# Shapes for WebGL rendering.\n\nYou don't need this module,\nunless you want to have a ready made square for a custom vertex shader.\nSince we're dealing with 2d only,\nthe only available shape is a square\n\n@docs unitSquare\n\n@docs Vertex\n",
+        "aliases": [
+          {
+            "name": "Vertex",
+            "comment": "\nJust an alias for a 2d vector.\nNeeds to be in a record because it will be passed as an\nattribute to the vertex shader\n",
+            "args": [],
+            "type": "{ a_position : Math.Vector2.Vec2 }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "unitSquare",
+            "comment": "\nA square with corners (0, 0), (1, 1)\n",
+            "type": "WebGL.Drawable Game.TwoD.Shapes.Vertex"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
       }
     ]
   },
@@ -79890,7 +80168,7 @@
   },
   {
     "name": "rtfeldman/elm-css",
-    "version": "6.0.0",
+    "version": "6.1.0",
     "docs": [
       {
         "name": "Css.File",
@@ -79920,7 +80198,7 @@
       },
       {
         "name": "Css",
-        "comment": " Functions for building stylesheets.\n\n# Misc\n@docs Stylesheet, asPairs, absolute, all, allPetiteCaps, allSmallCaps, withClass, auto, baseline, block, bold, bolder, border, border2, border3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockEndColor, borderBlockEndStyle, borderBlockStart, borderBlockStart2, borderBlockStart3, borderBlockStartColor, borderBlockStartStyle, borderBottom, borderBottom2, borderBottom3, borderBottomColor, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderColor2, borderColor3, borderColor4, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineEndColor, borderInlineEndStyle, borderInlineEndWidth, borderInlineStart, borderInlineStart2, borderInlineStart3, borderInlineStartColor, borderInlineStartStyle, borderLeft, borderLeft2, borderLeft3, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderRight, borderRight2, borderRight3, borderRightColor, borderRightStyle, borderRightWidth, borderStyle, borderTop, borderTop2, borderTop3, borderTopColor, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderTopStyle, borderTopWidth, bottom, column, columnReverse, commonLigatures, content, contentBox, contextual, cursive, dashed, diagonalFractions, discretionaryLigatures, dotted, double, fantasy, fillBox, fixed, flat, displayFlex, flexEnd, flexStart, groove, hex, hidden, historicalLigatures, hsl, hsla, important, inherit, initial, inline, inlineBlock, inlineListItem, inset, italic, large, larger, lighter, liningNums, listItem, matrix, matrix3d, middle, monospace, noCommonLigatures, noContextual, noDiscretionaryLigatures, noHistoricalLigatures, noWrap, none, normal, oblique, oldstyleNums, ordinal, outset, perspective, petiteCaps, position, preserve3d, proportionalNums, relative, rgb, rgba, ridge, rotate, rotate3d, rotateX, rotateY, rotateZ, row, rowReverse, sansSerif, scale, scale2, scale3d, scaleX, scaleY, scroll, serif, skew, skew2, skewX, skewY, slashedZero, small, smallCaps, smaller, solid, stackedFractions, static, sticky, stretch, sub, super, tabularNums, textBottom, textTop, titlingCaps, top, translate, translate2, translate3d, translateX, translateY, translateZ, transparent, unicase, unset, viewBox, visible, wavy, wrap, wrapReverse, xLarge, xSmall, xxLarge, xxSmall\n@docs listStyleType, disc, circle, square, decimal, decimalLeadingZero, lowerRoman, upperRoman, lowerGreek, lowerAlpha, lowerLatin, upperAlpha, upperLatin, arabicIndic, armenian, bengali, cjkEarthlyBranch, cjkHeavenlyStem, devanagari, georgian, gujarati, gurmukhi, kannada, khmer, lao, malayalam, myanmar, oriya, telugu, thai\n@docs listStylePosition, inside, outside\n@docs listStyle, listStyle2, listStyle3\n\n# Style\n@docs Snippet, Mixin, mixin, stylesheet, compile\n\n# Statements\n@docs (#), (.), selector, everything\n\n# Combinators\n@docs children, descendants, adjacentSiblings, generalSiblings\n\n# Media Queries\n@docs screen, tv, projection, print\n\n# Properties\n@docs property, flex, flex2, flex3, medium, alignSelf, alignItems, order, flexDirection, flexFlow1, flexFlow2, flexWrap, flexBasis, flexGrow, flexShrink, transformStyle, transformBox, transform, transforms, currentColor, underline, overline, lineThrough, textDecoration, textDecoration2, textDecoration3, textDecorationLine, textDecorations, textDecorations2, textDecorations3, textDecorationLine, textDecorationLines, textDecorationStyle, capitalize, uppercase, lowercase, fullWidth, hanging, eachLine, textIndent, textIndent2, textIndent3, clip, ellipsis, textOverflow, optimizeSpeed, optimizeLegibility, geometricPrecision, textRendering, textTransform, textAlign, textAlignLast, left, right, center, textJustify, justifyAll, start, end, matchParent, true, verticalAlign, display, opacity, minContent, maxContent, fitContent, fillAvailable, width, minWidth, maxWidth, height, minHeight, maxHeight, padding, padding2, padding3, padding4, paddingTop, paddingBottom, paddingRight, paddingLeft, paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd, margin, margin2, margin3, margin4, marginTop, marginBottom, marginRight, marginLeft, marginBlockStart, marginBlockEnd, marginInlineStart, marginInlineEnd, boxSizing, overflow, overflowX, overflowY, whiteSpace, backgroundColor, color, withMedia, each, media, mediaQuery, textShadow, textShadow2, textShadow3, textShadow4, lineHeight, letterSpacing, fontFace, fontFamily, fontSize, fontStyle, fontWeight, fontVariant, fontVariant2, fontVariant3, fontVariantLigatures, fontVariantCaps, fontVariantNumeric, fontVariantNumeric2, fontVariantNumeric3, fontFamilies, fontVariantNumerics, fontFeatureSettings, fontFeatureSettingsList, cursor, outline, outline3, outlineColor, outlineWidth, outlineStyle, outlineOffset\n\n# Values\n\n## Color values\n@docs Color all, important, custom, solid, transparent, rgb, rgba, hsl, hsla, hex\n\n## Font values\n@docs featureTag, featureTag2, featureOn, featureOff\n\n## Other values\n@docs borderColor, borderColor2, borderColor3, borderColor4, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderBottomWidth, borderInlineEndWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBlockEndStyle, borderBlockStartStyle, borderInlineEndStyle, borderBottomStyle, borderInlineStartStyle, borderLeftStyle, borderRightStyle, borderTopStyle, borderStyle, borderBlockStartColor, borderBlockEndColor, borderBottomColor, borderInlineStartColor, borderInlineEndColor, borderLeftColor, borderRightColor, borderTopColor, borderBox, contentBox, border, border2, border3, borderTop, borderTop2, borderTop3, borderBottom, borderBottom2, borderBottom3, borderLeft, borderLeft2, borderLeft3, borderRight, borderRight2, borderRight3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockStart, borderBlockStart2, borderBlockStart3, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineStart, borderInlineStart2, borderInlineStart3, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, scroll, visible, block, inlineBlock, inline, none, auto, inherit, unset, initial, noWrap, top, static, fixed, sticky, relative, absolute, position, bottom, middle, baseline, sub, super, textTop, textBottom, hidden, wavy, dotted, dashed, solid, double, groove, ridge, inset, outset, matrix, matrix3d, perspective, rotate3d, rotateX, rotateY, rotateZ, scale, scale2, scale3d, scaleX, scaleY, skew, skew2, skewX, skewY, translate, translate2, translate3d, translateX, translateY, translateZ, rotate, fillBox, viewBox, flat, preserve3d, content, wrapReverse, wrap, flexStart, flexEnd, stretch, row, rowReverse, column, columnReverse, serif, sansSerif, monospace, cursive, fantasy, xxSmall, xSmall, small, large, xLarge, xxLarge, smaller, larger, normal, italic, oblique, bold, lighter, bolder, smallCaps, allSmallCaps, petiteCaps, allPetiteCaps, unicase, titlingCaps, commonLigatures, noCommonLigatures, discretionaryLigatures, noDiscretionaryLigatures, historicalLigatures, noHistoricalLigatures, contextual, noContextual, liningNums, oldstyleNums, proportionalNums, tabularNums, diagonalFractions, stackedFractions, ordinal, slashedZero, default, pointer, crosshair, contextMenu, help, progress, wait, cell, text, verticalText, cursorAlias, copy, move, noDrop, notAllowed, eResize, nResize, neResize, nwResize, sResize, seResize, swResize, wResize, ewResize, nsResize, neswResize, nwseResize, colResize, rowResize, allScroll, zoomIn, zoomOut, grab, grabbing\n\n# Length\n@docs Length, pct, px, em, pt, ex, ch, rem, vh, vw, vmin, vmax, mm, cm, inches, pc, int, num, zero, (|+|), (|-|), (|*|), (|/|)\n\n# Length Units\n@docs Px, Em, Rem, Pct, Ex, Ch, Vh, Vw, Vmin, Vmax,  Mm, Cm, In, Pt, Pc\n\n# Angle\n@docs deg, rad, grad, turn\n\n# Pseudo-Classes\n@docs active, any, checked, dir, disabled, empty, enabled, first, firstChild, firstOfType, fullscreen, focus, hover, indeterminate, invalid, lang, lastChild, lastOfType, link, nthChild, nthLastChild, nthLastOfType, nthOfType, onlyChild, onlyOfType, optional, outOfRange, readWrite, required, root, scope, target, valid\n\n# Pseudo-Elements\n@docs after, before, firstLetter, firstLine, selection\n\n# Media Queries\n@docs MediaQuery, screen, print, tv, projection\n\n# Source\n@docs src\n\n# Quoting\n@docs qt\n\n# Types\n\n@docs FontSize, ColorValue\n\n# Intentionally Unsupported\n\nThese are features you might expect to be in elm-css (because they are in the\nCSS specification) but which have been omitted because their use is either\ndeprecated or discouraged.\n\n@docs thin, medium, thick, blink\n",
+        "comment": " Functions for building stylesheets.\n\n# Misc\n@docs Stylesheet, asPairs, absolute, all, allPetiteCaps, allSmallCaps, withClass, auto, baseline, block, bold, bolder, border, border2, border3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockEndColor, borderBlockEndStyle, borderBlockStart, borderBlockStart2, borderBlockStart3, borderBlockStartColor, borderBlockStartStyle, borderBottom, borderBottom2, borderBottom3, borderBottomColor, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderColor2, borderColor3, borderColor4, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineEndColor, borderInlineEndStyle, borderInlineEndWidth, borderInlineStart, borderInlineStart2, borderInlineStart3, borderInlineStartColor, borderInlineStartStyle, borderLeft, borderLeft2, borderLeft3, borderLeftColor, borderLeftStyle, borderLeftWidth, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderRight, borderRight2, borderRight3, borderRightColor, borderRightStyle, borderRightWidth, borderStyle, borderCollapse, borderTop, borderTop2, borderTop3, borderTopColor, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderTopStyle, borderTopWidth, bottom, column, columnReverse, commonLigatures, content, contentBox, contextual, cursive, dashed, diagonalFractions, discretionaryLigatures, dotted, double, fantasy, fillBox, fixed, flat, displayFlex, flexEnd, flexStart, groove, hex, hidden, historicalLigatures, hsl, hsla, important, inherit, initial, inline, inlineBlock, inlineListItem, inset, italic, large, larger, lighter, liningNums, listItem, matrix, matrix3d, middle, monospace, noCommonLigatures, noContextual, noDiscretionaryLigatures, noHistoricalLigatures, noWrap, none, normal, oblique, oldstyleNums, ordinal, outset, perspective, petiteCaps, position, float, preserve3d, proportionalNums, relative, rgb, rgba, ridge, rotate, rotate3d, rotateX, rotateY, rotateZ, row, rowReverse, sansSerif, scale, scale2, scale3d, scaleX, scaleY, scroll, serif, skew, skew2, skewX, skewY, slashedZero, small, smallCaps, smaller, solid, stackedFractions, static, sticky, stretch, sub, super, tabularNums, textBottom, textTop, titlingCaps, top, translate, translate2, translate3d, translateX, translateY, translateZ, transparent, unicase, unset, viewBox, visible, wavy, wrap, wrapReverse, xLarge, xSmall, xxLarge, xxSmall\n@docs listStyleType, disc, circle, square, decimal, decimalLeadingZero, lowerRoman, upperRoman, lowerGreek, lowerAlpha, lowerLatin, upperAlpha, upperLatin, arabicIndic, armenian, bengali, cjkEarthlyBranch, cjkHeavenlyStem, devanagari, georgian, gujarati, gurmukhi, kannada, khmer, lao, malayalam, myanmar, oriya, telugu, thai\n@docs listStylePosition, inside, outside\n@docs listStyle, listStyle2, listStyle3\n\n# Style\n@docs Snippet, Mixin, mixin, stylesheet, compile\n\n# Statements\n@docs (#), (.), selector, everything\n\n# Combinators\n@docs children, descendants, adjacentSiblings, generalSiblings\n\n# Media Queries\n@docs screen, tv, projection, print\n\n# Properties\n@docs property, flex, flex2, flex3, medium, alignSelf, alignItems, order, flexDirection, flexFlow1, flexFlow2, flexWrap, flexBasis, flexGrow, flexShrink, transformStyle, transformBox, transform, transforms, currentColor, underline, overline, lineThrough, textOrientation, textDecoration, textDecoration2, textDecoration3, textDecorationLine, textDecorations, textDecorations2, textDecorations3, textDecorationLine, textDecorationLines, textDecorationStyle, textEmphasisColor, capitalize, uppercase, lowercase, fullWidth, hanging, eachLine, textIndent, textIndent2, textIndent3, clip, ellipsis, textOverflow, optimizeSpeed, optimizeLegibility, geometricPrecision, textRendering, textTransform, textAlign, textAlignLast, left, right, center, textJustify, justifyAll, start, end, matchParent, true, verticalAlign, display, opacity, minContent, maxContent, fitContent, fillAvailable, width, minWidth, maxWidth, height, minHeight, maxHeight, padding, padding2, padding3, padding4, paddingTop, paddingBottom, paddingRight, paddingLeft, paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd, margin, margin2, margin3, margin4, marginTop, marginBottom, marginRight, marginLeft, marginBlockStart, marginBlockEnd, marginInlineStart, marginInlineEnd, boxSizing, overflow, overflowX, overflowY, whiteSpace, backgroundColor, color, withMedia, each, media, mediaQuery, textShadow, textShadow2, textShadow3, textShadow4, boxShadow, boxShadow2, boxShadow3, boxShadow4, boxShadow5, lineHeight, letterSpacing, fontFace, fontFamily, fontSize, fontStyle, fontWeight, fontVariant, fontVariant2, fontVariant3, fontVariantLigatures, fontVariantCaps, fontVariantNumeric, fontVariantNumeric2, fontVariantNumeric3, fontFamilies, fontVariantNumerics, fontFeatureSettings, fontFeatureSettingsList, cursor, outline, outline3, outlineColor, outlineWidth, outlineStyle, outlineOffset\n\n# Values\n\n## Color values\n@docs Color all, important, custom, solid, transparent, rgb, rgba, hsl, hsla, hex\n\n## Font values\n@docs featureTag, featureTag2, featureOn, featureOff\n\n## Other values\n@docs borderCollapse, borderColor, borderColor2, borderColor3, borderColor4, borderBottomLeftRadius, borderBottomLeftRadius2, borderBottomRightRadius, borderBottomRightRadius2, borderTopLeftRadius, borderTopLeftRadius2, borderTopRightRadius, borderTopRightRadius2, borderRadius, borderRadius2, borderRadius3, borderRadius4, borderBottomWidth, borderInlineEndWidth, borderLeftWidth, borderRightWidth, borderTopWidth, borderBlockEndStyle, borderBlockStartStyle, borderInlineEndStyle, borderBottomStyle, borderInlineStartStyle, borderLeftStyle, borderRightStyle, borderTopStyle, borderStyle, borderBlockStartColor, borderBlockEndColor, borderBottomColor, borderInlineStartColor, borderInlineEndColor, borderLeftColor, borderRightColor, borderTopColor, borderBox, contentBox, border, border2, border3, borderTop, borderTop2, borderTop3, borderBottom, borderBottom2, borderBottom3, borderLeft, borderLeft2, borderLeft3, borderRight, borderRight2, borderRight3, borderBlockEnd, borderBlockEnd2, borderBlockEnd3, borderBlockStart, borderBlockStart2, borderBlockStart3, borderInlineEnd, borderInlineEnd2, borderInlineEnd3, borderInlineStart, borderInlineStart2, borderInlineStart3, borderImageOutset, borderImageOutset2, borderImageOutset3, borderImageOutset4, borderImageWidth, borderImageWidth2, borderImageWidth3, borderImageWidth4, scroll, visible, block, inlineBlock, inline, none, auto, inherit, unset, initial, noWrap, top, static, fixed, sticky, relative, absolute, position, float, bottom, middle, baseline, sub, super, textTop, textBottom, hidden, wavy, dotted, dashed, solid, double, groove, ridge, inset, outset, matrix, matrix3d, perspective, rotate3d, rotateX, rotateY, rotateZ, scale, scale2, scale3d, scaleX, scaleY, skew, skew2, skewX, skewY, translate, translate2, translate3d, translateX, translateY, translateZ, rotate, fillBox, viewBox, flat, preserve3d, content, wrapReverse, wrap, flexStart, flexEnd, stretch, row, rowReverse, column, columnReverse, serif, sansSerif, monospace, cursive, fantasy, xxSmall, xSmall, small, large, xLarge, xxLarge, smaller, larger, normal, italic, oblique, bold, lighter, bolder, smallCaps, allSmallCaps, petiteCaps, allPetiteCaps, unicase, titlingCaps, commonLigatures, noCommonLigatures, discretionaryLigatures, noDiscretionaryLigatures, historicalLigatures, noHistoricalLigatures, contextual, noContextual, liningNums, oldstyleNums, proportionalNums, tabularNums, diagonalFractions, stackedFractions, ordinal, slashedZero, default, pointer, crosshair, contextMenu, help, progress, wait, cell, text, verticalText, cursorAlias, copy, move, noDrop, notAllowed, eResize, nResize, neResize, nwResize, sResize, seResize, swResize, wResize, ewResize, nsResize, neswResize, nwseResize, colResize, rowResize, allScroll, zoomIn, zoomOut, grab, grabbing\n\n# Length\n@docs Length, pct, px, em, pt, ex, ch, rem, vh, vw, vmin, vmax, mm, cm, inches, pc, int, num, zero, (|+|), (|-|), (|*|), (|/|)\n\n# Length Units\n@docs Px, Em, Rem, Pct, Ex, Ch, Vh, Vw, Vmin, Vmax,  Mm, Cm, In, Pt, Pc\n\n# Angle\n@docs deg, rad, grad, turn\n\n# Pseudo-Classes\n@docs active, any, checked, dir, disabled, empty, enabled, first, firstChild, firstOfType, fullscreen, focus, hover, indeterminate, invalid, lang, lastChild, lastOfType, link, nthChild, nthLastChild, nthLastOfType, nthOfType, onlyChild, onlyOfType, optional, outOfRange, readWrite, required, root, scope, target, valid\n\n# Pseudo-Elements\n@docs after, before, firstLetter, firstLine, selection\n\n# Media Queries\n@docs MediaQuery, screen, print, tv, projection\n\n# Source\n@docs src\n\n# Quoting\n@docs qt\n\n# Types\n\n@docs FontSize, ColorValue\n\n# Intentionally Unsupported\n\nThese are features you might expect to be in elm-css (because they are in the\nCSS specification) but which have been omitted because their use is either\ndeprecated or discouraged.\n\n@docs thin, medium, thick, blink\n",
         "aliases": [
           {
             "name": "Ch",
@@ -80316,6 +80594,11 @@
             "type": "Css.BoxSizing {}"
           },
           {
+            "name": "borderCollapse",
+            "comment": " Sets [`border-collapse`](https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse)\n\n    borderCollapse collapse\n",
+            "type": "Css.BorderCollapse compatible -> Css.Mixin"
+          },
+          {
             "name": "borderColor",
             "comment": " Sets [`border-color`](https://developer.mozilla.org/en-US/docs/Web/CSS/border-color)\n\n    borderColor  (rgb 12 11 10)\n    borderColor2 (rgb 12 11 10) (hex \"FFBBCC\")\n    borderColor3 (rgb 12 11 10) (hex \"FFBBCC\") inherit\n    borderColor4 (rgb 12 11 10) (hex \"FFBBCC\") inherit (rgb 1 2 3)\n",
             "type": "Css.ColorValue compatible -> Css.Mixin"
@@ -80569,6 +80852,31 @@
             "name": "bottom",
             "comment": " The [`bottom`](https://developer.mozilla.org/en-US/docs/Web/CSS/bottom) property.\n\n    position absolute\n    bottom (px 5)\n\nThis can also be used as a `bottom` [vertical-align](https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align) value:\n\n    verticalAlign bottom\n",
             "type": "Css.LengthOrAuto compatible -> Css.Mixin"
+          },
+          {
+            "name": "boxShadow",
+            "comment": " Sets [`box-shadow`](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow).\n\n    boxShadow  none\n    boxShadow2 (px 1) (px 2)\n    boxShadow3 (px 1) (px 2) (rgb 211 121 112)\n    boxShadow3 (px 1) (px 2) (px 3)\n    boxShadow3 inset (px 2) (px 3)\n    boxShadow4 (px 1) (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 inset (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 (px 1) (px 2) (px 3) (px 4)\n    boxShadow4 inset (px 2) (px 3) (px 4)\n    boxShadow5 (px 1) (px 2) (px 3) (px 4) (rgb 211 121 112)\n    boxShadow5 inset (px 2) (px 3) (px 4) (rgb 211 121 112)\n\n",
+            "type": "Css.None compatible -> Css.Mixin"
+          },
+          {
+            "name": "boxShadow2",
+            "comment": " Sets [`box-shadow`](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow).\n\n    boxShadow  none\n    boxShadow2 (px 1) (px 2)\n    boxShadow3 (px 1) (px 2) (rgb 211 121 112)\n    boxShadow3 (px 1) (px 2) (px 3)\n    boxShadow3 inset (px 2) (px 3)\n    boxShadow4 (px 1) (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 inset (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 (px 1) (px 2) (px 3) (px 4)\n    boxShadow4 inset (px 2) (px 3) (px 4)\n    boxShadow5 (px 1) (px 2) (px 3) (px 4) (rgb 211 121 112)\n    boxShadow5 inset (px 2) (px 3) (px 4) (rgb 211 121 112)\n\n",
+            "type": "Css.Length compatibleA unitsA -> Css.Length compatibleB unitsB -> Css.Mixin"
+          },
+          {
+            "name": "boxShadow3",
+            "comment": " Sets [`box-shadow`](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow).\n\n    boxShadow  none\n    boxShadow2 (px 1) (px 2)\n    boxShadow3 (px 1) (px 2) (rgb 211 121 112)\n    boxShadow3 (px 1) (px 2) (px 3)\n    boxShadow3 inset (px 2) (px 3)\n    boxShadow4 (px 1) (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 inset (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 (px 1) (px 2) (px 3) (px 4)\n    boxShadow4 inset (px 2) (px 3) (px 4)\n    boxShadow5 (px 1) (px 2) (px 3) (px 4) (rgb 211 121 112)\n    boxShadow5 inset (px 2) (px 3) (px 4) (rgb 211 121 112)\n\n",
+            "type": "Css.Value a -> Css.Length compatibleB unitsB -> Css.Value c -> Css.Mixin"
+          },
+          {
+            "name": "boxShadow4",
+            "comment": " Sets [`box-shadow`](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow).\n\n    boxShadow  none\n    boxShadow2 (px 1) (px 2)\n    boxShadow3 (px 1) (px 2) (rgb 211 121 112)\n    boxShadow3 (px 1) (px 2) (px 3)\n    boxShadow3 inset (px 2) (px 3)\n    boxShadow4 (px 1) (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 inset (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 (px 1) (px 2) (px 3) (px 4)\n    boxShadow4 inset (px 2) (px 3) (px 4)\n    boxShadow5 (px 1) (px 2) (px 3) (px 4) (rgb 211 121 112)\n    boxShadow5 inset (px 2) (px 3) (px 4) (rgb 211 121 112)\n\n",
+            "type": "Css.Value a -> Css.Length compatibleB unitsB -> Css.Length compatibleC unitsC -> Css.Value d -> Css.Mixin"
+          },
+          {
+            "name": "boxShadow5",
+            "comment": " Sets [`box-shadow`](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow).\n\n    boxShadow  none\n    boxShadow2 (px 1) (px 2)\n    boxShadow3 (px 1) (px 2) (rgb 211 121 112)\n    boxShadow3 (px 1) (px 2) (px 3)\n    boxShadow3 inset (px 2) (px 3)\n    boxShadow4 (px 1) (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 inset (px 2) (px 3) (rgb 211 121 112)\n    boxShadow4 (px 1) (px 2) (px 3) (px 4)\n    boxShadow4 inset (px 2) (px 3) (px 4)\n    boxShadow5 (px 1) (px 2) (px 3) (px 4) (rgb 211 121 112)\n    boxShadow5 inset (px 2) (px 3) (px 4) (rgb 211 121 112)\n\n",
+            "type": "Css.Value a -> Css.Length compatibleB unitsB -> Css.Length compatibleC unitsC -> Css.Length compatibleD unitsD -> Css.ColorValue compatibleE -> Css.Mixin"
           },
           {
             "name": "boxSizing",
@@ -80981,6 +81289,11 @@
             "type": "Css.FlexWrap compatible -> Css.Mixin"
           },
           {
+            "name": "float",
+            "comment": " Sets ['float'](https://developer.mozilla.org/en-US/docs/Web/CSS/float)\nfloat : Float compatible -> Mixin\n\n    float right\n",
+            "type": "(Css.ExplicitLength Css.IncompatibleUnits -> Css.Mixin) -> Css.Mixin"
+          },
+          {
             "name": "focus",
             "comment": " A [`:focus`](https://developer.mozilla.org/en-US/docs/Web/CSS/%3Afocus)\n[pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes).\n",
             "type": "List Css.Mixin -> Css.Mixin"
@@ -81282,7 +81595,7 @@
           },
           {
             "name": "left",
-            "comment": " The [`left`](https://developer.mozilla.org/en-US/docs/Web/CSS/left) property.\n\n    position absolute\n    left (px 5)\n\nThis can also be used as a `left` [text alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align) value:\n\n    textAlign left\n",
+            "comment": " The [`left`](https://developer.mozilla.org/en-US/docs/Web/CSS/left) property.\n\n    position absolute\n    left (px 5)\n\nThis can also be used as a `left` [text alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align) value:\n\n    textAlign left\n    \n    \nIt can also be used as a `left` [float](https://developer.mozilla.org/en-US/docs/Web/CSS/float) value :\n\n    float left\n",
             "type": "Css.LengthOrAuto compatible -> Css.Mixin"
           },
           {
@@ -81922,7 +82235,7 @@
           },
           {
             "name": "right",
-            "comment": " Sets [`right`](https://developer.mozilla.org/en-US/docs/Web/CSS/right).\n\n    position absolute\n    right (px 5)\n\nThis can also be used as a `right` [alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align) value:\n\n    textAlign right\n",
+            "comment": " Sets [`right`](https://developer.mozilla.org/en-US/docs/Web/CSS/right).\n\n    position absolute\n    right (px 5)\n\nThis can also be used as a `right` [alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align) value:\n\n    textAlign right\n    \n    \nIt can also be used as a `right` [float](https://developer.mozilla.org/en-US/docs/Web/CSS/float) value :\n\n    float right\n",
             "type": "Css.LengthOrAuto compatible -> Css.Mixin"
           },
           {
@@ -82221,6 +82534,11 @@
             "type": "List (Css.TextDecorationLine compatibleA) -> Css.TextDecorationStyle compatibleB -> Css.ColorValue compatibleC -> Css.Mixin"
           },
           {
+            "name": "textEmphasisColor",
+            "comment": " Sets ['text-emphasis-color'](https://developer.mozilla.org/en-US/docs/Web/CSS/text-emphasis-color)\n\n     textEmphasisColor (rgb 100 100 100)\n",
+            "type": "Css.ColorValue compatible -> Css.Mixin"
+          },
+          {
             "name": "textIndent",
             "comment": " Sets [`text-indent`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-indent).\n\n    textIndent  (px 40)\n    textIndent2 (px 40) hanging\n    textIndent3 (px 40) hanging eachLine\n",
             "type": "Css.Length compatible units -> Css.Mixin"
@@ -82239,6 +82557,11 @@
             "name": "textJustify",
             "comment": " `text-justify` [alignment](https://developer.mozilla.org/en-US/docs/Web/CSS/text-align).\n",
             "type": "Css.TextAlign a b"
+          },
+          {
+            "name": "textOrientation",
+            "comment": " Sets [`text-orientation`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation).\n\n    text-orientation mixed\n",
+            "type": "Css.TextOrientation compatible -> Css.Mixin"
           },
           {
             "name": "textOverflow",
@@ -82559,20 +82882,6 @@
         "generated-with-elm-version": "0.17.1"
       },
       {
-        "name": "Css.Namespace",
-        "comment": " Namespacing\n@docs namespace\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "namespace",
-            "comment": "\ntakes an identifier, namespaces the list of snippets given with that identifier\n",
-            "type": "a -> List Css.Preprocess.Snippet -> List Css.Preprocess.Snippet"
-          }
-        ],
-        "generated-with-elm-version": "0.17.1"
-      },
-      {
         "name": "Css.Elements",
         "comment": " Selectors for HTML elements.\n\n# Basic elements\n@docs html, body\n\n# Content sectioning\n@docs article, header, footer, h1, h2, h3, h4, h5, h6, nav, section\n\n# Text content\n@docs div, hr, li, main', ol, p, ul, pre\n\n# Inline text semantics\n@docs a, code, small, span, strong\n\n# Image and multimedia\n@docs img, audio, video, canvas\n\n# Table content\n@docs caption, col, colgroup, table, tbody, td, tfoot, th, thead, tr\n\n# Forms\n@docs button, fieldset, form, input, label, legend, optgroup, option, progress, select\n",
         "aliases": [],
@@ -82827,6 +83136,20 @@
             "name": "video",
             "comment": " Selector for a video element.\n",
             "type": "List Css.Preprocess.Mixin -> Css.Preprocess.Snippet"
+          }
+        ],
+        "generated-with-elm-version": "0.17.1"
+      },
+      {
+        "name": "Css.Namespace",
+        "comment": " Namespacing\n@docs namespace\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "namespace",
+            "comment": "\ntakes an identifier, namespaces the list of snippets given with that identifier\n",
+            "type": "a -> List Css.Preprocess.Snippet -> List Css.Preprocess.Snippet"
           }
         ],
         "generated-with-elm-version": "0.17.1"
