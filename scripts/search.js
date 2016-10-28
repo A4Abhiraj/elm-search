@@ -12751,8 +12751,8 @@ var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p7) {
 						_elm_lang$html$Html_Attributes$name('q'),
 						_elm_lang$html$Html_Attributes$type$('search'),
 						_elm_lang$html$Html_Events$onInput(_klaftertief$elm_search$Search_Model$SetFilterQueryString),
-						_elm_lang$html$Html_Attributes$value(_p8.filter.queryString),
-						_elm_lang$html$Html_Attributes$disabled(isDisabled)
+						_elm_lang$html$Html_Attributes$defaultValue(_p8.filter.queryString),
+						_elm_lang$html$Html_Attributes$autofocus(true)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
@@ -12941,40 +12941,64 @@ var _klaftertief$elm_search$Web_Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SearchMsg':
-				var _p5 = _p0._0;
+				var _p8 = _p0._0;
 				var _p2 = model;
-				if (_p2.ctor === 'Ready') {
-					var _p4 = _p2._0;
-					var cmd = function () {
-						var _p3 = _p5;
-						if (_p3.ctor === 'RunFilter') {
-							return _klaftertief$elm_search$Ports$pushQuery(
-								_klaftertief$elm_search$Web_Model$toQueryString(_p4.filter));
+				switch (_p2.ctor) {
+					case 'Ready':
+						var _p4 = _p2._0;
+						var cmd = function () {
+							var _p3 = _p8;
+							if (_p3.ctor === 'RunFilter') {
+								return _klaftertief$elm_search$Ports$pushQuery(
+									_klaftertief$elm_search$Web_Model$toQueryString(_p4.filter));
+							} else {
+								return _elm_lang$core$Platform_Cmd$none;
+							}
+						}();
+						var newSearch = A2(_klaftertief$elm_search$Search_Update$update, _p8, _p4);
+						return {
+							ctor: '_Tuple2',
+							_0: _klaftertief$elm_search$Web_Model$Ready(newSearch),
+							_1: cmd
+						};
+					case 'Loading':
+						var _p7 = _p2._0;
+						var _p5 = _p8;
+						if (_p5.ctor === 'SetFilterQueryString') {
+							var _p6 = _p5._0;
+							return {
+								ctor: '_Tuple2',
+								_0: _klaftertief$elm_search$Web_Model$Loading(
+									_elm_lang$core$Native_Utils.update(
+										_p7,
+										{
+											queryString: _p6,
+											query: _klaftertief$elm_search$Search_Model$queryListFromString(_p6)
+										})),
+								_1: _elm_lang$core$Platform_Cmd$none
+							};
 						} else {
-							return _elm_lang$core$Platform_Cmd$none;
+							return {
+								ctor: '_Tuple2',
+								_0: _klaftertief$elm_search$Web_Model$Loading(_p7),
+								_1: _elm_lang$core$Platform_Cmd$none
+							};
 						}
-					}();
-					var newSearch = A2(_klaftertief$elm_search$Search_Update$update, _p5, _p4);
-					return {
-						ctor: '_Tuple2',
-						_0: _klaftertief$elm_search$Web_Model$Ready(newSearch),
-						_1: cmd
-					};
-				} else {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+					default:
+						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			default:
-				var _p6 = model;
-				if (_p6.ctor === 'Ready') {
-					var _p7 = _p6._0;
+				var _p9 = model;
+				if (_p9.ctor === 'Ready') {
+					var _p10 = _p9._0;
 					var filter = _klaftertief$elm_search$Web_Model$parseSearchString(_p0._0);
-					var newSearch = (!_elm_lang$core$Native_Utils.eq(filter, _p7.filter)) ? A2(
+					var newSearch = (!_elm_lang$core$Native_Utils.eq(filter, _p10.filter)) ? A2(
 						_klaftertief$elm_search$Search_Update$update,
 						_klaftertief$elm_search$Search_Model$RunFilter,
 						A2(
 							_klaftertief$elm_search$Search_Update$update,
 							_klaftertief$elm_search$Search_Model$SetFilter(filter),
-							_p7)) : _p7;
+							_p10)) : _p10;
 					return {
 						ctor: '_Tuple2',
 						_0: _klaftertief$elm_search$Web_Model$Ready(newSearch),
@@ -12985,13 +13009,13 @@ var _klaftertief$elm_search$Web_Update$update = F2(
 				}
 		}
 	});
-var _klaftertief$elm_search$Web_Update$init = function (_p8) {
-	var _p9 = _p8;
-	var filter = _klaftertief$elm_search$Web_Model$parseSearchString(_p9.search);
+var _klaftertief$elm_search$Web_Update$init = function (_p11) {
+	var _p12 = _p11;
+	var filter = _klaftertief$elm_search$Web_Model$parseSearchString(_p12.search);
 	return {
 		ctor: '_Tuple2',
 		_0: _klaftertief$elm_search$Web_Model$Loading(filter),
-		_1: _klaftertief$elm_search$Web_Update$getPackages(_p9.index)
+		_1: _klaftertief$elm_search$Web_Update$getPackages(_p12.index)
 	};
 };
 
