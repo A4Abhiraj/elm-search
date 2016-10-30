@@ -12069,8 +12069,9 @@ var _klaftertief$elm_search$Search_Distance$simple = F3(
 			query,
 			extract(chunk)) ? _klaftertief$elm_search$Search_Distance$noPenalty : (A2(
 			_elm_lang$core$String$contains,
-			query,
-			extract(chunk)) ? (_klaftertief$elm_search$Search_Distance$mediumPenalty * (1 - (_elm_lang$core$Basics$toFloat(
+			_elm_lang$core$String$toLower(query),
+			_elm_lang$core$String$toLower(
+				extract(chunk))) ? (_klaftertief$elm_search$Search_Distance$mediumPenalty * (1 - (_elm_lang$core$Basics$toFloat(
 			_elm_lang$core$String$length(query)) / _elm_lang$core$Basics$toFloat(
 			_elm_lang$core$String$length(
 				extract(chunk)))))) : _klaftertief$elm_search$Search_Distance$maxPenalty);
