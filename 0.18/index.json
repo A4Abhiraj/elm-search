@@ -717,7 +717,7 @@
   },
   {
     "name": "Bogdanp/elm-time",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Time.ZonedDateTime",
@@ -4132,7 +4132,7 @@
       },
       {
         "name": "Time.TimeZone",
-        "comment": " This module defines a representations for Timezone information.\n\n# TimeZone values\n@docs TimeZone, abbreviation, offset, offsetString\n\n# Manipulating TimeZones\n@docs setName\n\n# Constructing TimeZones\n@docs unpack\n",
+        "comment": " This module defines a representations for Timezone information.\n\n# TimeZone values\n@docs TimeZone, name, abbreviation, offset, offsetString\n\n# Manipulating TimeZones\n@docs setName\n\n# Constructing TimeZones\n@docs unpack\n",
         "aliases": [],
         "types": [
           {
@@ -4149,13 +4149,18 @@
             "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
           },
           {
+            "name": "name",
+            "comment": " name returns a TimeZone's name.\n",
+            "type": "Time.TimeZone.TimeZone -> String"
+          },
+          {
             "name": "offset",
             "comment": " Given an arbitrary Time and a TimeZone, offset returns the\nTimeZone's UTC offset in milliseconds at that Time.\n",
             "type": "Time.Time -> Time.TimeZone.TimeZone -> Int"
           },
           {
             "name": "offsetString",
-            "comment": " Given an arbitrary Time and TimeZone, offset returns an\nISO8601-formatted UTC offset for at that Time.\n",
+            "comment": " Given an arbitrary Time and TimeZone, offsetString returns an\nISO8601-formatted UTC offset for at that Time.\n",
             "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
           },
           {
@@ -19113,6 +19118,230 @@
     ]
   },
   {
+    "name": "eskimoblood/elm-simplex-noise",
+    "version": "1.2.3",
+    "docs": [
+      {
+        "name": "Noise",
+        "comment": " This is a library to generate simplex noise in Elm.\n\nThe code is a port of the [simplex noise JavaScript version](https:--github.com/jwagner/simplex-noise.js) by Jonas Wagner.\n\n## Example usage\n\n    (perm, newSeed) = permutationTable (initialSeed 42) -- generate the permutation table\n    noiseValue = noise3d perm 1 1 1\n\n# Permutation tables\n@docs permutationTable, PermutationTable\n\n# Genarate noise\n@docs noise4d, noise3d, noise2d\n\n",
+        "aliases": [
+          {
+            "name": "PermutationTable",
+            "comment": "\nPermutation table that is needed to generate the noise value.\n",
+            "args": [],
+            "type": "{ perm : Array.Array Int, permMod12 : Array.Array Int }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "noise2d",
+            "comment": "\nGenerates a noise value between `-1` and `1` based on the given x and y value and a seeded permutation table.\nUsing the same permutation table will always return the same result for the same coordinate.\n",
+            "type": "Noise.PermutationTable -> Float -> Float -> Float"
+          },
+          {
+            "name": "noise3d",
+            "comment": "\nGenerates a noise value between `-1` and `1` based on the given x, y and z value and a seeded permutation table.\nUsing the same permutation table will always return the same result for the same coordinate.\n",
+            "type": "Noise.PermutationTable -> Float -> Float -> Float -> Float"
+          },
+          {
+            "name": "noise4d",
+            "comment": "\nGenerates a noise value between `-1` and `1` based on the given x, y, z and w value and a seeded permutation table.\nUsing the same permutation table will always return the same result for the same coordinate.\n",
+            "type": "Noise.PermutationTable -> Float -> Float -> Float -> Float -> Float"
+          },
+          {
+            "name": "permutationTable",
+            "comment": "\nGenrate the permutation tables that are needed to calculate the noise value.\nThe function takes a seed and returns the table and  a new seed.\n",
+            "type": "Random.Seed -> ( Noise.PermutationTable, Random.Seed )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "eskimoblood/elm-wallpaper",
+    "version": "2.1.5",
+    "docs": [
+      {
+        "name": "WallpaperGroup.Pattern",
+        "comment": "\nCreates wallpaper group based pattern\n\n#create pattern\n@docs pattern\n@docs bounding\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bounding",
+            "comment": "\n  get the bounding box for a specific pattern group\n\n",
+            "type": "WallpaperGroup.Group.Group -> WallpaperGroup.Geom.BoundingBox.BoundingBox"
+          },
+          {
+            "name": "pattern",
+            "comment": "\n  Create pattern by passing a group the number of columns and rows and tiles.\n\n",
+            "type": "WallpaperGroup.Group.Group -> Int -> Int -> List (List { x : Float, y : Float }) -> List (List (List { x : Float, y : Float }))"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "WallpaperGroup.Group",
+        "comment": "\nThe predefined Groups according to\n[this](https://en.wikipedia.org/wiki/Wallpaper_group) Wikipedia entry\n\n@docs Group\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Group",
+            "comment": "\nCreate a pattern width the specific width and/or height.\nFor triangle shaped pattern only the width of the base line is needed.\n",
+            "args": [],
+            "cases": [
+              [
+                "P1",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P2",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "Pm",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "Pg",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "Cm",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P2mm",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P2mg",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P2gg",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "C2mm",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P4",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P4mm",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P4mg",
+                [
+                  "Float",
+                  "Float"
+                ]
+              ],
+              [
+                "P3",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "P3m1",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "P31m",
+                [
+                  "Float"
+                ]
+              ],
+              [
+                "P6",
+                [
+                  "Float"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "WallpaperGroup.Geom.BoundingBox",
+        "comment": "\nBounding box of a single pattern.\n\n@docs BoundingBox\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "BoundingBox",
+            "comment": "\n  Bounding box can be a triangle oder a rect.\n\n",
+            "args": [],
+            "cases": [
+              [
+                "Triangle",
+                [
+                  "{ x : Float, y : Float }",
+                  "{ x : Float, y : Float }",
+                  "{ x : Float, y : Float }"
+                ]
+              ],
+              [
+                "Rect",
+                [
+                  "{ x : Float, y : Float }",
+                  "{ x : Float, y : Float }",
+                  "{ x : Float, y : Float }",
+                  "{ x : Float, y : Float }"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "etaque/elm-response",
     "version": "3.0.0",
     "docs": [
@@ -23399,6 +23628,57 @@
     ]
   },
   {
+    "name": "krisajenkins/history",
+    "version": "1.1.1",
+    "docs": [
+      {
+        "name": "History",
+        "comment": " Manage browser history and link creation using the HTML5 history API.\n\n@docs History, Router, Parser, Path, create\n",
+        "aliases": [
+          {
+            "name": "History",
+            "comment": " History's prime concern is turning URIs into views, and views into URIs.\n",
+            "args": [
+              "view"
+            ],
+            "type": "{ parser : String -> view, router : view -> String }"
+          },
+          {
+            "name": "Parser",
+            "comment": " ",
+            "args": [
+              "view"
+            ],
+            "type": "String -> view"
+          },
+          {
+            "name": "Path",
+            "comment": " A path is just a URI split up into sections. For example\n`/account/1234/settings` would convert to the path\n`[\"account\", \"1234\", \"settings\"]`.\n",
+            "args": [],
+            "type": "List String"
+          },
+          {
+            "name": "Router",
+            "comment": " ",
+            "args": [
+              "view"
+            ],
+            "type": "view -> String"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "create",
+            "comment": " Create a history manager by supplying one function that goes from\n`Path` to `view`, and one that goes the other way from `view` to\n`Path`.\n",
+            "type": "(History.Path -> view) -> (view -> History.Path) -> History.History view"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "krisajenkins/remotedata",
     "version": "3.0.0",
     "docs": [
@@ -24022,6 +24302,31 @@
     ]
   },
   {
+    "name": "marcosh/elm-html-to-unicode",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "ElmEscapeHtml",
+        "comment": " This library allows to escape html string and unescape named and numeric\ncharacter references (e.g. &gt;, &#62;, &x3e;) to the corresponding unicode\ncharacters\n\n#Definition\n@docs escape, unescape\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "escape",
+            "comment": " Escapes a string converting characters that could be used to inject XSS\nvectors (http://wonko.com/post/html-escaping). At the moment we escape &, <, >,\n\", ', `, , !, @, $, %, (, ), =, +, {, }, [ and ]\n\nfor example\n\nescape \"&<>\\\"\" == \"&amp;&lt;&gt;&quot;\"\n",
+            "type": "String -> String"
+          },
+          {
+            "name": "unescape",
+            "comment": " Unescapes a string, converting all named and numeric character references\n(e.g. &gt;, &#62;, &x3e;) to their corresponding unicode characters.\n\nfor example\n\nunescape \"&quot;&amp;&lt;&gt;\" == \"\\\"&<>\"\n",
+            "type": "String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "mgold/elm-animation",
     "version": "1.0.5",
     "docs": [
@@ -24358,6 +24663,91 @@
     ]
   },
   {
+    "name": "myrho/elm-round",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Round",
+        "comment": " This library empowers you to convert a `Float` to a `String` with ultimate \ncontrol how many digits after the decimal point are shown and how the remaining \ndigits are rounded. You can round, round up and round down the mathematical or \nthe commerical way. For example:\n\n    x = 3.141592653589793\n\n    round 2 x -- \"3.14\"\n    round 4 x -- \"3.1416\"\n    \n    ceiling 2 x -- \"3.15\"\n    floor 4 x -- \"3.1415\"\n\n[Commercial \nrounding](https://en.wikipedia.org/wiki/Rounding#Round_half_away_from_zero) \nmeans that negative and positive numbers are treated symmetrically. It affects \nnumbers whose last digit equals 5. For example:\n\n    x = -0.5\n\n    round 0 x -- \"0\"\n    roundCom 0 x -- \"-1\"\n\n    floor 0 x -- \"-1\"\n    floorCom 0 x -- \"0\"\n\n    ceiling 0 x -- \"0\"\n    ceilingCom 0 x -- \"-1\"\n\nHave a look at the tests for more examples!\n\nUnder the hood the `Float` is \n\n  * converted to a string\n  * normalized (if it is in scientific notation, eg `1.234e-23`)\n  * splitted at the comma.\n  * Then the part after comma is truncated to the number of desired digits + 1\n  * inserting a comma before the last digit,\n  * turning this into a `Float` again,\n  * apply a rounding function on it,\n  * attach it the part before comma again.\n  * By the way handles cases with already rounded numbers, zero and the sign.\n\nWhy aren't we just doing `x * 1000 |> round |> toFloat |> (flip (/)) 1000` in \norder to round to 3 digits after comma? Because due to floating point \narithmetic it might happen that it outputs someting like `3.1416000000001`, \nalthough we just wanted `3.1416`. Ugly.\n\n# Round to String\n@docs round, ceiling, floor, roundCom, ceilingCom, floorCom\n\n# Round to Float\n@docs roundNum, ceilingNum, floorNum, roundNumCom, ceilingNumCom, floorNumCom\n\n# Utility functions\n@docs toDecimal, truncate\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "ceiling",
+            "comment": " Turns a `Float` into a `String` and rounds it up to the given number of \ndigits after decimal point.\n\n    x = 3.141592653589793\n\n    ceiling 2 x -- \"3.15\"\n    ceiling 4 x -- \"3.1416\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "ceilingCom",
+            "comment": " Turns a `Float` into a `String` and rounds it up to the given number of \ndigits after decimal point the commercial way.\n\n    x = -0.5\n\n    ceiling 0 x -- \"0\"\n    ceilingCom 0 x -- \"-1\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "ceilingNum",
+            "comment": " As `ceiling` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "ceilingNumCom",
+            "comment": " As `ceilingCom` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "floor",
+            "comment": " Turns a `Float` into a `String` and rounds it down to the given number of \ndigits after decimal point.\n\n    x = 3.141592653589793\n\n    floor 2 x -- \"3.14\"\n    floor 4 x -- \"3.1415\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "floorCom",
+            "comment": " Turns a `Float` into a `String` and rounds it down to the given number of \ndigits after decimal point the commercial way.\n\n    x = -0.5\n\n    floor 0 x -- \"-1\"\n    floorCom 0 x -- \"0\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "floorNum",
+            "comment": " As `floor` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "floorNumCom",
+            "comment": " As `floorCom` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "round",
+            "comment": " Turns a `Float` into a `String` and rounds it to the given number of digits \nafter decimal point.\n\n    x = 3.141592653589793\n\n    round 2 x -- \"3.14\"\n    round 4 x -- \"3.1416\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "roundCom",
+            "comment": " Turns a `Float` into a `String` and rounds it to the given number of digits \nafter decimal point the commercial way.\n\n    x = -0.5\n\n    round 0 x -- \"0\"\n    roundCom 0 x -- \"-1\"\n",
+            "type": "Int -> Float -> String"
+          },
+          {
+            "name": "roundNum",
+            "comment": " As `round` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "roundNumCom",
+            "comment": " As `roundCom` but turns the resulting `String` back to a `Float`.\n",
+            "type": "Int -> Float -> Float"
+          },
+          {
+            "name": "toDecimal",
+            "comment": " Transforms a `Float` in scientific notation into its decimal representation \nas a `String`.\n\n    x = 1e30\n    toDecimal x -- outputs \"1000000000000000000000000000000\"\n\n    x = 1.2345e-30\n    toDecimal x -- outputs \"0.0000000000000000000000000000012345\"\n",
+            "type": "Float -> String"
+          },
+          {
+            "name": "truncate",
+            "comment": " Like Elm's basic `truncate` but works on the full length of a float's 64 \nbits. So it's more precise.\n\n    x = 9007199254740.99\n\n    Basics.truncate x -- 652835028 (which is not correct)\n    Round.truncate x -- 9007199254740 (which is)\n",
+            "type": "Float -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "nphollon/update-clock",
     "version": "1.0.1",
     "docs": [
@@ -24623,6 +25013,947 @@
             "name": "withZeroStatusAllowed",
             "comment": " Explicitly allows a require for a file:// url with a response status code\nof 0 to pass through successfully. This is a common issue when dealing with\nfile:// urls in environments like cordova, and using this function will allow\nyou to work around the problem on an opt-in basis.\n",
             "type": "HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "rluiten/elm-date-extra",
+    "version": "8.1.2",
+    "docs": [
+      {
+        "name": "Date.Extra.Utils",
+        "comment": " Date Utils.\n\n2016/14/23 `fromString` was removed as its extra date validity checking had problems in\nmany timezones so it became the same as `Date.fromString`.\n\n## Date parsing\n**Be careful with unsafeFromString it will Debug.crash() if it cant parse date.**\n@docs unsafeFromString\n\n## Utility\n@docs dayList\n@docs isoWeek\n@docs isoWeekOne\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayList",
+            "comment": " Return a list of days dayLength long for successive days\nstarting from startDate.\n",
+            "type": "Int -> Date.Date -> List Date.Date"
+          },
+          {
+            "name": "isoWeek",
+            "comment": " Return iso week values year, week, isoDayOfWeek.\nInput date is expected to be in local time zone of vm.\n",
+            "type": "Date.Date -> ( Int, Int, Int )"
+          },
+          {
+            "name": "isoWeekOne",
+            "comment": " Return date of start of ISO week one for given year. ",
+            "type": "Int -> Date.Date"
+          },
+          {
+            "name": "unsafeFromString",
+            "comment": " Utility for known input string date creation cases.\nChecks for a fail just in case and calls Debug.crash().\n",
+            "type": "String -> Date.Date"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.TimeUnit",
+        "comment": " Reduce or Increase a date to a given start or end of a TimeUnit granularity.\n\nThis allows you to modify a date to reset to minimum or maximum values\nall values below a given TimeUnit granulariy.\n\nThis operates in local time zone so if you are not in UTC time zone\nand you output date in UTC time zone the datefields will not be to the start\nor end of the TimeUnit.\n\nExample `TimeUnit.startOfTime Hour date` will return a modified date with\n* Minutes to 0\n* Seconds to 0\n* Milliseconds to 0\n\nExample `TimeUnit.endOfTime Hour date` will return a modified date with\n* Minutes to 59\n* Seconds to 59\n* Milliseconds to 999\n\n\n@docs startOfTime\n@docs endOfTime\n@docs TimeUnit\n\n**Warning about using endOfTime for date ranges**\n\nIn the past when I have encountered people using a function like endOfTime\n(max date at a given granularity) it was being used in ways that could introduce\nproblems.\n\nHere is why.\n\n* You want to do a date range comparison between the minimum date\n(or current date) and this maximum date. In all the cases I can\nremember they were doing a date range comparison using\nGreater Than Or Equal To minimum date and Less Than or Equal To maximum date.\n * I can't state strongly enough that this is not the way to do date ranges\n it leads to missed matches that fall between the generated maximum date\n and the following date at the same granularity in systems were you are\n working at a granularity larger than the underlying stored granularity.\n Even if you are working at the smallest granularity of the system its a\n not a good way to think about ranges.\n * When comparing date ranges I strongly suggest you always use a\n half closed interval. This means always build date ranges using\n Greater Than or Equal To minimum date and Less Than maximum date.\n (This applies to floating point numbers as well).\n  * Its equivalently safe to go Greater Than minimum and\n  Less Than or Equal to maximum, in my experience business understanding\n  nearly always dictated include minimum excluded maximum.\n * Once you do this there is no possible gap and it becomes easier to think about.\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "TimeUnit",
+            "comment": " Date granularity of operations. ",
+            "args": [],
+            "cases": [
+              [
+                "Millisecond",
+                []
+              ],
+              [
+                "Second",
+                []
+              ],
+              [
+                "Minute",
+                []
+              ],
+              [
+                "Hour",
+                []
+              ],
+              [
+                "Day",
+                []
+              ],
+              [
+                "Month",
+                []
+              ],
+              [
+                "Year",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "endOfTime",
+            "comment": " Return a date created by increasing to maximum value all values below\na given TimeUnit granularity.\n\nThis modifies in local time zone values, as the date element parts\nare pulled straight from the local time zone date values.\n",
+            "type": "Date.Extra.TimeUnit.TimeUnit -> Date.Date -> Date.Date"
+          },
+          {
+            "name": "startOfTime",
+            "comment": " Return a date created by reducing to minimum value all values below\na given TimeUnit granularity.\n\nThis modifies date in local time zone values, as the date element parts\nare pulled straight from the local time zone date values.\n",
+            "type": "Date.Extra.TimeUnit.TimeUnit -> Date.Date -> Date.Date"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Field",
+        "comment": " Setting a date field on a date.\n\n@docs fieldToDate\n@docs fieldToDateClamp\n@docs Field\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Field",
+            "comment": " Configured Field and Value to set on date.\n\nAll field values are applied Modulus there maximum value.\n\n\n* DayOfWeek\n * The week keeps the same start of week day as passed in and changes day.\n* Month\n * Will not change year only the month of year.\n\n",
+            "args": [],
+            "cases": [
+              [
+                "Millisecond",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Second",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Minute",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Hour",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "DayOfWeek",
+                [
+                  "( Date.Day, Date.Day )"
+                ]
+              ],
+              [
+                "DayOfMonth",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Month",
+                [
+                  "Date.Month"
+                ]
+              ],
+              [
+                "Year",
+                [
+                  "Int"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "fieldToDate",
+            "comment": " Set a field on a date to a specific value.\n\nIf your value in field is out side of valid range for\nthe date field this function will return Nothing.\n\n* DayOfWeek cannot be invalid input range\n* Month cannot be invalid\n\nValid ranges\n* Millisecond 0 to 999\n* Second 0 to 59\n* Minute 0 to 59\n* Hour 0 to 23\n* DayOfMonth 1 to max day of month for year\n* Year >= 0\n\n",
+            "type": "Date.Extra.Field.Field -> Date.Date -> Maybe.Maybe Date.Date"
+          },
+          {
+            "name": "fieldToDateClamp",
+            "comment": "  Set a field on a date to a specific value.\n\nThis version clamps any input Field values to valid ranges as\ndescribed in the doc for fieldToDate function.\n",
+            "type": "Date.Extra.Field.Field -> Date.Date -> Date.Date"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Duration",
+        "comment": " A Duration is a length of time that may vary with with calendar date\nand time. It can be used to modify a date.\n\nWhen modify dates using Durations (Day | Month | Week | Year) this module\ncompensates for day light saving hour variations to minimise the scenarios\nthat cause the Hour field in the result to be different to the input date.\nIt can't completely avoid the hour changing as some hours are not a real\nworld date and hence will modify the hour more than the Duration modified.\n\nThis behaviour is modelled on momentjs so any observed behaviour that is\nnot the same as momentjs should be raised as in issue.\n\nNote adding or subtracting 24 * Hour units from a date may produce a\ndifferent answer to adding or subtracting a Day if day light saving\ntransitions occur as part of the date change.\n\n**Warning**\n\nBe careful if you add Duration Delta to a Date as Duration contains months\nand Years which are not fixed elapsed times like Period Delta, however if\nyou really need a relative number of months or years then it may meet\nyour needs.\n\n@docs add\n@docs Duration\n@docs DeltaRecord\n@docs zeroDelta\n@docs diff\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "DeltaRecord",
+            "comment": " A multi granularity duration delta.\n\nThis does not contain week like Period.DeltaRecord.\nIt does contain month and year.\n",
+            "args": [],
+            "type": "{ year : Int , month : Int , day : Int , hour : Int , minute : Int , second : Int , millisecond : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Duration",
+            "comment": " A Duration is time period that may vary with with calendar and time.\n\nUsing `Duration` adding 24 hours can produce different result to adding 1 day.\n\n",
+            "args": [],
+            "cases": [
+              [
+                "Millisecond",
+                []
+              ],
+              [
+                "Second",
+                []
+              ],
+              [
+                "Minute",
+                []
+              ],
+              [
+                "Hour",
+                []
+              ],
+              [
+                "Day",
+                []
+              ],
+              [
+                "Week",
+                []
+              ],
+              [
+                "Month",
+                []
+              ],
+              [
+                "Year",
+                []
+              ],
+              [
+                "Delta",
+                [
+                  "Date.Extra.Duration.DeltaRecord"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add duration * count to date. ",
+            "type": "Date.Extra.Duration.Duration -> Int -> Date.Date -> Date.Date"
+          },
+          {
+            "name": "diff",
+            "comment": " Return a Period representing date difference. date1 - date2.\n\nIf  you add the result of this function to date2 with addend of 1\nwill return date1.\n\n**Differences to Period.diff**\n\n* Duration DeltaRecord excludes week field\n* Duration DeltaRecord includes month field\n* Duration DeltaRecord includes year field\n* Day is number of days difference between months.\n\nWhen adding a Duration DeltaRecord to a date.\nThe larger granularity fields are added before lower granularity fields\nso Years are added before Months before Days etc.\n\n* Very different behaviour to Period diff\n * If date1 > date2 then all fields in DeltaRecord will be positive or zero.\n * If date1 < date2 then all fields in DeltaRecord will be negative or zero.\n* Because it deals with non fixed length periods of time\n\nExample 1.\n  days in 2016/05 (May) = 31\n  days in 2016/04 (Apr) = 30\n  days in 2016/03 (Mar) = 31\n\n  days in 2015/03 (Mar) = 31\n\n  diff of \"2016/05/15\" \"2015/03/20\"\n  result naive field diff.\n    year 1, month 2, day -5\n\n  days \"2015/03/20\" to \"2015/04/01\" (31 - 20) = 11 days (12). still in march with 11.\n  days \"2015/04/01\" to \"2016/04/15\" (15 - 1) = 14 days\n  months \"2016/04/15\" to \"2016/05/15\" 1 months\n  result field diff\n    year 1, month 1, day 26\n\n  This logic applies all the way down to milliseconds.\n\n\n\n ",
+            "type": "Date.Date -> Date.Date -> Date.Extra.Duration.DeltaRecord"
+          },
+          {
+            "name": "zeroDelta",
+            "comment": " All zero delta.\nUseful as a starting point if you want to set a few fields only.\n",
+            "type": "Date.Extra.Duration.DeltaRecord"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Format",
+        "comment": " Date Format, turning dates into strings.\n\nThe format code originally came from and was modified and extended from.\nhttps://github.com/mgold/elm-date-format/blob/1.0.4/src/Date/Format.elm\n\n## Date presentation\n@docs format\n@docs formatUtc\n@docs formatOffset\n\n## Extra presentation convenience\n@docs isoString\n@docs isoStringNoOffset\n@docs utcIsoString\n\n## Low level formats used in specific places in library.\n@docs isoDateString\n@docs utcIsoDateString\n\n## Useful strings for format\n@docs isoFormat\n@docs isoMsecFormat\n@docs isoOffsetFormat\n@docs isoMsecOffsetFormat\n@docs isoDateFormat\n@docs isoTimeFormat\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "format",
+            "comment": " Use a format string to format a date.\nThis gets time zone offset from provided date.\n",
+            "type": "Date.Extra.Config.Config -> String -> Date.Date -> String"
+          },
+          {
+            "name": "formatOffset",
+            "comment": " This adjusts date for offset, and renders with the offset ",
+            "type": "Date.Extra.Config.Config -> Int -> String -> Date.Date -> String"
+          },
+          {
+            "name": "formatUtc",
+            "comment": " Convert date to utc then format it with offset set to 0 if rendered. ",
+            "type": "Date.Extra.Config.Config -> String -> Date.Date -> String"
+          },
+          {
+            "name": "isoDateFormat",
+            "comment": " ISO Date. ",
+            "type": "String"
+          },
+          {
+            "name": "isoDateString",
+            "comment": " Return date as string.\n\nLow level routine required by areas like checkDateResult to avoid\nrecursive loops in Format.format.\n",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "isoFormat",
+            "comment": " ISO date time, 24hr. ",
+            "type": "String"
+          },
+          {
+            "name": "isoMsecFormat",
+            "comment": " ISO Date time with milliseconds, 24hr. ",
+            "type": "String"
+          },
+          {
+            "name": "isoMsecOffsetFormat",
+            "comment": " ISO Date time with milliseconds and timezone, 24hr. ",
+            "type": "String"
+          },
+          {
+            "name": "isoOffsetFormat",
+            "comment": " ISO Date time with timezone, 24hr. ",
+            "type": "String"
+          },
+          {
+            "name": "isoString",
+            "comment": " Return date and time as string in local zone. ",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "isoStringNoOffset",
+            "comment": " Return date and time as string in local zone, without\na timezone offset as otuput by `Format.isoString`.\nIntroduced to deal with dates assuming local time zone.\n",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "isoTimeFormat",
+            "comment": " ISO Time 24hr. ",
+            "type": "String"
+          },
+          {
+            "name": "utcIsoDateString",
+            "comment": " Utc variant of isoDateString.\n\nLow level routine required by areas like checkDateResult to avoid\nrecursive loops in Format.format.\n",
+            "type": "Date.Date -> String"
+          },
+          {
+            "name": "utcIsoString",
+            "comment": " Return date and time as string in ISO form with Z for UTC offset. ",
+            "type": "Date.Date -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Create",
+        "comment": " Create dates and offsets.\n\n@docs getTimezoneOffset\n@docs dateFromFields\n@docs timeFromFields\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dateFromFields",
+            "comment": " Create a date in current time zone from given fields.\nAll field values are clamped to there allowed range values.\nHours are input in 24 hour time range 0 to 23 valid.\nReturns dates in current time zone.\n\nUsing algorithm from http://howardhinnant.github.io/date_algorithms.html\nSpecifically days_from_civil function.\n\nThe two `<*>Compensate` values adjust for the zone offset time\nintroduced by `epochDate` as starting point.\n",
+            "type": "Int -> Date.Month -> Int -> Int -> Int -> Int -> Int -> Date.Date"
+          },
+          {
+            "name": "getTimezoneOffset",
+            "comment": " Return the time zone offset of current javascript environment underneath\nElm in Minutes. This should produce the same result getTimezoneOffset()\nfor a given date in the same javascript VM.\n\nTime zone offset is always for a given date and time so an input date is required.\n\nGiven that timezones change (though slowly) this is not strictly pure, but\nI suspect it is sufficiently pure to be useful. Is is dependent on the timezone\nmechanics of the javascript VM.\n\n### Example zone stuff.\nFor an offset of -600 minutes, in +10:00 time zone offset.\n",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "timeFromFields",
+            "comment": " Create a time in current time zone from given fields, for\nwhen you dont care about the date part but need time part anyway.\n\nAll field values are clamped to there allowed range values.\nThis can only return dates in current time zone.\n\nHours are input in 24 hour time range 0 to 23 valid.\n\nThis defaults to year 1970, month Jan, day of month 1 for date part.\n",
+            "type": "Int -> Int -> Int -> Int -> Date.Date"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Configs",
+        "comment": " Get a Date Extra Config based up on a locale code.\n\n@docs getConfig\n@docs configs\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "configs",
+            "comment": " Built in configurations. ",
+            "type": "Dict.Dict String Date.Extra.Config.Config"
+          },
+          {
+            "name": "getConfig",
+            "comment": " Get a Date Extra Config for a locale id.\n\nLower case matches strings and accepts \"-\" or \"_\" to seperate\nthe characters in code.\n\nReturns \"en_us\" config if it can't find a match in configs.\n",
+            "type": "String -> Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_fr_fr",
+        "comment": " This is the French config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for fr-fr. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_pl_pl",
+        "comment": " This is the Polish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for pl-pl. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Period",
+        "comment": " Period is a fixed length of time. It is an elapsed time concept, which\ndoes not include the concept of Years Months or Daylight saving variations.\n\nName of type concept copied from NodaTime.\n\n@docs add\n@docs diff\n@docs Period\n@docs DeltaRecord\n@docs zeroDelta\n@docs toTicks\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "DeltaRecord",
+            "comment": " A multi granularity period delta. ",
+            "args": [],
+            "type": "{ week : Int , day : Int , hour : Int , minute : Int , second : Int , millisecond : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Period",
+            "comment": " A Period.\n\nWeek is a convenience for users if they want to use it, it does\njust scale Day in functionality so is not strictly required.\n\nDELTARECORD values are multiplied addend on application.\n",
+            "args": [],
+            "cases": [
+              [
+                "Millisecond",
+                []
+              ],
+              [
+                "Second",
+                []
+              ],
+              [
+                "Minute",
+                []
+              ],
+              [
+                "Hour",
+                []
+              ],
+              [
+                "Day",
+                []
+              ],
+              [
+                "Week",
+                []
+              ],
+              [
+                "Delta",
+                [
+                  "Date.Extra.Period.DeltaRecord"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add Period count to date. ",
+            "type": "Date.Extra.Period.Period -> Int -> Date.Date -> Date.Date"
+          },
+          {
+            "name": "diff",
+            "comment": " Return a Period representing date difference. date1 - date2.\n\nIf  you add the result of this function to date2 with addend of 1\nwill return date1.\n ",
+            "type": "Date.Date -> Date.Date -> Date.Extra.Period.DeltaRecord"
+          },
+          {
+            "name": "toTicks",
+            "comment": " Return tick counts for periods.\nUseful to get total ticks in a Delta.\n",
+            "type": "Date.Extra.Period.Period -> Int"
+          },
+          {
+            "name": "zeroDelta",
+            "comment": " All zero delta.\nUseful as a starting point if you want to set a few fields only.\n",
+            "type": "Date.Extra.Period.DeltaRecord"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Compare",
+        "comment": " Compare dates.\n\n@docs is\n@docs is3\n@docs Compare2\n@docs Compare3\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Compare2",
+            "comment": " Date comparison type for 2 dates.\n\n* After\n * Return True if date1 is after date2.\n* Before\n * Return True if date1 is before date2.\n* Same\n * Return True if date1 is same as date2.\n* SameOrAfter\n * Return True if date1 is same or after date2.\n* SameOrBefore\n * Return True if date1 is same or before date2.\n",
+            "args": [],
+            "cases": [
+              [
+                "After",
+                []
+              ],
+              [
+                "Before",
+                []
+              ],
+              [
+                "Same",
+                []
+              ],
+              [
+                "SameOrAfter",
+                []
+              ],
+              [
+                "SameOrBefore",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Compare3",
+            "comment": " Date comparison type for 3 dates.\n\nBetween does not care if date2 > date3 or date2 < date3.\n\n* Between\n * Return True if date1 is After date2 and Before date3\n * Return True if date1 is After date3 and Before date2\n* BetweenOpenStart\n * Return True if date1 is SameOrAfter date2 and Before date3\n* BetweenOpenEnd\n * Return True if date1 is After date2 and SameOrBefore date3\n* BetweenOpen\n * Return True if date1 is SameOrAfter date2 and SameOrBefore date3\n",
+            "args": [],
+            "cases": [
+              [
+                "Between",
+                []
+              ],
+              [
+                "BetweenOpenStart",
+                []
+              ],
+              [
+                "BetweenOpenEnd",
+                []
+              ],
+              [
+                "BetweenOpen",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "is",
+            "comment": " Compare two dates.\n",
+            "type": "Date.Extra.Compare.Compare2 -> Date.Date -> Date.Date -> Bool"
+          },
+          {
+            "name": "is3",
+            "comment": " Compare three dates.\n\nThis figures out the low and high bounds from date2\nand date3 using minimum and maximum of them respectively.\n",
+            "type": "Date.Extra.Compare.Compare3 -> Date.Date -> Date.Date -> Date.Date -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_fi_fi",
+        "comment": " This is the Finnish config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for fi-fi. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_en_us",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-us. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_en_gb",
+        "comment": " This is the UK english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Bruno Girin\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-gb. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_en_au",
+        "comment": " This is the default english config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for en-au. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config.Config_ro_ro",
+        "comment": " This is the Romanian config for formatting dates.\n\n@docs config\n\nCopyright (c) 2016 Cezar Halmagean\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "config",
+            "comment": " Config for ro_ro. ",
+            "type": "Date.Extra.Config.Config"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_fr_fr",
+        "comment": " French values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Bruno Girin\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " Returns a common French idiom for days of month.\nPad indicates space pad the day of month value so single\ndigit outputs have space padding to make them same\nlength as double digit days of month.\n\nNote that the French idiom is to use the ordinal number\nfor the first day of the month (1er janvier) and\ncardinal numbers for all other days (15 janvier). This\nmethod doesn't pad the value on the right even if the\n`pad` argument is `true`.\n",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_pl_pl",
+        "comment": " Polish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Bartosz Sokół\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " This may not do anything in French ",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Core",
+        "comment": " Date core.\n\n## Info\n@docs monthToInt\n@docs intToMonth\n@docs daysInMonth\n@docs monthList\n@docs daysInNextMonth\n@docs daysInPrevMonth\n@docs daysInMonthDate\n@docs isLeapYear\n@docs isLeapYearDate\n@docs yearToDayLength\n@docs isoDayOfWeek\n\n## Utility\n@docs toFirstOfMonth\n@docs firstOfNextMonthDate\n@docs lastOfMonthDate\n@docs lastOfPrevMonthDate\n@docs daysBackToStartOfWeek\n\n## Conversion\n@docs fromTime\n@docs toTime\n\n## Iteration Utility\n@docs nextDay\n@docs prevDay\n@docs nextMonth\n@docs prevMonth\n\n## Date constants\n@docs epochDateStr\n\n## Date constants\n@docs ticksAMillisecond\n@docs ticksASecond\n@docs ticksAMinute\n@docs ticksAnHour\n@docs ticksADay\n@docs ticksAWeek\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "daysBackToStartOfWeek",
+            "comment": " Days back to start of week day. ",
+            "type": "Date.Day -> Date.Day -> Int"
+          },
+          {
+            "name": "daysInMonth",
+            "comment": " Return days in month for year month. ",
+            "type": "Int -> Date.Month -> Int"
+          },
+          {
+            "name": "daysInMonthDate",
+            "comment": " Days in month for given date. ",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "daysInNextMonth",
+            "comment": " Return days in next calendar month. ",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "daysInPrevMonth",
+            "comment": " Return days in previous calendar month. ",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "epochDateStr",
+            "comment": " Epoch starting point for tick 0. ",
+            "type": "String"
+          },
+          {
+            "name": "firstOfNextMonthDate",
+            "comment": " Return first of next month date. ",
+            "type": "Date.Date -> Date.Date"
+          },
+          {
+            "name": "fromTime",
+            "comment": " Convenience fromTime as time ticks are Elm Ints in this library. ",
+            "type": "Int -> Date.Date"
+          },
+          {
+            "name": "intToMonth",
+            "comment": " Return integer as month. Jan <= 1 Feb == 2 up to Dec > 11. ",
+            "type": "Int -> Date.Month"
+          },
+          {
+            "name": "isLeapYear",
+            "comment": " Return True if Year is a leap year. ",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "isLeapYearDate",
+            "comment": " Return True if Year of Date is a leap year. ",
+            "type": "Date.Date -> Bool"
+          },
+          {
+            "name": "isoDayOfWeek",
+            "comment": " Return the Iso DayOfWeek Monday 1, to Sunday 7. ",
+            "type": "Date.Day -> Int"
+          },
+          {
+            "name": "lastOfMonthDate",
+            "comment": " Resturn date of last day of month. ",
+            "type": "Date.Date -> Date.Date"
+          },
+          {
+            "name": "lastOfPrevMonthDate",
+            "comment": " Return last of previous month date. ",
+            "type": "Date.Date -> Date.Date"
+          },
+          {
+            "name": "monthList",
+            "comment": " List of months in order from Jan to Dec. ",
+            "type": "List Date.Month"
+          },
+          {
+            "name": "monthToInt",
+            "comment": " Return month as integer. Jan = 1 to Dec = 12. ",
+            "type": "Date.Month -> Int"
+          },
+          {
+            "name": "nextDay",
+            "comment": " Return next day in calendar sequence. ",
+            "type": "Date.Day -> Date.Day"
+          },
+          {
+            "name": "nextMonth",
+            "comment": " Return next month in calendar sequence. ",
+            "type": "Date.Month -> Date.Month"
+          },
+          {
+            "name": "prevDay",
+            "comment": " Return previous day in calendar sequence. ",
+            "type": "Date.Day -> Date.Day"
+          },
+          {
+            "name": "prevMonth",
+            "comment": " Return previous month in calendar sequence. ",
+            "type": "Date.Month -> Date.Month"
+          },
+          {
+            "name": "ticksADay",
+            "comment": " Ticks in a day. ",
+            "type": "Int"
+          },
+          {
+            "name": "ticksAMillisecond",
+            "comment": " Ticks in a millisecond. (this is 1 on Win 7 in Chrome) ",
+            "type": "Int"
+          },
+          {
+            "name": "ticksAMinute",
+            "comment": " Ticks in a minute. ",
+            "type": "Int"
+          },
+          {
+            "name": "ticksASecond",
+            "comment": " Ticks in a second. ",
+            "type": "Int"
+          },
+          {
+            "name": "ticksAWeek",
+            "comment": " Ticks in a week. ",
+            "type": "Int"
+          },
+          {
+            "name": "ticksAnHour",
+            "comment": " Ticks in an hour. ",
+            "type": "Int"
+          },
+          {
+            "name": "toFirstOfMonth",
+            "comment": " Return date of first of month. ",
+            "type": "Date.Date -> Date.Date"
+          },
+          {
+            "name": "toTime",
+            "comment": " Convenience toTime as time ticks are Elm Ints in this library. ",
+            "type": "Date.Date -> Int"
+          },
+          {
+            "name": "yearToDayLength",
+            "comment": " Return number of days in a year. ",
+            "type": "Int -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_fi_fi",
+        "comment": " Finnish values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Ossi Hanhinen\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " This may not do anything in Finish ",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.I18n.I_en_us",
+        "comment": " English values for day and month names.\n\n@docs dayShort\n@docs dayName\n@docs monthShort\n@docs monthName\n@docs dayOfMonthWithSuffix\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dayName",
+            "comment": " Day full name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "dayOfMonthWithSuffix",
+            "comment": " Returns a common english idiom for days of month.\nPad indicates space pad the day of month value so single\ndigit outputs have space padding to make them same\nlength as double digit days of monnth.\n",
+            "type": "Bool -> Int -> String"
+          },
+          {
+            "name": "dayShort",
+            "comment": " Day short name. ",
+            "type": "Date.Day -> String"
+          },
+          {
+            "name": "monthName",
+            "comment": " Month full name. ",
+            "type": "Date.Month -> String"
+          },
+          {
+            "name": "monthShort",
+            "comment": " Month short name. ",
+            "type": "Date.Month -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Date.Extra.Config",
+        "comment": " Date configuration.\n\nFor i18n for day and month names.\nParameter to Format.format* functions.\n\nThere is scope to put in some default format strings here.\n\n@docs Config\n\nCopyright (c) 2016 Robin Luiten\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Configuration for formatting dates. ",
+            "args": [],
+            "type": "{ i18n : { dayShort : Date.Day -> String , dayName : Date.Day -> String , monthShort : Date.Month -> String , monthName : Date.Month -> String , dayOfMonthWithSuffix : Bool -> Int -> String } , format : { date : String , longDate : String , time : String , longTime : String , dateTime : String , firstDayOfWeek : Date.Day } }"
+          }
+        ],
+        "types": [],
+        "values": [],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "rluiten/stringdistance",
+    "version": "1.0.3",
+    "docs": [
+      {
+        "name": "StringDistance",
+        "comment": " A library to calculate a metric indicating the string distance between two strings.\n\nThis library was extracted from the Elm implementation of mailcheck http://package.elm-lang.org/packages/rluiten/mailcheck/latest.\n\nThe `lcs` and `lcsLimit` functions are more general and support more than just\nChar as list elements.\n\n\n## Functions\n\n@docs sift3Distance\n@docs lcs\n@docs lcsLimit\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lcs",
+            "comment": " Longest Common Subsequence\n\nThis is a simple implementation and would benefit from memoization if\nperformance is a problem. It does not limit look ahead\nwhich can be very costly see lcsLimit for a limited look ahead version.\n\nWarning this gets very slow very quickly with increases in list lengths even\n17 character lists can cause things to bog down.\n\nThis implementation is based on http://rosettacode.org/wiki/Longest_common_subsequence#Haskell\n\n```elm\n    lcs [\"a\", \"b\", \"c\"] [\"b\", \"c\", \"d\"] == [\"b\", \"c\"]\n```\n\n ",
+            "type": "List a -> List a -> List a"
+          },
+          {
+            "name": "lcsLimit",
+            "comment": " Return function which returns lcs with limited look ahead.\n\nWarning maxLookAhead quickly makes the returned function costly stay\nbelow 8 if you want responsiveness.\n\n```elm\n    lcsLimit 5 [\"a\", \"b\", \"c\"] [\"b\", \"c\", \"d\"] == [\"b\", \"c\"]\n```\n\n",
+            "type": "Int -> List a -> List a -> List a"
+          },
+          {
+            "name": "sift3Distance",
+            "comment": " Calculate sift3 string distance between candidate strings.\n\n```elm\n    sift3Distance \"\" \"abc\" == 3.0\n    sift3Distance \"ab\" \"\" == 2.0\n    sift3Distance \"abc\" \"abc\" == 0\n    sift3Distance \"abc\" \"ab\"  == 0.5\n```\n\n",
+            "type": "String -> String -> Float"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -30080,6 +31411,261 @@
             "name": "badge",
             "comment": " Present a badge with a given content\n\n    badge \"Hello world!\"\n",
             "type": "String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "terezka/elm-plot",
+    "version": "2.0.3",
+    "docs": [
+      {
+        "name": "Plot",
+        "comment": "\n This library aims to allow you to visualize a variety of graphs in\n an intuitve manner without comprimising flexibility regarding configuration.\n It is insprired by the elm-html api, using the `element attrs children` pattern.\n\n# Elements\n@docs Element, plot, line, area, xAxis, yAxis, Point, Style\n\n# Configuration\n\n## Meta configuration\n@docs MetaAttr, size, padding, plotStyle\n\n## Line configuration\n@docs LineAttr, lineStyle\n\n## Area configuration\n@docs AreaAttr, areaStyle\n\n## Axis configuration\n@docs AxisAttr, axisStyle, axisLineStyle\n\n### Tick values configuration\n@docs tickValues, tickDelta, tickRemoveZero\n\n### Tick view configuration\n@docs TickViewAttr, tickConfigView, tickConfigViewFunc, tickLength, tickWidth, tickStyle, tickCustomView, tickCustomViewIndexed\n\n### Label values configuration\n@docs labelValues, labelFilter\n\n### Label values configuration\n@docs LabelViewAttr, labelConfigView, labelConfigViewFunc, labelFormat, labelDisplace, labelStyle, labelCustomView, labelCustomViewIndexed\n\n## Grid configuration\n@docs verticalGrid, horizontalGrid, gridMirrorTicks, gridValues, gridStyle\n\n",
+        "aliases": [
+          {
+            "name": "AreaAttr",
+            "comment": " The type representing an area configuration.\n",
+            "args": [],
+            "type": "Plot.AreaConfig -> Plot.AreaConfig"
+          },
+          {
+            "name": "AxisAttr",
+            "comment": " The type representing an axis configuration.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "LabelViewAttr",
+            "comment": " Type representing a label view configuration attribute.\n",
+            "args": [],
+            "type": "Plot.LabelViewConfig -> Plot.LabelViewConfig"
+          },
+          {
+            "name": "LineAttr",
+            "comment": " The type representing a line configuration.\n",
+            "args": [],
+            "type": "Plot.LineConfig -> Plot.LineConfig"
+          },
+          {
+            "name": "MetaAttr",
+            "comment": " The type representing an a meta configuration.\n",
+            "args": [],
+            "type": "Plot.MetaConfig -> Plot.MetaConfig"
+          },
+          {
+            "name": "Point",
+            "comment": " Convinience type to represent coordinates.\n",
+            "args": [],
+            "type": "( Float, Float )"
+          },
+          {
+            "name": "Style",
+            "comment": " Convinience type to represent style.\n",
+            "args": [],
+            "type": "List ( String, String )"
+          },
+          {
+            "name": "TickViewAttr",
+            "comment": " Type representing a tick view configuration attribute.\n",
+            "args": [],
+            "type": "Plot.TickViewConfig -> Plot.TickViewConfig"
+          }
+        ],
+        "types": [
+          {
+            "name": "Element",
+            "comment": " Represents child element of the plot.\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "area",
+            "comment": " This returns an area element resulting in an area serie rendered in your plot.\n\n    main =\n        plot [] [ area []  [ ( 0, -2 ), ( 2, 0 ), ( 3, 1 ) ] ]\n",
+            "type": "List Plot.AreaAttr -> List Plot.Point -> Plot.Element msg"
+          },
+          {
+            "name": "areaStyle",
+            "comment": " Add styles to your area serie.\n\n    main =\n        plot\n            []\n            [ area\n                [ areaStyle\n                    [ ( \"fill\", \"deeppink\" )\n                    , ( \"stroke\", \"deeppink\" )\n                    , ( \"opacity\", \"0.5\" ) ]\n                    ]\n                ]\n                areaDataPoints\n            ]\n",
+            "type": "Plot.Style -> Plot.AreaConfig -> Plot.AreaConfig"
+          },
+          {
+            "name": "axisLineStyle",
+            "comment": " Add styling to the axis line.\n\n    main =\n        plot\n            []\n            [ xAxis [ axisLineStyle [ ( \"stroke\", \"blue\" ) ] ] ]\n\n Default: `[]`\n",
+            "type": "Plot.Style -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "axisStyle",
+            "comment": " Add style to the container holding your axis. Most properties are\n conveniently inherited by your ticks and labels.\n\n    main =\n        plot\n            []\n            [ xAxis [ axisStyle [ ( \"stroke\", \"red\" ) ] ] ]\n\n Default: `[]`\n",
+            "type": "Plot.Style -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "gridMirrorTicks",
+            "comment": " Adds grid lines where the ticks on the corresponding axis are.\n\n    main =\n        plot\n            []\n            [ verticalGrid [ gridMirrorTicks ]\n            , xAxis []\n            ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `gridValues` attribute, then this attribute will have no effect.\n",
+            "type": "Plot.GridConfig -> Plot.GridConfig"
+          },
+          {
+            "name": "gridStyle",
+            "comment": " Specify styles for the gridlines.\n\n    plot\n        []\n        [ verticalGrid\n            [ gridMirrorTicks\n            , gridStyle myGridStyles\n            ]\n        ]\n\n Remember that if you do not specify either `gridMirrorTicks`\n or `gridValues`, then we will default to not showing any grid lines.\n",
+            "type": "Plot.Style -> Plot.GridConfig -> Plot.GridConfig"
+          },
+          {
+            "name": "gridValues",
+            "comment": " Specify a list of ticks where you want grid lines drawn.\n\n    plot [] [ verticalGrid [ gridValues [ 1, 2, 4, 8 ] ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `gridMirrorTicks` attribute, then this attribute will have no effect.\n",
+            "type": "List Float -> Plot.GridConfig -> Plot.GridConfig"
+          },
+          {
+            "name": "horizontalGrid",
+            "comment": " This returns an grid element resulting in vertical grid lines being rendered in your plot.\n\n    main =\n        plot [] [ horizontalGrid [] ]\n",
+            "type": "List Plot.GridAttr -> Plot.Element msg"
+          },
+          {
+            "name": "labelConfigView",
+            "comment": " Configure the label view specifying a list of label view attributes.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ labelConfigView\n                    [ labelFormat (\\t -> toString t ++ \" s\") ]\n                ]\n            ]\n",
+            "type": "List Plot.LabelViewAttr -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "labelConfigViewFunc",
+            "comment": " Configure the label view specifying a function returning a list of label view attributes.\n The function will be passed:\n 1) An integer representing the amount of ticks away from the origin, the current tick is.\n 2) A float value represeting the value of the tick.\n\n    toLabelConfig : Int -> Float -> List TickViewAttr\n    toLabelConfig index tick =\n        if isOdd index then\n            [ labelFormat (\\t -> toString t ++ \" s\") ]\n        else\n            [ labelFormat (always \"\") ]\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ labelConfigViewFunc toLabelConfig ]\n            ]\n",
+            "type": "Plot.LabelAttrFunc -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "labelCustomView",
+            "comment": " Add a custom view for rendering your label.\n\n    viewLabel : Float -> Svg.Svg a\n    viewLabel tick =\n        text_ mySpecialAttributes mySpecialLabelDisplay\n\n    main =\n        plot\n            []\n            [ xAxis [ labelCustomView viewLabel ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `labelFormat` attribute, then this attribute will have no effect.\n",
+            "type": "(Float -> Svg.Svg msg) -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "labelCustomViewIndexed",
+            "comment": " Same as `labelCustomView`, except this view is also passed the value being\n the amount of ticks the current tick is away from zero.\n\n    viewLabel : Int -> Float -> Svg.Svg a\n    viewLabel fromZero tick =\n        let\n            attrs =\n                if isOdd fromZero then oddAttrs\n                else evenAttrs\n        in\n            text_ attrs labelHtml\n\n    main =\n        plot\n            []\n            [ xAxis [ labelCustomViewIndexed viewLabel ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `labelFormat` attribute, then this attribute will have no effect.\n",
+            "type": "(Int -> Float -> Svg.Svg msg) -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "labelDisplace",
+            "comment": " Move the position of the label.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ labelConfigView [ labelDisplace ( 0, 27 ) ] ]\n            ]\n",
+            "type": "( Int, Int ) -> Plot.LabelViewConfig -> Plot.LabelViewConfig"
+          },
+          {
+            "name": "labelFilter",
+            "comment": " Add a filter determining which of the ticks are added a label. The first argument passed\n to the filter is a number describing how many ticks a way the current tick is. The second argument\n is the value of the tick.\n\n    onlyEvenTicks : Int -> Float -> Bool\n    onlyEvenTicks index value =\n        rem 2 index == 0\n\n    main =\n        plot\n            []\n            [ xAxis [ labelValues onlyEvenTicks ] ]\n\n Default: `(\\a b -> True)`\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `labelValues` attribute, then this attribute will have no effect.\n",
+            "type": "(Int -> Float -> Bool) -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "labelFormat",
+            "comment": " Format the label based on its value.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ labelConfigView\n                    [ labelFormat (\\l -> toString l ++ \" DKK\") ]\n                ]\n            ]\n",
+            "type": "(Float -> String) -> Plot.LabelViewConfig -> Plot.LabelViewConfig"
+          },
+          {
+            "name": "labelStyle",
+            "comment": " Move the position of the label.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ labelConfigView\n                    [ labelStyle [ (\"stroke\", \"blue\" ) ] ]\n                ]\n            ]\n",
+            "type": "Plot.Style -> Plot.LabelViewConfig -> Plot.LabelViewConfig"
+          },
+          {
+            "name": "labelValues",
+            "comment": " Add a list of values where labels will be added.\n\n    main =\n        plot\n            []\n            [ xAxis [ labelValues [ 20, 40, 60 ] ] ]\n",
+            "type": "List Float -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "line",
+            "comment": " This returns a line element resulting in an line serie rendered in your plot.\n\n    main =\n        plot [] [ line [] [ ( 0, 1 ), ( 2, 2 ), ( 3, 4 ) ] ]\n",
+            "type": "List Plot.LineAttr -> List Plot.Point -> Plot.Element msg"
+          },
+          {
+            "name": "lineStyle",
+            "comment": " Add styles to your line serie.\n\n    main =\n        plot\n            []\n            [ line\n                [ lineStyle [ ( \"fill\", \"deeppink\" ) ] ]\n                lineDataPoints\n            ]\n",
+            "type": "Plot.Style -> Plot.LineConfig -> Plot.LineConfig"
+          },
+          {
+            "name": "padding",
+            "comment": " Add padding to your plot, meaning extra space below\n and above the lowest and highest point in your plot.\n The unit is pixels.\n\n Default: `( 0, 0 )`\n",
+            "type": "( Int, Int ) -> Plot.MetaConfig -> Plot.MetaConfig"
+          },
+          {
+            "name": "plot",
+            "comment": " This is the function processing your entire plot configuration.\n Pass your meta attributes and plot elements to this function and\n a svg plot will be returned!\n",
+            "type": "List Plot.MetaAttr -> List (Plot.Element msg) -> Svg.Svg msg"
+          },
+          {
+            "name": "plotStyle",
+            "comment": " Add styles to the svg element.\n\n Default: `[ ( \"padding\", \"30px\" ), ( \"stroke\", \"#000\" ) ]`\n",
+            "type": "Plot.Style -> Plot.MetaConfig -> Plot.MetaConfig"
+          },
+          {
+            "name": "size",
+            "comment": " Specify the size of your plot in pixels.\n\n Default: `( 800, 500 )`\n",
+            "type": "( Int, Int ) -> Plot.MetaConfig -> Plot.MetaConfig"
+          },
+          {
+            "name": "tickConfigView",
+            "comment": " Defines how the tick will be displayed by specifying a list of tick view attributes.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ tickConfigView\n                    [ tickLength 10\n                    , tickWidth 2\n                    , tickStyle [ ( \"stroke\", \"red\" ) ]\n                    ]\n                ]\n            ]\n\n If you do not define another view configuration,\n the default will be `[ tickLength 7, tickWidth 1, tickStyle [] ]`\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickCustomView`, `tickConfigViewFunc` or a `tickCustomViewIndexed` attribute,\n then this attribute will have no effect.\n",
+            "type": "List Plot.TickViewAttr -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickConfigViewFunc",
+            "comment": " Defines how the tick will be displayed by specifying a list of tick view attributes.\n\n    toTickConfig : Int -> Float -> List TickViewAttr\n    toTickConfig index tick =\n        if isOdd index then\n            [ tickLength 7\n            , tickStyle [ ( \"stroke\", \"#e4e3e3\" ) ]\n            ]\n        else\n            [ tickLength 10\n            , tickStyle [ ( \"stroke\", \"#b9b9b9\" ) ]\n            ]\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ tickConfigViewFunc toTickConfig ]\n            ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickConfigView`, `tickCustomView` or a `tickCustomViewIndexed` attribute,\n then this attribute will have no effect.\n",
+            "type": "Plot.TickAttrFunc -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickCustomView",
+            "comment": " Defines how the tick will be displayed by specifying a function which returns your tick html.\n\n    viewTick : Float -> Svg.Svg a\n    viewTick tick =\n        text_\n            [ transform (\"translate(-5, 10)\") ]\n            [ tspan [] [ text \"✨\" ] ]\n\n    main =\n        plot [] [ xAxis [ tickCustomView viewTick ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickConfigView` or a `tickCustomViewIndexed` attribute, then this attribute will have no effect.\n",
+            "type": "(Float -> Svg.Svg msg) -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickCustomViewIndexed",
+            "comment": " Same as `tickCustomConfig`, but the functions is also passed a value\n which is how many ticks away the current tick is from the zero tick.\n\n    viewTick : Int -> Float -> Svg.Svg a\n    viewTick index tick =\n        text_\n            [ transform (\"translate(-5, 10)\") ]\n            [ tspan\n                []\n                [ text (if isOdd index then \"🌟\" else \"⭐\") ]\n            ]\n\n    main =\n        plot [] [ xAxis [ tickCustomViewIndexed viewTick ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickConfigView` or a `tickCustomView` attribute, then this attribute will have no effect.\n",
+            "type": "(Int -> Float -> Svg.Svg msg) -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickDelta",
+            "comment": " Defines what ticks will be shown on the axis by specifying the delta between the ticks.\n The delta will be added from zero.\n\n    main =\n        plot\n            []\n            [ xAxis [ tickDelta 4 ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickValues` attribute, then this attribute will have no effect.\n",
+            "type": "Float -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickLength",
+            "comment": " Set the length of the tick.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ tickConfigView [ tickLength 10 ] ]\n            ]\n",
+            "type": "Int -> Plot.TickViewConfig -> Plot.TickViewConfig"
+          },
+          {
+            "name": "tickRemoveZero",
+            "comment": " Remove tick at origin. Useful when two axis' are crossing and you do not\n want the origin the be cluttered with labels.\n\n    main =\n        plot\n            []\n            [ xAxis [ tickRemoveZero ] ]\n",
+            "type": "Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickStyle",
+            "comment": " Sets the style of the tick\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ tickConfigView\n                    [ tickStyle [ ( \"stroke\", \"blue\" ) ] ]\n                ]\n            ]\n",
+            "type": "Plot.Style -> Plot.TickViewConfig -> Plot.TickViewConfig"
+          },
+          {
+            "name": "tickValues",
+            "comment": " Defines what ticks will be shown on the axis by specifying a list of values.\n\n    main =\n        plot\n            []\n            [ xAxis [ tickValues [ 0, 1, 2, 4, 8 ] ] ]\n\n **Note:** If in the list of axis attributes, this attribute is followed by a\n `tickDelta` attribute, then this attribute will have no effect.\n",
+            "type": "List Float -> Plot.AxisConfig msg -> Plot.AxisConfig msg"
+          },
+          {
+            "name": "tickWidth",
+            "comment": " Set the width of the tick.\n\n    main =\n        plot\n            []\n            [ xAxis\n                [ tickConfigView [ tickWidth 2 ] ]\n            ]\n",
+            "type": "Int -> Plot.TickViewConfig -> Plot.TickViewConfig"
+          },
+          {
+            "name": "verticalGrid",
+            "comment": " This returns an axis element resulting in horizontal grid lines being rendered in your plot.\n\n    main =\n        plot [] [ verticalGrid [] ]\n",
+            "type": "List Plot.GridAttr -> Plot.Element msg"
+          },
+          {
+            "name": "xAxis",
+            "comment": " This returns an axis element resulting in an x-axis being rendered in your plot.\n\n    main =\n        plot [] [ xAxis [] ]\n",
+            "type": "List (Plot.AxisAttr msg) -> Plot.Element msg"
+          },
+          {
+            "name": "yAxis",
+            "comment": " This returns an axis element resulting in an y-axis being rendered in your plot.\n\n    main =\n        plot [] [ yAxis [] ]\n",
+            "type": "List (Plot.AxisAttr msg) -> Plot.Element msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
