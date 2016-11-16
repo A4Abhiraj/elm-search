@@ -4599,6 +4599,1439 @@
     ]
   },
   {
+    "name": "Zinggi/elm-2d-game",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Game.TwoD",
+        "comment": "\nA set of functions used to embed a 2d game into a web page.\nThese functions specify the size and attributes passed to the canvas element.\n\nYou need to pass along the time, size and camera, as these are needed for rendering.\n\nsuggested import:\n\n    import Game.TwoD as Game\n\n@docs RenderConfig\n\n## Canvas element only\n@docs render\n@docs renderWithOptions\n\n## Embedded in a div\n@docs renderCentered\n@docs renderCenteredWithOptions\n",
+        "aliases": [
+          {
+            "name": "RenderConfig",
+            "comment": "\nThis is used by all the functions below, it represents all the shared state needed to render stuff.\nIf you don't use sprite animations you can use `0` for the time parameter.\n",
+            "args": [],
+            "type": "{ time : Float , size : ( Int, Int ) , camera : Game.TwoD.Camera.Camera }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "render",
+            "comment": "\nCreates a canvas element that renders the given Renderables.\n\nIf you don't use animated sprites, you can use `0` for the time parameter.\n\n    render { time = time, size = (800, 600), camera = state.camera }\n        [ Background.render\n        , Player.render state.Player\n        ]\n",
+            "type": "Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html x"
+          },
+          {
+            "name": "renderCentered",
+            "comment": "\nSame as `render`, but wrapped in a div and nicely centered on the page using flexbox\n",
+            "type": "Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html x"
+          },
+          {
+            "name": "renderCenteredWithOptions",
+            "comment": "\nSame as above, but you can specify attributes for the container div and the canvas.\n\n    renderCenteredWithOptions\n        containerAttributes\n        canvasAttributes\n        renderConfig\n        renderables\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Attribute msg) -> Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html msg"
+          },
+          {
+            "name": "renderWithOptions",
+            "comment": "\nSame as above, but you can specify additional attributes that will be passed to the canvas element.\nA useful trick to save some gpu processing at the cost of image quality is\nto use a smaller `size` argument and than scale the canvas with css. e.g.\n\n    renderWithOptions [style [(\"width\", \"800px\"), (\"height\", \"600px\")]]\n        { time = time, size = (400, 300), camera = camera }\n        (World.render model.world)\n",
+            "type": "List (Html.Attribute msg) -> Game.TwoD.RenderConfig -> List Game.TwoD.Render.Renderable -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Game.TwoD.Render",
+        "comment": "\n# 2D rendering module\nThis module provides a way to render commonly used objects in 2d games\nlike simple sprites and sprite animations.\n\nIt also provides colored rectangles which can be great during prototyping.\nThe simple rectangles can easily be replaced by nicer looking textures later.\n\nsuggested import:\n\n    import Game.TwoD.Render as Render exposing (Renderable)\n\n\nMost functions to render something come in 3 forms:\n\n    thing, thingZ, thingWithOptions\n\nThe first is the most common one where you can specify\nthe size, the position in 2d and some more.\n\n\nThe second one is the same as the first, but with a 3d position.\nThe z position goes from -1 to 1, everything outside this will be invisible.\nThis can be used to put something in front or behind regardless of the render order.\n\n\nThe last one gives you all possible options, e.g. the rotation\n, the pivot point of the rotation (normalized from 0 to 1), etc.\n\nTODO: insert picture to visualize coordinate system.\n\n@docs Renderable\n\n## Rectangles\n@docs rectangle\n@docs rectangleZ\n@docs rectangleWithOptions\n\n### With texture\n\nTextures are `Maybe` values because you can never have a texture at the start of your game.\nYou first have to load your textures. In case you pass a `Nothing` as a value for a texture,\nA gray rectangle will be displayed instead.\n\nFor loading textures I suggest using the [game-resources library](http://package.elm-lang.org/packages/Zinggi/elm-game-resources/latest).\n\n**NOTE**: Texture dimensions have to be in a power of 2, e.g. (2^n)x(2^m), like 4x16, 16x16, 512x256, etc.\nIf you try to use a non power of two texture, WebGL will spit out a bunch of warnings and display a black rectangle.\n\n@docs sprite\n@docs spriteZ\n@docs spriteWithOptions\n\n### Animated\n@docs animatedSprite\n@docs animatedSpriteZ\n@docs animatedSpriteWithOptions\n\n### Background\n@docs parallaxScroll\n@docs parallaxScrollWithOptions\n\n## Custom\nThese are useful if you want to write your own GLSL shaders.\nWhen writing your own shaders, you might want to look at\nGame.TwoD.Shaders and Game.TwoD.Shapes for reusable parts.\n\n\n@docs customFragment\n@docs MakeUniformsFunc\n@docs veryCustom\n@docs toWebGl\n",
+        "aliases": [
+          {
+            "name": "MakeUniformsFunc",
+            "comment": "\nJust an alias for this crazy function, needed when you want to use customFragment\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ cameraProj : Math.Matrix4.Mat4 , time : Float , transform : Math.Matrix4.Mat4 } -> { a | cameraProj : Math.Matrix4.Mat4, transform : Math.Matrix4.Mat4 }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Renderable",
+            "comment": "\nA representation of something that can be rendered.\nTo actually render a `Renderable` onto a web page use the `Game.TwoD.*` functions\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "animatedSprite",
+            "comment": "\nAn animated sprite. `bottomLeft` and `topRight` define a sub area from a texture\nwhere the animation frames are located. It's a normalized coordinate from 0 to 1.\n\nTODO: picture!\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float2, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "animatedSpriteWithOptions",
+            "comment": " the same with rotation\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "animatedSpriteZ",
+            "comment": "\nThe same with 3d position\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, bottomLeft : Game.Helpers.Float2, topRight : Game.Helpers.Float2, numberOfFrames : Int, duration : Float } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "customFragment",
+            "comment": "\nThis allows you to write your own custom fragment shader.\nThe type signature may look terrifying,\nbut this is still easier than using veryCustom or using WebGL directly.\nIt handles the vertex shader for you, e.g. your object will appear at the expected location once rendered.\n\nFor the fragment shader, you have the `vec2 varying vcoord;` variable available,\nwhich can be used to sample a texture (`texture2D(texture, vcoord);`)\n\nThe `MakeUniformsFunc` allows you to pass along any additional uniforms you may need.\nIn practice, this might look something like this:\n\n    makeUniforms {cameraProj, transform, time} =\n        {cameraProj=cameraProj, transform=transform, time=time, myUniform=someVector}\n\n    render =\n        customFragment makeUniforms { fragmentShader=frag, position=p, size=s, rotation=0, pivot=(0,0) }\n\n    frag =\n        [|glsl\n\n    precision mediump float;\n\n    varying vec2 vcoord;\n    uniform vec2 myUniform;\n\n    void main () {\n      gl_FragColor = vcoord.yx + myUniform;\n    }\n    |]\n\nDon't pass the time along if your shader doesn't need it.\n",
+            "type": "Game.TwoD.Render.MakeUniformsFunc u -> { b | fragmentShader : WebGL.Shader {} { u | cameraProj : Math.Matrix4.Mat4, transform : Math.Matrix4.Mat4 } { vcoord : Math.Vector2.Vec2 }, pivot : Game.Helpers.Float2, position : Game.Helpers.Float3, rotation : Float, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "parallaxScroll",
+            "comment": "\nUsed for scrolling backgrounds.\nThis probably wont satisfy all possible needs for a scrolling background,\nbut it can give you something that looks nice quickly.\n",
+            "type": "{ o | scrollSpeed : Game.Helpers.Float2, z : Float, tileWH : Game.Helpers.Float2, texture : Maybe.Maybe WebGL.Texture } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "parallaxScrollWithOptions",
+            "comment": "\nSame but with an offset parameter that you can use to position the background.\n",
+            "type": "{ o | scrollSpeed : Game.Helpers.Float2, z : Float, tileWH : Game.Helpers.Float2, offset : Game.Helpers.Float2, texture : Maybe.Maybe WebGL.Texture } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangle",
+            "comment": "\nA colored rectangle, great for prototyping\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float2, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangleWithOptions",
+            "comment": "\nA colored rectangle, that can also be rotated\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float3, size : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "rectangleZ",
+            "comment": "\nThe same, but with 3d position.\n",
+            "type": "{ o | color : Color.Color, position : Game.Helpers.Float3, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "sprite",
+            "comment": "\nA sprite.\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float2, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "spriteWithOptions",
+            "comment": "\nA sprite with tiling and rotation.\n\n    spriteWithOptions {config | tiling = (3,5)}\n\nwill create a sprite with a texture that repeats itself 3 times horizontally and 5 times vertically.\nTODO: picture!\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2, tiling : Game.Helpers.Float2, rotation : Float, pivot : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "spriteZ",
+            "comment": "\nA sprite with 3d position\n",
+            "type": "{ o | texture : Maybe.Maybe WebGL.Texture, position : Game.Helpers.Float3, size : Game.Helpers.Float2 } -> Game.TwoD.Render.Renderable"
+          },
+          {
+            "name": "toWebGl",
+            "comment": "\nConverts a Renderable to a WebGL.Renderable.\nYou don't need this unless you want to slowely introduce\nthis library in a project that currently uses WebGL directly.\n\n    toWebGl time camera (w, h) cameraProj renderable\n",
+            "type": "Float -> Game.TwoD.Camera.Camera -> Game.Helpers.Float2 -> Math.Matrix4.Mat4 -> Game.TwoD.Render.Renderable -> WebGL.Renderable"
+          },
+          {
+            "name": "veryCustom",
+            "comment": "\nThis allows you to specify your own attributes, vertex shader and fragment shader by using the WebGL library directly.\nIf you use this you have to calculate your transformations yourself. (You can use Shaders.makeTransform)\n\nIf you need a square as attributes, you can take the one from Game.TwoD.Shapes\n\n    veryCustom (\\{cameraProj, time} ->\n        WebGL.render vert frag Shapes.unitSquare\n          { u_crazyFrog = frogTexture\n          , transform = Shaders.makeTransform (x, y, z) 0 (2, 4) (0, 0)\n          , camera = cameraProj\n          }\n    )\n",
+            "type": "({ cameraProj : Math.Matrix4.Mat4, time : Float } -> WebGL.Renderable) -> Game.TwoD.Render.Renderable"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Game.TwoD.Shaders",
+        "comment": "\n# Standard shaders for WebGL rendering.\n\nYou don't need this module,\nunless you want to write your own vertex or fragment shader\nand a shader from here already provides one half.\n\nOr if you're using WebGL directly.\n\n## Vertex shaders\n@docs vertColoredRect, vertTexturedRect, vertParallaxScroll\n\n## Fragment shaders\n@docs fragTextured, fragAnimTextured, fragUniColor\n\n---\n### useful helper functions\n@docs colorToRGBAVector, colorToRGBVector, makeTransform\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "colorToRGBAVector",
+            "comment": " ",
+            "type": "Color.Color -> Math.Vector4.Vec4"
+          },
+          {
+            "name": "colorToRGBVector",
+            "comment": " ",
+            "type": "Color.Color -> Math.Vector3.Vec3"
+          },
+          {
+            "name": "fragAnimTextured",
+            "comment": "\nA shader to render spritesheet animations.\nIt assumes that the animation frames are in one horizontal line\n",
+            "type": "WebGL.Shader {} { u | texture : WebGL.Texture, bottomLeft : Math.Vector2.Vec2, topRight : Math.Vector2.Vec2, numberOfFrames : Int, duration : Float, time : Float } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "fragTextured",
+            "comment": "\nDisplay a tiled texture.\nTileWH specifies how many times the texture should be tiled.\n",
+            "type": "WebGL.Shader {} { u | texture : WebGL.Texture, tileWH : Math.Vector2.Vec2 } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "fragUniColor",
+            "comment": "\nA very simple shader, coloring the whole area in a single color\n",
+            "type": "WebGL.Shader {} { u | color : Math.Vector3.Vec3 } {}"
+          },
+          {
+            "name": "makeTransform",
+            "comment": " Creates a transformation matrix usually used in the fragment shader.\n\n    makeTransform ( x, y, z ) rotation ( w, h ) ( px, py )\n",
+            "type": "Game.Helpers.Float3 -> Float -> Game.Helpers.Float2 -> Game.Helpers.Float2 -> Math.Matrix4.Mat4"
+          },
+          {
+            "name": "vertColoredRect",
+            "comment": "\nThe most basic shader, renders a rectangle.\nSince it doesn't even pass along the texture coordinates,\nit's only use is to create a colored rectangle.\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { a | transform : Math.Matrix4.Mat4, cameraProj : Math.Matrix4.Mat4 } {}"
+          },
+          {
+            "name": "vertParallaxScroll",
+            "comment": "\nA shader that scrolls it's texture when the camera moves, but at not at the same speed.\nGood for background images.\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { u | cameraPos : Math.Vector2.Vec2, cameraSize : Math.Vector2.Vec2, scrollSpeed : Math.Vector2.Vec2, z : Float, offset : Math.Vector2.Vec2 } { vcoord : Math.Vector2.Vec2 }"
+          },
+          {
+            "name": "vertTexturedRect",
+            "comment": "\nA simple shader that passes the texture coordinates along for the fragment shader.\nCan be generally used if the fragment shader needs to display texture(s).\n",
+            "type": "WebGL.Shader Game.TwoD.Shapes.Vertex { u | transform : Math.Matrix4.Mat4, cameraProj : Math.Matrix4.Mat4 } { vcoord : Math.Vector2.Vec2 }"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Game.TwoD.Camera",
+        "comment": "\nThis provides a basic camera.\n\nYou can also create your own camera type if you wish.\nTo do so, have a look at the source of this file.\n\n## camera creation\n@docs Camera, fixedArea, fixedWidth, fixedHeight, custom\n\n## manipulate camera\n@docs getPosition, moveBy, moveTo, follow\n\n---\n@docs view, getViewSize\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Camera",
+            "comment": "\nA camera represents how to render the virtual world.\nIt's essentially a transformation from virtual game coordinates to pixel coordinates on the screen.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "custom",
+            "comment": "\nThe custom camera allows you to use a function\nthat maps viewport size (in pixel) to game units.\nE.g. here's an implementation of the fixedWidth camera using custom:\n\n    fixedWidth width =\n        custom (\\(w, h) -> (width, width * h / w))\n\n",
+            "type": "(( Float, Float ) -> ( Float, Float )) -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedArea",
+            "comment": "\nA camera that always shows the same area.\nThis is useful in a top down game.\nThis means that you probably want to specify the area property like this:\n\n    fixedArea (16*10) (x, y)\n\nThis would show 16 by 10 units IF the game is displayed in a 16:10 viewport.\nBut in a 4:3 viewport it would show sqrt(16*10*4/3)=14.6 by sqrt(16*10*3/4)=10.95 units.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedHeight",
+            "comment": "\nA camera that always shows `height` units of your game vertically.\nWell suited for a vertical scroller.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "fixedWidth",
+            "comment": "\nA camera that always shows `width` units of your game horizontally.\nWell suited for a side-scroller.\n",
+            "type": "Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "follow",
+            "comment": "\nSmoothly follow the given target. Use this in your tick function.\n\n    follow 1.5 dt target camera\n\n",
+            "type": "Float -> Float -> ( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "getPosition",
+            "comment": "\n",
+            "type": "Game.TwoD.Camera.Camera -> ( Float, Float )"
+          },
+          {
+            "name": "getViewSize",
+            "comment": "\nGiven the screen size, gets the width and height in game units\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> ( Float, Float )"
+          },
+          {
+            "name": "moveBy",
+            "comment": "\nMove a camera by the given vector *relative* to the camera.\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "moveTo",
+            "comment": "\nMove a camera to the given location. In *absolute* coordinates.\n",
+            "type": "( Float, Float ) -> Game.TwoD.Camera.Camera -> Game.TwoD.Camera.Camera"
+          },
+          {
+            "name": "view",
+            "comment": "\nGets the transformation that represents how to transform the camera back to the origin.\nThe result of this is used in the vertex shader.\n",
+            "type": "Game.TwoD.Camera.Camera -> ( Float, Float ) -> Math.Matrix4.Mat4"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Game.TwoD.Shapes",
+        "comment": "\n# Shapes for WebGL rendering.\n\nYou don't need this module,\nunless you want to have a ready made square for a custom vertex shader.\nSince we're dealing with 2d only,\nthe only available shape is a square\n\n@docs unitSquare\n\n@docs Vertex\n",
+        "aliases": [
+          {
+            "name": "Vertex",
+            "comment": "\nJust an alias for a 2d vector.\nNeeds to be in a record because it will be passed as an\nattribute to the vertex shader\n",
+            "args": [],
+            "type": "{ a_position : Math.Vector2.Vec2 }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "unitSquare",
+            "comment": "\nA square with corners (0, 0), (1, 1)\n",
+            "type": "WebGL.Drawable Game.TwoD.Shapes.Vertex"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "Zinggi/elm-game-resources",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Game.Resources",
+        "comment": "\nA module for managing resources needed for games.\nThis currently only manages textures, but a future version might add sounds, 3d-meshes etc..\n\nSuggested import:\n\n    import Game.Resources as Resources exposing (Resources)\n\n# Usage\nAdd `resources` to your `initialModel`:\n\n    initialModel =\n        { ..\n        , resources = Resources.init\n        }\n\nAdd the resources message to your `Msg`\n\n    type Msg\n        = ..\n        | Resources Resources.Msg\n\nLoad textures at `init`:\n\n    init =\n        initialModel\n            ! [ Resources.loadTextures [ \"images/box.png\" ]\n                    |> Cmd.map Resources\n              ]\n\nAdd a case for the `Resources.Msg` in `update`\n\n    Resources msg ->\n        { model | resources = Resources.update msg model.resources } ! []\n\nRequest your texture when you need it\n\n    Resources.getTexture \"images/box.png\" resources\n\n\n# Resources\n@docs Resources, init, update, Msg\n\n## Textures\n@docs Texture, loadTextures, getTexture\n\n@docs loadTexturesWithConfig, LoadTextureConfig\n\nThese are just an alias for the same functions in the WebGL library\n@docs TextureFilter, linear, nearest\n\n@docs textureSize\n",
+        "aliases": [
+          {
+            "name": "LoadTextureConfig",
+            "comment": " ",
+            "args": [
+              "msg"
+            ],
+            "type": "{ success : Game.Resources.Msg -> msg, failed : String -> msg }"
+          },
+          {
+            "name": "Texture",
+            "comment": " ",
+            "args": [],
+            "type": "WebGL.Texture"
+          },
+          {
+            "name": "TextureFilter",
+            "comment": " ",
+            "args": [],
+            "type": "WebGL.TextureFilter"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Resources",
+            "comment": "\nThe main type of this library\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "getTexture",
+            "comment": "\nReturns a maybe as the texture might not be loaded yet.\n",
+            "type": "String -> Game.Resources.Resources -> Maybe.Maybe Game.Resources.Texture"
+          },
+          {
+            "name": "init",
+            "comment": " ",
+            "type": "Game.Resources.Resources"
+          },
+          {
+            "name": "linear",
+            "comment": " ",
+            "type": "Game.Resources.TextureFilter"
+          },
+          {
+            "name": "loadTextures",
+            "comment": "\nLoads a list of textures from the given urls.\nPNGs and JPEGs are known to work.\nFor WebGL make sure that your textures have a dimension with a power of two, e.g. 2^n x 2^m\n",
+            "type": "List String -> Platform.Cmd.Cmd Game.Resources.Msg"
+          },
+          {
+            "name": "loadTexturesWithConfig",
+            "comment": "\nSame as loadTextures, but gives you more control\nby being able to react to a texture loading error\nand by specifying a texture filter.\n\n    loadTexturesWithConfig\n        { success = Resources\n        , failed = LoadingTextureFailed\n        }\n        [ (linear, \"images/blob.png\"), (nearest, \"images/box.jpeg\") ]\n\n",
+            "type": "Game.Resources.LoadTextureConfig msg -> List ( Game.Resources.TextureFilter, String ) -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "nearest",
+            "comment": " ",
+            "type": "Game.Resources.TextureFilter"
+          },
+          {
+            "name": "textureSize",
+            "comment": "\n",
+            "type": "Game.Resources.Texture -> ( Int, Int )"
+          },
+          {
+            "name": "update",
+            "comment": "\n",
+            "type": "Game.Resources.Msg -> Game.Resources.Resources -> Game.Resources.Resources"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "Zinggi/elm-webgl-math",
+    "version": "1.0.5",
+    "docs": [
+      {
+        "name": "Matrix4",
+        "comment": " This module deals mostly with 3D transformation matrices.\n\nWe can represent a transformation of a 3D vector as a multiplication with a 4x4 matrix\nby writing the vector in homogeneous coordinates.\n\nHere are a few useful links if you want to understand the math behind this library.\n\nhttp://learnopengl.com/#!Getting-started/Transformations\nhttp://www.codinglabs.net/article_world_view_projection_matrix.aspx\nhttp://www.euclideanspace.com/maths/geometry/affine/index.htm\n\n\n@docs Float4x4, Mat4\n\n## General operations\n\n@docs map, map2, foldl, foldr\n\n## General math\n\n@docs identity, fromRows, fromColumns\n\n@docs add, sub, mul, elementWiseMul, mulByConst, transpose, mulVector\n\n\n## Transformation matrices\nA transformation matrix represents an arbitrary transform on a 3d vector.\nTo transform a 3d vector v, we multiply it with a 4x4 transformation matrix M.\nTo do that we need to write v in homogeneous coordinates,\nthen transform the result back to normal coordinates.\n\n        |v|   |v'|\n    M * |1| = |w |,\n    res = v'/w\n\nThese transformations can be chained, e.g. you can apply several transformations in series.\nNote that to understand how a vector will be transformed, it helps to read it backwards:\n\n    T*R*S*v\n\nMeans that `v` will be scaled by the matrix `S`, then rotated by `R` and finally translated by `T`.\n\n\n@docs transform\n\n\n### Affine transformations\nThese represent a transform that preserves shapes, e.g. translations, rotations and scaling.\nThese are composed of a 3x3 rotation and scale matrix M and a translation vector t:\n\n    |M t|\n    |0 1|\n\n@docs makeRotate, makeScale, makeTranslate, makeTransform\n@docs rotate, scale, translate, transformBy\n\nTODO: does it make sense for these to be post multiplied?\n    This means that currently these operations will be done before doing the transform,\n    meaning they will act as local transformations.\n    However this makes creating a composed transformation weird,\n    as the order of operations might be counter-intuitive!\n    E.g. `identity |> translate |> rotate` actually corresponds to `I*T*R`\n    which means rotate first, then translate.\n\n@docs makeLookAt, makeBasis\n\n#### Operations on affine transforms\nThese can speed up some calculations, but are only correct if actually used with affine transforms.\n\n@docs transformAffine, mulAffine, inverseRigidBodyTransform\n\n\n### Cameras\nCameras can also be represented as a transformation matrix.\n**NOTE**: These transforms are generally **not** affine transforms!\n\nCamera projection matrices map their view of the scene into a 2x2x2 cube.\nMath heavy reference: http://www.songho.ca/opengl/gl_projectionmatrix.html\n\n@docs makeFrustum, makePerspective, makeOrtho, makeOrtho2d\n\n\n## Other\n\n@docs maxNorm, almostEqual\n\n",
+        "aliases": [
+          {
+            "name": "Float4x4",
+            "comment": " ",
+            "args": [],
+            "type": "Matrix4.Mat4 Float"
+          },
+          {
+            "name": "Mat4",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( Vector4.Vec4 a, Vector4.Vec4 a, Vector4.Vec4 a, Vector4.Vec4 a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " `A + B`\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "almostEqual",
+            "comment": "\nThis checks whether `|A - B| <= eps`.\n\n    almostEqual eps a b\n\nThis is useful for testing, see the tests of this library for how this makes testing easy.\n\nSince any definition of a norm can be used for this, it uses the simple `maxNorm`\n",
+            "type": "Float -> Matrix4.Float4x4 -> Matrix4.Float4x4 -> Bool"
+          },
+          {
+            "name": "elementWiseMul",
+            "comment": " Element wise multiplication. Also called Hadamard product, Schur product or entrywise product.\n\n    A .* B\n\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "foldl",
+            "comment": " ",
+            "type": "(elem -> acc -> acc) -> acc -> Matrix4.Mat4 elem -> acc"
+          },
+          {
+            "name": "foldr",
+            "comment": " ",
+            "type": "(elem -> acc -> acc) -> acc -> Matrix4.Mat4 elem -> acc"
+          },
+          {
+            "name": "fromColumns",
+            "comment": "\n    fromColumns a b c d == transpose (a,b,c,d)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "fromRows",
+            "comment": "\n    fromRows a b c d == (a,b,c,d)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "identity",
+            "comment": " The identity matrix. This is also a valid transformation matrix which doesn't do anything.\n\n    I = |1 0 0 0|\n        |0 1 0 0|\n        |0 0 1 0|\n        |0 0 0 1|\n\n",
+            "type": "Matrix4.Float4x4"
+          },
+          {
+            "name": "inverseRigidBodyTransform",
+            "comment": "\nCalculate the inverse of a rigid body transform.\nThis a special form of affine transform, that is only composed of\nrotations and translations.\n\n    | R t |^-1 = | R^T -R^T*t |\n    | 0 1 |      | 0    1     |\n\nIt's usually easier and faster to just do the construction of the matrix you want to invert in reverse, e.g.\n\n    inverseRigidBodyTransform (makeRotate 1.2 (0,1,0)) == makeRotate -1.2 (0,1,0)\n    inverseRigidBodyTransform (makeScale (2,3,1)) == makeScale (1/2,1/3,1)\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeBasis",
+            "comment": "\nCreate an affine transform from 3 orthogonal (perpendicular) vectors.\nMake sure xAxis yAxis zAxis are really orthonormal,\notherwise you won't get an affine transform!\nOnly use this if you know what you are doing.\n\n    makeBasis (1, 0, 0) (0, 1, 0) (0, 0, 1) == identity\n\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeFrustum",
+            "comment": " Creates a matrix for a projection frustum.\n\n    makeFrustum left right bottom top znear zfar\n\nhttp://www.songho.ca/opengl/gl_projectionmatrix.html\n",
+            "type": "Float -> Float -> Float -> Float -> Float -> Float -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeLookAt",
+            "comment": "\nCreate a transform that makes a 3D object look at the target.\nVery often used with cameras to make them look at a target.\nThe up vector is usually (0, 1, 0), e.g. the y-axis. (some people also use the z-axis)\n\n    makeLookAt cameraPosition target (0, 1, 0)\n\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeOrtho",
+            "comment": " This creates an orthographic projection.\n\n    makeOrtho left right bottom top znear zfar\n",
+            "type": "Float -> Float -> Float -> Float -> Float -> Float -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeOrtho2d",
+            "comment": " Same as `makeOrtho`, but with `znear = -1` and `zfar = 1` set.\n\n    makeOrtho2d left right bottom top\n",
+            "type": "Float -> Float -> Float -> Float -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makePerspective",
+            "comment": " Creates a matrix for a perspective projection.\n\n    makePerspective fovy aspect znear zfar\n\nfovy - field of view in the y axis, in degrees\naspect - aspect ratio\nznear - the near z distance of the projection\nzfar - the far z distance of the projection\n",
+            "type": "Float -> Float -> Float -> Float -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeRotate",
+            "comment": " Creates a rotation matrix `R`.\nThis represents a rotation of `angle` degrees (in radians)\naround the vector specified by `axis`.\nThe rotation is specified according to the right hand rule.\n",
+            "type": "Float -> Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeScale",
+            "comment": " Create a scale matrix `S`.\n",
+            "type": "Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeTransform",
+            "comment": " Creates an affine transform given a translation, a scale, a rotation and a pivot vector.\nThe pivot is the 'center' of the rotation and scaling operation.\n\n    makeTransform translation scale angle rotationAxis pivot\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float -> Vector3.Float3 -> Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "makeTranslate",
+            "comment": " Create a translation matrix `T`\n",
+            "type": "Vector3.Float3 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "map",
+            "comment": " ",
+            "type": "(a -> b) -> Matrix4.Mat4 a -> Matrix4.Mat4 b"
+          },
+          {
+            "name": "map2",
+            "comment": " ",
+            "type": "(a -> b -> c) -> Matrix4.Mat4 a -> Matrix4.Mat4 b -> Matrix4.Mat4 c"
+          },
+          {
+            "name": "maxNorm",
+            "comment": " The max norm. This is the biggest element of a matrix.\nUseful for fuzz testing.\n",
+            "type": "Matrix4.Float4x4 -> Float"
+          },
+          {
+            "name": "mul",
+            "comment": " `A*B`\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "mulAffine",
+            "comment": " Multiply two affine transforms. Same as `mul` but a bit faster.\nOnly correct if used with an affine transform!\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "mulByConst",
+            "comment": " `a*A`\n",
+            "type": "Float -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "mulVector",
+            "comment": " `A*v`\n",
+            "type": "Matrix4.Float4x4 -> Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "rotate",
+            "comment": "\nRotate an affine transform by an angle along the given axis.\n",
+            "type": "Float -> Vector3.Float3 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "scale",
+            "comment": "\nScale an affine transform with the given vector.\nSame as `M*makeScale(s)`\n",
+            "type": "Vector3.Float3 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "sub",
+            "comment": " `A - B`\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "transform",
+            "comment": " Transform a vector by an arbitrary transformation matrix.\nIn math terms, we do:\n\n    |v'| = A*|v|  v'/w\n    |w |     |1|,\n\n",
+            "type": "Matrix4.Float4x4 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "transformAffine",
+            "comment": " Same as `transform`, but a bit faster. Only correct if used with an affine transform!\n",
+            "type": "Matrix4.Float4x4 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "transformBy",
+            "comment": " Transform a vector by the transformation specified in the parameters\n\n    transformBy translation scale angle rotationAxis pivot v\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float -> Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "translate",
+            "comment": "\nTranslate an affine transform by the given vector.\nSame as `M*makeTranslate(t)`\n",
+            "type": "Vector3.Float3 -> Matrix4.Float4x4 -> Matrix4.Float4x4"
+          },
+          {
+            "name": "transpose",
+            "comment": " The transpose.\nFlips a matrix along it's diagonal.\n\n`A^T`\n",
+            "type": "Matrix4.Float4x4 -> Matrix4.Float4x4"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Vector4",
+        "comment": "\n@docs Float4, Vec4\n\n@docs fromV3, setX, setY, setZ, setW, getX, getY, getZ, getW, map, map2, foldl, foldr\n\n@docs add, sub, negate, scale, divideBy\n\n@docs dot, length, lengthSquared, normalize, directionFromTo, distance, distanceSquared, angle\n",
+        "aliases": [
+          {
+            "name": "Float4",
+            "comment": " ",
+            "args": [],
+            "type": "Vector4.Vec4 Float"
+          },
+          {
+            "name": "Vec4",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( a, a, a, a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " `v + w`\n\n    add (2,4,1,-2) (3,-6,2,1) == (5,-2,3,-1)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "angle",
+            "comment": " The angle between two vectors. The angle is in radians.\n\n`acos((v dot w)/(|v|*|w|))`\n\n    angle (-1,-1,2,0) (2,2,2,0) == pi/2    -- or 90°\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Float"
+          },
+          {
+            "name": "directionFromTo",
+            "comment": " A unit vector pointing from `v` to `w`\n\n`(w - v)/|w - v|`\n\n    directionFromTo (5,1,2,4) (7,5,3,6) == (2/5,4/5,1/5,2/5)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "distance",
+            "comment": " Calculates the distance from `v` to `w`.\n\n`|v - w| = |w - v|`\n\n    distance (7,5,3,6) (5,1,2,4) == 5\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Float"
+          },
+          {
+            "name": "distanceSquared",
+            "comment": " The squared distance. This is slightly faster.\n\n`|v - w|^2`\n\n    distanceSquared (3,0,2,1) (0,2,4,1) == 17\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Float"
+          },
+          {
+            "name": "divideBy",
+            "comment": " `v/a`\n\n    divideBy (3/2) (3,12,6,9) == (2,8,4,6)\n",
+            "type": "Float -> Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "dot",
+            "comment": " `v dot w`\n\nThe **dot product** of two vectors. Also called **scalar product** or **inner product**.\n\nIt links the length and angle of two vectors.\n\n`v dot w = |v|*|w|*cos(phi)`\n\n    dot (1,2,2,3) (3,3,2,2) == 1*3 + 2*3 + 2*2 + 3*2 == 19\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Float"
+          },
+          {
+            "name": "foldl",
+            "comment": "\n    foldl (\\elem acc -> acc + elem^2) 0 (2,4,1,2) == 25\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector4.Vec4 elem -> acc"
+          },
+          {
+            "name": "foldr",
+            "comment": "\n    foldr (::) [] (1,2,3,5) == [1,2,3,5]\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector4.Vec4 elem -> acc"
+          },
+          {
+            "name": "fromV3",
+            "comment": "\n    fromV3 (1,2,3) 1 == (1,2,3,1)\n",
+            "type": "Vector3.Vec3 a -> a -> Vector4.Vec4 a"
+          },
+          {
+            "name": "getW",
+            "comment": " ",
+            "type": "Vector4.Vec4 a -> a"
+          },
+          {
+            "name": "getX",
+            "comment": " ",
+            "type": "Vector4.Vec4 a -> a"
+          },
+          {
+            "name": "getY",
+            "comment": " ",
+            "type": "Vector4.Vec4 a -> a"
+          },
+          {
+            "name": "getZ",
+            "comment": " ",
+            "type": "Vector4.Vec4 a -> a"
+          },
+          {
+            "name": "length",
+            "comment": " The length of a vector. Also known as magnitude or norm.\n\n`|v| = sqrt(v dot v)`\n\n    length (2,4,1,2) == sqrt (2^2+4^2+1^2+2^2) == 5\n",
+            "type": "Vector4.Float4 -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The squared length. This is cheaper to calculate,\nso if you only need to compare lengths you can use this instead of the length.\n\n`|v|^2 = v dot w`\n\n    lengthSquared (3,4,1,2) == 3^2+4^2+1^2+2^2 == 30\n",
+            "type": "Vector4.Float4 -> Float"
+          },
+          {
+            "name": "map",
+            "comment": "\n    map (\\x -> x^2) (1,2,3,4) == (1,4,9,16)\n",
+            "type": "(a -> b) -> Vector4.Vec4 a -> Vector4.Vec4 b"
+          },
+          {
+            "name": "map2",
+            "comment": "\n    map2 (<) (2,1,4,2) (3,2,1,6) == (True, True, False, True)\n",
+            "type": "(a -> b -> c) -> Vector4.Vec4 a -> Vector4.Vec4 b -> Vector4.Vec4 c"
+          },
+          {
+            "name": "negate",
+            "comment": " `-v`\n\n    negate (2,-1,5,1) == (-2,1,-5,-1)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "normalize",
+            "comment": " Normalizes a vector. This will give you a unit vector (e.g. with length 1) in the same direction as `v`.\n\n`v/|v|`\n\n    normalize (2,4,1,2) == (2/5,4/5,1/5,2/5)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "scale",
+            "comment": " `a*v`\n\n    scale (3/2) (4,2,6,10) == (6,3,9,15)\n",
+            "type": "Float -> Vector4.Float4 -> Vector4.Float4"
+          },
+          {
+            "name": "setW",
+            "comment": " ",
+            "type": "a -> Vector4.Vec4 a -> Vector4.Vec4 a"
+          },
+          {
+            "name": "setX",
+            "comment": " ",
+            "type": "a -> Vector4.Vec4 a -> Vector4.Vec4 a"
+          },
+          {
+            "name": "setY",
+            "comment": " ",
+            "type": "a -> Vector4.Vec4 a -> Vector4.Vec4 a"
+          },
+          {
+            "name": "setZ",
+            "comment": " ",
+            "type": "a -> Vector4.Vec4 a -> Vector4.Vec4 a"
+          },
+          {
+            "name": "sub",
+            "comment": " `v - w`\n\n    sub (4,6,1,2) (3,-1,-4,4) == (1,7,5,-2)\n",
+            "type": "Vector4.Float4 -> Vector4.Float4 -> Vector4.Float4"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Matrix3",
+        "comment": " This will have some more functions soon.\nCurrently it's missing 2D transformation functions.\n\n@docs Mat3, Float3x3\n\n@docs map, map2\n\n@docs identity, add, sub, mul, mulVector, transpose, elementWiseMul\n\n@docs transform\n\n",
+        "aliases": [
+          {
+            "name": "Float3x3",
+            "comment": " ",
+            "args": [],
+            "type": "Matrix3.Mat3 Float"
+          },
+          {
+            "name": "Mat3",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( Vector3.Vec3 a, Vector3.Vec3 a, Vector3.Vec3 a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " `A + B`\n",
+            "type": "Matrix3.Float3x3 -> Matrix3.Float3x3 -> Matrix3.Float3x3"
+          },
+          {
+            "name": "elementWiseMul",
+            "comment": " `A .* B`\n",
+            "type": "Matrix3.Float3x3 -> Matrix3.Float3x3 -> Matrix3.Float3x3"
+          },
+          {
+            "name": "identity",
+            "comment": " The identity matrix\n\n    I = |1 0 0|\n        |0 1 0|\n        |0 0 1|\n",
+            "type": "Matrix3.Float3x3"
+          },
+          {
+            "name": "map",
+            "comment": " ",
+            "type": "(a -> b) -> Matrix3.Mat3 a -> Matrix3.Mat3 b"
+          },
+          {
+            "name": "map2",
+            "comment": " ",
+            "type": "(a -> b -> c) -> Matrix3.Mat3 a -> Matrix3.Mat3 b -> Matrix3.Mat3 c"
+          },
+          {
+            "name": "mul",
+            "comment": " `A*B`\n",
+            "type": "Matrix3.Float3x3 -> Matrix3.Float3x3 -> Matrix3.Float3x3"
+          },
+          {
+            "name": "mulVector",
+            "comment": " `A*v`\n",
+            "type": "Matrix3.Float3x3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "sub",
+            "comment": " `A - B`\n",
+            "type": "Matrix3.Float3x3 -> Matrix3.Float3x3 -> Matrix3.Float3x3"
+          },
+          {
+            "name": "transform",
+            "comment": "\n    |v'| = A*|v|  v'/w\n    |w |     |1|,\n",
+            "type": "Matrix3.Float3x3 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "transpose",
+            "comment": " `A^T`\n",
+            "type": "Matrix3.Float3x3 -> Matrix3.Float3x3"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Vector3",
+        "comment": "\n@docs Float3, Vec3\n\n@docs fromV2, setX, setY, setZ, getX, getY, getZ, map, map2, foldl, foldr\n\n@docs add, sub, negate, scale, divideBy\n\n@docs dot, cross, length, lengthSquared, normalize, directionFromTo, distance, distanceSquared, angle, project, reject\n",
+        "aliases": [
+          {
+            "name": "Float3",
+            "comment": " ",
+            "args": [],
+            "type": "Vector3.Vec3 Float"
+          },
+          {
+            "name": "Vec3",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( a, a, a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " `v + w`\n\n    add (2,4,1) (3,-6,2) == (5,-2,3)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "angle",
+            "comment": " The angle between two vectors. The angle is in radians.\n\n`acos((v dot w)/(|v|*|w|))`\n\n    angle (-1,-1,2) (2,2,2) == pi/2    -- or 90°\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float"
+          },
+          {
+            "name": "cross",
+            "comment": " `v cross w`\n\nThe **cross product** of two vectors. Also called **vector product**.\n\n`v cross w` is a vector that is perpendicular to both `v` and `w`\nand therefore normal to the plane containing them.\n\nThe length of `v cross w` is equal to the area of the parallelogram spanned by `v` and `w`.\n\n`|v cross w| = |v|*|w|*sin(phi)`\n\n    cross (2,1,3) (4,5,-3) == (1*(-3) - 3*5, 3*4 - 2*(-3), 2*5 - 1*4) == (-18, 18, 6)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "directionFromTo",
+            "comment": " A unit vector pointing from `v` to `w`\n\n`(w - v)/|w - v|`\n\n    directionFromTo (5,1,2) (9,3,6) == (2/3,1/3,2/3)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "distance",
+            "comment": " Calculates the distance from `v` to `w`.\n\n`|v - w| = |w - v|`\n\n    distance (2,0,4) (0,4,0) == 6\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float"
+          },
+          {
+            "name": "distanceSquared",
+            "comment": " The squared distance. This is slightly faster.\n\n`|v - w|^2`\n\n    distanceSquared (3,0,2) (0,4,1) == 26\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float"
+          },
+          {
+            "name": "divideBy",
+            "comment": " `v/a`\n\n    divideBy (1/2) (2,1,3) == (4,2,6)\n",
+            "type": "Float -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "dot",
+            "comment": " `v dot w`\n\nThe **dot product** of two vectors. Also called **scalar product** or **inner product**.\n\nIt links the length and angle of two vectors.\n\n`v dot w = |v|*|w|*cos(phi)`\n\n    dot (1,2,2) (3,3,2) == 1*3 + 2*3 + 2*2 == 13\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Float"
+          },
+          {
+            "name": "foldl",
+            "comment": "\n    foldl (*) 1 (2,4,1) == 8\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector3.Vec3 elem -> acc"
+          },
+          {
+            "name": "foldr",
+            "comment": "\n    foldr max 0 (1,12,-5) == 12\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector3.Vec3 elem -> acc"
+          },
+          {
+            "name": "fromV2",
+            "comment": "\n    fromV2 (1,2) 3 == (1,2,3)\n",
+            "type": "Vector2.Vec2 a -> a -> Vector3.Vec3 a"
+          },
+          {
+            "name": "getX",
+            "comment": " ",
+            "type": "Vector3.Vec3 a -> a"
+          },
+          {
+            "name": "getY",
+            "comment": " ",
+            "type": "Vector3.Vec3 a -> a"
+          },
+          {
+            "name": "getZ",
+            "comment": " ",
+            "type": "Vector3.Vec3 a -> a"
+          },
+          {
+            "name": "length",
+            "comment": " The length of a vector. Also known as magnitude or norm.\n\n`|v| = sqrt(v dot v)`\n\n    length (4,2,4) == sqrt (4^2+2^2+4^2) == 6\n",
+            "type": "Vector3.Float3 -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The squared length. This is cheaper to calculate,\nso if you only need to compare lengths you can use this instead of the length.\n\n`|v|^2 = v dot w`\n\n    lengthSquared (3,4,1) == 3^2+4^2+1^2 == 26\n",
+            "type": "Vector3.Float3 -> Float"
+          },
+          {
+            "name": "map",
+            "comment": "\n    map sqrt (1,4,9) == (1,2,3)\n",
+            "type": "(a -> b) -> Vector3.Vec3 a -> Vector3.Vec3 b"
+          },
+          {
+            "name": "map2",
+            "comment": "\n    map2 (/) (4,9,12) (2,3,4) == (2,3,3)\n",
+            "type": "(a -> b -> c) -> Vector3.Vec3 a -> Vector3.Vec3 b -> Vector3.Vec3 c"
+          },
+          {
+            "name": "negate",
+            "comment": " `-v`\n\n    negate (2,-1,5) == (-2,1,-5)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "normalize",
+            "comment": " Normalizes a vector. This will give you a unit vector (e.g. with length 1) in the same direction as `v`.\n\n`v/|v|`\n\n    normalize (4,2,4) == (2/3,1/3,2/3)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "project",
+            "comment": " The projection of `v` onto `w`.\n\n`(v dot w)/|w| * w/|w|`\n\n    project (2,1,0) (4,0,0) == (2,0,0)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "reject",
+            "comment": " The rejection of `v` onto `w`. This is always perpendicular to the projection.\n\n`v - (project v w)`\n\n    reject (2,1,0) (4,0,0) == (0,1,0)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "scale",
+            "comment": " `a*v`\n\n    scale (1/2) (4,2,6) == (2,1,3)\n",
+            "type": "Float -> Vector3.Float3 -> Vector3.Float3"
+          },
+          {
+            "name": "setX",
+            "comment": " ",
+            "type": "a -> Vector3.Vec3 a -> Vector3.Vec3 a"
+          },
+          {
+            "name": "setY",
+            "comment": " ",
+            "type": "a -> Vector3.Vec3 a -> Vector3.Vec3 a"
+          },
+          {
+            "name": "setZ",
+            "comment": " ",
+            "type": "a -> Vector3.Vec3 a -> Vector3.Vec3 a"
+          },
+          {
+            "name": "sub",
+            "comment": " `v - w`\n\n    sub (4,6,1) (3,-1,-4) == (1,7,5)\n",
+            "type": "Vector3.Float3 -> Vector3.Float3 -> Vector3.Float3"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Matrix2",
+        "comment": "\n@docs Float2x2, Mat2\n\n## General operations\n\n@docs map, map2, foldl, foldr\n\n## Math\n\n@docs identity, fromRows, fromColumns\n\n@docs add, sub, mul, elementWiseMul, mulByConst, transpose, mulVector\n\n## Other\n\n@docs almostEqual, maxNorm\n\n",
+        "aliases": [
+          {
+            "name": "Float2x2",
+            "comment": " ",
+            "args": [],
+            "type": "Matrix2.Mat2 Float"
+          },
+          {
+            "name": "Mat2",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( Vector2.Vec2 a, Vector2.Vec2 a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Matrix addition.\n\n    |a b|   |e f|   |a+e b+f|\n    |c d| + |g h| = |c+g d+h|\n",
+            "type": "Matrix2.Float2x2 -> Matrix2.Float2x2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "almostEqual",
+            "comment": "\nThis checks whether `|A - B| < eps`.\n\n    almostEqual eps a b\n\nThis is useful for testing, see the tests of this library for how this makes testing easy.\n\nSince any definition of a norm can be used for this, it uses the simple `maxNorm`\n",
+            "type": "Float -> Matrix2.Float2x2 -> Matrix2.Float2x2 -> Bool"
+          },
+          {
+            "name": "elementWiseMul",
+            "comment": " Element wise multiplication. Also called Hadamard product, Schur product or entrywise product.\n\n    |a b|    |e f|   |ae bf|\n    |c d| .* |g h| = |cg dh|\n",
+            "type": "Matrix2.Float2x2 -> Matrix2.Float2x2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "foldl",
+            "comment": " ",
+            "type": "(elem -> acc -> acc) -> acc -> Matrix2.Mat2 elem -> acc"
+          },
+          {
+            "name": "foldr",
+            "comment": " ",
+            "type": "(elem -> acc -> acc) -> acc -> Matrix2.Mat2 elem -> acc"
+          },
+          {
+            "name": "fromColumns",
+            "comment": " Construct a matrix from columns.\n\n    fromColumns (1,2) (3,4) == ((1,3),(2,4))\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "fromRows",
+            "comment": " Construct a matrix from rows.\n\n    fromRows (1,2) (3,4) == ((1,2),(3,4))\n\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "identity",
+            "comment": " The identity matrix.\n\n    I = |1 0|\n        |0 1|\n\n    I*A = A = A*I\n",
+            "type": "Matrix2.Float2x2"
+          },
+          {
+            "name": "map",
+            "comment": "\n    elementsSquared = map (\\x -> x^2)\n",
+            "type": "(a -> b) -> Matrix2.Mat2 a -> Matrix2.Mat2 b"
+          },
+          {
+            "name": "map2",
+            "comment": "\n    elementWiseDivision = map2 (/)\n",
+            "type": "(a -> b -> c) -> Matrix2.Mat2 a -> Matrix2.Mat2 b -> Matrix2.Mat2 c"
+          },
+          {
+            "name": "maxNorm",
+            "comment": " The max norm. This is the biggest element of a matrix.\nUseful for fuzz testing.\n",
+            "type": "Matrix2.Float2x2 -> Float"
+          },
+          {
+            "name": "mul",
+            "comment": " Matrix multiplication.\n\n`A*B`\n",
+            "type": "Matrix2.Float2x2 -> Matrix2.Float2x2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "mulByConst",
+            "comment": " `a*A`\nMultiply a matrix by a constant\n",
+            "type": "Float -> Matrix2.Float2x2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "mulVector",
+            "comment": " Matrix-vector multiplication.\n\n          |a b| |x|   |ax+by|\n    A*v = |c d|*|y| = |cx+dy|\n",
+            "type": "Matrix2.Float2x2 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "sub",
+            "comment": " Matrix subtraction.\n\n`A - B`\n",
+            "type": "Matrix2.Float2x2 -> Matrix2.Float2x2 -> Matrix2.Float2x2"
+          },
+          {
+            "name": "transpose",
+            "comment": " The transpose.\nFlips a matrix along it's diagonal.\n\n    |a b|T  |a c|\n    |c d| = |b d|\n\n",
+            "type": "Matrix2.Float2x2 -> Matrix2.Float2x2"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Vector2",
+        "comment": "\n@docs Float2, Vec2\n\n@docs setX, setY, getX, getY, map, map2, foldl, foldr\n\n@docs add, sub, negate, scale, divideBy\n\n@docs dot, length, lengthSquared, normalize, directionFromTo, distance, distanceSquared, angle, project, reject\n",
+        "aliases": [
+          {
+            "name": "Float2",
+            "comment": " ",
+            "args": [],
+            "type": "Vector2.Vec2 Float"
+          },
+          {
+            "name": "Vec2",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "( a, a )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " `v + w`\n\n    add (1,2) (4,5) == (5,7)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "angle",
+            "comment": " The angle between two vectors. The angle is in radians.\n\n`acos((v dot w)/(|v|*|w|))`\n\n    angle (1,0) (2,2) == pi/4    -- or 45°\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Float"
+          },
+          {
+            "name": "directionFromTo",
+            "comment": " A unit vector pointing from `v` to `w`\n\n`(w - v)/|w - v|`\n\n    directionFromTo (5,1) (8,5) == (3/5,4/5)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "distance",
+            "comment": " Calculates the distance from `v` to `w`.\n\n`|v - w| = |w - v|`\n\n    distance (3,0) (0,4) == 5\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Float"
+          },
+          {
+            "name": "distanceSquared",
+            "comment": " The squared distance. This is slightly faster.\n\n`|v - w|^2`\n\n    distanceSquared (3,0) (0,4) == 25\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Float"
+          },
+          {
+            "name": "divideBy",
+            "comment": " `v/a`\n\n    divideBy 4 (12,16) == (3,4)\n",
+            "type": "Float -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "dot",
+            "comment": " `v dot w`\n\nThe **dot product** of two vectors. Also called **scalar product** or **inner product**.\n\nIt links the length and angle of two vectors.\n\n`v dot w = |v|*|w|*cos(phi)`\n\n    dot (1,2) (3,2) == 1*3 + 2*2 == 7\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Float"
+          },
+          {
+            "name": "foldl",
+            "comment": "\n    foldl (+) 0 (2,4) == 6\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector2.Vec2 elem -> acc"
+          },
+          {
+            "name": "foldr",
+            "comment": "\n    foldr (-) 0 (1,12) == -11\n",
+            "type": "(elem -> acc -> acc) -> acc -> Vector2.Vec2 elem -> acc"
+          },
+          {
+            "name": "getX",
+            "comment": " ",
+            "type": "Vector2.Vec2 a -> a"
+          },
+          {
+            "name": "getY",
+            "comment": " ",
+            "type": "Vector2.Vec2 a -> a"
+          },
+          {
+            "name": "length",
+            "comment": " The length of a vector. Also known as magnitude or norm.\n\n`|v| = sqrt(v dot v)`\n\n    length (3,4) == sqrt(3^2+4^2) == 5\n",
+            "type": "Vector2.Float2 -> Float"
+          },
+          {
+            "name": "lengthSquared",
+            "comment": " The squared length. This is cheaper to calculate,\nso if you only need to compare lengths you can use this instead of the length.\n\n`|v|^2 = v dot w`\n\n    lengthSquared (3,4) == 3^2+4^2 == 25\n",
+            "type": "Vector2.Float2 -> Float"
+          },
+          {
+            "name": "map",
+            "comment": "\n    map ((+) 1) (2,3) == (3,4)\n",
+            "type": "(a -> b) -> Vector2.Vec2 a -> Vector2.Vec2 b"
+          },
+          {
+            "name": "map2",
+            "comment": "\n    map2 (*) (2,4) (3,2) == (6,8)\n",
+            "type": "(a -> b -> c) -> Vector2.Vec2 a -> Vector2.Vec2 b -> Vector2.Vec2 c"
+          },
+          {
+            "name": "negate",
+            "comment": " `-v`\n\n    negate (2,-4) == (-2,4)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "normalize",
+            "comment": " Normalizes a vector. This will give you a unit vector (e.g. with length 1) in the same direction as `v`.\n\n`v/|v|`\n\n    normalize (3,4) == (3/5,4/5)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "project",
+            "comment": " The projection of `v` onto `w`.\n\n`(v dot w)/|w| * w/|w|`\n\n    project (2,1) (4,0) == (2,0)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "reject",
+            "comment": " The rejection of `v` onto `w`. This is always perpendicular to the projection.\n\n`v - (project v w)`\n\n    reject (2,1) (4,0) == (0,1)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "scale",
+            "comment": " `a*v`\n\n    scale 3 (2,3) = (6,9)\n",
+            "type": "Float -> Vector2.Float2 -> Vector2.Float2"
+          },
+          {
+            "name": "setX",
+            "comment": " ",
+            "type": "a -> Vector2.Vec2 a -> Vector2.Vec2 a"
+          },
+          {
+            "name": "setY",
+            "comment": " ",
+            "type": "a -> Vector2.Vec2 a -> Vector2.Vec2 a"
+          },
+          {
+            "name": "sub",
+            "comment": " `v - w`\n\n    sub (3,1) (-3,8) == (6,-7)\n",
+            "type": "Vector2.Float2 -> Vector2.Float2 -> Vector2.Float2"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "arturopala/elm-monocle",
+    "version": "1.3.1",
+    "docs": [
+      {
+        "name": "Monocle.Common",
+        "comment": " Common lenses/prisms/optionals that most projects will use.\n\n@docs (=>)\n@docs maybe\n@docs array\n@docs dict\n@docs result\n@docs id\n@docs first\n@docs second\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "=>",
+            "comment": " Convenient infix operator for composing optionals.\n\n   .getOption (maybe => array 2) (Just [10..15])\n   > 12\n\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional b c -> Monocle.Optional.Optional a c"
+          },
+          {
+            "name": "array",
+            "comment": " Step into an `Array` at the given index.\n\n    array.getOption 2 (Array.fromList [10..15])\n    > Just 12\n\n    array.getOption 8 (Array.fromList [10..15])\n    > Nothing\n",
+            "type": "Int -> Monocle.Optional.Optional (Array.Array a) a"
+          },
+          {
+            "name": "dict",
+            "comment": " Step into a `Dict` with the given key.\n\n    dict.getOption \"Tom\" (Dict.fromList [(\"Tom\",\"Cat\")])\n    > Just \"Cat\"\n\n    dict.getOption \"Jerry\" (Dict.fromList [(\"Tom\",\"Cat\")])\n    > Nothing\n",
+            "type": "comparable -> Monocle.Optional.Optional (Dict.Dict comparable v) v"
+          },
+          {
+            "name": "first",
+            "comment": " Step into the first element of a pair.\n\n    first.get ('a', 'b')\n    > Just 'a'\n",
+            "type": "Monocle.Lens.Lens ( a, b ) a"
+          },
+          {
+            "name": "id",
+            "comment": " Step into a record with an `id` key.\n\n    id.get {id = 1000, name = ...}\n    > Just 1000\n\nSince records with an `id` field are incredible common, this is\nincluded for convenience. It also serves as a simple recipe for\ncreating record lenses.\n",
+            "type": "Monocle.Lens.Lens { a | id : b } b"
+          },
+          {
+            "name": "maybe",
+            "comment": " Step into a `Maybe` value.\n\n    maybe.set 5 Nothing\n    > Just 5\n",
+            "type": "Monocle.Optional.Optional (Maybe.Maybe a) a"
+          },
+          {
+            "name": "result",
+            "comment": " Step into the success value of a `Result`.\n\n    result.getOption (Ok 5)\n    > Just 5\n\n    result.getOption (Err \"500\")\n    > Nothing\n",
+            "type": "Monocle.Optional.Optional (Result.Result e a) a"
+          },
+          {
+            "name": "second",
+            "comment": " Step into the second element of a pair.\n\n    second.get ('a', 'b')\n    > Just 'b'\n",
+            "type": "Monocle.Lens.Lens ( a, b ) b"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Monocle.Optional",
+        "comment": " A Optional is a weaker Lens and a weaker Prism\n\n# Definition\n@docs Optional\n\n# Derived methods\n@docs compose, composeLens, modifyOption, modify, zip\n\n# Conversion\n@docs fromPrism, fromLens\n\n# Example\n\n    addressRegionOptional : Optional Address String\n    addressRegionOptional =\n        let\n            getOption a = a.region\n\n            set r a = { a | region = Just r }\n        in\n            Optional getOption set\n",
+        "aliases": [
+          {
+            "name": "Optional",
+            "comment": " In order to create Optional we need to suply 2 functions: set and getOption\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "{ getOption : a -> Maybe.Maybe b, set : b -> a -> a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "compose",
+            "comment": " Composes `Optional a b` with `Optional b c` and returns `Optional a c`\n\n    string2IntPrism : Prism String Int\n    string2IntPrism = Prism (String.toInt >> Result.toMaybe) toString\n\n    addressRegionIntOptional: Optional Address Int\n    addressRegionIntOptional = addressRegionOptional `compose` (fromPrism string2IntPrism)\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional b c -> Monocle.Optional.Optional a c"
+          },
+          {
+            "name": "composeLens",
+            "comment": " Composes `Optional a b` with `Lens b c` and returns `Optional a c`\n\n    string2CharListIso : Iso String (List Char)\n    string2CharListIso = Iso String.toList String.fromList\n\n    addressRegionListCharOptional: Optional Address (List Char)\n    addressRegionListCharOptional = addressRegionOptional `composeLens` (fromIso string2CharListIso)\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Lens.Lens b c -> Monocle.Optional.Optional a c"
+          },
+          {
+            "name": "fromLens",
+            "comment": " Casts `Lens a b` to `Optional a b` where `getOption` will return always `Just`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Optional.Optional a b"
+          },
+          {
+            "name": "fromPrism",
+            "comment": " Casts `Prism a b` to `Optional a b`\n\n    string2IntPrism : Prism String Int\n    string2IntPrism =\n        Prism (String.toInt >> Result.toMaybe) toString\n\n    stringIntOptional: Optional String Int\n    stringIntOptional = fromPrism string2IntPrism\n",
+            "type": "Monocle.Prism.Prism a b -> Monocle.Optional.Optional a b"
+          },
+          {
+            "name": "modify",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> a)` using `Optional a b`\n\n        modifyRegion: String -> String\n        modifyRegion region = String.reverse region\n\n        modifyAddressRegion: Address -> Address\n        modifyAddressRegion address = Optional.modify addressRegionOptional modifyRegion address\n",
+            "type": "Monocle.Optional.Optional a b -> (b -> b) -> a -> a"
+          },
+          {
+            "name": "modifyOption",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> Maybe a)` using `Optional a b`\n\n        modifyRegion: String -> String\n        modifyRegion region = String.reverse region\n\n        modifyAddressRegion: Address -> Maybe Address\n        modifyAddressRegion address = Optional.modifyOption addressRegionOptional modifyRegion address\n",
+            "type": "Monocle.Optional.Optional a b -> (b -> b) -> a -> Maybe.Maybe a"
+          },
+          {
+            "name": "zip",
+            "comment": " Zip `Optional a c` with `Optional b d` to form Optional for the pairs ( a, b ) ( c, d )\n",
+            "type": "Monocle.Optional.Optional a c -> Monocle.Optional.Optional b d -> Monocle.Optional.Optional ( a, b ) ( c, d )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Monocle.Prism",
+        "comment": " A Prism is a tool which optionally converts elements of type A into elements of type B and back.\n\n# Definition\n@docs Prism\n\n# Example\n\n    string2IntPrism : Prism String Int\n    string2IntPrism =\n        Prism (String.toInt >> Result.toMaybe) toString\n\n    string2IntPrism.getOption \"17896\" == Just 17896\n    string2IntPrism.getOption \"1a896\" == Nothing\n    string2IntPrism.reverseGet 1626767 = \"1626767\"\n\n# Derived methods\n@docs isMatching, modify, modifyOption, compose, composeIso\n\n# Conversion\n@docs fromIso\n\n",
+        "aliases": [
+          {
+            "name": "Prism",
+            "comment": " In order to create a `Prism` we need to supply two functions: `getOption` and `reverseGet`\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "{ getOption : a -> Maybe.Maybe b, reverseGet : b -> a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "compose",
+            "comment": " Composes `Prism a b` with `Prism b c` and returns `Prism a c`\n\n        prism = Monocle.Prism.compose string2FloatPrism float2IntPrism\n        prism.getOption \"22\" == Just 22\n        prism.getOption \"22.2\" == Nothing\n        prism.getOption \"22a\" == Nothing\n        prism.getOption \"abc\" == Nothing\n\n",
+            "type": "Monocle.Prism.Prism a b -> Monocle.Prism.Prism b c -> Monocle.Prism.Prism a c"
+          },
+          {
+            "name": "composeIso",
+            "comment": " Composes `Prism a b` with `Iso b c` and returns `Prism a c`\n\n        iso = Iso ((*) 10) ((//) 10)\n        prism = Monocle.Prism.composeIso string2IntPrism iso\n        prism.getOption \"22\" == Just 220\n        prism.getOption \"22.2\" == Nothing\n        prism.getOption \"22a\" == Nothing\n        prism.getOption \"abc\" == Nothing\n",
+            "type": "Monocle.Prism.Prism a b -> Monocle.Iso.Iso b c -> Monocle.Prism.Prism a c"
+          },
+          {
+            "name": "fromIso",
+            "comment": " Casts `Iso a b` to `Prism a b`\n",
+            "type": "Monocle.Iso.Iso a b -> Monocle.Prism.Prism a b"
+          },
+          {
+            "name": "isMatching",
+            "comment": " Checks if value of type `A` has matching element of type 'B'\n\n        Monocle.Prism.isMatching string2IntPrism \"abc\" == False\n        Monocle.Prism.isMatching string2IntPrism \"123\" == True\n",
+            "type": "Monocle.Prism.Prism a b -> a -> Bool"
+          },
+          {
+            "name": "modify",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> a)` using `Prism a b`\n\n        fx i = i * 2\n        modified = Monocle.Prism.modify string2IntPrism fx\n        modified \"22\" == \"44\"\n        modified \"abc\" == \"abc\"\n",
+            "type": "Monocle.Prism.Prism a b -> (b -> b) -> a -> a"
+          },
+          {
+            "name": "modifyOption",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> Maybe a)` using `Prism a b`\n\n        fx i = i * 2\n        modified = Monocle.Prism.modify string2IntPrism fx\n        modified \"22\" == Just \"44\"\n        modified \"abc\" == Nothing\n",
+            "type": "Monocle.Prism.Prism a b -> (b -> b) -> a -> Maybe.Maybe a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Monocle.Lens",
+        "comment": " A Lens is a functional concept which solves a very common problem:\n    how to easily update a complex immutable structure,\n    for this purpose Lens acts as a zoom into a record.\n\n# Definition\n@docs Lens\n\n# Example\n    addressStreetNameLens : Lens Address String\n    addressStreetNameLens =\n        let\n            get a = a.streetName\n\n            set sn a = { a | streetName = sn }\n        in\n            Lens get set\n\n    placeAddressLens : Lens Place Address\n    placeAddressLens =\n        let\n            get p = p.address\n\n            set a p = { p | address = a }\n        in\n            Lens get set\n\n    placeStreetName: Lens Place String\n    placeStreetName = placeAddressLens `compose` addressStreetNameLens\n\n# Derived methods\n@docs compose, modify, modifyAndMerge, zip\n\n# Conversion\n@docs fromIso\n\n",
+        "aliases": [
+          {
+            "name": "Lens",
+            "comment": " In order to create Lens we need to suply 2 functions: set and get\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "{ get : a -> b, set : b -> a -> a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "compose",
+            "comment": " Composes `Lens a b` with `Lens b c` and returns `Lens a c`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Lens.Lens b c -> Monocle.Lens.Lens a c"
+          },
+          {
+            "name": "fromIso",
+            "comment": " Casts `Iso a b` to `Lens a b`\n",
+            "type": "Monocle.Iso.Iso a b -> Monocle.Lens.Lens a b"
+          },
+          {
+            "name": "modify",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> a)` using `Lens a b`\n\n    addressStreetNameLens = Lens Address String\n    fx streetName = String.reverse streeName\n    fx2 = Lens.modify addressStreetNameLens fx\n    fx2 {streetName=\"abcdef\"} == {streetName=\"fedcba\"}\n",
+            "type": "Monocle.Lens.Lens a b -> (b -> b) -> a -> a"
+          },
+          {
+            "name": "modifyAndMerge",
+            "comment": " Modifies given function `(b -> (b,c))` to be `(a,c) -> (a,c)` using `Lens a b` and `merge` function\n\n",
+            "type": "Monocle.Lens.Lens a b -> (b -> ( b, c )) -> (c -> c -> c) -> ( a, c ) -> ( a, c )"
+          },
+          {
+            "name": "zip",
+            "comment": " Zips `Lens a c` with `Lens b d` to form Lens ( a, b ) ( c, d )\n",
+            "type": "Monocle.Lens.Lens a c -> Monocle.Lens.Lens b d -> Monocle.Lens.Lens ( a, b ) ( c, d )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Monocle.Iso",
+        "comment": " An Iso is a tool which converts elements of type A into elements of type B and back without loss.\n\n# Definition\n@docs Iso\n\n# Laws\n    Identity:  \\x -> iso.get(iso.reverseGet x) == x\n    Reversed:  \\x -> iso.reverseGet(iso.get x) == x\n\n# Example\n\n    string2CharListIso : Iso String (List Char)\n    string2CharListIso =\n        Iso String.toList String.fromList\n\n    (string2CharListIso.get \"ABcdE\") == ['A','B','c','d','E']\n    (string2CharListIso.reverseGet ['A','B','c','d','E']) == \"ABcdE\"\n\n# Derived methods\n@docs reverse, modify, compose\n",
+        "aliases": [
+          {
+            "name": "Iso",
+            "comment": " In order to create an `Iso` we need to supply two total functions: `get` and `reverseGet`\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "{ get : a -> b, reverseGet : b -> a }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "compose",
+            "comment": " Composes `Iso a b` with `Iso b c` and returns `Iso a c`\n",
+            "type": "Monocle.Iso.Iso a b -> Monocle.Iso.Iso b c -> Monocle.Iso.Iso a c"
+          },
+          {
+            "name": "modify",
+            "comment": " Modifies given function `(b -> b)` to be `(a -> a)` using `Iso a b`\n\n        someiso = Iso String.toList String.fromList\n        somefx xs =  '@' :: xs\n        modified = Iso.modify someiso somefx\n        (modified \"artur\") == \"@artur\"\n\n",
+            "type": "Monocle.Iso.Iso a b -> (b -> b) -> a -> a"
+          },
+          {
+            "name": "reverse",
+            "comment": " Creates reversed `Iso b a`, exchanges functions `get` and `reverseGet`\n\n        .get (Iso.reversed someiso) == someiso.reverseGet\n        .reverseGet (Iso.reversed someiso) == someiso.get\n        Iso.compose someiso (Iso.reversed someiso) == Iso identity identity\n",
+            "type": "Monocle.Iso.Iso a b -> Monocle.Iso.Iso b a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "avh4/elm-fifo",
     "version": "1.0.3",
     "docs": [
@@ -5715,6 +7148,54 @@
     ]
   },
   {
+    "name": "coreytrampe/elm-vendor",
+    "version": "2.0.3",
+    "docs": [
+      {
+        "name": "Vendor",
+        "comment": " A tiny module that detects the browser vendor prefix\n\n```elm\ndisplayValue : String\ndisplayValue =\n    if Vendor.prefix == Vendor.Webkit\n    then \"-webkit-flex\"\n    else \"flex\"\n```\n\n@docs Prefix, prefix\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Prefix",
+            "comment": " A union of prefix tags\n",
+            "args": [],
+            "cases": [
+              [
+                "Moz",
+                []
+              ],
+              [
+                "Webkit",
+                []
+              ],
+              [
+                "MS",
+                []
+              ],
+              [
+                "O",
+                []
+              ],
+              [
+                "Unknown",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "prefix",
+            "comment": " The detected vendor\n",
+            "type": "Vendor.Prefix"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "danielnarey/elm-css-basics",
     "version": "2.0.1",
     "docs": [
@@ -6639,24 +8120,24 @@
   },
   {
     "name": "danielnarey/elm-toolkit",
-    "version": "3.1.0",
+    "version": "3.2.1",
     "docs": [
       {
         "name": "Toolkit.Operators",
-        "comment": "\n\n## A small set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::), (:+:)\n\n# Function Application\n@docs (||>), (.|>), (:|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n# Uncurry Operators\n@docs (@@|>), (@@@|>)\n",
+        "comment": "\n\n## A small set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::), (:+:)\n\n# Function Application\n@docs (||>)\n\n## with Lists\n@docs (.|>), (:|>)\n\n## with Tuples\n@docs (..|>), (...|>), (@@|>), (@@@|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "!+>",
-            "comment": " Forward operator for Result.andThen\n\n    toInt rawString !+> toValidMonth\n",
+            "comment": " Forward operator for Result.andThen\n\n    String.toInt \"1\" !+> always (Err \"ERROR\")    --> Err \"ERROR\"\n",
             "type": "Result.Result x a -> (a -> Result.Result x b) -> Result.Result x b",
             "associativity": "left",
             "precedence": 0
           },
           {
             "name": "!=",
-            "comment": " Forward operator for Result.withDefault\n\n    String.toInt \"123\" != 0   --> 123\n    String.toInt \"abc\" != 0   --> 0\n",
+            "comment": " Forward operator for Result.withDefault\n\n    String.toInt \"123\" != 0    --> 123\n    String.toInt \"abc\" != 0    --> 0\n",
             "type": "Result.Result x a -> a -> a",
             "associativity": "left",
             "precedence": 0
@@ -6669,6 +8150,20 @@
             "precedence": 0
           },
           {
+            "name": "...|>",
+            "comment": " Forward operator for\n[map3Tuple](http://package.elm-lang.org/packages/danielnarey/elm-toolkit/latest/Toolkit-Helpers#map3Tuple)\n\n    (1,2,3) ...|> (+) 1    --> (2,3,4)\n",
+            "type": "( a, a, a ) -> (a -> b) -> ( b, b, b )",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "..|>",
+            "comment": " Forward operator for\n[map2Tuple](http://package.elm-lang.org/packages/danielnarey/elm-toolkit/latest/Toolkit-Helpers#map2Tuple)\n\n    (1,2) ..|> (+) 1    --> (2,3)\n",
+            "type": "( a, a ) -> (a -> b) -> ( b, b )",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
             "name": ".|>",
             "comment": " Forward operator for List.map\n\n    [1,4,9] .|> sqrt    --> [1,2,3]\n",
             "type": "List a -> (a -> b) -> List b",
@@ -6677,7 +8172,7 @@
           },
           {
             "name": ":+:",
-            "comment": " Construct a list from the LHS and RHS; precedence is 5 and associativity is\nright (same as `++`)\n\n    1 :+: 2   --> [1, 2]\n",
+            "comment": " Construct a list from the LHS and RHS; precedence is 5 and associativity is\nright (same as `++`)\n\n    1 :+: 2    --> [1, 2]\n",
             "type": "a -> a -> List a",
             "associativity": "right",
             "precedence": 5
@@ -6691,7 +8186,7 @@
           },
           {
             "name": "?+>",
-            "comment": " Forward operator for Maybe.andThen\n\n    head months ?+> toValidMonth\n",
+            "comment": " Forward operator for Maybe.andThen\n\n    List.head [1] ?+> always Nothing    --> Nothing\n",
             "type": "Maybe.Maybe a -> (a -> Maybe.Maybe b) -> Maybe.Maybe b",
             "associativity": "left",
             "precedence": 0
@@ -6750,7 +8245,7 @@
       },
       {
         "name": "Toolkit.Helpers",
-        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
+        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -6803,6 +8298,21 @@
             "name": "getNth",
             "comment": " Get the value at the nth place of a list without converting the list to an\narray; returns `Nothing` if the list contains fewer than `n + 1` items, or if\n`n` is negative\n\n    getNth 0 [1, 3, 9, 27]    --> Just 1\n    getNth 3 [1, 3, 9, 27]    --> Just 27\n    getNth 4 [1, 3, 9, 27]    --> Nothing\n    getNth -1 [1, 3, 9, 27]   --> Nothing\n\n",
             "type": "Int -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "map2Tuple",
+            "comment": " Apply a function to both values in a 2-tuple and return the results as a\n2-tuple\n",
+            "type": "(a -> b) -> ( a, a ) -> ( b, b )"
+          },
+          {
+            "name": "map3Tuple",
+            "comment": " Apply a function to all 3 values in a 3-tuple and return the results as a\n3-tuple\n",
+            "type": "(a -> b) -> ( a, a, a ) -> ( b, b, b )"
+          },
+          {
+            "name": "map4Tuple",
+            "comment": " Apply a function to all 4 values in a 4-tuple and return the results as a\n4-tuple\n",
+            "type": "(a -> b) -> ( a, a, a, a ) -> ( b, b, b, b )"
           },
           {
             "name": "maybe2Tuple",
@@ -7503,6 +9013,156 @@
             "name": "values",
             "comment": " Get all of the values in a dictionary. ",
             "type": "EveryDict.EveryDict k v -> List v"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "eeue56/elm-default-dict",
+    "version": "2.0.2",
+    "docs": [
+      {
+        "name": "DefaultDict",
+        "comment": " A dictionary mapping unique keys to values. A provided default is used for when\nkeys are missing. The keys can be any comparable\ntype. This includes `Int`, `Float`, `Time`, `Char`, `String`, and tuples or\nlists of comparable types.\n\nInsert, remove, and query operations all take *O(log n)* time. DefaultDictionary\nequality with `(==)` is unreliable and should not be used.\n\n# Types\n@docs DefaultDict\n\n# Build\n@docs empty, singleton, insert, update, remove\n\n# Query\n@docs isEmpty, member, get, size, getDefault, eq, fullEq\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs keys, values, toList, fromList\n\n# Transform\n@docs map, mapWithDefault, foldl, foldr, filter, partition\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "DefaultDict",
+            "comment": " A default dict which lifts the type from Core's Dict\n",
+            "args": [
+              "k",
+              "v"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Keep a key-value pair when its key does not appear in the second dictionary.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty dictionary with a given default value\n",
+            "type": "v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "eq",
+            "comment": " Element equality. Does not check equality of base\n",
+            "type": "DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v -> Bool"
+          },
+          {
+            "name": "filter",
+            "comment": " Keep a key-value pair when it satisfies a predicate.\n",
+            "type": "(comparable -> v -> Bool) -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from lowest\nkey to highest key.\n",
+            "type": "(comparable -> v -> b -> b) -> b -> DefaultDict.DefaultDict comparable v -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from highest\nkey to lowest key.\n",
+            "type": "(comparable -> v -> b -> b) -> b -> DefaultDict.DefaultDict comparable v -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert an association list into a dictionary.\nTakes a default value, and a list of key-pair tuples\n",
+            "type": "v -> List ( comparable, v ) -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "fullEq",
+            "comment": " Base + element equality\n",
+            "type": "DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v -> Bool"
+          },
+          {
+            "name": "get",
+            "comment": " Get the value associated with a key. If the key is not found, return\n`Nothing`. This is useful when you are not sure if a key will be in the\ndictionary.\n\n    animals = fromList [ (\"Tom\", Cat), (\"Jerry\", Mouse) ]\n\n    get \"Tom\"   animals == Just Cat\n    get \"Mouse\" animals == Just Mouse\n    get \"Spike\" animals == Nothing\n\n",
+            "type": "comparable -> DefaultDict.DefaultDict comparable v -> v"
+          },
+          {
+            "name": "getDefault",
+            "comment": " Helper function for grabbing the default value used in the dict\n",
+            "type": "DefaultDict.DefaultDict comparable v -> v"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a key-value pair into a dictionary. Replaces value when there is\na collision.\n",
+            "type": "comparable -> v -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "intersect",
+            "comment": " Keep a key-value pair when its key appears in the second dictionary.\nPreference is given to values in the first dictionary.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a dictionary is empty.\n\n    isEmpty empty == True\n",
+            "type": "DefaultDict.DefaultDict comparable v -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get all of the keys in a dictionary.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> List comparable"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in a dictionary.\nNotice that this function takes a function of type `comparable -> a -> a`,\nrather than Dict's `comparable a -> b`. If you want to provide a new default,\nsee mapWithDefault\n",
+            "type": "(comparable -> a -> a) -> DefaultDict.DefaultDict comparable a -> DefaultDict.DefaultDict comparable a"
+          },
+          {
+            "name": "mapWithDefault",
+            "comment": " Like map, but allows you to provide a default value too.\nWhen mapping from type `a` to type `b`, the old default of\ntype `a` won't work as it's not possible to have `DefaultDict compareable (a|b)`\nIf this is what you want, use an `Either` type instead.\n",
+            "type": "b -> (comparable -> a -> b) -> DefaultDict.DefaultDict comparable a -> DefaultDict.DefaultDict comparable b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a key is in a dictionary.\n",
+            "type": "comparable -> DefaultDict.DefaultDict comparable v -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest.\n",
+            "type": "(comparable -> v -> Bool) -> DefaultDict.DefaultDict comparable v -> ( DefaultDict.DefaultDict comparable v , DefaultDict.DefaultDict comparable v )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a key-value pair from a dictionary. If the key is not found,\nno changes are made.\n",
+            "type": "comparable -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a dictionary with one key-value pair.\n",
+            "type": "comparable -> v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "size",
+            "comment": " Get the number of key-value pairs in a dict\n",
+            "type": "DefaultDict.DefaultDict k v -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a dictionary into an association list of key-value pairs.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> List ( comparable, v )"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two dictionaries. If there is a collision, preference is given\nto the first dictionary.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "update",
+            "comment": " Update the value of a dictionary for a specific key with a given function.\n",
+            "type": "comparable -> (v -> Maybe.Maybe v) -> DefaultDict.DefaultDict comparable v -> DefaultDict.DefaultDict comparable v"
+          },
+          {
+            "name": "values",
+            "comment": " Get all of the values in a dictionary.\n",
+            "type": "DefaultDict.DefaultDict comparable v -> List v"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -24239,6 +25899,26 @@
     ]
   },
   {
+    "name": "ersocon/creditcard-validation",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Payment.CreditCard.Validation",
+        "comment": " This library can be used to validate a credit card number. It implements\nthe Luhn algorithm which checks for the checksum of the card. In general it\nworks with credit card numbers of all types (Visa, Mastercard, Maestro,\nAmerican Express, ...).\n\nBehind the scenes it transforms the given number into a list of strings to\ncreate single digits. This implementation may change in future. API will stay\nas is.\n\nThe main use case is the validation of credit card numbers entered by users in\nan input field. To avoid dependencies to parser libraries there is no\nfunction with the signature of String -> Bool.\n\n# Definition\n@docs isValid\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "isValid",
+            "comment": " Check the given credit card number for validity ",
+            "type": "Int -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "eskimoblood/elm-color-extra",
     "version": "3.2.3",
     "docs": [
@@ -25380,6 +27060,123 @@
     ]
   },
   {
+    "name": "etaque/elm-hexagons",
+    "version": "1.0.3",
+    "docs": [
+      {
+        "name": "Hexagons.Grid",
+        "comment": " A naive grid storage for hexagons: `Dict Int (Dict Int a)`\n\n# Types\n@docs Grid, Row, Tile\n\n# Finders\n@docs get, list, getPoint\n\n# Modifiers\n@docs set, delete\n",
+        "aliases": [
+          {
+            "name": "Grid",
+            "comment": " A grid is a Dict of rows\n",
+            "args": [
+              "a"
+            ],
+            "type": "Dict.Dict Int (Hexagons.Grid.Row a)"
+          },
+          {
+            "name": "Row",
+            "comment": " A row is a Dict of values\n",
+            "args": [
+              "a"
+            ],
+            "type": "Dict.Dict Int a"
+          },
+          {
+            "name": "Tile",
+            "comment": " A tile has coords and some content\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ content : a, coords : Hexagons.Axial }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "delete",
+            "comment": " Remove content from those axial coordinates within grid\n",
+            "type": "Hexagons.Axial -> Hexagons.Grid.Grid a -> Hexagons.Grid.Grid a"
+          },
+          {
+            "name": "get",
+            "comment": " Find eventual content in grid on those axial coordinates\n",
+            "type": "Hexagons.Grid.Grid a -> Hexagons.Axial -> Maybe.Maybe a"
+          },
+          {
+            "name": "getPoint",
+            "comment": " Given an hexagonal grid definition (radius and grid),\nwhat's in the hexagon holding this point?\n",
+            "type": "Float -> Hexagons.Grid.Grid a -> Hexagons.Point -> Maybe.Maybe a"
+          },
+          {
+            "name": "list",
+            "comment": " Produce a list of all tiles within grid\n",
+            "type": "Hexagons.Grid.Grid a -> List (Hexagons.Grid.Tile a)"
+          },
+          {
+            "name": "set",
+            "comment": " Add or update content to grid on those axial coordinates\n",
+            "type": "a -> Hexagons.Axial -> Hexagons.Grid.Grid a -> Hexagons.Grid.Grid a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Hexagons",
+        "comment": " Suite of functions for hexagonal grid computing, focused on horizontal grids (\"pointy topped\" hexagons) with axial coordinate system.\n\nSee http://www.redblobgames.com/grids/hexagons for reference.\n\n# Types\n@docs Axial, Point\n\n# Conversions\n@docs dims, axialToPoint, pointToAxial\n\n# Measuring\n@docs axialDistance\n\n# Drawing\n@docs axialLine, axialRange\n",
+        "aliases": [
+          {
+            "name": "Axial",
+            "comment": " Axial coordinates of an hexagon with a grid\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "Point",
+            "comment": " Point on screen (pixel)\n",
+            "args": [],
+            "type": "( Float, Float )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "axialDistance",
+            "comment": " Distance between two axial coordinates\n",
+            "type": "Hexagons.Axial -> Hexagons.Axial -> Int"
+          },
+          {
+            "name": "axialLine",
+            "comment": " List all hexagons composing a line between two hexagons.\n\nSee [Line Drawing](http://www.redblobgames.com/grids/hexagons/#line-drawing) on Red Blob Games\n",
+            "type": "Hexagons.Axial -> Hexagons.Axial -> List Hexagons.Axial"
+          },
+          {
+            "name": "axialRange",
+            "comment": " List all hexagons within given distance of this one.\n\nSee [Range](http://www.redblobgames.com/grids/hexagons/#range) on Red Blob Games\n",
+            "type": "Hexagons.Axial -> Int -> List Hexagons.Axial"
+          },
+          {
+            "name": "axialToPoint",
+            "comment": " Given hex radius and axial coords, return pixel coords of its center\n",
+            "type": "Float -> Hexagons.Axial -> Hexagons.Point"
+          },
+          {
+            "name": "dims",
+            "comment": " Given radius, returns width and height of hexagon\n",
+            "type": "Float -> ( Float, Float )"
+          },
+          {
+            "name": "pointToAxial",
+            "comment": " Given hex radius and pixel coords, returns corresponding axial coords\n",
+            "type": "Float -> Hexagons.Point -> Hexagons.Axial"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "etaque/elm-response",
     "version": "3.0.0",
     "docs": [
@@ -25438,6 +27235,283 @@
             "name": "withTask",
             "comment": " Construct a result from model and task, flipped for piping:\n\n    { model | foo = bar }\n      |> withTask someTask\n",
             "type": "(Result.Result x a -> msg) -> Task.Task x a -> model -> Response.Response model msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "etaque/elm-route-parser",
+    "version": "3.0.0",
+    "docs": [
+      {
+        "name": "RouteParser.QueryString",
+        "comment": " Tools for query string parsing and extraction\n\n@docs QueryString, parse\n",
+        "aliases": [
+          {
+            "name": "QueryString",
+            "comment": " A parsed query string is a Dict of param names to param value list.\n",
+            "args": [],
+            "type": "Dict.Dict String (List String)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "parse",
+            "comment": " Parse a query string. Parsed string must include the leading \"?\" char.\n",
+            "type": "String -> RouteParser.QueryString.QueryString"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "RouteParser",
+        "comment": " A typed router in Elm, with a nice DSL built on top of parser cominators\n(see [README](https://github.com/etaque/elm-route-parser) for usage).\n\n# DSL for simple cases\n@docs int, string, customParam, static, dyn1, dyn2, dyn3\n\n# Other route matcher builders\n@docs parserMatcher, rawMatcher, mapMatcher, mapMatchers\n\n# Because eventually you'll have to run the router\n@docs match, router\n\n# Types\n@docs Matcher, Param, Router\n",
+        "aliases": [
+          {
+            "name": "Router",
+            "comment": " A router is composed of a route parser, and a path generator.\n",
+            "args": [
+              "route"
+            ],
+            "type": "{ fromPath : String -> Maybe.Maybe route, toPath : route -> String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Matcher",
+            "comment": " A single route parser\n",
+            "args": [
+              "route"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Param",
+            "comment": " A param parser in a route\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "customParam",
+            "comment": " Build a custom param extractor from a parser instance\n",
+            "type": "Combine.Parser () a -> RouteParser.Param a"
+          },
+          {
+            "name": "dyn1",
+            "comment": " Matcher for a path with one dynamic param.\n\n    type Route = Topic Int\n    matchers = [ dyn1 Topic \"/topic/\" int \"/edit\" ]\n\n    match matchers \"/topic/1/edit\" == Just (Topic 1)\n",
+            "type": "(a -> route) -> String -> RouteParser.Param a -> String -> RouteParser.Matcher route"
+          },
+          {
+            "name": "dyn2",
+            "comment": " Matcher for a path with two dynamic params.\n\n    type Route = SubTopic Int Int\n    matchers = [ dyn2 SubTopic \"/topic/\" int \"/\" int \"\" ]\n\n    match matchers \"/topic/1/2\" == Just (SubTopic 1 2)\n",
+            "type": "(a -> b -> route) -> String -> RouteParser.Param a -> String -> RouteParser.Param b -> String -> RouteParser.Matcher route"
+          },
+          {
+            "name": "dyn3",
+            "comment": " Matcher for a path with three dynamic params.\n\n    type Route = Something String String String\n    matchers = [ dyn3 Something \"/some/\" string \"/thing/\" string \"/here/\" string \"\" ]\n\n    match matchers \"/some/cool/thing/must-be/here/i-guess\" == Just (Something \"cool\" \"must-be\" \"i-guess\")\n",
+            "type": "(a -> b -> c -> route) -> String -> RouteParser.Param a -> String -> RouteParser.Param b -> String -> RouteParser.Param c -> String -> RouteParser.Matcher route"
+          },
+          {
+            "name": "int",
+            "comment": " Extract an Int param\n",
+            "type": "RouteParser.Param Int"
+          },
+          {
+            "name": "mapMatcher",
+            "comment": " Map the result of the match\n",
+            "type": "(a -> b) -> RouteParser.Matcher a -> RouteParser.Matcher b"
+          },
+          {
+            "name": "mapMatchers",
+            "comment": " map a list of matchers from a route type to another route type.\nUseful for subrouting, like delegating one of the routes to another type :\n\n    -- global routing:\n\n    type Route = Home | Admin AdminRoute\n\n    matchers =\n      [ static Home \"/\" ] ++ (mapMatchers Admin adminMatchers)\n\n    -- can be delegated to a component without knowdedge of global routing:\n\n    type AdminRoute = Dashboard | Users\n\n    adminMatchers =\n      [ static Dashboard \"/admin\", static Users \"/users\" ]\n",
+            "type": "(a -> b) -> List (RouteParser.Matcher a) -> List (RouteParser.Matcher b)"
+          },
+          {
+            "name": "match",
+            "comment": " Given a list of matchers and a path, return the first successful match of the path.\n",
+            "type": "List (RouteParser.Matcher route) -> String -> Maybe.Maybe route"
+          },
+          {
+            "name": "parserMatcher",
+            "comment": " Build a route from a Parser instance\n",
+            "type": "Combine.Parser () route -> RouteParser.Matcher route"
+          },
+          {
+            "name": "rawMatcher",
+            "comment": " Build a route from a raw matcher function\n",
+            "type": "(String -> Maybe.Maybe route) -> RouteParser.Matcher route"
+          },
+          {
+            "name": "router",
+            "comment": " Full-featured router. A record with two properties:\n\n* `fromPath` to maybe get the route from a path,\n* `toPath`to build the path from the route, typically for links in the views.\n",
+            "type": "List (RouteParser.Matcher route) -> (route -> String) -> RouteParser.Router route"
+          },
+          {
+            "name": "static",
+            "comment": " Matcher for a static path.\n\n    type Route = About\n    matchers = [ static About \"/about\" ]\n\n    match matchers \"/about\" == Just About\n",
+            "type": "route -> String -> RouteParser.Matcher route"
+          },
+          {
+            "name": "string",
+            "comment": " Extract a String param\n",
+            "type": "RouteParser.Param String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "etaque/elm-transit",
+    "version": "7.0.3",
+    "docs": [
+      {
+        "name": "Transit",
+        "comment": " Styled transitions with minimal boilerplate, typically for page transitions in single page apps.\n\nSee README or [example](https://github.com/etaque/elm-transit/blob/master/example/src/Main.elm) for usage.\n\nUses elm-animations and Cmd.tick for animation logic.\n\n# State\n@docs Transition, WithTransition, empty\n\n# Update\n@docs Msg, start, tick, subscriptions\n\n# View\n@docs getValue, getStep, Step\n",
+        "aliases": [
+          {
+            "name": "WithTransition",
+            "comment": " Extended type for the parent model holding the transition.\n",
+            "args": [
+              "model"
+            ],
+            "type": "{ model | transition : Transit.Transition }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Transition msg, to be wrapped in your own msg type.\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Step",
+            "comment": " Transition step: Exit -> *send message* -> Enter -> Done.\n",
+            "args": [],
+            "cases": [
+              [
+                "Exit",
+                []
+              ],
+              [
+                "Enter",
+                []
+              ],
+              [
+                "Done",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Transition",
+            "comment": " Opaque type for transition state storage.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Empty transition state, as initial value in the model.\n",
+            "type": "Transit.Transition"
+          },
+          {
+            "name": "getStep",
+            "comment": " Extract current animation step.\n",
+            "type": "Transit.Transition -> Transit.Step"
+          },
+          {
+            "name": "getValue",
+            "comment": " Extract current animation value (a float between 0 and 1).\n",
+            "type": "Transit.Transition -> Float"
+          },
+          {
+            "name": "start",
+            "comment": " Start the transition with the following parameters:\n\n* `tagger` to wrap Transit's Msg into your app's Msg type (consistent with `tick` signature, saves you one `Cmd.map`)\n* `parentMsg` to send at end of exit\n* `durations` of transition steps (exit phase then enter phase)\n* `parent` is the model storing the Transition, to update with new transition state\n\nReturns a tuple that you can directly emit from your `update`.\n",
+            "type": "(Transit.Msg msg -> msg) -> msg -> ( Time.Time, Time.Time ) -> Transit.WithTransition parent -> ( Transit.WithTransition parent, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "subscriptions",
+            "comment": " Animation frame subscription. Must be called by your component's subscription function.\n",
+            "type": "(Transit.Msg msg -> msg) -> Transit.WithTransition parent -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "tick",
+            "comment": " Where all the logic happens. Run transition steps, and triggers timeline's parent message when needed.\n\n* `tagger` to wrap Transit's msg into app's Msg type, has to be same type of timeline.msg,\n* `msg` is the Transit message to process,\n* `parent` is the model storing the Transition, for transition state update.\n",
+            "type": "(Transit.Msg msg -> msg) -> Transit.Msg msg -> Transit.WithTransition parent -> ( Transit.WithTransition parent, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "etaque/elm-transit-style",
+    "version": "3.0.1",
+    "docs": [
+      {
+        "name": "TransitStyle",
+        "comment": " Animations for elm-transit, to be used on elm-html `style` attribute.\n\n    div\n      [ style (fadeSlide 100 model.transition) ]\n      [ text \"Some content\" ]\n\n# Combinations\n@docs fadeSlide\n\n# Slide left\n@docs slide, slideOut, slideIn\n\n# Fade\n@docs fade, fadeOut, fadeIn\n\n# Tooling to create animations\n@docs compose, Style\n",
+        "aliases": [
+          {
+            "name": "Style",
+            "comment": " Just an alias for elm-html style value\n",
+            "args": [],
+            "type": "List ( String, String )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "compose",
+            "comment": " Compose an animation with `exit` and `enter` phases.\n",
+            "type": "(Float -> TransitStyle.Style) -> (Float -> TransitStyle.Style) -> Transit.Transition -> TransitStyle.Style"
+          },
+          {
+            "name": "fade",
+            "comment": " Fade animation\n",
+            "type": "Transit.Transition -> TransitStyle.Style"
+          },
+          {
+            "name": "fadeIn",
+            "comment": " Fade in (enter).\n",
+            "type": "Float -> TransitStyle.Style"
+          },
+          {
+            "name": "fadeOut",
+            "comment": " Fade out (exit).\n",
+            "type": "Float -> TransitStyle.Style"
+          },
+          {
+            "name": "fadeSlide",
+            "comment": " Combine fade and slideLeft with the specified offset\n",
+            "type": "Float -> Transit.Transition -> TransitStyle.Style"
+          },
+          {
+            "name": "slide",
+            "comment": " Slide animation, with the specified offset.\nGreater than 0 to right, lesser to left.\n",
+            "type": "Float -> Transit.Transition -> TransitStyle.Style"
+          },
+          {
+            "name": "slideIn",
+            "comment": " Slide in (enter) by translating on X for desired offset\n",
+            "type": "Float -> Float -> TransitStyle.Style"
+          },
+          {
+            "name": "slideOut",
+            "comment": " Slide out (exit) by translating on X for desired offset\n",
+            "type": "Float -> Float -> TransitStyle.Style"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -28038,6 +30112,26 @@
         ],
         "types": [],
         "values": [],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "ggb/porterstemmer",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "PorterStemmer",
+        "comment": " Elm implementation of the classical Porter Stemming-algorithm. The algorithm\nis described in [this paper](http://tartarus.org/martin/PorterStemmer/def.txt)\nand on [Wikipedia](https://en.wikipedia.org/wiki/Stemming).\nThe implementation is inspired by the [JavaScript](http://tartarus.org/martin/PorterStemmer/js.txt)-\nand the [Haskell](http://tartarus.org/martin/PorterStemmer/haskell.txt)-implementation.\n\nThe module exposes a single function.\n\n@docs stem\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "stem",
+            "comment": " The stem-function takes a word and returns its stem.\n\n    stem \"sky\" == \"sky\"\n    stem \"hopefulness\" == \"hope\"\n",
+            "type": "String -> String"
+          }
+        ],
         "generated-with-elm-version": "0.18.0"
       }
     ]
@@ -31154,7 +33248,7 @@
   },
   {
     "name": "krisajenkins/remotedata",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "RemoteData.Infix",
@@ -31229,7 +33323,7 @@
           {
             "name": "andThen",
             "comment": " Chain together RemoteData function calls.\n",
-            "type": "RemoteData.RemoteData e a -> (a -> RemoteData.RemoteData e b) -> RemoteData.RemoteData e b"
+            "type": "(a -> RemoteData.RemoteData e b) -> RemoteData.RemoteData e a -> RemoteData.RemoteData e b"
           },
           {
             "name": "append",
@@ -33541,6 +35635,147 @@
             "name": "truncate",
             "comment": " Like Elm's basic `truncate` but works on the full length of a float's 64 \nbits. So it's more precise.\n\n    x = 9007199254740.99\n\n    Basics.truncate x -- 652835028 (which is not correct)\n    Round.truncate x -- 9007199254740 (which is)\n",
             "type": "Float -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "nphollon/collision",
+    "version": "3.0.2",
+    "docs": [
+      {
+        "name": "Collision",
+        "comment": " Detect collisions between rigid three-dimensional objects. The process goes like this:\n\n1. Start with a set of triangular faces that describe the shape of an object.\n\n2. Use `create` to convert the list of faces into a `Bounds` value. Creating the bounds can be time-consuming, so you will want to do this before you start the time loop.\n\n3. If you want to create your bounds ahead of time, you can `encode` them to JSON and `decode` them later.\n\n4. Once your simulation/game is running, test for collisions using `collide`.\n\nThis module will not work for 2D objects.\n\n# Collision Detection\n@docs Face, face, Bounds, create, empty, Body, collide\n\n# Working with JSON\n@docs encode, decode\n\n# Debugging\n\nChances are you won't need to use the functions below. They are used by the Collision Visualizer. You can use them along with the `Collision.Tree` module to examine the collision trees.\n\n@docs BoundingBox, collisionMap\n",
+        "aliases": [
+          {
+            "name": "Body",
+            "comment": " An object that is positioned and oriented in three-dimensional space. The bounds of the object are given in the body's reference frame. The `Frame` type is defined in [nphollon/geo3d](package.elm-lang.org/packages/nphollon/geo3d/latest/Frame).\n\nBefore testing for a collision, we use the position and orientation to move the bounds into the world's reference frame. This way, we can move our objects through the world, but we don't have to re-compute the bounds (as long as the object does not change shape).\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ a | frame : Frame.Frame, bounds : Collision.Bounds }"
+          },
+          {
+            "name": "BoundingBox",
+            "comment": " An oriented bounding box. A, B, and C are the radiuses, or half-widths, of the box along its X, Y, and Z axes, respectively. The frame describes the placement of the bounding box relative to the body's reference frame.\n",
+            "args": [],
+            "type": "{ a : Float, b : Float, c : Float, frame : Frame.Frame }"
+          },
+          {
+            "name": "Bounds",
+            "comment": " The boundary data for an object, stored as an OBBTree.\n",
+            "args": [],
+            "type": "Collision.Tree.Tree Collision.BoundingBox Collision.Face"
+          },
+          {
+            "name": "Face",
+            "comment": " A triangle. The surface of your colliding objects is described by a collection of triangular faces. The `Vector` type is defined in [nphollon/geo3d](package.elm-lang.org/packages/nphollon/geo3d/latest/Vector).\n",
+            "args": [],
+            "type": "{ p : Vector.Vector, q : Vector.Vector, r : Vector.Vector }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "collide",
+            "comment": " Determine whether two bodies collide.\n",
+            "type": "Collision.Body a -> Collision.Body b -> Bool"
+          },
+          {
+            "name": "collisionMap",
+            "comment": " Given two bodies, A and B, return the set of tree coordinates where the bounding tree of A collides with the bounding tree of B. This gives you an inkling of how the collision algorithm works. In general, boxes that collide with boxes or leaves on the same level are hits, and leaves that collide with leafs are hits.\n\nIf A has a bounding box at (1, 2), and it collides with a bounding box in B at (1, 4), then `collisionMap a b` will include (1, 2), and `collisionMap b a` will include (1, 4).\n\nIf A has a leaf at (3, 0), and it collides with a leaf in B at (4, 2), then `collisionMap a b` will include (3, 0), and `collisionMap b a` will include (4, 2).\n\nCheck out the Collision Visualizer to see this function in action.\n\nFor more information about how the tree coordinates work, see `Collision.Tree`.\n",
+            "type": "Collision.Body a -> Collision.Body b -> Set.Set ( Int, Int )"
+          },
+          {
+            "name": "create",
+            "comment": " Generate the bounding tree for an object. The list of faces defines the surface.\n\nThe overall time to build the OBBTree is O(n log^2 n), where n is the number of faces.\n",
+            "type": "List Collision.Face -> Collision.Bounds"
+          },
+          {
+            "name": "decode",
+            "comment": " A JSON decoder for an OBBTree encoded with the above function.\n",
+            "type": "Json.Decode.Decoder Collision.Bounds"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty bounding tree. This will not collide with anything.\n",
+            "type": "Collision.Bounds"
+          },
+          {
+            "name": "encode",
+            "comment": " Encode an OBBTree as JSON.\n",
+            "type": "Collision.Bounds -> Json.Encode.Value"
+          },
+          {
+            "name": "face",
+            "comment": " Create a triangular face, given the positions of its three vertexes. The vertexes can be given in any order.\n",
+            "type": "Vector.Vector -> Vector.Vector -> Vector.Vector -> Collision.Face"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Collision.Tree",
+        "comment": " This module defines the tree structure used in the `Bounds` type. You don't need to import this module if you are just doing collision detection. But you may find it useful for debugging.\n\nWe identify nodes in the tree using a two-dimensional coordinate system. The first coordinate measures distance from the root node. The second coordinate measures how far \"from the left\" the node is. So the root node is at (0,0), its two children are (1,0) and (1,1), their children are (2,0) through (2,3), and so on.\n\n# Definition\n\n@docs Tree\n\n# Inspecting\n\n@docs depth, leaves, internals, subtreeAt, toTheLeft, toTheRight\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Tree",
+            "comment": " A binary tree type. The the internal nodes can store differently-typed data than the leaf nodes.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "cases": [
+              [
+                "Leaf",
+                [
+                  "b"
+                ]
+              ],
+              [
+                "Node",
+                [
+                  "a",
+                  "Collision.Tree.Tree a b",
+                  "Collision.Tree.Tree a b"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "depth",
+            "comment": " Return the maximum depth of the tree.\n\n    depth (Leaf 1) == 1\n    depth (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5)) == 3\n",
+            "type": "Collision.Tree.Tree a b -> Int"
+          },
+          {
+            "name": "internals",
+            "comment": " Return of list of internal node values, tagged with tree coordinates.\n\n    internals (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5))\n      == [ ((0,0), 1), ((1,0), 2) ]\n",
+            "type": "Collision.Tree.Tree a b -> List ( ( Int, Int ), a )"
+          },
+          {
+            "name": "leaves",
+            "comment": " Return a list of leaf values, tagged with tree coordinates.\n\n    leaves (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5))\n      == [ ((2,0), 3), ((2,1), 4), ((1,1), 5) ]\n",
+            "type": "Collision.Tree.Tree a b -> List ( ( Int, Int ), b )"
+          },
+          {
+            "name": "subtreeAt",
+            "comment": " Return the subtree of a given tree, whose root node is at the given coordinates. If the coordinates are out of bounds, return the nearest ancestor.\n\n    subtreeAt (1,0) (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5))\n      == Node 2 (Leaf 3) (Leaf 4)\n\n    subtreeAt (2,1) (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5))\n      == Leaf 4\n\n    subtreeAt (2,3) (Node 1 (Node 2 (Leaf 3) (Leaf 4)) (Leaf 5))\n      == Leaf 5\n",
+            "type": "( Int, Int ) -> Collision.Tree.Tree a b -> Collision.Tree.Tree a b"
+          },
+          {
+            "name": "toTheLeft",
+            "comment": " Given a pair of tree coordinates, return the coordinates of the left child node.\n\n    toTheLeft (0,0) == (1,0)\n    toTheLeft (1,1) == (2,2)\n    toTheLeft (4,7) == (5,14)\n",
+            "type": "( Int, Int ) -> ( Int, Int )"
+          },
+          {
+            "name": "toTheRight",
+            "comment": " Given a pair of tree coordinates, return the coordinates of the right child node.\n\n    toTheRight (0,0) == (1,1)\n    toTheRight (1,1) == (2,3)\n    toTheRight (4,7) == (5,15)\n",
+            "type": "( Int, Int ) -> ( Int, Int )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -36109,6 +38344,63 @@
             "name": "suggestWith",
             "comment": " Suggest with passed in domain lists.\n\n* domains is list of known valid domains\n* top level domains is allowed to be empty\n* second level domains is allowed to be empty\n\n",
             "type": "List String -> List String -> List String -> String -> Maybe.Maybe ( String, String, String )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "rluiten/sparsevector",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "SparseVector",
+        "comment": " SparseVector is an n-dimension sparse vector.\n\nVery simple implementation with just the functions I needed at the time for Lunrelm.\n\nModel stored in Dict with index as key.\n\nDimension of vector is not held, so there is no way to check that dot or\ncosineSimilarity are both using the same dimension vector.\n\n@docs SparseVector\n@docs empty\n@docs isEmpty\n@docs insert\n@docs insertList\n\n@docs magnitude\n@docs dot\n@docs cosineSimilarity\n\nCopyright (c) 2016 Robin Luiten\n\n",
+        "aliases": [
+          {
+            "name": "SparseVector",
+            "comment": " SparseVector type alias ",
+            "args": [],
+            "type": "Dict.Dict Int Float"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "cosineSimilarity",
+            "comment": " Calculates the cosine similarity between vectors.\n",
+            "type": "SparseVector.SparseVector -> SparseVector.SparseVector -> Float"
+          },
+          {
+            "name": "dot",
+            "comment": " Calculates the dot product between vectors.\n",
+            "type": "SparseVector.SparseVector -> SparseVector.SparseVector -> Float"
+          },
+          {
+            "name": "empty",
+            "comment": " Empty SparseVector ",
+            "type": "SparseVector.SparseVector"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert value in vector.\n",
+            "type": "Int -> Float -> SparseVector.SparseVector -> SparseVector.SparseVector"
+          },
+          {
+            "name": "insertList",
+            "comment": " Insert list of values in vector.\n",
+            "type": "List ( Int, Float ) -> SparseVector.SparseVector -> SparseVector.SparseVector"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Return true if vector is empty ",
+            "type": "SparseVector.SparseVector -> Bool"
+          },
+          {
+            "name": "magnitude",
+            "comment": " Calculates magnitude of vector.\n\nSqrt of Sum of Squares of each dimension value.\n",
+            "type": "SparseVector.SparseVector -> Float"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -39404,6 +41696,81 @@
     ]
   },
   {
+    "name": "rtfeldman/elm-validate",
+    "version": "1.1.3",
+    "docs": [
+      {
+        "name": "Validate",
+        "comment": " Convenience functions for validating data.\n\n# Validating a subject\n@docs Validator, ifBlank, ifNotInt, ifEmptyDict, ifEmptySet, ifInvalid, ifNothing, ifInvalidEmail\n\n\n# Combining validators\n@docs all, any, eager\n",
+        "aliases": [
+          {
+            "name": "Validator",
+            "comment": " A `Validator` is a function which takes a subject and returns a list of errors\ndescribing anything invalid about that subject.\n\nAn empty error list means the subject was valid.\n",
+            "args": [
+              "error",
+              "subject"
+            ],
+            "type": "subject -> List error"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "all",
+            "comment": " Run each of the given validators, in order, and return their concatenated\nerror lists.\n",
+            "type": "List (Validate.Validator error subject) -> Validate.Validator error subject"
+          },
+          {
+            "name": "any",
+            "comment": " Return `True` if none of the given validators returns any errors for the given\nsubject, and `False` if any validator returns one or more errors.\n",
+            "type": "List (Validate.Validator error subject) -> subject -> Bool"
+          },
+          {
+            "name": "eager",
+            "comment": " Run each of the given validators, in order, stopping after the first error\nand returning it. If no errors are encountered, return `Nothing`.\n",
+            "type": "List (Validate.Validator error subject) -> subject -> Maybe.Maybe error"
+          },
+          {
+            "name": "ifBlank",
+            "comment": " Return an error if the given `String` is empty, or if it contains only\nwhitespace characters.\n",
+            "type": "error -> Validate.Validator error String"
+          },
+          {
+            "name": "ifEmptyDict",
+            "comment": " Return an error if the given `Dict` is empty.\n",
+            "type": "error -> Validate.Validator error (Dict.Dict comparable v)"
+          },
+          {
+            "name": "ifEmptySet",
+            "comment": " Return an error if the given `Set` is empty.\n",
+            "type": "error -> Validate.Validator error (Set.Set comparable)"
+          },
+          {
+            "name": "ifInvalid",
+            "comment": " Return an error if the given predicate returns `True` for the given\nsubject.\n",
+            "type": "(subject -> Bool) -> error -> Validate.Validator error subject"
+          },
+          {
+            "name": "ifInvalidEmail",
+            "comment": " Return an error if the given email string is malformed.\n",
+            "type": "error -> Validate.Validator error String"
+          },
+          {
+            "name": "ifNotInt",
+            "comment": " Return an error if the given `String` cannot be parsed as an `Int`.\n",
+            "type": "error -> Validate.Validator error String"
+          },
+          {
+            "name": "ifNothing",
+            "comment": " Return an error if given a `Maybe` that is `Nothing`.\n",
+            "type": "error -> Validate.Validator error (Maybe.Maybe a)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "rtfeldman/html-test-runner",
     "version": "2.0.0",
     "docs": [
@@ -39607,6 +41974,401 @@
             "name": "hex",
             "comment": " Given a string of arbitrary length, returns a string of 32 hexadecimal characters (a-f, 0-9)\nrepresenting the 128-bit MD5 message digest.\n\n    hex \"\"          == \"d41d8cd98f00b204e9800998ecf8427e\"\n    hex \"foobarbaz\" == \"6df23dc03f9b54cc38a0fc1483df6e21\"\n\nUnlike the [Javascript program](https://css-tricks.com/snippets/javascript/javascript-md5/) upon which this\nimplementation is based, CRLF pairs in the input are not automatically replaced with LFs prior to computing\nthe digest. If you want that behaviour you should adjust the input yourself before evaluating the function.\nFor example:\n\n    myHex : String -> String\n    myHex input =\n        let\n            myInput =\n                Regex.replace Regex.All (Regex.regex \"\\x0D\\n\") (\\_ -> \"\\n\") input\n        in\n            hex myInput\n",
             "type": "String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "scottcorgan/keyboard-combo",
+    "version": "2.0.2",
+    "docs": [
+      {
+        "name": "Keyboard.Combo",
+        "comment": " Provides helpers to call messages on the given key combinations\n\n## Types\n\n@docs Model, Msg, KeyCombo, Key\n\n## Setup\n\n    import Keyboard.Combo\n\n    type alias Model =\n        { combos : Keyboard.Combo.Model Msg }\n\n    type Msg\n        = Save\n        | SaveAll\n        | RandomThing\n        | ComboMsg Keyboard.Combo.Msg\n\n    keyboardCombos : List (Keyboard.Combo.KeyCombo Msg)\n    keyboardCombos =\n        [ Keyboard.Combo.combo2 ( Keyboard.Combo.control, Keyboard.Combo.s ) Save\n        , Keyboard.Combo.combo2 ( Keyboard.Combo.control, Keyboard.Combo.a ) SelectAll\n        , Keyboard.Combo.combo3 ( Keyboard.Combo.control, Keyboard.Combo.alt, Keyboard.Combo.e ) RandomThing\n        ]\n\n    init : ( Model, Cmd Msg )\n    init =\n        { combos = Keyboard.Combo.init ComboMsg keyboardCombos } ! []\n\n\n    subscriptions : Model -> Sub Msg\n    subscriptions model =\n        Keyboard.Combo.subscriptions model.combos\n\n@docs init, subscriptions, update\n\n## Combo Helpers\n\n    import Keyboard.Combo\n\n    type Msg\n        = Save\n        | SaveAll\n        | RandomThing\n\n    keyboardCombos : List (Keyboard.Combo.KeyCombo Msg)\n    keyboardCombos =\n        [ Keyboard.Combo.combo2 ( Keyboard.Combo.control, Keyboard.Combo.s ) Save\n        , Keyboard.Combo.combo2 ( Keyboard.Combo.control, Keyboard.Combo.a ) SelectAll\n        , Keyboard.Combo.combo3 ( Keyboard.Combo.control, Keyboard.Combo.alt, Keyboard.Combo.e ) RandomThing\n        ]\n\n@docs combo1, combo2, combo3, combo4\n\n## Modifiers\n\n@docs super, command, shift, control, alt, option, enter, tab, escape, space, backspace, delete\n\n\n## Letters\n\n@docs a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z\n\n## Number Helpers\n\n@docs zero, one, two, three, four, five, six, seven, eight, nine\n\n## Arrow Helpers\n\n@docs left, right, up, down\n\n\n## Punctuation\n\n@docs period, comma, semicolon, singleQuote, minus, equals, openBracket, closeBracket, backSlash, forwardSlash, backTick\n",
+        "aliases": [
+          {
+            "name": "Key",
+            "comment": " Each key uses this type\n",
+            "args": [],
+            "type": "Keyboard.Extra.Key"
+          },
+          {
+            "name": "Model",
+            "comment": " Internal state that keeps track of keys currently pressed and key combos\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ keys : Keyboard.Extra.Model , combos : List (Keyboard.Combo.KeyCombo msg) , toMsg : Keyboard.Combo.Msg -> msg }"
+          }
+        ],
+        "types": [
+          {
+            "name": "KeyCombo",
+            "comment": " Combo length types\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Internal update messages\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "a",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "alt",
+            "comment": " Helper for alt key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "b",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "backSlash",
+            "comment": " Helper for a `\\`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "backTick",
+            "comment": " Helper for a `` ` ``\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "backspace",
+            "comment": " Helper for backspace key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "c",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "closeBracket",
+            "comment": " Helper for a `]`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "combo1",
+            "comment": " Helper to define a key combo of one key\n",
+            "type": "Keyboard.Combo.Key -> msg -> Keyboard.Combo.KeyCombo msg"
+          },
+          {
+            "name": "combo2",
+            "comment": " Helper to define a key combo of two keys\n",
+            "type": "( Keyboard.Combo.Key, Keyboard.Combo.Key ) -> msg -> Keyboard.Combo.KeyCombo msg"
+          },
+          {
+            "name": "combo3",
+            "comment": " Helper to define a key combo of three keys\n",
+            "type": "( Keyboard.Combo.Key, Keyboard.Combo.Key, Keyboard.Combo.Key ) -> msg -> Keyboard.Combo.KeyCombo msg"
+          },
+          {
+            "name": "combo4",
+            "comment": " Helper to define a key combo of four keys\n",
+            "type": "( Keyboard.Combo.Key , Keyboard.Combo.Key , Keyboard.Combo.Key , Keyboard.Combo.Key ) -> msg -> Keyboard.Combo.KeyCombo msg"
+          },
+          {
+            "name": "comma",
+            "comment": " Helper for a `,`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "command",
+            "comment": " Helper for macOS command key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "control",
+            "comment": " Helper for control key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "d",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "delete",
+            "comment": " Helper for delete key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "down",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "e",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "eight",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "enter",
+            "comment": " Helper for enter key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "equals",
+            "comment": " Helper for a `=`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "escape",
+            "comment": " Helper for escape key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "f",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "five",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "forwardSlash",
+            "comment": " Helper for a `/`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "four",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "g",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "h",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "i",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "init",
+            "comment": " Initialize the module\n",
+            "type": "(Keyboard.Combo.Msg -> msg) -> List (Keyboard.Combo.KeyCombo msg) -> Keyboard.Combo.Model msg"
+          },
+          {
+            "name": "j",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "k",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "l",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "left",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "m",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "minus",
+            "comment": " Helper for a `-`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "n",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "nine",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "o",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "one",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "openBracket",
+            "comment": " Helper for a `[`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "option",
+            "comment": " Helper for macOS option key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "p",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "period",
+            "comment": " Helper for a `.`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "q",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "r",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "right",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "s",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "semicolon",
+            "comment": " Helper for a `;`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "seven",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "shift",
+            "comment": " Helper for shift key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "singleQuote",
+            "comment": " Helper for a `'`\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "six",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "space",
+            "comment": " Helper for space key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "subscriptions",
+            "comment": " Subscribe to module key events\n",
+            "type": "Keyboard.Combo.Model parentMsg -> Platform.Sub.Sub parentMsg"
+          },
+          {
+            "name": "super",
+            "comment": " Helper for super key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "t",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "tab",
+            "comment": " Helper for tab key\n",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "three",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "two",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "u",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "up",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "update",
+            "comment": " Update the internal model\n",
+            "type": "Keyboard.Combo.Msg -> Keyboard.Combo.Model msg -> Keyboard.Combo.Model msg"
+          },
+          {
+            "name": "v",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "w",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "x",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "y",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "z",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
+          },
+          {
+            "name": "zero",
+            "comment": " ",
+            "type": "Keyboard.Combo.Key"
           }
         ],
         "generated-with-elm-version": "0.18.0"
