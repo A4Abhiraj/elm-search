@@ -9399,7 +9399,7 @@
   },
   {
     "name": "arturopala/elm-monocle",
-    "version": "1.3.1",
+    "version": "1.4.0",
     "docs": [
       {
         "name": "Monocle.Common",
@@ -9452,7 +9452,7 @@
       },
       {
         "name": "Monocle.Optional",
-        "comment": " A Optional is a weaker Lens and a weaker Prism\n\n# Definition\n@docs Optional\n\n# Derived methods\n@docs compose, composeLens, modifyOption, modify, zip\n\n# Conversion\n@docs fromPrism, fromLens\n\n# Example\n\n    addressRegionOptional : Optional Address String\n    addressRegionOptional =\n        let\n            getOption a = a.region\n\n            set r a = { a | region = Just r }\n        in\n            Optional getOption set\n",
+        "comment": " A Optional is a weaker Lens and a weaker Prism\n\n# Definition\n@docs Optional\n\n# Derived methods\n@docs compose, composeLens, modifyOption, modify, modify2, modify3, zip, tuple, tuple3\n\n# Conversion\n@docs fromPrism, fromLens\n\n# Example\n\n    addressRegionOptional : Optional Address String\n    addressRegionOptional =\n        let\n            getOption a = a.region\n\n            set r a = { a | region = Just r }\n        in\n            Optional getOption set\n",
         "aliases": [
           {
             "name": "Optional",
@@ -9468,12 +9468,12 @@
         "values": [
           {
             "name": "compose",
-            "comment": " Composes `Optional a b` with `Optional b c` and returns `Optional a c`\n\n    string2IntPrism : Prism String Int\n    string2IntPrism = Prism (String.toInt >> Result.toMaybe) toString\n\n    addressRegionIntOptional: Optional Address Int\n    addressRegionIntOptional = addressRegionOptional `compose` (fromPrism string2IntPrism)\n",
+            "comment": " Composes `Optional a b` with `Optional b c` and returns `Optional a c`\n\n    string2IntPrism : Prism String Int\n    string2IntPrism = Prism (String.toInt >> Result.toMaybe) toString\n\n    addressRegionIntOptional: Optional Address Int\n    addressRegionIntOptional = compose addressRegionOptional (fromPrism string2IntPrism)\n",
             "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional b c -> Monocle.Optional.Optional a c"
           },
           {
             "name": "composeLens",
-            "comment": " Composes `Optional a b` with `Lens b c` and returns `Optional a c`\n\n    string2CharListIso : Iso String (List Char)\n    string2CharListIso = Iso String.toList String.fromList\n\n    addressRegionListCharOptional: Optional Address (List Char)\n    addressRegionListCharOptional = addressRegionOptional `composeLens` (fromIso string2CharListIso)\n",
+            "comment": " Composes `Optional a b` with `Lens b c` and returns `Optional a c`\n\n    string2CharListIso : Iso String (List Char)\n    string2CharListIso = Iso String.toList String.fromList\n\n    addressRegionListCharOptional: Optional Address (List Char)\n    addressRegionListCharOptional = composeLens addressRegionOptional (fromIso string2CharListIso)\n",
             "type": "Monocle.Optional.Optional a b -> Monocle.Lens.Lens b c -> Monocle.Optional.Optional a c"
           },
           {
@@ -9492,9 +9492,29 @@
             "type": "Monocle.Optional.Optional a b -> (b -> b) -> a -> a"
           },
           {
+            "name": "modify2",
+            "comment": " Modifies given function `(b,d) -> (b,d)` to be `(a,c) -> (a,c)` using `Optional a b` and `Optional c d`\n\n    Function will be invoked ONLY when for ALL arguments `a` and `c` method `Optional.getOption` returns some value.\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional c d -> (( b, d ) -> ( b, d )) -> ( a, c ) -> ( a, c )"
+          },
+          {
+            "name": "modify3",
+            "comment": " Modifies given function `( b, d, f ) -> ( b, d, f )` to be `( a, c, e ) -> ( a, c, e )` using `Optional a b` and `Optional c d` and `Optional e f`\n\n    Function will be invoked ONLY when for ALL arguments `a`,`c`,`f` method `Optional.getOption` returns some value.\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional c d -> Monocle.Optional.Optional e f -> (( b, d, f ) -> ( b, d, f )) -> ( a, c, e ) -> ( a, c, e )"
+          },
+          {
             "name": "modifyOption",
             "comment": " Modifies given function `(b -> b)` to be `(a -> Maybe a)` using `Optional a b`\n\n        modifyRegion: String -> String\n        modifyRegion region = String.reverse region\n\n        modifyAddressRegion: Address -> Maybe Address\n        modifyAddressRegion address = Optional.modifyOption addressRegionOptional modifyRegion address\n",
             "type": "Monocle.Optional.Optional a b -> (b -> b) -> a -> Maybe.Maybe a"
+          },
+          {
+            "name": "tuple",
+            "comment": " Tuple `Optional a b` with `Optional a c` and returns `Optional a (b,c)`\n\n    Method `Optional.getOption` returns pair of values only when both given optionals return some value.\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional a c -> Monocle.Optional.Optional a ( b, c )"
+          },
+          {
+            "name": "tuple3",
+            "comment": " Tuple `Optional a b` with `Optional a c` with `Optional a d` and returns `Optional a (b,c,d)`\n\n    Method `Optional.getOption` returns triple of values only when all given optionals return some value.\n",
+            "type": "Monocle.Optional.Optional a b -> Monocle.Optional.Optional a c -> Monocle.Optional.Optional a d -> Monocle.Optional.Optional a ( b, c, d )"
           },
           {
             "name": "zip",
@@ -9555,7 +9575,7 @@
       },
       {
         "name": "Monocle.Lens",
-        "comment": " A Lens is a functional concept which solves a very common problem:\n    how to easily update a complex immutable structure,\n    for this purpose Lens acts as a zoom into a record.\n\n# Definition\n@docs Lens\n\n# Example\n    addressStreetNameLens : Lens Address String\n    addressStreetNameLens =\n        let\n            get a = a.streetName\n\n            set sn a = { a | streetName = sn }\n        in\n            Lens get set\n\n    placeAddressLens : Lens Place Address\n    placeAddressLens =\n        let\n            get p = p.address\n\n            set a p = { p | address = a }\n        in\n            Lens get set\n\n    placeStreetName: Lens Place String\n    placeStreetName = placeAddressLens `compose` addressStreetNameLens\n\n# Derived methods\n@docs compose, modify, modifyAndMerge, zip\n\n# Conversion\n@docs fromIso\n\n",
+        "comment": " A Lens is a functional concept which solves a very common problem:\n    how to easily update a complex immutable structure,\n    for this purpose Lens acts as a zoom into a record.\n\n# Definition\n@docs Lens\n\n# Example\n    addressStreetNameLens : Lens Address String\n    addressStreetNameLens =\n        let\n            get a = a.streetName\n\n            set sn a = { a | streetName = sn }\n        in\n            Lens get set\n\n    placeAddressLens : Lens Place Address\n    placeAddressLens =\n        let\n            get p = p.address\n\n            set a p = { p | address = a }\n        in\n            Lens get set\n\n    placeStreetName: Lens Place String\n    placeStreetName = compose placeAddressLens addressStreetNameLens\n\n# Derived methods\n@docs compose, modify, modify2, modify3, modifyAndMerge, zip, tuple, tuple3\n\n# Conversion\n@docs fromIso\n\n",
         "aliases": [
           {
             "name": "Lens",
@@ -9585,9 +9605,29 @@
             "type": "Monocle.Lens.Lens a b -> (b -> b) -> a -> a"
           },
           {
+            "name": "modify2",
+            "comment": " Modifies given function `(b,d) -> (b,d)` to be `(a,c) -> (a,c)` using `Lens a b` and `Lens c d`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Lens.Lens c d -> (( b, d ) -> ( b, d )) -> ( a, c ) -> ( a, c )"
+          },
+          {
+            "name": "modify3",
+            "comment": " Modifies given function `(b,d,f) -> (b,d,f)` to be `(a,c,e) -> (a,c,e)` using `Lens a b` and `Lens c d` and `Lens e f`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Lens.Lens c d -> Monocle.Lens.Lens e f -> (( b, d, f ) -> ( b, d, f )) -> ( a, c, e ) -> ( a, c, e )"
+          },
+          {
             "name": "modifyAndMerge",
             "comment": " Modifies given function `(b -> (b,c))` to be `(a,c) -> (a,c)` using `Lens a b` and `merge` function\n\n",
             "type": "Monocle.Lens.Lens a b -> (b -> ( b, c )) -> (c -> c -> c) -> ( a, c ) -> ( a, c )"
+          },
+          {
+            "name": "tuple",
+            "comment": " Tuple `Lens a b` with `Lens a c` and returns `Lens a (b,c)`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Lens.Lens a c -> Monocle.Lens.Lens a ( b, c )"
+          },
+          {
+            "name": "tuple3",
+            "comment": " Tuple `Lens a b` with `Lens a c` with `Lens a d` and returns `Lens a (b,c,d)`\n",
+            "type": "Monocle.Lens.Lens a b -> Monocle.Lens.Lens a c -> Monocle.Lens.Lens a d -> Monocle.Lens.Lens a ( b, c, d )"
           },
           {
             "name": "zip",
@@ -10743,6 +10783,130 @@
             "name": "withDefault",
             "comment": " Return the `Success` value, or the default.\n",
             "type": "a -> RemoteData.RemoteData e a -> a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "chendrix/elm-matrix",
+    "version": "3.1.2",
+    "docs": [
+      {
+        "name": "Matrix.Random",
+        "comment": " This module lets you generate random Matrices.\n\n@docs matrix, matrixUsing\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "matrix",
+            "comment": " Generate a matrix with a random width and height, filled with random elements.\n\n    matrix (Random.int 1 4) (Random.int 2 5) (Random.bool)\n\nThe example above will generate you a matrix anywhere between 1-4 rows, 2-5 columns, filled with random Booleans.\n\n",
+            "type": "Random.Generator Int -> Random.Generator Int -> Random.Generator a -> Random.Generator (Matrix.Matrix a)"
+          },
+          {
+            "name": "matrixUsing",
+            "comment": " Generate a matrix of a random width and height, but whose elements are generated via a function given the location of that element in the matrix.\n\n    matrix\n      (Random.int 1 4)\n      (Random.int 1 2)\n      (\\location ->\n        if (row loc % 2 == 0) then\n          True\n        else\n          False\n      )\n\nIn the example above, if it makes a 4x2 matrix, it will be\n\n    T T T T\n    F F F F\n\n",
+            "type": "Random.Generator Int -> Random.Generator Int -> (Matrix.Location -> a) -> Random.Generator (Matrix.Matrix a)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Matrix",
+        "comment": " A library for creating and using 2-D matrices/grids. Geared towards\n2-D games.\n\n# Locations\n\n@docs Location, loc, row, col\n\n# Matrices\n\n@docs Matrix\n\n## Create\n@docs matrix, square, fromList\n\n## Transform\n@docs map, mapWithLocation, flatten\n\n## Get and Set\n@docs get, set, update\n\n## Properties\n@docs colCount, rowCount\n\n## Convert to other types\n@docs toList\n\n",
+        "aliases": [
+          {
+            "name": "Location",
+            "comment": " A representation of a row number and a column number, used to locate and access elements in a matrix.\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "Matrix",
+            "comment": " An ordered collection of elements, all of a particular type, arranged into `m` rows and `n` columns.\n\n",
+            "args": [
+              "a"
+            ],
+            "type": "Array.Array (Array.Array a)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "col",
+            "comment": " Extract the col number from a location\n\n    col (loc 3 5) == 5\n\n",
+            "type": "Matrix.Location -> Int"
+          },
+          {
+            "name": "colCount",
+            "comment": " Get the number of columns in a matrix\n",
+            "type": "Matrix.Matrix a -> Int"
+          },
+          {
+            "name": "flatten",
+            "comment": " Convert a matrix to a single list\n\n    let\n      m = fromList [[0, 1], [2, 3], [4, 5]]\n    in\n      flatten m == [0, 1, 2, 3, 4, 5]\n",
+            "type": "Matrix.Matrix a -> List a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list of lists into a matrix\n\n    fromList [[1, 0], [0, 1]] == square 2 (\\l -> if row l == col l then 1 else 0)\n",
+            "type": "List (List a) -> Matrix.Matrix a"
+          },
+          {
+            "name": "get",
+            "comment": " Get the element at a particular location\n\n    get (loc -1 1) (square 2 (\\_ -> True)) == Nothing\n\n    get (loc 1 1) (fromList [[0, 1], [2, 3]]) == Just 3\n",
+            "type": "Matrix.Location -> Matrix.Matrix a -> Maybe.Maybe a"
+          },
+          {
+            "name": "loc",
+            "comment": " Turn two integers into a location\n",
+            "type": "Int -> Int -> Matrix.Location"
+          },
+          {
+            "name": "map",
+            "comment": " Apply the function to every element in the matrix\n\n    map not (fromList [[True, False], [False, True]]) == fromList [[False, True], [True, False]]\n",
+            "type": "(a -> b) -> Matrix.Matrix a -> Matrix.Matrix b"
+          },
+          {
+            "name": "mapWithLocation",
+            "comment": " Apply the function to every element in the list, where the first function argument\nis the location of the element.\n\n    let\n      m = (square 2 (\\_ -> 1))\n      f location element = if row location == col location\n                            then element * 2\n                            else element\n    in\n      mapWithLocation f m == fromList [[2, 1], [1, 2]]\n\n",
+            "type": "(Matrix.Location -> a -> b) -> Matrix.Matrix a -> Matrix.Matrix b"
+          },
+          {
+            "name": "matrix",
+            "comment": " Initialize a new matrix of size `m x n`.\nDelegates to a function of type `Location -> a` to determine value to\nplace at each element in the matrix.\n\n    matrix 3 5 (\\location ->\n      if (isEven (row location)) then \"Hello\" else \"World\")\n\nwill give back the matrix\n\n    Hello Hello Hello Hello Hello\n    World World World World World\n    Hello Hello Hello Hello Hello\n",
+            "type": "Int -> Int -> (Matrix.Location -> a) -> Matrix.Matrix a"
+          },
+          {
+            "name": "row",
+            "comment": " Extract the row number from a location\n\n    row (loc 3 5) == 3\n\n",
+            "type": "Matrix.Location -> Int"
+          },
+          {
+            "name": "rowCount",
+            "comment": " Get the number of rows in a matrix\n",
+            "type": "Matrix.Matrix a -> Int"
+          },
+          {
+            "name": "set",
+            "comment": " Set the element at a particular location\n\n    set (loc -1 1) 42 (square 2 (\\_ -> True)) == square 2 (\\_ -> True)\n\n    set (loc 1 1) 42 (fromList [[0, 1], [2, 3]]) == fromList [[0, 1], [2, 42]]\n",
+            "type": "Matrix.Location -> a -> Matrix.Matrix a -> Matrix.Matrix a"
+          },
+          {
+            "name": "square",
+            "comment": " Create a square matrix of a certain size\n\n    square 2 (\\_ -> 'H') == H H\n                            H H\n",
+            "type": "Int -> (Matrix.Location -> a) -> Matrix.Matrix a"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a matrix to a list of lists\n\n    toList (fromList [[1, 0], [0, 1]]) == [[1, 0], [0, 1]]\n\n",
+            "type": "Matrix.Matrix a -> List (List a)"
+          },
+          {
+            "name": "update",
+            "comment": " Update the element at a particular location using the current value\n\n",
+            "type": "Matrix.Location -> (a -> a) -> Matrix.Matrix a -> Matrix.Matrix a"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -42263,7 +42427,7 @@
   },
   {
     "name": "lattenwald/elm-base64",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "Base64",
@@ -45603,6 +45767,36 @@
     ]
   },
   {
+    "name": "noahzgordon/elm-jsonapi-http",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "JsonApi.Http",
+        "comment": " A library for requesting resources from JSON API-compliant servers.\n    Intended to be used in conjunction with `elm-jsonapi`, which provides\n    serializers and helper functions.\n\n@docs getDocument, getPrimaryResource, getPrimaryResourceCollection\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "getDocument",
+            "comment": " Retreives a JSON API document from the given endpoint.\n",
+            "type": "String -> Http.Request JsonApi.Document"
+          },
+          {
+            "name": "getPrimaryResource",
+            "comment": " Retreives the JSON API resource from the given endpoint.\n    If there the payload is malformed or there is no singleton primary resource,\n    the error type will be BadPayload.\n",
+            "type": "String -> Http.Request JsonApi.Resource"
+          },
+          {
+            "name": "getPrimaryResourceCollection",
+            "comment": " Retreives the JSON API resource collection from the given endpoint.\n    If there the payload is malformed or there is no primary resource collection,\n    the error type will be BadPayload.\n",
+            "type": "String -> Http.Request (List JsonApi.Resource)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "nphollon/collision",
     "version": "3.0.2",
     "docs": [
@@ -47266,6 +47460,46 @@
     ]
   },
   {
+    "name": "powet/elm-funfolding",
+    "version": "2.0.1",
+    "docs": [
+      {
+        "name": "FunFolding",
+        "comment": " This library contains high-order functions for folding a list of functions together. [foldlFun](#foldlFun) uses a accumulator function which is used to compose all the functions provided with the function list.\n\n# funFolding\n\nas an example, imagine you want to filter a list of integers [-100..100] using the following predicates:\n  - (\\x->x/=0)\n  - (\\x->x>(-20))\n  - (\\x->x<20)\n  - (\\x->(rem x 10) == 0)\n\nThe expected result is : [-10,10]\n\nWe foldl all the predicates using the (&&) operator, the outcome is a single predicate function that we use in [List.filter](http://package.elm-lang.org/packages/elm-lang/core/latest/List#filter)\n\nThe folding function that we use is defined by:\n\n    andN : List (a->Bool) -> a -> Bool\n    andN =\n      foldlFun (&&) False\n\nthis function can be used the following way:\n\n    test \"Compare with 4 predicates\" <|\n        \\() ->\n         let           \n           fun = andN [ (\\x->x/=0)\n                      , (\\x->x>(-20))\n                      , (\\x->x<20)\n                      , (\\x->(rem x 10) == 0)\n                      ]\n           result = List.filter fun [-100..100]\n           expected = [-10,10]\n         in\n           (Expect.equal result expected)\n\n# base functions\n@docs foldlFun, foldlFun2\n\n# specialized functions\n@docs compareN, andN ,orN \n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "andN",
+            "comment": " [andN](#andN) folds a list of predicates using the && operator. [andN](#andN) and [orN](#orN) can be combined together.\n\n    fun = andN [ (\\x->x/=0)\n               , (\\x->x>(-20))\n               , (\\x->x<20)\n               , (\\x->(rem x 10) == 0)\n               ]\n    result = List.filter fun [-100..100]\n    expected = [-10,10]\n",
+            "type": "List (a -> Bool) -> a -> Bool"
+          },
+          {
+            "name": "compareN",
+            "comment": " [compareN](#compareN) folds a list of 'compare' function in such a way that left that left most compares have a bigger weight that the right most compares.\n\n    type alias Person = { name: String\n                        , age : Int\n                        , adr : String\n\n    louis id age adr = Person\n                      (\"Louis\"++(toString id))\n                      age\n                      ((toString adr))}\n\n     fun = compareN [ (\\x y -> compare x.name y.name)\n                    , (\\x y -> compare x.age y.age)\n                    , (\\x y -> compare x.adr y.adr)\n                    ]\n                             \n     sortedList = List.sortWith fun [ louis 2 1 1                                               \n                                    , louis 1 2 2\n                                    , louis 1 1 1\n                                    , louis 1 2 3                                                \n                                    , louis 2 1 2\n                                    , louis 1 2 2\n                                    ]\n     expected = [ louis 1 1 1\n                , louis 1 2 2\n                , louis 1 2 2\n                , louis 1 2 3\n                , louis 2 1 1\n                , louis 2 1 2\n                ]\n",
+            "type": "List (a -> a -> Basics.Order) -> a -> a -> Basics.Order"
+          },
+          {
+            "name": "foldlFun",
+            "comment": " [foldlFun](#foldlFun) folds a list of functions using composition function.\nThe composition function can be ssen as the accumulator function.\nAs an Example , the [andN](#andN) function is defined by :\n \n    andN : List (a->Bool) -> a -> Bool\n    andN = foldlFun (&&) False\n\n",
+            "type": "(a -> a -> a) -> a -> List (b -> a) -> b -> a"
+          },
+          {
+            "name": "foldlFun2",
+            "comment": " [foldlFun2](#foldlFun2) folds a list of two parameters functions using a composition function.\nThe composition function can be ssen as the accumulator function.\n As an Example , the [compareN](#compareN) function is defined by :\n\n    compareN : List (a->a->Order)->a->a->Order\n    compareN = foldlFun2 andOrder EQ\n",
+            "type": "(a -> a -> a) -> a -> List (b -> b -> a) -> b -> b -> a"
+          },
+          {
+            "name": "orN",
+            "comment": " [orN](#orN) folds a list of predicates using the || operator. [andN](#andN) and [orN](#orN) can be combined together.\n\n    fun = orN [(\\x->x==0), (\\x->x<(-99)), (\\x->x>99) ]\n    result = List.filter fun [-100..100]\n    expected = [-100,0,100]\n",
+            "type": "List (a -> Bool) -> a -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "prikhi/elm-http-builder",
     "version": "1.0.1",
     "docs": [
@@ -47502,7 +47736,7 @@
   },
   {
     "name": "pzingg/elm-navigation-extra",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "docs": [
       {
         "name": "Navigation.Builder",
@@ -47637,7 +47871,7 @@
       },
       {
         "name": "Navigation.Router",
-        "comment": " This module provides routing for single-page apps based on changes to the\nthe browser's location. To use this module, create a `Navigation.program`\nor `Navigation.programWithFlags` in your main module, and follow the\nprotocols described here to pass state changes (that can possibly change\nthe URL shown in your browser's location bar), and location changes\n(that can either come from your program changing the location, or from\na user typing a new URL into the location bar, following a link, etc.).\n\nRouting happens in both directions\n-- that is, changes to the browser's location are translated to messages\nyour app can respond to, and changes to your app's state are translated to\nchanges in the browser's location. The net effect is to make it possible for\nthe 'back' and 'forward' buttons in the browser to do useful things, and for\nthe state of your app to be partially bookmark-able.\n\nThe router state and protocols in this module are responsible for updating\nthe browser's history and prevent infinite loops that can be could be caused\nif you are both changing the location and responding to location changes.\n\nSee the documentation on the\n[`elm-lang/navigation` package](http://package.elm-lang.org/packages/elm-lang/navigation/latest)\nfor a basic discussion of how location changes are passed to a\n`Navigation.program` and how you set up the program to create a `LocationChanged`\nmessage (Note: `LocationChanged` is just a message tag you create; you could\nname it anything you like).\n\nFor a discussion of the\ndifferences between the official module and this one, see the [package documentation]\n(http://package.elm-lang.org/packages/pzingg/elm-navgiation-extra/latest).\n\n# Router State\n\nYour program is responsible for maintaining the state of the `router`, by\nkeeping a `Navigation.Router.Model` member in your program's larger model.\nThis state is used to detect whether incoming changes to your program's location\nare \"internal\" or \"external\".  Call the `Navigation.Router.init` function\nas part of the `init` function in your `Navigation.program`.\n\n@docs Model, init\n\n# Processing Location Changes\n\nYour program's `update` function must update the router's state when\nhandling the `LocationChanged` message, by calling\n`Navigation.Router.locationChanged`.  After updating your program's model,\nthe router can process any additional commands that should be performed\nwhen the URL changes, by calling `Navigation.Router.processLocation`.\n\n@docs locationChanged, processLocation\n\n# Setting Urls Based on Program State\n\nWhen any messages other than a 'LocationChanged' message are received\nby your program's `update` function, you may want changes to your model\nto be reflected in a new URL.  You do this by generating a\n`Navigation.Router.UrlChange` type that indicates what the new URL should\nbe and whether the URL should replace or modify the browser's current history.\n\nYour program's `update` function calls `Navigation.Router.urlChanged` to\nlet the router remember the URL that you are setting, so that when the\nlocation change is received later, an infinite loop is prevented.\n\n@docs UrlChange, HistoryEntry, urlChanged\n",
+        "comment": " This module provides routing for single-page apps based on changes to the\nthe browser's location. To use this module, create a `Navigation.program`\nor `Navigation.programWithFlags` in your main module, and follow the\nprotocols described here to pass state changes (that can possibly change\nthe URL shown in your browser's location bar), and location changes\n(that can either come from your program changing the location, or from\na user typing a new URL into the location bar, following a link, etc.).\n\nRouting happens in both directions\n-- that is, changes to the browser's location are translated to messages\nyour app can respond to, and changes to your app's state are translated to\nchanges in the browser's location. The net effect is to make it possible for\nthe 'back' and 'forward' buttons in the browser to do useful things, and for\nthe state of your app to be partially bookmark-able.\n\nThe router state and protocols in this module are responsible for updating\nthe browser's history and prevent infinite loops that can be could be caused\nif you are both changing the location and responding to location changes.\n\nSee the documentation on the\n[`elm-lang/navigation` package](http://package.elm-lang.org/packages/elm-lang/navigation/latest)\nfor a basic discussion of how location changes are passed to a\n`Navigation.program` and how you set up the program to create a `LocationChanged`\nmessage (Note: `LocationChanged` is just a message tag you create; you could\nname it anything you like).\n\nFor a discussion of the\ndifferences between the official module and this one, see the\n[package documentation](http://package.elm-lang.org/packages/pzingg/elm-navgiation-extra/latest).\n\n# Router State\n\nYour program is responsible for maintaining the state of the `router`, by\nkeeping a `Navigation.Router.Model` member in your program's larger model.\nThis state is used to detect whether incoming changes to your program's location\nare \"internal\" or \"external\".  Call the `Navigation.Router.init` function\nas part of the `init` function in your `Navigation.program`.\n\n@docs Model, init\n\n# Processing Location Changes\n\nYour program's `update` function must update the router's state when\nhandling the `LocationChanged` message, by calling\n`Navigation.Router.locationChanged`.  After updating your program's model,\nthe router can process any additional commands that should be performed\nwhen the URL changes, by calling `Navigation.Router.processLocation`.\n\n@docs locationChanged, processLocation\n\n# Setting Urls Based on Program State\n\nWhen any messages other than a 'LocationChanged' message are received\nby your program's `update` function, you may want changes to your model\nto be reflected in a new URL.  You do this by generating a\n`Navigation.Router.UrlChange` type that indicates what the new URL should\nbe and whether the URL should replace or modify the browser's current history.\n\nYour program's `update` function calls `Navigation.Router.urlChanged` to\nlet the router remember the URL that you are setting, so that when the\nlocation change is received later, an infinite loop is prevented.\n\n@docs UrlChange, HistoryEntry, urlChanged\n",
         "aliases": [
           {
             "name": "Model",
@@ -47677,17 +47911,17 @@
           },
           {
             "name": "locationChanged",
-            "comment": " Updates the router's `Model` when a location message has been\nreceived in the program's `update` function.\n\nParameters:\n\n* `model` is the current state of your program's `Navigation.Router.Model`\n(not the larger model of the program).\n\n* `location` is the `Navigation.Location` value received through your\nprogram's `LocationChanged` message.\n\nThe function returns a `Tuple` consisting of the updated `Navigation.Router.Model`\nand a `Bool` flag, `external`, indicating if the change was from the \"outside\",\ni.e. from the user clicking on a link, typing in the location bar,\nor following a bookmark.\n\nThis is step one of procssing a location message in the `update` function.\n\nStep two is to update your program's larger model, keeping the new state of the\nrouter's model.\n\nStep three is to call `Navigation.Router.processLocation` with the `external`\nflag returned here, with your program's `update` and `location2messages`\nfunctions, the location and your program's model.\n",
+            "comment": " Updates the router's `Model` when a location message has been\nreceived in the program's `update` function.\n\nParameters:\n\n* `model` is the current state of your program's `Navigation.Router.Model`\n(not the larger model of the program).\n\n* `location` is the `Navigation.Location` value received through your\nprogram's `LocationChanged` message.\n\nThe function returns a `Tuple` consisting of the updated `Navigation.Router.Model`\nand a `Bool` flag, `external`, indicating if the change was from the \"outside\",\ni.e. from the user clicking on a link, typing in the location bar,\nor following a bookmark.\n\nThis is Step 1 of procssing a location message in the `update` function.\n\nStep 2 is to update your program's larger model, keeping the new state of the\nrouter's model.\n\nStep 3 is to call `Navigation.Router.processLocation` with the `external`\nflag returned here, with your program's `update` and `location2messages`\nfunctions, the location and your program's model.\n\nHere's an example `update` implementation showing the three steps\nto handle the `LocationChanged` message:\n\n```\nupdate : Msg -> Model -> ( Model, Cmd Msg )\nupdate msg model =\n    case msg of\n        -- Location changed message\n        LocationChanged location ->\n            let\n                -- Step 1\n                ( newRouter, external ) =\n                    Router.locationChanged model.router location\n\n                -- Step 2\n                newModel =\n                    { model\n                    | history = location :: model.history\n                    , router = newRouter\n                    }\n            in\n                -- Step 3\n                Router.processLocation external\n                    update location2messages location newModel []\n\n        -- Non-location messages (see documentation below)...\n```\n",
             "type": "Navigation.Router.Model -> Navigation.Location -> ( Navigation.Router.Model, Bool )"
           },
           {
             "name": "processLocation",
-            "comment": " If the location change came from an outside source, this function\ncalls the program's `location2messages` function, which generates a list\nof program messages.  Each message is processed by calling back to the\nprogram's `update` function (possibly updating the program's larger model\nand possibly creating additional commands).\n\nIf the location change came from an internally generated URL (created by\nyour program's `delta2url` function), this function just returns the\nmodel and commands passed to it, without calling the `update` function.\n\nParameters:\n\n* `external` is a Bool flag (as returned from `Navigation.Router.locationChanged`)\nindicating whether this is an \"outside\" location change.\n\n* `update` is your program's `update` function (which will be called recursively\nto process messages generated by your `location2messages` function).\n\n* `location2messages` is your program's `location2messages` function. See\nthe [package documentation]\n(http://package.elm-lang.org/packages/pzingg/elm-navgiation-extra/latest)\nfor a description of how your implementation should be developed.\n\n* `location` is the `Navigation.Location` record that will be passed to\n`location2messages` to generate state-changing messages.\n\n* `model` is your program's larger model (that will be updated when the\nmessages are processed).\n\n* `commands` are any other commands that should be batched when\nyour `update` function returns.\n\nThe function returns the possibly updated model and list of commands, so\nyou can use the value of this function as the return value\nof the `LocationChanged` branch of your program's `update` function.\n",
+            "comment": " If the location change came from an outside source, this function\ncalls the program's `location2messages` function which generates a list\nof program messages.  Each message is processed by calling back to the\nprogram's `update` function (possibly updating the program's larger model\nand possibly creating additional commands).\n\nIf the location change came from an internally generated URL (created by\nyour program's `delta2url` function), this function just returns the\nmodel and commands passed to it, without calling the `update` function.\n\nYour program must implement the `location2messages` function.\nIt should return a list of messages that your `update` function\ncan respond to. Those messages will be fed into your app, to produce the\nchanges to the model that the new URL implies.\n\nHere's an example implementation for `location2messages`:\n\n```\nroute : UrlParser.Parser (Msg -> a) a\nroute =\n    UrlParser.map SetCount (UrlParser.s \"!\" </> UrlParser.int)\n\n\nlocation2messagesUsingUrlParser : Navigation.Location -> List Msg\nlocation2messagesUsingUrlParser location =\n    let\n        maybeMsg = UrlParser.parseHash route location\n    in\n        case maybeMsg of\n            Just msg ->\n                [ msg ]\n\n            _ ->\n                []\n```\n\nParameters for `processLocation`:\n\n* `external` is a Bool flag (as returned from `Navigation.Router.locationChanged`)\nindicating whether this is an \"outside\" location change.\n\n* `update` is your program's `update` function (which will be called recursively\nto process messages generated by your `location2messages` function).\n\n* `location2messages` is your program's `location2messages` function. See the\n[package documentation](http://package.elm-lang.org/packages/pzingg/elm-navgiation-extra/latest)\nfor a description of how your implementation should be developed.\n\n* `location` is the `Navigation.Location` record that will be passed to\n`location2messages` to generate state-changing messages.\n\n* `model` is your program's larger model (that will be updated when the\nmessages are processed).\n\n* `commands` are any other commands that should be batched when\nyour `update` function returns.\n\nThe function returns the possibly updated model and list of commands, so\nyou can use the value of this function as the return value\nof the `LocationChanged` branch of your program's `update` function.\n",
             "type": "Bool -> (msg -> model -> ( model, Platform.Cmd.Cmd msg )) -> (Navigation.Location -> List msg) -> Navigation.Location -> model -> List (Platform.Cmd.Cmd msg) -> ( model, Platform.Cmd.Cmd msg )"
           },
           {
             "name": "urlChanged",
-            "comment": " To process a change of your program's state, first create a function\n`delta2url` in your program.\n\nThen in your program's `update` function, if your model changes,\ncall `delta2url` with two parameters. The first parameter is\nthe model's previous value, and the second is the model's new value.\n\nYour `delta2url` function should return a `Just Navigation.Router.UrlChange`\nif a new URL should be displayed in the browser's location bar;\nor `Nothing` if no change to the URL is needed.\n\nThe reason we provide both the previous and current model for your\nconsideration is that sometimes you may want to do something differently\ndepending on the nature of the change in the model, not just the new value.\nFor instance, it might make the difference between using `NewEntry` or\n`ModifyEntry` to make the change.\n\nNote: Do not call `delta2url` when processing a `LocationChanged` message.\nInstead use the `Navigation.Router.locationChanged` and\n`Navigation.Router.processLocation` functions described above.\n\nAfter calling `delta2url`, step two of processing a state change that\nmay result in a new URL to be added to your browser's location bar is\nto then call this function, `Navigation.Router.urlChanged`.\n\nThe `urlChanged` function will check the `urlChange` parameter against\nthe value of the last URL received by the router before setting a new one,\nso you need not worry about setting duplicate URLs -- that will be\nautomatically avoided.\n\nParameters:\n\n* `model` is the current state of your program's `Navigation.Router.Model`\n(not the larger model of the program).\n\n* `urlChange`, is the `Maybe Navigation.Router.UrlChange` value\nyou received from your program's `delta2url` function.\n\nThe function returns a `Tuple`, containing the new router state\nand possibly a `Cmd` from the elm-lang `Navigation` module\n(either `Navigation.newUrl` or `Navigation.modifUrl`).\n\nAfter calling this function, update the `router` component of your program's\nmodel with the new router state, and return the command from your\nprogram's `update` function.\n",
+            "comment": " To process a change of your program's state, first create a function\n`delta2url` in your program.\n\nThen in your program's `update` function, if your model changes,\ncall `delta2url` with two parameters. The first parameter is\nthe model's previous value, and the second is the model's new value.\n\nYour `delta2url` function should return a `Just Navigation.Router.UrlChange`\nif a new URL should be displayed in the browser's location bar;\nor `Nothing` if no change to the URL is needed.\n\nThe reason we provide both the previous and current model for your\nconsideration is that sometimes you may want to do something differently\ndepending on the nature of the change in the model, not just the new value.\nFor instance, it might make the difference between using `NewEntry` or\n`ModifyEntry` to make the change.\n\nHere's an example implementation of a `delta2url` function, where\nwe just put our model's `counter` value into a URL hash:\n\n```\ndelta2url : Model -> Model -> Maybe UrlChange\ndelta2url _ current =\n    Just <|\n        { entry = NewEntry\n        , url = \"#!/\" ++ (toString current.counter)\n        }\n```\n\nNote: Do not call `delta2url` when processing a `LocationChanged` message.\nInstead use the `Navigation.Router.locationChanged` and\n`Navigation.Router.processLocation` functions described above.\n\nAfter calling `delta2url`, step two of processing a state change that\nmay result in a new URL to be added to your browser's location bar is\nto then call this function, `Navigation.Router.urlChanged`.\n\nThe `urlChanged` function will check the `urlChange` parameter against\nthe value of the last URL received by the router before setting a new one,\nso you need not worry about setting duplicate URLs -- that will be\nautomatically avoided.\n\nParameters for `urlChanged`:\n\n* `model` is the current state of your program's `Navigation.Router.Model`\n(not the larger model of the program).\n\n* `urlChange`, is the `Maybe Navigation.Router.UrlChange` value\nyou received from your program's `delta2url` function.\n\nThe function returns a `Tuple`, containing the new router state\nand possibly a `Cmd` from the elm-lang `Navigation` module\n(either `Navigation.newUrl` or `Navigation.modifUrl`).\n\nAfter calling this function, update the `router` component of your program's\nmodel with the new router state, and return the command from your\nprogram's `update` function.\n\nHere's the rest of the `update` function\n(and a sub-function `updateModelState` that is used for common processing)\nfrom the example program:\n\n```elm\nupdate : Msg -> Model -> ( Model, Cmd Msg )\nupdate msg model =\n    case msg of\n        -- Location changed message\n        LocationChanged location ->\n        -- See documentation above...\n\n        -- Non-location messages\n        _ ->\n            let\n                ( newModel, cmd, mightChangeUrl ) = updateModelState msg model\n            in\n                if mightChangeUrl then\n                    let\n                        ( newRouter, routerCmd ) =\n                            Router.urlChanged model.router (delta2url model newModel)\n                    in\n                        ( { newModel | router = newRouter }\n                        , Cmd.batch [ cmd, routerCmd ]\n                        )\n                else\n                    ( newModel, cmd )\n\n\nupdateModelState : Msg -> Model -> ( Model, Cmd Msg, Bool )\nupdateModelState msg model =\n    case msg of\n        Increment ->\n            ( { model | counter = model.counter + 1 }, Cmd.none, True )\n\n        Decrement ->\n            ( { model | counter = model.counter - 1 }, Cmd.none, True )\n\n        SetCount counter ->\n            ( { model | counter = counter }, Cmd.none, True )\n\n        _ ->\n            ( model, Cmd.none, False )\n```\n",
             "type": "Navigation.Router.Model -> Maybe.Maybe Navigation.Router.UrlChange -> ( Navigation.Router.Model, Platform.Cmd.Cmd msg )"
           }
         ],
@@ -55430,6 +55664,191 @@
     ]
   },
   {
+    "name": "tapeinosyne/elm-microkanren",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "MicroKanren.Operators",
+        "comment": " Infix operators for μKanren\n\n@docs (++), (>>=), (===), (≡)\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "++",
+            "comment": " Infix alias of `mplus`. ",
+            "type": "MicroKanren.Stream a -> MicroKanren.Stream a -> MicroKanren.Stream a"
+          },
+          {
+            "name": "===",
+            "comment": " Infix alias of `identical`. ",
+            "type": "MicroKanren.Term a -> MicroKanren.Term a -> MicroKanren.Goal a"
+          },
+          {
+            "name": ">>=",
+            "comment": " Infix alias of `bind`. ",
+            "type": "MicroKanren.Stream a -> MicroKanren.Goal a -> MicroKanren.Stream a"
+          },
+          {
+            "name": "≡",
+            "comment": " Unicode alias of `identical`. ",
+            "type": "MicroKanren.Term a -> MicroKanren.Term a -> MicroKanren.Goal a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "MicroKanren",
+        "comment": " μKanren provides a minimal, independent core for relational programming in Elm,\nas described by Hemann and Friedmann in [µKanren: A Minimal Functional Core\nfor Relational Programming](http://webyrd.net/scheme-2013/papers/HemannMuKanren2013.pdf).\n\nThis module only provides a barebones typed foundation upon which it is possible\nto build larger languages in the [miniKanren family](http://www.minikanren.org),\nand lacks much of the convenience user-facing libraries rightfully require.\n\n## Terms of a μKanren Program\n@docs Var, Term, Substitution\n\n### Traversing and Manipulating Substitutions\n@docs walk, extend, unify\n\n## Creating and Manipulating Streams\n@docs State\n@docs Stream, mzero\n@docs Goal, unit\n@docs mplus, bind\n\n## Goal Constructors\n@docs callFresh, identical, conjoin, disjoin\n",
+        "aliases": [
+          {
+            "name": "Goal",
+            "comment": " A goal to be pursued within the received state.\nA successful goal returns a non-empty stream, containing the states which satisfied it. ",
+            "args": [
+              "a"
+            ],
+            "type": "MicroKanren.State a -> MicroKanren.Stream a"
+          },
+          {
+            "name": "State",
+            "comment": " A state encapsulates the substitution `s`, which encompasses current variable-term bindings,\nand the counter `c`, which represents the index of the next unbound (“fresh”) logic variable. ",
+            "args": [
+              "a"
+            ],
+            "type": "{ s : MicroKanren.Substitution a, c : MicroKanren.Var }"
+          },
+          {
+            "name": "Substitution",
+            "comment": " A dictionary of variable-term bindings. ",
+            "args": [
+              "a"
+            ],
+            "type": "Dict.Dict MicroKanren.Var (MicroKanren.Term a)"
+          },
+          {
+            "name": "Var",
+            "comment": " The `Var` type is an index (or counter),\nused to track the results of logic operations. ",
+            "args": [],
+            "type": "Int"
+          }
+        ],
+        "types": [
+          {
+            "name": "Stream",
+            "comment": " A potentially infinite sequence of states.\n\nA stream may be:\n  - empty;\n  - mature, when the head is a state that has already been computed;\n  - immature, when the head is a thunk containing a delayed computation.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "Empty",
+                []
+              ],
+              [
+                "Immature",
+                [
+                  "() -> MicroKanren.Stream a"
+                ]
+              ],
+              [
+                "Mature",
+                [
+                  "MicroKanren.State a",
+                  "MicroKanren.Stream a"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Term",
+            "comment": " The terms on which a μKanren program operates.\n\nThree variants are established:\n  - `LVar`, the identifier of a logic variable; effectively a term-level `Var`\n    acting as a reference.\n  - `LVal`, which wraps some value of type `a` for use by logic operations.\n  - `Pair`, two terms of the same type `a`.\n",
+            "args": [
+              "a"
+            ],
+            "cases": [
+              [
+                "LVar",
+                [
+                  "MicroKanren.Var"
+                ]
+              ],
+              [
+                "LVal",
+                [
+                  "a"
+                ]
+              ],
+              [
+                "Pair",
+                [
+                  "MicroKanren.Term a",
+                  "MicroKanren.Term a"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "bind",
+            "comment": " Invoke a goal on each element of the given stream,\nand interleave the resulting streams. ",
+            "type": "MicroKanren.Stream a -> MicroKanren.Goal a -> MicroKanren.Stream a"
+          },
+          {
+            "name": "callFresh",
+            "comment": " Create a goal which introduces a new logic variable for use by another goal. ",
+            "type": "(MicroKanren.Term a -> MicroKanren.Goal a) -> MicroKanren.Goal a"
+          },
+          {
+            "name": "conjoin",
+            "comment": " Create a goal which succeeds if the second goal is achievable within the stream\ngenerated by the first goal.\n\nEffectively a binary conjunction of goals. ",
+            "type": "MicroKanren.Goal a -> MicroKanren.Goal a -> MicroKanren.Goal a"
+          },
+          {
+            "name": "disjoin",
+            "comment": " Create a goal which succeeds if either of the received goals are achieved.\n\nEffectively a binary disjunction of goals. ",
+            "type": "MicroKanren.Goal a -> MicroKanren.Goal a -> MicroKanren.Goal a"
+          },
+          {
+            "name": "extend",
+            "comment": " Extend the substitution with a new variable-term binding. ",
+            "type": "MicroKanren.Var -> MicroKanren.Term a -> MicroKanren.Substitution a -> MicroKanren.Substitution a"
+          },
+          {
+            "name": "identical",
+            "comment": " Create a goal which succeeds if the two terms unify in the received state. ",
+            "type": "MicroKanren.Term a -> MicroKanren.Term a -> MicroKanren.Goal a"
+          },
+          {
+            "name": "mplus",
+            "comment": " Merge two streams by interleaving their states, so that infinite streams\nwill not prevent finite streams from yielding their state. ",
+            "type": "MicroKanren.Stream a -> MicroKanren.Stream a -> MicroKanren.Stream a"
+          },
+          {
+            "name": "mzero",
+            "comment": " An alias for the empty stream. ",
+            "type": "MicroKanren.Stream a"
+          },
+          {
+            "name": "unify",
+            "comment": " Unify two terms in the received substitution `s`,\npotentially extending it.\n\n- `LVar` variables unify when they refer to the same index,\n  i.e. they are the same variable. `s` is returned unchanged..\n- `LVal` values unify when they are equivalent under Elm's native `(==)`.\n  `s` is returned unchanged.\n- Pairs unify when their terms unify pairwise.\n- Finally, an `LVar` variable and an `LVal` value unify under an extended substitution `s1`,\n  where they form a new binding.\n\nIf unification fails, `Nothing` is returned.\n",
+            "type": "MicroKanren.Term a -> MicroKanren.Term a -> MicroKanren.Substitution a -> Maybe.Maybe (MicroKanren.Substitution a)"
+          },
+          {
+            "name": "unit",
+            "comment": " The trivial goal, which lifts the state into a mature stream\nwhose only element is that state. ",
+            "type": "MicroKanren.Goal a"
+          },
+          {
+            "name": "walk",
+            "comment": " Given a `LVar`, traverse the substitution and return its value.\nIf the given term cannot be found, or is not a variable, the term itself is returned. ",
+            "type": "MicroKanren.Term a -> MicroKanren.Substitution a -> MicroKanren.Term a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "terezka/elm-plot",
     "version": "2.1.0",
     "docs": [
@@ -56325,7 +56744,7 @@
   },
   {
     "name": "toastal/return-optics",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "Return.Optics",
@@ -56746,6 +57165,31 @@
     ]
   },
   {
+    "name": "truqu/elm-base64",
+    "version": "1.0.5",
+    "docs": [
+      {
+        "name": "Base64",
+        "comment": " Library for base64 encoding and decoding of Ascii strings.\nFor the moment only works with the characters :\n\n\" !\\\"#$%&\\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\"\n\n# Method\n@docs encode, decode\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "decode",
+            "comment": " base64 decodes an ascii string. If the input is not a valid base64 string returns a Result.Err,\notherwise a Result.Ok String\n    decode(\"RWxtIGlzIENvb2w=\") == Result.Ok \"Elm is Cool\"\n",
+            "type": "String -> Result.Result String String"
+          },
+          {
+            "name": "encode",
+            "comment": " base64 encodes an ascii string. If the input is not valid returns a Result.Err,\notherwise a Result.Ok String\n    encode(\"Elm is Cool\") == Result.Ok \"RWxtIGlzIENvb2w=\"\n",
+            "type": "String -> Result.Result String String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "w0rm/elm-slice-show",
     "version": "4.0.0",
     "docs": [
@@ -57108,6 +57552,131 @@
             "name": "fade",
             "comment": " Fade in\n",
             "type": "Slides.FragmentAnimation.Animator"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "zaboco/elm-draggable",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Draggable.Events",
+        "comment": " Listeners for the various events involved in dragging (`onDragBy`, `onDragStart`, etc.). Also handles `click` events when the mouse was not moved.\n@docs onDragStart, onDragEnd, onDragBy\n@docs onClick, onMouseDown, onMouseUp\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "onClick",
+            "comment": " Register a `Click` event listener. It will trigger if the mouse is pressed and immediately release, without any move.\n",
+            "type": "msg -> Draggable.Event msg"
+          },
+          {
+            "name": "onDragBy",
+            "comment": " Register a `DragBy` event listener. It will trigger every time the mouse is moved. The sent message will contain a `Delta`, which is the distance between the current position and the previous one.\n\n    case Msg of\n        OnDragBy (dx, dy) ->\n            { model | position = { x = position.x + dx, y = position.y + dy } }\n",
+            "type": "(Internal.Delta -> msg) -> Draggable.Event msg"
+          },
+          {
+            "name": "onDragEnd",
+            "comment": " Register a `DragEnd` event listener. It will not trigger if the mouse has not moved while it was pressed.\n",
+            "type": "msg -> Draggable.Event msg"
+          },
+          {
+            "name": "onDragStart",
+            "comment": " Register a `DragStart` event listener. It will not trigger if the mouse has not moved while it was pressed.\n",
+            "type": "msg -> Draggable.Event msg"
+          },
+          {
+            "name": "onMouseDown",
+            "comment": " Register a `MouseDown` event listener. It will trigger whenever the mouse is pressed.\n",
+            "type": "msg -> Draggable.Event msg"
+          },
+          {
+            "name": "onMouseUp",
+            "comment": " Register a `MouseUp` event listener. It will trigger whenever the mouse is released.\n",
+            "type": "msg -> Draggable.Event msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Draggable",
+        "comment": "\nThis library provides and easy way to make DOM elements (Html or Svg) draggable.\n\n## When is dragging considered?\nAn element is considered to be dragging when the mouse is pressed **and** moved before it is released. Otherwise, the action is considered a click. This is useful because in some cases you may want to support both actions.\n\n[See examples](https://github.com/zaboco/elm-draggable/tree/master/examples)\n\n\n# Initial State\n@docs init\n\n# Config\n@docs basicConfig, customConfig\n\n# Update\n@docs update, subscriptions\n\n# DOM trigger\n@docs triggerOnMouseDown\n\n# Helpers\n@docs deltaToFloats\n\n# Definitions\n@docs Delta, State, Msg, Config, Event\n",
+        "aliases": [
+          {
+            "name": "Delta",
+            "comment": " A type alias representing the distance between two drag points.\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "Event",
+            "comment": " An event declaration for the draggable config\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Internal.Event msg"
+          }
+        ],
+        "types": [
+          {
+            "name": "Config",
+            "comment": " Configuration of a draggable model.\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " A message type for updating the internal drag state.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "State",
+            "comment": " Drag state to be included in model.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "basicConfig",
+            "comment": " Basic config\n\n    config = basicConfig OnDragBy\n",
+            "type": "(Draggable.Delta -> msg) -> Draggable.Config msg"
+          },
+          {
+            "name": "customConfig",
+            "comment": " Custom config, including arbitrary options. See [`Events`](#Draggable-Events).\n\n    config = customConfig\n        [ onDragBy OnDragBy\n        , onDragStart OnDragStart\n        , onDragEnd OnDragEnd\n        ]\n",
+            "type": "List (Draggable.Event msg) -> Draggable.Config msg"
+          },
+          {
+            "name": "deltaToFloats",
+            "comment": " Converts a `Delta` to a tuple of `Float`s. Can be used to change the argument to `DragBy` messages, when float operations are needed:\n\n    dragConfig =\n        Draggable.basicConfig (OnDragBy << Draggable.deltaToFloats)\n\nA use case for that could be converting the `Delta` to a `Vector` type (e.g. [`Math.Vector2.Vec2` from `linear-algebra`][vec2])\n\n    dragConfig =\n        Draggable.basicConfig (OnDragBy << Vector2.fromTuple << Draggable.deltaToFloats)\n\nSee [PanAndZoomExample](https://github.com/zaboco/elm-draggable/blob/master/examples/PanAndZoomExample.elm)\n\n[vec2]: http://package.elm-lang.org/packages/elm-community/linear-algebra/1.0.0/Math-Vector2#Vec2\n",
+            "type": "Draggable.Delta -> ( Float, Float )"
+          },
+          {
+            "name": "init",
+            "comment": " Initial drag state\n",
+            "type": "Draggable.State"
+          },
+          {
+            "name": "subscriptions",
+            "comment": " Handle mouse subscriptions used for dragging\n",
+            "type": "(Draggable.Msg -> msg) -> Draggable.State -> Platform.Sub.Sub msg"
+          },
+          {
+            "name": "triggerOnMouseDown",
+            "comment": " DOM event handler to start dragging on mouse down.\n\n    div [ triggerOnMouseDown DragMsg ] [ text \"Drag me\" ]\n",
+            "type": "(Draggable.Msg -> msg) -> VirtualDom.Property msg"
+          },
+          {
+            "name": "update",
+            "comment": " Handle update messages for the draggable model. It assumes that the drag state will be stored under the key `drag`.\n",
+            "type": "Draggable.Config msg -> Draggable.Msg -> { m | drag : Draggable.State } -> ( { m | drag : Draggable.State }, Platform.Cmd.Cmd msg )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
