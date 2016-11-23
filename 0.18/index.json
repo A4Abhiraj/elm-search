@@ -10462,42 +10462,100 @@
   },
   {
     "name": "Fresheyeball/elm-function-extra",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Function.Infix",
-        "comment": "\nElm is getting less functional, here is some relief\n@docs (<$>), (<*>), (>>=)\n",
+        "comment": "\nElm is getting less functional, here is some relief\n@docs (<$>), (<*>), (>>=), (<.>)\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "<$>",
             "comment": " map as an infix, like normal ",
-            "type": "(a -> b) -> (x -> a) -> x -> b",
-            "associativity": "left",
-            "precedence": 4
+            "type": "(a -> b) -> (x -> a) -> x -> b"
           },
           {
             "name": "<*>",
             "comment": " apply as an infix, like normal ",
-            "type": "(x -> a -> b) -> (x -> a) -> x -> b",
-            "associativity": "left",
-            "precedence": 5
+            "type": "(x -> a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "<.>",
+            "comment": " Profunctor about, like a baby rabbit in a meadow ",
+            "type": "(a -> b) -> (c -> d) -> (b -> c) -> a -> d"
           },
           {
             "name": ">>=",
             "comment": " bind as an infix, like normal ",
-            "type": "(x -> a) -> (a -> x -> b) -> x -> b",
-            "associativity": "left",
-            "precedence": 1
+            "type": "(x -> a) -> (a -> x -> b) -> x -> b"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Function.Pro",
+        "comment": "\nBasic Pro Functor utilities for working on functions\n\n## Functors\n@docs mapBefore, mapAfter, mapBoth\n\n## Tuples\nTuples are ultimately AND on the type level\n@docs first, second, sproodle\n\n## Either\nEithers are ultimately XOR on the type level\n@docs mapWithLeft, mapWithRight\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "first",
+            "comment": " Slip in a value on the right hand side of a tuple ",
+            "type": "Function.Arrow a b -> Function.Arrow ( a, x ) ( b, x )"
+          },
+          {
+            "name": "mapAfter",
+            "comment": " Map on the co-domain ",
+            "type": "(a -> b) -> Function.Arrow x a -> Function.Arrow x b"
+          },
+          {
+            "name": "mapBefore",
+            "comment": " Map on the domain ",
+            "type": "(b -> a) -> Function.Arrow a x -> Function.Arrow b x"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Map both sides of a function ",
+            "type": "(a -> b) -> (c -> d) -> Function.Arrow b c -> Function.Arrow a d"
+          },
+          {
+            "name": "mapWithLeft",
+            "comment": " ",
+            "type": "Function.Arrow a b -> Function.Arrow (Either.Either a x) (Either.Either b x)"
+          },
+          {
+            "name": "mapWithRight",
+            "comment": " ",
+            "type": "Function.Arrow a b -> Function.Arrow (Either.Either x a) (Either.Either x b)"
+          },
+          {
+            "name": "second",
+            "comment": " Slip in a value on the left hand side of a tuple ",
+            "type": "Function.Arrow a b -> Function.Arrow ( x, a ) ( x, b )"
+          },
+          {
+            "name": "sproodle",
+            "comment": " I think I know exactly what I mean ",
+            "type": "Function.Arrow a (b -> c) -> Function.Arrow ( a, b ) c"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
         "name": "Function",
-        "comment": "\n## Compose a two parameter function with a single parameter function\n@docs (>>>), (<<<)\n\n## Compose a three parameter function with a single parameter function\n@docs (>>>>), (<<<<)\n\n## Function properties\n@docs map, map2, map3, map4, andMap, andThen, singleton, on\n\n## Reorder\n@docs swirlr, swirll, flip3\n",
-        "aliases": [],
+        "comment": "\n## Function arrow as a type\n@docs Arrow\n\n## Compose a two parameter function with a single parameter function\n@docs (>>>), (<<<)\n\n## Compose a three parameter function with a single parameter function\n@docs (>>>>), (<<<<)\n\n## Function properties\n@docs map, map2, map3, map4, map5, map6, andMap, andThen, singleton, on\n\n## Reorder\n@docs swirlr, swirll, flip3\n",
+        "aliases": [
+          {
+            "name": "Arrow",
+            "comment": "\nMaking `->` into a type makes reading it much easier,\nto read the effects when treating functions as a data structure.\n",
+            "args": [
+              "a",
+              "b"
+            ],
+            "type": "a -> b"
+          }
+        ],
         "types": [],
         "values": [
           {
@@ -10523,12 +10581,12 @@
           {
             "name": "andMap",
             "comment": " Make a function that will call two functions on the same value and subsequently combine them.\n\nUseful for longer chains, see the following examples:\n\n    f = (,) `map` sqrt `andMap` (\\x -> x ^ 2)\n    f 4 -- (2, 16)\n\n    g = (,,) `map` toString `andMap` ((+) 1) `andMap` (\\x -> x % 5)\n    g 12 -- (\"12\",13,2)\n",
-            "type": "(x -> a) -> (x -> a -> b) -> x -> b"
+            "type": "Function.Arrow x a -> Function.Arrow x (a -> b) -> Function.Arrow x b"
           },
           {
             "name": "andThen",
             "comment": "\nThe functions are Monads and so should have an `andThen`.\n",
-            "type": "(b -> a -> c) -> (a -> b) -> a -> c"
+            "type": "(a -> Function.Arrow x b) -> Function.Arrow x a -> Function.Arrow x b"
           },
           {
             "name": "flip3",
@@ -10538,22 +10596,32 @@
           {
             "name": "map",
             "comment": "",
-            "type": "(a -> b) -> (x -> a) -> x -> b"
+            "type": "(a -> b) -> Function.Arrow x a -> Function.Arrow x b"
           },
           {
             "name": "map2",
             "comment": "",
-            "type": "(a -> b -> c) -> (x -> a) -> (x -> b) -> x -> c"
+            "type": "(a -> b -> c) -> Function.Arrow x a -> Function.Arrow x b -> Function.Arrow x c"
           },
           {
             "name": "map3",
             "comment": "",
-            "type": "(a -> b -> c -> d) -> (x -> a) -> (x -> b) -> (x -> c) -> x -> d"
+            "type": "(a -> b -> c -> d) -> Function.Arrow x a -> Function.Arrow x b -> Function.Arrow x c -> Function.Arrow x d"
           },
           {
             "name": "map4",
             "comment": "",
-            "type": "(a -> b -> c -> d -> e) -> (x -> a) -> (x -> b) -> (x -> c) -> (x -> d) -> x -> e"
+            "type": "(a -> b -> c -> d -> e) -> Function.Arrow x a -> Function.Arrow x b -> Function.Arrow x c -> Function.Arrow x d -> Function.Arrow x e"
+          },
+          {
+            "name": "map5",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> f) -> Function.Arrow x a -> Function.Arrow x b -> Function.Arrow x c -> Function.Arrow x d -> Function.Arrow x e -> Function.Arrow x f"
+          },
+          {
+            "name": "map6",
+            "comment": "",
+            "type": "(a -> b -> c -> d -> e -> f -> g) -> Function.Arrow x a -> Function.Arrow x b -> Function.Arrow x c -> Function.Arrow x d -> Function.Arrow x e -> Function.Arrow x f -> Function.Arrow x g"
           },
           {
             "name": "on",
@@ -10563,7 +10631,7 @@
           {
             "name": "singleton",
             "comment": "\nThe functions are Monads and so should have a `singleton`.\n",
-            "type": "a -> b -> a"
+            "type": "a -> Function.Arrow x a"
           },
           {
             "name": "swirll",
@@ -10875,34 +10943,28 @@
   },
   {
     "name": "Fresheyeball/elm-return",
-    "version": "6.0.0",
+    "version": "6.0.3",
     "docs": [
       {
         "name": "Infix",
-        "comment": "\n\nElm is getting less functional, here is some relief\n@docs (<$>), (<*>), (>>=)\n\n",
+        "comment": "\n\nElm is getting less functional, here is some relief\n@docs (<$>), (<*>), (>>=)\n\nInfix order may not work correctly\nhttps://github.com/elm-lang/elm-compiler/issues/1096\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "<$>",
             "comment": " map as an infix, like normal ",
-            "type": "(a -> b) -> Return.Return msg a -> Return.Return msg b",
-            "associativity": "left",
-            "precedence": 4
+            "type": "(a -> b) -> Return.Return msg a -> Return.Return msg b"
           },
           {
             "name": "<*>",
             "comment": " apply as an infix, like normal ",
-            "type": "Return.Return msg (a -> b) -> Return.Return msg a -> Return.Return msg b",
-            "associativity": "left",
-            "precedence": 5
+            "type": "Return.Return msg (a -> b) -> Return.Return msg a -> Return.Return msg b"
           },
           {
             "name": ">>=",
             "comment": " bind as an infix, like normal ",
-            "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b",
-            "associativity": "left",
-            "precedence": 1
+            "type": "Return.Return msg a -> (a -> Return.Return msg b) -> Return.Return msg b"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -10934,7 +10996,7 @@
         "values": [
           {
             "name": "<<<",
-            "comment": "\n\nGo point free with `andThen` chaining. Looking at the example from `andThen`\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn `andThen` foo\n           `andThen` foo\n           `andThen` foo\n```\n\nthis code roughly becomes:\n\n```elm\ndoFoo3Times : { model | bar : Int } -> Return msg { model | bar : Int }\ndoFoo3Times =\n  foo >>> foo >>> foo\n```\n",
+            "comment": "\n\nGo point free with `andThen` chaining. Looking at the example from `andThen`\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn |> andThen foo\n           |> andThen foo\n           |> andThen foo\n```\n\nthis code roughly becomes:\n\n```elm\ndoFoo3Times : { model | bar : Int } -> Return msg { model | bar : Int }\ndoFoo3Times =\n  foo >>> foo >>> foo\n```\n",
             "type": "(b -> Return.Return msg c) -> (a -> Return.Return msg b) -> a -> Return.Return msg c"
           },
           {
@@ -10949,7 +11011,7 @@
           },
           {
             "name": "andThen",
-            "comment": "\n```elm\n-- arbitrary function to demonstrate\nfoo : Model -> Return Msg Model\nfoo ({bar} as model) =\n  -- forking logic\n  if bar < 10\n  -- that side effects may be added\n  then (model, getAjaxThing)\n  -- that the model may be updated\n  else ({model | bar = model.bar - 2 }, Cmd.none)\n```\n\nThey are now chainable with `andThen`...\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn `andThen` foo\n           `andThen` foo\n           `andThen` foo\n```\n\nHere we changed up `foo` three times, but we can use any function of\ntype `(a -> Return msg b)`.\n\nCommands will be accumulated automatically as is the case with all\nfunctions in this library.\n",
+            "comment": "\n```elm\n-- arbitrary function to demonstrate\nfoo : Model -> Return Msg Model\nfoo ({bar} as model) =\n  -- forking logic\n  if bar < 10\n  -- that side effects may be added\n  then (model, getAjaxThing)\n  -- that the model may be updated\n  else ({model | bar = model.bar - 2 }, Cmd.none)\n```\n\nThey are now chainable with `andThen`...\n\n```elm\nresulting : Return msg { model | bar : Int }\nresulting =\n  myReturn |> andThen foo\n           |> andThen foo\n           |> andThen foo\n```\n\nHere we changed up `foo` three times, but we can use any function of\ntype `(a -> Return msg b)`.\n\nCommands will be accumulated automatically as is the case with all\nfunctions in this library.\n",
             "type": "(a -> Return.Return msg b) -> Return.Return msg a -> Return.Return msg b"
           },
           {
@@ -26209,7 +26271,7 @@
   },
   {
     "name": "elm-community/elm-test",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "docs": [
       {
         "name": "Test.Runner",
@@ -26505,7 +26567,7 @@
       },
       {
         "name": "Expect",
-        "comment": " A library to create `Expectation`s, which describe a claim to be tested.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Collections\n\n@docs equalLists, equalDicts, equalSets\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
+        "comment": " A library to create `Expectation`s, which describe a claim to be tested.\n\n## Quick Reference\n\n* [`equal`](#equal) `(arg2 == arg1)`\n* [`notEqual`](#notEqual) `(arg2 /= arg1)`\n* [`lessThan`](#lessThan) `(arg2 < arg1)`\n* [`atMost`](#atMost) `(arg2 <= arg1)`\n* [`greaterThan`](#greaterThan) `(arg2 > arg1)`\n* [`atLeast`](#atLeast) `(arg2 >= arg1)`\n* [`true`](#true) `(arg == True)`\n* [`false`](#false) `(arg == False)`\n\n## Basic Expectations\n\n@docs Expectation, equal, notEqual, all\n\n## Comparisons\n\n@docs lessThan, atMost, greaterThan, atLeast\n\n## Booleans\n\n@docs true, false\n\n## Collections\n\n@docs equalLists, equalDicts, equalSets\n\n## Customizing\n\n@docs pass, fail, onFail, getFailure\n",
         "aliases": [
           {
             "name": "Expectation",
@@ -26516,6 +26578,11 @@
         ],
         "types": [],
         "values": [
+          {
+            "name": "all",
+            "comment": " Passes if each of the given functions passes when applied to the subject.\n\n**NOTE:** Passing an empty list is assumed to be a mistake, so `Expect.all []`\nwill always return a failed expectation no matter what else it is passed.\n\n    Expect.all\n        [ Expect.greaterThan -2\n        , Expect.lessThan 5\n        ]\n        (List.length [])\n\n    -- Passes because (0 > -2) is True and (0 < 5) is also True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 > -10) is False\n    List.length []\n        |> Expect.all\n            [ Expect.greaterThan -2\n            , Expect.lessThan -10\n            , Expect.equal 0\n            ]\n\n    {-\n\n    0\n    ╷\n    │ Expect.lessThan\n    ╵\n    -10\n\n    -}\n",
+            "type": "List (subject -> Expect.Expectation) -> subject -> Expect.Expectation"
+          },
           {
             "name": "atLeast",
             "comment": " Passes if the second argument is greater than or equal to the first.\n\n    Expect.atLeast -2 (List.length [])\n\n    -- Passes because (0 >= -2) is True\n\nFailures resemble code written in pipeline style, so you can tell\nwhich argument is which:\n\n    -- Fails because (0 >= 3) is False\n    List.length []\n        |> Expect.atLeast 3\n\n    {-\n\n    0\n    ╷\n    │ Expect.atLeast\n    ╵\n    3\n\n    -}\n",
@@ -30733,7 +30800,7 @@
   },
   {
     "name": "elm-community/webgl",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "docs": [
       {
         "name": "WebGL",
@@ -43146,6 +43213,135 @@
     ]
   },
   {
+    "name": "jweir/elm-iso8601",
+    "version": "3.0.2",
+    "docs": [
+      {
+        "name": "ISO8601",
+        "comment": " This package provides functionality for working with time and strings based\non the ISO 8601 standard i.e. `2016-03-31T12:13:14.22-04:00`\n\n# Time record\n@docs Time, Weekday, Offset\n\n# Accessors\n@docs year, month, day, hour, minute, second, millisecond, offset, weekday\n\n# Parsing\n@docs fromString, toString\n\n# Time conversion\n@docs toTime, fromTime\n",
+        "aliases": [
+          {
+            "name": "Offset",
+            "comment": " Offset represents the hour and minute timezone offset from UTC.\n\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "Time",
+            "comment": " Record representing the time. Offset is tuple representing the hour and minute ± from UTC.\n\n",
+            "args": [],
+            "type": "ISO8601.Model"
+          }
+        ],
+        "types": [
+          {
+            "name": "Weekday",
+            "comment": " Represents one of the seven days of the week\n",
+            "args": [],
+            "cases": [
+              [
+                "Mon",
+                []
+              ],
+              [
+                "Tue",
+                []
+              ],
+              [
+                "Wed",
+                []
+              ],
+              [
+                "Thu",
+                []
+              ],
+              [
+                "Fri",
+                []
+              ],
+              [
+                "Sat",
+                []
+              ],
+              [
+                "Sun",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "day",
+            "comment": " return the day\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "fromString",
+            "comment": " Given an ISO 8601 compatible string, returns a Time record.\n\n````elm\nISO8601.fromString \"2016-01-01T01:30:00-04:00\"\n-- { year = 2016, month = 1, day = 1, hour = 1, minute = 30, second = 0, millisecond = 0, offset = (-4,0) }\n    : ISO8601.Time\nISO8601.fromString \"2016-11-07\"\n--{ year = 2016, month = 11, day = 7, hour = 0, minute = 0, second = 0, millisecond = 0, offset = (0,0) }\n    : ISO8601.Time\n```\n\n",
+            "type": "String -> Result.Result String ISO8601.Time"
+          },
+          {
+            "name": "fromTime",
+            "comment": " Converts the milliseconds relative to the Unix epoch to a Time record.\n",
+            "type": "Int -> ISO8601.Time"
+          },
+          {
+            "name": "hour",
+            "comment": " return the hour\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "millisecond",
+            "comment": " return the millisecond\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "minute",
+            "comment": " return the minute\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "month",
+            "comment": " return the month\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "offset",
+            "comment": " return the offset\n",
+            "type": "ISO8601.Time -> ISO8601.Offset"
+          },
+          {
+            "name": "second",
+            "comment": " return the secon\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "toString",
+            "comment": " Converts a Time record to an ISO 8601 formated string.\n",
+            "type": "ISO8601.Time -> String"
+          },
+          {
+            "name": "toTime",
+            "comment": " Converts the Time to milliseconds relative to the Unix epoch: `1970-01-01T00:00:00Z`\n",
+            "type": "ISO8601.Time -> Int"
+          },
+          {
+            "name": "weekday",
+            "comment": " Returns the day of the week from the Time record\n",
+            "type": "ISO8601.Time -> ISO8601.Weekday"
+          },
+          {
+            "name": "year",
+            "comment": " return the year\n",
+            "type": "ISO8601.Time -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "jystic/elm-font-awesome",
     "version": "2.0.1",
     "docs": [
@@ -48987,165 +49183,6 @@
     ]
   },
   {
-    "name": "krisajenkins/remotedata",
-    "version": "4.0.0",
-    "docs": [
-      {
-        "name": "RemoteData.Infix",
-        "comment": " Convenience infix operators, for those that like them.\n\nAllows you do define a \"merge three values into a tuple\" function as:\n\n``` elm\nmerge3 a b c =\n    (,,) <$> a <*> b <*> c\n```\n\n@docs (<$>)\n@docs (<*>)\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "<$>",
-            "comment": " Infix form of map. For those who like their applicative functors Haskell-style.\n",
-            "type": "(a -> b) -> RemoteData.RemoteData e a -> RemoteData.RemoteData e b"
-          },
-          {
-            "name": "<*>",
-            "comment": " Infix form of (flip andMap). For those who like their applicative functors Haskell-style.\n\n\n",
-            "type": "RemoteData.RemoteData e (a -> b) -> RemoteData.RemoteData e a -> RemoteData.RemoteData e b"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "RemoteData",
-        "comment": " A datatype representing fetched data.\n\nIf you find yourself continually using `Maybe (Result Error a)` to\nrepresent loaded data, or you have a habit of shuffling errors away to\nwhere they can be quietly ignored, consider using this. It makes it\neasier to represent the real state of a remote data fetch and handle\nit properly.\n\n\nFor more on the motivation, take a look at the blog post [How Elm Slays A UI Antipattern](http://blog.jenkster.com/2016/06/how-elm-slays-a-ui-antipattern.html).\n\n\nTo use the datatype, let's look at an example that loads `News` from a feed.\n\nFirst you add to your model, wrapping the data you want in `WebData`:\n\n\n``` elm\ntype alias Model =\n    { news : WebData News }\n```\n\nThen add in a message that will deliver the response:\n\n``` elm\ntype alias Msg\n    = NewsResponse (WebData News)\n```\n\nNow we can create an HTTP get:\n\n``` elm\ngetNews : Cmd Msg\ngetNews =\n    Http.get decodeNews \"/news\"\n        |> RemoteData.asCmd\n        |> Cmd.map NewsResponse\n\n```\n\nWe trigger it in our `init` function:\n\n``` elm\ninit : ( Model, Cmd Msg)\ninit =\n    ( { news = Loading }\n    , getNews\n    )\n```\n\nWe handle it in our `update` function:\n\n``` elm\nupdate msg model =\n    case msg of\n        NewsResponse response ->\n            ( { model | news = response }\n            , Cmd.none\n            )\n```\n\n\nMost of this you'd already have in your app, and the changes are just\nwrapping the datatype in `Webdata`, and updating the `Http.get` call\nto add in `RemoteData.asCmd`.\n\nNow we get to where we really want to be, rendering the data and\nhandling the different states in the UI gracefully:\n\n\n``` elm\nview : Model -> Html msg\nview model =\n  case model.news of\n    NotAsked -> text \"Initialising.\"\n\n    Loading -> text \"Loading.\"\n\n    Failure err -> text (\"Error: \" ++ toString err)\n\n    Success news -> viewNews news\n\n\nviewNews : News -> Html msg\nviewNews news =\n    div []\n        [h1 [] [text \"Here is the news.\"]\n        , ...]\n```\n\nAnd that's it. A more accurate model of what's happening leads to a better UI.\n\n@docs RemoteData\n@docs WebData\n@docs map\n@docs andMap\n@docs succeed\n@docs mapError\n@docs mapBoth\n@docs andThen\n@docs withDefault\n@docs fromResult\n@docs toMaybe\n@docs asCmd\n@docs append\n@docs isSuccess\n@docs isFailure\n@docs isLoading\n@docs isNotAsked\n@docs update\n@docs prism\n\n",
-        "aliases": [
-          {
-            "name": "WebData",
-            "comment": " While `RemoteData` can model any type of error, the most common\none you'll actually encounter is when you fetch data from a REST\ninterface, and get back `RemoteData Http.Error a`. Because that case\nis so common, `WebData` is provided as a useful alias.\n",
-            "args": [
-              "a"
-            ],
-            "type": "RemoteData.RemoteData Http.Error a"
-          }
-        ],
-        "types": [
-          {
-            "name": "RemoteData",
-            "comment": " Frequently when you're fetching data from an API, you want to represent four different states:\n  * `NotAsked` - We haven't asked for the data yet.\n  * `Loading` - We've asked, but haven't got an answer yet.\n  * `Failure` - We asked, but something went wrong. Here's the error.\n  * `Success` - Everything worked, and here's the data.\n",
-            "args": [
-              "e",
-              "a"
-            ],
-            "cases": [
-              [
-                "NotAsked",
-                []
-              ],
-              [
-                "Loading",
-                []
-              ],
-              [
-                "Failure",
-                [
-                  "e"
-                ]
-              ],
-              [
-                "Success",
-                [
-                  "a"
-                ]
-              ]
-            ]
-          }
-        ],
-        "values": [
-          {
-            "name": "andMap",
-            "comment": " Put the results of two RemoteData calls together.\n\nFor example, if you were fetching three datasets, `a`, `b` and `c`,\nand wanted to end up with a tuple of all three, you could say:\n\n``` elm\nmerge3 :\n    RemoteData e a\n    -> RemoteData e b\n    -> RemoteData e c\n    -> RemoteData e ( a, b, c )\nmerge3 a b c =\n    map (,,) a\n        |> andMap b\n        |> andMap c\n```\n\nThe final tuple succeeds only if all its children succeeded.  It is\nstill `Loading` if _any_ of its children are still `Loading`. And if\nany child fails, the error is the leftmost `Failure` value.\n\nNote that this provides a general pattern for `map2`, `map3`, ..,\n`mapN`. If you find yourself wanting `map5`, just use:\n\n``` elm\nfoo f a b c d e =\n    map f a\n        |> andMap b\n        |> andMap c\n        |> andMap d\n        |> andMap e\n```\n\nIt's a general recipe that doesn't require us to ever have the\ndiscussion, \"Could you just add `map7`? Could you just add `map8`?\nCould you just...\".\n\nCategory theory points: This is `apply` with the arguments flipped.\n",
-            "type": "RemoteData.RemoteData e a -> RemoteData.RemoteData e (a -> b) -> RemoteData.RemoteData e b"
-          },
-          {
-            "name": "andThen",
-            "comment": " Chain together RemoteData function calls.\n",
-            "type": "(a -> RemoteData.RemoteData e b) -> RemoteData.RemoteData e a -> RemoteData.RemoteData e b"
-          },
-          {
-            "name": "append",
-            "comment": " Append - join two `RemoteData` values together as though\nthey were one.\n\nIf either value is `NotAsked`, the result is `NotAsked`.\nIf either value is `Loading`, the result is `Loading`.\nIf both values are `Failure`, the left one wins.\n",
-            "type": "RemoteData.RemoteData e a -> RemoteData.RemoteData e b -> RemoteData.RemoteData e ( a, b )"
-          },
-          {
-            "name": "asCmd",
-            "comment": " Convert a web `Task`, probably produced from elm-http, to a `Cmd (RemoteData e a)`.\n",
-            "type": "Task.Task e a -> Platform.Cmd.Cmd (RemoteData.RemoteData e a)"
-          },
-          {
-            "name": "fromResult",
-            "comment": " Convert a `Result Error`, probably produced from elm-http, to a RemoteData value.\n",
-            "type": "Result.Result e a -> RemoteData.RemoteData e a"
-          },
-          {
-            "name": "isFailure",
-            "comment": " State-checking predicate. Returns true if we've failed to load some data.\n",
-            "type": "RemoteData.RemoteData e a -> Bool"
-          },
-          {
-            "name": "isLoading",
-            "comment": " State-checking predicate. Returns true if we're loading.\n",
-            "type": "RemoteData.RemoteData e a -> Bool"
-          },
-          {
-            "name": "isNotAsked",
-            "comment": " State-checking predicate. Returns true if we haven't asked for data yet.\n",
-            "type": "RemoteData.RemoteData e a -> Bool"
-          },
-          {
-            "name": "isSuccess",
-            "comment": " State-checking predicate. Returns true if we've successfully loaded some data.\n",
-            "type": "RemoteData.RemoteData e a -> Bool"
-          },
-          {
-            "name": "map",
-            "comment": " Map a function into the `Success` value.\n",
-            "type": "(a -> b) -> RemoteData.RemoteData e a -> RemoteData.RemoteData e b"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Map function into both the `Success` and `Failure` value.\n",
-            "type": "(a -> b) -> (e -> f) -> RemoteData.RemoteData e a -> RemoteData.RemoteData f b"
-          },
-          {
-            "name": "mapError",
-            "comment": " Map a function into the `Failure` value.\n",
-            "type": "(e -> f) -> RemoteData.RemoteData e a -> RemoteData.RemoteData f a"
-          },
-          {
-            "name": "prism",
-            "comment": " A monocle-compatible Prism.\n\nIf you use Monocle, you'll want this, otherwise you can ignore it.\n\nThe type signature is actually:\n\n``` elm\nprism : Prism (RemoteData e a) a\n```\n\n...but we use the more verbose type here to avoid introducing a dependency on Monocle.\n",
-            "type": "{ getOption : RemoteData.RemoteData e a -> Maybe.Maybe a , reverseGet : a -> RemoteData.RemoteData e a }"
-          },
-          {
-            "name": "succeed",
-            "comment": " Lift an ordinary value into the realm of RemoteData.\n\nCategory theory points: This is `pure`.\n",
-            "type": "a -> RemoteData.RemoteData e a"
-          },
-          {
-            "name": "toMaybe",
-            "comment": " Convert a `RemoteData e a` to a `Maybe a`\n",
-            "type": "RemoteData.RemoteData e a -> Maybe.Maybe a"
-          },
-          {
-            "name": "update",
-            "comment": " Apply an Elm update function - `Model -> (Model, Cmd Msg)` - to any `Successful`-ly loaded data.\n\nIt's quite common in Elm to want to run a model-update function, over\nsome remote data, but only once it's actually been loaded.\n\nFor example, we might want to handle UI messages changing the users\nsettings, but that only makes sense once those settings have been\nreturned from the server.\n\nThis function makes it more convenient to reach inside a\n`RemoteData.Success` value and apply an update. If the data is not\n`Success a`, it is returned unchanged with a `Cmd.none`.\n\n",
-            "type": "(a -> ( b, Platform.Cmd.Cmd c )) -> RemoteData.RemoteData e a -> ( RemoteData.RemoteData e b, Platform.Cmd.Cmd c )"
-          },
-          {
-            "name": "withDefault",
-            "comment": " Return the `Success` value, or the default.\n",
-            "type": "a -> RemoteData.RemoteData e a -> a"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      }
-    ]
-  },
-  {
     "name": "ktonon/elm-child-update",
     "version": "1.0.2",
     "docs": [
@@ -51535,7 +51572,7 @@
   },
   {
     "name": "micktwomey/elmo-8",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "docs": [
       {
         "name": "Elmo8.Pico8",
@@ -60536,7 +60573,7 @@
   },
   {
     "name": "simonh1000/elm-jwt",
-    "version": "4.0.1",
+    "version": "4.0.3",
     "docs": [
       {
         "name": "Jwt",
@@ -64763,7 +64800,7 @@
   },
   {
     "name": "zaboco/elm-draggable",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "Draggable.Events",
