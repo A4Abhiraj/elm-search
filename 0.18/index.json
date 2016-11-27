@@ -19064,7 +19064,7 @@
   },
   {
     "name": "danielnarey/elm-form-capture",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "docs": [
       {
         "name": "FormCapture.Readers",
@@ -19175,7 +19175,7 @@
   },
   {
     "name": "danielnarey/elm-html-tree",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "HtmlTree.Modify",
@@ -19263,8 +19263,8 @@
           },
           {
             "name": "addStyle",
-            "comment": " Add a new style declaration (*proprty-value* pair) to the element at the root\nnode of an `HtmlTree`. If a new declaration has the same *property* as an\nexisting declaration, the new *value* replaces the old one; otherwise, existing\nstyle declarations are retained.\n\n    welcomeMessage\n        |> addStyle (\"text-align\", \"center\")\n",
-            "type": "( String, String ) -> HtmlTree.HtmlTree msg -> HtmlTree.HtmlTree msg"
+            "comment": " Add a new style declaration (*proprty-value* pair) to the element at the root\nnode of an `HtmlTree`. If a new declaration has the same *property* as an\nexisting declaration, the new *value* replaces the old one; otherwise, existing\nstyle declarations are retained.\n\nThe *value* part of the declaration must be given as a\n[`CssValue`](http://package.elm-lang.org/packages/danielnarey/elm-css-basics/latest/CssBasics#CssValue),\ndefined in the\n[`CssBasics`](http://package.elm-lang.org/packages/danielnarey/elm-css-basics/latest)\npackage.\n\n    welcomeMessage\n        |> addStyle (\"text-align\", Str \"center\")\n",
+            "type": "( String, CssBasics.CssValue number ) -> HtmlTree.HtmlTree msg -> HtmlTree.HtmlTree msg"
           },
           {
             "name": "appendChild",
@@ -19353,8 +19353,8 @@
           },
           {
             "name": "withStyles",
-            "comment": " Add a list of style declarations (*name-value* pairs) to the element at the\nroot node of an `HtmlTree`, *replacing* any existing styles. Style declarations\nadded in this way are defined via the element's `style` attribute, which means\nthey override style declarations assigned to tag, class, and id selectors in\nglobal stylesheets.\n\n    welcomeMessage =\n      \"Hello, world!\"\n        |> textWrapper \"p\"\n        |> withStyles\n          [ (\"font-size\", \"2em\")\n          , (\"text-align\", \"center\")\n          ]\n\nSee my\n[Stylesheet](http://package.elm-lang.org/packages/danielnarey/elm-stylesheet/latest/Stylesheet)\npackage for a more general approach to defining CSS rules and generating a\nglobal stylesheet in Elm.\n",
-            "type": "List ( String, String ) -> HtmlTree.HtmlTree msg -> HtmlTree.HtmlTree msg"
+            "comment": " Add a list of style declarations (*property-value* pairs) to the element at\nthe root node of an `HtmlTree`, *replacing* any existing styles.\n\nThe *value* part of each declaration must be given as a\n[`CssValue`](http://package.elm-lang.org/packages/danielnarey/elm-css-basics/latest/CssBasics#CssValue),\ndefined in the\n[`CssBasics`](http://package.elm-lang.org/packages/danielnarey/elm-css-basics/latest)\npackage. These values are automatically converted to strings, so if you don't\nwant to concern yourself with the `CssValue` types, just enter each value as a\nstring prefaced by `Str`. For instance, in the example below, the expression\n`Unit 2 Em` is equivalent to `Str \"2em\"`.\n\n    welcomeMessage =\n      \"Hello, world!\"\n        |> textWrapper \"p\"\n        |> withStyles\n          [ (\"font-size\", Unit 2 Em)\n          , (\"text-align\", Str \"center\")\n          ]\n\nStyle declarations added in this way are defined via the element's `style`\nattribute, which means they override style declarations assigned to tag, class,\nand id selectors in global stylesheets. See my\n[Stylesheet](http://package.elm-lang.org/packages/danielnarey/elm-stylesheet/latest/Stylesheet)\npackage for a more general approach to defining CSS rules and generating a\nglobal stylesheet in Elm.\n",
+            "type": "List ( String, CssBasics.CssValue number ) -> HtmlTree.HtmlTree msg -> HtmlTree.HtmlTree msg"
           },
           {
             "name": "withTag",
@@ -20313,6 +20313,26 @@
             "name": "uuidStringGenerator",
             "comment": " Random.PCG Generator for Uuid Strings. Using this Generator instead of the generate\nfunction lets you use the full power of the Random.PCG library to create lists of Uuids,\nmap them to other types etc.\n",
             "type": "Random.Pcg.Generator String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "derekdreery/elm-die-faces",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "DieFaces",
+        "comment": " This very small library provides face dot locations for a 6-sided die.\n\nIt is expected that this library will be used with svg or similar, but I don't\nwant to either restrict usage to svg, or pull in possibly unnecessary\ndependencies.\n\n@docs dotLocations\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dotLocations",
+            "comment": " Given a number between one and six, returns a list of points to draw that\nface of a die. Example usage (assuming Svg and Svg.Attributes are imported):\n\n    faceMapper : (Float, Float) -> Svg Msg\n    faceMapper (x, y) =\n      circle\n        [ cx (toString x)\n        , cy (toString y)\n        , r \"0.05\"\n        ] []\n\n    dieFace : Int -> Svg Msg\n    dieFace face =\n      svg\n        [ width \"100\"\n        , height \"100\"\n        , viewBox \"0 0 1 1\"\n        ]\n        dieFace face\n\nwith `face = 2` would give\n\n```html\n<svg width=\"100\" height=\"100\" viewBox=\"0 0 1 1\">\n  <circle cx=\"0.5\" cy=\"0.3\" r=\"0.05\" />\n  <circle cx=\"0.5\" cy=\"0.7\" r=\"0.05\" />\n</svg>\n```\n\n",
+            "type": "Int -> List ( Float, Float )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -38005,7 +38025,7 @@
   },
   {
     "name": "elm-lang/virtual-dom",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "docs": [
       {
         "name": "VirtualDom",
@@ -55166,15 +55186,15 @@
   },
   {
     "name": "prikhi/remote-status",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "RemoteStatus",
-        "comment": " RemoteStatus is used to track the progress of multiple remote operations.\n\n# Definition\n@docs Model, initial\n\n# Operations\n@docs start, enqueue, finishOne\n\n# Querying\n@docs isInProgress, isFinished\n\n",
+        "comment": " RemoteStatus is used to track the progress of multiple remote operations.\n\n# Definition\n@docs Status, initial\n\n# Operations\n@docs start, enqueue, finishOne\n\n# Querying\n@docs isInProgress, isFinished, percentageCompleted\n\n",
         "aliases": [],
         "types": [
           {
-            "name": "Model",
+            "name": "Status",
             "comment": " Store the status of a remote operation, differentiating between unstarted,\nin progress and completed states.\n",
             "args": [],
             "cases": []
@@ -55184,32 +55204,37 @@
           {
             "name": "enqueue",
             "comment": " Increase the number of remote operations to track.\n",
-            "type": "RemoteStatus.Model -> Int -> RemoteStatus.Model"
+            "type": "RemoteStatus.Status -> Int -> RemoteStatus.Status"
           },
           {
             "name": "finishOne",
             "comment": " Increase the number of operations that have been completed by 1.\n",
-            "type": "RemoteStatus.Model -> RemoteStatus.Model"
+            "type": "RemoteStatus.Status -> RemoteStatus.Status"
           },
           {
             "name": "initial",
             "comment": " Default the status to not started.\n",
-            "type": "RemoteStatus.Model"
+            "type": "RemoteStatus.Status"
           },
           {
             "name": "isFinished",
             "comment": " Determine whether the operations have completed.\n",
-            "type": "RemoteStatus.Model -> Bool"
+            "type": "RemoteStatus.Status -> Bool"
           },
           {
             "name": "isInProgress",
             "comment": " Determine whether the operations are still in progress.\n",
-            "type": "RemoteStatus.Model -> Bool"
+            "type": "RemoteStatus.Status -> Bool"
+          },
+          {
+            "name": "percentageCompleted",
+            "comment": " Determine the percentage of completed operations if operations are in progress.\n",
+            "type": "RemoteStatus.Status -> Maybe.Maybe Int"
           },
           {
             "name": "start",
             "comment": " Start tracking the remote operation if the status is in it's initial state.\n",
-            "type": "RemoteStatus.Model -> RemoteStatus.Model"
+            "type": "RemoteStatus.Status -> RemoteStatus.Status"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -61106,7 +61131,7 @@
   },
   {
     "name": "sporto/erl",
-    "version": "10.0.2",
+    "version": "11.0.0",
     "docs": [
       {
         "name": "Erl",
@@ -61114,9 +61139,9 @@
         "aliases": [
           {
             "name": "Query",
-            "comment": " A Dict that holds keys and values for the query string\n",
+            "comment": " List of tuples that holds the keys and values in the query string\n",
             "args": [],
-            "type": "Dict.Dict String String"
+            "type": "List ( String, String )"
           },
           {
             "name": "Url",
@@ -61129,7 +61154,7 @@
         "values": [
           {
             "name": "addQuery",
-            "comment": " Set key/value in query string\n\n    Erl.addQuery key value url\n",
+            "comment": " Adds key/value in query string\n\n    Erl.addQuery key value url\n\nThis doesn't replace existing keys, so if this is a duplicated this key is just added.\n",
             "type": "String -> String -> Erl.Url -> Erl.Url"
           },
           {
@@ -61194,7 +61219,7 @@
           },
           {
             "name": "setQuery",
-            "comment": " Set key/value in query string, removes any existing ones\n\n    Erl.setQuery key value url\n",
+            "comment": " Set key/value in query string, removes any existing one if necessary.\n\n    Erl.setQuery key value url\n",
             "type": "String -> String -> Erl.Url -> Erl.Url"
           },
           {
@@ -63392,11 +63417,11 @@
   },
   {
     "name": "terezka/elm-plot",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "docs": [
       {
         "name": "Plot",
-        "comment": "\n This library aims to allow you to visualize a variety of graphs in\n an intuitve manner without comprimising flexibility regarding configuration.\n It is insprired by the elm-html api, using the `element attrs children` pattern.\n\n# Elements\n@docs Element, plot, line, area, xAxis, yAxis, Point, Style\n\n# Configuration\n\n## Meta configuration\n@docs MetaAttr, size, padding, plotClasses, plotStyle\n\n## Line configuration\n@docs LineAttr, lineStyle\n\n## Area configuration\n@docs AreaAttr, areaStyle\n\n## Axis configuration\n@docs AxisAttr, axisClasses, axisStyle, axisLineStyle\n\n### Tick values configuration\n@docs tickValues, tickDelta, tickRemoveZero\n\n### Tick view configuration\n@docs TickViewAttr, tickConfigView, tickConfigViewFunc, tickLength, tickWidth, tickClasses, tickStyle, tickCustomView, tickCustomViewIndexed\n\n### Label values configuration\n@docs labelValues, labelFilter\n\n### Label values configuration\n@docs LabelViewAttr, labelConfigView, labelConfigViewFunc, labelFormat, labelDisplace, labelClasses, labelStyle, labelCustomView, labelCustomViewIndexed\n\n## Grid configuration\n@docs verticalGrid, horizontalGrid, gridMirrorTicks, gridValues, gridClasses, gridStyle\n\n",
+        "comment": "\n This library aims to allow you to visualize a variety of graphs in\n an intuitve manner without comprimising flexibility regarding configuration.\n It is insprired by the elm-html api, using the `element attrs children` pattern.\n\n# Elements\n@docs Element, plot, area, scatter, line, xAxis, yAxis, Point, Style\n\n# Configuration\n\n## Meta configuration\n@docs MetaAttr, size, padding, plotClasses, plotStyle\n\n## Line configuration\n@docs LineAttr, lineStyle\n\n## Area configuration\n@docs AreaAttr, areaStyle\n\n## Scatter configuration\n@docs ScatterAttr, scatterRadius, scatterStyle\n\n## Axis configuration\n@docs AxisAttr, axisClasses, axisStyle, axisLineStyle\n\n### Tick values configuration\n@docs tickValues, tickDelta, tickRemoveZero\n\n### Tick view configuration\n@docs TickViewAttr, tickConfigView, tickConfigViewFunc, tickLength, tickWidth, tickClasses, tickStyle, tickCustomView, tickCustomViewIndexed\n\n### Label values configuration\n@docs labelValues, labelFilter\n\n### Label values configuration\n@docs LabelViewAttr, labelConfigView, labelConfigViewFunc, labelFormat, labelDisplace, labelClasses, labelStyle, labelCustomView, labelCustomViewIndexed\n\n## Grid configuration\n@docs verticalGrid, horizontalGrid, gridMirrorTicks, gridValues, gridClasses, gridStyle\n\n",
         "aliases": [
           {
             "name": "AreaAttr",
@@ -63435,6 +63460,12 @@
             "comment": " Convinience type to represent coordinates.\n",
             "args": [],
             "type": "( Float, Float )"
+          },
+          {
+            "name": "ScatterAttr",
+            "comment": " The type representing an scatter configuration.\n",
+            "args": [],
+            "type": "Plot.ScatterConfig -> Plot.ScatterConfig"
           },
           {
             "name": "Style",
@@ -63589,6 +63620,21 @@
             "name": "plotStyle",
             "comment": " Add styles to the svg element.\n\n Default: `[ ( \"padding\", \"30px\" ), ( \"stroke\", \"#000\" ) ]`\n",
             "type": "Plot.Style -> Plot.MetaConfig -> Plot.MetaConfig"
+          },
+          {
+            "name": "scatter",
+            "comment": " This returns a scatter element resulting in a scatter series rendered in your plot.\n\n    main =\n        plot [] [ scatter []  [ ( 0, -2 ), ( 2, 0 ), ( 3, 1 ) ] ]\n",
+            "type": "List Plot.ScatterAttr -> List Plot.Point -> Plot.Element msg"
+          },
+          {
+            "name": "scatterRadius",
+            "comment": " Add a radius to your scatter circles\n\n    main =\n        plot\n            []\n            [ scatter\n                [ scatterStyle\n                    [ ( \"stroke\", \"deeppink\" )\n                    , ( \"opacity\", \"0.5\" ) ]\n                    ]\n                , scatterRadius 4\n                ]\n                scatterDataPoints\n            ]\n",
+            "type": "Float -> Plot.ScatterConfig -> Plot.ScatterConfig"
+          },
+          {
+            "name": "scatterStyle",
+            "comment": " Add styles to your scatter series\n\n    main =\n        plot\n            []\n            [ scatter\n                [ scatterStyle\n                    [ ( \"stroke\", \"deeppink\" )\n                    , ( \"opacity\", \"0.5\" ) ]\n                    ]\n                , scatterRadius 4\n                ]\n                scatterDataPoints\n            ]\n",
+            "type": "Plot.Style -> Plot.ScatterConfig -> Plot.ScatterConfig"
           },
           {
             "name": "size",
@@ -65811,7 +65857,7 @@
   },
   {
     "name": "zaboco/elm-draggable",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "docs": [
       {
         "name": "Draggable.Events",
