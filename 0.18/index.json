@@ -15085,6 +15085,58 @@
     ]
   },
   {
+    "name": "SwiftsNamesake/please-focus",
+    "version": "1.1.1",
+    "docs": [
+      {
+        "name": "Focus",
+        "comment": " Sort-of lenses\n\n# Types\n@docs Setter\n\n# Operators\n@docs compose, (=>), (.=), ($=), (&)\n\n",
+        "aliases": [
+          {
+            "name": "Setter",
+            "comment": " 'Setter's work by applying a function to a given field ",
+            "args": [
+              "s",
+              "t",
+              "a",
+              "b"
+            ],
+            "type": "(a -> b) -> s -> t"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "$=",
+            "comment": " Apply setter to constant value (TODO: Rename?) ",
+            "type": "Focus.Setter s t a b -> (a -> b) -> s -> t"
+          },
+          {
+            "name": "&",
+            "comment": " Reverse type application ",
+            "type": "a -> (a -> b) -> b"
+          },
+          {
+            "name": ".=",
+            "comment": " Apply setter to constant value (TODO: Rename?) ",
+            "type": "Focus.Setter s t a b -> b -> s -> t"
+          },
+          {
+            "name": "=>",
+            "comment": " Synonym for compose (TODO: Rename?) ",
+            "type": "Focus.Setter s t a b -> Focus.Setter a b c d -> Focus.Setter s t c d"
+          },
+          {
+            "name": "compose",
+            "comment": " Compose two setters ",
+            "type": "Focus.Setter s t a b -> Focus.Setter a b c d -> Focus.Setter s t c d"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "Zinggi/elm-2d-game",
     "version": "1.0.1",
     "docs": [
@@ -16283,32 +16335,44 @@
   },
   {
     "name": "abadi199/elm-input-extra",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "docs": [
       {
-        "name": "Input.Text",
-        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
+        "name": "MaskedInput.Text",
+        "comment": " Masked Text input\n\n# State\n@docs State, initialState\n\n# View\n@docs input, Options, defaultOptions\n",
         "aliases": [
           {
             "name": "Options",
-            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n",
+            "comment": " Options of the input component.\n\n * `pattern` is the pattern used to format the input value. e.g.: (###) ###-####\n * `inputCharacter`: is the special character used to represent user input. Default value: `#`\n * `toMsg`: is the Msg for updating internal `State` of the element.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n",
             "args": [
               "msg"
             ],
-            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) }"
+            "type": "{ pattern : String , inputCharacter : Char , onInput : String -> msg , toMsg : MaskedInput.Text.State -> msg , hasFocus : Maybe.Maybe (Bool -> msg) }"
           }
         ],
-        "types": [],
+        "types": [
+          {
+            "name": "State",
+            "comment": " Opaque type for storing local State\n",
+            "args": [],
+            "cases": []
+          }
+        ],
         "values": [
           {
             "name": "defaultOptions",
-            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    }\n\n",
-            "type": "(String -> msg) -> Input.Text.Options msg"
+            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n * `toMsg` (type: `String -> msg`) : The Msg for updating internal `State` of the element.\n\nValue:\n\n    { pattern = \"\"\n    , inputCharacter = '#'\n    , onInput = onInput\n    , toMsg = toMsg\n    , hasFocus = Nothing\n    }\n\n",
+            "type": "(String -> msg) -> (MaskedInput.Text.State -> msg) -> MaskedInput.Text.Options msg"
+          },
+          {
+            "name": "initialState",
+            "comment": " Initial state\n",
+            "type": "MaskedInput.Text.State"
           },
           {
             "name": "input",
-            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
-            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
+            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | StateUpdated MaskedInput.State | FocusUpdated Bool\n\n    MaskedInput.Text.input\n        { pattern = \"(###) ###-####\"\n        , inputCharacter = '#'\n        , onInput = InputUpdated\n        , toMsg = StateUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"masked-input\"\n        ...\n        ]\n        model.currentState\n        model.currentValue\n\n",
+            "type": "MaskedInput.Text.Options msg -> List (Html.Attribute msg) -> MaskedInput.Text.State -> String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -16342,35 +16406,29 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Dropdown",
-        "comment": " Dropdown\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs dropdown\n",
+        "name": "Input.Text",
+        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
         "aliases": [
           {
-            "name": "Item",
-            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the dropdown item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
-            "args": [],
-            "type": "{ value : String, text : String, enabled : Bool }"
-          },
-          {
             "name": "Options",
-            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `emptyItem` is the item for when the nothing is selected. Set to `Nothing` for no empty item.\n * `onChange` is the message for when the selected value in the dropdown is changed.\n",
+            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n",
             "args": [
               "msg"
             ],
-            "type": "{ items : List Dropdown.Item , emptyItem : Maybe.Maybe Dropdown.Item , onChange : Maybe.Maybe String -> msg }"
+            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) }"
           }
         ],
         "types": [],
         "values": [
           {
             "name": "defaultOptions",
-            "comment": " Default Options, will give you empty dropdown with no empty item\n",
-            "type": "(Maybe.Maybe String -> msg) -> Dropdown.Options msg"
+            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    }\n\n",
+            "type": "(String -> msg) -> Input.Text.Options msg"
           },
           {
-            "name": "dropdown",
-            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = DropdownChanged String\n\n    Html.div []\n        [ Dropdown.dropdown\n            (Dropdown.defaultOptions DropdownChanged)\n            [ class \"my-dropdown\" ]\n            model.selectedDropdownValue\n        ]\n",
-            "type": "Dropdown.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe String -> Html.Html msg"
+            "name": "input",
+            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
+            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -16408,12 +16466,46 @@
           }
         ],
         "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Dropdown",
+        "comment": " Dropdown\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs dropdown\n",
+        "aliases": [
+          {
+            "name": "Item",
+            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the dropdown item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
+            "args": [],
+            "type": "{ value : String, text : String, enabled : Bool }"
+          },
+          {
+            "name": "Options",
+            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `emptyItem` is the item for when the nothing is selected. Set to `Nothing` for no empty item.\n * `onChange` is the message for when the selected value in the dropdown is changed.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ items : List Dropdown.Item , emptyItem : Maybe.Maybe Dropdown.Item , onChange : Maybe.Maybe String -> msg }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Default Options, will give you empty dropdown with no empty item\n",
+            "type": "(Maybe.Maybe String -> msg) -> Dropdown.Options msg"
+          },
+          {
+            "name": "dropdown",
+            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = DropdownChanged String\n\n    Html.div []\n        [ Dropdown.dropdown\n            (Dropdown.defaultOptions DropdownChanged)\n            [ class \"my-dropdown\" ]\n            model.selectedDropdownValue\n        ]\n",
+            "type": "Dropdown.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
       }
     ]
   },
   {
     "name": "adeschamps/mdl-context",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Context",
@@ -16421,7 +16513,7 @@
         "aliases": [
           {
             "name": "Context",
-            "comment": " Encapsulates the three arguments that are usually found together in elm-mdl:\nIn elm-mdl apps, these are typically:\n\n- toMsg: Mdl\n- index: [ 0 ] or (i :: index) in larger apps\n- container: model.mdl\n",
+            "comment": " Encapsulates the three arguments that are usually found together in elm-mdl.\nIn elm-mdl apps, these are typically:\n\n- toMsg: Mdl\n- index: [ 0 ] or (i :: index) in larger apps\n- container: model.mdl\n",
             "args": [
               "container",
               "msg"
@@ -19751,11 +19843,111 @@
   },
   {
     "name": "danielnarey/elm-toolkit",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "docs": [
       {
+        "name": "Toolkit.Operators",
+        "comment": "\n\n## A small set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::)\n\n# Function Application\n@docs (||>)\n\n## with Lists\n@docs (.|>), (:|>)\n\n## with Tuples\n@docs (..|>), (@@|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "!+>",
+            "comment": " Forward operator for Result.andThen\n\n    String.toInt \"1\" !+> always (Err \"ERROR\")    --> Err \"ERROR\"\n",
+            "type": "Result.Result x a -> (a -> Result.Result x b) -> Result.Result x b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "!=",
+            "comment": " Forward operator for Result.withDefault\n\n    String.toInt \"123\" != 0    --> 123\n    String.toInt \"abc\" != 0    --> 0\n",
+            "type": "Result.Result x a -> a -> a",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "!|>",
+            "comment": " Forward operator for Result.map\n\n    Ok 4.0 !|> sqrt             --> Ok 2.0\n    Err \"bad input\" !|> sqrt    --> Err \"bad input\"\n\n",
+            "type": "Result.Result x a -> (a -> value) -> Result.Result x value",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "..|>",
+            "comment": " Forward operator for\n[map2Tuple](http://package.elm-lang.org/packages/danielnarey/elm-toolkit/latest/Toolkit-Helpers#map2Tuple)\n\n    (1,2) ..|> (+) 1    --> (2,3)\n",
+            "type": "( a, a ) -> (a -> b) -> ( b, b )",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": ".|>",
+            "comment": " Forward operator for List.map\n\n    [1,4,9] .|> sqrt    --> [1,2,3]\n",
+            "type": "List a -> (a -> b) -> List b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": ":|>",
+            "comment": " Wrap LHS in a list, then apply RHS function\n\n    1 :|> List.head   --> Just 1\n",
+            "type": "a -> (List a -> b) -> b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "?+>",
+            "comment": " Forward operator for Maybe.andThen\n\n    List.head [1] ?+> always Nothing    --> Nothing\n",
+            "type": "Maybe.Maybe a -> (a -> Maybe.Maybe b) -> Maybe.Maybe b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "?=",
+            "comment": " Forward operator for Maybe.withDefault\n\n    Just 42 ?= 100    --> 42\n    Nothing ?= 100    --> 100\n",
+            "type": "Maybe.Maybe a -> a -> a",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "?|>",
+            "comment": " Forward operator for Maybe.map\n\n    Just 9 ?|> sqrt     --> Just 3\n    Nothing ?|> sqrt    --> Nothing\n\n",
+            "type": "Maybe.Maybe a -> (a -> b) -> Maybe.Maybe b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "@@|>",
+            "comment": " Forward operator for\n[`uncurry`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#uncurry)\nwith 2 parameters\n\n    (1,2) @@|> (+)    --> 3\n",
+            "type": "( a, b ) -> (a -> b -> c) -> c",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "|++",
+            "comment": " Append the RHS to the end of the LHS; equivalent to `++`, but\nleft-associative with precedence set to `0` (same as `|>`)\n\n    (\"ba\" |> String.reverse) ++ \"c\"       --> \"abc\"\n    \"ba\" |> String.reverse ++ \"c\"         --> ERROR\n    \"ba\" |> String.reverse |++ \"c\"        --> \"abc\"\n\n",
+            "type": "appendable -> appendable -> appendable",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "|::",
+            "comment": " Append the item on the RHS to the end of the list on the LHS\n\n    [1] |:: 2         --> [1,2]\n    [1] |:: 2 |:: 3   --> [1,2,3]\n",
+            "type": "List a -> a -> List a",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": "||>",
+            "comment": " Forward function application with precedence set to 9. Allows you to avoid\nparentheses when you want the argument to appear before the function name in an\ninline expression.\n\n    1 ||> toString ++ 2 ||> toString    --> \"12\"\n",
+            "type": "a -> (a -> b) -> b",
+            "associativity": "left",
+            "precedence": 9
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
         "name": "Toolkit.Helpers",
-        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
+        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Test Functions\n@docs isOneOf, isInRange, isBetween\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -19808,6 +20000,21 @@
             "name": "getNth",
             "comment": " Get the value at the nth place of a list without converting the list to an\narray; returns `Nothing` if the list contains fewer than `n + 1` items, or if\n`n` is negative\n\n    getNth 0 [1, 3, 9, 27]    --> Just 1\n    getNth 3 [1, 3, 9, 27]    --> Just 27\n    getNth 4 [1, 3, 9, 27]    --> Nothing\n    getNth -1 [1, 3, 9, 27]   --> Nothing\n\n",
             "type": "Int -> List a -> Maybe.Maybe a"
+          },
+          {
+            "name": "isBetween",
+            "comment": " Given a pair of values defining an interval and a test value, returns `True`\nif the test value falls strictly *between* the endpoints of the interval, such\nthat a test value equal to one of the endpoints will return `False`\n",
+            "type": "( comparable, comparable ) -> comparable -> Bool"
+          },
+          {
+            "name": "isInRange",
+            "comment": " Given a pair of values defining an interval and a test value, returns `True`\nif the test value falls within the interval, *including* its endpoints\n",
+            "type": "( comparable, comparable ) -> comparable -> Bool"
+          },
+          {
+            "name": "isOneOf",
+            "comment": " Given a list and a test value, returns `True` if the list contains a value\nequal to the test value.\n\nEquivalent to\n[List.member](http://package.elm-lang.org/packages/elm-lang/core/latest/List#member)\nwith the arguments flipped\n",
+            "type": "List a -> a -> Bool"
           },
           {
             "name": "map2Tuple",
@@ -19943,106 +20150,6 @@
             "name": "zip4",
             "comment": " Convert a 4-tuple of lists to a list of 4-tuples\n",
             "type": "( List a, List b, List c, List d ) -> List ( a, b, c, d )"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Toolkit.Operators",
-        "comment": "\n\n## A small set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::)\n\n# Function Application\n@docs (||>)\n\n## with Lists\n@docs (.|>), (:|>)\n\n## with Tuples\n@docs (..|>), (@@|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "!+>",
-            "comment": " Forward operator for Result.andThen\n\n    String.toInt \"1\" !+> always (Err \"ERROR\")    --> Err \"ERROR\"\n",
-            "type": "Result.Result x a -> (a -> Result.Result x b) -> Result.Result x b",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "!=",
-            "comment": " Forward operator for Result.withDefault\n\n    String.toInt \"123\" != 0    --> 123\n    String.toInt \"abc\" != 0    --> 0\n",
-            "type": "Result.Result x a -> a -> a",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "!|>",
-            "comment": " Forward operator for Result.map\n\n    Ok 4.0 !|> sqrt             --> Ok 2.0\n    Err \"bad input\" !|> sqrt    --> Err \"bad input\"\n\n",
-            "type": "Result.Result x a -> (a -> value) -> Result.Result x value",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "..|>",
-            "comment": " Forward operator for\n[map2Tuple](http://package.elm-lang.org/packages/danielnarey/elm-toolkit/latest/Toolkit-Helpers#map2Tuple)\n\n    (1,2) ..|> (+) 1    --> (2,3)\n",
-            "type": "( a, a ) -> (a -> b) -> ( b, b )",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": ".|>",
-            "comment": " Forward operator for List.map\n\n    [1,4,9] .|> sqrt    --> [1,2,3]\n",
-            "type": "List a -> (a -> b) -> List b",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": ":|>",
-            "comment": " Wrap LHS in a list, then apply RHS function\n\n    1 :|> List.head   --> Just 1\n",
-            "type": "a -> (List a -> b) -> b",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "?+>",
-            "comment": " Forward operator for Maybe.andThen\n\n    List.head [1] ?+> always Nothing    --> Nothing\n",
-            "type": "Maybe.Maybe a -> (a -> Maybe.Maybe b) -> Maybe.Maybe b",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "?=",
-            "comment": " Forward operator for Maybe.withDefault\n\n    Just 42 ?= 100    --> 42\n    Nothing ?= 100    --> 100\n",
-            "type": "Maybe.Maybe a -> a -> a",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "?|>",
-            "comment": " Forward operator for Maybe.map\n\n    Just 9 ?|> sqrt     --> Just 3\n    Nothing ?|> sqrt    --> Nothing\n\n",
-            "type": "Maybe.Maybe a -> (a -> b) -> Maybe.Maybe b",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "@@|>",
-            "comment": " Forward operator for\n[`uncurry`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#uncurry)\nwith 2 parameters\n\n    (1,2) @@|> (+)    --> 3\n",
-            "type": "( a, b ) -> (a -> b -> c) -> c",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "|++",
-            "comment": " Append the RHS to the end of the LHS; equivalent to `++`, but\nleft-associative with precedence set to `0` (same as `|>`)\n\n    (\"ba\" |> String.reverse) ++ \"c\"       --> \"abc\"\n    \"ba\" |> String.reverse ++ \"c\"         --> ERROR\n    \"ba\" |> String.reverse |++ \"c\"        --> \"abc\"\n\n",
-            "type": "appendable -> appendable -> appendable",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "|::",
-            "comment": " Append the item on the RHS to the end of the list on the LHS\n\n    [1] |:: 2         --> [1,2]\n    [1] |:: 2 |:: 3   --> [1,2,3]\n",
-            "type": "List a -> a -> List a",
-            "associativity": "left",
-            "precedence": 0
-          },
-          {
-            "name": "||>",
-            "comment": " Forward function application with precedence set to 9. Allows you to avoid\nparentheses when you want the argument to appear before the function name in an\ninline expression.\n\n    1 ||> toString ++ 2 ||> toString    --> \"12\"\n",
-            "type": "a -> (a -> b) -> b",
-            "associativity": "left",
-            "precedence": 9
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -26988,68 +27095,18 @@
   },
   {
     "name": "elm-community/html-extra",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "docs": [
       {
-        "name": "Html.Events.Extra",
-        "comment": " Additional decoders for use with event handlers in html.\n\n# Event decoders\n* TODO: `key`\n* TODO: `code`\n* TODO: `KeyEvent`, `keyEvent`\n@docs charCode\n\n# Typed event decoders\n@docs targetValueFloat, targetValueInt, targetValueMaybe, targetValueMaybeFloat, targetValueMaybeInt\n@docs targetValueFloatParse, targetValueIntParse, targetValueMaybeFloatParse, targetValueMaybeIntParse\n@docs targetSelectedIndex\n\n",
+        "name": "Html.Extra",
+        "comment": " Convenience functionality on\n[`Html`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html#Html)\n\n@docs static\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "charCode",
-            "comment": " Character code for key board events.\nThis is being deprecated, but support for DOM3 Keyboard events is not yet present in most browsers.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Char)"
-          },
-          {
-            "name": "targetSelectedIndex",
-            "comment": " Parse the index of the selected option of a select.\nReturns Nothing in place of the spec's magic value -1.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
-          },
-          {
-            "name": "targetValueFloat",
-            "comment": " Floating-point target value.\n",
-            "type": "Json.Decode.Decoder Float"
-          },
-          {
-            "name": "targetValueFloatParse",
-            "comment": " Parse a floating-point value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
-            "type": "Json.Decode.Decoder Float"
-          },
-          {
-            "name": "targetValueInt",
-            "comment": " Integer target value.\n",
-            "type": "Json.Decode.Decoder Int"
-          },
-          {
-            "name": "targetValueIntParse",
-            "comment": " Parse an integer value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
-            "type": "Json.Decode.Decoder Int"
-          },
-          {
-            "name": "targetValueMaybe",
-            "comment": " String or empty target value.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
-          },
-          {
-            "name": "targetValueMaybeFloat",
-            "comment": " Floating-point or empty target value.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Float)"
-          },
-          {
-            "name": "targetValueMaybeFloatParse",
-            "comment": " Parse an optional floating-point value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Float)"
-          },
-          {
-            "name": "targetValueMaybeInt",
-            "comment": " Integer or empty target value.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
-          },
-          {
-            "name": "targetValueMaybeIntParse",
-            "comment": " Parse an optional integer value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
+            "name": "static",
+            "comment": " Embedding static html.\n\nThe type argument\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\nin `Html Never` tells us that the html has no event handlers attached,\nit will not generate any messages. We may want to embed such static\nhtml into arbitrary views, while using types to enforce the\nstaticness. That is what this function provides.\n\n*Note:* To call this function, the argument need not be literally of type\n`Html Never`. It suffices if it is a fully polymorphic (in the message type)\n`Html` value. For example, this works: `static (Html.text \"abcdef\")`.\n",
+            "type": "Html.Html Basics.Never -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -27129,15 +27186,85 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Html.Extra",
-        "comment": " Convenience functionality on\n[`Html`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html#Html)\n\n@docs static\n",
+        "name": "Html.Events.Extra",
+        "comment": " Additional decoders for use with event handlers in html.\n\n# Event decoders\n* TODO: `key`\n* TODO: `code`\n* TODO: `KeyEvent`, `keyEvent`\n@docs charCode\n\n# Typed event decoders\n@docs targetValueFloat, targetValueInt, targetValueMaybe, targetValueMaybeFloat, targetValueMaybeInt\n@docs targetValueFloatParse, targetValueIntParse, targetValueMaybeFloatParse, targetValueMaybeIntParse\n@docs targetSelectedIndex\n\n\n# Event Handlers\n@docs onClickPreventDefault, onClickStopPropagation, onClickPreventDefaultAndStopPropagation, onEnter\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "static",
-            "comment": " Embedding static html.\n\nThe type argument\n[`Never`](http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#Never)\nin `Html Never` tells us that the html has no event handlers attached,\nit will not generate any messages. We may want to embed such static\nhtml into arbitrary views, while using types to enforce the\nstaticness. That is what this function provides.\n\n*Note:* To call this function, the argument need not be literally of type\n`Html Never`. It suffices if it is a fully polymorphic (in the message type)\n`Html` value. For example, this works: `static (Html.text \"abcdef\")`.\n",
-            "type": "Html.Html Basics.Never -> Html.Html msg"
+            "name": "charCode",
+            "comment": " Character code for key board events.\nThis is being deprecated, but support for DOM3 Keyboard events is not yet present in most browsers.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Char)"
+          },
+          {
+            "name": "onClickPreventDefault",
+            "comment": " Always send `msg` upon click, preventing the browser's default behavior.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onClickPreventDefaultAndStopPropagation",
+            "comment": " Always send `msg` upon click, preventing the browser's default behavior and propagation\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onClickStopPropagation",
+            "comment": " Always send `msg` upon click, preventing click propagation.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "onEnter",
+            "comment": " When the enter key is released, send the `msg`.\n    Otherwise, do nothing.\n",
+            "type": "msg -> Html.Attribute msg"
+          },
+          {
+            "name": "targetSelectedIndex",
+            "comment": " Parse the index of the selected option of a select.\nReturns Nothing in place of the spec's magic value -1.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
+          },
+          {
+            "name": "targetValueFloat",
+            "comment": " Floating-point target value.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "targetValueFloatParse",
+            "comment": " Parse a floating-point value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "targetValueInt",
+            "comment": " Integer target value.\n",
+            "type": "Json.Decode.Decoder Int"
+          },
+          {
+            "name": "targetValueIntParse",
+            "comment": " Parse an integer value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
+            "type": "Json.Decode.Decoder Int"
+          },
+          {
+            "name": "targetValueMaybe",
+            "comment": " String or empty target value.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+          },
+          {
+            "name": "targetValueMaybeFloat",
+            "comment": " Floating-point or empty target value.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Float)"
+          },
+          {
+            "name": "targetValueMaybeFloatParse",
+            "comment": " Parse an optional floating-point value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Float)"
+          },
+          {
+            "name": "targetValueMaybeInt",
+            "comment": " Integer or empty target value.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
+          },
+          {
+            "name": "targetValueMaybeIntParse",
+            "comment": " Parse an optional integer value from the input instead of using `valueAsNumber`.\nUse this with inputs that do not have a `number` type.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe Int)"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -31123,7 +31250,7 @@
   },
   {
     "name": "elm-community/webgl",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "WebGL",
@@ -41926,6 +42053,60 @@
     ]
   },
   {
+    "name": "gaborv/debouncer",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Debouncer",
+        "comment": "\n\nThis is a delay-based debouncer. You can create it by defining a delay time.\nFor every bounce the timer \"restarts\" and the new message takes over. \nIf there is no new message for a given id in the specified delay time frame, the last message is sent to your app. \n\n\n## Debouncer State\n\n@docs DebouncerState\n@docs create\n\n\n## Starting and bouncing the Debouncer\n\n@docs BounceDetails\n@docs bounce\n\n\n## Internal message handling\n\n@docs SelfMsg\n@docs process\n\n",
+        "aliases": [
+          {
+            "name": "BounceDetails",
+            "comment": " Pass these details to the bounce function to start / bounce the debouncer\n",
+            "args": [
+              "appMsg"
+            ],
+            "type": "{ id : Debouncer.Id, msgToSend : appMsg }"
+          }
+        ],
+        "types": [
+          {
+            "name": "DebouncerState",
+            "comment": " The state of tagged debouncers\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "SelfMsg",
+            "comment": " Forward SelfMsgs to the process function\n",
+            "args": [
+              "appMsg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "bounce",
+            "comment": " Call bounce to start the debouncer as well as anytime the desired outccome changes.\n",
+            "type": "Debouncer.BounceDetails appMsg -> Debouncer.DebouncerState -> ( Debouncer.DebouncerState , Platform.Cmd.Cmd (Debouncer.SelfMsg appMsg) )"
+          },
+          {
+            "name": "create",
+            "comment": " Create tagged debouncers with a given delay time (shared accross all of them)\n",
+            "type": "Time.Time -> Debouncer.DebouncerState"
+          },
+          {
+            "name": "process",
+            "comment": " Forward the debouncer's `SelfMsg`s to this function so that debouncer can manage its state and fire the delayed commands when it is neccessary\n",
+            "type": "Debouncer.SelfMsg appMsg -> Debouncer.DebouncerState -> ( Debouncer.DebouncerState, Platform.Cmd.Cmd appMsg )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "gampleman/elm-visualization",
     "version": "1.1.0",
     "docs": [
@@ -42588,6 +42769,111 @@
     ]
   },
   {
+    "name": "gmauricio/elm-semantic-ui",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "SemanticUi",
+        "comment": " Elm bindings for Semantic UI using a declarative API and useful\nabstractions.\n\n# Rendering\n\n@docs render\n\n# Styling\n\n@docs Size, size, fluid, placeholder\n\n# Events\n\n@docs events\n\n# Elements\n\n## Grid\n\n@docs container, row, col\n\n## Button\n\n@docs button\n\n## Input\n\n@docs input\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Size",
+            "comment": " Some elements might have different sizes. ",
+            "args": [],
+            "cases": [
+              [
+                "Mini",
+                []
+              ],
+              [
+                "Tiny",
+                []
+              ],
+              [
+                "Small",
+                []
+              ],
+              [
+                "Medium",
+                []
+              ],
+              [
+                "Large",
+                []
+              ],
+              [
+                "Big",
+                []
+              ],
+              [
+                "Huge",
+                []
+              ],
+              [
+                "Massive",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "button",
+            "comment": " A button with a text. ",
+            "type": "String -> SemanticUi.Element (SemanticUi.Button msg) msg"
+          },
+          {
+            "name": "col",
+            "comment": " Create the `Html msg` for a grid col.\n\n    col \"two\" [ div [] [] ]\n",
+            "type": "String -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "container",
+            "comment": " Create the `Html msg` for a grid container.\n\n    container [html content]\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "events",
+            "comment": " Set placeholder for input element\n\n    input [] |> events [ onInput InputTextMsg ]\n",
+            "type": "List (Html.Attribute msg) -> SemanticUi.Element (SemanticUi.EventEmitter a msg) msg -> SemanticUi.Element (SemanticUi.EventEmitter a msg) msg"
+          },
+          {
+            "name": "fluid",
+            "comment": " Add fluid class to input element\n\n    input [] |> fluid\n",
+            "type": "SemanticUi.Element (SemanticUi.WithAttributes a msg) msg -> SemanticUi.Element (SemanticUi.WithAttributes a msg) msg"
+          },
+          {
+            "name": "input",
+            "comment": " A inout with a html attributes ",
+            "type": "List (Html.Attribute msg) -> SemanticUi.Element (SemanticUi.Input msg) msg"
+          },
+          {
+            "name": "placeholder",
+            "comment": " Set placeholder for input element\n\n    input [] |> placeholder \"write here...\"\n",
+            "type": "String -> SemanticUi.Element (SemanticUi.Writable a) msg -> SemanticUi.Element (SemanticUi.Writable a) msg"
+          },
+          {
+            "name": "render",
+            "comment": " Create the `Html msg` for a Semantic UI `Element`.\n\n    button \"click\" |> render\n",
+            "type": "SemanticUi.Element a msg -> Html.Html msg"
+          },
+          {
+            "name": "row",
+            "comment": " Create the `Html msg` for a grid row.\n\n    row [] [ div [] [] ]\n",
+            "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "size",
+            "comment": " Adjust the size of an element.\n\n    button \"click\" |> size Huge\n ",
+            "type": "SemanticUi.Size -> SemanticUi.Element (SemanticUi.Sized a) msg -> SemanticUi.Element (SemanticUi.Sized a) msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "hoelzro/elm-drag",
     "version": "1.0.1",
     "docs": [
@@ -42625,6 +42911,186 @@
             "name": "update",
             "comment": " Updates the drag model.  The first argument is a function that\nconverts an `(Int, Int)` to your application's message type; if you\nhave a `type Msg = Drag (Int, Int)`, this would just be `Drag`.\nThe second and third arguments are the drag message and model that\nyou're currently processing.\n",
             "type": "(( Int, Int ) -> msg) -> Drag.Msg -> Drag.Model -> ( Drag.Model, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "ingara/elm-asoiaf-api",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Asoiaf.Api",
+        "comment": "\n\n# Characters\n@docs getCharacters, getCharacter, queryCharacters\n\n# Houses\n@docs getHouses, getHouse, queryHouses\n\n# Books\n@docs getBooks, getBook, queryBooks\n\n# Pagination\n@docs Pagination, defaultPagination\n\n# Queries\n@docs CharacterQuery, HouseQuery, BookQuery, defaultCharacterQuery, defaultHouseQuery, defaultBookQuery\n\n",
+        "aliases": [
+          {
+            "name": "BookQuery",
+            "comment": " Represents the fields we can query books by\n",
+            "args": [],
+            "type": "{ name : Maybe.Maybe String , fromReleaseDate : Maybe.Maybe Date.Date , toReleaseDate : Maybe.Maybe Date.Date }"
+          },
+          {
+            "name": "CharacterQuery",
+            "comment": " Represents the fields we can query characters by\n",
+            "args": [],
+            "type": "{ name : Maybe.Maybe String , gender : Maybe.Maybe String , culture : Maybe.Maybe String , born : Maybe.Maybe Int , died : Maybe.Maybe Int , isAlive : Maybe.Maybe Bool }"
+          },
+          {
+            "name": "HouseQuery",
+            "comment": " Represents the fields we can query houses by\n",
+            "args": [],
+            "type": "{ name : Maybe.Maybe String , region : Maybe.Maybe String , words : Maybe.Maybe String , hasWords : Maybe.Maybe Bool , hasTitles : Maybe.Maybe Bool , hasSeats : Maybe.Maybe Bool , hasDiedOut : Maybe.Maybe Bool , hasAncestralWeapons : Maybe.Maybe Bool }"
+          },
+          {
+            "name": "Pagination",
+            "comment": " All requests are paginated. Use this to specify which page to request and\nwhat page size to use.\n",
+            "args": [],
+            "type": "{ page : Int, pageSize : Int }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultBookQuery",
+            "comment": " Default book query. No fields specified.\n",
+            "type": "Asoiaf.Api.BookQuery"
+          },
+          {
+            "name": "defaultCharacterQuery",
+            "comment": " Default character query. No fields specified.\n",
+            "type": "Asoiaf.Api.CharacterQuery"
+          },
+          {
+            "name": "defaultHouseQuery",
+            "comment": " Default house query. No fields specified.\n",
+            "type": "Asoiaf.Api.HouseQuery"
+          },
+          {
+            "name": "defaultPagination",
+            "comment": " Default pagination.\n\n    { page = 1\n    , pageSize = 10\n    }\n",
+            "type": "Asoiaf.Api.Pagination"
+          },
+          {
+            "name": "getBook",
+            "comment": " Get a book by id\n",
+            "type": "Asoiaf.Models.Id -> Http.Request Asoiaf.Models.Book"
+          },
+          {
+            "name": "getBooks",
+            "comment": " Get a list of books\n",
+            "type": "Asoiaf.Api.Pagination -> Http.Request (List Asoiaf.Models.Book)"
+          },
+          {
+            "name": "getCharacter",
+            "comment": " Get a character by id\n",
+            "type": "Asoiaf.Models.Id -> Http.Request Asoiaf.Models.Character"
+          },
+          {
+            "name": "getCharacters",
+            "comment": " Get a list of characters\n",
+            "type": "Asoiaf.Api.Pagination -> Http.Request (List Asoiaf.Models.Character)"
+          },
+          {
+            "name": "getHouse",
+            "comment": " Get a house by id\n",
+            "type": "Asoiaf.Models.Id -> Http.Request Asoiaf.Models.House"
+          },
+          {
+            "name": "getHouses",
+            "comment": " Get a list of houses\n",
+            "type": "Asoiaf.Api.Pagination -> Http.Request (List Asoiaf.Models.House)"
+          },
+          {
+            "name": "queryBooks",
+            "comment": " Query books\n\n    pagination =\n      { page = 1\n      , pageSize = 25\n      }\n    query =\n      { defaultBookQuery\n      | name = Just \"A Game of Thrones\"\n      }\n    queryBooks pagination query == [ { name = \"A Game of Thrones\", ... } ]\n",
+            "type": "Asoiaf.Api.Pagination -> Asoiaf.Api.BookQuery -> Http.Request (List Asoiaf.Models.Book)"
+          },
+          {
+            "name": "queryCharacters",
+            "comment": " Query characters\n\n    pagination =\n      { page = 1\n      , pageSize = 25\n      }\n    query =\n      { defaultCharacterQuery\n      | name = Just \"Jon Snow\"\n      }\n    queryCharacters pagination query == [ { name = \"Jon Snow\", ... } ]\n",
+            "type": "Asoiaf.Api.Pagination -> Asoiaf.Api.CharacterQuery -> Http.Request (List Asoiaf.Models.Character)"
+          },
+          {
+            "name": "queryHouses",
+            "comment": " Query houses\n\n    pagination =\n      { page = 1\n      , pageSize = 25\n      }\n    query =\n      { defaultBookQuery\n      | words = Just \"Winter is Coming\"\n      }\n    queryHouses pagination query == [ { name = \"House Stark of Winterfell\", ... } ]\n",
+            "type": "Asoiaf.Api.Pagination -> Asoiaf.Api.HouseQuery -> Http.Request (List Asoiaf.Models.House)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Asoiaf.Models",
+        "comment": " Models\n\n# Types\n@docs Character, House, Book, Url, Id\n\n# Utils\n@docs getId\n\n# Decoders\n@docs decodeCharacter, decodeHouse, decodeBook\n\n# Encoders\n@docs encodeCharacter, encodeHouse, encodeBook\n\n",
+        "aliases": [
+          {
+            "name": "Book",
+            "comment": " Represents a book\n",
+            "args": [],
+            "type": "{ url : String , name : String , isbn : String , authors : List String , numberOfPages : Int , publisher : String , country : String , mediaType : String , released : String , characters : List String , povCharacters : List String }"
+          },
+          {
+            "name": "Character",
+            "comment": " Represents a character\n",
+            "args": [],
+            "type": "{ url : String , name : String , gender : String , culture : String , born : String , died : String , titles : List String , aliases : List String , father : String , mother : String , spouse : String , allegiances : List String , books : List String , povBooks : List String , tvSeries : List String , playedBy : List String }"
+          },
+          {
+            "name": "House",
+            "comment": " Represents a house\n",
+            "args": [],
+            "type": "{ url : String , name : String , region : String , coatOfArms : String , words : String , titles : List String , seats : List String , currentLord : String , heir : String , overlord : String , founded : String , founder : String , diedOut : String , ancestralWeapons : List String , cadetBranches : List String , swornMembers : List String }"
+          },
+          {
+            "name": "Id",
+            "comment": " Represents an id\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "Url",
+            "comment": " Represents a url\n",
+            "args": [],
+            "type": "String"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "decodeBook",
+            "comment": " Json decode a book\n",
+            "type": "Json.Decode.Decoder Asoiaf.Models.Book"
+          },
+          {
+            "name": "decodeCharacter",
+            "comment": " Json decode a character\n",
+            "type": "Json.Decode.Decoder Asoiaf.Models.Character"
+          },
+          {
+            "name": "decodeHouse",
+            "comment": " Json decode a house\n",
+            "type": "Json.Decode.Decoder Asoiaf.Models.House"
+          },
+          {
+            "name": "encodeBook",
+            "comment": " Json encode a book\n",
+            "type": "Asoiaf.Models.Book -> Json.Encode.Value"
+          },
+          {
+            "name": "encodeCharacter",
+            "comment": " Json encode a character\n",
+            "type": "Asoiaf.Models.Character -> Json.Encode.Value"
+          },
+          {
+            "name": "encodeHouse",
+            "comment": " Json encode a House\n",
+            "type": "Asoiaf.Models.House -> Json.Encode.Value"
+          },
+          {
+            "name": "getId",
+            "comment": " Gets the id from the end of a URL as used in the ASOIAF API.\n\n    getId \"http://www.anapioficeandfire.com/api/houses/362\" == 362\n\nUseful for for example getting ids of the books a character is appearing in\n\n    getBookIds : Character -> List Int\n    getBookIds character =\n      List.map getId character.books\n",
+            "type": "Asoiaf.Models.Url -> Asoiaf.Models.Id"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -47428,7 +47894,7 @@
   },
   {
     "name": "krisajenkins/elm-exts",
-    "version": "26.1.0",
+    "version": "26.1.1",
     "docs": [
       {
         "name": "Exts.Html",
@@ -47528,25 +47994,6 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.Function",
-        "comment": " Extensions so generic they just operate on functions.\n\n@docs (>>>)\n@docs (<<<)\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "<<<",
-            "comment": " Right-to-left composition of functions that rely on an environment.\n",
-            "type": "(env -> b -> c) -> (env -> a -> b) -> env -> a -> c"
-          },
-          {
-            "name": ">>>",
-            "comment": " Left-to-right composition of functions that rely on an environment.\n\nExample:\n\n    quux (bar (foo model x) model) model\n\nBecomes:\n\n    (foo >>> bar >>> quux) model x\n\nThe operator `>>>` mirrors Haskell's Control.Arrow, because really\nthis is an arrow specialised to Reader.\n",
-            "type": "(env -> a -> b) -> (env -> b -> c) -> env -> a -> c"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
         "name": "Exts.Validation",
         "comment": " Simple tools for validation. See also [Richard Feldman's elm-validate](http://package.elm-lang.org/packages/rtfeldman/elm-validate/latest).\n\n@docs Validator\n@docs apply\n@docs (|:)\n@docs required\n@docs notBlank\n@docs matches\n@docs email\n@docs emailRegex\n",
         "aliases": [
@@ -47602,49 +48049,6 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.Task",
-        "comment": " Extensions to the core `Process` library.\n\n@docs delay\n@docs asCmd\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "asCmd",
-            "comment": " Turn a `Task` into a `Cmd` which returns a `Result`.\n",
-            "type": "Task.Task e a -> Platform.Cmd.Cmd (Result.Result e a)"
-          },
-          {
-            "name": "delay",
-            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
-            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Set",
-        "comment": " Extensions to the core `Set` library.\n\n@docs select\n@docs uniqueItems\n@docs toggle\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "select",
-            "comment": " Pull any items from a list where (f x) is in the given set.\n",
-            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
-          },
-          {
-            "name": "toggle",
-            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
-            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
-          },
-          {
-            "name": "uniqueItems",
-            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
-            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
         "name": "Exts.Tuple",
         "comment": " Extensions for tuples.\n\n@docs indexedPair\n@docs mapFirst\n@docs mapSecond\n@docs both\n@docs pair\n@docs fork\n@docs onFirst\n@docs onSecond\n\n",
         "aliases": [],
@@ -47689,6 +48093,208 @@
             "name": "pair",
             "comment": " Update both components of a pair with two functions.\n",
             "type": "(a -> b) -> (x -> y) -> ( a, x ) -> ( b, y )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Html.Attributes",
+        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue\n@docs defaultString\n@docs defaultInt\n@docs defaultFloat\n@docs styleList\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultFloat",
+            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
+            "type": "Float -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultInt",
+            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
+            "type": "Int -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultString",
+            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
+            "type": "String -> Html.Attribute msg"
+          },
+          {
+            "name": "defaultValue",
+            "comment": " Set a default value for an input field.\n",
+            "type": "Json.Encode.Value -> Html.Attribute msg"
+          },
+          {
+            "name": "styleList",
+            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
+            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Set",
+        "comment": " Extensions to the core `Set` library.\n\n@docs select\n@docs uniqueItems\n@docs toggle\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "select",
+            "comment": " Pull any items from a list where (f x) is in the given set.\n",
+            "type": "(a -> comparable) -> Set.Set comparable -> List a -> List a"
+          },
+          {
+            "name": "toggle",
+            "comment": " If x is a member of the set, remove it. Otherwise, add it.\n",
+            "type": "comparable -> Set.Set comparable -> Set.Set comparable"
+          },
+          {
+            "name": "uniqueItems",
+            "comment": " Dive into a `List` to get a set of values.\n\n  For example, pulling a `Set` of countries from a `List` of users.\n",
+            "type": "(a -> Maybe.Maybe comparable) -> List a -> Set.Set comparable"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.String",
+        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "removePrefix",
+            "comment": " Strip a leading string from a `String`.\n",
+            "type": "String -> String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Result",
+        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth\n@docs isOk\n@docs isErr\n@docs fromOk\n@docs fromErr\n@docs mappend\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "fromErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Maybe.Maybe e"
+          },
+          {
+            "name": "fromOk",
+            "comment": " Convert a `Result` to a `Maybe`.\n",
+            "type": "Result.Result e a -> Maybe.Maybe a"
+          },
+          {
+            "name": "isErr",
+            "comment": " ",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "isOk",
+            "comment": " Boolean checks for success/failure.\n",
+            "type": "Result.Result e a -> Bool"
+          },
+          {
+            "name": "mapBoth",
+            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
+            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
+          },
+          {
+            "name": "mappend",
+            "comment": " Monoidal append - join two Results together as though they were one.\n",
+            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Task",
+        "comment": " Extensions to the core `Process` library.\n\n@docs delay\n@docs asCmd\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "asCmd",
+            "comment": " Turn a `Task` into a `Cmd` which returns a `Result`.\n",
+            "type": "Task.Task e a -> Platform.Cmd.Cmd (Result.Result e a)"
+          },
+          {
+            "name": "delay",
+            "comment": " Delay running the `Task` for a given `Time`.\n\nThis is just the example given in `Task.sleep` wrapped up, because it's o useful.\n",
+            "type": "Time.Time -> Task.Task e a -> Task.Task e a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.LatLng",
+        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bearingTo",
+            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          },
+          {
+            "name": "distanceBetween",
+            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
+            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Json.Encode",
+        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set\n@docs dict\n@docs tuple2\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dict",
+            "comment": " Encode a `Dict` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
+          },
+          {
+            "name": "set",
+            "comment": " Encode a `Set` to a JSON array .\n",
+            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
+          },
+          {
+            "name": "tuple2",
+            "comment": " Encode a pair to a JSON array .\n",
+            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Exts.Json.Decode",
+        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n@docs decodeTime\n@docs decodeDate\n@docs parseWith\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "decodeDate",
+            "comment": " Decode a Date from a string, using the same format as the core\nfunction `Date.fromString`.\n",
+            "type": "Json.Decode.Decoder Date.Date"
+          },
+          {
+            "name": "decodeTime",
+            "comment": " Decode a Date from seconds-since-the-epoch.\n",
+            "type": "Json.Decode.Decoder Date.Date"
+          },
+          {
+            "name": "parseWith",
+            "comment": " Lift a function that parses things, returning a `Result`, into the world of decoders.\n\nIf you're looking for the pre-0.18 function `customDecoder`, you can\nuse something like this instead:\n\n``` elm\ndecodeUUID : Decoder UUID\ndecodeUUID =\n    string\n        |> andThen (parseWith UUID.fromString)\n```\n",
+            "type": "(a -> Result.Result String b) -> a -> Json.Decode.Decoder b"
+          },
+          {
+            "name": "stringIgnoringBlanks",
+            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
+            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -47758,140 +48364,162 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.String",
-        "comment": " Extensions to the core `String` library.\n\n@docs removePrefix\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
+        "name": "Exts.Html.Table",
+        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef\n@docs TableDef\n@docs simpleTable\n@docs simpleTableRow\n@docs titleGroup\n@docs valueGroup\n",
+        "aliases": [
           {
-            "name": "removePrefix",
-            "comment": " Strip a leading string from a `String`.\n",
-            "type": "String -> String -> String"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Json.Encode",
-        "comment": " Extensions to the core `Json.Encode` library.\n\n@docs set\n@docs dict\n@docs tuple2\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "dict",
-            "comment": " Encode a `Dict` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> (v -> Json.Encode.Value) -> Dict.Dict comparable v -> Json.Encode.Value"
+            "name": "CellDef",
+            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "( Html.Html msg, a -> Html.Html msg )"
           },
           {
-            "name": "set",
-            "comment": " Encode a `Set` to a JSON array .\n",
-            "type": "(comparable -> Json.Encode.Value) -> Set.Set comparable -> Json.Encode.Value"
-          },
-          {
-            "name": "tuple2",
-            "comment": " Encode a pair to a JSON array .\n",
-            "type": "(a -> Json.Encode.Value) -> (b -> Json.Encode.Value) -> ( a, b ) -> Json.Encode.Value"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Result",
-        "comment": " Extensions to the core `Result` library.\n\n@docs mapBoth\n@docs isOk\n@docs isErr\n@docs fromOk\n@docs fromErr\n@docs mappend\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "fromErr",
+            "name": "TableDef",
             "comment": " ",
-            "type": "Result.Result e a -> Maybe.Maybe e"
+            "args": [
+              "a",
+              "msg"
+            ],
+            "type": "List (Exts.Html.Table.CellDef a msg)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "simpleTable",
+            "comment": " Given a table definition, render a list of elements as HTML.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
           },
           {
-            "name": "fromOk",
-            "comment": " Convert a `Result` to a `Maybe`.\n",
-            "type": "Result.Result e a -> Maybe.Maybe a"
+            "name": "simpleTableRow",
+            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
+            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
           },
           {
-            "name": "isErr",
+            "name": "titleGroup",
+            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
+            "type": "List String -> Html.Html msg"
+          },
+          {
+            "name": "valueGroup",
             "comment": " ",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "isOk",
-            "comment": " Boolean checks for success/failure.\n",
-            "type": "Result.Result e a -> Bool"
-          },
-          {
-            "name": "mapBoth",
-            "comment": " Apply functions to both sides of a `Result`, transforming the error and ok types.\n",
-            "type": "(e -> f) -> (a -> b) -> Result.Result e a -> Result.Result f b"
-          },
-          {
-            "name": "mappend",
-            "comment": " Monoidal append - join two Results together as though they were one.\n",
-            "type": "Result.Result e a -> Result.Result e b -> Result.Result e ( a, b )"
+            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.LatLng",
-        "comment": " Calculations between points on the earth.\n\n@docs distanceBetween, bearingTo\n",
+        "name": "Exts.Html.Bootstrap",
+        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet\n@docs container\n@docs containerFluid\n@docs row\n@docs formGroup\n@docs empty\n@docs twoColumns\n@docs Ratio\n@docs video\n@docs popover\n@docs PopoverDirection\n@docs clearfix\n@docs well\n@docs jumbotron\n@docs badge\n",
         "aliases": [],
-        "types": [],
-        "values": [
+        "types": [
           {
-            "name": "bearingTo",
-            "comment": " Calculate the heading you'd need to travel on to get from point a to point b.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+            "name": "PopoverDirection",
+            "comment": " ",
+            "args": [],
+            "cases": [
+              [
+                "Top",
+                []
+              ],
+              [
+                "Right",
+                []
+              ],
+              [
+                "Bottom",
+                []
+              ],
+              [
+                "Left",
+                []
+              ]
+            ]
           },
           {
-            "name": "distanceBetween",
-            "comment": " Calculate the distance in kilometers between two points.\n\n  Note that this assumes the earth is spherical, which is not true, but may be true enough for your purposes.\n",
-            "type": "{ a | latitude : Float, longitude : Float } -> { b | latitude : Float, longitude : Float } -> Float"
+            "name": "Ratio",
+            "comment": " Aspect ratios for responsive video embedding.\n",
+            "args": [],
+            "cases": [
+              [
+                "SixteenByNine",
+                []
+              ],
+              [
+                "FourByThree",
+                []
+              ]
+            ]
           }
         ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Int",
-        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
-        "aliases": [],
-        "types": [],
         "values": [
           {
-            "name": "floorBy",
-            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
-            "type": "Int -> Int -> Maybe.Maybe Int"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Json.Decode",
-        "comment": " Extensions to the core `Json.Decode` library.\n\n@docs stringIgnoringBlanks\n@docs decodeTime\n@docs decodeDate\n@docs parseWith\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "decodeDate",
-            "comment": " Decode a Date from a string, using the same format as the core\nfunction `Date.fromString`.\n",
-            "type": "Json.Decode.Decoder Date.Date"
+            "name": "badge",
+            "comment": " Bootstrap badge component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "decodeTime",
-            "comment": " Decode a Date from seconds-since-the-epoch.\n",
-            "type": "Json.Decode.Decoder Date.Date"
+            "name": "clearfix",
+            "comment": " Bootstrap clearfix.\n",
+            "type": "Html.Html msg"
           },
           {
-            "name": "parseWith",
-            "comment": " Lift a function that parses things, returning a `Result`, into the world of decoders.\n\nIf you're looking for the pre-0.18 function `customDecoder`, you can\nuse something like this instead:\n\n``` elm\ndecodeUUID : Decoder UUID\ndecodeUUID =\n    string\n        |> andThen (parseWith UUID.fromString)\n```\n",
-            "type": "(a -> Result.Result String b) -> a -> Json.Decode.Decoder b"
+            "name": "container",
+            "comment": " Bootstrap grid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
           },
           {
-            "name": "stringIgnoringBlanks",
-            "comment": " A decoder like `(maybe string)`, except an empty or whitespace string is treated as `Nothing`.\n\nUseful for dirty data-models.\n",
-            "type": "Json.Decode.Decoder (Maybe.Maybe String)"
+            "name": "containerFluid",
+            "comment": " Bootstrap grid fluid container.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "empty",
+            "comment": " The minimum markup - an empty span.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "formGroup",
+            "comment": " Bootstrap form group.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "jumbotron",
+            "comment": " Bootstrap jumbotron component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "popover",
+            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
+            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
+          },
+          {
+            "name": "row",
+            "comment": " Bootstrap grid row.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "stylesheet",
+            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
+            "type": "Html.Html msg"
+          },
+          {
+            "name": "twoColumns",
+            "comment": " Two evenly-sized columns. Must be used within a row.\n",
+            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
+          },
+          {
+            "name": "video",
+            "comment": " Embed a responsive video.\n",
+            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
+          },
+          {
+            "name": "well",
+            "comment": " Bootstrap well component.\n",
+            "type": "List (Html.Html msg) -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -48971,196 +49599,73 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.Html.Table",
-        "comment": " Helpers for simple data tables. Define how a list of items can be\nrendered as a table. The definition is a `List` of `(column-title,\ncolumn-value-accessor)` pairs.\n\n  I find this approach works well for simple tables, but breaks down\n  as soon as you need much customisation. Use it to get you started\n  quickly, but be ready to rewrite when this 80% case no longer suits.\n\n@docs CellDef\n@docs TableDef\n@docs simpleTable\n@docs simpleTableRow\n@docs titleGroup\n@docs valueGroup\n",
-        "aliases": [
-          {
-            "name": "CellDef",
-            "comment": " A table definition looks something like:\n\n    [(text \"Name\", .name >> text)\n    ,(text \"Name\", .age >> toString >> text)]\n\n",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "( Html.Html msg, a -> Html.Html msg )"
-          },
-          {
-            "name": "TableDef",
-            "comment": " ",
-            "args": [
-              "a",
-              "msg"
-            ],
-            "type": "List (Exts.Html.Table.CellDef a msg)"
-          }
-        ],
+        "name": "Exts.Function",
+        "comment": " Extensions so generic they just operate on functions.\n\n@docs (>>>)\n@docs (<<<)\n",
+        "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "simpleTable",
-            "comment": " Given a table definition, render a list of elements as HTML.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> List a -> Html.Html msg"
+            "name": "<<<",
+            "comment": " Right-to-left composition of functions that rely on an environment.\n",
+            "type": "(env -> b -> c) -> (env -> a -> b) -> env -> a -> c"
           },
           {
-            "name": "simpleTableRow",
-            "comment": " Given a table definition, render an element to a <tr> tag. This is\nlower-level. Usually you will want `simpleTable` instead.\n",
-            "type": "Exts.Html.Table.TableDef a msg -> a -> Html.Html msg"
-          },
-          {
-            "name": "titleGroup",
-            "comment": " titleGroup and valueGroup are used to create columns that stack multiple pairs. For example:\n\n    [(titleGroup [\"Latitude\", \"Longitude\"]\n     ,valueGroup [.location >> .lat >> toString >> text\n                 ,.location >> .lng >> toString >> text])\n\n",
-            "type": "List String -> Html.Html msg"
-          },
-          {
-            "name": "valueGroup",
-            "comment": " ",
-            "type": "List (a -> Html.Html msg) -> a -> Html.Html msg"
+            "name": ">>>",
+            "comment": " Left-to-right composition of functions that rely on an environment.\n\nExample:\n\n    quux (bar (foo model x) model) model\n\nBecomes:\n\n    (foo >>> bar >>> quux) model x\n\nThe operator `>>>` mirrors Haskell's Control.Arrow, because really\nthis is an arrow specialised to Reader.\n",
+            "type": "(env -> a -> b) -> (env -> b -> c) -> env -> a -> c"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.Html.Attributes",
-        "comment": " Extensions to the `Html.Attributes` library.\n\n@docs defaultValue\n@docs defaultString\n@docs defaultInt\n@docs defaultFloat\n@docs styleList\n",
+        "name": "Exts.Int",
+        "comment": " Extensions to the core `Int` library.\n\n@docs floorBy\n",
         "aliases": [],
         "types": [],
         "values": [
           {
-            "name": "defaultFloat",
-            "comment": " Convenience version of `defaultValue`, for `Float`s.\n",
-            "type": "Float -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultInt",
-            "comment": " Convenience version of `defaultValue`, for `Int`s.\n",
-            "type": "Int -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultString",
-            "comment": " Convenience version of `defaultValue`, for `String`s.\n",
-            "type": "String -> Html.Attribute msg"
-          },
-          {
-            "name": "defaultValue",
-            "comment": " Set a default value for an input field.\n",
-            "type": "Json.Encode.Value -> Html.Attribute msg"
-          },
-          {
-            "name": "styleList",
-            "comment": " This function makes it easier to specify a conditional set of styles.\n   This the style-equivalent of elm-html's classList.\n",
-            "type": "List ( String, String, Bool ) -> Html.Attribute msg"
+            "name": "floorBy",
+            "comment": " Round an int down to the nearest multiple of a factor.\n\n    floorBy  2 143 => Just 142\n    floorBy 50 143 => Just 100\n    floorBy  0 143 => Nothing\n",
+            "type": "Int -> Int -> Maybe.Maybe Int"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Exts.Html.Bootstrap",
-        "comment": " Base classes for Twitter Bootstrap 3 users.\n\n@docs stylesheet\n@docs container\n@docs containerFluid\n@docs row\n@docs formGroup\n@docs empty\n@docs twoColumns\n@docs Ratio\n@docs video\n@docs popover\n@docs PopoverDirection\n@docs clearfix\n@docs well\n@docs jumbotron\n@docs badge\n",
+        "name": "Exts.Dict",
+        "comment": " Extensions to the core `Dict` library.\n\n@docs indexBy\n@docs groupBy\n@docs frequency\n@docs getWithDefault\n@docs foldToList\n@docs updateDict\n\n",
         "aliases": [],
-        "types": [
-          {
-            "name": "PopoverDirection",
-            "comment": " ",
-            "args": [],
-            "cases": [
-              [
-                "Top",
-                []
-              ],
-              [
-                "Right",
-                []
-              ],
-              [
-                "Bottom",
-                []
-              ],
-              [
-                "Left",
-                []
-              ]
-            ]
-          },
-          {
-            "name": "Ratio",
-            "comment": " Aspect ratios for responsive video embedding.\n",
-            "args": [],
-            "cases": [
-              [
-                "SixteenByNine",
-                []
-              ],
-              [
-                "FourByThree",
-                []
-              ]
-            ]
-          }
-        ],
+        "types": [],
         "values": [
           {
-            "name": "badge",
-            "comment": " Bootstrap badge component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
+            "name": "foldToList",
+            "comment": " Run a function over the dictionary entries, resulting in a list of the final results.\n",
+            "type": "(comparable -> v -> b) -> Dict.Dict comparable v -> List b"
           },
           {
-            "name": "clearfix",
-            "comment": " Bootstrap clearfix.\n",
-            "type": "Html.Html msg"
+            "name": "frequency",
+            "comment": " Create a frequency-map from the given list.\n",
+            "type": "List comparable -> Dict.Dict comparable Int"
           },
           {
-            "name": "container",
-            "comment": " Bootstrap grid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
+            "name": "getWithDefault",
+            "comment": " Attempt to find a key, if it's not there, return a default value.\n",
+            "type": "a -> comparable -> Dict.Dict comparable a -> a"
           },
           {
-            "name": "containerFluid",
-            "comment": " Bootstrap grid fluid container.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
+            "name": "groupBy",
+            "comment": " Group a list of items by a key.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `groupBy` returns a dictionary of group-key/list-of-items.\n\n  If the indexing function returns a unique key for every item, consider `indexBy` instead.\n",
+            "type": "(v -> comparable) -> List v -> Dict.Dict comparable (List v)"
           },
           {
-            "name": "empty",
-            "comment": " The minimum markup - an empty span.\n",
-            "type": "Html.Html msg"
+            "name": "indexBy",
+            "comment": " Turn a list of items into an indexed dictionary.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `indexBy` returns a dictionary with each item stored under\n  its index.\n\n  This code assumes each index is unique. If that is not the case, you\n  should use `groupBy` instead.\n",
+            "type": "(v -> comparable) -> List v -> Dict.Dict comparable v"
           },
           {
-            "name": "formGroup",
-            "comment": " Bootstrap form group.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "jumbotron",
-            "comment": " Bootstrap jumbotron component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "popover",
-            "comment": " Interface to the bootstrap popover that does not require bootstrap.js.\n",
-            "type": "Exts.Html.Bootstrap.PopoverDirection -> Bool -> List ( String, String ) -> Maybe.Maybe String -> Html.Html msg -> Html.Html msg"
-          },
-          {
-            "name": "row",
-            "comment": " Bootstrap grid row.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "stylesheet",
-            "comment": " A tag that loads Bootstrap from a CDN.\n\nYou'll probably only want to use this to get you started. By the time you go\ninto production, you should probably be loading this file in the `<head>` tag\nof your page.\n",
-            "type": "Html.Html msg"
-          },
-          {
-            "name": "twoColumns",
-            "comment": " Two evenly-sized columns. Must be used within a row.\n",
-            "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
-          },
-          {
-            "name": "video",
-            "comment": " Embed a responsive video.\n",
-            "type": "Exts.Html.Bootstrap.Ratio -> String -> Html.Html msg"
-          },
-          {
-            "name": "well",
-            "comment": " Bootstrap well component.\n",
-            "type": "List (Html.Html msg) -> Html.Html msg"
+            "name": "updateDict",
+            "comment": " Apply an Elm update function - `Model -> (Model, Cmd Msg)` - to a `Dict` entry, if present.\n\nIt's quite common in Elm to want to run a model-update function, over\nsome dictionary of models, but only if that model is available.\n\nThis function makes it more convenient to reach inside a `Dict` and\napply an update. If the data is not there, the `Dict` is returned\nunchanged with a `Cmd.none`.\n\n",
+            "type": "(a -> ( a, Platform.Cmd.Cmd cmd )) -> comparable -> Dict.Dict comparable a -> ( Dict.Dict comparable a, Platform.Cmd.Cmd cmd )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -49227,45 +49732,6 @@
             "name": "generation",
             "comment": " Update the delta by inspecting a list of players.\n",
             "type": "List a -> Exts.Delta.Delta a -> Exts.Delta.Delta a"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Exts.Dict",
-        "comment": " Extensions to the core `Dict` library.\n\n@docs indexBy\n@docs groupBy\n@docs frequency\n@docs getWithDefault\n@docs foldToList\n@docs updateDict\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "foldToList",
-            "comment": " Run a function over the dictionary entries, resulting in a list of the final results.\n",
-            "type": "(comparable -> v -> b) -> Dict.Dict comparable v -> List b"
-          },
-          {
-            "name": "frequency",
-            "comment": " Create a frequency-map from the given list.\n",
-            "type": "List comparable -> Dict.Dict comparable Int"
-          },
-          {
-            "name": "getWithDefault",
-            "comment": " Attempt to find a key, if it's not there, return a default value.\n",
-            "type": "a -> comparable -> Dict.Dict comparable a -> a"
-          },
-          {
-            "name": "groupBy",
-            "comment": " Group a list of items by a key.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `groupBy` returns a dictionary of group-key/list-of-items.\n\n  If the indexing function returns a unique key for every item, consider `indexBy` instead.\n",
-            "type": "(v -> comparable) -> List v -> Dict.Dict comparable (List v)"
-          },
-          {
-            "name": "indexBy",
-            "comment": " Turn a list of items into an indexed dictionary.\n\n  Supply an indexing function (eg. `.id`) and a list of\n  items. `indexBy` returns a dictionary with each item stored under\n  its index.\n\n  This code assumes each index is unique. If that is not the case, you\n  should use `groupBy` instead.\n",
-            "type": "(v -> comparable) -> List v -> Dict.Dict comparable v"
-          },
-          {
-            "name": "updateDict",
-            "comment": " Apply an Elm update function - `Model -> (Model, Cmd Msg)` - to a `Dict` entry, if present.\n\nIt's quite common in Elm to want to run a model-update function, over\nsome dictionary of models, but only if that model is available.\n\nThis function makes it more convenient to reach inside a `Dict` and\napply an update. If the data is not there, the `Dict` is returned\nunchanged with a `Cmd.none`.\n\n",
-            "type": "(a -> ( a, Platform.Cmd.Cmd cmd )) -> comparable -> Dict.Dict comparable a -> ( Dict.Dict comparable a, Platform.Cmd.Cmd cmd )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -51189,6 +51655,873 @@
             "name": "zippy",
             "comment": " The default used by elm-style-animation.\n",
             "type": "Animation.Spring.Presets.Spring"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "mdgriffith/style-elements",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Style",
+        "comment": "\n\nThis module is focused around composing a style.\n\n@docs Model, Property, StyleSheet, embed, render, renderWith, class, selector, foundation\n\n## Rendering Options\n\n@docs Option, debug, base, importCSS, importUrl, autoImportGoogleFonts\n\n\n# Positioning\n\nThe coordinates for position always have the same coordinate system, right and down are the positive directions, same as the standard coordinate system for svg.\n\nThese coordinates are always rendered in pixels.\n\nThe name of the position property refers on which corner of the css box to start at.\n\n@docs topLeft, topRight, bottomLeft, bottomRight\n\n@docs positionBy, PositionParent, parent, currentPosition, screen\n\n\n\n# Width/Height\n\n@docs height, minHeight, maxHeight, width, minWidth, maxWidth\n\n# Units\n\nMost values in this library have one set of units to the library that are required to be used.\n\nThis is to encourage relative units to be expressed in terms of your elm code instead of relying on DOM hierarchy.\n\nHowever, `width` and `height` values can be pixels, percent, or auto.\n\n@docs percent, px, auto\n\n\n# A Note on Padding and Margins\n\nWith `padding` and `margin` you have two ways of specifying the spacing of the child element within the parent.  Either the `margin` on the child or the `padding` on the parent.\n\nIn the effort of having only one good way to accomplish something, we only allow the `padding` property to be set.\n\nWe introduce the `spacing` attribute, which sets the spacing between all _child_ elements (using the margin property).\n\n> __Some exceptions__\n>\n> `inline` elements are not affected by spacing.\n>\n> Floating elements will only respect certain spacing values.\n\n@docs padding, spacing, zIndex\n\n\n# Padding, Spacing, and Borders\n\nPadding, spacing, and border widths are all specified by a tuple of four floats that represent (top, right, bottom, left).  These are all rendered as `px` values.\n\nThe following are convenience functions for setting these values.\n\n@docs all, top, bottom, left, right, topBottom, leftRight, leftRightAndTopBottom, leftRightTopBottom, allButTop, allButLeft, allButRight, allButBottom\n\n\n## Borderstyles\n\n@docs Border, border, borderStyle, BorderStyle, borderWidth, solid, dotted, dashed, borderRadius\n\n# Layouts\n\nLayouts affect how child elements are arranged.\n\n@docs Layout, textLayout, tableLayout\n\n@docs Flow, flowUp, flowDown, flowRight, flowLeft\n\n\n@docs inline\n\n@docs Floating, floatLeft, floatRight, floatTopLeft, floatTopRight\n\n# Alignment\n\n@docs Alignment, alignLeft, alignRight, justify, justifyAll, alignCenter\n\n@docs VerticalAlignment, verticalCenter, verticalStretch, alignTop, alignBottom\n\n\n# Colors\n\n@docs textColor, backgroundColor, borderColor\n\n\n# Visibility\n\n@docs visibility, Visibility, hidden, opacity, transparency, visible\n\n\n# Text/Font\n\n@docs font, fontsize, lineHeight, textAlign, letterOffset, whitespace, Whitespace, normal, pre, preLine, preWrap, noWrap, italicize, bold, light, strike, underline, cursor\n\n\n# Background Images\n\n@docs backgroundImage, BackgroundImage, Repeat, repeat, repeatX, repeatY, noRepeat, round, space\n\n@docs property, mix\n\n\n# Shadows\n\n@docs shadows, Shadow, shadow, insetShadow, textShadow, dropShadow\n\n\n# Transforms\n\n@docs transforms, Transform, translate, rotate, scale\n\n# Filters\n\n@docs filters, Filter, filterUrl, blur, brightness, contrast, grayscale, hueRotate, invert, opacityFilter, saturate, sepia\n\n\n# Animations and Transitions\n\n@docs Animation, animate\n\n\n@docs Transition, transition\n\n## Pseudo elements and classes\n\n@docs selection, after, before, hover, focus, checked\n\n\n\n\n",
+        "aliases": [
+          {
+            "name": "Alignment",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Alignment"
+          },
+          {
+            "name": "Animation",
+            "comment": " ",
+            "args": [],
+            "type": "{ duration : Time.Time , easing : String , repeat : Float , steps : List ( Float, List Style.Property ) }"
+          },
+          {
+            "name": "BackgroundImage",
+            "comment": " ",
+            "args": [],
+            "type": "{ src : String, position : ( Float, Float ), repeat : Style.Repeat }"
+          },
+          {
+            "name": "Border",
+            "comment": " ",
+            "args": [],
+            "type": "{ width : ( Float, Float, Float, Float ) , style : Style.BorderStyle , color : Color.Color }"
+          },
+          {
+            "name": "BorderStyle",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.BorderStyle"
+          },
+          {
+            "name": "Filter",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Filter"
+          },
+          {
+            "name": "Floating",
+            "comment": " Only rendered if the parent is a textLayout.\n",
+            "args": [],
+            "type": "Style.Model.Floating"
+          },
+          {
+            "name": "Flow",
+            "comment": "\n\n",
+            "args": [],
+            "type": "{ wrap : Bool , horizontal : Style.Alignment , vertical : Style.VerticalAlignment }"
+          },
+          {
+            "name": "Layout",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Layout"
+          },
+          {
+            "name": "Model",
+            "comment": " ",
+            "args": [
+              "class"
+            ],
+            "type": "Style.Model.Model class"
+          },
+          {
+            "name": "PositionParent",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.PositionParent"
+          },
+          {
+            "name": "Property",
+            "comment": " ",
+            "args": [],
+            "type": "Style.Model.Property"
+          },
+          {
+            "name": "Repeat",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Repeat"
+          },
+          {
+            "name": "Shadow",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Shadow"
+          },
+          {
+            "name": "StyleSheet",
+            "comment": " ",
+            "args": [
+              "class",
+              "msg"
+            ],
+            "type": "{ class : class -> Html.Attribute msg , classList : List ( class, Bool ) -> Html.Attribute msg , css : String }"
+          },
+          {
+            "name": "Transform",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Transform"
+          },
+          {
+            "name": "Transition",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Transition"
+          },
+          {
+            "name": "VerticalAlignment",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.VerticalAlignment"
+          },
+          {
+            "name": "Visibility",
+            "comment": "\n",
+            "args": [],
+            "type": "Style.Model.Visibility"
+          },
+          {
+            "name": "Whitespace",
+            "comment": " ",
+            "args": [],
+            "type": "Style.Model.Whitespace"
+          }
+        ],
+        "types": [
+          {
+            "name": "Option",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "after",
+            "comment": " Requires a string which will be rendered as the 'content' property\n",
+            "type": "String -> List Style.Property -> Style.Property"
+          },
+          {
+            "name": "alignBottom",
+            "comment": " ",
+            "type": "Style.VerticalAlignment"
+          },
+          {
+            "name": "alignCenter",
+            "comment": " ",
+            "type": "Style.Alignment"
+          },
+          {
+            "name": "alignLeft",
+            "comment": " ",
+            "type": "Style.Alignment"
+          },
+          {
+            "name": "alignRight",
+            "comment": " ",
+            "type": "Style.Alignment"
+          },
+          {
+            "name": "alignTop",
+            "comment": " ",
+            "type": "Style.VerticalAlignment"
+          },
+          {
+            "name": "all",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "allButBottom",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "allButLeft",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "allButRight",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "allButTop",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "animate",
+            "comment": " Create an animation\n",
+            "type": "Style.Animation -> Style.Property"
+          },
+          {
+            "name": "auto",
+            "comment": " ",
+            "type": "Style.Length"
+          },
+          {
+            "name": "autoImportGoogleFonts",
+            "comment": " An attempt will be made to import all non-standard webfonts that are in your styles.\n",
+            "type": "Style.Option"
+          },
+          {
+            "name": "backgroundColor",
+            "comment": " ",
+            "type": "Color.Color -> Style.Property"
+          },
+          {
+            "name": "backgroundImage",
+            "comment": " ",
+            "type": "Style.BackgroundImage -> Style.Property"
+          },
+          {
+            "name": "base",
+            "comment": " Set a base style.  All classes in this stylesheet will start with these properties.\n",
+            "type": "List Style.Property -> Style.Option"
+          },
+          {
+            "name": "before",
+            "comment": " Requires a string which will be rendered as the 'content' property\n",
+            "type": "String -> List Style.Property -> Style.Property"
+          },
+          {
+            "name": "blur",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "bold",
+            "comment": " ",
+            "type": "Style.Property"
+          },
+          {
+            "name": "border",
+            "comment": " ",
+            "type": "Style.Border -> Style.Property"
+          },
+          {
+            "name": "borderColor",
+            "comment": " ",
+            "type": "Color.Color -> Style.Property"
+          },
+          {
+            "name": "borderRadius",
+            "comment": " ",
+            "type": "( Float, Float, Float, Float ) -> Style.Property"
+          },
+          {
+            "name": "borderStyle",
+            "comment": " ",
+            "type": "Style.BorderStyle -> Style.Property"
+          },
+          {
+            "name": "borderWidth",
+            "comment": " ",
+            "type": "( Float, Float, Float, Float ) -> Style.Property"
+          },
+          {
+            "name": "bottom",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "bottomLeft",
+            "comment": " ",
+            "type": "Float -> Float -> Style.Property"
+          },
+          {
+            "name": "bottomRight",
+            "comment": " ",
+            "type": "Float -> Float -> Style.Property"
+          },
+          {
+            "name": "brightness",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "checked",
+            "comment": " ",
+            "type": "List Style.Property -> Style.Property"
+          },
+          {
+            "name": "class",
+            "comment": "\n",
+            "type": "class -> List Style.Property -> Style.Model class"
+          },
+          {
+            "name": "contrast",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "currentPosition",
+            "comment": " ",
+            "type": "Style.PositionParent"
+          },
+          {
+            "name": "cursor",
+            "comment": " ",
+            "type": "String -> Style.Property"
+          },
+          {
+            "name": "dashed",
+            "comment": " ",
+            "type": "Style.BorderStyle"
+          },
+          {
+            "name": "debug",
+            "comment": " Log a warning if a style is missing from a style sheet.\n\nAlso shows a visual warning if a style uses float or inline in a table layout orflow/flex layout.\n\n",
+            "type": "Style.Option"
+          },
+          {
+            "name": "dotted",
+            "comment": " ",
+            "type": "Style.BorderStyle"
+          },
+          {
+            "name": "dropShadow",
+            "comment": "\n",
+            "type": "{ offset : ( Float, Float ), blur : Float, color : Color.Color } -> Style.Shadow"
+          },
+          {
+            "name": "embed",
+            "comment": " Embed a style sheet into your html.\n",
+            "type": "Style.StyleSheet class msg -> Html.Html msg"
+          },
+          {
+            "name": "filterUrl",
+            "comment": " ",
+            "type": "String -> Style.Filter"
+          },
+          {
+            "name": "filters",
+            "comment": " ",
+            "type": "List Style.Filter -> Style.Property"
+          },
+          {
+            "name": "floatLeft",
+            "comment": " Float something to the left.  Only valid in textLayouts.\n\nWill ignore any left spacing that it's parent has set for it.\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "floatRight",
+            "comment": "\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "floatTopLeft",
+            "comment": " Same as floatLeft, except it will ignore any top spacing that it's parent has set for it.\n\nThis is useful for floating things at the beginning of text.\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "floatTopRight",
+            "comment": "\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "flowDown",
+            "comment": "\n\n",
+            "type": "Style.Flow -> Style.Property"
+          },
+          {
+            "name": "flowLeft",
+            "comment": " ",
+            "type": "Style.Flow -> Style.Property"
+          },
+          {
+            "name": "flowRight",
+            "comment": " ",
+            "type": "Style.Flow -> Style.Property"
+          },
+          {
+            "name": "flowUp",
+            "comment": " This is a flexbox foundationd layout\n",
+            "type": "Style.Flow -> Style.Property"
+          },
+          {
+            "name": "focus",
+            "comment": " ",
+            "type": "List Style.Property -> Style.Property"
+          },
+          {
+            "name": "font",
+            "comment": " Set font-family\n",
+            "type": "String -> Style.Property"
+          },
+          {
+            "name": "fontsize",
+            "comment": " Set font-size.  Only px allowed.\n",
+            "type": "Float -> Style.Property"
+          },
+          {
+            "name": "foundation",
+            "comment": "\n\nSets the following defaults:\n\n    box-sizing: border-box\n    display: block\n    position: relative\n    top: 0\n    left: 0\n\n",
+            "type": "List Style.Property"
+          },
+          {
+            "name": "grayscale",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "height",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "hidden",
+            "comment": " Same as \"display:none\"\n",
+            "type": "Style.Visibility"
+          },
+          {
+            "name": "hover",
+            "comment": " ",
+            "type": "List Style.Property -> Style.Property"
+          },
+          {
+            "name": "hueRotate",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "importCSS",
+            "comment": "\n",
+            "type": "String -> Style.Option"
+          },
+          {
+            "name": "importUrl",
+            "comment": "\n",
+            "type": "String -> Style.Option"
+          },
+          {
+            "name": "inline",
+            "comment": " Render an element as 'inline-block'.\n\nThis element will no longer be affected by 'spacing'\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "insetShadow",
+            "comment": " ",
+            "type": "{ offset : ( Float, Float ) , size : Float , blur : Float , color : Color.Color } -> Style.Shadow"
+          },
+          {
+            "name": "invert",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "italicize",
+            "comment": " ",
+            "type": "Style.Property"
+          },
+          {
+            "name": "justify",
+            "comment": " ",
+            "type": "Style.Alignment"
+          },
+          {
+            "name": "justifyAll",
+            "comment": " ",
+            "type": "Style.Alignment"
+          },
+          {
+            "name": "left",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "leftRight",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "leftRightAndTopBottom",
+            "comment": " ",
+            "type": "Float -> Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "leftRightTopBottom",
+            "comment": " ",
+            "type": "Float -> Float -> Float -> Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "letterOffset",
+            "comment": " ",
+            "type": "Float -> Style.Property"
+          },
+          {
+            "name": "light",
+            "comment": " ",
+            "type": "Style.Property"
+          },
+          {
+            "name": "lineHeight",
+            "comment": " Given as unitless lineheight.\n",
+            "type": "Float -> Style.Property"
+          },
+          {
+            "name": "maxHeight",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "maxWidth",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "minHeight",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "minWidth",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "mix",
+            "comment": " ",
+            "type": "List Style.Property -> Style.Property"
+          },
+          {
+            "name": "noRepeat",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "noWrap",
+            "comment": " ",
+            "type": "Style.Whitespace"
+          },
+          {
+            "name": "normal",
+            "comment": " ",
+            "type": "Style.Whitespace"
+          },
+          {
+            "name": "opacity",
+            "comment": " A value between 0 and 1\n",
+            "type": "Float -> Style.Visibility"
+          },
+          {
+            "name": "opacityFilter",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "padding",
+            "comment": " ",
+            "type": "( Float, Float, Float, Float ) -> Style.Property"
+          },
+          {
+            "name": "parent",
+            "comment": " ",
+            "type": "Style.PositionParent"
+          },
+          {
+            "name": "percent",
+            "comment": " ",
+            "type": "Float -> Style.Length"
+          },
+          {
+            "name": "positionBy",
+            "comment": " ",
+            "type": "Style.PositionParent -> Style.Property"
+          },
+          {
+            "name": "pre",
+            "comment": " ",
+            "type": "Style.Whitespace"
+          },
+          {
+            "name": "preLine",
+            "comment": " ",
+            "type": "Style.Whitespace"
+          },
+          {
+            "name": "preWrap",
+            "comment": " ",
+            "type": "Style.Whitespace"
+          },
+          {
+            "name": "property",
+            "comment": " Add a property.  Not to be exported, `properties` is to be used instead.\n",
+            "type": "String -> String -> Style.Property"
+          },
+          {
+            "name": "px",
+            "comment": " ",
+            "type": "Float -> Style.Length"
+          },
+          {
+            "name": "render",
+            "comment": " Render styles into a stylesheet\n\n",
+            "type": "List (Style.Model class) -> Style.StyleSheet class msg"
+          },
+          {
+            "name": "renderWith",
+            "comment": " ",
+            "type": "List Style.Option -> List (Style.Model class) -> Style.StyleSheet class msg"
+          },
+          {
+            "name": "repeat",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "repeatX",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "repeatY",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "right",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "rotate",
+            "comment": " Units always rendered as `radians`.\n\nUse `x * deg` or `x * turn` from the standard library if you want to use a different set of units.\n",
+            "type": "Float -> Float -> Float -> Style.Transform"
+          },
+          {
+            "name": "round",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "saturate",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "scale",
+            "comment": " ",
+            "type": "Float -> Float -> Float -> Style.Transform"
+          },
+          {
+            "name": "screen",
+            "comment": " ",
+            "type": "Style.PositionParent"
+          },
+          {
+            "name": "selection",
+            "comment": " ",
+            "type": "List Style.Property -> Style.Property"
+          },
+          {
+            "name": "selector",
+            "comment": " ",
+            "type": "String -> List Style.Property -> Style.Model class"
+          },
+          {
+            "name": "sepia",
+            "comment": " ",
+            "type": "Float -> Style.Filter"
+          },
+          {
+            "name": "shadow",
+            "comment": " ",
+            "type": "{ offset : ( Float, Float ) , size : Float , blur : Float , color : Color.Color } -> Style.Shadow"
+          },
+          {
+            "name": "shadows",
+            "comment": " ",
+            "type": "List Style.Shadow -> Style.Property"
+          },
+          {
+            "name": "solid",
+            "comment": " ",
+            "type": "Style.BorderStyle"
+          },
+          {
+            "name": "space",
+            "comment": " ",
+            "type": "Style.Repeat"
+          },
+          {
+            "name": "spacing",
+            "comment": " ",
+            "type": "( Float, Float, Float, Float ) -> Style.Property"
+          },
+          {
+            "name": "strike",
+            "comment": " ",
+            "type": "Style.Property"
+          },
+          {
+            "name": "tableLayout",
+            "comment": " This is the same as setting an element to `display:table`.\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "textAlign",
+            "comment": " ",
+            "type": "Style.Alignment -> Style.Property"
+          },
+          {
+            "name": "textColor",
+            "comment": " ",
+            "type": "Color.Color -> Style.Property"
+          },
+          {
+            "name": "textLayout",
+            "comment": " This is the only layout that allows for child elements to use `float` or `inline`.\n\nIf you try to assign a float or make an element inline that is not the child of a textLayout, the float or inline will be ignored.\n\nIf you use Style.debug instead of Style.render, the element will be highlighted in red with a large warning.\n\nBesides this, all immediate children are arranged as if they were `display: block`.\n\n",
+            "type": "Style.Property"
+          },
+          {
+            "name": "textShadow",
+            "comment": " ",
+            "type": "{ offset : ( Float, Float ), blur : Float, color : Color.Color } -> Style.Shadow"
+          },
+          {
+            "name": "top",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "topBottom",
+            "comment": " ",
+            "type": "Float -> ( Float, Float, Float, Float )"
+          },
+          {
+            "name": "topLeft",
+            "comment": " ",
+            "type": "Float -> Float -> Style.Property"
+          },
+          {
+            "name": "topRight",
+            "comment": " ",
+            "type": "Float -> Float -> Style.Property"
+          },
+          {
+            "name": "transforms",
+            "comment": " ",
+            "type": "List Style.Transform -> Style.Property"
+          },
+          {
+            "name": "transition",
+            "comment": " ",
+            "type": "Style.Transition -> Style.Property"
+          },
+          {
+            "name": "translate",
+            "comment": " Units are always as pixels\n",
+            "type": "Float -> Float -> Float -> Style.Transform"
+          },
+          {
+            "name": "transparency",
+            "comment": " A value between 0 and 1\n",
+            "type": "Float -> Style.Visibility"
+          },
+          {
+            "name": "underline",
+            "comment": " ",
+            "type": "Style.Property"
+          },
+          {
+            "name": "verticalCenter",
+            "comment": " ",
+            "type": "Style.VerticalAlignment"
+          },
+          {
+            "name": "verticalStretch",
+            "comment": " ",
+            "type": "Style.VerticalAlignment"
+          },
+          {
+            "name": "visibility",
+            "comment": " ",
+            "type": "Style.Visibility -> Style.Property"
+          },
+          {
+            "name": "visible",
+            "comment": "\n",
+            "type": "Style.Visibility"
+          },
+          {
+            "name": "whitespace",
+            "comment": " ",
+            "type": "Style.Whitespace -> Style.Property"
+          },
+          {
+            "name": "width",
+            "comment": " ",
+            "type": "Style.Length -> Style.Property"
+          },
+          {
+            "name": "zIndex",
+            "comment": " ",
+            "type": "Int -> Style.Property"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Style.Media",
+        "comment": " Standard media query ranges.\n\nTaken from the following article: https://medium.freecodecamp.com/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862#.lzjwmdyed\n\n@docs query, phoneOnly, tabletPortraitUp, tabletPortraitOnly, tabletLandscapeUp, tabletLandscapeOnly, desktopUp, desktopOnly, bigDesktopUp\n\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "bigDesktopUp",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "desktopOnly",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "desktopUp",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "phoneOnly",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "query",
+            "comment": " ",
+            "type": "String -> List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "tabletLandscapeOnly",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "tabletLandscapeUp",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "tabletPortraitOnly",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
+          },
+          {
+            "name": "tabletPortraitUp",
+            "comment": " ",
+            "type": "List Style.Model.Property -> Style.Model.Property"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -55186,20 +56519,20 @@
   },
   {
     "name": "prikhi/remote-status",
-    "version": "2.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "RemoteStatus",
         "comment": " RemoteStatus is used to track the progress of multiple remote operations.\n\n# Definition\n@docs Status, initial\n\n# Operations\n@docs start, enqueue, finishOne\n\n# Querying\n@docs isInProgress, isFinished, percentageCompleted\n\n",
-        "aliases": [],
-        "types": [
+        "aliases": [
           {
             "name": "Status",
             "comment": " Store the status of a remote operation, differentiating between unstarted,\nin progress and completed states.\n",
             "args": [],
-            "cases": []
+            "type": "RemoteStatus.Internals.Status"
           }
         ],
+        "types": [],
         "values": [
           {
             "name": "enqueue",
@@ -55237,6 +56570,37 @@
             "type": "RemoteStatus.Status -> RemoteStatus.Status"
           }
         ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "RemoteStatus.Internals",
+        "comment": " This is an internal module not meant for general use. The internal types\nand functions are more likely to change compared to the base `RemoteStatus`\nmodule.\n\n@docs Status\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Status",
+            "comment": " Store the current status as a union type, with queued/completed statuses\nstored as Ints.\n",
+            "args": [],
+            "cases": [
+              [
+                "NotStarted",
+                []
+              ],
+              [
+                "InProgress",
+                [
+                  "Int",
+                  "Int"
+                ]
+              ],
+              [
+                "Finished",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [],
         "generated-with-elm-version": "0.18.0"
       }
     ]
@@ -63231,6 +64595,143 @@
     ]
   },
   {
+    "name": "swiftsnamesake/euclidean-space",
+    "version": "1.2.1",
+    "docs": [
+      {
+        "name": "Euclid.Rectangle",
+        "comment": " Defines a Rectangle type\n\n# Types\n@docs Rectangle\n\n# Properties\n@docs width, height, left, right, top, bottom, opposite\n\n# Misc\n@docs hasPoint\n",
+        "aliases": [
+          {
+            "name": "Rectangle",
+            "comment": " A polymorphic rectangle defined by its top left corner and its size ",
+            "args": [
+              "n"
+            ],
+            "type": "{ corner : Euclid.Vector.Vector n, size : Euclid.Vector.Vector n }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "bottom",
+            "comment": " Bottom side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle number -> number"
+          },
+          {
+            "name": "hasPoint",
+            "comment": " Does the rectangle contain the point ",
+            "type": "Euclid.Rectangle.Rectangle comparable -> Euclid.Vector.Vector comparable -> Bool"
+          },
+          {
+            "name": "height",
+            "comment": " Height of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle n -> n"
+          },
+          {
+            "name": "left",
+            "comment": " Left side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle n -> n"
+          },
+          {
+            "name": "opposite",
+            "comment": " Opposite corner of a rectangle (bottom right) ",
+            "type": "Euclid.Rectangle.Rectangle number -> Euclid.Vector.Vector number"
+          },
+          {
+            "name": "right",
+            "comment": " Right side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle number -> number"
+          },
+          {
+            "name": "top",
+            "comment": " Top side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle number -> number"
+          },
+          {
+            "name": "width",
+            "comment": " Width of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle n -> n"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Euclid.Vector",
+        "comment": " Defines a polymorphic Vector type\n\n# Types\n@docs Vector\n\n# Construction\n@docs vec\n\n# Arithmetic\n@docs add, subtract, negate, conjugate\n\n# Transform\n@docs map, map2, dotwise, fold, x, y\n\n",
+        "aliases": [
+          {
+            "name": "Vector",
+            "comment": " A 2D vector ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n, y : n }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Add two vectors component-wise ",
+            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+          },
+          {
+            "name": "conjugate",
+            "comment": " The complex conjugate (Y component is negated) ",
+            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+          },
+          {
+            "name": "dotwise",
+            "comment": " Apply some function to two vectors component-wise (like map for two vectors)  ",
+            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+          },
+          {
+            "name": "fold",
+            "comment": " Reduce a Vector to a single value by applying some function to its components ",
+            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> b"
+          },
+          {
+            "name": "map",
+            "comment": " Apply some function to each component ",
+            "type": "(a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+          },
+          {
+            "name": "map2",
+            "comment": " See 'dotwise' ",
+            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+          },
+          {
+            "name": "negate",
+            "comment": " Negate both components ",
+            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+          },
+          {
+            "name": "subtract",
+            "comment": " Subtract two vectors component-wise ",
+            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+          },
+          {
+            "name": "vec",
+            "comment": " Construct a vector from an X and a Y value  ",
+            "type": "n -> n -> Euclid.Vector.Vector n"
+          },
+          {
+            "name": "x",
+            "comment": " Apply some function to the X component ",
+            "type": "(a -> a) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a"
+          },
+          {
+            "name": "y",
+            "comment": " Apply some function to the y component ",
+            "type": "(a -> a) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "tapeinosyne/elm-microkanren",
     "version": "1.0.0",
     "docs": [
@@ -63409,6 +64910,41 @@
             "name": "walk",
             "comment": " Given a `LVar`, traverse the substitution and return its value.\nIf the given term cannot be found, or is not a variable, the term itself is returned. ",
             "type": "MicroKanren.Term a -> MicroKanren.Substitution a -> MicroKanren.Term a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "teepark/elmoji",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Elmoji",
+        "comment": " This library is for conveniently supporting\n[emoji](http://unicode.org/emoji/charts/full-emoji-list.html) in Elm\napplications.\n\nThere is a high-level drop-in replacement for `Html.text` which has to make\nsome extra assumptions about the app, and customizable mapping over emojis.\n\n# The high level\n@docs text_\n\n# Customizable\n@docs textWith, replaceWithEmojiOne, replaceWithTwemoji\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "replaceWithEmojiOne",
+            "comment": " Turn an emoji unicode sequence into an `<img>` pointing at\n[EmojiOne](http://emojione.com/), with classes `elmoji-img` and `elmoji-one`.\n\n    -- this is the definition of text' from this module.\n    text' : String -> Html a\n    text' =\n        textWith replaceWithEmojiOne >> span [ class \"elmoji\" ]\n",
+            "type": "List String -> Html.Html a"
+          },
+          {
+            "name": "replaceWithTwemoji",
+            "comment": " Convert an emoji unicode sequence into a\n[Twemoji](http://twitter.github.io/twemoji/) `<img>` tag. It will have CSS\nclasses `elmoji-img` and `elmoji-twem`.\n\n    -- build your own Html.text drop-in replacement\n    text' : String -> Html a\n    text' body =\n        span [] ( textWith replaceWithTwemoji body )\n",
+            "type": "List String -> Html.Html a"
+          },
+          {
+            "name": "textWith",
+            "comment": " Create a customized emoji converter. The function argument maps emoji\n(identified by the lowercase hex-encoded unicode code point sequence) to\nHtml nodes.\n\n    mapEmoji : List String -> Html a\n    mapEmoji codePoints =\n        text (\"(I'm code \" ++ (String.join \"-\" codePoints) ++ \")\")\n\n    div []\n        ( textWith mapEmoji \"here's a penguin:🐧\" )\n",
+            "type": "(List String -> Html.Html a) -> String -> List (Html.Html a)"
+          },
+          {
+            "name": "text_",
+            "comment": " Convert a String with unicode emoji characters into an Html element\ncontaining the text with `<img>` tags replacing the emojis.\n\nThis function produces a `<span class='elmoji'>` containing the text, replacing\nemojis with `<img class='elmoji-img elmoji-one'>` tags pointing to CDN-hosted\n[EmojiOne](http://emojione.com/).\n\n    div [] [ text' \"Live long and prosper 🖖\" ]\n",
+            "type": "String -> Html.Html a"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -64118,6 +65654,103 @@
     ]
   },
   {
+    "name": "tiziano88/elm-oauth",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "OAuth.Config",
+        "comment": " This library contains several ready-made server configs for various OAuth 2.0 providers\n\n@docs google, facebook, digitalOcean, gitHub, stackExchange\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "digitalOcean",
+            "comment": " Base configuration for DigitalOcean endpoints.\n\nBased on https://developers.digitalocean.com/documentation/oauth/#client-application-flow\n\nNote: Verification does not seem to be provided by this endpoint.\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "facebook",
+            "comment": " Base configuration for Facebook endpoints.\n\nBased on https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow .\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "gitHub",
+            "comment": " Base configuration for GitHub endpoints.\n\nBased on https://developer.github.com/v3/oauth/ .\n\nNote: Does not currently work. It seems that GitHub does not currently support web-only flow.\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "google",
+            "comment": " Base configuration for Google endpoints.\n\nBased on https://developers.google.com/identity/protocols/OAuth2UserAgent .\n",
+            "type": "OAuth.ServerConfig"
+          },
+          {
+            "name": "stackExchange",
+            "comment": " Base configuration for StackExchange endpoints.\n\nBased on https://api.stackexchange.com/docs/authentication .\n\nNote: Verification does not seem to be provided by this endpoint.\n",
+            "type": "OAuth.ServerConfig"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "OAuth",
+        "comment": " This library allows handling OAuth 2.0 authentication.\n\n# Client\n\n@docs Client, newClient\n\n# Configuration\n\n@docs ServerConfig, ClientConfig\n\n# Token\n\n@docs Token\n\n# App\n\n@docs buildAuthUrl, init\n\n",
+        "aliases": [
+          {
+            "name": "Client",
+            "comment": " An OAuth client.\n",
+            "args": [],
+            "type": "{ serverConfig : OAuth.ServerConfig , clientConfig : OAuth.ClientConfig }"
+          },
+          {
+            "name": "ClientConfig",
+            "comment": " Client-side configuration for a single OAuth client.\nIt includes the endpoints used to obtain and verify tokens, and also client-specific settings.\n",
+            "args": [],
+            "type": "{ clientId : String, scopes : List String, redirectUrl : String }"
+          },
+          {
+            "name": "ServerConfig",
+            "comment": " Server-side configuration for a single OAuth client.\nIt includes the endpoints used to obtain and verify tokens, and also client-specific settings.\n",
+            "args": [],
+            "type": "{ endpointUrl : String, validateUrl : String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Token",
+            "comment": " Represents a validated OAuth token.\n",
+            "args": [],
+            "cases": [
+              [
+                "Validated",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "buildAuthUrl",
+            "comment": " Builds an URL that when followed allows the user to authenticate with the specified provider.\n",
+            "type": "OAuth.Client -> String"
+          },
+          {
+            "name": "init",
+            "comment": " A function to create an initial Cmd to be used with a `Navigation.program` init function.\n\n    type Msg\n        = Token (Result Http.Error OAuth.Token)\n        ...\n\n    init : Navigation.Location -> ( Model, Cmd Msg )\n    init location =\n        { ... } ! [ OAuth.init client location |> Cmd.map Token ]\n",
+            "type": "OAuth.Client -> Navigation.Location -> Platform.Cmd.Cmd (Result.Result Http.Error OAuth.Token)"
+          },
+          {
+            "name": "newClient",
+            "comment": " Creates a new OAuth client based on a server configuration and a client configuration.\nNormally defined at top-level in the application.\n\n    authClient : OAuth.Client\n    authClient = OAuth.newClient serverConfig clientConfig\n\n",
+            "type": "OAuth.ServerConfig -> OAuth.ClientConfig -> OAuth.Client"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "toastal/either",
     "version": "3.0.0",
     "docs": [
@@ -64452,7 +66085,7 @@
   },
   {
     "name": "tomjkidd/elm-multiway-tree-zipper",
-    "version": "1.10.1",
+    "version": "1.10.2",
     "docs": [
       {
         "name": "MultiwayTreeZipper",
@@ -64507,47 +66140,47 @@
           },
           {
             "name": "goLeft",
-            "comment": " Move left relative to the current Zipper focus. This allows navigation from\na child to it's previous sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goLeft\n",
+            "comment": " Move left relative to the current Zipper focus. This allows navigation from\na child to it's previous sibling.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goLeft\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goRight",
-            "comment": " Move right relative to the current Zipper focus. This allows navigation from\na child to it's next sibling.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goRight\n",
+            "comment": " Move right relative to the current Zipper focus. This allows navigation from\na child to it's next sibling.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n        &> goRight\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goTo",
-            "comment": " Move the focus to the first element for which the predicate is True. If no\nsuch element exists returns Nothing. Starts searching at the root of the tree.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goTo (\\elem -> elem == \"e\")\n",
+            "comment": " Move the focus to the first element for which the predicate is True. If no\nsuch element exists returns Nothing. Starts searching at the root of the tree.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goTo (\\elem -> elem == \"e\")\n",
             "type": "(a -> Bool) -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToChild",
-            "comment": " Move down relative to the current Zipper focus. This allows navigation from\na parent to it's children.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n",
+            "comment": " Move down relative to the current Zipper focus. This allows navigation from\na parent to it's children.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 1\n",
             "type": "Int -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToNext",
-            "comment": " Moves to the next node in the hierarchy, depth-first. If already\n  at the end, stays there.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToNext\n        &> goToNext\n",
+            "comment": " Moves to the next node in the hierarchy, depth-first. If already\n  at the end, stays there.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToNext\n        &> goToNext\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToPrevious",
-            "comment": " Moves to the previous node in the hierarchy, depth-first.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 2\n        &> goToPrevious\n        &> goToPrevious\n",
+            "comment": " Moves to the previous node in the hierarchy, depth-first.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 2\n        &> goToPrevious\n        &> goToPrevious\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToRightMostChild",
-            "comment": " Move down and as far right as possible relative to the current Zipper focus.\nThis allows navigation from a parent to it's last child.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToRightMostChild\n",
+            "comment": " Move down and as far right as possible relative to the current Zipper focus.\nThis allows navigation from a parent to it's last child.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToRightMostChild\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goToRoot",
-            "comment": " Move to the root of the current Zipper focus. This allows navigation from\nany part of the tree back to the root.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> goToChild 1\n        &> goToRoot\n",
+            "comment": " Move to the root of the current Zipper focus. This allows navigation from\nany part of the tree back to the root.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> goToChild 1\n        &> goToRoot\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
             "name": "goUp",
-            "comment": " Move up relative to the current Zipper focus. This allows navigation from a\nchild to it's parent.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> goUp\n",
+            "comment": " Move up relative to the current Zipper focus. This allows navigation from a\nchild to it's parent.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\" []\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> goUp\n",
             "type": "MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
@@ -64562,7 +66195,7 @@
           },
           {
             "name": "replaceDatum",
-            "comment": " Replace the datum at the current Zipper focus. This allows complete\nreplacement of a node's datum information, ignoring the previous state of the\nnode.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> replaceDatum \"X\" -- Replaces \"b\" with \"X\"\n        &> goToRoot\n",
+            "comment": " Replace the datum at the current Zipper focus. This allows complete\nreplacement of a node's datum information, ignoring the previous state of the\nnode.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> replaceDatum \"X\" -- Replaces \"b\" with \"X\"\n        &> goToRoot\n",
             "type": "a -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           },
           {
@@ -64572,7 +66205,7 @@
           },
           {
             "name": "updateDatum",
-            "comment": " Update the datum at the current Zipper focus. This allows changes to be made\nto a part of a node's datum information, given the previous state of the node.\n\n    (&>) = Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> updateDatum (\\old -> old ++ \"X\") -- Appends an X to \"b\"\n        &> goToRoot\n",
+            "comment": " Update the datum at the current Zipper focus. This allows changes to be made\nto a part of a node's datum information, given the previous state of the node.\n\n    (&>) = flip Maybe.andThen\n\n    simpleTree =\n        Tree \"a\"\n            [ Tree \"b\"\n                [ Tree \"e\" [] ]\n            , Tree \"c\" []\n            , Tree \"d\" []\n            ]\n\n    Just (simpleTree, [])\n        &> goToChild 0\n        &> updateDatum (\\old -> old ++ \"X\") -- Appends an X to \"b\"\n        &> goToRoot\n",
             "type": "(a -> a) -> MultiwayTreeZipper.Zipper a -> Maybe.Maybe (MultiwayTreeZipper.Zipper a)"
           }
         ],
@@ -65194,6 +66827,41 @@
             "name": "toId",
             "comment": " Convert any value to `Id` type.\nThis is just alias for `toString` function.\n\n    toId \"str\" = \"str\"\n    toId 1 = \"1\"\n    toId { a = \"a\" } = \"{ a = \\\"a\\\" }\"\n",
             "type": "a -> Chae.Id.Id"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "turboMaCk/grid-solver",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Grid",
+        "comment": " Build awesome Grid layouts in Elm.\n\nThis library provides general abstraction for solving grid layout problems.\nThe idea is to use **ordered list of items with dimmensions** and **number of columns**\nto solve whole layout of grid. It's designed to be easy to use and extremly deterministic\nabstraction with simple integration to any Html, SVG or Canvas based APP.\n\n# Definition\n@docs Position, Item\n\n# Api\n@docs solve\n",
+        "aliases": [
+          {
+            "name": "Item",
+            "comment": "\n    type alias GridItem a =\n        { a\n            | width : Int\n            , height : Int\n        }\n",
+            "args": [
+              "a"
+            ],
+            "type": "Types.GridItem a"
+          },
+          {
+            "name": "Position",
+            "comment": "\n    type alias GridPosition =\n        { x : Int\n        , y : Int\n        }\n",
+            "args": [],
+            "type": "Types.GridPosition"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "solve",
+            "comment": " This function is heart and the only public function\nthis library provides. It calculates grid layout\nfor given number of columns and items with dimmensions.\nYou can then use result (List of tuples with `Position` and `Item`)\nin you're views to simply render layout as you wish.\nOrder of items is guaranteed to stay same.\n\n- `Int` - number of Columns\n- `List` - Grid items\n\n## Four column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|A|A|\n    -- 1 |A|A|A|A|\n    -- 2 |B|B|C|C|\n    -- 3 | | |C|C|\n\n    solve 4\n        [ { width = 4, height = 2 }\n        , { width = 2, height = 1 }\n        , { width = 2, height = 2 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 4, height = 2 } )\n    , ( { x = 0, y = 2 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 2 }, { width = 2, height = 2 } )\n    ]\n\n\n## Two column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1\n    -- 0 |A|A|\n    -- 1 |B| |\n    -- 2 |B| |\n    -- 3 |C|C|\n\n    solve 2\n        [ { width = 2, height = 1 }\n        , { width = 1, height = 2 }\n        , { width = 2, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 1 }, { width = 1, height = 2 } )\n    , ( { x = 0, y = 3 }, { width = 2, height = 1 } )\n    ]\n\n## More complex layout:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|B|B|\n    -- 1 |C|C|B|B|\n    -- 2 | | |B|B|\n    -- 3 |D|D|D|D|\n\n    solve 4\n        [ { width = 2, height = 1 }\n        , { width = 2, height = 3 }\n        , { width = 2, height = 1 }\n        , { width = 4, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 0 }, { width = 2, height = 3 } )\n    , ( { x = 0, y = 1 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 3 }, { width = 4, height = 1 } )\n    ]\n",
+            "type": "Int -> List (Grid.Item a) -> List ( Grid.Position, Grid.Item a )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -65849,6 +67517,320 @@
             "name": "whiteSpace",
             "comment": " Matches a single white space character, including (but not limited to)\nspace, tab, form feed and line feed.\n",
             "type": "RegexBuilder.Pattern"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "yotamDvir/elm-pivot",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Pivot",
+        "comment": " A pivot is a list upgraded with a center and sides. However, a pivot\ncan never be empty, so it is better to think of it an upgraded cons list.\n\nIn this library, we suffix functions with letters to denote their context,\nas follows.\n\n* The __C__enter\n* Both __S__ides\n* The __L__eft side\n* The __R__ight side\n* __A__ll the members\n\nThis way you can guess a function's name easily.\nSee the different `map*` functions.\n\nFor example, `getL` gets the left side of a pivot.\n\n# Type\n@docs Pivot\n\n# To & Fro\nSo you want to use a pivot? Better know how to create one, and get stuff back!\n\n## Create\n@docs fromList, fromCons, singleton\n\n## Get\n@docs getC, getL, getR, getA, hasL, hasR\n\n# Movement\nHandle the position of the center.\nThese functions do not mutate the underlying list.\nThat is, if you apply functions from here and then apply `getA`,\nyou'd get the same thing you would by applying `getA` beforehand.\n\n## Position\n@docs lengthL, lengthR, lengthA\n\n## Momentum\n@docs goR, goL, goBy, goTo, goToStart, goToEnd\n\n## Find\n@docs firstWith, lastWith, findR, findL, findCR, findCL\n\n# Modify\nNow we start seeing functions that can actually change the underlying list.\n\n## Set\n@docs setC, setL, setR\n\n## Add\n@docs addL, addR, addGoL, addGoR\n\n## Remove\nRemoving is not guaranteed to work,\nfor the simple reason that a pivot cannot be empty.\n@docs removeGoL, removeGoR\n\n## Switch\nSwitch places with other members.\n@docs switchL, switchR\n\n## Sort\n@docs sort, sortWith\n\n# Maps\nLists can be mapped over, and so can pivots.\nHowever, since a pivot is made up of three distinct objects at any time,\nit makes sense that you may want to apply different transformations to\nthe different objects.\n\n## Maps\n@docs mapCLR, mapCRL, mapCS, mapA\n\n## Constraint Maps\nIf you want to map only over some of the pivot,\nthen you must retain the type.\n@docs mapC, mapS, mapL, mapR\n\n## As a whole\nSome `List a -> List a` functions cannot be made from `a -> a` functions.\nThis is why these maps may be of importance.\nJust add `_` to a `map*` function to use functions on lists instead of values.\n@docs mapCLR_, mapCRL_, mapCS_, mapS_, mapL_, mapR_\n\n## Special\n@docs zip, apply\n\n# Utilities\n@docs reverse, mirror, mirrorM, assert, withRollback\n",
+        "aliases": [
+          {
+            "name": "Pivot",
+            "comment": " Pivot is an opaque data type.\n",
+            "args": [
+              "a"
+            ],
+            "type": "Pivot.Types.Pivot a"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "addGoL",
+            "comment": " Add a member to the left of the center and immediately move left.\nWe know that `addL >> goL` cannot really fail, but it still results in a\n`Maybe` type. This avoids this issue.\n\n    addGoL >> Just == addL >> goL\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addGoR",
+            "comment": " Add a member to the right of the center and immediately move right.\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addL",
+            "comment": " Add a member to the left of the center\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "addR",
+            "comment": " Add a member to the right of the center\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "apply",
+            "comment": " Apply functions in a pivot on values in another Pivot.\nThe center gets applied to the center,\nand each side gets applied to each side.\nBut how does a list of functions get applied on a list of values?\nWell, each function maps over the complete list of values,\nand then all the lists created from these applications are concatinated.\n\n    mapCLR onC onL onR == (singleton onC |> setL [ onL ] |> setR [ onR ] |> apply)\n",
+            "type": "Pivot.Pivot (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "assert",
+            "comment": " Takes a pivot full of possible values, and realizes it only if all\nthe values are real. That is, if all the values are `Just a`, then we get\n`Just (Pivot a)`. Otherwise, we get `Nothing`.\nThis is great for composing with the different map functions.\nFor example, you could define\n\n    mapAM : (a -> Maybe b) -> Pivot a -> Maybe (Pivot b)\n    mapAM f = mapA f >> assert\n",
+            "type": "Pivot.Pivot (Maybe.Maybe a) -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findCL",
+            "comment": " Like `findL`, but checks the center first as well.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findCR",
+            "comment": " Like `findR`, but checks the center first as well.\n\n_Fails if and only if there are no such members._\n\n    firstWith == \\pred -> goToStart >> findCR pred\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findL",
+            "comment": " Find the first member to the center's left satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "findR",
+            "comment": " Find the first member to the center's right satisfying some predicate.\n\n_Fails if and only if there are no such members._\n\n    findR ((==) 3) (fromCons 1 [2..4]) == (singleton 3 |> setL [1, 2] |> setR [4])\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "firstWith",
+            "comment": " Find the first member of a pivot satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "fromCons",
+            "comment": " Like `fromList`, but by specifying the center explicitly, it cannot fail.\n\n    getC (fromCons \"well\" [\"hello\", \"world\"]) == \"well\"\n    getL (fromCons \"well\" [\"hello\", \"world\"]) == []\n    getR (fromCons \"well\" [\"hello\", \"world\"]) == [\"hello\", \"world\"]\n    Just (fromCons 1 [2..4]) == fromList [1..4]\n",
+            "type": "a -> List a -> Pivot.Pivot a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Make a pivot from a list with empty left side.\n\n_Fails if and only if the list given is empty._\n\n    fromList [] == Nothing\n",
+            "type": "List a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "getA",
+            "comment": " Make the pivot into a list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "getC",
+            "comment": " Get the center member.\n\n    singleton >> getC == identity\n",
+            "type": "Pivot.Pivot a -> a"
+          },
+          {
+            "name": "getL",
+            "comment": " Get the left side list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "getR",
+            "comment": " Get the right side list.\n",
+            "type": "Pivot.Pivot a -> List a"
+          },
+          {
+            "name": "goBy",
+            "comment": " Move right by some number of steps. Negative number moves left instead.\n\n_Fails if and only if the movement goes out of bounds._\n",
+            "type": "Int -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goL",
+            "comment": " Move one step left.\n\n_Fails if and only if the left side is empty._\n\n    goL (fromCons 1 [2..4]) == Nothing\n    withRollback goL (fromCons 1 [2..4]) == fromCons 1 [2..4]\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goR",
+            "comment": " Move one step right.\n\n_Fails if and only if the right side is empty._\n\nTip: You can avoid the failure using `withRollback`,\nand instead have a possible no-op. See __Utilities__.\n\n    fromCons 1 [2..4] |> goR /= Nothing\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goTo",
+            "comment": " Go to a specific position from the left. Starts with 0.\n\n_Fails if and only if the position given doesn't exist._\n",
+            "type": "Int -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "goToEnd",
+            "comment": " Go to starting position.\n\n    goToEnd >> lengthR == 0\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "goToStart",
+            "comment": " Go to starting position.\n\n    goToStart >> lengthL == 0\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "hasL",
+            "comment": " Check if the left side is not empty.\n",
+            "type": "Pivot.Pivot a -> Bool"
+          },
+          {
+            "name": "hasR",
+            "comment": " Check if the right side is not empty.\n",
+            "type": "Pivot.Pivot a -> Bool"
+          },
+          {
+            "name": "lastWith",
+            "comment": " Find the last member of a pivot satisfying some predicate.\n\n_Fails if and only if there are no such members._\n",
+            "type": "(a -> Bool) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "lengthA",
+            "comment": " Length of the pivot.\n\n    lengthA == \\p -> lengthL p + 1 + lengthR p\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "lengthL",
+            "comment": " Position from the left side. Starts with 0.\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "lengthR",
+            "comment": " Position from the right side. Starts with 0.\n",
+            "type": "Pivot.Pivot a -> Int"
+          },
+          {
+            "name": "mapA",
+            "comment": " Like `mapCS`, but you provide one function for all members.\nThis is exactly like `List.map` for the underlying list.\n\n    mapA ((==) 3) (fromCons 1 [2..4]) == fromCons False [False, True, False]\n",
+            "type": "(a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapC",
+            "comment": " Like `mapA`, but only the center is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapCLR",
+            "comment": " Provide functions that control what happens to the center,\nthe left members and the right member separately,\nand get a function that acts on pivots.\n",
+            "type": "(a -> b) -> (a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCLR_",
+            "comment": " Like `mapCLR`, but the functions for the left and right act on the\nlists as a whole, and not on each member separately.\n",
+            "type": "(a -> b) -> (List a -> List b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCRL",
+            "comment": " Like `mapCLR`, but provide the function for the right before the left.\n",
+            "type": "(a -> b) -> (a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCRL_",
+            "comment": " See `mapCLR_`.\n",
+            "type": "(a -> b) -> (List a -> List b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCS",
+            "comment": " Like `mapCLR`, but you provide one function for both sides.\n",
+            "type": "(a -> b) -> (a -> b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapCS_",
+            "comment": " See `mapCLR_`.\n",
+            "type": "(a -> b) -> (List a -> List b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mapL",
+            "comment": " Like `mapA`, but only the left is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapL_",
+            "comment": " See `mapCLR_`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapR",
+            "comment": " Like `mapA`, but only the right is affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapR_",
+            "comment": " See `mapCLR_`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapS",
+            "comment": " Like `mapA`, but the center is __not__ affected.\n",
+            "type": "(a -> a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mapS_",
+            "comment": " See `mapCLR_`.\n",
+            "type": "(List a -> List a) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "mirror",
+            "comment": " Reverse a function's notion of left and right.\nUsed in many of this library's functions under the hood\n",
+            "type": "(Pivot.Pivot a -> Pivot.Pivot b) -> Pivot.Pivot a -> Pivot.Pivot b"
+          },
+          {
+            "name": "mirrorM",
+            "comment": " Reverse a possibly-failing-function's notion of left and right.\nUsed in many of this library's functions under the hood\n",
+            "type": "(Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot b)) -> Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot b)"
+          },
+          {
+            "name": "removeGoL",
+            "comment": " Replace center with member nearest to the left.\n\n_Fails if and only if left side is empty._\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "removeGoR",
+            "comment": " Replace center with member nearest to the right.\n\n_Fails if and only if right side is empty._\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "reverse",
+            "comment": " Reverse a pivot, like a list. You could also think of it as mirroring\nleft and right.\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setC",
+            "comment": " Replace the center.\n",
+            "type": "a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setL",
+            "comment": " Replace the left.\n",
+            "type": "List a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "setR",
+            "comment": " Replace the right.\n",
+            "type": "List a -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Like `fromCons`, but without the list. That is, we specify only the center.\n\n    singleton == flip fromCons []\n",
+            "type": "a -> Pivot.Pivot a"
+          },
+          {
+            "name": "sort",
+            "comment": " Sort a pivot while keeping the center as center.\n\nIt does not simply sort each side separately!\n\n    sort >> getA == getA >> List.sort\n    getC == sort >> getC\n",
+            "type": "Pivot.Pivot comparable -> Pivot.Pivot comparable"
+          },
+          {
+            "name": "sortWith",
+            "comment": " Like `sort`, but with a costum comparator.\n\n    sort == sortWith compare\n",
+            "type": "(a -> a -> Basics.Order) -> Pivot.Pivot a -> Pivot.Pivot a"
+          },
+          {
+            "name": "switchL",
+            "comment": " Switch places with member nearest to the left\n\n_Fails if and only if left side is empty_\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "switchR",
+            "comment": " Switch places with member nearest to the right\n\n_Fails if and only if right side is empty_\n",
+            "type": "Pivot.Pivot a -> Maybe.Maybe (Pivot.Pivot a)"
+          },
+          {
+            "name": "withRollback",
+            "comment": " Replace a possibly-failing-function with a possibly-does-nothing-function.\nFor example, if you try to `goR` a pivot,\nyou may fail since there is nothing to the right.\nBut if you `withRollback goR` a pivot,\nthe worst that could happen is that nothing happens.\n\nUse it, don't abuse it. That is, only use it when it makes sense to ignore\na failure, or when you are __certain__ a possibly-failing-function cannot\nreally fail. For example,\n\n    addGoR == addR >> withRollback goR\n\nIt might be useful to define infix operators as such.\n\n    (!>) = flip withRollback\n    infixl 0 !>\n\n    (<!) = withRollback\n    infixr 0 <!\n\n    goR <! pvt == withRollback goR pvt\n",
+            "type": "(a -> Maybe.Maybe a) -> a -> a"
+          },
+          {
+            "name": "zip",
+            "comment": " Adds indices to the values.\nBased internally on `List.indexedMap`.\n",
+            "type": "Pivot.Pivot a -> Pivot.Pivot ( Int, a )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
