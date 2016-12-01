@@ -715,11 +715,207 @@
   },
   {
     "name": "Bogdanp/elm-time",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "docs": [
       {
+        "name": "Time.ZonedDateTime",
+        "comment": " This module defines a time representation based on a Date, the\ntime of day and a time zone.\n\nZonedDateTimes should only be used when reasoning about or displaying\n`DateTime`s in a user's local time zone.  For this reason, the API\nsurface of `ZonedDateTimes` is extremely limited.\n\n# ZonedDateTimes\n@docs ZonedDateTime\n\n# Constructing ZonedDateTimes\n@docs zero, zonedDateTime, fromDateTime, toDateTime, fromTimestamp, toTimestamp\n\n# Inspecting ZonedDateTimes\n@docs timeZone, year, month, day, weekday, hour, minute, second, millisecond, abbreviation, utcOffset, utcOffsetString\n\n# Manipulating ZonedDateTimes\n@docs asTimeZone, setDate, setYear, setMonth, setDay, setHour, setMinute, setSecond, setMillisecond, addYears, addMonths, addDays, addHours, addMinutes, addSeconds, addMilliseconds\n\n# Helper functions\n@docs toISO8601, fromISO8601\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "ZonedDateTime",
+            "comment": " ZoneDateTime is the opaque type for all ZonedDateTime values.\nValues of this type represent a `(TimeZone, DateTime)` pair.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "abbreviation",
+            "comment": " abbreviation returns a ZonedDateTime's abbreviation at that time.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
+          },
+          {
+            "name": "addDays",
+            "comment": " addDays adds an absolute number of days to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addHours",
+            "comment": " addHours adds a relative number of hours to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addMilliseconds",
+            "comment": " addMilliseconds adds an absolute number of milliseconds to a\nZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addMinutes",
+            "comment": " addMinutes adds a relative number of minutes to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addMonths",
+            "comment": " addMonths adds a relative number of months to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addSeconds",
+            "comment": " addSeconds adds a relative number of seconds to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "addYears",
+            "comment": " addYears adds a relative number of years to a ZonedDateTime value.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "asTimeZone",
+            "comment": " asTimeZone converts a ZonedDateTime to another TimeZone.\n",
+            "type": "Time.TimeZone.TimeZone -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "day",
+            "comment": " day returns a ZonedDateTime's day.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "fromDateTime",
+            "comment": " fromDateTime constructs a ZonedDateTime value from a TimeZone and\na DateTime.\n",
+            "type": "Time.TimeZone.TimeZone -> Time.DateTime.DateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "fromISO8601",
+            "comment": " fromISO8601 parses an ISO8601-formatted string into a\nZonedDateTime object, adjusting for its offset.\n",
+            "type": "Time.TimeZone.TimeZone -> String -> Result.Result String Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "fromTimestamp",
+            "comment": " fromTimestamp converts the millisecond representation of a UNIX\ntimestamp into a ZonedDateTime value.  This is equivalent to calling\n`DateTime.fromTimestamp` and then converting the resulting `DateTime`\nvalue to a `ZonedDateTime`.\n",
+            "type": "Time.TimeZone.TimeZone -> Time.Time -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "hour",
+            "comment": " hour returns a ZonedDateTime's hour.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "millisecond",
+            "comment": " millisecond returns a ZonedDateTime's millisecond.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "minute",
+            "comment": " minute returns a ZonedDateTime's minute.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "month",
+            "comment": " month returns a ZonedDateTime's month.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "second",
+            "comment": " second returns a ZonedDateTime's second.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "setDate",
+            "comment": " setDate sets a ZonedDateTime's date.\n",
+            "type": "Time.Date.Date -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setDay",
+            "comment": " setDay sets a ZonedDateTime's day.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setHour",
+            "comment": " setHour sets a ZonedDateTime's hour.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setMillisecond",
+            "comment": " setMillisecond sets a ZonedDateTime's millisecond.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setMinute",
+            "comment": " setMinute sets a ZonedDateTime's minute.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setMonth",
+            "comment": " setMonth sets a ZonedDateTime's month.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setSecond",
+            "comment": " setSecond sets a ZonedDateTime's second.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "setYear",
+            "comment": " setYear sets a ZonedDateTime's year.\n",
+            "type": "Int -> Time.ZonedDateTime.ZonedDateTime -> Time.ZonedDateTime.ZonedDateTime"
+          },
+          {
+            "name": "timeZone",
+            "comment": " timeZone returns a ZonedDatetime's TimeZone.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.TimeZone.TimeZone"
+          },
+          {
+            "name": "toDateTime",
+            "comment": " toDateTime converts a ZonedDateTime to a UTC DateTime value.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.DateTime.DateTime"
+          },
+          {
+            "name": "toISO8601",
+            "comment": " toISO8601 renders a ZonedDateTime in ISO8601 format.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
+          },
+          {
+            "name": "toTimestamp",
+            "comment": " toTimestamp converts a ZonedDateTime to its UNIX timestamp\nrepresentation in milliseconds.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.Time"
+          },
+          {
+            "name": "utcOffset",
+            "comment": " utcOffset returns a ZonedDateTime's offset from UTC in\nmilliseconds at that time.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "utcOffsetString",
+            "comment": " utcOffsetString returns a ZonedDateTime's UTC offset at that time\nas a string.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
+          },
+          {
+            "name": "weekday",
+            "comment": " weekday returns a ZonedDateTime's day of the week.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.Date.Weekday"
+          },
+          {
+            "name": "year",
+            "comment": " year returns a ZonedDateTime's year.\n",
+            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
+          },
+          {
+            "name": "zero",
+            "comment": " zero represents the first millisecond of the first day of the\ncurrent era.  Use it to build `ZonedDateTime` values:\n\n    -- 0-01-01T00:00:00+02:00\n    zonedDateTime (europe_bucharest ()) zero\n\n    -- 2016-01-01T00:00:00+02:00\n    zonedDateTime (europe_bucharest ()) { zero | year = 2016 }\n\n    -- 2016-05-29T13:00:00+02:00\n    zonedDateTime (europe_bucharest ()) { zero | year = 2016, month = 5, day = 29, hour = 13 }\n",
+            "type": "Time.Internal.DateTimeData"
+          },
+          {
+            "name": "zonedDateTime",
+            "comment": " zonedDateTime constructs a ZonedDateTime value given a TimeZone, a\ndate and a time.  Invalid values are clamped to the nearest valid date\nand time.\n",
+            "type": "Time.TimeZone.TimeZone -> Time.Internal.DateTimeData -> Time.ZonedDateTime.ZonedDateTime"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
         "name": "Time.TimeZones",
-        "comment": " This module contains TimeZone definitions for all Timezones as they\nare defined in the IANA zoneinfo database.\n\nTimeZone data is parsed lazily so, in order to retrieve a zone's value you\nmust apply `()` to it.  For example:\n\n    import Time.DateTime exposing (epoch, toTimestamp)\n    import Time.TimeZone exposing (abbreviation)\n    import Time.TimeZones exposing (europe_bucharest)\n\n    let\n        timezone = europe_bucharest ()\n    in\n        abbreviation (toTimestamp epoch) timezone\n\n@docs africa_abidjan, africa_accra, africa_addis_ababa, africa_algiers, africa_asmara, africa_asmera, africa_bamako, africa_bangui, africa_banjul, africa_bissau, africa_blantyre, africa_brazzaville, africa_bujumbura, africa_cairo, africa_casablanca, africa_ceuta, africa_conakry, africa_dakar, africa_dar_es_salaam, africa_djibouti, africa_douala, africa_el_aaiun, africa_freetown, africa_gaborone, africa_harare, africa_johannesburg, africa_juba, africa_kampala, africa_khartoum, africa_kigali, africa_kinshasa, africa_lagos, africa_libreville, africa_lome, africa_luanda, africa_lubumbashi, africa_lusaka, africa_malabo, africa_maputo, africa_maseru, africa_mbabane, africa_mogadishu, africa_monrovia, africa_nairobi, africa_ndjamena, africa_niamey, africa_nouakchott, africa_ouagadougou, africa_porto_novo, africa_sao_tome, africa_timbuktu, africa_tripoli, africa_tunis, africa_windhoek, america_adak, america_anchorage, america_anguilla, america_antigua, america_araguaina, america_argentina_buenos_aires, america_argentina_catamarca, america_argentina_comodrivadavia, america_argentina_cordoba, america_argentina_jujuy, america_argentina_la_rioja, america_argentina_mendoza, america_argentina_rio_gallegos, america_argentina_salta, america_argentina_san_juan, america_argentina_san_luis, america_argentina_tucuman, america_argentina_ushuaia, america_aruba, america_asuncion, america_atikokan, america_atka, america_bahia, america_bahia_banderas, america_barbados, america_belem, america_belize, america_blanc_sablon, america_boa_vista, america_bogota, america_boise, america_buenos_aires, america_cambridge_bay, america_campo_grande, america_cancun, america_caracas, america_catamarca, america_cayenne, america_cayman, america_chicago, america_chihuahua, america_coral_harbour, america_cordoba, america_costa_rica, america_creston, america_cuiaba, america_curacao, america_danmarkshavn, america_dawson, america_dawson_creek, america_denver, america_detroit, america_dominica, america_edmonton, america_eirunepe, america_el_salvador, america_ensenada, america_fort_nelson, america_fort_wayne, america_fortaleza, america_glace_bay, america_godthab, america_goose_bay, america_grand_turk, america_grenada, america_guadeloupe, america_guatemala, america_guayaquil, america_guyana, america_halifax, america_havana, america_hermosillo, america_indiana_indianapolis, america_indiana_knox, america_indiana_marengo, america_indiana_petersburg, america_indiana_tell_city, america_indiana_vevay, america_indiana_vincennes, america_indiana_winamac, america_indianapolis, america_inuvik, america_iqaluit, america_jamaica, america_jujuy, america_juneau, america_kentucky_louisville, america_kentucky_monticello, america_knox_in, america_kralendijk, america_la_paz, america_lima, america_los_angeles, america_louisville, america_lower_princes, america_maceio, america_managua, america_manaus, america_marigot, america_martinique, america_matamoros, america_mazatlan, america_mendoza, america_menominee, america_merida, america_metlakatla, america_mexico_city, america_miquelon, america_moncton, america_monterrey, america_montevideo, america_montreal, america_montserrat, america_nassau, america_new_york, america_nipigon, america_nome, america_noronha, america_north_dakota_beulah, america_north_dakota_center, america_north_dakota_new_salem, america_ojinaga, america_panama, america_pangnirtung, america_paramaribo, america_phoenix, america_port_au_prince, america_port_of_spain, america_porto_acre, america_porto_velho, america_puerto_rico, america_rainy_river, america_rankin_inlet, america_recife, america_regina, america_resolute, america_rio_branco, america_rosario, america_santa_isabel, america_santarem, america_santiago, america_santo_domingo, america_sao_paulo, america_scoresbysund, america_shiprock, america_sitka, america_st_barthelemy, america_st_johns, america_st_kitts, america_st_lucia, america_st_thomas, america_st_vincent, america_swift_current, america_tegucigalpa, america_thule, america_thunder_bay, america_tijuana, america_toronto, america_tortola, america_vancouver, america_virgin, america_whitehorse, america_winnipeg, america_yakutat, america_yellowknife, antarctica_casey, antarctica_davis, antarctica_dumontdurville, antarctica_macquarie, antarctica_mawson, antarctica_mcmurdo, antarctica_palmer, antarctica_rothera, antarctica_south_pole, antarctica_syowa, antarctica_troll, antarctica_vostok, arctic_longyearbyen, asia_aden, asia_almaty, asia_amman, asia_anadyr, asia_aqtau, asia_aqtobe, asia_ashgabat, asia_ashkhabad, asia_baghdad, asia_bahrain, asia_baku, asia_bangkok, asia_barnaul, asia_beirut, asia_bishkek, asia_brunei, asia_calcutta, asia_chita, asia_choibalsan, asia_chongqing, asia_chungking, asia_colombo, asia_dacca, asia_damascus, asia_dhaka, asia_dili, asia_dubai, asia_dushanbe, asia_gaza, asia_harbin, asia_hebron, asia_ho_chi_minh, asia_hong_kong, asia_hovd, asia_irkutsk, asia_istanbul, asia_jakarta, asia_jayapura, asia_jerusalem, asia_kabul, asia_kamchatka, asia_karachi, asia_kashgar, asia_kathmandu, asia_katmandu, asia_khandyga, asia_kolkata, asia_krasnoyarsk, asia_kuala_lumpur, asia_kuching, asia_kuwait, asia_macao, asia_macau, asia_magadan, asia_makassar, asia_manila, asia_muscat, asia_nicosia, asia_novokuznetsk, asia_novosibirsk, asia_omsk, asia_oral, asia_phnom_penh, asia_pontianak, asia_pyongyang, asia_qatar, asia_qyzylorda, asia_rangoon, asia_riyadh, asia_saigon, asia_sakhalin, asia_samarkand, asia_seoul, asia_shanghai, asia_singapore, asia_srednekolymsk, asia_taipei, asia_tashkent, asia_tbilisi, asia_tehran, asia_tel_aviv, asia_thimbu, asia_thimphu, asia_tokyo, asia_tomsk, asia_ujung_pandang, asia_ulaanbaatar, asia_ulan_bator, asia_urumqi, asia_ust_nera, asia_vientiane, asia_vladivostok, asia_yakutsk, asia_yekaterinburg, asia_yerevan, atlantic_azores, atlantic_bermuda, atlantic_canary, atlantic_cape_verde, atlantic_faeroe, atlantic_faroe, atlantic_jan_mayen, atlantic_madeira, atlantic_reykjavik, atlantic_south_georgia, atlantic_st_helena, atlantic_stanley, australia_act, australia_adelaide, australia_brisbane, australia_broken_hill, australia_canberra, australia_currie, australia_darwin, australia_eucla, australia_hobart, australia_lhi, australia_lindeman, australia_lord_howe, australia_melbourne, australia_north, australia_nsw, australia_perth, australia_queensland, australia_south, australia_sydney, australia_tasmania, australia_victoria, australia_west, australia_yancowinna, brazil_acre, brazil_denoronha, brazil_east, brazil_west, canada_atlantic, canada_central, canada_east_saskatchewan, canada_eastern, canada_mountain, canada_newfoundland, canada_pacific, canada_saskatchewan, canada_yukon, cet, chile_continental, chile_easterisland, cst6cdt, cuba, eet, egypt, eire, est, est5edt, etc_gmt, etc_gmt_0, etc_gmt_minus_0, etc_gmt_minus_1, etc_gmt_minus_10, etc_gmt_minus_11, etc_gmt_minus_12, etc_gmt_minus_13, etc_gmt_minus_14, etc_gmt_minus_2, etc_gmt_minus_3, etc_gmt_minus_4, etc_gmt_minus_5, etc_gmt_minus_6, etc_gmt_minus_7, etc_gmt_minus_8, etc_gmt_minus_9, etc_gmt_plus_0, etc_gmt_plus_1, etc_gmt_plus_10, etc_gmt_plus_11, etc_gmt_plus_12, etc_gmt_plus_2, etc_gmt_plus_3, etc_gmt_plus_4, etc_gmt_plus_5, etc_gmt_plus_6, etc_gmt_plus_7, etc_gmt_plus_8, etc_gmt_plus_9, etc_greenwich, etc_uct, etc_universal, etc_utc, etc_zulu, europe_amsterdam, europe_andorra, europe_astrakhan, europe_athens, europe_belfast, europe_belgrade, europe_berlin, europe_bratislava, europe_brussels, europe_bucharest, europe_budapest, europe_busingen, europe_chisinau, europe_copenhagen, europe_dublin, europe_gibraltar, europe_guernsey, europe_helsinki, europe_isle_of_man, europe_istanbul, europe_jersey, europe_kaliningrad, europe_kiev, europe_kirov, europe_lisbon, europe_ljubljana, europe_london, europe_luxembourg, europe_madrid, europe_malta, europe_mariehamn, europe_minsk, europe_monaco, europe_moscow, europe_nicosia, europe_oslo, europe_paris, europe_podgorica, europe_prague, europe_riga, europe_rome, europe_samara, europe_san_marino, europe_sarajevo, europe_simferopol, europe_skopje, europe_sofia, europe_stockholm, europe_tallinn, europe_tirane, europe_tiraspol, europe_ulyanovsk, europe_uzhgorod, europe_vaduz, europe_vatican, europe_vienna, europe_vilnius, europe_volgograd, europe_warsaw, europe_zagreb, europe_zaporozhye, europe_zurich, gb, gb_eire, gmt, gmt_0, gmt_minus_0, gmt_plus_0, greenwich, hongkong, hst, iceland, indian_antananarivo, indian_chagos, indian_christmas, indian_cocos, indian_comoro, indian_kerguelen, indian_mahe, indian_maldives, indian_mauritius, indian_mayotte, indian_reunion, iran, israel, jamaica, japan, kwajalein, libya, met, mexico_bajanorte, mexico_bajasur, mexico_general, mst, mst7mdt, navajo, nz, nz_chat, pacific_apia, pacific_auckland, pacific_bougainville, pacific_chatham, pacific_chuuk, pacific_easter, pacific_efate, pacific_enderbury, pacific_fakaofo, pacific_fiji, pacific_funafuti, pacific_galapagos, pacific_gambier, pacific_guadalcanal, pacific_guam, pacific_honolulu, pacific_johnston, pacific_kiritimati, pacific_kosrae, pacific_kwajalein, pacific_majuro, pacific_marquesas, pacific_midway, pacific_nauru, pacific_niue, pacific_norfolk, pacific_noumea, pacific_pago_pago, pacific_palau, pacific_pitcairn, pacific_pohnpei, pacific_ponape, pacific_port_moresby, pacific_rarotonga, pacific_saipan, pacific_samoa, pacific_tahiti, pacific_tarawa, pacific_tongatapu, pacific_truk, pacific_wake, pacific_wallis, pacific_yap, poland, portugal, prc, pst8pdt, roc, rok, singapore, turkey, uct, universal, us_alaska, us_aleutian, us_arizona, us_central, us_east_indiana, us_eastern, us_hawaii, us_indiana_starke, us_michigan, us_mountain, us_pacific, us_pacific_new, us_samoa, utc, w_su, wet, zulu\n",
+        "comment": " This module contains TimeZone definitions for all Timezones as they\nare defined in the IANA zoneinfo database.\n\nTimeZone data is parsed lazily so, in order to retrieve a zone's value you\nmust apply `()` to it.  For example:\n\n    import Time.DateTime exposing (epoch, toTimestamp)\n    import Time.TimeZone exposing (abbreviation)\n    import Time.TimeZones exposing (europe_bucharest)\n\n    let\n        timezone = europe_bucharest ()\n    in\n        abbreviation (toTimestamp epoch) timezone\n\n@docs all, fromName, africa_abidjan, africa_accra, africa_addis_ababa, africa_algiers, africa_asmara, africa_asmera, africa_bamako, africa_bangui, africa_banjul, africa_bissau, africa_blantyre, africa_brazzaville, africa_bujumbura, africa_cairo, africa_casablanca, africa_ceuta, africa_conakry, africa_dakar, africa_dar_es_salaam, africa_djibouti, africa_douala, africa_el_aaiun, africa_freetown, africa_gaborone, africa_harare, africa_johannesburg, africa_juba, africa_kampala, africa_khartoum, africa_kigali, africa_kinshasa, africa_lagos, africa_libreville, africa_lome, africa_luanda, africa_lubumbashi, africa_lusaka, africa_malabo, africa_maputo, africa_maseru, africa_mbabane, africa_mogadishu, africa_monrovia, africa_nairobi, africa_ndjamena, africa_niamey, africa_nouakchott, africa_ouagadougou, africa_porto_novo, africa_sao_tome, africa_timbuktu, africa_tripoli, africa_tunis, africa_windhoek, america_adak, america_anchorage, america_anguilla, america_antigua, america_araguaina, america_argentina_buenos_aires, america_argentina_catamarca, america_argentina_comodrivadavia, america_argentina_cordoba, america_argentina_jujuy, america_argentina_la_rioja, america_argentina_mendoza, america_argentina_rio_gallegos, america_argentina_salta, america_argentina_san_juan, america_argentina_san_luis, america_argentina_tucuman, america_argentina_ushuaia, america_aruba, america_asuncion, america_atikokan, america_atka, america_bahia, america_bahia_banderas, america_barbados, america_belem, america_belize, america_blanc_sablon, america_boa_vista, america_bogota, america_boise, america_buenos_aires, america_cambridge_bay, america_campo_grande, america_cancun, america_caracas, america_catamarca, america_cayenne, america_cayman, america_chicago, america_chihuahua, america_coral_harbour, america_cordoba, america_costa_rica, america_creston, america_cuiaba, america_curacao, america_danmarkshavn, america_dawson, america_dawson_creek, america_denver, america_detroit, america_dominica, america_edmonton, america_eirunepe, america_el_salvador, america_ensenada, america_fort_nelson, america_fort_wayne, america_fortaleza, america_glace_bay, america_godthab, america_goose_bay, america_grand_turk, america_grenada, america_guadeloupe, america_guatemala, america_guayaquil, america_guyana, america_halifax, america_havana, america_hermosillo, america_indiana_indianapolis, america_indiana_knox, america_indiana_marengo, america_indiana_petersburg, america_indiana_tell_city, america_indiana_vevay, america_indiana_vincennes, america_indiana_winamac, america_indianapolis, america_inuvik, america_iqaluit, america_jamaica, america_jujuy, america_juneau, america_kentucky_louisville, america_kentucky_monticello, america_knox_in, america_kralendijk, america_la_paz, america_lima, america_los_angeles, america_louisville, america_lower_princes, america_maceio, america_managua, america_manaus, america_marigot, america_martinique, america_matamoros, america_mazatlan, america_mendoza, america_menominee, america_merida, america_metlakatla, america_mexico_city, america_miquelon, america_moncton, america_monterrey, america_montevideo, america_montreal, america_montserrat, america_nassau, america_new_york, america_nipigon, america_nome, america_noronha, america_north_dakota_beulah, america_north_dakota_center, america_north_dakota_new_salem, america_ojinaga, america_panama, america_pangnirtung, america_paramaribo, america_phoenix, america_port_au_prince, america_port_of_spain, america_porto_acre, america_porto_velho, america_puerto_rico, america_rainy_river, america_rankin_inlet, america_recife, america_regina, america_resolute, america_rio_branco, america_rosario, america_santa_isabel, america_santarem, america_santiago, america_santo_domingo, america_sao_paulo, america_scoresbysund, america_shiprock, america_sitka, america_st_barthelemy, america_st_johns, america_st_kitts, america_st_lucia, america_st_thomas, america_st_vincent, america_swift_current, america_tegucigalpa, america_thule, america_thunder_bay, america_tijuana, america_toronto, america_tortola, america_vancouver, america_virgin, america_whitehorse, america_winnipeg, america_yakutat, america_yellowknife, antarctica_casey, antarctica_davis, antarctica_dumontdurville, antarctica_macquarie, antarctica_mawson, antarctica_mcmurdo, antarctica_palmer, antarctica_rothera, antarctica_south_pole, antarctica_syowa, antarctica_troll, antarctica_vostok, arctic_longyearbyen, asia_aden, asia_almaty, asia_amman, asia_anadyr, asia_aqtau, asia_aqtobe, asia_ashgabat, asia_ashkhabad, asia_atyrau, asia_baghdad, asia_bahrain, asia_baku, asia_bangkok, asia_barnaul, asia_beirut, asia_bishkek, asia_brunei, asia_calcutta, asia_chita, asia_choibalsan, asia_chongqing, asia_chungking, asia_colombo, asia_dacca, asia_damascus, asia_dhaka, asia_dili, asia_dubai, asia_dushanbe, asia_famagusta, asia_gaza, asia_harbin, asia_hebron, asia_ho_chi_minh, asia_hong_kong, asia_hovd, asia_irkutsk, asia_istanbul, asia_jakarta, asia_jayapura, asia_jerusalem, asia_kabul, asia_kamchatka, asia_karachi, asia_kashgar, asia_kathmandu, asia_katmandu, asia_khandyga, asia_kolkata, asia_krasnoyarsk, asia_kuala_lumpur, asia_kuching, asia_kuwait, asia_macao, asia_macau, asia_magadan, asia_makassar, asia_manila, asia_muscat, asia_nicosia, asia_novokuznetsk, asia_novosibirsk, asia_omsk, asia_oral, asia_phnom_penh, asia_pontianak, asia_pyongyang, asia_qatar, asia_qyzylorda, asia_rangoon, asia_riyadh, asia_saigon, asia_sakhalin, asia_samarkand, asia_seoul, asia_shanghai, asia_singapore, asia_srednekolymsk, asia_taipei, asia_tashkent, asia_tbilisi, asia_tehran, asia_tel_aviv, asia_thimbu, asia_thimphu, asia_tokyo, asia_tomsk, asia_ujung_pandang, asia_ulaanbaatar, asia_ulan_bator, asia_urumqi, asia_ust_nera, asia_vientiane, asia_vladivostok, asia_yakutsk, asia_yangon, asia_yekaterinburg, asia_yerevan, atlantic_azores, atlantic_bermuda, atlantic_canary, atlantic_cape_verde, atlantic_faeroe, atlantic_faroe, atlantic_jan_mayen, atlantic_madeira, atlantic_reykjavik, atlantic_south_georgia, atlantic_st_helena, atlantic_stanley, australia_act, australia_adelaide, australia_brisbane, australia_broken_hill, australia_canberra, australia_currie, australia_darwin, australia_eucla, australia_hobart, australia_lhi, australia_lindeman, australia_lord_howe, australia_melbourne, australia_north, australia_nsw, australia_perth, australia_queensland, australia_south, australia_sydney, australia_tasmania, australia_victoria, australia_west, australia_yancowinna, brazil_acre, brazil_denoronha, brazil_east, brazil_west, canada_atlantic, canada_central, canada_east_saskatchewan, canada_eastern, canada_mountain, canada_newfoundland, canada_pacific, canada_saskatchewan, canada_yukon, cet, chile_continental, chile_easterisland, cst6cdt, cuba, eet, egypt, eire, est, est5edt, etc_gmt, etc_gmt_0, etc_gmt_minus_0, etc_gmt_minus_1, etc_gmt_minus_10, etc_gmt_minus_11, etc_gmt_minus_12, etc_gmt_minus_13, etc_gmt_minus_14, etc_gmt_minus_2, etc_gmt_minus_3, etc_gmt_minus_4, etc_gmt_minus_5, etc_gmt_minus_6, etc_gmt_minus_7, etc_gmt_minus_8, etc_gmt_minus_9, etc_gmt_plus_0, etc_gmt_plus_1, etc_gmt_plus_10, etc_gmt_plus_11, etc_gmt_plus_12, etc_gmt_plus_2, etc_gmt_plus_3, etc_gmt_plus_4, etc_gmt_plus_5, etc_gmt_plus_6, etc_gmt_plus_7, etc_gmt_plus_8, etc_gmt_plus_9, etc_greenwich, etc_uct, etc_universal, etc_utc, etc_zulu, europe_amsterdam, europe_andorra, europe_astrakhan, europe_athens, europe_belfast, europe_belgrade, europe_berlin, europe_bratislava, europe_brussels, europe_bucharest, europe_budapest, europe_busingen, europe_chisinau, europe_copenhagen, europe_dublin, europe_gibraltar, europe_guernsey, europe_helsinki, europe_isle_of_man, europe_istanbul, europe_jersey, europe_kaliningrad, europe_kiev, europe_kirov, europe_lisbon, europe_ljubljana, europe_london, europe_luxembourg, europe_madrid, europe_malta, europe_mariehamn, europe_minsk, europe_monaco, europe_moscow, europe_nicosia, europe_oslo, europe_paris, europe_podgorica, europe_prague, europe_riga, europe_rome, europe_samara, europe_san_marino, europe_sarajevo, europe_saratov, europe_simferopol, europe_skopje, europe_sofia, europe_stockholm, europe_tallinn, europe_tirane, europe_tiraspol, europe_ulyanovsk, europe_uzhgorod, europe_vaduz, europe_vatican, europe_vienna, europe_vilnius, europe_volgograd, europe_warsaw, europe_zagreb, europe_zaporozhye, europe_zurich, gb, gb_eire, gmt, gmt_0, gmt_minus_0, gmt_plus_0, greenwich, hongkong, hst, iceland, indian_antananarivo, indian_chagos, indian_christmas, indian_cocos, indian_comoro, indian_kerguelen, indian_mahe, indian_maldives, indian_mauritius, indian_mayotte, indian_reunion, iran, israel, jamaica, japan, kwajalein, libya, met, mexico_bajanorte, mexico_bajasur, mexico_general, mst, mst7mdt, navajo, nz, nz_chat, pacific_apia, pacific_auckland, pacific_bougainville, pacific_chatham, pacific_chuuk, pacific_easter, pacific_efate, pacific_enderbury, pacific_fakaofo, pacific_fiji, pacific_funafuti, pacific_galapagos, pacific_gambier, pacific_guadalcanal, pacific_guam, pacific_honolulu, pacific_johnston, pacific_kiritimati, pacific_kosrae, pacific_kwajalein, pacific_majuro, pacific_marquesas, pacific_midway, pacific_nauru, pacific_niue, pacific_norfolk, pacific_noumea, pacific_pago_pago, pacific_palau, pacific_pitcairn, pacific_pohnpei, pacific_ponape, pacific_port_moresby, pacific_rarotonga, pacific_saipan, pacific_samoa, pacific_tahiti, pacific_tarawa, pacific_tongatapu, pacific_truk, pacific_wake, pacific_wallis, pacific_yap, poland, portugal, prc, pst8pdt, roc, rok, singapore, turkey, uct, universal, us_alaska, us_aleutian, us_arizona, us_central, us_east_indiana, us_eastern, us_hawaii, us_indiana_starke, us_michigan, us_mountain, us_pacific, us_pacific_new, us_samoa, utc, w_su, wet, zulu\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -735,7 +931,7 @@
           },
           {
             "name": "africa_addis_ababa",
-            "comment": " Africa/Addis_Ababa ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -745,27 +941,27 @@
           },
           {
             "name": "africa_asmara",
-            "comment": " Africa/Asmara ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_asmera",
-            "comment": " Africa/Asmera ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_bamako",
-            "comment": " Africa/Bamako ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_bangui",
-            "comment": " Africa/Bangui ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_banjul",
-            "comment": " Africa/Banjul ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -775,17 +971,17 @@
           },
           {
             "name": "africa_blantyre",
-            "comment": " Africa/Blantyre ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_brazzaville",
-            "comment": " Africa/Brazzaville ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_bujumbura",
-            "comment": " Africa/Bujumbura ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -805,27 +1001,27 @@
           },
           {
             "name": "africa_conakry",
-            "comment": " Africa/Conakry ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_dakar",
-            "comment": " Africa/Dakar ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_dar_es_salaam",
-            "comment": " Africa/Dar_es_Salaam ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_djibouti",
-            "comment": " Africa/Djibouti ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_douala",
-            "comment": " Africa/Douala ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -835,17 +1031,17 @@
           },
           {
             "name": "africa_freetown",
-            "comment": " Africa/Freetown ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_gaborone",
-            "comment": " Africa/Gaborone ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_harare",
-            "comment": " Africa/Harare ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -855,12 +1051,12 @@
           },
           {
             "name": "africa_juba",
-            "comment": " Africa/Juba ",
+            "comment": " Africa/Khartoum ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_kampala",
-            "comment": " Africa/Kampala ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -870,12 +1066,12 @@
           },
           {
             "name": "africa_kigali",
-            "comment": " Africa/Kigali ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_kinshasa",
-            "comment": " Africa/Kinshasa ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -885,32 +1081,32 @@
           },
           {
             "name": "africa_libreville",
-            "comment": " Africa/Libreville ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_lome",
-            "comment": " Africa/Lome ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_luanda",
-            "comment": " Africa/Luanda ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_lubumbashi",
-            "comment": " Africa/Lubumbashi ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_lusaka",
-            "comment": " Africa/Lusaka ",
+            "comment": " Africa/Maputo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_malabo",
-            "comment": " Africa/Malabo ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -920,17 +1116,17 @@
           },
           {
             "name": "africa_maseru",
-            "comment": " Africa/Maseru ",
+            "comment": " Africa/Johannesburg ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_mbabane",
-            "comment": " Africa/Mbabane ",
+            "comment": " Africa/Johannesburg ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_mogadishu",
-            "comment": " Africa/Mogadishu ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -950,32 +1146,32 @@
           },
           {
             "name": "africa_niamey",
-            "comment": " Africa/Niamey ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_nouakchott",
-            "comment": " Africa/Nouakchott ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_ouagadougou",
-            "comment": " Africa/Ouagadougou ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_porto_novo",
-            "comment": " Africa/Porto-Novo ",
+            "comment": " Africa/Lagos ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_sao_tome",
-            "comment": " Africa/Sao_Tome ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "africa_timbuktu",
-            "comment": " Africa/Timbuktu ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -994,6 +1190,11 @@
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
+            "name": "all",
+            "comment": " A mapping from TimeZone names to their respective functions.  Use\nthis to look up TimeZones by name. ",
+            "type": "Dict.Dict String (() -> Time.TimeZone.TimeZone)"
+          },
+          {
             "name": "america_adak",
             "comment": " America/Adak ",
             "type": "() -> Time.TimeZone.TimeZone"
@@ -1005,12 +1206,12 @@
           },
           {
             "name": "america_anguilla",
-            "comment": " America/Anguilla ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_antigua",
-            "comment": " America/Antigua ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1030,7 +1231,7 @@
           },
           {
             "name": "america_argentina_comodrivadavia",
-            "comment": " America/Argentina/ComodRivadavia ",
+            "comment": " America/Argentina/Catamarca ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1085,7 +1286,7 @@
           },
           {
             "name": "america_aruba",
-            "comment": " America/Aruba ",
+            "comment": " America/Curacao ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1100,7 +1301,7 @@
           },
           {
             "name": "america_atka",
-            "comment": " America/Atka ",
+            "comment": " America/Adak ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1150,7 +1351,7 @@
           },
           {
             "name": "america_buenos_aires",
-            "comment": " America/Buenos_Aires ",
+            "comment": " America/Argentina/Buenos_Aires ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1175,7 +1376,7 @@
           },
           {
             "name": "america_catamarca",
-            "comment": " America/Catamarca ",
+            "comment": " America/Argentina/Catamarca ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1185,7 +1386,7 @@
           },
           {
             "name": "america_cayman",
-            "comment": " America/Cayman ",
+            "comment": " America/Panama ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1200,12 +1401,12 @@
           },
           {
             "name": "america_coral_harbour",
-            "comment": " America/Coral_Harbour ",
+            "comment": " America/Atikokan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_cordoba",
-            "comment": " America/Cordoba ",
+            "comment": " America/Argentina/Cordoba ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1255,7 +1456,7 @@
           },
           {
             "name": "america_dominica",
-            "comment": " America/Dominica ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1275,7 +1476,7 @@
           },
           {
             "name": "america_ensenada",
-            "comment": " America/Ensenada ",
+            "comment": " America/Tijuana ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1315,12 +1516,12 @@
           },
           {
             "name": "america_grenada",
-            "comment": " America/Grenada ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_guadeloupe",
-            "comment": " America/Guadeloupe ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1355,7 +1556,7 @@
           },
           {
             "name": "america_indiana_indianapolis",
-            "comment": " America/Indiana/Indianapolis ",
+            "comment": " America/Fort_Wayne ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1395,7 +1596,7 @@
           },
           {
             "name": "america_indianapolis",
-            "comment": " America/Indianapolis ",
+            "comment": " America/Fort_Wayne ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1415,7 +1616,7 @@
           },
           {
             "name": "america_jujuy",
-            "comment": " America/Jujuy ",
+            "comment": " America/Argentina/Jujuy ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1435,12 +1636,12 @@
           },
           {
             "name": "america_knox_in",
-            "comment": " America/Knox_IN ",
+            "comment": " America/Indiana/Knox ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_kralendijk",
-            "comment": " America/Kralendijk ",
+            "comment": " America/Curacao ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1460,12 +1661,12 @@
           },
           {
             "name": "america_louisville",
-            "comment": " America/Louisville ",
+            "comment": " America/Kentucky/Louisville ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_lower_princes",
-            "comment": " America/Lower_Princes ",
+            "comment": " America/Curacao ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1485,7 +1686,7 @@
           },
           {
             "name": "america_marigot",
-            "comment": " America/Marigot ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1505,7 +1706,7 @@
           },
           {
             "name": "america_mendoza",
-            "comment": " America/Mendoza ",
+            "comment": " America/Argentina/Mendoza ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1550,12 +1751,12 @@
           },
           {
             "name": "america_montreal",
-            "comment": " America/Montreal ",
+            "comment": " America/Toronto ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_montserrat",
-            "comment": " America/Montserrat ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1635,7 +1836,7 @@
           },
           {
             "name": "america_porto_acre",
-            "comment": " America/Porto_Acre ",
+            "comment": " America/Rio_Branco ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1680,12 +1881,12 @@
           },
           {
             "name": "america_rosario",
-            "comment": " America/Rosario ",
+            "comment": " America/Argentina/Cordoba ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_santa_isabel",
-            "comment": " America/Santa_Isabel ",
+            "comment": " America/Tijuana ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1715,7 +1916,7 @@
           },
           {
             "name": "america_shiprock",
-            "comment": " America/Shiprock ",
+            "comment": " America/Denver ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1725,7 +1926,7 @@
           },
           {
             "name": "america_st_barthelemy",
-            "comment": " America/St_Barthelemy ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1735,22 +1936,22 @@
           },
           {
             "name": "america_st_kitts",
-            "comment": " America/St_Kitts ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_st_lucia",
-            "comment": " America/St_Lucia ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_st_thomas",
-            "comment": " America/St_Thomas ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "america_st_vincent",
-            "comment": " America/St_Vincent ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1785,7 +1986,7 @@
           },
           {
             "name": "america_tortola",
-            "comment": " America/Tortola ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1795,7 +1996,7 @@
           },
           {
             "name": "america_virgin",
-            "comment": " America/Virgin ",
+            "comment": " America/Port_of_Spain ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1845,7 +2046,7 @@
           },
           {
             "name": "antarctica_mcmurdo",
-            "comment": " Antarctica/McMurdo ",
+            "comment": " Pacific/Auckland ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1860,7 +2061,7 @@
           },
           {
             "name": "antarctica_south_pole",
-            "comment": " Antarctica/South_Pole ",
+            "comment": " Pacific/Auckland ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1880,12 +2081,12 @@
           },
           {
             "name": "arctic_longyearbyen",
-            "comment": " Arctic/Longyearbyen ",
+            "comment": " Europe/Oslo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "asia_aden",
-            "comment": " Asia/Aden ",
+            "comment": " Asia/Riyadh ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1920,7 +2121,12 @@
           },
           {
             "name": "asia_ashkhabad",
-            "comment": " Asia/Ashkhabad ",
+            "comment": " Asia/Ashgabat ",
+            "type": "() -> Time.TimeZone.TimeZone"
+          },
+          {
+            "name": "asia_atyrau",
+            "comment": " Asia/Atyrau ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1930,7 +2136,7 @@
           },
           {
             "name": "asia_bahrain",
-            "comment": " Asia/Bahrain ",
+            "comment": " Asia/Qatar ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1965,7 +2171,7 @@
           },
           {
             "name": "asia_calcutta",
-            "comment": " Asia/Calcutta ",
+            "comment": " Asia/Kolkata ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1980,12 +2186,12 @@
           },
           {
             "name": "asia_chongqing",
-            "comment": " Asia/Chongqing ",
+            "comment": " Asia/Shanghai ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "asia_chungking",
-            "comment": " Asia/Chungking ",
+            "comment": " Asia/Shanghai ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -1995,7 +2201,7 @@
           },
           {
             "name": "asia_dacca",
-            "comment": " Asia/Dacca ",
+            "comment": " Asia/Dhaka ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2024,13 +2230,18 @@
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
+            "name": "asia_famagusta",
+            "comment": " Asia/Famagusta ",
+            "type": "() -> Time.TimeZone.TimeZone"
+          },
+          {
             "name": "asia_gaza",
             "comment": " Asia/Gaza ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "asia_harbin",
-            "comment": " Asia/Harbin ",
+            "comment": " Asia/Shanghai ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2060,7 +2271,7 @@
           },
           {
             "name": "asia_istanbul",
-            "comment": " Asia/Istanbul ",
+            "comment": " Europe/Istanbul ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2095,7 +2306,7 @@
           },
           {
             "name": "asia_kashgar",
-            "comment": " Asia/Kashgar ",
+            "comment": " Asia/Urumqi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2105,7 +2316,7 @@
           },
           {
             "name": "asia_katmandu",
-            "comment": " Asia/Katmandu ",
+            "comment": " Asia/Kathmandu ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2135,12 +2346,12 @@
           },
           {
             "name": "asia_kuwait",
-            "comment": " Asia/Kuwait ",
+            "comment": " Asia/Riyadh ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "asia_macao",
-            "comment": " Asia/Macao ",
+            "comment": " Asia/Macau ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2165,7 +2376,7 @@
           },
           {
             "name": "asia_muscat",
-            "comment": " Asia/Muscat ",
+            "comment": " Asia/Dubai ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2195,7 +2406,7 @@
           },
           {
             "name": "asia_phnom_penh",
-            "comment": " Asia/Phnom_Penh ",
+            "comment": " Asia/Bangkok ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2230,7 +2441,7 @@
           },
           {
             "name": "asia_saigon",
-            "comment": " Asia/Saigon ",
+            "comment": " Asia/Ho_Chi_Minh ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2285,12 +2496,12 @@
           },
           {
             "name": "asia_tel_aviv",
-            "comment": " Asia/Tel_Aviv ",
+            "comment": " Asia/Jerusalem ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "asia_thimbu",
-            "comment": " Asia/Thimbu ",
+            "comment": " Asia/Thimphu ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2310,7 +2521,7 @@
           },
           {
             "name": "asia_ujung_pandang",
-            "comment": " Asia/Ujung_Pandang ",
+            "comment": " Asia/Makassar ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2320,7 +2531,7 @@
           },
           {
             "name": "asia_ulan_bator",
-            "comment": " Asia/Ulan_Bator ",
+            "comment": " Asia/Ulaanbaatar ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2335,7 +2546,7 @@
           },
           {
             "name": "asia_vientiane",
-            "comment": " Asia/Vientiane ",
+            "comment": " Asia/Bangkok ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2346,6 +2557,11 @@
           {
             "name": "asia_yakutsk",
             "comment": " Asia/Yakutsk ",
+            "type": "() -> Time.TimeZone.TimeZone"
+          },
+          {
+            "name": "asia_yangon",
+            "comment": " Asia/Rangoon ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2380,7 +2596,7 @@
           },
           {
             "name": "atlantic_faeroe",
-            "comment": " Atlantic/Faeroe ",
+            "comment": " Atlantic/Faroe ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2390,7 +2606,7 @@
           },
           {
             "name": "atlantic_jan_mayen",
-            "comment": " Atlantic/Jan_Mayen ",
+            "comment": " Europe/Oslo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2410,7 +2626,7 @@
           },
           {
             "name": "atlantic_st_helena",
-            "comment": " Atlantic/St_Helena ",
+            "comment": " Africa/Abidjan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2420,7 +2636,7 @@
           },
           {
             "name": "australia_act",
-            "comment": " Australia/ACT ",
+            "comment": " Australia/Sydney ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2440,7 +2656,7 @@
           },
           {
             "name": "australia_canberra",
-            "comment": " Australia/Canberra ",
+            "comment": " Australia/Sydney ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2465,7 +2681,7 @@
           },
           {
             "name": "australia_lhi",
-            "comment": " Australia/LHI ",
+            "comment": " Australia/Lord_Howe ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2485,12 +2701,12 @@
           },
           {
             "name": "australia_north",
-            "comment": " Australia/North ",
+            "comment": " Australia/Darwin ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "australia_nsw",
-            "comment": " Australia/NSW ",
+            "comment": " Australia/Sydney ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2500,12 +2716,12 @@
           },
           {
             "name": "australia_queensland",
-            "comment": " Australia/Queensland ",
+            "comment": " Australia/Brisbane ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "australia_south",
-            "comment": " Australia/South ",
+            "comment": " Australia/Adelaide ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2515,87 +2731,87 @@
           },
           {
             "name": "australia_tasmania",
-            "comment": " Australia/Tasmania ",
+            "comment": " Australia/Hobart ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "australia_victoria",
-            "comment": " Australia/Victoria ",
+            "comment": " Australia/Melbourne ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "australia_west",
-            "comment": " Australia/West ",
+            "comment": " Australia/Perth ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "australia_yancowinna",
-            "comment": " Australia/Yancowinna ",
+            "comment": " Australia/Broken_Hill ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "brazil_acre",
-            "comment": " Brazil/Acre ",
+            "comment": " America/Rio_Branco ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "brazil_denoronha",
-            "comment": " Brazil/DeNoronha ",
+            "comment": " America/Noronha ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "brazil_east",
-            "comment": " Brazil/East ",
+            "comment": " America/Sao_Paulo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "brazil_west",
-            "comment": " Brazil/West ",
+            "comment": " America/Manaus ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_atlantic",
-            "comment": " Canada/Atlantic ",
+            "comment": " America/Halifax ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_central",
-            "comment": " Canada/Central ",
+            "comment": " America/Winnipeg ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_east_saskatchewan",
-            "comment": " Canada/East-Saskatchewan ",
+            "comment": " America/Regina ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_eastern",
-            "comment": " Canada/Eastern ",
+            "comment": " America/Toronto ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_mountain",
-            "comment": " Canada/Mountain ",
+            "comment": " America/Edmonton ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_newfoundland",
-            "comment": " Canada/Newfoundland ",
+            "comment": " America/St_Johns ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_pacific",
-            "comment": " Canada/Pacific ",
+            "comment": " America/Vancouver ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_saskatchewan",
-            "comment": " Canada/Saskatchewan ",
+            "comment": " America/Regina ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "canada_yukon",
-            "comment": " Canada/Yukon ",
+            "comment": " America/Whitehorse ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2605,12 +2821,12 @@
           },
           {
             "name": "chile_continental",
-            "comment": " Chile/Continental ",
+            "comment": " America/Santiago ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "chile_easterisland",
-            "comment": " Chile/EasterIsland ",
+            "comment": " Pacific/Easter ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2620,7 +2836,7 @@
           },
           {
             "name": "cuba",
-            "comment": " Cuba ",
+            "comment": " America/Havana ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2630,17 +2846,17 @@
           },
           {
             "name": "egypt",
-            "comment": " Egypt ",
+            "comment": " Africa/Cairo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "eire",
-            "comment": " Eire ",
+            "comment": " Europe/Dublin ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "est",
-            "comment": " Europe/Budapest ",
+            "comment": " EST ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2650,17 +2866,17 @@
           },
           {
             "name": "etc_gmt",
-            "comment": " Etc/GMT ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "etc_gmt_0",
-            "comment": " Etc/GMT0 ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "etc_gmt_minus_0",
-            "comment": " Etc/GMT-0 ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2800,7 +3016,7 @@
           },
           {
             "name": "etc_greenwich",
-            "comment": " Etc/Greenwich ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2810,7 +3026,7 @@
           },
           {
             "name": "etc_universal",
-            "comment": " Etc/Universal ",
+            "comment": " Etc/UTC ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2820,7 +3036,7 @@
           },
           {
             "name": "etc_zulu",
-            "comment": " Etc/Zulu ",
+            "comment": " Etc/UTC ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2845,7 +3061,7 @@
           },
           {
             "name": "europe_belfast",
-            "comment": " Europe/Belfast ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2860,7 +3076,7 @@
           },
           {
             "name": "europe_bratislava",
-            "comment": " Europe/Bratislava ",
+            "comment": " Europe/Prague ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2880,7 +3096,7 @@
           },
           {
             "name": "europe_busingen",
-            "comment": " Europe/Busingen ",
+            "comment": " Europe/Zurich ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2905,7 +3121,7 @@
           },
           {
             "name": "europe_guernsey",
-            "comment": " Europe/Guernsey ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2915,7 +3131,7 @@
           },
           {
             "name": "europe_isle_of_man",
-            "comment": " Europe/Isle_of_Man ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2925,7 +3141,7 @@
           },
           {
             "name": "europe_jersey",
-            "comment": " Europe/Jersey ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2950,7 +3166,7 @@
           },
           {
             "name": "europe_ljubljana",
-            "comment": " Europe/Ljubljana ",
+            "comment": " Europe/Belgrade ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2975,7 +3191,7 @@
           },
           {
             "name": "europe_mariehamn",
-            "comment": " Europe/Mariehamn ",
+            "comment": " Europe/Helsinki ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -2995,7 +3211,7 @@
           },
           {
             "name": "europe_nicosia",
-            "comment": " Europe/Nicosia ",
+            "comment": " Asia/Nicosia ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3010,7 +3226,7 @@
           },
           {
             "name": "europe_podgorica",
-            "comment": " Europe/Podgorica ",
+            "comment": " Europe/Belgrade ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3035,12 +3251,17 @@
           },
           {
             "name": "europe_san_marino",
-            "comment": " Europe/San_Marino ",
+            "comment": " Europe/Rome ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "europe_sarajevo",
-            "comment": " Europe/Sarajevo ",
+            "comment": " Europe/Belgrade ",
+            "type": "() -> Time.TimeZone.TimeZone"
+          },
+          {
+            "name": "europe_saratov",
+            "comment": " Europe/Saratov ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3050,7 +3271,7 @@
           },
           {
             "name": "europe_skopje",
-            "comment": " Europe/Skopje ",
+            "comment": " Europe/Belgrade ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3075,7 +3296,7 @@
           },
           {
             "name": "europe_tiraspol",
-            "comment": " Europe/Tiraspol ",
+            "comment": " Europe/Chisinau ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3090,12 +3311,12 @@
           },
           {
             "name": "europe_vaduz",
-            "comment": " Europe/Vaduz ",
+            "comment": " Europe/Zurich ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "europe_vatican",
-            "comment": " Europe/Vatican ",
+            "comment": " Europe/Rome ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3120,7 +3341,7 @@
           },
           {
             "name": "europe_zagreb",
-            "comment": " Europe/Zagreb ",
+            "comment": " Europe/Belgrade ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3134,43 +3355,48 @@
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
+            "name": "fromName",
+            "comment": " Look up a TimeZone by name. ",
+            "type": "String -> Maybe.Maybe Time.TimeZone.TimeZone"
+          },
+          {
             "name": "gb",
-            "comment": " GB ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "gb_eire",
-            "comment": " GB-Eire ",
+            "comment": " Europe/London ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "gmt",
-            "comment": " GMT ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "gmt_0",
-            "comment": " GMT0 ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "gmt_minus_0",
-            "comment": " GMT-0 ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "gmt_plus_0",
-            "comment": " GMT+0 ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "greenwich",
-            "comment": " Greenwich ",
+            "comment": " Etc/GMT+0 ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "hongkong",
-            "comment": " Hongkong ",
+            "comment": " Asia/Hong_Kong ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3180,12 +3406,12 @@
           },
           {
             "name": "iceland",
-            "comment": " Iceland ",
+            "comment": " Atlantic/Reykjavik ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "indian_antananarivo",
-            "comment": " Indian/Antananarivo ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3205,7 +3431,7 @@
           },
           {
             "name": "indian_comoro",
-            "comment": " Indian/Comoro ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3230,7 +3456,7 @@
           },
           {
             "name": "indian_mayotte",
-            "comment": " Indian/Mayotte ",
+            "comment": " Africa/Nairobi ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3240,32 +3466,32 @@
           },
           {
             "name": "iran",
-            "comment": " Iran ",
+            "comment": " Asia/Tehran ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "israel",
-            "comment": " Israel ",
+            "comment": " Asia/Jerusalem ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "jamaica",
-            "comment": " Jamaica ",
+            "comment": " America/Jamaica ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "japan",
-            "comment": " Japan ",
+            "comment": " Asia/Tokyo ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "kwajalein",
-            "comment": " Kwajalein ",
+            "comment": " Pacific/Kwajalein ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "libya",
-            "comment": " Libya ",
+            "comment": " Africa/Tripoli ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3275,17 +3501,17 @@
           },
           {
             "name": "mexico_bajanorte",
-            "comment": " Mexico/BajaNorte ",
+            "comment": " America/Tijuana ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "mexico_bajasur",
-            "comment": " Mexico/BajaSur ",
+            "comment": " America/Mazatlan ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "mexico_general",
-            "comment": " Mexico/General ",
+            "comment": " America/Mexico_City ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3300,17 +3526,17 @@
           },
           {
             "name": "navajo",
-            "comment": " Navajo ",
+            "comment": " America/Denver ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "nz",
-            "comment": " NZ ",
+            "comment": " Pacific/Auckland ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "nz_chat",
-            "comment": " NZ-CHAT ",
+            "comment": " Pacific/Chatham ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3395,7 +3621,7 @@
           },
           {
             "name": "pacific_johnston",
-            "comment": " Pacific/Johnston ",
+            "comment": " Pacific/Honolulu ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3425,7 +3651,7 @@
           },
           {
             "name": "pacific_midway",
-            "comment": " Pacific/Midway ",
+            "comment": " Pacific/Pago_Pago ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3470,7 +3696,7 @@
           },
           {
             "name": "pacific_ponape",
-            "comment": " Pacific/Ponape ",
+            "comment": " Pacific/Pohnpei ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3485,12 +3711,12 @@
           },
           {
             "name": "pacific_saipan",
-            "comment": " Pacific/Saipan ",
+            "comment": " Pacific/Guam ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "pacific_samoa",
-            "comment": " Pacific/Samoa ",
+            "comment": " Pacific/Pago_Pago ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3510,7 +3736,7 @@
           },
           {
             "name": "pacific_truk",
-            "comment": " Pacific/Truk ",
+            "comment": " Pacific/Chuuk ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3525,22 +3751,22 @@
           },
           {
             "name": "pacific_yap",
-            "comment": " Pacific/Yap ",
+            "comment": " Pacific/Chuuk ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "poland",
-            "comment": " Poland ",
+            "comment": " Europe/Warsaw ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "portugal",
-            "comment": " Portugal ",
+            "comment": " Europe/Lisbon ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "prc",
-            "comment": " PRC ",
+            "comment": " Asia/Shanghai ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3550,107 +3776,107 @@
           },
           {
             "name": "roc",
-            "comment": " ROC ",
+            "comment": " Asia/Taipei ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "rok",
-            "comment": " ROK ",
+            "comment": " Asia/Seoul ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "singapore",
-            "comment": " Singapore ",
+            "comment": " Asia/Singapore ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "turkey",
-            "comment": " Turkey ",
+            "comment": " Europe/Istanbul ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "uct",
-            "comment": " UCT ",
+            "comment": " Etc/UCT ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "universal",
-            "comment": " Universal ",
+            "comment": " Etc/UTC ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_alaska",
-            "comment": " US/Alaska ",
+            "comment": " America/Anchorage ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_aleutian",
-            "comment": " US/Aleutian ",
+            "comment": " America/Adak ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_arizona",
-            "comment": " US/Arizona ",
+            "comment": " America/Phoenix ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_central",
-            "comment": " US/Central ",
+            "comment": " America/Chicago ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_east_indiana",
-            "comment": " US/East-Indiana ",
+            "comment": " America/Fort_Wayne ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_eastern",
-            "comment": " US/Eastern ",
+            "comment": " America/New_York ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_hawaii",
-            "comment": " US/Hawaii ",
+            "comment": " Pacific/Honolulu ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_indiana_starke",
-            "comment": " US/Indiana-Starke ",
+            "comment": " America/Indiana/Knox ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_michigan",
-            "comment": " US/Michigan ",
+            "comment": " America/Detroit ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_mountain",
-            "comment": " US/Mountain ",
+            "comment": " America/Denver ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_pacific",
-            "comment": " US/Pacific ",
+            "comment": " America/Los_Angeles ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_pacific_new",
-            "comment": " US/Pacific-New ",
+            "comment": " America/Los_Angeles ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "us_samoa",
-            "comment": " US/Samoa ",
+            "comment": " Pacific/Pago_Pago ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "utc",
-            "comment": " UTC ",
+            "comment": " Etc/UTC ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
             "name": "w_su",
-            "comment": " W-SU ",
+            "comment": " Europe/Moscow ",
             "type": "() -> Time.TimeZone.TimeZone"
           },
           {
@@ -3660,114 +3886,8 @@
           },
           {
             "name": "zulu",
-            "comment": " Zulu ",
+            "comment": " Etc/UTC ",
             "type": "() -> Time.TimeZone.TimeZone"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Time.ZonedDateTime",
-        "comment": " This module defines a time representation based on a Date, the\ntime of day and a time zone.\n\nZonedDateTimes should only be used when reasoning about or displaying\n`DateTime`s in a user's local time zone.  For this reason, the API\nsurface of `ZonedDateTimes` is extremely limited.\n\n# ZonedDateTimes\n@docs ZonedDateTime\n\n# Constructing ZonedDateTimes\n@docs zero, zonedDateTime, fromDateTime, toDateTime\n\n# Inspecting ZonedDateTimes\n@docs timeZone, year, month, day, weekday, hour, minute, second, millisecond, abbreviation, utcOffset, utcOffsetString\n\n# Helper functions\n@docs toISO8601, fromISO8601\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "ZonedDateTime",
-            "comment": " ZoneDateTime is the opaque type for all ZonedDateTime values.\nValues of this type represent a `(TimeZone, DateTime)` pair.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "abbreviation",
-            "comment": " abbreviation returns a ZonedDateTime's abbreviation at that time.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
-          },
-          {
-            "name": "day",
-            "comment": " day returns a ZonedDateTime's day.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "fromDateTime",
-            "comment": " fromDateTime constructs a ZonedDateTime value from a TimeZone and\na DateTime.\n",
-            "type": "Time.TimeZone.TimeZone -> Time.DateTime.DateTime -> Time.ZonedDateTime.ZonedDateTime"
-          },
-          {
-            "name": "fromISO8601",
-            "comment": " fromISO8601 parses an ISO8601-formatted string into a\nZonedDateTime object, adjusting for its offset.\n",
-            "type": "Time.TimeZone.TimeZone -> String -> Result.Result String Time.ZonedDateTime.ZonedDateTime"
-          },
-          {
-            "name": "hour",
-            "comment": " hour returns a ZonedDateTime's hour.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "millisecond",
-            "comment": " millisecond returns a ZonedDateTime's millisecond.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "minute",
-            "comment": " minute returns a ZonedDateTime's minute.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "month",
-            "comment": " month returns a ZonedDateTime's month.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "second",
-            "comment": " second returns a ZonedDateTime's second.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "timeZone",
-            "comment": " timeZone returns a ZonedDatetime's TimeZone.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.TimeZone.TimeZone"
-          },
-          {
-            "name": "toDateTime",
-            "comment": " toDateTime converts a ZonedDateTime to a UTC DateTime value.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.DateTime.DateTime"
-          },
-          {
-            "name": "toISO8601",
-            "comment": " toISO8601 renders a ZonedDateTime in ISO8601 format.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
-          },
-          {
-            "name": "utcOffset",
-            "comment": " utcOffset returns a ZonedDateTime's offset from UTC in\nmilliseconds at that time.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "utcOffsetString",
-            "comment": " utcOffsetString returns a ZonedDateTime's UTC offset at that time\nas a string.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> String"
-          },
-          {
-            "name": "weekday",
-            "comment": " weekday returns a ZonedDateTime's day of the week.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Time.Date.Weekday"
-          },
-          {
-            "name": "year",
-            "comment": " year returns a ZonedDateTime's year.\n",
-            "type": "Time.ZonedDateTime.ZonedDateTime -> Int"
-          },
-          {
-            "name": "zero",
-            "comment": " zero represents the first millisecond of the first day of the\ncurrent era.  Use it to build `ZonedDateTime` values:\n\n    -- 0-01-01T00:00:00+02:00\n    zonedDateTime (europe_bucharest ()) zero\n\n    -- 2016-01-01T00:00:00+02:00\n    zonedDateTime (europe_bucharest ()) { zero | year = 2016 }\n\n    -- 2016-05-29T13:00:00+02:00\n    zonedDateTime (europe_bucharest ()) { zero | year = 2016, month = 5, day = 29, hour = 13 }\n",
-            "type": "Time.Internal.DateTimeData"
-          },
-          {
-            "name": "zonedDateTime",
-            "comment": " zonedDateTime constructs a ZonedDateTime value given a TimeZone, a\ndate and a time.  Invalid values are clamped to the nearest valid date\nand time.\n",
-            "type": "Time.TimeZone.TimeZone -> Time.Internal.DateTimeData -> Time.ZonedDateTime.ZonedDateTime"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -3976,52 +4096,6 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Time.TimeZone",
-        "comment": " This module defines a representations for Timezone information.\n\n# TimeZone values\n@docs TimeZone, name, abbreviation, offset, offsetString\n\n# Manipulating TimeZones\n@docs setName\n\n# Constructing TimeZones\n@docs unpack\n",
-        "aliases": [],
-        "types": [
-          {
-            "name": "TimeZone",
-            "comment": " TimeZone represents the opaque type of timezone values.  These are\ngenerally loaded from an external source via `unpack`.\n\nSee also http://momentjs.com/timezone/docs/#/data-formats/packed-format/.\n",
-            "args": [],
-            "cases": []
-          }
-        ],
-        "values": [
-          {
-            "name": "abbreviation",
-            "comment": " Given an arbitrary Time and a TimeZone, abbreviation returns the\nTimeZone's abbreviation at that Time.\n",
-            "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
-          },
-          {
-            "name": "name",
-            "comment": " name returns a TimeZone's name.\n",
-            "type": "Time.TimeZone.TimeZone -> String"
-          },
-          {
-            "name": "offset",
-            "comment": " Given an arbitrary Time and a TimeZone, offset returns the\nTimeZone's UTC offset in milliseconds at that Time.\n",
-            "type": "Time.Time -> Time.TimeZone.TimeZone -> Int"
-          },
-          {
-            "name": "offsetString",
-            "comment": " Given an arbitrary Time and TimeZone, offsetString returns an\nISO8601-formatted UTC offset for at that Time.\n",
-            "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
-          },
-          {
-            "name": "setName",
-            "comment": " setName updates a TimeZone's name.\n",
-            "type": "String -> Time.TimeZone.TimeZone -> Time.TimeZone.TimeZone"
-          },
-          {
-            "name": "unpack",
-            "comment": " unpack decodes a packed zone data object into a TimeZone value.\n\nSee also http://momentjs.com/timezone/docs/#/data-formats/packed-format/\n",
-            "type": "String -> Result.Result (List String) Time.TimeZone.TimeZone"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
         "name": "Time.Date",
         "comment": " This module defines a timezone-independent Date type which can\nrepresent any date of the proleptic Gregorian calendar.\n\n# Dates\n@docs Date, date, year, month, day, Weekday, weekday\n\n# Manipulating Dates\n@docs setYear, setMonth, setDay, addYears, addMonths, addDays\n\n# Comparing Dates\n@docs compare\n\n# Subtracting Dates\n@docs DateDelta, delta\n\n# Helper functions\n@docs toISO8601, fromISO8601, toTuple, fromTuple, isValidDate, isLeapYear, daysInMonth\n",
         "aliases": [
@@ -4175,6 +4249,52 @@
             "name": "year",
             "comment": " year returns a Date's year as an Int.\n",
             "type": "Time.Date.Date -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Time.TimeZone",
+        "comment": " This module defines a representations for Timezone information.\n\n# TimeZone values\n@docs TimeZone, name, abbreviation, offset, offsetString\n\n# Manipulating TimeZones\n@docs setName\n\n# Constructing TimeZones\n@docs unpack\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "TimeZone",
+            "comment": " TimeZone represents the opaque type of timezone values.  These are\ngenerally loaded from an external source via `unpack`.\n\nSee also http://momentjs.com/timezone/docs/#/data-formats/packed-format/.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "abbreviation",
+            "comment": " Given an arbitrary Time and a TimeZone, abbreviation returns the\nTimeZone's abbreviation at that Time.\n",
+            "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
+          },
+          {
+            "name": "name",
+            "comment": " name returns a TimeZone's name.\n",
+            "type": "Time.TimeZone.TimeZone -> String"
+          },
+          {
+            "name": "offset",
+            "comment": " Given an arbitrary Time and a TimeZone, offset returns the\nTimeZone's UTC offset in milliseconds at that Time.\n",
+            "type": "Time.Time -> Time.TimeZone.TimeZone -> Int"
+          },
+          {
+            "name": "offsetString",
+            "comment": " Given an arbitrary Time and TimeZone, offsetString returns an\nISO8601-formatted UTC offset for at that Time.\n",
+            "type": "Time.Time -> Time.TimeZone.TimeZone -> String"
+          },
+          {
+            "name": "setName",
+            "comment": " setName updates a TimeZone's name.\n",
+            "type": "String -> Time.TimeZone.TimeZone -> Time.TimeZone.TimeZone"
+          },
+          {
+            "name": "unpack",
+            "comment": " unpack decodes a packed zone data object into a TimeZone value.\n\nSee also http://momentjs.com/timezone/docs/#/data-formats/packed-format/\n",
+            "type": "String -> Result.Result (List String) Time.TimeZone.TimeZone"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -15085,6 +15205,266 @@
     ]
   },
   {
+    "name": "SwiftsNamesake/euclidean-space",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Euclid.Rectangle",
+        "comment": " Defines a Rectangle type\n\n# Types\n@docs Rectangle\n\n# Properties\n@docs width, height, left, right, top, bottom, opposite\n\n# Misc\n@docs hasPoint\n",
+        "aliases": [
+          {
+            "name": "Rectangle",
+            "comment": " A polymorphic rectangle defined by its top left corner and its size ",
+            "args": [
+              "v"
+            ],
+            "type": "{ corner : v, size : v }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "bottom",
+            "comment": " Bottom side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
+          },
+          {
+            "name": "hasPoint",
+            "comment": " Does the rectangle contain the point? ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 comparable) -> Euclid.Vector.V2 comparable -> Bool"
+          },
+          {
+            "name": "height",
+            "comment": " Height of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasY v n) -> n"
+          },
+          {
+            "name": "left",
+            "comment": " Left side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasX v n) -> n"
+          },
+          {
+            "name": "opposite",
+            "comment": " Opposite corner of a rectangle (bottom right) ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "right",
+            "comment": " Right side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
+          },
+          {
+            "name": "top",
+            "comment": " Top side of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
+          },
+          {
+            "name": "width",
+            "comment": " Width of a rectangle ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasX v n) -> n"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Euclid.Vector",
+        "comment": " Defines a polymorphic Vector type. Due to limits of Elm's type system and also due to my own requirements, many functions will\n   only work with 2D vectors.\n\n# Types\n@docs V1, V2, V3, HasX, HasY, HasZ, HasXY, HasXYZ, Vector\n\n# Construction\n@docs vec\n\n# Arithmetic\n@docs add, subtract, negate, conjugate\n\n# Transform\n@docs map, map2, dotwise, scale\n\n# Focus\n@docs x, y, z\n\n# Polar coordinates\n@docs fromPolar, arg, abs\n\n# Polymorphic stuff\n@docs foldX, foldXY, foldXYZ, apX, apXY, apXYZ\n\n",
+        "aliases": [
+          {
+            "name": "HasX",
+            "comment": " A type that has an x field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n }"
+          },
+          {
+            "name": "HasXY",
+            "comment": " A type that has an x and a y field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n, y : n }"
+          },
+          {
+            "name": "HasXYZ",
+            "comment": " A type that has an x, a y and a z field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n, y : n, z : n }"
+          },
+          {
+            "name": "HasY",
+            "comment": " A type that has an y field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | y : n }"
+          },
+          {
+            "name": "HasZ",
+            "comment": " A type that has an z field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | z : n }"
+          },
+          {
+            "name": "V1",
+            "comment": " A 1D vector (for completeness' sake) ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n }"
+          },
+          {
+            "name": "V2",
+            "comment": " A 2D vector ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n, y : n }"
+          },
+          {
+            "name": "V3",
+            "comment": " A 3D vector ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n, y : n, z : n }"
+          },
+          {
+            "name": "Vector",
+            "comment": " ... ",
+            "args": [
+              "v",
+              "w",
+              "x",
+              "n",
+              "b"
+            ],
+            "type": "{ v | methods : { fold : n -> b -> b, pure : n -> v, ap : v -> w -> x } }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "abs",
+            "comment": " Finds the absolute value (also known as the magnitude) of a vector ",
+            "type": "Euclid.Vector.V2 number -> number"
+          },
+          {
+            "name": "add",
+            "comment": " Add two vectors component-wise ",
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "apX",
+            "comment": " Apply a 1D vector of functions to a 1d vector of arguments ",
+            "type": "Euclid.Vector.HasX v (a -> b) -> Euclid.Vector.HasX v a -> Euclid.Vector.HasX v b"
+          },
+          {
+            "name": "apXY",
+            "comment": " Apply a 2D vector of functions to a 2d vector of arguments ",
+            "type": "Euclid.Vector.HasXY v (a -> b) -> Euclid.Vector.HasXY v a -> Euclid.Vector.HasXY v b"
+          },
+          {
+            "name": "apXYZ",
+            "comment": " Apply a 3d vector of functions to a 3d vector of arguments ",
+            "type": "Euclid.Vector.HasXYZ v (a -> b) -> Euclid.Vector.HasXYZ v a -> Euclid.Vector.HasXYZ v b"
+          },
+          {
+            "name": "arg",
+            "comment": " Finds the 'argument' (in radians) of a vector (the angle between the vector and the positive X axis) ",
+            "type": "Euclid.Vector.V2 Float -> Float"
+          },
+          {
+            "name": "conjugate",
+            "comment": " The complex conjugate (Y component is negated) ",
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "dotwise",
+            "comment": " Apply some function to two vectors component-wise (like map for two vectors)  ",
+            "type": "(a -> b -> c) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b -> Euclid.Vector.V2 c"
+          },
+          {
+            "name": "foldX",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasX v a -> b"
+          },
+          {
+            "name": "foldXY",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasXY v a -> b"
+          },
+          {
+            "name": "foldXYZ",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasXYZ v a -> b"
+          },
+          {
+            "name": "fromPolar",
+            "comment": " Construct a V2 from an angle (in radians) and a magnitude ",
+            "type": "Float -> Float -> Euclid.Vector.V2 Float"
+          },
+          {
+            "name": "map",
+            "comment": " Apply some function to each component ",
+            "type": "(a -> b) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b"
+          },
+          {
+            "name": "map2",
+            "comment": " See 'dotwise' ",
+            "type": "(a -> b -> c) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b -> Euclid.Vector.V2 c"
+          },
+          {
+            "name": "negate",
+            "comment": " Negate both components ",
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "scale",
+            "comment": " Multiply the vector by a scalar ",
+            "type": "number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "subtract",
+            "comment": " Subtract two vectors component-wise ",
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "vec",
+            "comment": " Construct a vector from an X and a Y value  ",
+            "type": "n -> n -> Euclid.Vector.V2 n"
+          },
+          {
+            "name": "x",
+            "comment": " Apply some function to the X component ",
+            "type": "(n -> m) -> Euclid.Vector.HasX v n -> Euclid.Vector.HasX v m"
+          },
+          {
+            "name": "y",
+            "comment": " Apply some function to the y component ",
+            "type": "(n -> m) -> Euclid.Vector.HasY v n -> Euclid.Vector.HasY v m"
+          },
+          {
+            "name": "z",
+            "comment": " Apply some function to the z component ",
+            "type": "(n -> m) -> Euclid.Vector.HasZ v n -> Euclid.Vector.HasZ v m"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "SwiftsNamesake/please-focus",
     "version": "1.1.1",
     "docs": [
@@ -16335,7 +16715,7 @@
   },
   {
     "name": "abadi199/elm-input-extra",
-    "version": "3.2.0",
+    "version": "4.0.0",
     "docs": [
       {
         "name": "MaskedInput.Text",
@@ -16378,6 +16758,34 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
+        "name": "Input.Text",
+        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
+        "aliases": [
+          {
+            "name": "Options",
+            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n * `type_` is the type of the HTML input element.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) , type_ : String }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    , type_ = \"text\"\n    }\n\n",
+            "type": "(String -> msg) -> Input.Text.Options msg"
+          },
+          {
+            "name": "input",
+            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
+            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
         "name": "Input.Number",
         "comment": " Number input\n\n# View\n@docs input, Options, defaultOptions\n",
         "aliases": [
@@ -16401,68 +16809,6 @@
             "name": "input",
             "comment": " View function\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Number.input\n        { onInput = InputUpdated\n        , maxLength = Nothing\n        , maxValue = 1000\n        , minValue = 10\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"numberInput\"\n        ...\n        ]\n        model.currentValue\n\n",
             "type": "Input.Number.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe Int -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "Input.Text",
-        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
-        "aliases": [
-          {
-            "name": "Options",
-            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultOptions",
-            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    }\n\n",
-            "type": "(String -> msg) -> Input.Text.Options msg"
-          },
-          {
-            "name": "input",
-            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
-            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "MultiSelect",
-        "comment": " MultiSelect\n\n`<select>` element with multiple selection.\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs multiSelect\n",
-        "aliases": [
-          {
-            "name": "Item",
-            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the multi-select item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
-            "args": [],
-            "type": "{ value : String, text : String, enabled : Bool }"
-          },
-          {
-            "name": "Options",
-            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `onChange` is the message for when the selected value in the multi-select is changed.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "{ items : List MultiSelect.Item, onChange : List String -> msg }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultOptions",
-            "comment": " Default Options, will give you empty multi-select with no empty item\n",
-            "type": "(List String -> msg) -> MultiSelect.Options msg"
-          },
-          {
-            "name": "multiSelect",
-            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = MultiSelectChanged (List String)\n\n    Html.div []\n        [ multiSelect\n            (defaultOptions MultiSelectChanged)\n            [ class \"my-multiSelect\" ]\n            model.selectedValues\n        ]\n",
-            "type": "MultiSelect.Options msg -> List (Html.Attribute msg) -> List String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -16497,6 +16843,40 @@
             "name": "dropdown",
             "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = DropdownChanged String\n\n    Html.div []\n        [ Dropdown.dropdown\n            (Dropdown.defaultOptions DropdownChanged)\n            [ class \"my-dropdown\" ]\n            model.selectedDropdownValue\n        ]\n",
             "type": "Dropdown.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "MultiSelect",
+        "comment": " MultiSelect\n\n`<select>` element with multiple selection.\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs multiSelect\n",
+        "aliases": [
+          {
+            "name": "Item",
+            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the multi-select item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
+            "args": [],
+            "type": "{ value : String, text : String, enabled : Bool }"
+          },
+          {
+            "name": "Options",
+            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `onChange` is the message for when the selected value in the multi-select is changed.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ items : List MultiSelect.Item, onChange : List String -> msg }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Default Options, will give you empty multi-select with no empty item\n",
+            "type": "(List String -> msg) -> MultiSelect.Options msg"
+          },
+          {
+            "name": "multiSelect",
+            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = MultiSelectChanged (List String)\n\n    Html.div []\n        [ multiSelect\n            (defaultOptions MultiSelectChanged)\n            [ class \"my-multiSelect\" ]\n            model.selectedValues\n        ]\n",
+            "type": "MultiSelect.Options msg -> List (Html.Attribute msg) -> List String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -17355,6 +17735,75 @@
             "name": "maybeEncode",
             "comment": " Encodes an optional value, using `null` when there is `Nothing`\n",
             "type": "(a -> Json.Decode.Value) -> Maybe.Maybe a -> Json.Decode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "bcardiff/elm-debounce",
+    "version": "1.1.3",
+    "docs": [
+      {
+        "name": "Debounce",
+        "comment": "\nThis modules allows easy usage of debounced events from the view.\n\n# Story\n\nSay you have an elm app where a button produce a `Clicked` message:\n\n```\ntype alias Model = { ... }\ntype Msg = Clicked | ...\n\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n\nview model = ... button [ onClick Clicked ] [ text \"click me!\" ] ...\n```\n\nwith this module you will be able to change the view using a `deb : Msg -> Msg`\nfunction that will state that the `Clicked` message should be debounced.\n\n```\nview model = ... button [ onClick (deb Clicked) ] [ text \"click me!\" ] ...\n```\n\nYou will want to specify the timeout for the debounce.\nThis is usually constant, hence, it does not belongs to the model or state of the app.\n\n```\ncfg : Debounce.Config Model Msg\ncfg = ... configuration of the debounce component ...\n\ndeb : Msg -> Msg\ndeb = Debounce.debounce cfg\n```\n\nIn order to create a Debounce.Config you will need to go trough some boilerplate.\n\n1) Extend the model with `Debounce.State` (and initialize it with `Debounce.init`)\n\n```\ntype alias Model = { ... , d : Debounce.State , ... }\ninitialModel = { ... , d = Debounce.init , ... }\n-- you can choose any name for `d`\n```\n\n2) Extend Msg with a wrapper message that will be routed to Debounce module.\n\n```\ntype Msg = Clicked | Deb (Debounce.Msg Msg)\n-- you can choose any name for `Deb`\n```\n\n3) Extend `update`\n\n```\nupdate : Msg -> Model -> (Model, Cmd Msg)\nupdate msg model =\n    case msg of\n        ...\n        Clicked -> -- perform update for Clicked --\n        ...\n        Deb a ->\n            Debounce.update cfg a model\n```\n\n4) Configure the debounce component using `Debounce.config`\n\n```\ncfg : Debounce.Config Model Msg\ncfg =\n    Debounce.config\n        .d                               -- getState   : Model -> Debounce.State\n        (\\model s -> { model | d = s })  -- setState   : Debounce.State -> Model -> Debounce.State\n        Deb                              -- msgWrapper : Msg a -> Msg\n        200                              -- timeout ms : Float\n```\n\n5) Enjoy!\n\n## Debouncing messages with values (onInput)\n\nIf the message that is wanted to be debounced hold data:\n\n```\ntype Msg = UserInput String\nview model = ... input [ onInput UserInput ] [] ...\n```\n\nYou will need to use `Debounce.debounce1`\n\n```\nview model = ... input [ onInput (deb1 UserInput) ] [] ...\n\ndeb1 : (a -> Msg) -> (a -> Msg)\ndeb1 = Debounce.debounce1 cfg\n```\n\n## Debouncing messages from the update\n\nIf you want to debounce a message generated from the `update`\n\n```\nupdate msg model =\n    case msg of\n        ... s ... ->\n            ( ... , debCmd <| UserInput s )\n\n        UserInput s ->\n            ( ... , Cmd.none )\n\n        Deb a ->\n            Debounce.update cfg a model\n\ndebCmd =\n    Debounce.debounceCmd cfg\n```\n\n# Functions to create `deb` `deb1` `debCmd` nice helpers\n\n@docs debounce\n@docs debounce1\n@docs debounceCmd\n\n# Boilerplate functions\n\n@docs init\n@docs config\n@docs update\n\n# Opaque structures\n\n@docs Config\n@docs State\n@docs Msg\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Config",
+            "comment": "\n  Configuration of a debounce component.\n",
+            "args": [
+              "model",
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": "\n  Messages to be wrapped.\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "State",
+            "comment": "\n  State to be included in model.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "config",
+            "comment": "\n  Creates a configured debounce component.\n",
+            "type": "(model -> Debounce.State) -> (model -> Debounce.State -> model) -> (Debounce.Msg msg -> msg) -> Float -> Debounce.Config model msg"
+          },
+          {
+            "name": "debounce",
+            "comment": "\n  Helper function for Msg without parameters.\n",
+            "type": "Debounce.Config model msg -> msg -> msg"
+          },
+          {
+            "name": "debounce1",
+            "comment": "\n  Helper function for Msg with 1 parameter.\n",
+            "type": "Debounce.Config model msg -> (a -> msg) -> a -> msg"
+          },
+          {
+            "name": "debounceCmd",
+            "comment": "\n  Helper function for deboucing a Cmd.\n",
+            "type": "Debounce.Config model msg -> msg -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "init",
+            "comment": "\n  Initial state for the model\n",
+            "type": "Debounce.State"
+          },
+          {
+            "name": "update",
+            "comment": "\n  Handle update messages for the debounce component.\n",
+            "type": "Debounce.Config model msg -> Debounce.Msg msg -> model -> ( model, Platform.Cmd.Cmd msg )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -19843,7 +20292,7 @@
   },
   {
     "name": "danielnarey/elm-toolkit",
-    "version": "4.1.0",
+    "version": "4.2.0",
     "docs": [
       {
         "name": "Toolkit.Operators",
@@ -19947,7 +20396,7 @@
       },
       {
         "name": "Toolkit.Helpers",
-        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Test Functions\n@docs isOneOf, isInRange, isBetween\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
+        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# Rounding Numbers\n@docs roundTo\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Test Functions\n@docs isOneOf, isInRange, isBetween\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -20070,6 +20519,11 @@
             "name": "resultList",
             "comment": " Given a list of `Result` values, if all values are `Ok`, return an `Ok`\nresult containing the list of values; otherwise, return an error message. When\npassed an empty list, returns `Ok []`.\n\n    resultList \"ERROR\" [Ok 1, Ok 2]       --> Ok [1,2]\n    resultList \"ERROR\" [Ok 1, Err \"..\"]   --> Err \"ERROR\"\n    resultList []                         --> Ok []\n\n",
             "type": "x -> List (Result.Result x a) -> Result.Result x (List a)"
+          },
+          {
+            "name": "roundTo",
+            "comment": " Round a `Float` to a given number of decimal places\n\n    pi |> roundTo 2      --> 3.14\n    pi |> roundTo 0      --> 3\n    1234 |> roundTo -2   --> 1200\n",
+            "type": "Int -> Float -> Float"
           },
           {
             "name": "second3",
@@ -21695,17 +22149,17 @@
   },
   {
     "name": "eeue56/elm-stringify",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Stringify",
-        "comment": "\n\n@docs stringify\n\n",
+        "comment": "\n\nDoes nothing! This is just `toString`\n\n@docs stringify\n\n",
         "aliases": [],
         "types": [],
         "values": [
           {
             "name": "stringify",
-            "comment": " Take anything and convert it to a string\n",
+            "comment": " toString\n",
             "type": "a -> String"
           }
         ],
@@ -42053,6 +42507,158 @@
     ]
   },
   {
+    "name": "frenchdonuts/elm-autocomplete",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Autocomplete",
+        "comment": "\n This library helps you create an autocomplete menu.\n Your data is stored separately; keep it in whatever shape makes the most sense for your application.\n An autocomplete has a lot of uses: form input, mentions, search, etc.\n\n I have (hopefully!) given the users of this library a large amount of customizability.\n\n I recommend looking at the [examples](https://github.com/thebritican/elm-autocomplete/tree/master/examples) before diving into the API or source code.\n\n# View\n@docs view\n\n# Update\n@docs update, subscription\n\n# Configuration\n@docs viewConfig, updateConfig\n\n# State\n@docs State, empty, reset, resetToFirstItem, resetToLastItem, KeySelected, MouseSelected\n\n# Definitions\n@docs Msg, ViewConfig, UpdateConfig, HtmlDetails\n\n# Sections\nSections require a separate view and configuration since another type of data must be\nprovided: sections.\n\n**Note:** Section data can have any shape: your static configuration will\njust tell the autocomplete how to grab an ID for a section and its related data.\n\n# View\n@docs viewWithSections\n\n# Configuration\n@docs sectionConfig, viewWithSectionsConfig\n\n# Definitions\n@docs SectionNode, SectionConfig, ViewWithSectionsConfig\n\n",
+        "aliases": [
+          {
+            "name": "HtmlDetails",
+            "comment": "\nHTML lists require `li` tags as children, so we allow you to specify everything about `li` HTML node except the nodeType.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ attributes : List (Html.Attribute msg) , children : List (Html.Html msg) }"
+          },
+          {
+            "name": "KeySelected",
+            "comment": " True if the element has been selected via keyboard navigation.\n",
+            "args": [],
+            "type": "Bool"
+          },
+          {
+            "name": "MouseSelected",
+            "comment": " True if the element has been selected via mouse hover.\n",
+            "args": [],
+            "type": "Bool"
+          },
+          {
+            "name": "SectionNode",
+            "comment": " Describe everything about a Section HTML node.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ nodeType : String , attributes : List (Html.Attribute msg) , children : List (Html.Html msg) }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " A message type for the autocomplete to update.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "SectionConfig",
+            "comment": " The configuration for a section of the menu.\n\n**Note:** This should never live in your model.\n",
+            "args": [
+              "data",
+              "sectionData"
+            ],
+            "cases": []
+          },
+          {
+            "name": "State",
+            "comment": " Tracks keyboard and mouse selection within the menu.\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "UpdateConfig",
+            "comment": " Configuration for updates\n",
+            "args": [
+              "msg",
+              "data"
+            ],
+            "cases": []
+          },
+          {
+            "name": "ViewConfig",
+            "comment": "\nConfiguration for your autocomplete, describing your menu and its items.\n\n**Note:** Your `ViewConfig` should never be held in your model. It should only appear in view code.\n",
+            "args": [
+              "data"
+            ],
+            "cases": []
+          },
+          {
+            "name": "ViewWithSectionsConfig",
+            "comment": "\nConfiguration for your autocomplete, describing your menu, its sections, and its items.\n\n**Note:** This should never live in your model.\n",
+            "args": [
+              "data",
+              "sectionData"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " A State with nothing selected.\n",
+            "type": "Autocomplete.State"
+          },
+          {
+            "name": "reset",
+            "comment": " Reset the keyboard navigation but leave the mouse state alone.\nConvenient when the two selections are represented separately.\n",
+            "type": "Autocomplete.UpdateConfig msg data -> Autocomplete.State -> Autocomplete.State"
+          },
+          {
+            "name": "resetToFirstItem",
+            "comment": " Like `reset` but defaults to a keyboard selection of the first item.\n",
+            "type": "Autocomplete.UpdateConfig msg data -> List data -> Int -> Autocomplete.State -> Autocomplete.State"
+          },
+          {
+            "name": "resetToLastItem",
+            "comment": " Like `reset` but defaults to a keyboard selection of the last item.\n",
+            "type": "Autocomplete.UpdateConfig msg data -> List data -> Int -> Autocomplete.State -> Autocomplete.State"
+          },
+          {
+            "name": "sectionConfig",
+            "comment": " Create the `SectionConfig` for your `view` function.\nSay we have a `List Century` that we want to show as a series of sections.\nWe would create a `SectionConfig` like so:\n\n    type alias Century =\n      { title : String\n      , people : List Person\n      }\n\n    import Autocomplete\n    sectionConfig : Autocomplete.SectionConfig Person Century\n    sectionConfig =\n        Autocomplete.sectionConfig\n            { toId = .title\n            , getData = .people\n            , ul = [ class \"autocomplete-section-list\" ]\n            , li =\n                \\section ->\n                    { nodeType = \"div\"\n                    , attributes = [ class \"autocomplete-section-item\" ]\n                    , children =\n                        [ div [ class \"autocomplete-section-box\" ]\n                            [ strong [ class \"autocomplete-section-text\" ] [ text section.title ]\n                            ]\n                        ]\n                    }\n            }\n\n\n\nYou provide the following information in your autocomplete configuration:\n  - `toId` &mdash; turn a `Century` into a unique ID.\n  - `getData` &mdash; extract the data from `Century`, in this case: `List Person`.\n  - `ul` &mdash; specify any non-behavioral attributes you'd like for the section list.\n  - `li` &mdash; specify any non-behavioral attributes and children for a section.\n",
+            "type": "{ toId : sectionData -> String , getData : sectionData -> List data , ul : List (Html.Attribute Basics.Never) , li : sectionData -> Autocomplete.SectionNode Basics.Never } -> Autocomplete.SectionConfig data sectionData"
+          },
+          {
+            "name": "subscription",
+            "comment": " Add this to your `program`'s subscriptions so the the autocomplete menu will respond to keyboard input.\n",
+            "type": "Platform.Sub.Sub Autocomplete.Msg"
+          },
+          {
+            "name": "update",
+            "comment": " Use this function to update the autocomplete's `State`.\nProvide the same data as your view.\nThe `Int` argument is how many results you would like to show.\n",
+            "type": "Autocomplete.UpdateConfig msg data -> Autocomplete.Msg -> Int -> Autocomplete.State -> List data -> ( Autocomplete.State, Maybe.Maybe msg )"
+          },
+          {
+            "name": "updateConfig",
+            "comment": " Create the configuration for your `update` function (`UpdateConfig`).\nSay we have a `List Person` that we want to show as a series of options.\nWe would create an `UpdateConfig` like so:\n\n    import Autocomplete\n    updateConfig : Autocomplete.UpdateConfig Msg Person\n    updateConfig =\n        Autocomplete.updateConfig\n            { toId = .name\n            , onKeyDown =\n                \\code maybeId ->\n                    if code == 38 || code == 40 then\n                        Nothing\n                    else if code == 13 then\n                        Maybe.map SelectPerson maybeId\n                    else\n                        Just Reset\n            , onTooLow = Nothing\n            , onTooHigh = Nothing\n            , onMouseEnter = \\_ -> Nothing\n            , onMouseLeave = \\_ -> Nothing\n            , onMouseClick = \\id -> Just <| SelectPerson id\n            , separateSelections = False\n            }\n\nYou provide the following information in your autocomplete configuration:\n  - `toId` &mdash; turn a `Person` into a unique ID.\n  - `ul` &mdash; specify any non-behavioral attributes you'd like for the list menu.\n  - `li` &mdash; specify any non-behavioral attributes and children for a list item: both selection states are provided.\n",
+            "type": "{ toId : data -> String , onKeyDown : Char.KeyCode -> Maybe.Maybe String -> Maybe.Maybe msg , onTooLow : Maybe.Maybe msg , onTooHigh : Maybe.Maybe msg , onMouseEnter : String -> Maybe.Maybe msg , onMouseLeave : String -> Maybe.Maybe msg , onMouseClick : String -> Maybe.Maybe msg , separateSelections : Bool } -> Autocomplete.UpdateConfig msg data"
+          },
+          {
+            "name": "view",
+            "comment": "\nTake a list of `data` and turn it into an autocomplete menu.\nThe `ViewConfig` argument is the configuration for the autocomplete view.\n`ViewConfig` describes the HTML we want to show for each item and the list.\nThe `Int` argument is how many results you would like to show.\nThe `State` argument describes what is selected via mouse and keyboard.\n\n**Note:** The `State` and `List data` should live in your Model.\nThe `ViewConfig` for the autocomplete belongs in your view code.\n`ViewConfig` should never exist in your model.\nDescribe any potential autocomplete configurations statically.\nThis pattern has been inspired by [Elm Sortable Table](http://package.elm-lang.org/packages/evancz/elm-sortable-table/latest).\n",
+            "type": "Autocomplete.ViewConfig data -> Int -> Autocomplete.State -> List data -> Html.Html Autocomplete.Msg"
+          },
+          {
+            "name": "viewConfig",
+            "comment": " Create the configuration for your `view` function (`ViewConfig`).\nSay we have a `List Person` that we want to show as a series of options.\nWe would create a `ViewConfig` like so:\n\n    import Autocomplete\n    viewConfig : Autocomplete.Config Person\n    viewConfig =\n      let\n          customizedLi keySelected mouseSelected person =\n              { attributes =\n                  [ classList [ ( \"autocomplete-item\", True )\n                              , ( \"key-selected\", keySelected )\n                              , ( \"mouse-selected\", mouseSelected )\n                              ]\n                  ]\n              , children = [ Html.text person.name ]\n              }\n      in\n          Autocomplete.viewConfig\n              { toId = .name\n              , ul = [ class \"autocomplete-list\" ]\n              , li = customizedLi\n              }\nYou provide the following information in your autocomplete configuration:\n  - `toId` &mdash; turn a `Person` into a unique ID. This lets us use\n  [`Html.Keyed`][keyed] under the hood to make sorting faster.\n  - `ul` &mdash; specify any non-behavioral attributes you'd like for the list menu.\n  - `li` &mdash; specify any non-behavioral attributes and children for a list item: both selection states are provided.\nSee the [examples][] to get a better understanding!\n[keyed]: http://package.elm-lang.org/packages/elm-lang/html/latest/Html-Keyed\n[examples]: https://github.com/thebritican/elm-autocomplete/tree/master/examples\n",
+            "type": "{ toId : data -> String , ul : List (Html.Attribute Basics.Never) , li : Autocomplete.KeySelected -> Autocomplete.MouseSelected -> Int -> data -> Autocomplete.HtmlDetails Basics.Never } -> Autocomplete.ViewConfig data"
+          },
+          {
+            "name": "viewWithSections",
+            "comment": " Presents an autocomplete menu with sections.\nYou can follow the same instructions as described for `view`, providing a more advanced configuration and different data shape.\n`ViewWithSectionsConfig` sets up your autocomplete to handle sectioned data.\nThe sectioned data becomes the new data argument for `viewWithSections`.\n",
+            "type": "Autocomplete.ViewWithSectionsConfig data sectionData -> Int -> Autocomplete.State -> List sectionData -> Html.Html Autocomplete.Msg"
+          },
+          {
+            "name": "viewWithSectionsConfig",
+            "comment": " The same configuration as viewConfig, but provide a section configuration as well.\n",
+            "type": "{ toId : data -> String , ul : List (Html.Attribute Basics.Never) , li : Autocomplete.KeySelected -> Autocomplete.MouseSelected -> data -> Autocomplete.HtmlDetails Basics.Never , section : Autocomplete.SectionConfig data sectionData } -> Autocomplete.ViewWithSectionsConfig data sectionData"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "gaborv/debouncer",
     "version": "1.0.1",
     "docs": [
@@ -42918,6 +43524,142 @@
     ]
   },
   {
+    "name": "hugobessaa/elm-logoot",
+    "version": "2.1.1",
+    "docs": [
+      {
+        "name": "Logoot",
+        "comment": " Simple Logoot implementation.\n\nInsert and remove operations in Logoot are idempotent, commutative and associative.\nThis means two replicas can exchange operations made in their local Logoot over a\nnetwork without having to garantee the order of messages, enabling their use with\ndistributed networks such as P2P.\n\nHere are various functions to deal with the Logoot document. There are a lot of\nmissing pieces here, help us sending PRs to the GitHub [repository]!\n\n[repository]: https://github.com/hugobessaa/elm-logoot\n\n## Types\n\n@docs Logoot, Pid, Positions, Position, Line, Site, Clock\n\n## Build\n\n@docs empty, insert, remove, insertAfter, insertAt\n\n## Query\n\nfuture docs isEmpty, member, get, size\n\n## Dictionaries\n\n@docs toDict, fromDict, diffDict, intersectDict\n\n## Lists\n\nIt is not recommended to change a `Logoot a` by using those functions.\n\nWhen you transform a `Logoot a` into a `List (Pid, a)` and back, it loses the\ncommutative context. This may make your `Logoot a` out-of-sync with other replicas.\n\nUse those functions only at the boundaries of your app, to transform, display, and create.\n\n@docs keys, values, toList, fromList, diffList, intersectList\n",
+        "aliases": [
+          {
+            "name": "Clock",
+            "comment": " ",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "Line",
+            "comment": " ",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "Pid",
+            "comment": " ",
+            "args": [],
+            "type": "( Logoot.Positions, Logoot.Clock )"
+          },
+          {
+            "name": "Position",
+            "comment": " ",
+            "args": [],
+            "type": "( Logoot.Line, Logoot.Site )"
+          },
+          {
+            "name": "Positions",
+            "comment": " ",
+            "args": [],
+            "type": "List Logoot.Position"
+          },
+          {
+            "name": "Site",
+            "comment": " ",
+            "args": [],
+            "type": "Int"
+          }
+        ],
+        "types": [
+          {
+            "name": "Logoot",
+            "comment": " A Logoot.\n\n`Logoot` implementation details are hidden from the public API.\n\nYou should use the provided functions to create and transform a `Logoot a`.\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diffDict",
+            "comment": " Returns a `Dict Pid a` of the pairs that does\n   not appear in the second `Logoot a`.\n",
+            "type": "Logoot.Logoot a -> Logoot.Logoot a -> Dict.Dict Logoot.Pid a"
+          },
+          {
+            "name": "diffList",
+            "comment": " Returns an association list `List (Pid, a)` of the pairs that does\n   not appear in the second `Logoot a`.\n",
+            "type": "Logoot.Logoot a -> Logoot.Logoot a -> List ( Logoot.Pid, a )"
+          },
+          {
+            "name": "empty",
+            "comment": " Return an empty `Logoot a`.\n\nAn empty `Logoot a` come with the first and last `Pid` in place. They can not be modified.\n\nYou should provide an empty representation of your data type. This is used as the content\nfor the first and last `Pid`\n\nTo create a `Logoot String` you could use:\n\n    toDict empty \"\" == Dict.fromList\n      [ (([(0,0)],0), \"\")\n      , (([(32000,0)],0), \"\")\n      ]\n",
+            "type": "a -> Logoot.Logoot a"
+          },
+          {
+            "name": "fromDict",
+            "comment": " Convert a `Dict Pid a` into a `Logoot a`.\n",
+            "type": "a -> Dict.Dict Logoot.Pid a -> Logoot.Logoot a"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert an association list `List (Pid, a)` into a `Logoot a`.\n",
+            "type": "a -> List ( Logoot.Pid, a ) -> Logoot.Logoot a"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a key in a `Logoot a`.\n\nThis works like `Dict.insert` but with a `Logoot a`.\n\n    empty \"\" |> insert ([(1, 3)], 15) \"it works\"\n\nUnlike `Dict.insert`, `insert` is commutative with `remove`,\nmaking it possible to insert and remove keys in any order and\nend up with the same `Logoot a`.\n",
+            "type": "Logoot.Pid -> a -> Logoot.Logoot a -> Logoot.Logoot a"
+          },
+          {
+            "name": "insertAfter",
+            "comment": " Insert a content that will come after `Pid` when `Logoot a` is sorted.\n",
+            "type": "Logoot.Site -> Logoot.Clock -> Logoot.Pid -> a -> Logoot.Logoot a -> Logoot.Logoot a"
+          },
+          {
+            "name": "insertAt",
+            "comment": " Insert a content that will come after a given index.\n\nIf the given index is invalid, return Nothing. If valid, Just Logoot\n",
+            "type": "Logoot.Site -> Logoot.Clock -> Int -> a -> Logoot.Logoot a -> Maybe.Maybe (Logoot.Logoot a)"
+          },
+          {
+            "name": "intersectDict",
+            "comment": " Returns `Dict Pid a` of the pairs that appears\n   in the second `Logoot a`, preference is given to values in the first `Logoot a`.\n",
+            "type": "Logoot.Logoot a -> Logoot.Logoot a -> Dict.Dict Logoot.Pid a"
+          },
+          {
+            "name": "intersectList",
+            "comment": " Returns an association list `List (Pid, a)` of the pairs that appears\n   in the second `Logoot a`, preference is given to values in the first `Logoot a`.\n",
+            "type": "Logoot.Logoot a -> Logoot.Logoot a -> List ( Logoot.Pid, a )"
+          },
+          {
+            "name": "keys",
+            "comment": " Get all of the keys in a `Logoot a`, sorted from lowest to highest.\n",
+            "type": "Logoot.Logoot a -> List Logoot.Pid"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a key in a `Logoot a`.\n\nThis works like `Dict.remove` but with a `Logoot a`.\n\n    empty \"\"\n      |> insert ([(1, 3)], 15) \"it works\"\n      |> remove ([(1, 3)], 15) \"it works\"\n\nWhen you remove a key that isn't a member of `Logoot a`, it will make sure\na future `insert` of that key will not add it to the `Logoot a`.\n\nUnlike `Dict.remove`, `remove` is commutative with `insert`,\nmaking it possible to insert and remove keys in any order and\nend up with the same `Logoot a`.\n",
+            "type": "Logoot.Pid -> a -> Logoot.Logoot a -> Logoot.Logoot a"
+          },
+          {
+            "name": "toDict",
+            "comment": " Convert a `Logoot a` into a `Dict Pid a` for easier usage.\n",
+            "type": "Logoot.Logoot a -> Dict.Dict Logoot.Pid a"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a `Logoot a` into a sorted association list `List (Pid, a)`.\n",
+            "type": "Logoot.Logoot a -> List ( Logoot.Pid, a )"
+          },
+          {
+            "name": "values",
+            "comment": " Get all of the values in a `Logoot a`, in the order of their keys.\n",
+            "type": "Logoot.Logoot a -> List a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "ingara/elm-asoiaf-api",
     "version": "2.0.0",
     "docs": [
@@ -43091,6 +43833,75 @@
             "name": "getId",
             "comment": " Gets the id from the end of a URL as used in the ASOIAF API.\n\n    getId \"http://www.anapioficeandfire.com/api/houses/362\" == 362\n\nUseful for for example getting ids of the books a character is appearing in\n\n    getBookIds : Character -> List Int\n    getBookIds character =\n      List.map getId character.books\n",
             "type": "Asoiaf.Models.Url -> Asoiaf.Models.Id"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "ir4y/elm-dnd",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "DnD",
+        "comment": "\nThis library allows you to build great UI with drag-and-drop simple.\nIt is abstracting you from mouse events and other low-level staff.\nYou can operate high-level things such as draggable and droppable areas.\n\nThe idea of package API is you should be able to wrap elements with `draggable meta` to add an ability to drag it.\nThe dragged object will get some meta information.\nAlso, you could wrap another element with `droppable OnDrop`,\nso if you drop element over that element, the message `OnDrop meta` will be fired.\n\nYou can find examples [here](https://github.com/ir4y/elm-dnd/tree/master/example/src).\n\n# Draggable types and its constructor\n@docs DraggableInit, Draggable, init\n\n# Helpers to get information about draggable object\n@docs atDroppable, getMeta\n\n# Message type\n@docs Msg\n\n# Update function\n@docs update\n\n# View helper\n@docs dragged\n\n",
+        "aliases": [
+          {
+            "name": "DraggableInit",
+            "comment": "\nThe type of init function result.\nSee `init` for more information.\n",
+            "args": [
+              "a",
+              "m"
+            ],
+            "type": "{ model : DnD.Draggable a m , subscriptions : DnD.Draggable a m -> Platform.Sub.Sub m , draggable : a -> List (Html.Attribute m) -> List (Html.Html m) -> Html.Html m , droppable : (a -> m) -> List (Html.Attribute m) -> List (Html.Html m) -> Html.Html m }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Draggable",
+            "comment": "\nType of Draggable object.\nIt is parametrized by the type of meta information and\nmessage constructor that will be invoked on Drop event\nYou should place it inside your Model.\n```\ntype alias Model =\n    { draggable : DnD.Draggable Int Msg\n    , count : Int\n    }\n```\n",
+            "args": [
+              "a",
+              "m"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Msg",
+            "comment": " Inner messages, you should pass them to DnD.update at your update function.\n```\ntype Msg\n    = Dropped Item\n    | DnDMsg (DnD.Msg Int Msg)\n```\n",
+            "args": [
+              "a",
+              "m"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "atDroppable",
+            "comment": "\nHelper that return you a message that will be invoked.\nif an object will be dropped at the current area.\nIt is useful to check is it area allow you to drop an object and highlight it for example.\n```\nDnD.droppable Dropped\n  DnDMsg\n   [ style\n     [ \"background-color\"\n       => case DnD.atDroppable model.draggable of\n         Just (Dropped _) ->\n           \"cyan\"\n\n         _ ->\n           \"white\"\n     ]\n   ]\n   []\n```\n",
+            "type": "DnD.Draggable a m -> Maybe.Maybe m"
+          },
+          {
+            "name": "dragged",
+            "comment": "\nView helper for a draggable object, it draws HTML of dragged object under your mouse in process of drag.\n```\nbox : Int -> Html Msg\ndragged item =\n    p [] [ text item.text]\n\nDnD.dragged\n  model.draggable\n  box\n```\n",
+            "type": "DnD.Draggable a m -> (a -> Html.Html m) -> Html.Html m"
+          },
+          {
+            "name": "getMeta",
+            "comment": "\nHelper that allow you to get meta information from a current draggable object.\nYou can use it to remove draggable object from the list\n```\nelements = model.elements\n    |> List.filter\n        (e -> model.draggable\n            |>  getMeta\n            |> Maybe.map (meta -> meta.id /= e.id )\n        )\n```\n",
+            "type": "DnD.Draggable a m -> Maybe.Maybe a"
+          },
+          {
+            "name": "init",
+            "comment": "\nInitialize Draggable state and function\nThis helper returns initModel, subscription, draggable and droppable functions\nfor your message wrapper.\n\n```\ntype Msg\n    = NoOp\n    ..\n    | Dropped String\n    | DnDMsg (DnD.Msg String Msg)\n\n\ndnd = DnD.init DnDMsg\ntype alias Model =\n    { ...\n    , draggable = dnd.model\n    }\n```\n\nSubscriptions alow you to get drop event.\n```\nsubscriptions : Model -> Sub Msg\nsubscriptions model =\n    dnd.subscriptions model.draggable\n```\nView wrapper for draggable object, you could drag object wrapped by this helper\n```\ndraggable\n    : (Html.Attribute Msg)\n    -> List (Html Msg)\n    -> Html Msg\ndraggable =  dnd.draggable meta\n```\nView helper for the droppable area, you could drop object to this area,\nafter that, your `Drop meta` message will be sended.\n```\ndroppable\n  : (Html.Attribute Msg)\n  -> List (Html Msg)\n  -> Html Msg\ndroppable = dnd.droppable Dropped\n```\n",
+            "type": "(DnD.Msg a m -> m) -> DnD.DraggableInit a m"
+          },
+          {
+            "name": "update",
+            "comment": " Update function handle all low-level staff\n```\nupdate : Msg -> Model -> Model\nupdate msg model =\n    case msg of\n        Dropped item ->\n            { model | count = item + 1 }\n\n        DnDMsg msg ->\n            { model\n                | draggable\n                    = DnD.update msg model.draggable }\n``\n",
+            "type": "DnD.Msg a m -> DnD.Draggable a m -> DnD.Draggable a m"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -64596,7 +65407,7 @@
   },
   {
     "name": "swiftsnamesake/euclidean-space",
-    "version": "1.2.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Euclid.Rectangle",
@@ -64606,9 +65417,9 @@
             "name": "Rectangle",
             "comment": " A polymorphic rectangle defined by its top left corner and its size ",
             "args": [
-              "n"
+              "v"
             ],
-            "type": "{ corner : Euclid.Vector.Vector n, size : Euclid.Vector.Vector n }"
+            "type": "{ corner : v, size : v }"
           }
         ],
         "types": [],
@@ -64616,115 +65427,238 @@
           {
             "name": "bottom",
             "comment": " Bottom side of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle number -> number"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
           },
           {
             "name": "hasPoint",
-            "comment": " Does the rectangle contain the point ",
-            "type": "Euclid.Rectangle.Rectangle comparable -> Euclid.Vector.Vector comparable -> Bool"
+            "comment": " Does the rectangle contain the point? ",
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 comparable) -> Euclid.Vector.V2 comparable -> Bool"
           },
           {
             "name": "height",
             "comment": " Height of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle n -> n"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasY v n) -> n"
           },
           {
             "name": "left",
             "comment": " Left side of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle n -> n"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasX v n) -> n"
           },
           {
             "name": "opposite",
             "comment": " Opposite corner of a rectangle (bottom right) ",
-            "type": "Euclid.Rectangle.Rectangle number -> Euclid.Vector.Vector number"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> Euclid.Vector.V2 number"
           },
           {
             "name": "right",
             "comment": " Right side of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle number -> number"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
           },
           {
             "name": "top",
             "comment": " Top side of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle number -> number"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.V2 number) -> number"
           },
           {
             "name": "width",
             "comment": " Width of a rectangle ",
-            "type": "Euclid.Rectangle.Rectangle n -> n"
+            "type": "Euclid.Rectangle.Rectangle (Euclid.Vector.HasX v n) -> n"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
         "name": "Euclid.Vector",
-        "comment": " Defines a polymorphic Vector type\n\n# Types\n@docs Vector\n\n# Construction\n@docs vec\n\n# Arithmetic\n@docs add, subtract, negate, conjugate\n\n# Transform\n@docs map, map2, dotwise, fold, x, y\n\n",
+        "comment": " Defines a polymorphic Vector type. Due to limits of Elm's type system and also due to my own requirements, many functions will\n   only work with 2D vectors.\n\n# Types\n@docs V1, V2, V3, HasX, HasY, HasZ, HasXY, HasXYZ, Vector\n\n# Construction\n@docs vec\n\n# Arithmetic\n@docs add, subtract, negate, conjugate\n\n# Transform\n@docs map, map2, dotwise, scale\n\n# Focus\n@docs x, y, z\n\n# Polar coordinates\n@docs fromPolar, arg, abs\n\n# Polymorphic stuff\n@docs foldX, foldXY, foldXYZ, apX, apXY, apXYZ\n\n",
         "aliases": [
           {
-            "name": "Vector",
+            "name": "HasX",
+            "comment": " A type that has an x field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n }"
+          },
+          {
+            "name": "HasXY",
+            "comment": " A type that has an x and a y field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n, y : n }"
+          },
+          {
+            "name": "HasXYZ",
+            "comment": " A type that has an x, a y and a z field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | x : n, y : n, z : n }"
+          },
+          {
+            "name": "HasY",
+            "comment": " A type that has an y field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | y : n }"
+          },
+          {
+            "name": "HasZ",
+            "comment": " A type that has an z field ",
+            "args": [
+              "v",
+              "n"
+            ],
+            "type": "{ v | z : n }"
+          },
+          {
+            "name": "V1",
+            "comment": " A 1D vector (for completeness' sake) ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n }"
+          },
+          {
+            "name": "V2",
             "comment": " A 2D vector ",
             "args": [
               "n"
             ],
             "type": "{ x : n, y : n }"
+          },
+          {
+            "name": "V3",
+            "comment": " A 3D vector ",
+            "args": [
+              "n"
+            ],
+            "type": "{ x : n, y : n, z : n }"
+          },
+          {
+            "name": "Vector",
+            "comment": " ... ",
+            "args": [
+              "v",
+              "w",
+              "x",
+              "n",
+              "b"
+            ],
+            "type": "{ v | methods : { fold : n -> b -> b, pure : n -> v, ap : v -> w -> x } }"
           }
         ],
         "types": [],
         "values": [
           {
+            "name": "abs",
+            "comment": " Finds the absolute value (also known as the magnitude) of a vector ",
+            "type": "Euclid.Vector.V2 number -> number"
+          },
+          {
             "name": "add",
             "comment": " Add two vectors component-wise ",
-            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "apX",
+            "comment": " Apply a 1D vector of functions to a 1d vector of arguments ",
+            "type": "Euclid.Vector.HasX v (a -> b) -> Euclid.Vector.HasX v a -> Euclid.Vector.HasX v b"
+          },
+          {
+            "name": "apXY",
+            "comment": " Apply a 2D vector of functions to a 2d vector of arguments ",
+            "type": "Euclid.Vector.HasXY v (a -> b) -> Euclid.Vector.HasXY v a -> Euclid.Vector.HasXY v b"
+          },
+          {
+            "name": "apXYZ",
+            "comment": " Apply a 3d vector of functions to a 3d vector of arguments ",
+            "type": "Euclid.Vector.HasXYZ v (a -> b) -> Euclid.Vector.HasXYZ v a -> Euclid.Vector.HasXYZ v b"
+          },
+          {
+            "name": "arg",
+            "comment": " Finds the 'argument' (in radians) of a vector (the angle between the vector and the positive X axis) ",
+            "type": "Euclid.Vector.V2 Float -> Float"
           },
           {
             "name": "conjugate",
             "comment": " The complex conjugate (Y component is negated) ",
-            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
           },
           {
             "name": "dotwise",
             "comment": " Apply some function to two vectors component-wise (like map for two vectors)  ",
-            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+            "type": "(a -> b -> c) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b -> Euclid.Vector.V2 c"
           },
           {
-            "name": "fold",
-            "comment": " Reduce a Vector to a single value by applying some function to its components ",
-            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> b"
+            "name": "foldX",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasX v a -> b"
+          },
+          {
+            "name": "foldXY",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasXY v a -> b"
+          },
+          {
+            "name": "foldXYZ",
+            "comment": " Folds the components from the left ",
+            "type": "(a -> b -> b) -> b -> Euclid.Vector.HasXYZ v a -> b"
+          },
+          {
+            "name": "fromPolar",
+            "comment": " Construct a V2 from an angle (in radians) and a magnitude ",
+            "type": "Float -> Float -> Euclid.Vector.V2 Float"
           },
           {
             "name": "map",
             "comment": " Apply some function to each component ",
-            "type": "(a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+            "type": "(a -> b) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b"
           },
           {
             "name": "map2",
             "comment": " See 'dotwise' ",
-            "type": "(a -> a -> b) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a -> Euclid.Vector.Vector b"
+            "type": "(a -> b -> c) -> Euclid.Vector.V2 a -> Euclid.Vector.V2 b -> Euclid.Vector.V2 c"
           },
           {
             "name": "negate",
             "comment": " Negate both components ",
-            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
+          },
+          {
+            "name": "scale",
+            "comment": " Multiply the vector by a scalar ",
+            "type": "number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
           },
           {
             "name": "subtract",
             "comment": " Subtract two vectors component-wise ",
-            "type": "Euclid.Vector.Vector number -> Euclid.Vector.Vector number -> Euclid.Vector.Vector number"
+            "type": "Euclid.Vector.V2 number -> Euclid.Vector.V2 number -> Euclid.Vector.V2 number"
           },
           {
             "name": "vec",
             "comment": " Construct a vector from an X and a Y value  ",
-            "type": "n -> n -> Euclid.Vector.Vector n"
+            "type": "n -> n -> Euclid.Vector.V2 n"
           },
           {
             "name": "x",
             "comment": " Apply some function to the X component ",
-            "type": "(a -> a) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a"
+            "type": "(n -> m) -> Euclid.Vector.HasX v n -> Euclid.Vector.HasX v m"
           },
           {
             "name": "y",
             "comment": " Apply some function to the y component ",
-            "type": "(a -> a) -> Euclid.Vector.Vector a -> Euclid.Vector.Vector a"
+            "type": "(n -> m) -> Euclid.Vector.HasY v n -> Euclid.Vector.HasY v m"
+          },
+          {
+            "name": "z",
+            "comment": " Apply some function to the z component ",
+            "type": "(n -> m) -> Euclid.Vector.HasZ v n -> Euclid.Vector.HasZ v m"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -67839,11 +68773,11 @@
   },
   {
     "name": "zaboco/elm-draggable",
-    "version": "1.0.4",
+    "version": "1.1.1",
     "docs": [
       {
         "name": "Draggable.Events",
-        "comment": " Listeners for the various events involved in dragging (`onDragBy`, `onDragStart`, etc.). Also handles `click` events when the mouse was not moved.\n@docs onDragStart, onDragEnd, onDragBy\n@docs onClick, onMouseDown, onMouseUp\n",
+        "comment": " Listeners for the various events involved in dragging (`onDragBy`, `onDragStart`, etc.). Also handles `click` events when the mouse was not moved.\n@docs onDragStart, onDragEnd, onDragBy\n@docs onClick, onMouseDown, onMouseDownKeyed, onMouseUp\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -67869,8 +68803,13 @@
           },
           {
             "name": "onMouseDown",
-            "comment": " Register a `MouseDown` event listener. It will trigger whenever the mouse is pressed.\n",
+            "comment": " Register a `MouseDown` event listener. It will trigger whenever the mouse is pressed.\n\n__Note__ This event ignores the key of the dragged element. If that is needed, you should use [`onMouseDownKeyed`](#onMouseDownKeyed).\n",
             "type": "msg -> Draggable.Event msg"
+          },
+          {
+            "name": "onMouseDownKeyed",
+            "comment": " Register a keyed `MouseDown` event listener. It will trigger whenever the mouse is pressed and will indicate the target element by the given `String` key.\n",
+            "type": "(String -> msg) -> Draggable.Event msg"
           },
           {
             "name": "onMouseUp",
@@ -67882,7 +68821,7 @@
       },
       {
         "name": "Draggable",
-        "comment": "\nThis library provides and easy way to make DOM elements (Html or Svg) draggable.\n\n## When is dragging considered?\nAn element is considered to be dragging when the mouse is pressed **and** moved before it is released. Otherwise, the action is considered a click. This is useful because in some cases you may want to support both actions.\n\n[See examples](https://github.com/zaboco/elm-draggable/tree/master/examples)\n\n\n# Initial State\n@docs init\n\n# Config\n@docs basicConfig, customConfig\n\n# Update\n@docs update, subscriptions\n\n# DOM trigger\n@docs triggerOnMouseDown\n\n# Helpers\n@docs deltaToFloats\n\n# Definitions\n@docs Delta, State, Msg, Config, Event\n",
+        "comment": "\nThis library provides and easy way to make DOM elements (Html or Svg) draggable.\n\n## When is dragging considered?\nAn element is considered to be dragging when the mouse is pressed **and** moved before it is released. Otherwise, the action is considered a click. This is useful because in some cases you may want to support both actions.\n\n[See examples](https://github.com/zaboco/elm-draggable/tree/master/examples)\n\n\n# Initial State\n@docs init\n\n# Config\n@docs basicConfig, customConfig\n\n# Update\n@docs update, subscriptions\n\n# DOM trigger\n@docs mouseTrigger, triggerOnMouseDown\n\n# Helpers\n@docs deltaToFloats\n\n# Definitions\n@docs Delta, State, Msg, Config, Event\n",
         "aliases": [
           {
             "name": "Delta",
@@ -67943,13 +68882,18 @@
             "type": "Draggable.State"
           },
           {
+            "name": "mouseTrigger",
+            "comment": " DOM event handler to start dragging on mouse down. It requires a `String` key for the element, in order to provide support for multiple drag targets sharing the same drag state. Of course, if only one element is draggable, it can have any value, including `\"\"`.\n\n    div [ mouseTrigger \"element-id\" DragMsg ] [ text \"Drag me\" ]\n",
+            "type": "String -> (Draggable.Msg -> msg) -> VirtualDom.Property msg"
+          },
+          {
             "name": "subscriptions",
             "comment": " Handle mouse subscriptions used for dragging\n",
             "type": "(Draggable.Msg -> msg) -> Draggable.State -> Platform.Sub.Sub msg"
           },
           {
             "name": "triggerOnMouseDown",
-            "comment": " DOM event handler to start dragging on mouse down.\n\n    div [ triggerOnMouseDown DragMsg ] [ text \"Drag me\" ]\n",
+            "comment": " __DEPRECATED__: Use [`mouseTrigger`](#mouseTrigger) instead\n\nDOM event handler to start dragging on mouse down.\n\n    div [ triggerOnMouseDown DragMsg ] [ text \"Drag me\" ]\n",
             "type": "(Draggable.Msg -> msg) -> VirtualDom.Property msg"
           },
           {
