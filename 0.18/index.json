@@ -16715,7 +16715,7 @@
   },
   {
     "name": "abadi199/elm-input-extra",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "docs": [
       {
         "name": "MaskedInput.Text",
@@ -16758,34 +16758,6 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Input.Text",
-        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
-        "aliases": [
-          {
-            "name": "Options",
-            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n * `type_` is the type of the HTML input element.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) , type_ : String }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "defaultOptions",
-            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    , type_ = \"text\"\n    }\n\n",
-            "type": "(String -> msg) -> Input.Text.Options msg"
-          },
-          {
-            "name": "input",
-            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
-            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
         "name": "Input.Number",
         "comment": " Number input\n\n# View\n@docs input, Options, defaultOptions\n",
         "aliases": [
@@ -16814,35 +16786,29 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "Dropdown",
-        "comment": " Dropdown\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs dropdown\n",
+        "name": "Input.Text",
+        "comment": " Text input\n\n# View\n@docs input, Options, defaultOptions\n",
         "aliases": [
           {
-            "name": "Item",
-            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the dropdown item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
-            "args": [],
-            "type": "{ value : String, text : String, enabled : Bool }"
-          },
-          {
             "name": "Options",
-            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `emptyItem` is the item for when the nothing is selected. Set to `Nothing` for no empty item.\n * `onChange` is the message for when the selected value in the dropdown is changed.\n",
+            "comment": " Options of the input component.\n\n * `maxLength` is the maximum number of character allowed in this input. Set to `Nothing` for no limit.\n * `onInput` is the Msg tagger for the onInput event.\n * `hasFocus` is an optional Msg tagger for onFocus/onBlur event.\n * `type_` is the type of the HTML input element.\n",
             "args": [
               "msg"
             ],
-            "type": "{ items : List Dropdown.Item , emptyItem : Maybe.Maybe Dropdown.Item , onChange : Maybe.Maybe String -> msg }"
+            "type": "{ maxLength : Maybe.Maybe Int , onInput : String -> msg , hasFocus : Maybe.Maybe (Bool -> msg) , type_ : String }"
           }
         ],
         "types": [],
         "values": [
           {
             "name": "defaultOptions",
-            "comment": " Default Options, will give you empty dropdown with no empty item\n",
-            "type": "(Maybe.Maybe String -> msg) -> Dropdown.Options msg"
+            "comment": " Default value for `Options`.\n * `onInput` (type: `String -> msg`) : The onInput Msg tagger\n\nValue:\n\n    { maxLength = Nothing\n    , onInput = onInput\n    , hasFocus = Nothing\n    , type_ = \"text\"\n    }\n\n",
+            "type": "(String -> msg) -> Input.Text.Options msg"
           },
           {
-            "name": "dropdown",
-            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = DropdownChanged String\n\n    Html.div []\n        [ Dropdown.dropdown\n            (Dropdown.defaultOptions DropdownChanged)\n            [ class \"my-dropdown\" ]\n            model.selectedDropdownValue\n        ]\n",
-            "type": "Dropdown.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe String -> Html.Html msg"
+            "name": "input",
+            "comment": " Text input element\n\nExample:\n\n    type Msg = InputUpdated String | FocusUpdated Bool\n\n    Input.Text.input\n        { maxLength = 10\n        , onInput = InputUpdated\n        , hasFocus = Just FocusUpdated\n        }\n        [ class \"textInput\"\n        ...\n        ]\n        model.currentValue\n\n",
+            "type": "Input.Text.Options msg -> List (Html.Attribute msg) -> String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -16877,6 +16843,40 @@
             "name": "multiSelect",
             "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = MultiSelectChanged (List String)\n\n    Html.div []\n        [ multiSelect\n            (defaultOptions MultiSelectChanged)\n            [ class \"my-multiSelect\" ]\n            model.selectedValues\n        ]\n",
             "type": "MultiSelect.Options msg -> List (Html.Attribute msg) -> List String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Dropdown",
+        "comment": " Dropdown\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs dropdown\n",
+        "aliases": [
+          {
+            "name": "Item",
+            "comment": " Item is the individual content of the dropdown.\n\n * `value` is the item value or `id`\n * `text` is the display text of the dropdown item.\n * `enabled` is a flag to indicate whether the item is enabled or disabled.\n",
+            "args": [],
+            "type": "{ value : String, text : String, enabled : Bool }"
+          },
+          {
+            "name": "Options",
+            "comment": " Options for the dropdown.\n\n * `items` is content of the dropdown.\n * `emptyItem` is the item for when the nothing is selected. Set to `Nothing` for no empty item.\n * `onChange` is the message for when the selected value in the dropdown is changed.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ items : List Dropdown.Item , emptyItem : Maybe.Maybe Dropdown.Item , onChange : Maybe.Maybe String -> msg }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultOptions",
+            "comment": " Default Options, will give you empty dropdown with no empty item\n",
+            "type": "(Maybe.Maybe String -> msg) -> Dropdown.Options msg"
+          },
+          {
+            "name": "dropdown",
+            "comment": " Html element.\n\nPut this in your view's Html content.\nExample:\n\n    type Msg = DropdownChanged String\n\n    Html.div []\n        [ Dropdown.dropdown\n            (Dropdown.defaultOptions DropdownChanged)\n            [ class \"my-dropdown\" ]\n            model.selectedDropdownValue\n        ]\n",
+            "type": "Dropdown.Options msg -> List (Html.Attribute msg) -> Maybe.Maybe String -> Html.Html msg"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -18040,6 +18040,115 @@
     ]
   },
   {
+    "name": "billperegoy/elm-form-validations",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Forms",
+        "comment": " # Forms\nThis library performs form validation for HTML forms. A user can define\na list of form elements and define validations for each element. Each time the\nformis updated, validations are automatically run and validation results are updated\nfor each form element as well as the overall form.\n\nAPI calls can be used to retrieve validation information that can be used to\ndisplay validation errors on the form itself.\n\n# Definition\n\n# Types\n@docs FieldValidator, Form, ValidationError\n\n# Helper Functions\n@docs errorList, errorString, formValue, updateFormInput, validateStatus\n\n# Form Initializer\n@docs initForm\n\n\n# Primitive Validators\n@docs validateGreaterThan, validateIsOneOf, validateMinLength\n@docs validateMaxLength, validateLessThan, validateExistence\n@docs validateNumericality, validateNumericRange, validateRegex\n\n",
+        "aliases": [
+          {
+            "name": "FieldValidator",
+            "comment": " A field validator is a function that takes a string to be validated and\n    returns a ValidationError (Maybe String)\n",
+            "args": [],
+            "type": "String -> Forms.ValidationError"
+          },
+          {
+            "name": "Form",
+            "comment": " A form is a set of form elements and a boolean indicating the validate\n    status. Details of the FormElements type are not exposed to the user.\n    Instead an API is provided so those details can be fluid.\n",
+            "args": [],
+            "type": "{ elements : Forms.FormElements, validateStatus : Bool }"
+          },
+          {
+            "name": "ValidationError",
+            "comment": " A validation result is simply a Maybe String.\n    Nothing indicates no error. Otherwise it's Just \"error message\"\n",
+            "args": [],
+            "type": "Maybe.Maybe String"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "errorList",
+            "comment": " Returns raw list of all current validation errors.\"\n\n    ErrorList form \"user\" == [ Just \"must be present\", Just \"must be 10 characters or fewer\" ]\n",
+            "type": "Forms.Form -> String -> List Forms.ValidationError"
+          },
+          {
+            "name": "errorString",
+            "comment": " Returns a formatted string representing all current validation errors.\n\n    ErrorSring form \"user\" == \"must be present, must be 10 characters or fewer\"\n",
+            "type": "Forms.Form -> String -> String"
+          },
+          {
+            "name": "formValue",
+            "comment": " Returns the current value of any form field.\n    Returns Nothing if an invalid form name is given.\n\n",
+            "type": "Forms.Form -> String -> String"
+          },
+          {
+            "name": "initForm",
+            "comment": " Initializes a form.Accepts a list of (name, validator) tuples\n    and returns a Form.\n",
+            "type": "List ( String, List Forms.FieldValidator ) -> Forms.Form"
+          },
+          {
+            "name": "updateFormInput",
+            "comment": " Given a Form, a field name and a feild value and returns\n    a new form containing the update. This is genrally called\n    from the application's update function.\n",
+            "type": "Forms.Form -> String -> String -> Forms.Form"
+          },
+          {
+            "name": "validateExistence",
+            "comment": " Validates existance of a form vale.\n\n    validateExistence \"\" == Just \"must be present\"\n    validateExistence \"valid\" == Nothing\n",
+            "type": "String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateGreaterThan",
+            "comment": " Validates that a string converts to an integer and is greater than the min\nsupplied\n\n    validateGreaterThan 100 \"105\" == Nothing\n    validateGreaterThan 100 \"95\" == Just \"must be > 100\"\n    validateGreaterThan 100 \"bad\" == Just \"must be > 100\"\n",
+            "type": "Int -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateIsOneOf",
+            "comment": " Validates that a string matches one of several potential matches\n\n    validateIsOneOf [ \"cat\", \"bat\", \"rat\" ] \"bat\" == Nothing\n    validateIsOneOf [ \"cat\", \"bat\", \"rat\" ] \"brat\" == Just \"must match one of (cat, bat, rat)\"\n",
+            "type": "List String -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateLessThan",
+            "comment": " Validates that a string converts to an integer and is less than the max\nsupplied\n\n    validateLessThan 100 \"95\" == Nothing\n    validateLessThan 100 \"105\" == Just \"must be < 100\"\n    validateLessThan 100 \"bad\" == Just \"must be < 100\"\n",
+            "type": "Int -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateMaxLength",
+            "comment": " Validates that a form element is less than a maximum length.\n\n    validateMaxLength 4 \"123\" == Nothing\n    validateMaxLength 2 \"123\" == Just \"must be at least 2 characters or fewer\"\n",
+            "type": "Int -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateMinLength",
+            "comment": " Validates that a form element is of a minimum length.\n\n    validateMinLength 2 \"123\" == Nothing\n    validateMinLength 4 \"123\" == Just \"must be at least 4 characters\"\n",
+            "type": "Int -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateNumericRange",
+            "comment": " iValidates that an integer field is within a specified numeric range.\n",
+            "type": "Int -> Int -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateNumericality",
+            "comment": " Validates that a form element is a valid integer.\n",
+            "type": "String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateRegex",
+            "comment": " Validates that a form element matches a regular expression.\n",
+            "type": "String -> String -> Maybe.Maybe String"
+          },
+          {
+            "name": "validateStatus",
+            "comment": " Returns a Bool representing the current validation status of a form.\n",
+            "type": "Forms.Form -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "billstclair/elm-bitwise-infix",
     "version": "1.0.2",
     "docs": [
@@ -18744,17 +18853,23 @@
   },
   {
     "name": "camjc/elm-quiz",
-    "version": "1.0.4",
+    "version": "1.1.1",
     "docs": [
       {
         "name": "Quiz",
-        "comment": " Create a Quiz based on Boolean (True | False) questions.\n\nExample:\n\n    import Quiz exposing (update, view, Model)\n    import Array exposing (fromList, empty)\n    import Html exposing (beginnerProgram)\n    import Markdown exposing (toHtml)\n\n\n    model : Quiz.Model\n    model =\n        { questionId =\n            -1\n            -- Show Instructions\n        , questions =\n            Array.fromList\n                [ ( True, \"Something truthy\" )\n                , ( False, \"Something falsy\" )\n                ]\n        , correctAnswers = Array.empty\n        , wrongAnswers = Array.empty\n        , buttonTrue = ( \"True\", \"green\" )\n        , buttonFalse = ( \"False\", \"red\" )\n        , instructionsComponent =\n          Markdown.toHtml [] \"\"\"\n    # True or False\n    ## How to Play\n      - A question will appear.\n      - Click *True* if you think the answer is true.\n      - Click *False* if you think the answer is false.\n    \"\"\"\n      }\n\n\n    main : Program Never\n    main =\n        Html.beginnerProgram { model = model, view = view, update = update }\n\n# Definition\n@docs update\n@docs view\n@docs Question\n@docs Model\n",
+        "comment": " Create a Quiz based on Boolean (True | False) questions.\n\nExample:\n\n    import Quiz exposing (update, view, Model)\n    import Array exposing (fromList, empty)\n    import Html exposing (beginnerProgram)\n    import Markdown exposing (toHtml)\n\n\n    model : Quiz.Model\n    model =\n        { questionId =\n            -1\n            -- Show Instructions\n        , questions =\n            Array.fromList\n                [ ( True, \"Something truthy\" )\n                , ( False, \"Something falsy\" )\n                ]\n        , correctAnswers = Array.empty\n        , wrongAnswers = Array.empty\n        , buttonTrue = ( \"True\", \"green\" )\n        , buttonFalse = ( \"False\", \"red\" )\n        , instructionsComponent =\n          Markdown.toHtml [] \"\"\"\n    # True or False\n    ## How to Play\n      - A question will appear.\n      - Click *True* if you think the answer is true.\n      - Click *False* if you think the answer is false.\n    \"\"\"\n      }\n\n\n    main : Program Never\n    main =\n        Html.beginnerProgram { model = model, view = view, update = update }\n\n# Definition\n@docs update\n@docs view\n@docs Question\n@docs Model\n@docs Msg\n",
         "aliases": [
           {
             "name": "Model",
             "comment": " The entire Model\n\n    model =\n        { questionId -- Should start at -1 to show the instructions.\n        , questions -- An array of `Question`s.\n        , correctAnswers -- Should start as an empty Array.\n        , wrongAnswers -- Should start as an empty Array.\n        , buttonTrue -- A Tuple of (\"Text\", \"Colour\").\n        , buttonFalse -- A Tuple of (\"Text\", \"Colour\").\n        , instructionsComponent -- HTML to show as instructions.\n        }\n",
             "args": [],
             "type": "QuizTypes.Model"
+          },
+          {
+            "name": "Msg",
+            "comment": " The actions that can be performed\n",
+            "args": [],
+            "type": "QuizTypes.Msg"
           },
           {
             "name": "Question",
@@ -42508,7 +42623,7 @@
   },
   {
     "name": "frenchdonuts/elm-autocomplete",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Autocomplete",
@@ -44383,6 +44498,306 @@
             "name": "hover",
             "comment": " Make a special element that can notice hover state.\n```\nmain =\n  ul []\n    [ hover styles li [] [ text \"Hello\" ]\n    , hover styles li [] [ text \"World\" ]\n    ]\n\nstyles =\n  [(\"background\", \"#abd\")]\n```\n",
             "type": "List ( String, String ) -> (List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg) -> List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "jinjor/elm-time-travel",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "TimeTravel.Html",
+        "comment": " Each functions in this module has the same interface as [Html.App](http://package.elm-lang.org/packages/elm-lang/html/latest/Html)\n\n# Start your Program\n@docs beginnerProgram, program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "beginnerProgram",
+            "comment": " See [Html.beginnerProgram](http://package.elm-lang.org/packages/elm-lang/html/latest/Html#beginnerProgram)\n",
+            "type": "{ model : model , view : model -> Html.Html msg , update : msg -> model -> model } -> Platform.Program Basics.Never (TimeTravel.Internal.Model.Model model msg) (TimeTravel.Html.Msg msg)"
+          },
+          {
+            "name": "program",
+            "comment": " See [Html.program](http://package.elm-lang.org/packages/elm-lang/html/latest/Html#program)\n",
+            "type": "{ init : ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never (TimeTravel.Internal.Model.Model model msg) (TimeTravel.Html.Msg msg)"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " See [Html.programWithFlags](http://package.elm-lang.org/packages/elm-lang/html/latest/Html#programWithFlags)\n",
+            "type": "{ init : flags -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags (TimeTravel.Internal.Model.Model model msg) (TimeTravel.Html.Msg msg)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "TimeTravel.Navigation",
+        "comment": " Each functions in this module has the same interface as [Navigation](http://package.elm-lang.org/packages/elm-lang/navigation/latest/Navigation)\n\n# Create a Program\n@docs program, programWithFlags\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "program",
+            "comment": " See [Navigation.program](http://package.elm-lang.org/packages/elm-lang/navigation/latest/Navigation#program)\n",
+            "type": "(Navigation.Location -> msg) -> { init : Navigation.Location -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program Basics.Never (TimeTravel.Internal.Model.Model model msg) (TimeTravel.Navigation.Msg msg)"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " See [Navigation.programWithFlags](http://package.elm-lang.org/packages/elm-lang/navigation/latest/Navigation#programWithFlags)\n",
+            "type": "(Navigation.Location -> msg) -> { init : flags -> Navigation.Location -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg } -> Platform.Program flags (TimeTravel.Internal.Model.Model model msg) (TimeTravel.Navigation.Msg msg)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "john-kelly/elm-postgrest",
+    "version": "4.0.1",
+    "docs": [
+      {
+        "name": "PostgRest",
+        "comment": " A query builder library for PostgREST.\n\nI recommend looking at the [examples](https://github.com/john-kelly/elm-postgrest/blob/master/examples/Main.elm) before diving into the API or source code.\n\n# Define a Resource\n@docs Resource, resource\n\n### Fields\n@docs Field, string, int, float, bool, field, nullable\n\n### Relations\n@docs Relation, HasOne, hasOne, hasMany, HasMany\n\n# Build a Query\n@docs Query, query\n\n### Selecting and Nesting\n@docs select, include, includeMany\n\n### Filtering\n@docs Filter, filter, like, ilike, eq, gte, gt, lte, lt, inList, is, not\n\n### Ordering\n@docs OrderBy, order, asc, desc\n\n### Limiting\n@docs Limit, limitTo, noLimit\n\n# Send a Query\n@docs list, first\n\n### Pagination\n@docs Page, paginate\n\n",
+        "aliases": [
+          {
+            "name": "Page",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "type": "{ data : List a, count : Int }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Field",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Filter",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "HasMany",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "HasOne",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Limit",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "OrderBy",
+            "comment": " ",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "Query",
+            "comment": " ",
+            "args": [
+              "uniq",
+              "schema",
+              "a"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Relation",
+            "comment": " ",
+            "args": [
+              "a",
+              "uniq"
+            ],
+            "cases": []
+          },
+          {
+            "name": "Resource",
+            "comment": " ",
+            "args": [
+              "uniq",
+              "schema"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "asc",
+            "comment": " Ascending\n",
+            "type": "(schema -> PostgRest.Field a) -> schema -> PostgRest.OrderBy"
+          },
+          {
+            "name": "bool",
+            "comment": " ",
+            "type": "String -> PostgRest.Field Bool"
+          },
+          {
+            "name": "desc",
+            "comment": " Descending\n",
+            "type": "(schema -> PostgRest.Field a) -> schema -> PostgRest.OrderBy"
+          },
+          {
+            "name": "eq",
+            "comment": " Equals\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "field",
+            "comment": " ",
+            "type": "Json.Decode.Decoder a -> (a -> String) -> String -> PostgRest.Field a"
+          },
+          {
+            "name": "filter",
+            "comment": " Apply filters to a query\n",
+            "type": "List (schema -> PostgRest.Filter) -> PostgRest.Query uniq schema a -> PostgRest.Query uniq schema a"
+          },
+          {
+            "name": "first",
+            "comment": " Takes `url` and a `query`, returns an Http.Request\n",
+            "type": "String -> PostgRest.Query uniq schema a -> Http.Request (Maybe.Maybe a)"
+          },
+          {
+            "name": "float",
+            "comment": " ",
+            "type": "String -> PostgRest.Field Float"
+          },
+          {
+            "name": "gt",
+            "comment": " Greater than\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "gte",
+            "comment": " Greater than or equal to\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "hasMany",
+            "comment": " ",
+            "type": "uniq -> PostgRest.Relation PostgRest.HasMany uniq"
+          },
+          {
+            "name": "hasOne",
+            "comment": " ",
+            "type": "uniq -> PostgRest.Relation PostgRest.HasOne uniq"
+          },
+          {
+            "name": "ilike",
+            "comment": " Case-insensitive `like`\n",
+            "type": "String -> (schema -> PostgRest.Field String) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "inList",
+            "comment": " In List\n",
+            "type": "List a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "include",
+            "comment": " ",
+            "type": "(schema1 -> PostgRest.Relation PostgRest.HasOne uniq2) -> PostgRest.Query uniq2 schema2 a -> PostgRest.Query uniq1 schema1 (Maybe.Maybe a -> b) -> PostgRest.Query uniq1 schema1 b"
+          },
+          {
+            "name": "includeMany",
+            "comment": " ",
+            "type": "(schema1 -> PostgRest.Relation PostgRest.HasMany uniq2) -> PostgRest.Limit -> PostgRest.Query uniq2 schema2 a -> PostgRest.Query uniq1 schema1 (List a -> b) -> PostgRest.Query uniq1 schema1 b"
+          },
+          {
+            "name": "int",
+            "comment": " ",
+            "type": "String -> PostgRest.Field Int"
+          },
+          {
+            "name": "is",
+            "comment": " Is comparison\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "like",
+            "comment": "\nSimple [pattern matching](https://www.postgresql.org/docs/9.5/static/functions-matching.html#FUNCTIONS-LIKE)\n",
+            "type": "String -> (schema -> PostgRest.Field String) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "limitTo",
+            "comment": " ",
+            "type": "Int -> PostgRest.Limit"
+          },
+          {
+            "name": "list",
+            "comment": " Takes `limit`, `url` and a `query`, returns an Http.Request\n",
+            "type": "PostgRest.Limit -> String -> PostgRest.Query uniq schema a -> Http.Request (List a)"
+          },
+          {
+            "name": "lt",
+            "comment": " Less than\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "lte",
+            "comment": " Less than or equal to\n",
+            "type": "a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "noLimit",
+            "comment": " ",
+            "type": "PostgRest.Limit"
+          },
+          {
+            "name": "not",
+            "comment": " Negate a Filter\n",
+            "type": "(a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter) -> a -> (schema -> PostgRest.Field a) -> schema -> PostgRest.Filter"
+          },
+          {
+            "name": "nullable",
+            "comment": " ",
+            "type": "PostgRest.Field a -> PostgRest.Field (Maybe.Maybe a)"
+          },
+          {
+            "name": "order",
+            "comment": " ",
+            "type": "List (schema -> PostgRest.OrderBy) -> PostgRest.Query uniq schema a -> PostgRest.Query uniq schema a"
+          },
+          {
+            "name": "paginate",
+            "comment": " ",
+            "type": "{ pageNumber : Int, pageSize : Int } -> String -> PostgRest.Query uniq schema a -> Http.Request (PostgRest.Page a)"
+          },
+          {
+            "name": "query",
+            "comment": " ",
+            "type": "PostgRest.Resource uniq schema -> (a -> b) -> PostgRest.Query uniq schema (a -> b)"
+          },
+          {
+            "name": "resource",
+            "comment": " ",
+            "type": "uniq -> String -> schema -> PostgRest.Resource uniq schema"
+          },
+          {
+            "name": "select",
+            "comment": " ",
+            "type": "(schema -> PostgRest.Field a) -> PostgRest.Query uniq schema (a -> b) -> PostgRest.Query uniq schema b"
+          },
+          {
+            "name": "string",
+            "comment": " ",
+            "type": "String -> PostgRest.Field String"
           }
         ],
         "generated-with-elm-version": "0.18.0"
