@@ -12247,6 +12247,330 @@
     ]
   },
   {
+    "name": "Kinto/elm-kinto",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Kinto",
+        "comment": " [Kinto](http://www.kinto-storage.org/) client to ease communicating with\nthe REST API.\n\nKinto is the backend for your next application. It's a generic JSON document\nstore with sharing and synchronisation capabilities. It's open source. It's\neasy to deploy. You can host it yourself, own your data and keep it out of\nsilos.\n\n# Creating requests\nYou create requests on either an item or a plural (list) endpoint.\n[Kinto concepts](http://kinto.readthedocs.io/en/stable/concepts.html) explain\nthat in details.\n\nPlural (list) endpoints are:\n- buckets: `buckets/`\n- collections: `buckets/:bucketId/collections/`\n- records: `buckets/:bucketId/collections/:collectionId/records/`\n\nItem endpoints are:\n- bucket: `buckets/:bucketId`\n- collection: `buckets/:bucketId/collections/:collectionId`\n- record: `buckets/:bucketId/collections/:collectionId/records/:recordId`\n\n@docs get, getList, create, update, replace, delete\n\n# Sorting, limiting, filtering\n@docs sortBy, limit, withFilter, Filter\n\n# Configure a client and resources\n@docs Client, client, Auth, headersForAuth, Resource, bucketResource, collectionResource, recordResource, decodeData, encodeData, errorDecoder\n\n# Types and Errors\n@docs Endpoint, endpointUrl, ErrorDetail, Error, extractError, toResponse\n\n# Sending requests\n@docs send, toRequest\n\n",
+        "aliases": [
+          {
+            "name": "Client",
+            "comment": " A Kinto Client. Constructed using the `client` helper.\n",
+            "args": [],
+            "type": "{ baseUrl : String, headers : List ( String, String ) }"
+          },
+          {
+            "name": "ErrorDetail",
+            "comment": " A type for Kinto error details.\n",
+            "args": [],
+            "type": "{ errno : Int, message : String, code : Int, error : String }"
+          },
+          {
+            "name": "Resource",
+            "comment": " A type for resources. Constructed using one of `bucketResource`,\n`collectionResource` or `recordResource`.\n",
+            "args": [
+              "a"
+            ],
+            "type": "{ itemEndpoint : String -> Kinto.Endpoint , listEndpoint : Kinto.Endpoint , itemDecoder : Json.Decode.Decoder a , listDecoder : Json.Decode.Decoder (List a) }"
+          }
+        ],
+        "types": [
+          {
+            "name": "Auth",
+            "comment": " A type for authentication\n\n    Basic \"username\" \"password\"\n",
+            "args": [],
+            "cases": [
+              [
+                "NoAuth",
+                []
+              ],
+              [
+                "Basic",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "Bearer",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Endpoint",
+            "comment": " A type for Kinto API endpoints.\n\n    RecordEndpoint \"bucket-name\" \"collection-name\" \"item-id\"\n",
+            "args": [],
+            "cases": [
+              [
+                "RootEndpoint",
+                []
+              ],
+              [
+                "BucketListEndpoint",
+                []
+              ],
+              [
+                "BucketEndpoint",
+                [
+                  "Kinto.BucketName"
+                ]
+              ],
+              [
+                "CollectionListEndpoint",
+                [
+                  "Kinto.BucketName"
+                ]
+              ],
+              [
+                "CollectionEndpoint",
+                [
+                  "Kinto.BucketName",
+                  "Kinto.CollectionName"
+                ]
+              ],
+              [
+                "RecordListEndpoint",
+                [
+                  "Kinto.BucketName",
+                  "Kinto.CollectionName"
+                ]
+              ],
+              [
+                "RecordEndpoint",
+                [
+                  "Kinto.BucketName",
+                  "Kinto.CollectionName",
+                  "Kinto.RecordId"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Error",
+            "comment": " A type for all errors that the elm-client may return.\n",
+            "args": [],
+            "cases": [
+              [
+                "ServerError",
+                [
+                  "Kinto.StatusCode",
+                  "Kinto.StatusMsg",
+                  "String"
+                ]
+              ],
+              [
+                "KintoError",
+                [
+                  "Kinto.StatusCode",
+                  "Kinto.StatusMsg",
+                  "Kinto.ErrorDetail"
+                ]
+              ],
+              [
+                "NetworkError",
+                [
+                  "Http.Error"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Filter",
+            "comment": " A type for filtering, used with `withFilter`\n",
+            "args": [],
+            "cases": [
+              [
+                "Equal",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "Min",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "Max",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "LT",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "GT",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "IN",
+                [
+                  "String",
+                  "List String"
+                ]
+              ],
+              [
+                "NOT",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "LIKE",
+                [
+                  "String",
+                  "String"
+                ]
+              ],
+              [
+                "SINCE",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "BEFORE",
+                [
+                  "String"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "bucketResource",
+            "comment": " A constructor for a bucket resource.\n\n    bucketResource bucketDecoder\n",
+            "type": "Json.Decode.Decoder a -> Kinto.Resource a"
+          },
+          {
+            "name": "client",
+            "comment": " A constructor for a `Client`.\n\n    client\n        \"https://kinto.dev.mozaws.net/v1/\"\n        (Basic \"username\" \"password\")\n",
+            "type": "Kinto.Url -> Kinto.Auth -> Kinto.Client"
+          },
+          {
+            "name": "collectionResource",
+            "comment": " A constructor for a collection resource.\n\n    collectionResource \"bucket-name\" collectionDecoder\n",
+            "type": "Kinto.BucketName -> Json.Decode.Decoder a -> Kinto.Resource a"
+          },
+          {
+            "name": "create",
+            "comment": " Create a POST request on a plural endpoint:\n\n    create resource data\n",
+            "type": "Kinto.Resource a -> Kinto.Body -> Kinto.Client -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "decodeData",
+            "comment": " A decoder for a basic Kinto response.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "delete",
+            "comment": " Create a DELETE request on an item endpoint:\n\n    delete resource itemId\n",
+            "type": "Kinto.Resource a -> String -> Kinto.Client -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "encodeData",
+            "comment": " An encoder for a basic Kinto query.\n",
+            "type": "Json.Encode.Value -> Json.Encode.Value"
+          },
+          {
+            "name": "endpointUrl",
+            "comment": " Get the full url to an endpoint.\n\n    endpointUrl \"https://kinto.dev.mozaws.net/v1/\" (RecordListEndpoint \"default\" \"test-items\")\n",
+            "type": "String -> Kinto.Endpoint -> Kinto.Url"
+          },
+          {
+            "name": "errorDecoder",
+            "comment": " A decoder for `ErrorDetail`. This is the kind of json message answered by Kinto when there's an error:\n\n    {\"errno\":104,\n     \"message\":\"Please authenticate yourself to use this endpoint.\",\n     \"code\":401,\n     \"error\":\"Unauthorized\"}\n",
+            "type": "Json.Decode.Decoder Kinto.ErrorDetail"
+          },
+          {
+            "name": "extractError",
+            "comment": " Extract an `Error` from an `Http.Error`.\n",
+            "type": "Http.Error -> Kinto.Error"
+          },
+          {
+            "name": "get",
+            "comment": " Create a GET request on an item endpoint\n\n    get resource itemId\n",
+            "type": "Kinto.Resource a -> String -> Kinto.Client -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "getList",
+            "comment": " Create a GET request on one of the plural endpoints\n\n    getList resource\n",
+            "type": "Kinto.Resource a -> Kinto.Client -> HttpBuilder.RequestBuilder (List a)"
+          },
+          {
+            "name": "headersForAuth",
+            "comment": " Return the header name and value for the given `Auth`.\n\n    headersForAuth (Basic \"username\" \"password\")\n",
+            "type": "Kinto.Auth -> ( String, String )"
+          },
+          {
+            "name": "limit",
+            "comment": " Add [limit query parameters](http://kinto.readthedocs.io/en/stable/api/1.x/pagination.html) to the request sent to the Kinto server.\n\n    client\n        |> getList recordResource\n        |> limit 10\n        |> send TodosFetched\n",
+            "type": "Int -> HttpBuilder.RequestBuilder a -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "recordResource",
+            "comment": " A constructor for a record resource.\n",
+            "type": "Kinto.BucketName -> Kinto.CollectionName -> Json.Decode.Decoder a -> Kinto.Resource a"
+          },
+          {
+            "name": "replace",
+            "comment": " Create a PUT request on an item endpoint:\n\n    put resource itemId\n",
+            "type": "Kinto.Resource a -> String -> Kinto.Body -> Kinto.Client -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "send",
+            "comment": " Send a request to the Kinto server.\n\n    client\n        |> create resource data\n        |> send TodosCreated\n\n",
+            "type": "(Result.Result Kinto.Error a -> msg) -> HttpBuilder.RequestBuilder a -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "sortBy",
+            "comment": " Add [sorting query parameters](http://kinto.readthedocs.io/en/stable/api/1.x/sorting.html) to the request sent to the Kinto server.\n\n    client\n        |> getList recordResource\n        |> sortBy [\"title\", \"description\"]\n        |> send TodosFetched\n",
+            "type": "List String -> HttpBuilder.RequestBuilder a -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "toRequest",
+            "comment": " Extract the Http.Request component of the request, for introspection,\ntesting, or converting to a `Task` using `Http.toTask`.\n\n    client\n        |> create resource data\n        |> toRequest\n\n",
+            "type": "HttpBuilder.RequestBuilder a -> Http.Request a"
+          },
+          {
+            "name": "toResponse",
+            "comment": " Change the error from an `Http.Error` to an `Error`.\n",
+            "type": "Result.Result Http.Error a -> Result.Result Kinto.Error a"
+          },
+          {
+            "name": "update",
+            "comment": " Create a PATCH request on an item endpoint:\n\n    update resource itemId\n",
+            "type": "Kinto.Resource a -> String -> Kinto.Body -> Kinto.Client -> HttpBuilder.RequestBuilder a"
+          },
+          {
+            "name": "withFilter",
+            "comment": " Add [filtering query parameters](http://kinto.readthedocs.io/en/stable/api/1.x/filtering.html) to the request sent to the Kinto server.\n\n    client\n        |> getList recordResource\n        |> withFilter (NOT \"title\" \"test\")\n        |> send TodosFetched\n",
+            "type": "Kinto.Filter -> HttpBuilder.RequestBuilder a -> HttpBuilder.RequestBuilder a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "MichaelCombs28/elm-dom",
     "version": "1.0.0",
     "docs": [
@@ -15051,6 +15375,106 @@
     ]
   },
   {
+    "name": "NoRedInk/elm-rails",
+    "version": "5.0.0",
+    "docs": [
+      {
+        "name": "Rails.Decode",
+        "comment": "\n\nTypes\n@docs ErrorList\n\n# Decoding\n@docs errors\n\n",
+        "aliases": [
+          {
+            "name": "ErrorList",
+            "comment": " ErrorList is a type alias for a list of `( fields, String )` pairs,\nwhere `field` is a type we can use to reference which fields had errors.\n\n```\ntype Field = Name | Password\n\ndecode : ErrorList Field\n```\n",
+            "args": [
+              "field"
+            ],
+            "type": "List ( field, String )"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "errors",
+            "comment": " Decodes errors passed from rails formatted like this:\n\n`{ errors: {errorName: [\"Error String\"] } }`.\n\nThis function takes a Dict that is a map of all the fields you need decoded.\nIt should look like this:\n\n```\nDict.fromList\n    [ ( \"school\", School )\n    , ( \"school.name\", SchoolName )\n    , ( \"school.address\", SchoolAddress )\n    , ( \"school.city\", City )\n    , ( \"school.state\", State )\n    , ( \"school.zip\", Zip )\n    , ( \"school.country\", Country )\n    ]\n```\n",
+            "type": "Dict.Dict String field -> Json.Decode.Decoder (Rails.Decode.ErrorList field)"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Rails",
+        "comment": "\n\n## Requests\n@docs Error, get, post, send, request\n\n## Decoding\n@docs decoder, always\n\n## Customizing\n@docs csrfToken, expectRailsJson\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Error",
+            "comment": " The kinds of errors a Rails server may return.\n",
+            "args": [
+              "error"
+            ],
+            "cases": [
+              [
+                "HttpError",
+                [
+                  "Http.Error"
+                ]
+              ],
+              [
+                "RailsError",
+                [
+                  "error"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "always",
+            "comment": " Returns a `ResponseDecoder` which uses the same decoder for both success and\nfailures.\n",
+            "type": "Json.Decode.Decoder success -> Rails.ResponseDecoder success success"
+          },
+          {
+            "name": "csrfToken",
+            "comment": " If there was a `<meta name=\"csrf-token\">` tag in the page's `<head>` when\n    elm-rails loaded, returns the value its `content` attribute had at that time.\n\n    Rails expects this value in the `X-CSRF-Token` header for non-`GET` requests as\n    a [CSRF countermeasure](http://guides.rubyonrails.org/security.html#csrf-countermeasures).\n",
+            "type": "Result.Result String String"
+          },
+          {
+            "name": "decoder",
+            "comment": " Returns a `ResponseDecoder`.\n",
+            "type": "Json.Decode.Decoder success -> Json.Decode.Decoder error -> Rails.ResponseDecoder error success"
+          },
+          {
+            "name": "expectRailsJson",
+            "comment": " Think `Http.fromJson`, but with additional effort to parse a non-20x response as JSON.\n\n  * If the status code is in the 200 range, try to parse with the given `decoder.success`.\n  * If that succeeds, the result is `Ok` with the result.\n  * If the status code is outside the 200 range, try to parse with the given `decoder.failure`.\n  * If that succeeds, the result is `Err` with the result.\n  * If either parsing fails, the request as a whole fails.\n",
+            "type": "Rails.ResponseDecoder error success -> Http.Expect (Result.Result error success)"
+          },
+          {
+            "name": "get",
+            "comment": " Send a GET request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    getHats : Cmd msg\n    getHats =\n        Rails.decoder (list string) (succeed ())\n            |> Rails.get \"http://example.com/hat-categories.json\"\n            |> Rails.send HandleGetHatsResponse\n",
+            "type": "String -> Rails.ResponseDecoder error success -> Http.Request (Result.Result error success)"
+          },
+          {
+            "name": "post",
+            "comment": " Send a POST request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    hats : Cmd msg\n    hats =\n        Rails.decoder (list string) (succeed ())\n            |> Rails.post \"http://example.com/hat-categories/new\" Http.emptyBody\n            |> Rails.send HandleResponse\n\n",
+            "type": "String -> Http.Body -> Rails.ResponseDecoder error success -> Http.Request (Result.Result error success)"
+          },
+          {
+            "name": "request",
+            "comment": " Wraps `Http.request` while adding the following default headers:\n\n* `X-CSRF-Token` - set to `csrfToken` if it's an `Ok` and this request isn't a `GET`\n* `Content-Type` - `\"application/json\"`\n* `Accept` - `\"application/json, text/javascript, */*; q=0.01\"`\n* `X-Requested-With` - `\"XMLHttpRequest\"`\n\n    import Dict\n    import Json.Decode exposing (list, string)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    hatRequest : HatStyle -> Request (Result (ErrorList Field) Hat)\n    hatRequest style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n\n            success =\n                list string\n\n            failure =\n                Dict.fromList [ ( \"style\", HatStyle ) ]\n                    |> Rails.Decode.errors\n        in\n            Rails.request\n                { method = \"POST\"\n                , headers = []\n                , url = url\n                , body = body\n                , expect = expectRailsJson (Rails.decoder success failure)\n                , timeout = Nothing\n                , withCredentials = False\n                }\n",
+            "type": "{ method : String , headers : List Http.Header , url : String , body : Http.Body , expect : Http.Expect a , timeout : Maybe.Maybe Time.Time , withCredentials : Bool } -> Http.Request a"
+          },
+          {
+            "name": "send",
+            "comment": " Send an HTTP request to Rails. This uses [`request`](#request) under the\nhood, which means that a CSRF token will automatically be passed, among\nother things. The Error handler uses a [`Rails.Error`](#Error), which includes\nmore information than the standard `Http.Error`.\n\n    import Dict\n    import Json.Decode exposing (list, string)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    requestHats : HatStyle -> Cmd Msg\n    requestHats style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n\n            success =\n                list string\n\n            failure =\n                Dict.fromList [ ( \"style\", HatStyle ) ]\n                    |> Rails.Decode.errors\n        in\n            Rails.decoder success failure\n                |> Rails.post url body\n                |> Rails.send HandleResponse\n",
+            "type": "(Result.Result (Rails.Error error) success -> msg) -> Http.Request (Result.Result error success) -> Platform.Cmd.Cmd msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "Skinney/elm-array-exploration",
     "version": "1.0.0",
     "docs": [
@@ -15510,6 +15934,158 @@
             "name": "compose",
             "comment": " Compose two setters ",
             "type": "Focus.Setter s t a b -> Focus.Setter a b c d -> Focus.Setter s t c d"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "VerbalExpressions/elm-verbal-expressions",
+    "version": "1.2.2",
+    "docs": [
+      {
+        "name": "VerbalExpressions",
+        "comment": " Elm port of [VerbalExpressions](https://github.com/VerbalExpressions)\n@docs verex, startOfLine, endOfLine, followedBy, find, possibly, anything, anythingBut, something, somethingBut, lineBreak, tab, word, anyOf, range, withAnyCase, repeatPrevious, repeatPrevious2, multiple, multiple2, orElse, beginCapture, endCapture, toRegex, toString, replace, VerbalExpression\n",
+        "aliases": [
+          {
+            "name": "VerbalExpression",
+            "comment": " The main type used for constructing verbal expressions\n",
+            "args": [],
+            "type": "{ prefixes : String , source : String , suffixes : String , modifiers : { insensitive : Bool, multiline : Bool } }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "anyOf",
+            "comment": " Match a character class\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "anything",
+            "comment": " Match any set of characters or not\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "anythingBut",
+            "comment": " Match any set of characters except a particular String\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "beginCapture",
+            "comment": " Start capturing a group\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "endCapture",
+            "comment": " Finish capturing a group\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "endOfLine",
+            "comment": " Restrict matches to end of line\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "find",
+            "comment": " Start the expression with a matching group\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "followedBy",
+            "comment": " Include a matching group in the expression\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "lineBreak",
+            "comment": " Match a new line\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "multiple",
+            "comment": " Match a group any number of times\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "multiple2",
+            "comment": " Match a group a particular number of times\n",
+            "type": "String -> Int -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "orElse",
+            "comment": " Add an alternative expression\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "possibly",
+            "comment": " Include an optional matching group\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "range",
+            "comment": " Match a character class with ranges\n",
+            "type": "List ( String, String ) -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "repeatPrevious",
+            "comment": " Repeat the prior case a number of times\n",
+            "type": "Int -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "repeatPrevious2",
+            "comment": " Repeat the prior case within some range of times\n",
+            "type": "Int -> Int -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "replace",
+            "comment": " Chainable function for replacing a string with another string using a Regex\ncreated using VerbalExpressions\n",
+            "type": "Regex.HowMany -> String -> String -> Regex.Regex -> String"
+          },
+          {
+            "name": "something",
+            "comment": " Match on one or more characters\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "somethingBut",
+            "comment": " Match on one or more characters, with the execption of some String\n",
+            "type": "String -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "startOfLine",
+            "comment": " Restrict matches to start of line\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "tab",
+            "comment": " Match a tab\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "toRegex",
+            "comment": " Compile result down to a Regex.regex\n",
+            "type": "VerbalExpressions.VerbalExpression -> Regex.Regex"
+          },
+          {
+            "name": "toString",
+            "comment": " Compile result down to a String\nNote, this is just a string of the expression. Modifier flags are discarded.\n",
+            "type": "VerbalExpressions.VerbalExpression -> String"
+          },
+          {
+            "name": "verex",
+            "comment": " An initial, empty verex to start from and pipe through functions\n",
+            "type": "VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "withAnyCase",
+            "comment": " Let the expression be case insensitive\n",
+            "type": "Bool -> VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
+          },
+          {
+            "name": "word",
+            "comment": " Match an alphanumeric word\n",
+            "type": "VerbalExpressions.VerbalExpression -> VerbalExpressions.VerbalExpression"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -18040,8 +18616,366 @@
     ]
   },
   {
+    "name": "besuikerd/elm-dictset",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "IntIdSet",
+        "comment": " Specilization functions for IdSets containing integers as their id.\n\n@docs IntIdSet\n@docs intGenerator\n@docs empty\n",
+        "aliases": [
+          {
+            "name": "IntIdSet",
+            "comment": " IdGenerator for intgers.\n",
+            "args": [
+              "item"
+            ],
+            "type": "IdSet.IdSet Int Int item"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Creates an empty set with intGenerator as its IdGenerator and initial seed 0\n",
+            "type": "IntIdSet.IntIdSet item"
+          },
+          {
+            "name": "intGenerator",
+            "comment": " IdGenerator for integers that simply increments the seed by 1.\n",
+            "type": "IdSet.IdGenerator Int Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "DictSet",
+        "comment": "  A Set that contains ordinal values, backed by a Dict. The ordinal value of\nitems in a DictSet are specified by the ord method that is given whenever a\nDictSet is constructed.\n\n# Dictionaries\n\n@docs DictSet\n@docs Ord\n\n# Build\n\n@docs empty\n@docs singleton\n@docs insert\n@docs update\n@docs remove\n\n# Query\n\n@docs isEmpty\n@docs member\n@docs get\n@docs size\n\n# Lists\n\n@docs keys\n@docs values\n@docs toList\n@docs fromList\n\n# Transform\n\n@docs map\n@docs foldl\n@docs foldr\n@docs filter\n@docs partition\n\n# Combine\n\n@docs union\n@docs intersect\n@docs diff\n@docs merge\n\n# Helpers\n\n@docs ord\n@docs dict\n\n",
+        "aliases": [
+          {
+            "name": "Ord",
+            "comment": " Ordinal function to define the order of DictSet entries.\n",
+            "args": [
+              "k",
+              "v"
+            ],
+            "type": "v -> k"
+          }
+        ],
+        "types": [
+          {
+            "name": "DictSet",
+            "comment": " A set of ordered values ordered by an ordinal function\n",
+            "args": [
+              "k",
+              "v"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "dict",
+            "comment": " Converts a `Dictset` to a `Dict`\n",
+            "type": "DictSet.DictSet k v -> Dict.Dict k v"
+          },
+          {
+            "name": "diff",
+            "comment": " Creates a set that contains all items that are contained in the first set,\nbut not in the second set.\n",
+            "type": "DictSet.DictSet comparable v -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "empty",
+            "comment": " Creates an empty DictSet using the specified ordinal function.\n",
+            "type": "DictSet.Ord k v -> DictSet.DictSet k v"
+          },
+          {
+            "name": "filter",
+            "comment": " Filter elements from the set that do not satisfy the predicate.\n",
+            "type": "(v -> Bool) -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over all values in the set, in order from lowest key to highest key.\n",
+            "type": "(b -> v -> b) -> b -> DictSet.DictSet comparable v -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over all values in the set, in order from highest key to lowest key.\n",
+            "type": "(v -> b -> b) -> b -> DictSet.DictSet comparable v -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list of items to a `DictSet` with the given ordering.\n",
+            "type": "DictSet.Ord comparable v -> List v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "get",
+            "comment": " Get the value from the set if it exists. Does not guarantee that the items\nare the same, it only retrieves an item with a matching ordinal value if it\nexists.\n",
+            "type": "comparable -> DictSet.DictSet comparable v -> Maybe.Maybe v"
+          },
+          {
+            "name": "insert",
+            "comment": " Inserts an item into the set.\n",
+            "type": "v -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "intersect",
+            "comment": " Creates a set that contains items that are contained in both sets.\n",
+            "type": "DictSet.DictSet comparable v -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if the set is empty.\n",
+            "type": "DictSet.DictSet k v -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get a list of keys (the ordinal values) of items in the set, ordered from\nlowest to highest.\n",
+            "type": "DictSet.DictSet comparable v -> List comparable"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in the set.\n",
+            "type": "(v -> v) -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if an item is a member of the set.\n",
+            "type": "v -> DictSet.DictSet comparable v -> Bool"
+          },
+          {
+            "name": "merge",
+            "comment": " The most general way of combining two sets. You provide three\naccumulators for when a given key appears:\n\n  1. Only in the left set.\n  2. In both sets.\n  3. Only in the right set.\n\nYou then traverse all the items from lowest ordinal value to highest ordinal\nvalue, building up whatever you want.\n",
+            "type": "(a -> result -> result) -> (a -> a -> result -> result) -> (a -> result -> result) -> DictSet.DictSet comparable a -> DictSet.DictSet comparable a -> result -> result"
+          },
+          {
+            "name": "ord",
+            "comment": " Obtains the function the set uses to calculate ordinal values for its items\n",
+            "type": "DictSet.DictSet k v -> DictSet.Ord k v"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a set according to a predicate. The first set contains all\nitems which satisfy the predicate and the second contains the rest.\n",
+            "type": "(v -> Bool) -> DictSet.DictSet comparable v -> ( DictSet.DictSet comparable v, DictSet.DictSet comparable v )"
+          },
+          {
+            "name": "remove",
+            "comment": " Removes an item from the set if it exists.\n",
+            "type": "v -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "singleton",
+            "comment": " Creates a singleton set - using the specified ordinal function.\n",
+            "type": "DictSet.Ord comparable v -> v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "size",
+            "comment": " Determines the number of items in a set\n",
+            "type": "DictSet.DictSet k v -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into an association list of key-value pairs, sorted by their\nordinal values.\n",
+            "type": "DictSet.DictSet comparable v -> List ( comparable, v )"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two sets. If there is a collision, preference is given to the first\nset.\n",
+            "type": "DictSet.DictSet comparable v -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "update",
+            "comment": " Replaces an item identified with the same ordinal value to the given new value\n",
+            "type": "v -> (Maybe.Maybe v -> Maybe.Maybe v) -> DictSet.DictSet comparable v -> DictSet.DictSet comparable v"
+          },
+          {
+            "name": "values",
+            "comment": " Get a list of values of items in the set, ordered from lowest to highest.\n",
+            "type": "DictSet.DictSet comparable v -> List v"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "IdSet",
+        "comment": "  A Set with a built in id generator. These ids are used as keys for the Dict\n\n# Dictionaries\n\n@docs IdSet\n@docs IdGenerator\n\n# Build\n\n@docs empty\n@docs singleton\n@docs insert\n@docs insertWithId\n@docs update\n@docs remove\n\n# Query\n\n@docs isEmpty\n@docs member\n@docs get\n@docs size\n\n# Lists\n\n@docs keys\n@docs values\n@docs toList\n@docs fromList\n\n# Transform\n\n@docs map\n@docs mapWithId\n@docs foldl\n@docs foldlWithId\n@docs foldr\n@docs foldrWithId\n@docs filter\n@docs filterWithId\n@docs partition\n@docs partitionWithId\n\n# Combine\n\n@docs union\n@docs intersect\n@docs diff\n@docs merge\n\n# Helpers\n\n@docs dict\n",
+        "aliases": [
+          {
+            "name": "IdGenerator",
+            "comment": " A method to generate new ids\n",
+            "args": [
+              "seed",
+              "id"
+            ],
+            "type": "seed -> ( id, seed )"
+          }
+        ],
+        "types": [
+          {
+            "name": "IdSet",
+            "comment": " A set of items with a built in id generator\n",
+            "args": [
+              "seed",
+              "id",
+              "item"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "dict",
+            "comment": " Converts a `Dictset` to a `Dict`\n",
+            "type": "IdSet.IdSet seed id item -> Dict.Dict id item"
+          },
+          {
+            "name": "diff",
+            "comment": " Creates a set that contains all items that are contained in the first set,\nbut not in the second set.\n",
+            "type": "IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item -> Dict.Dict comparable item"
+          },
+          {
+            "name": "empty",
+            "comment": " Creates an empty set initialized with the given IdGenerator and initial seed\n",
+            "type": "IdSet.IdGenerator seed id -> seed -> IdSet.IdSet seed id item"
+          },
+          {
+            "name": "filter",
+            "comment": " Filter elements from the set that do not satisfy the predicate.\n",
+            "type": "(item -> Bool) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "filterWithId",
+            "comment": " Filter elements from the set that do not satisfy the predicate. The id of\neach item is added as extra input.\n",
+            "type": "(comparable -> item -> Bool) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over all values in the set, in order from lowest key to highest key.\n",
+            "type": "(item -> b -> b) -> b -> IdSet.IdSet seed comparable item -> b"
+          },
+          {
+            "name": "foldlWithId",
+            "comment": " Fold over all values in the set, with the id of each item as extra input,\nin order from lowest key to highest key.\n",
+            "type": "(comparable -> item -> b -> b) -> b -> IdSet.IdSet seed comparable item -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over all values in the set, in order from highest key to lowest key.\n",
+            "type": "(item -> b -> b) -> b -> IdSet.IdSet seed comparable item -> b"
+          },
+          {
+            "name": "foldrWithId",
+            "comment": " Fold over all values in the set, with the id of each item as extra input,\nin order from highest key to lowest key.\n",
+            "type": "(comparable -> item -> b -> b) -> b -> IdSet.IdSet seed comparable item -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list of items into a set using the given IdGenerator and initial\nseed\n",
+            "type": "IdSet.IdGenerator seed comparable -> seed -> List item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "get",
+            "comment": " Get the item associated with the id. If the item is not in the set, it\nreturns Nothing.\n",
+            "type": "comparable -> IdSet.IdSet seed comparable item -> Maybe.Maybe item"
+          },
+          {
+            "name": "insert",
+            "comment": " Inserts an item into the set\n",
+            "type": "item -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "insertWithId",
+            "comment": " Inserts an item into the set. The id that will be used as a key for the\nitem is added as extra input\n",
+            "type": "(comparable -> item) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "intersect",
+            "comment": " Creates a set that contains items that are contained in both sets. Note that\n this function does not return an IdSet, since the IdGenerator cannot be split\n in two.\n",
+            "type": "IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item -> Dict.Dict comparable item"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determines if the set is empty\n",
+            "type": "IdSet.IdSet seed id item -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get a list of keys (the ordinal values) of items in the set, ordered from\nlowest to highest.\n",
+            "type": "IdSet.IdSet seed comparable item -> List comparable"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in the set.\n",
+            "type": "(item -> item) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "mapWithId",
+            "comment": " Apply a function to all values in the set, with the id of each item as extra\ninput\n",
+            "type": "(comparable -> item -> item) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "member",
+            "comment": " Determines if an id is in the set\n",
+            "type": "comparable -> IdSet.IdSet seed comparable item -> Bool"
+          },
+          {
+            "name": "merge",
+            "comment": " The most general way of combining two sets. You provide three accumulators\nfor when a given key appears:\n\n  1. Only in the left set.\n  2. In both set.\n  3. Only in the right set.\nYou then traverse all the keys from lowest to highest, building up whatever you\nwant.\n",
+            "type": "(a -> result -> result) -> (a -> b -> result -> result) -> (b -> result -> result) -> IdSet.IdSet seed comparable a -> IdSet.IdSet seed comparable b -> result -> result"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest. Note that this function does not return an IdSet, since the\nIdGenerator cannot be split in two.\n",
+            "type": "(item -> Bool) -> IdSet.IdSet seed comparable item -> ( Dict.Dict comparable item, Dict.Dict comparable item )"
+          },
+          {
+            "name": "partitionWithId",
+            "comment": " Partition a dictionary according to a predicate, with the id of each item as extra input.\nThe first dictionary contains all key-value pairs which satisfy the predicate,\nand the second contains the rest. Note that this function does not return\nIdSets, since the IdGenerator cannot be split in two.\n",
+            "type": "(comparable -> item -> Bool) -> IdSet.IdSet seed comparable item -> ( Dict.Dict comparable item, Dict.Dict comparable item )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a value from the set with the given id. If there is no entry with\nsuch an id, no changes are made\n",
+            "type": "comparable -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "singleton",
+            "comment": " Creates a singleton set using the given IdGenerator and initial seed\n",
+            "type": "IdSet.IdGenerator seed comparable -> seed -> item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "size",
+            "comment": " Determines the number of items in a set\n",
+            "type": "IdSet.IdSet seed comparable item -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into an association list of key-value pairs, sorted by their\nordinal values.\n",
+            "type": "IdSet.IdSet seed comparable item -> List ( comparable, item )"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two sets. If there is a collision, preference is given to the first\nset. Note that this function does not return an IdSet, since the IdGenerator\ncannot be split in two.\n",
+            "type": "IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item -> Dict.Dict comparable item"
+          },
+          {
+            "name": "update",
+            "comment": " Update the value of an item with the given index ",
+            "type": "comparable -> (Maybe.Maybe item -> Maybe.Maybe item) -> IdSet.IdSet seed comparable item -> IdSet.IdSet seed comparable item"
+          },
+          {
+            "name": "values",
+            "comment": " Get a list of values of items in the set, ordered from lowest to highest.\n",
+            "type": "IdSet.IdSet seed comparable item -> List item"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "billperegoy/elm-form-validations",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "docs": [
       {
         "name": "Forms",
@@ -27663,6 +28597,392 @@
     ]
   },
   {
+    "name": "elm-community/graph",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Graph",
+        "comment": " This module contains the primitives to build, update and traverse graphs.\nIf you find that this module is hard to use or the documentation\nis insufficient, consider opening an issue for that (and possibly even a\npull request :)).\n\nInternally, we use the `elm-intdict` package for efficient dynamic graph\nrepresentation.\n\n# Data\n@docs NodeId, Node, Edge, Adjacency, NodeContext, Graph\n\n# Building\n@docs empty, update, insert, remove, inducedSubgraph\n\n# Query\n@docs isEmpty, size, member, get, nodeIdRange\n\n# List representations\n@docs nodeIds, nodes, edges, fromNodesAndEdges, fromNodeLabelsAndEdgePairs\n\n# Transforms\n@docs fold, mapContexts, mapNodes, mapEdges, reverseEdges, symmetricClosure\n\n# Characterization\n\n# Traversals\n## Neighbor selectors and node visitors\n@docs NeighborSelector, alongOutgoingEdges, alongIncomingEdges, SimpleNodeVisitor\n## Depth-first\n@docs DfsNodeVisitor, onDiscovery, onFinish, dfs, dfsTree, dfsForest, guidedDfs\n## Breadth-first\n@docs BfsNodeVisitor, ignorePath, bfs, guidedBfs\n\n# Topological Sort\n@docs topologicalSort, heightLevels\n\n# Strongly Connected Components\n@docs stronglyConnectedComponents\n\n# String representation\n@docs toString\n\n",
+        "aliases": [
+          {
+            "name": "Adjacency",
+            "comment": " Adjacency is represented as an ordered dictionary\nrather than as an ordered list. This enables more dynamic\ngraphs with efficient edge removal and insertion on the run.\n",
+            "args": [
+              "e"
+            ],
+            "type": "IntDict.IntDict e"
+          },
+          {
+            "name": "BfsNodeVisitor",
+            "comment": " A specialized node visitor for breadth-first traversal. Compared to a\n`SimpleNodeVisitor`, the path of contexts from the root to the current\nnode is passed instead of just the current node's context. Additionally, the\ndistance from the root is passed as an `Int` (the root has distance 0 and it\nholds always that `length path == distance - 1`).\n\nIf you don't need the additional information, you can turn a `SimpleNodeVisitor`\ninto a `BfsNodeVisitor` by calling `ignorePath`.\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "List (Graph.NodeContext n e) -> Int -> acc -> acc"
+          },
+          {
+            "name": "DfsNodeVisitor",
+            "comment": " A node visitor specialized for depth-first traversal. Along with the node\ncontext of the currently visited node, the current accumulated value is passed.\nThe visitor then has the chance to both modify the value at discovery of the\nnode through the first return value and also provide a finishing\ntransformation which is called with the value after all children were processed\nand the node is about to be finished.\n\nIn the cases where you don't need access to the value both at dicovery and at\nfinish, look into `onDiscovery` and `onFinish`.\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "Graph.NodeContext n e -> acc -> ( acc, acc -> acc )"
+          },
+          {
+            "name": "Edge",
+            "comment": " Represents a directd edge in the graph. In addition\nto start and end node identifiers, a label value can\nbe attached to an edge.\n",
+            "args": [
+              "e"
+            ],
+            "type": "{ from : Graph.NodeId, to : Graph.NodeId, label : e }"
+          },
+          {
+            "name": "NeighborSelector",
+            "comment": " Selects the next neighbors for the currently visited node in the traversal.\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "type": "Graph.NodeContext n e -> List Graph.NodeId"
+          },
+          {
+            "name": "Node",
+            "comment": " The type representing a node: An identifier with\na label.\n",
+            "args": [
+              "n"
+            ],
+            "type": "{ id : Graph.NodeId, label : n }"
+          },
+          {
+            "name": "NodeContext",
+            "comment": " Represents a node with its incoming and outgoing edges\n(predecessors and successors).\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "type": "{ node : Graph.Node n , incoming : Graph.Adjacency e , outgoing : Graph.Adjacency e }"
+          },
+          {
+            "name": "NodeId",
+            "comment": " The type used for identifying nodes, an integer.\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "SimpleNodeVisitor",
+            "comment": " A generic node visitor just like that in the ordinary `fold` function.\nThere are combinators that make these usable for both depth-first traversal\n(`onDiscovery`, `onFinish`) and breadth-first traversal (`ignorePath`).\n",
+            "args": [
+              "n",
+              "e",
+              "acc"
+            ],
+            "type": "Graph.NodeContext n e -> acc -> acc"
+          }
+        ],
+        "types": [
+          {
+            "name": "Graph",
+            "comment": " The central graph type. It is parameterized both over the node label type `n`\nand the edge label type `e`.\n\nOne can build such a graph with the primitives under *Build*. Most of the time\n`fromNodesAndEdges` works fairly well.\n\nFor simplicity, this library just uses a patricia trie based graph representation, which means\nit is just an efficient version of `Dict NodeId (NodeContext n e)`. This allows efficient insertion and\nremoval of nodes of the graph after building.\n",
+            "args": [
+              "n",
+              "e"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "alongIncomingEdges",
+            "comment": " A less common way for selecting neighbors is to follow incoming edges:\n\n    alongIncomingEdges ctx =\n      IntDict.keys (ctx.incoming)\n",
+            "type": "Graph.NeighborSelector n e"
+          },
+          {
+            "name": "alongOutgoingEdges",
+            "comment": " A good default for selecting neighbors is to just go along outgoing edges:\n\n    alongOutgoingEdges ctx =\n      IntDict.keys (ctx.outgoing)\n\n`dfs`/`bfs` use this as their selecting strategy.\n",
+            "type": "Graph.NeighborSelector n e"
+          },
+          {
+            "name": "bfs",
+            "comment": " An off-the-shelf breadth-first traversal. It will visit all components of the\ngraph in no guaranteed order, discovering nodes `alongOutgoingEdges`.\nSee the docs of `BfsNodeVisitor` on how to supply such a beast. There are also\nexamples on how to use `bfs`.\n",
+            "type": "Graph.BfsNodeVisitor n e acc -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "dfs",
+            "comment": " An off-the-shelf depth-first traversal. It will visit all components of the\ngraph in no guaranteed order, discovering nodes `alongOutgoingEdges`.\nSee the docs of `DfsNodeVisitor` on how to supply such a beast. There are also\nexamples on how to use `dfs`.\n",
+            "type": "Graph.DfsNodeVisitor n e acc -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "dfsForest",
+            "comment": " `dfsForest seeds graph` computes a depth-first spanning `Forest` of the\ncomponents in `graph` spanned by `seeds` `alongOutgoingEdges`.\n\nA traversal over this forest would be equivalent to a depth-first traversal\nover the original graph.\n",
+            "type": "List Graph.NodeId -> Graph.Graph n e -> Graph.Tree.Forest (Graph.NodeContext n e)"
+          },
+          {
+            "name": "dfsTree",
+            "comment": " `dfsTree seed graph` computes a depth-first [spanning tree](https://en.wikipedia.org/wiki/Spanning_tree) of the component\nin `graph` starting from `seed` `alongOutgoingEdges`. This function is exemplary for needing to\nutilize the whole power of `DfsNodeVisitor`.\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Graph.Tree.Tree (Graph.NodeContext n e)"
+          },
+          {
+            "name": "edges",
+            "comment": " `edges graph` returns a list of all `Edge`s (e.g. a record of `from` and `to` ids\nand a `label`) in `graph`.\n\n    edges empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    edges graph == [Edge 1 2 \"->\"]\n",
+            "type": "Graph.Graph n e -> List (Graph.Edge e)"
+          },
+          {
+            "name": "empty",
+            "comment": " An empty graph.\n\n    size empty == 0\n",
+            "type": "Graph.Graph n e"
+          },
+          {
+            "name": "fold",
+            "comment": " A fold over all node contexts. The accumulated value is computed lazily,\nso that the fold can exit early when the suspended accumulator is not forced.\n\n    hasLoop ctx = IntDict.member ctx.node.id ctx.incoming\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    -- The graph should not have any loop.\n    fold (\\ctx acc -> acc || hasLoop ctx) False graph == False\n",
+            "type": "(Graph.NodeContext n e -> acc -> acc) -> acc -> Graph.Graph n e -> acc"
+          },
+          {
+            "name": "fromNodeLabelsAndEdgePairs",
+            "comment": " A more convenient version of `fromNodesAndEdges`, when edges are unlabeled\nand there are no special requirements on node ids.\n\n`fromNodeLabelsAndEdgePairs labels edges` implicitly assigns node ids according\nto the label's index in `labels` and the list of edge pairs is converted to\nunlabeled `Edge`s.\n\n    graph = fromNodeLabelsAndEdgePairs ['a', 'b'] [(0, 1)]\n",
+            "type": "List n -> List ( Graph.NodeId, Graph.NodeId ) -> Graph.Graph n ()"
+          },
+          {
+            "name": "fromNodesAndEdges",
+            "comment": " `fromNodesAndEdges nodes edges` constructs a graph from the supplied `nodes`\nand `edges`. This is the most comfortable way to construct a graph as a whole.\nOftentimes it is even more convenient to use `fromNodeLabelsAndEdgePairs` when\nedges are unlabeled anyway and auto incremented node ids are OK.\n\nThe following constructs a graph with 2 nodes with a string label, connected\nby an edge labeled \"->\".\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n",
+            "type": "List (Graph.Node n) -> List (Graph.Edge e) -> Graph.Graph n e"
+          },
+          {
+            "name": "get",
+            "comment": " Analogous to `Dict.get`, `get nodeId graph` returns the `Just` the node\ncontext with id `nodeId` in `graph` if there is one and `Nothing` otherwise.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    get 42 graph == Nothing\n    get 1 graph == Just <node context of node 1>\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Maybe.Maybe (Graph.NodeContext n e)"
+          },
+          {
+            "name": "guidedBfs",
+            "comment": " The `bfs` function is not powerful enough? Go for this beast.\n\n`guidedBfs selectNeighbors visitNode seeds acc graph` will perform a breadth-first\ntraversal on `graph` starting with a queue of `seeds`. The children of each node\nwill be selected with `selectNeighbors` (see `NeighborSelector`), the visiting\nof nodes is handled by `visitNode` (c.f. `BfsNodeVisitor`), folding `acc` over\nthe graph.\n\nWhen there are not any more nodes to be visited, the function will return the\naccumulated value together with the unvisited rest of `graph`.\n\n    bfsLevelOrder graph =\n      -- NodeId 1 is just a wild guess here\n      guidedBfs alongOutgoingEdges (ignorePath (::)) [1] [] graph\n",
+            "type": "Graph.NeighborSelector n e -> Graph.BfsNodeVisitor n e acc -> List Graph.NodeId -> acc -> Graph.Graph n e -> ( acc, Graph.Graph n e )"
+          },
+          {
+            "name": "guidedDfs",
+            "comment": " The `dfs*` functions are not powerful enough? Go for this beast.\n\n`guidedDfs selectNeighbors visitNode seeds acc graph` will perform a depth-first\ntraversal on `graph` starting with a stack of `seeds`. The children of each node\nwill be selected with `selectNeighbors` (see `NeighborSelector`), the visiting\nof nodes is handled by `visitNode` (c.f. `DfsNodeVisitor`), folding `acc` over\nthe graph.\n\nWhen there are not any more nodes to be visited, the function will return the\naccumulated value together with the unvisited rest of `graph`.\n\n    dfsPreOrder graph =\n      -- NodeId 1 is just a wild guess here\n      guidedDfs alongOutgoingEdges (onDiscovery (::)) [1] [] graph\n",
+            "type": "Graph.NeighborSelector n e -> Graph.DfsNodeVisitor n e acc -> List Graph.NodeId -> acc -> Graph.Graph n e -> ( acc, Graph.Graph n e )"
+          },
+          {
+            "name": "heightLevels",
+            "comment": " Computes the height function of a given graph. This is a more general\n[topological sort](https://en.wikipedia.org/wiki/Topological_sorting),\nwhere independent nodes are in the same height level (e.g. the same list\nindex). A valid topological sort is trivially obtained by flattening the\nresult of this function.\n\nThe height function is useful for solving the maximal clique problem for\ncertain [perfect graphs](https://en.wikipedia.org/wiki/Perfect_graph)\n([comparability graphs](https://en.wikipedia.org/wiki/Comparability_graph)).\nThere is the excellent reference\n[Algorithmic Graph Theory and Perfect Graphs](http://dl.acm.org/citation.cfm?id=984029).\n",
+            "type": "Graph.Graph n e -> List (List (Graph.NodeContext n e))"
+          },
+          {
+            "name": "ignorePath",
+            "comment": " Turns a `SimpleNodeVisitor` into a `BfsNodeVisitor` by ignoring the path\nand distance parameters.\nThis is useful for when the visitor should be agnostic of the\ntraversal (breadth-first or depth-first or even just `fold`).\n\n    bfsLevelOrder : List (NodeContext n e)\n    bfsLevelOrder graph =\n      graph\n        |> bfs (ignorePath (::)) []\n        |> List.reverse\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.BfsNodeVisitor n e acc"
+          },
+          {
+            "name": "inducedSubgraph",
+            "comment": " The [induced subgraph](http://mathworld.wolfram.com/Edge-InducedSubgraph.html)\nof a number of node ids.\n",
+            "type": "List Graph.NodeId -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "insert",
+            "comment": " Analogous to `Dict.insert`, `insert nodeContext graph` inserts a fresh node\nwith its context (label, id and edges) into `graph`. If there was already a node\nwith the same id, it will be replaced by the new node context.\n\n    graph1 = fromNodesAndEdges [Node 1 \"1\"] []\n    newNode =\n      { node = Node 2 \"2\"\n      , incoming = IntDict.singleton 1 () -- so there will be an edge from 1 to 2\n      , outgoing = IntDict.empty\n      }\n    graph2 = insert newNode graph1\n    size graph2 == 2\n\nIt's possible to build up whole graphs this way, but a lot less tedious way would\nbe simply to use `fromNodesAndEdges`.\n",
+            "type": "Graph.NodeContext n e -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " `isEmpty graph` is true if and only if there are no nodes in the graph.\nSome properties to reason about in code, which hold for any `graph`:\n\n    isEmpty graph =\n      graph == empty\n    isEmpty graph =\n      size graph == 0\n",
+            "type": "Graph.Graph n e -> Bool"
+          },
+          {
+            "name": "mapContexts",
+            "comment": " Maps each node context to another one. This may change edge and node labels\n(including their types), possibly the node ids and also add or remove edges\nentirely through modifying the adjacency lists.\n\nThe following is a specification for reverseEdges:\n\n    flipEdges ctx = { ctx | incoming = ctx.outgoing, outgoing = ctx.incoming }\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    reverseEdges graph == mapContexts flipEdges graph\n",
+            "type": "(Graph.NodeContext n1 e1 -> Graph.NodeContext n2 e2) -> Graph.Graph n1 e1 -> Graph.Graph n2 e2"
+          },
+          {
+            "name": "mapEdges",
+            "comment": " Maps over edge labels, possibly chaing their types. Leaves the graph\ntopology intact.\n",
+            "type": "(e1 -> e2) -> Graph.Graph n e1 -> Graph.Graph n e2"
+          },
+          {
+            "name": "mapNodes",
+            "comment": " Maps over node labels, possibly changing their types. Leaves the graph\ntopology intact.\n",
+            "type": "(n1 -> n2) -> Graph.Graph n1 e -> Graph.Graph n2 e"
+          },
+          {
+            "name": "member",
+            "comment": " Analogous to `Dict.member`, `member nodeId graph` is true, if and only if\nthere is a node with id `nodeId` in `graph`.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    member 42 graph == False\n    member 1 graph == True\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Bool"
+          },
+          {
+            "name": "nodeIdRange",
+            "comment": " `nodeIdRange graph` returns `Just (minNodeId, maxNodeId)` if `graph` is not empty and `Nothing`\notherwise.\n\nThis is useful for finding unoccupied node ids without trial and error.\n\n    nodeIdRange empty == Nothing\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodeIdRange graph == Just (1, 2)\n",
+            "type": "Graph.Graph n e -> Maybe.Maybe ( Graph.NodeId, Graph.NodeId )"
+          },
+          {
+            "name": "nodeIds",
+            "comment": " `nodeIds graph` returns a list of all nodes' ids in `graph`.\n\n    nodeIds empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodeIds graph == [1, 2]\n",
+            "type": "Graph.Graph n e -> List Graph.NodeId"
+          },
+          {
+            "name": "nodes",
+            "comment": " `nodes graph` returns a list of all `Node`s (e.g. `id` and `label`) in\n`graph`.\n\n    nodes empty == []\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    nodes graph == [Node 1 \"1\", Node 2 \"2\"]\n",
+            "type": "Graph.Graph n e -> List (Graph.Node n)"
+          },
+          {
+            "name": "onDiscovery",
+            "comment": " Transform a `SimpleNodeVisitor` into an equivalent `DfsNodeVisitor`, which\nwill be called upon node discovery. This eases providing `DfsNodeVisitor`s in\nthe default case:\n\n    dfsPostOrder : Graph n e  -> List (NodeContext n e)\n    dfsPostOrder graph =\n      dfs (onDiscovery (::)) [] graph\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.DfsNodeVisitor n e acc"
+          },
+          {
+            "name": "onFinish",
+            "comment": " Transform a `SimpleNodeVisitor` into an equivalent `DfsNodeVisitor`, which\nwill be called upon node finish. This eases providing `DfsNodeVisitor`s in\nthe default case:\n\n    dfsPreOrder : Graph n e  -> List (NodeContext n e)\n    dfsPreOrder graph =\n      dfs (onFinish (::)) [] graph\n",
+            "type": "Graph.SimpleNodeVisitor n e acc -> Graph.DfsNodeVisitor n e acc"
+          },
+          {
+            "name": "remove",
+            "comment": " Analogous to `Dict.remove`, `remove nodeId graph` returns a version of `graph`\nwithout a node with id `nodeId`. If there was no node with that id, then remove\nis a no-op:\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 ()]\n    graph == remove 42 graph\n    graph |> remove 2 |> size == 1\n",
+            "type": "Graph.NodeId -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "reverseEdges",
+            "comment": " Reverses the direction of every edge in the graph.\n",
+            "type": "Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "size",
+            "comment": " `size graph` returns the number of nodes in `graph`.\n\n    size empty == 0\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] []\n    size graph == 2\n",
+            "type": "Graph.Graph n e -> Int"
+          },
+          {
+            "name": "stronglyConnectedComponents",
+            "comment": " Decomposes a graph into its strongly connected components. The resulting\nlist is a topological ordering of the component graph.\n",
+            "type": "Graph.Graph n e -> List (Graph.Graph n e)"
+          },
+          {
+            "name": "symmetricClosure",
+            "comment": " `symmetricClosure edgeMerger graph` is the\n[symmetric closure](https://en.wikipedia.org/wiki/Symmetric_closure) of `graph`,\ne.g. the undirected equivalent, where for every edge in `graph` there is also\na corresponding reverse edge. This implies that `ctx.incoming` == `ctx.outgoing`\nfor each node context `ctx`.\n\n`edgeMerger` resolves conflicts for when there are already edges in both\ndirections, e.g. the graph isn't truly directed. It is guaranteed that\n`edgeMerger` will only be called with the smaller node id passed in first\nto enforce consitency of merging decisions.\n\n    graph = fromNodesAndEdges [Node 1 \"1\", Node 2 \"2\"] [Edge 1 2 \"->\"]\n    onlyUndirectedEdges ctx =\n      ctx.incoming == ctx.outgoing\n    merger from to outgoingLabel incomingLabel =\n      outgoingLabel -- quite arbitrary, will not be called for the above graph\n    fold\n      (\\ctx acc -> acc && onlyUndirectedEdges ctx)\n      True\n      (symmetricClosure merger graph)\n      == True\n",
+            "type": "(Graph.NodeId -> Graph.NodeId -> e -> e -> e) -> Graph.Graph n e -> Graph.Graph n e"
+          },
+          {
+            "name": "toString",
+            "comment": " Returns a string representation of the graph in the format of\n`Graph.fromNodesAndEdges [<nodes>] [<edges>]`.\n",
+            "type": "Graph.Graph n e -> String"
+          },
+          {
+            "name": "topologicalSort",
+            "comment": " Computes a\n[topological ordering](https://en.wikipedia.org/wiki/Topological_sorting) of the\ngiven graph.\n",
+            "type": "Graph.Graph n e -> List (Graph.NodeContext n e)"
+          },
+          {
+            "name": "update",
+            "comment": " Analogous to `Dict.update`, `update nodeId updater graph` will find\nthe node context of the node with id `nodeId` in `graph`. It will then call `updater`\nwith `Just` that node context if that node was found and `Nothing`\notherwise. `updater` can then return `Just` an updated node context\n(modifying edges is also permitted!) or delete the node by returning\n`Nothing`. The updated `graph` is returned.\n\nThis is the most powerful building function since all possible per-node\noperations are possible (node removal, insertion and updating of context\nproperties).\n\nThe other operations can be implemented in terms of `update` like this:\n\n    remove nodeId graph =\n      update nodeId (always Nothing) graph\n    insert nodeContext graph =\n      update nodeContext.node.id (always (Just nodeContext)) graph\n",
+            "type": "Graph.NodeId -> (Maybe.Maybe (Graph.NodeContext n e) -> Maybe.Maybe (Graph.NodeContext n e)) -> Graph.Graph n e -> Graph.Graph n e"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Graph.Tree",
+        "comment": " This module provides a simple tree data type of arbitrary arity (a rose tree).\nThere are primitives for building and traversing such a tree.\n\n# Data\n@docs Tree, Forest\n\n# Building\n@docs empty, leaf, inner, unfoldTree, unfoldForest\n\n# Query\n@docs isEmpty, root, size, height\n\n# Traversal\n\nIt is instructory to read the article on [tree traversals on Wikipedia](https://en.wikipedia.org/wiki/Tree_traversal) first if you are not familiar with the concept.\n\n@docs levelOrder, levelOrderList, preOrder, preOrderList, postOrder, postOrderList\n\n",
+        "aliases": [
+          {
+            "name": "Forest",
+            "comment": " This is just an alias for a list of trees, called a forest in the\nliterature.\n",
+            "args": [
+              "label"
+            ],
+            "type": "List (Graph.Tree.Tree label)"
+          }
+        ],
+        "types": [
+          {
+            "name": "Tree",
+            "comment": " Data type representing an n-ary tree with node labels of type `a`\nBuilding such a tree is done with the `empty`, `leaf` and `inner` smart\nconstructors. An example for a tree with three leafs and a root node:\n\n    tree = inner 1 [leaf 2, leaf 3, leaf 4]\n",
+            "args": [
+              "label"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "empty",
+            "comment": " Construct an empty tree with no nodes. ",
+            "type": "Graph.Tree.Tree label"
+          },
+          {
+            "name": "height",
+            "comment": " Computes the height of the tree in O(n) time.\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    height tree == 3\n",
+            "type": "Graph.Tree.Tree label -> Int"
+          },
+          {
+            "name": "inner",
+            "comment": " Construct a new tree by `inner label children`, combining a number of\nsubtrees `children` with a `label` for the new inner node which will be\nthe root of the tree. Empty subtrees are filtered out. An example:\n\n    tree1 = inner 1 [leaf 2, leaf 3, leaf 4]\n    tree2 = inner 1 [leaf 2, leaf 3, leaf 4, empty]\n    tree1 == tree2\n",
+            "type": "label -> List (Graph.Tree.Tree label) -> Graph.Tree.Tree label"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " `isEmpty tree` returns true if and only if `tree` is `empty`.\n\n    isEmpty empty == True\n    isEmpty (leaf 42) == False\n",
+            "type": "Graph.Tree.Tree label -> Bool"
+          },
+          {
+            "name": "leaf",
+            "comment": " Construct a tree with a single node from a value for the node's label.\n\n    tree : Tree Int\n    tree = leaf 42\n ",
+            "type": "label -> Graph.Tree.Tree label"
+          },
+          {
+            "name": "levelOrder",
+            "comment": " `levelOrder visit acc tree` is a breadth-first fold over `tree`,\nvisiting each node and accumulating results with `visit`. Nodes are visited\nin level-order, e.g. for a tree like\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n\nnodes would be visited in order `[0, 1, 4, 2, 3, 5, 6]`. This is in fact the\nlist produced by `levelOrderList`, but through `levelOrder` you also get access\nto the children of the current node via the second parameter of visit.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "levelOrderList",
+            "comment": " See the documentation on `levelOrder`. `levelOrderList tree` produces\na list of the nodes of the tree visited in level-order, e.g. breadth-first.\nSo:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    levelOrderList tree == [0, 1, 4, 2, 3, 5, 6]\n\nIf you also need information on child trees instead of just the node labels,\nuse `levelOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "postOrder",
+            "comment": " `postOrder visit acc tree` is a (depth-first) post-order traversal (fold)\nover `tree` where `visit` is called with the label and the child sub-forest of\nthe current node in addition to a supplied accumulator value.\n\nWhen `visit` is called for some node, `acc` already contains the value of all\nsub-trees, so post-order traversal is a kind of bottom-up traversal, where\nall children are visited prior to their parent.\nSee `postOrderList` for an example on the order in which nodes are visited.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "postOrderList",
+            "comment": " See `postOrder` for an explanation of how post-order traversals work.\nHere is an example on visit order:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    postOrderList tree == [2, 3, 1, 5, 6, 4, 0]\n\nIf you also need information on child trees instead of just the node labels,\nuse `postOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "preOrder",
+            "comment": " `preOrder visit acc tree` is a (depth-first) pre-order traversal (fold)\nover `tree` where `visit` is called with the label and the child sub-forest of\nthe current node in addition to a supplied accumulator value.\n\nPost-order traversals work top-down: When `visit` is called for some node,\n`acc` already contains the value of all ancestral nodes.\nSee `preOrderList` for an example on the order in which nodes are visited.\n",
+            "type": "(label -> Graph.Tree.Forest label -> acc -> acc) -> acc -> Graph.Tree.Tree label -> acc"
+          },
+          {
+            "name": "preOrderList",
+            "comment": " See `preOrder` for an explanation of how post-order traversals work.\nHere is an example on visit order:\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    preOrderList tree == [0, 1, 2, 3, 4, 5, 6]\n\nIf you also need information on child trees instead of just the node labels,\nuse `preOrder`.\n",
+            "type": "Graph.Tree.Tree label -> List label"
+          },
+          {
+            "name": "root",
+            "comment": " `root tree` returns `Nothing` if `tree` is `empty`, otherwise\nit returns `Just (label, childForest)` of the root node.\n\n    tree = inner 1 [leaf 2, leaf 3, leaf 4]\n    root tree == Just (1, [leaf 2, leaf 3, leaf 4])\n    root empty == Nothing\n",
+            "type": "Graph.Tree.Tree label -> Maybe.Maybe ( label, Graph.Tree.Forest label )"
+          },
+          {
+            "name": "size",
+            "comment": " The size of the tree, e.g. the number of nodes.\n\n    tree = inner 0 [inner 1 [leaf 2, leaf 3], inner 4 [leaf 5, leaf 6]]\n    size tree == 7\n",
+            "type": "Graph.Tree.Tree label -> Int"
+          },
+          {
+            "name": "unfoldForest",
+            "comment": " Construct a new forest with `unfoldForest next seeds` by `unfoldTree next seed`\nfor each `seed` in `seeds`. A simple specification would be\n\n    unfoldForest next seeds = List.map (unfoldTree next) seeds\n",
+            "type": "(seed -> ( label, List seed )) -> List seed -> Graph.Tree.Forest label"
+          },
+          {
+            "name": "unfoldTree",
+            "comment": " Construct a new tree with `unfoldTree next seed`, top to bottom. `next` will be\ncalled repeatedly with seeds, from which it should construct a label for\nthe current tree node but also a list of seeds from which to unfold\nchild nodes. This sort of works top to bottom compared to creating a\ntree bottom up by using the other primitives.\n\n    tree1 = inner 1 [leaf 2, leaf 3, leaf 4]\n    next seed = (seed, if seed == 1 then [2, 3, 4] else [])\n    tree2 = unfoldTree next 1\n    tree1 == tree2\n",
+            "type": "(seed -> ( label, List seed )) -> seed -> Graph.Tree.Tree label"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "elm-community/html-extra",
     "version": "2.2.0",
     "docs": [
@@ -29404,7 +30724,7 @@
   },
   {
     "name": "elm-community/maybe-extra",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "docs": [
       {
         "name": "Maybe.Extra",
@@ -29469,7 +30789,7 @@
           },
           {
             "name": "or",
-            "comment": " Like the boolean `||` this will return the first value that is\npositive (`Just`). However, unlike with `||`, both values will be\ncomputed anyway (there is no short-circuiting).\n\n    Just 4 `or` Just 5    == Just 4\n    Just 4 `or` Nothing   == Just 4\n    Nothing `or` Just 5   == Just 5\n    Nothing `or` Nothing  == Nothing\n\nThis function sort of works like `oneOf` but on single `Maybe`s.\n\nAdvanced functional programmers will recognize this as the\nimplementation of `mplus` for `Maybe`s from the `MonadPlus` type\nclass.\n",
+            "comment": " Like the boolean `||` this will return the first value that is\npositive (`Just`). However, unlike with `||`, both values will be\ncomputed anyway (there is no short-circuiting).\n\n    or (Just 4) (Just 5) == Just 4\n    or (Just 4) Nothing  == Just 4\n    or Nothing (Just 5)  == Just 5\n    or Nothing Nothing   == Nothing\n\nAdvanced functional programmers will recognize this as the\nimplementation of `mplus` for `Maybe`s from the `MonadPlus` type\nclass.\n",
             "type": "Maybe.Maybe a -> Maybe.Maybe a -> Maybe.Maybe a"
           },
           {
@@ -31075,6 +32395,316 @@
             "name": "rgba",
             "comment": " Generate a random transparent color by random RGBA values.\n",
             "type": "Random.Generator Color.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "elm-community/ratio",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Ratio.Infix",
+        "comment": " Infix operators for Rationals.\n\nExpressions may include both Rationals and Ints.  Where both operands are Rationals, we surround the operator with the '|' symbol.\nWhere one operand is a Rational and the other an Int, we place the '|' symbol at the side of the operator adjacent to the Rational.\nFor example (where r is a Rational and i an Int):\n\n\n    r |+| r\n\n    i +| r\n\n    r |+ i\n\n\n# Infix comparisons\n@docs (|==|), (|==), (|/=|), (|/=), (|>|), (|>=|), (|<|), (|<=|)\n\n# Infix arithmetic\n@docs  (+|), (|+), (|+|), (-|), (|-), (|-|),\n       (*|), (|*), (|*|), (/|), (|/), (|/|)\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "*|",
+            "comment": " Multiply an Int by a Rational\n",
+            "type": "Int -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "+|",
+            "comment": " Add an Int to a Rational\n",
+            "type": "Int -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "-|",
+            "comment": " Subtract a Rational from an Iny\n",
+            "type": "Int -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "/|",
+            "comment": " Divide an Int by a Rational\n",
+            "type": "Int -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "|*",
+            "comment": " Multiply an Rational by an Int\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "|*|",
+            "comment": " Synonym for Ratio.multiply\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "|+",
+            "comment": " add a Rational to an Int\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "|+|",
+            "comment": " Synonym for Ratio.add\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "|-",
+            "comment": " Subtract an Int from a Rational\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "|-|",
+            "comment": " Synonym for Ratio.subtract\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 6
+          },
+          {
+            "name": "|/",
+            "comment": " Divide a Rational by an Int\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "|/=",
+            "comment": " Test a Rational and an Int for inequality\n",
+            "type": "Ratio.Rational -> Int -> Bool"
+          },
+          {
+            "name": "|/=|",
+            "comment": " Synonym for Ratio.ne\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "|/|",
+            "comment": " Synonym for Ratio.divide\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational",
+            "associativity": "left",
+            "precedence": 7
+          },
+          {
+            "name": "|<=|",
+            "comment": " Synonym for Ratio.le\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "|<|",
+            "comment": " Synonym for Ratio.lt\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "|==",
+            "comment": " Test a Rational and an Int for equality\n",
+            "type": "Ratio.Rational -> Int -> Bool"
+          },
+          {
+            "name": "|==|",
+            "comment": " Synonym for Ratio.eq\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "|>=|",
+            "comment": " Synonym for Ratio.ge\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "|>|",
+            "comment": " Synonym for Ratio.gt\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Ratio",
+        "comment": " A simple module providing a ratio type for rational numbers\n\n# Types\n@docs Rational\n\n# Construction\n@docs over, fromInt\n\n# Comparison\n@docs eq, ne, gt, lt, ge, le, max, min, compare\n\n# Mathematics\n@docs add, subtract, multiply, multiplyByInt\n@docs divide, divideByInt, divideIntBy, negate\n@docs isZero, isInfinite, round, floor, ceiling, truncate\n\n# Elimination\n@docs numerator, denominator, split\n\n# Utils\n@docs gcd, invert, toFloat\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Rational",
+            "comment": " \"Arbitrary\" (up to `max_int` size) precision fractional numbers. Think of\n    it as the length of a rigid bar that you've constructed from a bunch of\n    initial bars of the same fixed length\n    by the operations of gluing bars together and shrinking a\n    given bar so that an integer number of copies of it glues together to\n    make another given bar.\n\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "add",
+            "comment": " Addition. It's like gluing together two bars of the given lengths.\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "ceiling",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
+          },
+          {
+            "name": "compare",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Basics.Order"
+          },
+          {
+            "name": "denominator",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
+          },
+          {
+            "name": "divide",
+            "comment": " Divide two rationals\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "divideByInt",
+            "comment": " Divide a rational by an Int\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational"
+          },
+          {
+            "name": "divideIntBy",
+            "comment": " Divide an Int by a rational\n",
+            "type": "Int -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "eq",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "floor",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
+          },
+          {
+            "name": "fromInt",
+            "comment": " `fromInt x = over x 1`\n",
+            "type": "Int -> Ratio.Rational"
+          },
+          {
+            "name": "gcd",
+            "comment": " The biggest number that divides both arguments (the greatest common divisor).\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "ge",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "gt",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "invert",
+            "comment": " invert the rational. r becomes 1/r.\n",
+            "type": "Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "isInfinite",
+            "comment": " ",
+            "type": "Ratio.Rational -> Bool"
+          },
+          {
+            "name": "isZero",
+            "comment": " ",
+            "type": "Ratio.Rational -> Bool"
+          },
+          {
+            "name": "le",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "lt",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "max",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "min",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "multiply",
+            "comment": " Mulitplication. `mulitply x (c / d)` is the length of the bar that you'd get\n    if you glued `c` copies of a bar of length `x` end-to-end and then shrunk it\n    down enough so that `d` copies of the shrunken bar would fit in the big\n    glued bar.\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "multiplyByInt",
+            "comment": " Multiply a rational by an Int\n",
+            "type": "Ratio.Rational -> Int -> Ratio.Rational"
+          },
+          {
+            "name": "ne",
+            "comment": " ",
+            "type": "Ratio.Rational -> Ratio.Rational -> Bool"
+          },
+          {
+            "name": "negate",
+            "comment": " multiplication by `-1`.\n",
+            "type": "Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "numerator",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
+          },
+          {
+            "name": "over",
+            "comment": " `over x y` is like `x / y`.\n",
+            "type": "Int -> Int -> Ratio.Rational"
+          },
+          {
+            "name": "round",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
+          },
+          {
+            "name": "split",
+            "comment": " `split x = (numerator x, denominator x)`\n",
+            "type": "Ratio.Rational -> ( Int, Int )"
+          },
+          {
+            "name": "subtract",
+            "comment": " subtraction. Is it like ungluing two bars of the given lengths?\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Ratio.Rational"
+          },
+          {
+            "name": "toFloat",
+            "comment": " ",
+            "type": "Ratio.Rational -> Float"
+          },
+          {
+            "name": "truncate",
+            "comment": " ",
+            "type": "Ratio.Rational -> Int"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -45188,6 +46818,31 @@
     ]
   },
   {
+    "name": "jvoigtlaender/elm-gauss",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "Gauss",
+        "comment": " The Gauss and Gauss-Jordan Elimination Algorithms, on type `Matrix`\nfrom the [`eeue56/elm-flat-matrix` package](http://package.elm-lang.org/packages/eeue56/elm-flat-matrix/latest),\nover `Rational`s from the [`imeckler/ratio` package](http://package.elm-lang.org/packages/imeckler/ratio/latest).\n\n@docs gauss, gaussJordan\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "gauss",
+            "comment": " `gauss 3` on matrix\n\n    [ [ 3, 4,  0, 2 ]\n    , [ 1, 0, -3, 1 ]\n    , [ 0, 2, -1, 5 ]\n    ]\n\ngives matrix\n\n    [ [ 1, 4/3,   0,  2/3 ]\n    , [ 0,   1, 9/4, -1/4 ]\n    , [ 0,   0,   1,   -1 ]\n    ]\n",
+            "type": "Int -> Matrix.Matrix Ratio.Rational -> Matrix.Matrix Ratio.Rational"
+          },
+          {
+            "name": "gaussJordan",
+            "comment": " `gaussJordan 3` on matrix\n\n    [ [ 3, 4,  0, 2 ]\n    , [ 1, 0, -3, 1 ]\n    , [ 0, 2, -1, 5 ]\n    ]\n\ngives matrix\n\n    [ [ 1, 0, 0, -2 ]\n    , [ 0, 1, 0,  2 ]\n    , [ 0, 0, 1, -1 ]\n    ]\n",
+            "type": "Int -> Matrix.Matrix Ratio.Rational -> Matrix.Matrix Ratio.Rational"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "jvoigtlaender/elm-memo",
     "version": "2.0.5",
     "docs": [
@@ -51712,6 +53367,270 @@
     ]
   },
   {
+    "name": "lukewestby/elm-template",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Template.Infix",
+        "comment": " Infix operators for more concise template construction\n\n@docs (<%), (%>)\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "%>",
+            "comment": " Operator alias for andString\n\n    template \"my string \" <% .hello %> \" another string\"\n",
+            "type": "Template.Template record -> String -> Template.Template record"
+          },
+          {
+            "name": "<%",
+            "comment": " Operator alias for andValue\n\n    template \"my string \" <% .hello\n",
+            "type": "Template.Template record -> (record -> String) -> Template.Template record"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Template",
+        "comment": " Type-safe string templating\n\n# types\n@docs Template\n\n# construction\n@docs template, withValue, withString\n\n# rendering\n@docs render\n\n",
+        "aliases": [
+          {
+            "name": "Template",
+            "comment": " A list of the components of a template\n",
+            "args": [
+              "a"
+            ],
+            "type": "List (Template.Component a)"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "render",
+            "comment": " Walks through a template's components and renders them to a single string\n\n    render\n      (template \"my string \" `andValue` .hello)\n      ({ hello = \"world\" })\n",
+            "type": "Template.Template record -> record -> String"
+          },
+          {
+            "name": "template",
+            "comment": " Create an initial template starting with the given string\n\n    template \"my string \"\n",
+            "type": "String -> Template.Template record"
+          },
+          {
+            "name": "withString",
+            "comment": " Attach a string to a template\n\n    template \"my string \"\n        |> withValue .hello\n        |> withString \" another string\"\n",
+            "type": "String -> Template.Template record -> Template.Template record"
+          },
+          {
+            "name": "withValue",
+            "comment": " Attach a record accessor to a template\n\n    template \"my string \"\n        |> withValue .hello\n",
+            "type": "(record -> String) -> Template.Template record -> Template.Template record"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "maksar/elm-function-extra",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Function.Extra",
+        "comment": " Higher-order helpers for working with functions.\n\n# Higher-order helpers\n@docs map, map2, map3, map4, twice\n@docs apply, andThen\n@docs curry3, curry4, curry5\n@docs uncurry3, uncurry4, uncurry5\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "andThen",
+            "comment": " Connect the result `a` of the first function to the first argument of the second function to form a pipeline.\nThen, send `x` into each function along the pipeline in order to execute it in a sequential manner.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `andThen` to repeatedly read from the environment `x` and send the result into to the next function, which in turn reads from the environment `x` again and so forth.\n\n    (f `andThen` g `andThen` h) x == (h (g (f x) x) x)\n",
+            "type": "(x -> a) -> (a -> x -> b) -> x -> b"
+          },
+          {
+            "name": "apply",
+            "comment": " Incrementally apply more functions, similar to `map`*N* where *N* is not fixed.\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `apply` to read an arbitrary number of arguments from the same environment `x`.\n\n    (f `apply` ga `apply` gb `apply` gc) x == f x (ga x) (gb x) (gc x)\n                                           == (map4 identity f ga gb gc) x\n                                           == (identity `map` f `apply` ga `apply` gb `apply` gc) x\n\n    (f' `map` ga `apply` gb `apply` gc) x  == f' (ga x) (gb x) (gc x) x\n                                           == (map3 f' ga gb gc) x\n\nAlso notice the type signatures...\n\n    ga                                   : x -> a\n    gb                                   : x -> b\n    gc                                   : x -> c\n\n    f                                    : x -> a -> b -> c -> d\n    (f `apply` ga)                       : x -> b -> c -> d\n    (f `apply` ga `apply` gb)            : x -> c -> d\n    (f `apply` ga `apply` gb `apply` gc) : x -> d\n\n    f'                                   : a -> b -> c -> d\n    (f' `map` ga)                        : x -> b -> c -> d\n    (f' `map` ga `apply` gb)             : x -> c -> d\n    (f' `map` ga `apply` gb `apply` gc)  : x -> d\n\n",
+            "type": "(x -> a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "curry3",
+            "comment": " Change how arguments are passed to a function.\nThis splits 3-tupled arguments into three separate arguments.\n",
+            "type": "(( a, b, c ) -> x) -> a -> b -> c -> x"
+          },
+          {
+            "name": "curry4",
+            "comment": " Change how arguments are passed to a function.\nThis splits 4-tupled arguments into four separate arguments.\n",
+            "type": "(( a, b, c, d ) -> x) -> a -> b -> c -> d -> x"
+          },
+          {
+            "name": "curry5",
+            "comment": " Change how arguments are passed to a function.\nThis splits 5-tupled arguments into five separate arguments.\n",
+            "type": "(( a, b, c, d, e ) -> x) -> a -> b -> c -> d -> e -> x"
+          },
+          {
+            "name": "map",
+            "comment": " Map into a function with a fixed input `x`. This function is just an alias for `(<<)`, the function composition operator.\n\n    (f `map` g `map` h) == (f << g << h) -- Note that `map` refers to Function.map not List.map!\n\nThe `(x -> ...)` signature is sometimes refered to as a *\"reader\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map` to transform a *\"reader\"* that produces an `a` into a *\"reader\"* that produces a `b`.\n",
+            "type": "(a -> b) -> (x -> a) -> x -> b"
+          },
+          {
+            "name": "map2",
+            "comment": " Send a single argument `x` into a binary function using two intermediate mappings.\n\n    (map2 f ga gb) x == (f (ga x) (gb x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map2` to read two variables from the environment `x` before applying them to a binary function `f`.\n",
+            "type": "(a -> b -> c) -> (x -> a) -> (x -> b) -> x -> c"
+          },
+          {
+            "name": "map3",
+            "comment": " Send a single argument `x` into a ternary function using three intermediate mappings.\n\n    (map3 f ga gb gc) x == (f (ga x) (gb x) (gc x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map3` to read three variables from the environment `x` before applying them to a ternary function `f`.\n",
+            "type": "(a -> b -> c -> d) -> (x -> a) -> (x -> b) -> (x -> c) -> x -> d"
+          },
+          {
+            "name": "map4",
+            "comment": " Send a single argument `x` into a quaternary function using four intermediate mappings.\nUse `apply` as an infix combinator in order to deal with a larger numbers of arguments.\n\n    (map4 f ga gb gc gd) x == (f (ga x) (gb x) (gc x) (gd x)) x\n\nThe `(x -> ...)` signatures are sometimes refered to as *\"readers\"* of `x`, where `x` represents some ancillary environment within which we would like to operate.\nThis allows `map4` to read four variables from the environment `x` before applying them to a quaternary function `f`.\n",
+            "type": "(a -> b -> c -> d -> e) -> (x -> a) -> (x -> b) -> (x -> c) -> (x -> d) -> x -> e"
+          },
+          {
+            "name": "twice",
+            "comment": " Applies given function `f` twice.\n\n    (twice f) == (f << f)\n",
+            "type": "(a -> a) -> a -> a"
+          },
+          {
+            "name": "uncurry3",
+            "comment": " Change how arguments are passed to a function.\nThis combines three arguments into a single 3-tuple.\n",
+            "type": "(a -> b -> c -> x) -> ( a, b, c ) -> x"
+          },
+          {
+            "name": "uncurry4",
+            "comment": " Change how arguments are passed to a function.\nThis combines four arguments into a single 4-tuple.\n",
+            "type": "(a -> b -> c -> d -> x) -> ( a, b, c, d ) -> x"
+          },
+          {
+            "name": "uncurry5",
+            "comment": " Change how arguments are passed to a function.\nThis combines five arguments into a single 5-tuple.\n",
+            "type": "(a -> b -> c -> d -> e -> x) -> ( a, b, c, d, e ) -> x"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "maksar/elm-workflow",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "Workflow",
+        "comment": " Workflow simulates voting process on multiple steps.\n    Each step has a threshold value.\n    To proceed to the next step, it's necessary to get threshold number of votes.\n    Power users can force skip one step.\n    User with at least `VOTE` permission can `reject` the current step (previous step re-starts).\n    Inactive users cannot `approve` or `reject`. User can only vote once on the same step.\n\n# Definition\n@docs Workflow\n\n# Creating Workflow\n@docs init\n\n# Interactions\n@docs approve, reject\n\n# Inspecting state\n@docs finished\n",
+        "aliases": [
+          {
+            "name": "Workflow",
+            "comment": " Record representing workflow status. Consists of:\n    `stepsConfig` - array, containing step's threshold values;\n    `currentStep` integer - number of the current workflow step;\n    `votes` - array of votes on each step.\n",
+            "args": [],
+            "type": "{ stepsConfig : Array.Array Int , currentStep : Int , votes : Array.Array Workflow.Bucket }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "approve",
+            "comment": " Performs approve (vote) operation from given `User` on a `Workflow`.\n\n    init [ 1, 2 ] |> approve (create \"Bob\" True [VOTE]) == { stepsConfig = Array.fromList [1,2], currentStep = 1, votes = Array.fromList [Set.fromList [User { name = \"Bob\", active = True, permissions = Array.fromList [VOTE] }],Set.fromList []] }\n",
+            "type": "User.User -> Workflow.Workflow -> Workflow.Workflow"
+          },
+          {
+            "name": "finished",
+            "comment": " Returns high-level `Workflow` completion status. `Workflow` becomes completed after going through all its steps.\n",
+            "type": "Workflow.Workflow -> Bool"
+          },
+          {
+            "name": "init",
+            "comment": " Creates `Workflow` from provided list of threshold values.\n\n    init [ 1, 2 ] == { stepsConfig = Array.fromList [1,2], currentStep = 0, votes = Array.fromList [Set.fromList [],Set.fromList []] }\n",
+            "type": "List Int -> Workflow.Workflow"
+          },
+          {
+            "name": "reject",
+            "comment": " Performs reject operation from given `User` on a `Workflow`.\n",
+            "type": "User.User -> Workflow.Workflow -> Workflow.Workflow"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "User",
+        "comment": " User type, instances of which should be used in `Workflow`s\n\n# Definition\n@docs User\n\n# Creating User\n@docs create\n\n# Taking User Apart\n@docs name, active, inactive, permissions\n\n# Getting Permission for a step\n@docs permission\n\n# Comparing Users\n@docs compare\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "User",
+            "comment": " Container for all attributes, required by `Workflow` to operate. ",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "active",
+            "comment": " Extracts operational status from `User` instance.\n\n    active <| create \"Bob\" True [ NONE, VOTE ] == True\n",
+            "type": "User.User -> Bool"
+          },
+          {
+            "name": "compare",
+            "comment": " Compare names of the two given users, returning `Order`. No other attributes are taken into account.\n\n    compare (create \"Bob\" True [ NONE ]) (create \"Alice\" True [ NONE ]) == False\n    compare (create \"Bob\" True [ NONE ]) (create \"Bob\" False [ ]) == True\n",
+            "type": "User.User -> User.User -> Basics.Order"
+          },
+          {
+            "name": "create",
+            "comment": " Creates instance of the `User` by name, operational status, and list of Permissions for each step.\n\n    create \"Bob\" True [ NONE, VOTE ] == User \"Bob\" True Array.fromList [ NONE, VOTE ]\n",
+            "type": "String -> Bool -> List Permission.Permission -> User.User"
+          },
+          {
+            "name": "inactive",
+            "comment": " Extracts operational status from `User` instance.\n\n    inactive <| create \"Bob\" False [ NONE, VOTE ] == True\n",
+            "type": "User.User -> Bool"
+          },
+          {
+            "name": "name",
+            "comment": " Extracts name from `User` instance.\n\n    name <| create \"Bob\" True [ NONE, VOTE ] == \"Bob\"\n",
+            "type": "User.User -> String"
+          },
+          {
+            "name": "permission",
+            "comment": " Gets permission from a user to a particular step of the `Workflow`.\n    If permission wasn't found, `NONE` will be returned.\n\n    permission 0 <| create \"Bob\" True [ NONE, VOTE ] == NONE\n    permission 1 <| create \"Bob\" True [ NONE, VOTE ] == VOTE\n    permission 2 <| create \"Bob\" True [ NONE, VOTE ] == NONE\n",
+            "type": "Int -> User.User -> Permission.Permission"
+          },
+          {
+            "name": "permissions",
+            "comment": " Extracts list of `Permission`s from `User` instance.\n\n    permissions <| create \"Bob\" True [ NONE, VOTE ] == [ NONE, VOTE ]\n",
+            "type": "User.User -> List Permission.Permission"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Permission",
+        "comment": " Permission type dictating what `User` can do on particular `Workflow` step.\n\n# Definition\n@docs Permission\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Permission",
+            "comment": " User can vote (having `VOTE` permission) on particular step of the `Workflow` or completely skip the whole step\n    (having `FORCE` permission). Without any permissions (`NONE`), `User` cannot affect the `Workflow`.\n",
+            "args": [],
+            "cases": [
+              [
+                "VOTE",
+                []
+              ],
+              [
+                "FORCE",
+                []
+              ],
+              [
+                "NONE",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "marcosh/elm-html-to-unicode",
     "version": "1.0.2",
     "docs": [
@@ -52889,11 +54808,11 @@
   },
   {
     "name": "mdgriffith/style-elements",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "docs": [
       {
         "name": "Style",
-        "comment": "\n\nThis module is focused around composing a style.\n\n@docs Model, Property, StyleSheet, embed, render, renderWith, class, selector, foundation\n\n## Rendering Options\n\n@docs Option, debug, base, importCSS, importUrl, autoImportGoogleFonts\n\n\n# Positioning\n\nThe coordinates for position always have the same coordinate system, right and down are the positive directions, same as the standard coordinate system for svg.\n\nThese coordinates are always rendered in pixels.\n\nThe name of the position property refers on which corner of the css box to start at.\n\n@docs topLeft, topRight, bottomLeft, bottomRight\n\n@docs positionBy, PositionParent, parent, currentPosition, screen\n\n\n\n# Width/Height\n\n@docs height, minHeight, maxHeight, width, minWidth, maxWidth\n\n# Units\n\nMost values in this library have one set of units to the library that are required to be used.\n\nThis is to encourage relative units to be expressed in terms of your elm code instead of relying on DOM hierarchy.\n\nHowever, `width` and `height` values can be pixels, percent, or auto.\n\n@docs percent, px, auto\n\n\n# A Note on Padding and Margins\n\nWith `padding` and `margin` you have two ways of specifying the spacing of the child element within the parent.  Either the `margin` on the child or the `padding` on the parent.\n\nIn the effort of having only one good way to accomplish something, we only allow the `padding` property to be set.\n\nWe introduce the `spacing` attribute, which sets the spacing between all _child_ elements (using the margin property).\n\n> __Some exceptions__\n>\n> `inline` elements are not affected by spacing.\n>\n> Floating elements will only respect certain spacing values.\n\n@docs padding, spacing, zIndex\n\n\n# Padding, Spacing, and Borders\n\nPadding, spacing, and border widths are all specified by a tuple of four floats that represent (top, right, bottom, left).  These are all rendered as `px` values.\n\nThe following are convenience functions for setting these values.\n\n@docs all, top, bottom, left, right, topBottom, leftRight, leftRightAndTopBottom, leftRightTopBottom, allButTop, allButLeft, allButRight, allButBottom\n\n\n## Borderstyles\n\n@docs Border, border, borderStyle, BorderStyle, borderWidth, solid, dotted, dashed, borderRadius\n\n# Layouts\n\nLayouts affect how child elements are arranged.\n\n@docs Layout, textLayout, tableLayout\n\n@docs Flow, flowUp, flowDown, flowRight, flowLeft\n\n\n@docs inline\n\n@docs Floating, floatLeft, floatRight, floatTopLeft, floatTopRight\n\n# Alignment\n\n@docs Alignment, alignLeft, alignRight, justify, justifyAll, alignCenter\n\n@docs VerticalAlignment, verticalCenter, verticalStretch, alignTop, alignBottom\n\n\n# Colors\n\n@docs textColor, backgroundColor, borderColor\n\n\n# Visibility\n\n@docs visibility, Visibility, hidden, opacity, transparency, visible\n\n\n# Text/Font\n\n@docs font, fontsize, lineHeight, textAlign, letterOffset, whitespace, Whitespace, normal, pre, preLine, preWrap, noWrap, italicize, bold, light, strike, underline, cursor\n\n\n# Background Images\n\n@docs backgroundImage, BackgroundImage, Repeat, repeat, repeatX, repeatY, noRepeat, round, space\n\n@docs property, mix\n\n\n# Shadows\n\n@docs shadows, Shadow, shadow, insetShadow, textShadow, dropShadow\n\n\n# Transforms\n\n@docs transforms, Transform, translate, rotate, scale\n\n# Filters\n\n@docs filters, Filter, filterUrl, blur, brightness, contrast, grayscale, hueRotate, invert, opacityFilter, saturate, sepia\n\n\n# Animations and Transitions\n\n@docs Animation, animate\n\n\n@docs Transition, transition\n\n## Pseudo elements and classes\n\n@docs selection, after, before, hover, focus, checked\n\n\n\n\n",
+        "comment": "\n\nThis module is focused around composing a style.\n\n@docs Model, Property\n\n# Rendering\n\nWe use `render` to create a style sheet and `embed` to embed it in our view.\n\n@docs render, renderWith, StyleSheet, embed\n\n## Rendering Options\n\n@docs Option, importCSS, importUrl, debug, base, foundation, autoImportGoogleFonts\n\n# Creating Styles\n\n@docs class, selector\n\n\n# Positioning\n\nThe coordinates for position always have the same coordinate system, right and down are the positive directions, same as the standard coordinate system for svg.\n\nThese coordinates are always rendered in pixels.\n\nThe name of the position property refers on which corner of the css box to start at.\n\n@docs topLeft, topRight, bottomLeft, bottomRight\n\n@docs positionBy, PositionParent, parent, currentPosition, screen\n\n\n\n# Width/Height\n\n@docs height, minHeight, maxHeight, width, minWidth, maxWidth\n\n# Units\n\nMost values in this library have one set of units to the library that are required to be used.\n\nThis is to encourage relative units to be expressed in terms of your elm code instead of relying on DOM hierarchy.\n\nHowever, `width` and `height` values can be pixels, percent, or auto.\n\n@docs percent, px, auto\n\n\n# A Note on Padding and Margins\n\nWith `padding` and `margin` you have two ways of specifying the spacing of the child element within the parent.  Either the `margin` on the child or the `padding` on the parent.\n\nIn the effort of having only one good way to accomplish something, we only allow the `padding` property to be set.\n\nWe introduce the `spacing` attribute, which sets the spacing between all _child_ elements (using the margin property).\n\n> __Some exceptions__\n>\n> `inline` elements are not affected by spacing.\n>\n> Floating elements will only respect certain spacing values.\n\n@docs padding, spacing, zIndex\n\n\n# Padding, Spacing, and Borders\n\nPadding, spacing, and border widths are all specified by a tuple of four floats that represent (top, right, bottom, left).  These are all rendered as `px` values.\n\nThe following are convenience functions for setting these values.\n\n@docs all, top, bottom, left, right, topBottom, leftRight, leftRightAndTopBottom, leftRightTopBottom, allButTop, allButLeft, allButRight, allButBottom\n\n\n## Borderstyles\n\n@docs Border, border, borderStyle, BorderStyle, borderWidth, solid, dotted, dashed, borderRadius\n\n# Layouts\n\nLayouts affect how child elements are arranged.\n\n@docs Layout, textLayout, tableLayout\n\n@docs Flow, flowUp, flowDown, flowRight, flowLeft\n\n\n@docs inline\n\n@docs Floating, floatLeft, floatRight, floatTopLeft, floatTopRight\n\n# Alignment\n\n@docs Alignment, alignLeft, alignRight, justify, justifyAll, alignCenter\n\n@docs VerticalAlignment, verticalCenter, verticalStretch, alignTop, alignBottom\n\n\n# Colors\n\n@docs textColor, backgroundColor, borderColor\n\n\n# Visibility\n\n@docs visibility, Visibility, hidden, opacity, transparency, visible\n\n\n# Text/Font\n\n@docs font, fontsize, lineHeight, textAlign, letterOffset, whitespace, Whitespace, normal, pre, preLine, preWrap, noWrap, italicize, bold, light, strike, underline, cursor\n\n\n# Background Images\n\n@docs backgroundImage, BackgroundImage, Repeat, repeat, repeatX, repeatY, noRepeat, round, space\n\n@docs property, mix\n\n\n# Shadows\n\n@docs shadows, Shadow, shadow, insetShadow, textShadow, dropShadow\n\n\n# Transforms\n\n@docs transforms, Transform, translate, rotate, scale\n\n# Filters\n\n@docs filters, Filter, filterUrl, blur, brightness, contrast, grayscale, hueRotate, invert, opacityFilter, saturate, sepia\n\n\n# Animations and Transitions\n\n@docs Animation, animate\n\n\n@docs Transition, transition\n\n## Pseudo elements and classes\n\n@docs selection, after, before, hover, focus, checked\n\n\n\n\n",
         "aliases": [
           {
             "name": "Alignment",
@@ -52951,7 +54870,7 @@
           },
           {
             "name": "Model",
-            "comment": " ",
+            "comment": " A style model which keeps of a list of style properties and the class for a given style.\n\nThe `class` type variable is the type you use to write your css classes.\n\n",
             "args": [
               "class"
             ],
@@ -52965,7 +54884,7 @@
           },
           {
             "name": "Property",
-            "comment": " ",
+            "comment": " This type represents any style property.  The Model has a list of these.\n\n",
             "args": [],
             "type": "Style.Model.Property"
           },
@@ -52983,7 +54902,7 @@
           },
           {
             "name": "StyleSheet",
-            "comment": " ",
+            "comment": " The stylesheet contains the rendered css as a string, and two functions to lookup\n\n",
             "args": [
               "class",
               "msg"
@@ -53024,7 +54943,7 @@
         "types": [
           {
             "name": "Option",
-            "comment": " ",
+            "comment": " A style rendering option to be used with `renderWith`\n",
             "args": [],
             "cases": []
           }
@@ -53097,7 +55016,7 @@
           },
           {
             "name": "autoImportGoogleFonts",
-            "comment": " An attempt will be made to import all non-standard webfonts that are in your styles.\n",
+            "comment": " An attempt will be made to import all non-standard webfonts that are in your styles.\n\nIf a font is not in the following list, then it will try to import it from google fonts.\n\n    [ \"arial\"\n    , \"sans-serif\"\n    , \"serif\"\n    , \"courier\"\n    , \"times\"\n    , \"times new roman\"\n    , \"verdana\"\n    , \"tahoma\"\n    , \"georgia\"\n    , \"helvetica\"\n    ]\n\n\n",
             "type": "Style.Option"
           },
           {
@@ -53182,7 +55101,7 @@
           },
           {
             "name": "class",
-            "comment": "\n",
+            "comment": " Set the class for a given style.  You should use a union type!\n",
             "type": "class -> List Style.Property -> Style.Model class"
           },
           {
@@ -53497,7 +55416,7 @@
           },
           {
             "name": "renderWith",
-            "comment": " ",
+            "comment": " Render a stylesheet with options\n",
             "type": "List Style.Option -> List (Style.Model class) -> Style.StyleSheet class msg"
           },
           {
@@ -53552,7 +55471,7 @@
           },
           {
             "name": "selector",
-            "comment": " ",
+            "comment": " You can set a raw css selector instead of a class.\n\nIt's highly recommended not to do this unless absolutely necessary.\n\n",
             "type": "String -> List Style.Property -> Style.Model class"
           },
           {
@@ -54608,6 +56527,80 @@
     ]
   },
   {
+    "name": "mpizenberg/elm-debounce",
+    "version": "2.0.0",
+    "docs": [
+      {
+        "name": "MsgControl",
+        "comment": " Control messages.\n\n# Different strategies available\n\n@docs debouncing, throttling, Strategy\n\n# Modification of the model\n\n@docs State, init\n\n# Modification of the update\n\n@docs Msg, update, MsgWrapper\n\n# Modification of the view\n\n@docs wrap\n\n",
+        "aliases": [
+          {
+            "name": "MsgWrapper",
+            "comment": " A wrapper for the internal controlled messages.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "MsgControl.Msg msg -> msg"
+          },
+          {
+            "name": "Strategy",
+            "comment": " The controlling strategy.\n",
+            "args": [
+              "msg"
+            ],
+            "type": "MsgControl.MsgWrapper msg -> msg -> MsgControl.State msg -> ( MsgControl.State msg, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Internal messages.\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          },
+          {
+            "name": "State",
+            "comment": " Control state to be stored in the model.\n\n    type alias Model = { ... , state : MsgControl.State Msg }\n",
+            "args": [
+              "msg"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "debouncing",
+            "comment": " Create a debouncing strategy.\n\n    strategy = MsgControl.debouncing <| 1 * Time.second\n",
+            "type": "Time.Time -> MsgControl.Strategy msg"
+          },
+          {
+            "name": "init",
+            "comment": " Initial state.\n\n    initialModel = { ... , state = MsgControl.init }\n",
+            "type": "MsgControl.State msg"
+          },
+          {
+            "name": "throttling",
+            "comment": " Create a throttling strategy.\n\n    strategy = MsgControl.throttling <| 50 * Time.millisecond\n",
+            "type": "Time.Time -> MsgControl.Strategy msg"
+          },
+          {
+            "name": "update",
+            "comment": " Update the controlled state of a message.\n\n    update msg model = case msg of\n        ...\n        Throttle controlMsg ->\n            let\n                ( newState, cmd ) =\n                    MsgControl.update\n                        (Throttle) -- The message wrapper\n                        (MsgControl.throttling <| 1 * Time.second) -- The strategy\n                        (controlMsg) -- The internal message\n                        (model.state) -- The current state\n            in\n                ( { model | state = newState }, cmd )\n",
+            "type": "MsgControl.MsgWrapper msg -> MsgControl.Strategy msg -> MsgControl.Msg msg -> MsgControl.State msg -> ( MsgControl.State msg, Platform.Cmd.Cmd msg )"
+          },
+          {
+            "name": "wrap",
+            "comment": " Inverse wrapper, wrap an outside raw message into an internal message.\nKey helper to control raw messages.\n\n    view model = ... button [ HA.map debounce <| onClick Clicked ] ...\n\n    debounce : Msg -> Msg\n    debounce =\n        Debounce << MsgControl.wrap\n",
+            "type": "msg -> MsgControl.Msg msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "mpizenberg/elm-image-annotation",
     "version": "5.0.2",
     "docs": [
@@ -55376,6 +57369,952 @@
             "name": "truncate",
             "comment": " Like Elm's basic `truncate` but works on the full length of a float's 64 \nbits. So it's more precise.\n\n    x = 9007199254740.99\n\n    Basics.truncate x -- 652835028 (which is not correct)\n    Round.truncate x -- 9007199254740 (which is)\n",
             "type": "Float -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "newlandsvalley/elm-abc-parser",
+    "version": "1.1.0",
+    "docs": [
+      {
+        "name": "Music.Tempo",
+        "comment": " Get or set the tempo of a tune.\n\nYou can change the tempo of an ABC tune by altering its beats per minute (bpm).\nFor example, to set the tempo of a parsed tune to 80 bpm you can say:\n\n* setBpm 80 tune\n\n\n\n# Constants\n@docs defaultTempo\n\n\n# Functions\n@docs getBpm\n    , setBpm\n\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultTempo",
+            "comment": " The default Tempo - 1/4=120.\n",
+            "type": "Abc.ParseTree.TempoSignature"
+          },
+          {
+            "name": "getBpm",
+            "comment": " Get the tempo of the tune in beats per minute from the tunes header\n    (if it exists) or the default of 120 if it does not.\n",
+            "type": "Abc.ParseTree.AbcTune -> Int"
+          },
+          {
+            "name": "setBpm",
+            "comment": " Change the tempo of the tune by altering the beats per minute (bpm)\n   in the tune's tempo header (if it exists) or by altering a newly incorporated\n   default tempo if not.\n",
+            "type": "Int -> Abc.ParseTree.AbcTune -> Abc.ParseTree.AbcTune"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Music.Transposition",
+        "comment": " Tune transposition\n\nYou can transpose an ABC tune (in whatever key - perhaps in C) to (say) G# using:\n\n    transposedResult = mapError (\\_ -> \"parse error\") (parse source)\n        |> andThen (\\tune -> transposeTo ({pitchClass = G, accidental = Just Sharp, mode = Major},[]) tune)\n\n\nThe mode before and after transposition must be identical (that is: you cannot transpose minor to major and so on).\nChord symbols will be lost on transposition.\n\n# Constants\n@docs defaultKey\n\n\n# Functions\n@docs keyDistance\n    , transposeNote\n    , transposeTo\n\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "defaultKey",
+            "comment": " The default Key - C Major.\n",
+            "type": "Abc.ParseTree.ModifiedKeySignature"
+          },
+          {
+            "name": "keyDistance",
+            "comment": " Calculate the distance between the keys (target - source) measured in semitones.\n   Keys must be in compatible modes.\n",
+            "type": "Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.ModifiedKeySignature -> Result.Result String Int"
+          },
+          {
+            "name": "transposeNote",
+            "comment": " Transpose a note from its source key to its target.\n",
+            "type": "Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.AbcNote -> Result.Result String Abc.ParseTree.AbcNote"
+          },
+          {
+            "name": "transposeTo",
+            "comment": " Transpose a tune to the target key.\n",
+            "type": "Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.AbcTune -> Result.Result String Abc.ParseTree.AbcTune"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Music.Notation",
+        "comment": " Helper functions for making more musical sense of the parse tree.\n\n\n# Data Types\n@docs MidiPitch, MidiTick, AbcTempo, NoteTime, DiatonicScale, HeaderMap\n\n# Constants\n@docs notesInChromaticScale\n    , standardMidiTick\n\n# Functions\n@docs  keySet\n    , modifiedKeySet\n    , getKeySet\n    , inKeySet\n    , getHeaderMap\n    , getKeySig\n    , getTempoSig\n    , getTitle\n    , diatonicScale\n    , inScale\n    , isCOrSharpKey\n    , accidentalImplicitInKey\n    , dotFactor\n    , noteTicks\n    , chordalNoteTicks\n    , toMidiPitch\n    , midiTempo\n    , noteDuration\n    , chordalNoteDuration\n    , transposeKeySignatureBy\n    , normaliseModalKey\n\n",
+        "aliases": [
+          {
+            "name": "AbcTempo",
+            "comment": " The tempo when the tune is being played. This is usually represented\nas (for example) 1/4 = 120 - i.e. 120 querter notes per minute.\n\n* tempoNoteLength - the note length of a tempo definition\n* bpm - the beats per minute of a tempo Definition\n* unitNoteLength - the length of a 'unit note' in the ABC definition\n",
+            "args": [],
+            "type": "{ tempoNoteLength : Ratio.Rational , bpm : Int , unitNoteLength : Ratio.Rational }"
+          },
+          {
+            "name": "DiatonicScale",
+            "comment": " A diatonic scale presented as a list of notes in the scale.\n",
+            "args": [],
+            "type": "List Abc.ParseTree.KeyAccidental"
+          },
+          {
+            "name": "HeaderMap",
+            "comment": " A representation of the ABC headers as a Dictionary, taking the first definition\nof any header if multiple definitions are present in the ABC\n",
+            "args": [],
+            "type": "Dict.Dict Char Abc.ParseTree.Header"
+          },
+          {
+            "name": "MidiPitch",
+            "comment": " The pitch of a note expressed as a MIDI interval.\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "MidiTick",
+            "comment": " A MIDI tick - used to give a note duration.\n",
+            "args": [],
+            "type": "Int"
+          },
+          {
+            "name": "NoteTime",
+            "comment": " The time taken when a note is played before the next note.\n",
+            "args": [],
+            "type": "Float"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "accidentalImplicitInKey",
+            "comment": " Return an accidental if it is implicitly there in the (modified) key signature\n    attached to the pitch class of the note. In ABC, notes generally inherit\n    their (sharp, flat or natural) accidental nature from the key signature.\n",
+            "type": "Abc.ParseTree.PitchClass -> Abc.ParseTree.ModifiedKeySignature -> Maybe.Maybe Abc.ParseTree.Accidental"
+          },
+          {
+            "name": "chordalNoteDuration",
+            "comment": " Find a real world duration of a note in a chord by translating an ABC note duration together with\n  the chord duration using the tune's tempo and unit note length.\n",
+            "type": "Music.Notation.AbcTempo -> Ratio.Rational -> Ratio.Rational -> Music.Notation.NoteTime"
+          },
+          {
+            "name": "chordalNoteTicks",
+            "comment": " Find the MIDI duration of a note within a chord in standard ticks\n    (1/4 note == 480 ticks)\n",
+            "type": "Ratio.Rational -> Ratio.Rational -> Music.Notation.MidiTick"
+          },
+          {
+            "name": "diatonicScale",
+            "comment": " The set of keys (pitch classes and accidental) that comprise a diatonic scale\n    in the given key signature.\n",
+            "type": "Abc.ParseTree.KeySignature -> Music.Notation.DiatonicScale"
+          },
+          {
+            "name": "dotFactor",
+            "comment": " The amount by which you increase or decrease the duration of a (possibly multiply) dotted note.\n    For example A > B increases the duration of A and proportionally reduces that of B.\n    A << B decreases the duration of A and increases that of B by an even greater amount.  This function\n    calculates the increase or decrease.  The new duration will be given by:\n\n    duration * (1 +/- dotfactor i)\n\n*  i is the number of 'dot' indicators (< or >)\n\n",
+            "type": "Int -> Ratio.Rational"
+          },
+          {
+            "name": "getHeaderMap",
+            "comment": " A map (Header code => Header) for the first instance of each Header\n",
+            "type": "Abc.ParseTree.AbcTune -> Music.Notation.HeaderMap"
+          },
+          {
+            "name": "getKeySet",
+            "comment": " Get the set of key accidentals from the (possibly modified) key (if there is one in the tune).\n",
+            "type": "Abc.ParseTree.AbcTune -> Abc.ParseTree.KeySet"
+          },
+          {
+            "name": "getKeySig",
+            "comment": " Get the key signature (if any) from the tune.\n",
+            "type": "Abc.ParseTree.AbcTune -> Maybe.Maybe Abc.ParseTree.ModifiedKeySignature"
+          },
+          {
+            "name": "getTempoSig",
+            "comment": " Get the tempo signature (if any) from the tune.\n",
+            "type": "Abc.ParseTree.AbcTune -> Maybe.Maybe Abc.ParseTree.TempoSignature"
+          },
+          {
+            "name": "getTitle",
+            "comment": " Get the first Title (if any) from the tune.\n",
+            "type": "Abc.ParseTree.AbcTune -> Maybe.Maybe String"
+          },
+          {
+            "name": "inKeySet",
+            "comment": " Is the KeyAccidental is in the KeySet?\n",
+            "type": "Abc.ParseTree.KeyAccidental -> Abc.ParseTree.KeySet -> Bool"
+          },
+          {
+            "name": "inScale",
+            "comment": " Is the KeyAccidental in the diatonic scale?\n",
+            "type": "Abc.ParseTree.KeyAccidental -> Music.Notation.DiatonicScale -> Bool"
+          },
+          {
+            "name": "isCOrSharpKey",
+            "comment": " Is the key signature a sharp key or else a simple C Major key?\n",
+            "type": "Abc.ParseTree.KeySignature -> Bool"
+          },
+          {
+            "name": "keySet",
+            "comment": " The set of keys (pitch classes with accidental) that comprise the key signature.\n",
+            "type": "Abc.ParseTree.KeySignature -> Abc.ParseTree.KeySet"
+          },
+          {
+            "name": "midiTempo",
+            "comment": " The MIDI tempo measured in microseconds per beat.\n",
+            "type": "Music.Notation.AbcTempo -> Int"
+          },
+          {
+            "name": "modifiedKeySet",
+            "comment": " The set of keys (pitch classes with accidental) that comprise a modified key signature\n",
+            "type": "Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.KeySet"
+          },
+          {
+            "name": "normaliseModalKey",
+            "comment": " normalise a modal key signature to that of the equivalent major key\n\n  Maybe, once this is completed and tested, implement modalScale in terms of this\n\n",
+            "type": "Abc.ParseTree.KeySignature -> Abc.ParseTree.KeySignature"
+          },
+          {
+            "name": "noteDuration",
+            "comment": " Find a real world note duration by translating an ABC note duration using\n   the tune's tempo and unit note length.\n",
+            "type": "Music.Notation.AbcTempo -> Ratio.Rational -> Music.Notation.NoteTime"
+          },
+          {
+            "name": "noteTicks",
+            "comment": " Calculate a MIDI note duration from the note length.\n\n    Assume a standard unit note length of 1/4 and a standard number of ticks per unit (1/4) note of 480.\n",
+            "type": "Ratio.Rational -> Music.Notation.MidiTick"
+          },
+          {
+            "name": "notesInChromaticScale",
+            "comment": " Number of notes in a chromatic scale (i.e. 12)\n",
+            "type": "Int"
+          },
+          {
+            "name": "standardMidiTick",
+            "comment": " A standard MIDI tick - we use 1/4 note = 480 ticks.\n",
+            "type": "Music.Notation.MidiTick"
+          },
+          {
+            "name": "toMidiPitch",
+            "comment": " Convert an ABC note pitch to a MIDI pitch.\n\n*  AbcNote - the note in question\n*  ModifiedKeySignature - the key signature (possibly modified by extra accidentals)\n*  Accidentals - any notes in this bar which have previously been set explicitly to an accidental which are thus inherited by this note\n*  MidiPitch - the resulting pitch of the MIDI note\n\n",
+            "type": "Abc.ParseTree.AbcNote -> Abc.ParseTree.ModifiedKeySignature -> Music.Accidentals.Accidentals -> Music.Notation.MidiPitch"
+          },
+          {
+            "name": "transposeKeySignatureBy",
+            "comment": " Transpose a key signature by a given distance.\n",
+            "type": "Int -> Abc.ParseTree.ModifiedKeySignature -> Abc.ParseTree.ModifiedKeySignature"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Abc",
+        "comment": " Library for parsing tunes written in ABC notation -\n     see: http://abcnotation.com/wiki/abc:standard:v2.1\n\n# Functions\n@docs parse, parseKeySignature, parseError\n\n# Types\n@docs ParseError\n\n",
+        "aliases": [
+          {
+            "name": "ParseError",
+            "comment": " A parse error with context.\n",
+            "args": [],
+            "type": "{ msgs : List String, input : String, position : Int }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "parse",
+            "comment": " Entry point - Parse an ABC tune image.\n",
+            "type": "String -> Result.Result Abc.ParseError Abc.ParseTree.AbcTune"
+          },
+          {
+            "name": "parseError",
+            "comment": " Format a parse error as a string.\n",
+            "type": "Abc.ParseError -> String"
+          },
+          {
+            "name": "parseKeySignature",
+            "comment": " Parse a key signature.\n    A utility function for applications needing to parse key signatures in isolation\n    and returning them as a ModifiedKeySignature (where the modification is empty).\n",
+            "type": "String -> Result.Result Abc.ParseError Abc.ParseTree.ModifiedKeySignature"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Music.Octave",
+        "comment": " Move a tune up or down an octave\n\n\n# Functions\n@docs up\n    , down\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "down",
+            "comment": " Move the tune down octave.\n",
+            "type": "Abc.ParseTree.AbcTune -> Abc.ParseTree.AbcTune"
+          },
+          {
+            "name": "up",
+            "comment": " Move the tune up an octave.\n",
+            "type": "Abc.ParseTree.AbcTune -> Abc.ParseTree.AbcTune"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Music.Accidentals",
+        "comment": " A type-safe interface into handling\n    sets of Key Accidentals - i.e. pitch classes associated\n    with an explicit sharp, flat or natural modifier.\n\n    (improves type-safety of Dicts with user-defined types)\n\n# Types\n@docs Accidentals\n\n\n# Functions\n@docs empty\n    , add\n    , fromKeySet\n    , lookup\n    , member\n\n",
+        "aliases": [
+          {
+            "name": "Accidentals",
+            "comment": " A set of accidentals,  String is a proxy for PitchClass\n",
+            "args": [],
+            "type": "Dict.Dict String Abc.ParseTree.Accidental"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "add",
+            "comment": " add an accidental to the set\n",
+            "type": "Abc.ParseTree.PitchClass -> Abc.ParseTree.Accidental -> Music.Accidentals.Accidentals -> Music.Accidentals.Accidentals"
+          },
+          {
+            "name": "empty",
+            "comment": " create an empty set of Key Accidentals\n",
+            "type": "Music.Accidentals.Accidentals"
+          },
+          {
+            "name": "fromKeySet",
+            "comment": " build Accidentals from a KeySet\n",
+            "type": "Abc.ParseTree.KeySet -> Music.Accidentals.Accidentals"
+          },
+          {
+            "name": "lookup",
+            "comment": " lookup a pitch class and see of it exists in the Accidentals set\n",
+            "type": "Abc.ParseTree.PitchClass -> Music.Accidentals.Accidentals -> Maybe.Maybe Abc.ParseTree.Accidental"
+          },
+          {
+            "name": "member",
+            "comment": " lookup a KeyAccidental and see if it's a member of the Accidentals set\n    (i.e. the value of the Accidental matches for the supplied pitch)\n",
+            "type": "Abc.ParseTree.KeyAccidental -> Music.Accidentals.Accidentals -> Bool"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Abc.Canonical",
+        "comment": " Module for converting an ABC Tune parse tree to a canonical ABC string,\n\n\n\n# Functions\n@docs fromTune, fromResult, abcNote, abcChord, tuplet\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "abcChord",
+            "comment": " Pretty-print a chord.\n",
+            "type": "Abc.ParseTree.AbcChord -> String"
+          },
+          {
+            "name": "abcNote",
+            "comment": " Pretty-print a note.\n",
+            "type": "Abc.ParseTree.AbcNote -> String"
+          },
+          {
+            "name": "fromResult",
+            "comment": " Translate a parse Result containing an ABC Tune parse tree to a Result containing a canonical ABC String.\n",
+            "type": "Result.Result String Abc.ParseTree.AbcTune -> Result.Result String String"
+          },
+          {
+            "name": "fromTune",
+            "comment": " Translate an ABC Tune parse tree to a canonical ABC String.\n",
+            "type": "Abc.ParseTree.AbcTune -> String"
+          },
+          {
+            "name": "tuplet",
+            "comment": " Pretty-print a tuplet.\n",
+            "type": "Abc.ParseTree.TupletSignature -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Abc.ParseTree",
+        "comment": " The ABC parse tree.\n\n# Data Types\n@docs AbcTune\n    , TuneHeaders\n    , TuneBody\n    , BodyPart\n    , MusicLine\n    , Header\n    , Music\n    , AbcNote\n    , AbcChord\n    , Bar\n    , Thickness\n    , Repeat\n    , NoteDuration\n    , KeySignature\n    , ModifiedKeySignature\n    , KeyAccidental\n    , KeySet\n    , MeterSignature\n    , TempoSignature\n    , TupletSignature\n    , AnnotationPlacement\n    , Mode\n    , Accidental\n    , PitchClass\n    , Broken\n\n# Functions  (constants)\n@docs middlecOctave\n\n",
+        "aliases": [
+          {
+            "name": "AbcChord",
+            "comment": " A Chord.\n",
+            "args": [],
+            "type": "{ notes : List Abc.ParseTree.AbcNote , duration : Abc.ParseTree.NoteDuration }"
+          },
+          {
+            "name": "AbcNote",
+            "comment": " A Note.\n",
+            "args": [],
+            "type": "{ pitchClass : Abc.ParseTree.PitchClass , accidental : Maybe.Maybe Abc.ParseTree.Accidental , octave : Int , duration : Abc.ParseTree.NoteDuration , tied : Bool }"
+          },
+          {
+            "name": "AbcTune",
+            "comment": " A Tune.\n",
+            "args": [],
+            "type": "( Abc.ParseTree.TuneHeaders, Abc.ParseTree.TuneBody )"
+          },
+          {
+            "name": "Bar",
+            "comment": " A Bar line:\n\n*  thickness - the thickness of vertical lines in the bar\n*  repeat - the type (if any) of a repeat marker for the section\n*  iteration - the section end may be iteration 1 or 2.\n",
+            "args": [],
+            "type": "{ thickness : Abc.ParseTree.Thickness , repeat : Maybe.Maybe Abc.ParseTree.Repeat , iteration : Maybe.Maybe Int }"
+          },
+          {
+            "name": "KeyAccidental",
+            "comment": " A Key Accidental (A modification to a standard key for one pitch in the scale).\n",
+            "args": [],
+            "type": "( Abc.ParseTree.PitchClass, Abc.ParseTree.Accidental )"
+          },
+          {
+            "name": "KeySet",
+            "comment": " A set of accidentals within a key signature.\n",
+            "args": [],
+            "type": "List Abc.ParseTree.KeyAccidental"
+          },
+          {
+            "name": "KeySignature",
+            "comment": " A Key Signature.\n",
+            "args": [],
+            "type": "{ pitchClass : Abc.ParseTree.PitchClass , accidental : Maybe.Maybe Abc.ParseTree.Accidental , mode : Abc.ParseTree.Mode }"
+          },
+          {
+            "name": "MeterSignature",
+            "comment": " A Meter Signature - e.g. 3/4.\n",
+            "args": [],
+            "type": "( Int, Int )"
+          },
+          {
+            "name": "ModifiedKeySignature",
+            "comment": " A Key Signature with modifications (possibly empty)\n    This is used for non-diatonic modes where intervals may be greater than two semitones\n    (for example as found in Klezmer).\n",
+            "args": [],
+            "type": "( Abc.ParseTree.KeySignature, List Abc.ParseTree.KeyAccidental )"
+          },
+          {
+            "name": "MusicLine",
+            "comment": " A line of musical score up to eol.\n",
+            "args": [],
+            "type": "List Abc.ParseTree.Music"
+          },
+          {
+            "name": "NoteDuration",
+            "comment": " A Note Duration - e.g. 1/4.\n",
+            "args": [],
+            "type": "Ratio.Rational"
+          },
+          {
+            "name": "TempoSignature",
+            "comment": " A Tempo Signature - for example:\n\n*  1/4=120\n*  1/4 3/8 1/4 3/8=40   (up to 4 note lengths allowed)\n*  \"Allegro\" 1/4=120\n*  3/8=50 \"Slowly\".\n",
+            "args": [],
+            "type": "{ noteLengths : List Ratio.Rational , bpm : Int , marking : Maybe.Maybe String }"
+          },
+          {
+            "name": "TuneBody",
+            "comment": " A Tune Body.\n",
+            "args": [],
+            "type": "List Abc.ParseTree.BodyPart"
+          },
+          {
+            "name": "TuneHeaders",
+            "comment": " A List of Tune Headers.\n",
+            "args": [],
+            "type": "List Abc.ParseTree.Header"
+          },
+          {
+            "name": "TupletSignature",
+            "comment": " A tuplet signature:\n    put p notes into the time of q the next r notes.\n",
+            "args": [],
+            "type": "( Int, Int, Int )"
+          }
+        ],
+        "types": [
+          {
+            "name": "Accidental",
+            "comment": " An Accidental.\n",
+            "args": [],
+            "cases": [
+              [
+                "Sharp",
+                []
+              ],
+              [
+                "Flat",
+                []
+              ],
+              [
+                "DoubleSharp",
+                []
+              ],
+              [
+                "DoubleFlat",
+                []
+              ],
+              [
+                "Natural",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "AnnotationPlacement",
+            "comment": " An Annotation placement.\n",
+            "args": [],
+            "cases": [
+              [
+                "AboveNextSymbol",
+                []
+              ],
+              [
+                "BelowNextSymbol",
+                []
+              ],
+              [
+                "LeftOfNextSymbol",
+                []
+              ],
+              [
+                "RightOfNextSymbol",
+                []
+              ],
+              [
+                "Discretional",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "BodyPart",
+            "comment": " A Tune Body part\n",
+            "args": [],
+            "cases": [
+              [
+                "Score",
+                [
+                  "Abc.ParseTree.MusicLine"
+                ]
+              ],
+              [
+                "BodyInfo",
+                [
+                  "Abc.ParseTree.Header"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Broken",
+            "comment": " A broken rhythm operator - one or more < or >.\n",
+            "args": [],
+            "cases": [
+              [
+                "LeftArrow",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "RightArrow",
+                [
+                  "Int"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Header",
+            "comment": " An ABC Tune Header.\n",
+            "args": [],
+            "cases": [
+              [
+                "Area",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Book",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Composer",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Discography",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "FileUrl",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Group",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "History",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Instruction",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Key",
+                [
+                  "Abc.ParseTree.ModifiedKeySignature"
+                ]
+              ],
+              [
+                "UnitNoteLength",
+                [
+                  "Abc.ParseTree.NoteDuration"
+                ]
+              ],
+              [
+                "Meter",
+                [
+                  "Maybe.Maybe Abc.ParseTree.MeterSignature"
+                ]
+              ],
+              [
+                "Macro",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Notes",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Origin",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Parts",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Tempo",
+                [
+                  "Abc.ParseTree.TempoSignature"
+                ]
+              ],
+              [
+                "Rhythm",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Remark",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Source",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "SymbolLine",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Title",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "UserDefined",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Voice",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "WordsAfter",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "WordsAligned",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "ReferenceNumber",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Transcription",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "FieldContinuation",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Comment",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "UnsupportedHeader",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Mode",
+            "comment": " A Mode.\n",
+            "args": [],
+            "cases": [
+              [
+                "Major",
+                []
+              ],
+              [
+                "Minor",
+                []
+              ],
+              [
+                "Ionian",
+                []
+              ],
+              [
+                "Dorian",
+                []
+              ],
+              [
+                "Phrygian",
+                []
+              ],
+              [
+                "Lydian",
+                []
+              ],
+              [
+                "Mixolydian",
+                []
+              ],
+              [
+                "Aeolian",
+                []
+              ],
+              [
+                "Locrian",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Music",
+            "comment": " The 'score' part of Music.\n",
+            "args": [],
+            "cases": [
+              [
+                "Barline",
+                [
+                  "Abc.ParseTree.Bar"
+                ]
+              ],
+              [
+                "Note",
+                [
+                  "Abc.ParseTree.AbcNote"
+                ]
+              ],
+              [
+                "BrokenRhythmPair",
+                [
+                  "Abc.ParseTree.AbcNote",
+                  "Abc.ParseTree.Broken",
+                  "Abc.ParseTree.AbcNote"
+                ]
+              ],
+              [
+                "Rest",
+                [
+                  "Abc.ParseTree.NoteDuration"
+                ]
+              ],
+              [
+                "Tuplet",
+                [
+                  "Abc.ParseTree.TupletSignature",
+                  "List Abc.ParseTree.AbcNote"
+                ]
+              ],
+              [
+                "Decoration",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Slur",
+                [
+                  "Char"
+                ]
+              ],
+              [
+                "GraceNote",
+                [
+                  "Bool",
+                  "List Abc.ParseTree.AbcNote"
+                ]
+              ],
+              [
+                "Annotation",
+                [
+                  "Abc.ParseTree.AnnotationPlacement",
+                  "String"
+                ]
+              ],
+              [
+                "ChordSymbol",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Chord",
+                [
+                  "Abc.ParseTree.AbcChord"
+                ]
+              ],
+              [
+                "Inline",
+                [
+                  "Abc.ParseTree.Header"
+                ]
+              ],
+              [
+                "Spacer",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "Ignore",
+                []
+              ],
+              [
+                "Continuation",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "PitchClass",
+            "comment": " A white note on the piano.\n",
+            "args": [],
+            "cases": [
+              [
+                "A",
+                []
+              ],
+              [
+                "B",
+                []
+              ],
+              [
+                "C",
+                []
+              ],
+              [
+                "D",
+                []
+              ],
+              [
+                "E",
+                []
+              ],
+              [
+                "F",
+                []
+              ],
+              [
+                "G",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Repeat",
+            "comment": " A Repeat in a Bar line.\n",
+            "args": [],
+            "cases": [
+              [
+                "Begin",
+                []
+              ],
+              [
+                "End",
+                []
+              ],
+              [
+                "BeginAndEnd",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Thickness",
+            "comment": " A bar line Thickness.\n",
+            "args": [],
+            "cases": [
+              [
+                "Thin",
+                []
+              ],
+              [
+                "ThinThin",
+                []
+              ],
+              [
+                "ThinThick",
+                []
+              ],
+              [
+                "ThickThin",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "middlecOctave",
+            "comment": " The octave number of middle C in MIDI parlance.\n",
+            "type": "Int"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -62932,6 +65871,31 @@
     ]
   },
   {
+    "name": "rtfeldman/hex",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Hex",
+        "comment": " Convert to and from Hex strings.\n\n@docs fromString, toString\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "fromString",
+            "comment": " Convert a hexdecimal string such as \"abc94f\" to a decimal integer.\n\n    Hex.fromString \"a5\" == Ok 165\n    Hex.fromString \"hat\" == Err \"invalid hexadecimal string\"\n",
+            "type": "String -> Result.Result String Int"
+          },
+          {
+            "name": "toString",
+            "comment": " Convert a decimal integer to a hexdecimal string such as \"abc94f\"\n\n    Hex.toString 165 == Ok \"a5\"\n",
+            "type": "Int -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "rtfeldman/html-test-runner",
     "version": "2.0.0",
     "docs": [
@@ -63538,7 +66502,7 @@
   },
   {
     "name": "simonh1000/elm-charts",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "docs": [
       {
         "name": "Chart",
@@ -63713,6 +66677,26 @@
             "name": "sendCheckExpired",
             "comment": " `sendCheckExpired` is similar to `send` but, on receiving a 401, it carries out a further check to\ndetermine whether the token has expired.\n",
             "type": "String -> (Result.Result Jwt.JwtError a -> msg) -> Http.Request a -> Platform.Cmd.Cmd msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "splodingsocks/elm-add-import",
+    "version": "1.0.4",
+    "docs": [
+      {
+        "name": "AddImport",
+        "comment": " Add an import to an Elm module.\n\nWrite an example here:\n\n``` elm\n```\n\n@docs addImport\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "addImport",
+            "comment": " ",
+            "type": "String -> Maybe.Maybe String -> String -> Result.Result String String"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -68006,7 +70990,7 @@
   },
   {
     "name": "turboMaCk/chae-tree",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Chae.Tree",
@@ -68014,7 +70998,7 @@
         "aliases": [
           {
             "name": "Tree",
-            "comment": " Tree\n",
+            "comment": " ",
             "args": [
               "a"
             ],
@@ -68036,12 +71020,12 @@
           {
             "name": "map",
             "comment": " Map function over tree\nSimilar to `List.map` but working with trees\n",
-            "type": "(a -> Chae.Id.Id) -> (a -> b) -> Chae.Tree.Tree a -> Chae.Tree.Tree b"
+            "type": "(a -> b) -> Chae.Tree.Tree a -> Chae.Tree.Tree b"
           },
           {
             "name": "map2",
             "comment": " Map function over two trees to produce new tree from both combined\nSimilar to `List.map2` but working with trees\n",
-            "type": "(a -> b -> Chae.Id.Id) -> (a -> b -> c) -> Chae.Tree.Tree a -> Chae.Tree.Tree b -> Chae.Tree.Tree c"
+            "type": "(a -> b -> c) -> Chae.Tree.Tree a -> Chae.Tree.Tree b -> Chae.Tree.Tree c"
           },
           {
             "name": "nil",
@@ -68066,7 +71050,7 @@
           {
             "name": "zip",
             "comment": " Zip two trees to tree of tuple\nSimilar to `List.zip` but working with trees\n",
-            "type": "(a -> b -> Chae.Id.Id) -> Chae.Tree.Tree a -> Chae.Tree.Tree b -> Chae.Tree.Tree ( a, b )"
+            "type": "Chae.Tree.Tree a -> Chae.Tree.Tree b -> Chae.Tree.Tree ( a, b )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -68078,11 +71062,20 @@
         "types": [
           {
             "name": "Node",
-            "comment": " Node\n",
+            "comment": " ",
             "args": [
               "a"
             ],
-            "cases": []
+            "cases": [
+              [
+                "Node",
+                [
+                  "Chae.Id.Id",
+                  "a",
+                  "List (Chae.Node.Node a)"
+                ]
+              ]
+            ]
           }
         ],
         "values": [
@@ -68098,13 +71091,13 @@
           },
           {
             "name": "flatMap",
-            "comment": " Map and flatten\n\n    n = node \"1\" 1 [ node \"2\" 2 [], node \"3\" 3 [ node \"4\" 4 []]]\n\n    flatMap toId (\\a -> node \"2\" (a * 2) []) n == Node \"1\" 2 ([Node \"2\" 4 [],Node \"3\" 6 ([Node \"4\" 8 []])])\n    flatMap toId (\\a -> node \"2\" (a *2) [node  \"1\" (a * 3) []]) m == Node \"1\" 2 ([Node \"1\" 3 [],Node \"2\" 4 ([Node \"1\" 6 []]),Node \"3\" 6 ([Node \"1\" 9 [],Node \"4\" 8 ([Node \"1\" 12 []])])])\n",
-            "type": "(a -> Chae.Id.Id) -> (a -> Chae.Node.Node b) -> Chae.Node.Node a -> Chae.Node.Node b"
+            "comment": " Map and flatten\n\n    n = node \"1\" 1 [ node \"2\" 2 [], node \"3\" 3 [ node \"4\" 4 []]]\n\n    flatMap (\\a -> node \"2\" (a * 2) []) n == Node \"1\" 2 ([Node \"2\" 4 [],Node \"3\" 6 ([Node \"4\" 8 []])])\n    flatMap (\\a -> node \"2\" (a * 2) [ node  \"1\" (a * 3) [] ] ) m == Node \"1\" 2 ([Node \"1\" 3 [],Node \"2\" 4 ([Node \"1\" 6 []]),Node \"3\" 6 ([Node \"1\" 9 [],Node \"4\" 8 ([Node \"1\" 12 []])])])\n",
+            "type": "(a -> Chae.Node.Node b) -> Chae.Node.Node a -> Chae.Node.Node b"
           },
           {
             "name": "flatten",
             "comment": " Flatten Node of Nodes to Node.\n",
-            "type": "(Chae.Id.Id -> Chae.Id.Id -> Chae.Id.Id) -> Chae.Node.Node (Chae.Node.Node a) -> Chae.Node.Node a"
+            "type": "Chae.Node.Node (Chae.Node.Node a) -> Chae.Node.Node a"
           },
           {
             "name": "hasChildren",
@@ -68118,17 +71111,17 @@
           },
           {
             "name": "map",
-            "comment": " Map function on tree\nproduces new modified tree\n\n   map toId ((+) 1) (addChild \"2\" 2 (singleton \"1\" 1)) == Node \"1\" 2 ([Node \"2\" 3 []])\n   map (\\n -> n + 1 |> toId) ((+) 1) (addChild \"2\" 2 (singleton \"1\" 1)) == Node \"2\" 2 ([Node \"3\" 3 []])\n",
-            "type": "(a -> Chae.Id.Id) -> (a -> b) -> Chae.Node.Node a -> Chae.Node.Node b"
+            "comment": " Map function on tree\nproduces new modified tree\n\n    map ((+) 1) (addChild \"2\" 2 (singleton \"1\" 1)) == Node \"1\" 2 ([Node \"2\" 3 []])\n",
+            "type": "(a -> b) -> Chae.Node.Node a -> Chae.Node.Node b"
           },
           {
             "name": "map2",
             "comment": " Similar to map, but takes two Nodes and produce new one by combining items of both\n",
-            "type": "(a -> b -> Chae.Id.Id) -> (a -> b -> c) -> Chae.Node.Node a -> Chae.Node.Node b -> Chae.Node.Node c"
+            "type": "(a -> b -> c) -> Chae.Node.Node a -> Chae.Node.Node b -> Chae.Node.Node c"
           },
           {
             "name": "node",
-            "comment": " Create node. Alias for Node constructor\n\n    node \"1\" 1 [] == Node \"1\" 1 []\n    node \"1\" 1 [ node \"2\" 2 [] ] == Node \"1\" 1 ([Node \"2\" 2 []])\n",
+            "comment": " Create node. Alias for Node constructor (which was opaque in previous releases)\n\n    node \"1\" 1 [] == Node \"1\" 1 []\n    node \"1\" 1 [ node \"2\" 2 [] ] == Node \"1\" 1 ([Node \"2\" 2 []])\n",
             "type": "Chae.Id.Id -> b -> List (Chae.Node.Node b) -> Chae.Node.Node b"
           },
           {
@@ -68184,33 +71177,31 @@
   },
   {
     "name": "turboMaCk/grid-solver",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "Grid",
-        "comment": " Build awesome Grid layouts in Elm.\n\nThis library provides general abstraction for solving grid layout problems.\nThe idea is to use **ordered list of items with dimmensions** and **number of columns**\nto solve whole layout of grid. It's designed to be easy to use and extremly deterministic\nabstraction with simple integration to any Html, SVG or Canvas based APP.\n\n# Definition\n@docs Position, Item\n\n# Api\n@docs solve\n",
+        "comment": " Build awesome Grid layouts in Elm.\n\nThis library provides general abstraction for solving grid layout problems.\nThe idea is to use **ordered list of items with dimmensions** and **number of columns**\nto solve whole layout of grid. It's designed to be easy to use and extremly deterministic\nabstraction with simple integration to any Html, SVG or Canvas based APP.\n\n# Definition\n@docs Position, Size\n\n# Api\n@docs solve\n",
         "aliases": [
-          {
-            "name": "Item",
-            "comment": "\n    type alias GridItem a =\n        { a\n            | width : Int\n            , height : Int\n        }\n",
-            "args": [
-              "a"
-            ],
-            "type": "Types.GridItem a"
-          },
           {
             "name": "Position",
             "comment": "\n    type alias GridPosition =\n        { x : Int\n        , y : Int\n        }\n",
             "args": [],
             "type": "Types.GridPosition"
+          },
+          {
+            "name": "Size",
+            "comment": "\n    type alias GridSize =\n        { width : Int\n        , height : Int\n        }\n",
+            "args": [],
+            "type": "Types.GridSize"
           }
         ],
         "types": [],
         "values": [
           {
             "name": "solve",
-            "comment": " This function is heart and the only public function\nthis library provides. It calculates grid layout\nfor given number of columns and items with dimmensions.\nYou can then use result (List of tuples with `Position` and `Item`)\nin you're views to simply render layout as you wish.\nOrder of items is guaranteed to stay same.\n\n- `Int` - number of Columns\n- `List` - Grid items\n\n## Four column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|A|A|\n    -- 1 |A|A|A|A|\n    -- 2 |B|B|C|C|\n    -- 3 | | |C|C|\n\n    solve 4\n        [ { width = 4, height = 2 }\n        , { width = 2, height = 1 }\n        , { width = 2, height = 2 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 4, height = 2 } )\n    , ( { x = 0, y = 2 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 2 }, { width = 2, height = 2 } )\n    ]\n\n\n## Two column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1\n    -- 0 |A|A|\n    -- 1 |B| |\n    -- 2 |B| |\n    -- 3 |C|C|\n\n    solve 2\n        [ { width = 2, height = 1 }\n        , { width = 1, height = 2 }\n        , { width = 2, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 1 }, { width = 1, height = 2 } )\n    , ( { x = 0, y = 3 }, { width = 2, height = 1 } )\n    ]\n\n## More complex layout:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|B|B|\n    -- 1 |C|C|B|B|\n    -- 2 | | |B|B|\n    -- 3 |D|D|D|D|\n\n    solve 4\n        [ { width = 2, height = 1 }\n        , { width = 2, height = 3 }\n        , { width = 2, height = 1 }\n        , { width = 4, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 0 }, { width = 2, height = 3 } )\n    , ( { x = 0, y = 1 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 3 }, { width = 4, height = 1 } )\n    ]\n",
-            "type": "Int -> List (Grid.Item a) -> List ( Grid.Position, Grid.Item a )"
+            "comment": " This function is heart and the only public function\nthis library provides. It calculates grid layout\nfor given number of columns and items with dimmensions.\nYou can then use result (List of tuples with `Position` and `Item`)\nin you're views to simply render layout as you wish.\nOrder of items is guaranteed to stay same.\n\n- `(a -> Size)` Function from item to Size\n- `Int` - number of Columns\n- `List` - Grid items\n\n## Four column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|A|A|\n    -- 1 |A|A|A|A|\n    -- 2 |B|B|C|C|\n    -- 3 | | |C|C|\n\n    solve identity 4\n        [ { width = 4, height = 2 }\n        , { width = 2, height = 1 }\n        , { width = 2, height = 2 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 4, height = 2 } )\n    , ( { x = 0, y = 2 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 2 }, { width = 2, height = 2 } )\n    ]\n\n\n## Two column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1\n    -- 0 |A|A|\n    -- 1 |B| |\n    -- 2 |B| |\n    -- 3 |C|C|\n\n    solve identity 2\n        [ { width = 2, height = 1 }\n        , { width = 1, height = 2 }\n        , { width = 2, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 1 }, { width = 1, height = 2 } )\n    , ( { x = 0, y = 3 }, { width = 2, height = 1 } )\n    ]\n\n## More complex layout:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|B|B|\n    -- 1 |C|C|B|B|\n    -- 2 | | |B|B|\n    -- 3 |D|D|D|D|\n\n    solve identity 4\n        [ { width = 2, height = 1 }\n        , { width = 2, height = 3 }\n        , { width = 2, height = 1 }\n        , { width = 4, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 0 }, { width = 2, height = 3 } )\n    , ( { x = 0, y = 1 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 3 }, { width = 4, height = 1 } )\n    ]\n",
+            "type": "(a -> Grid.Size) -> Int -> List a -> List ( Grid.Position, a )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
