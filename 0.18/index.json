@@ -15376,7 +15376,7 @@
   },
   {
     "name": "NoRedInk/elm-rails",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "docs": [
       {
         "name": "Rails.Decode",
@@ -15403,71 +15403,424 @@
       },
       {
         "name": "Rails",
-        "comment": "\n\n## Requests\n@docs Error, get, post, send, request\n\n## Decoding\n@docs decoder, always\n\n## Customizing\n@docs csrfToken, expectRailsJson\n\n",
-        "aliases": [],
-        "types": [
+        "comment": "\n\n## Requests\n@docs Error, get, post, put, delete, decodeErrors, request\n\n## Customizing\n@docs csrfToken\n\n",
+        "aliases": [
           {
             "name": "Error",
             "comment": " The kinds of errors a Rails server may return.\n",
             "args": [
               "error"
             ],
-            "cases": [
-              [
-                "HttpError",
-                [
-                  "Http.Error"
-                ]
-              ],
-              [
-                "RailsError",
-                [
-                  "error"
-                ]
-              ]
-            ]
+            "type": "{ http : Http.Error, rails : Maybe.Maybe error }"
           }
         ],
+        "types": [],
         "values": [
-          {
-            "name": "always",
-            "comment": " Returns a `ResponseDecoder` which uses the same decoder for both success and\nfailures.\n",
-            "type": "Json.Decode.Decoder success -> Rails.ResponseDecoder success success"
-          },
           {
             "name": "csrfToken",
             "comment": " If there was a `<meta name=\"csrf-token\">` tag in the page's `<head>` when\n    elm-rails loaded, returns the value its `content` attribute had at that time.\n\n    Rails expects this value in the `X-CSRF-Token` header for non-`GET` requests as\n    a [CSRF countermeasure](http://guides.rubyonrails.org/security.html#csrf-countermeasures).\n",
             "type": "Result.Result String String"
           },
           {
-            "name": "decoder",
-            "comment": " Returns a `ResponseDecoder`.\n",
-            "type": "Json.Decode.Decoder success -> Json.Decode.Decoder error -> Rails.ResponseDecoder error success"
+            "name": "decodeErrors",
+            "comment": " Decode Rails-specific error information from a [`BadStatus`](http://package.elm-lang.org/packages/elm-lang/http/latest/Http#Error)\nresponse. (That is, a response whose status code is outside the 200 range.)\n\nThis is intended to be used with [`Http.send`](http://package.elm-lang.org/packages/elm-lang/http/1.0.0/Http#send)\nlike so:\n\n    import Dict\n    import Json.Decode exposing (list, string, at)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    requestHats : HatStyle -> Cmd Msg\n    requestHats style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n\n            getErrors =\n                at [ \"errors\", \"style\" ] string\n                    |> Rails.decodeErrors\n        in\n            list string\n                |> Rails.post url body\n                |> Http.send (getErrors >> HandleResponse)\n",
+            "type": "Json.Decode.Decoder railsError -> Result.Result Http.Error success -> Result.Result (Rails.Error railsError) success"
           },
           {
-            "name": "expectRailsJson",
-            "comment": " Think `Http.fromJson`, but with additional effort to parse a non-20x response as JSON.\n\n  * If the status code is in the 200 range, try to parse with the given `decoder.success`.\n  * If that succeeds, the result is `Ok` with the result.\n  * If the status code is outside the 200 range, try to parse with the given `decoder.failure`.\n  * If that succeeds, the result is `Err` with the result.\n  * If either parsing fails, the request as a whole fails.\n",
-            "type": "Rails.ResponseDecoder error success -> Http.Expect (Result.Result error success)"
+            "name": "delete",
+            "comment": " Send a DELETE request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    hats : Cmd msg\n    hats =\n        list hatDecoder\n            |> Rails.delete \"http://example.com/hat-categories/5\" Http.emptyBody\n            |> Http.send HandleResponse\n\n",
+            "type": "String -> Http.Body -> Json.Decode.Decoder val -> Http.Request val"
           },
           {
             "name": "get",
-            "comment": " Send a GET request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    getHats : Cmd msg\n    getHats =\n        Rails.decoder (list string) (succeed ())\n            |> Rails.get \"http://example.com/hat-categories.json\"\n            |> Rails.send HandleGetHatsResponse\n",
-            "type": "String -> Rails.ResponseDecoder error success -> Http.Request (Result.Result error success)"
+            "comment": " Send a GET request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    getHats : Cmd msg\n    getHats =\n        list hatDecoder\n            |> Rails.get \"http://example.com/hat-categories.json\"\n            |> Http.send HandleGetHatsResponse\n",
+            "type": "String -> Json.Decode.Decoder val -> Http.Request val"
           },
           {
             "name": "post",
-            "comment": " Send a POST request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    hats : Cmd msg\n    hats =\n        Rails.decoder (list string) (succeed ())\n            |> Rails.post \"http://example.com/hat-categories/new\" Http.emptyBody\n            |> Rails.send HandleResponse\n\n",
-            "type": "String -> Http.Body -> Rails.ResponseDecoder error success -> Http.Request (Result.Result error success)"
+            "comment": " Send a POST request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    hats : Cmd msg\n    hats =\n        list hatDecoder\n            |> Rails.post \"http://example.com/hat-categories/new\" Http.emptyBody\n            |> Http.send HandleResponse\n\n",
+            "type": "String -> Http.Body -> Json.Decode.Decoder val -> Http.Request val"
+          },
+          {
+            "name": "put",
+            "comment": " Send a PUT request to the given URL. Specify how to decode the response.\n\n    import Json.Decode exposing (list, string, succeed)\n    import Http\n    import Rails\n\n\n    hats : Cmd msg\n    hats =\n        list hatDecoder\n            |> Rails.put \"http://example.com/hat-categories/5\" revisedHatData\n            |> Http.send HandleResponse\n\n",
+            "type": "String -> Http.Body -> Json.Decode.Decoder val -> Http.Request val"
           },
           {
             "name": "request",
-            "comment": " Wraps `Http.request` while adding the following default headers:\n\n* `X-CSRF-Token` - set to `csrfToken` if it's an `Ok` and this request isn't a `GET`\n* `Content-Type` - `\"application/json\"`\n* `Accept` - `\"application/json, text/javascript, */*; q=0.01\"`\n* `X-Requested-With` - `\"XMLHttpRequest\"`\n\n    import Dict\n    import Json.Decode exposing (list, string)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    hatRequest : HatStyle -> Request (Result (ErrorList Field) Hat)\n    hatRequest style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n\n            success =\n                list string\n\n            failure =\n                Dict.fromList [ ( \"style\", HatStyle ) ]\n                    |> Rails.Decode.errors\n        in\n            Rails.request\n                { method = \"POST\"\n                , headers = []\n                , url = url\n                , body = body\n                , expect = expectRailsJson (Rails.decoder success failure)\n                , timeout = Nothing\n                , withCredentials = False\n                }\n",
+            "comment": " Wraps `Http.request` while adding the following default headers:\n\n* `X-CSRF-Token` - set to `csrfToken` if it's an `Ok` and this request isn't a `GET`\n* `Content-Type` - `\"application/json\"`\n* `Accept` - `\"application/json, text/javascript, */*; q=0.01\"`\n* `X-Requested-With` - `\"XMLHttpRequest\"`\n\nYou can specify additional headers in the `headers` field of the configuration record.\n\n    import Dict\n    import Json.Decode exposing (list, string)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    hatRequest : HatStyle -> Request (Result (ErrorList Field) Hat)\n    hatRequest style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n        in\n            Rails.request\n                { method = \"POST\"\n                , headers = []\n                , url = url\n                , body = body\n                , expect = Http.expectJson (list string)\n                , timeout = Nothing\n                , withCredentials = False\n                }\n",
             "type": "{ method : String , headers : List Http.Header , url : String , body : Http.Body , expect : Http.Expect a , timeout : Maybe.Maybe Time.Time , withCredentials : Bool } -> Http.Request a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "NoRedInk/elm-simple-fuzzy",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Simple.Fuzzy",
+        "comment": " Fuzzy match through a list of strings\n\n# Matching and Filtering\n\n@docs match, filter\n\n# Helpers\n\n@docs root\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "filter",
+            "comment": " `filter` will filter an arbitrary list of objects given a function that\nconverts the object to value you want to match on\n\n    let\n        languages =\n            [ { name = \"Elm\" }\n            , { name = \"Ruby\" }\n            , { name = \"Rust\" }\n            , { name = \"Haskell\" }\n            , { name = \"javascript\" }\n            , { name = \"English\" }\n            ]\n    in\n        filter .name \"el\" languages\n\n    -- Gives:\n    -- [ { name = \"Elm\" }\n    -- , { name = \"Haskell\"}\n    -- , { name = \"English\"}\n    -- ]\n\n",
+            "type": "(a -> String) -> String -> List a -> List a"
           },
           {
-            "name": "send",
-            "comment": " Send an HTTP request to Rails. This uses [`request`](#request) under the\nhood, which means that a CSRF token will automatically be passed, among\nother things. The Error handler uses a [`Rails.Error`](#Error), which includes\nmore information than the standard `Http.Error`.\n\n    import Dict\n    import Json.Decode exposing (list, string)\n    import Json.Encode as Encode\n    import Http\n    import Rails.Decode\n    import Rails\n\n\n    requestHats : HatStyle -> Cmd Msg\n    requestHats style =\n        let\n            body =\n                [ ( \"style\", encodeHatStyle style ) ]\n                    |> Encode.object\n                    |> Http.jsonBody\n\n            success =\n                list string\n\n            failure =\n                Dict.fromList [ ( \"style\", HatStyle ) ]\n                    |> Rails.Decode.errors\n        in\n            Rails.decoder success failure\n                |> Rails.post url body\n                |> Rails.send HandleResponse\n",
-            "type": "(Result.Result (Rails.Error error) success -> msg) -> Http.Request (Result.Result error success) -> Platform.Cmd.Cmd msg"
+            "name": "match",
+            "comment": " `match` allows you to see if the letters of your query\nmatch within a bigger string.\n\n    match \"poo\" \"Poo\" --> True\n    match \"poo\" \"Police\" --> False\n    match \"poo\" \"Please be polite Online!\" --> True\n\n",
+            "type": "String -> String -> Bool"
+          },
+          {
+            "name": "root",
+            "comment": " `root` strips a word down to just the lower case version of itself\nwithout any punctuation or spacing.\n\n    root \"Wow, I'm excited!!!!\" --> \"wowimexcited\"\n\n",
+            "type": "String -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "NoRedInk/nri-elm-css",
+    "version": "1.6.1",
+    "docs": [
+      {
+        "name": "Nri.Stylers",
+        "comment": " Helper module for working with fonts\n\n@docs makeFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "makeFont",
+            "comment": "\ntakes a size and a color and creates a font\n",
+            "type": "Css.FontSize a -> Css.ColorValue b -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Nri",
+        "comment": " A collection of helpers for working with NoRedInk projects\n@docs name\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "name",
+            "comment": " NoRedInk's name!\n",
+            "type": "String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Nri.Fonts",
+        "comment": " Fonts for NoRedInk projects\n\n@docs baseFont, quizFont\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "baseFont",
+            "comment": " Font for instructions, headers, and pretty much everything else\n",
+            "type": "Css.Mixin"
+          },
+          {
+            "name": "quizFont",
+            "comment": " Font for question sentences, or most interactable or graded fields\n",
+            "type": "Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Nri.Accessibility",
+        "comment": " Helper module for functions that make it easier to write accessible code.\n    Role, aria, label-related helpers, color-fallbacks, etc.\n\n@docs invisibleText\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "invisibleText",
+            "comment": "\ninvisibleText is most frequently useful on labels.\n\nFor instance, if there's an input element with a placeholder,\nsomeone on a screenreader would miss the content of that placeholder.\n\nWith invisibleText, we can avoid redundancy across visible label\nand placeholder, but maintain semantic meaning of the input for other users.\n",
+            "type": "Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Nri.Css.Extra",
+        "comment": " Put helper functions, properties, mixins, and anything else that might be missing from elm-css. If it gets used enough and the use case is in the scope of elm-css, we can open PRs/Issues to discuss or add the features to that package.\n\n@docs lineHeightNum\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "lineHeightNum",
+            "comment": " Use a Css.Num value for line height\n",
+            "type": "Float -> Css.Mixin"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Nri.Colors",
+        "comment": " Helper module for working with colors\n\n@docs black, blue, blueDark, blueDark5, blueDark70, blueLighter, coral, coralLighter, coralLightest, gray, grayDark, grayDarker, grayLighter, grayLightest, green, greenLighter, greenLightest, linkBlue, linkBlueMed, orange, orangeDark, orangeLighter, purple, purpleLighter, purpleLightest, turquoise, turquoiseLighter, turquoiseLightest,  white, yellowDark\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "black",
+            "comment": " black\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blue",
+            "comment": " blue\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark",
+            "comment": " blueDark\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark5",
+            "comment": " blueDark5\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueDark70",
+            "comment": " blueDark70\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "blueLighter",
+            "comment": " blueLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coral",
+            "comment": " coral\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coralLighter",
+            "comment": " coralLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "coralLightest",
+            "comment": " coralLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "gray",
+            "comment": " gray\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayDark",
+            "comment": " grayDark\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayDarker",
+            "comment": " grayDarker\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayLighter",
+            "comment": " grayLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "grayLightest",
+            "comment": " grayLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "green",
+            "comment": " green\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "greenLighter",
+            "comment": " greenLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "greenLightest",
+            "comment": " greenLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "linkBlue",
+            "comment": " linkBlue\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "linkBlueMed",
+            "comment": " linkBlueMed\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "orange",
+            "comment": " orange\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "orangeDark",
+            "comment": " orangeDark\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "orangeLighter",
+            "comment": " orangeLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "purple",
+            "comment": " purple\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "purpleLighter",
+            "comment": " purpleLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "purpleLightest",
+            "comment": " purpleLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoise",
+            "comment": " turquoise\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoiseLighter",
+            "comment": " turquoiseLighter\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "turquoiseLightest",
+            "comment": " turquoiseLightest\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "white",
+            "comment": " white\n",
+            "type": "Css.Color"
+          },
+          {
+            "name": "yellowDark",
+            "comment": " yellowDark\n",
+            "type": "Css.Color"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "RomanErnst/updated-list",
+    "version": "3.0.0",
+    "docs": [
+      {
+        "name": "UpdatedList",
+        "comment": " This library helps with updating view that have list structure\n\n# Definitions\n@docs Id, ListItemAction, Model\n\n# Creation and recreation\n@docs init, updateItems, getItems\n\n# Update\n@docs updateList\n\n# View\n@docs createItemsView\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Id",
+            "comment": " Unique id for each node in list\n",
+            "args": [],
+            "cases": []
+          },
+          {
+            "name": "ListItemAction",
+            "comment": " Actions that can be performed to list\n",
+            "args": [
+              "updateElementMsg"
+            ],
+            "cases": [
+              [
+                "AddListItem",
+                [
+                  "UpdatedList.Id"
+                ]
+              ],
+              [
+                "RemoveListItem",
+                [
+                  "UpdatedList.Id"
+                ]
+              ],
+              [
+                "SaveListItem",
+                [
+                  "UpdatedList.Id"
+                ]
+              ],
+              [
+                "EditListItem",
+                [
+                  "UpdatedList.Id"
+                ]
+              ],
+              [
+                "CancelEditListItem",
+                [
+                  "UpdatedList.Id"
+                ]
+              ],
+              [
+                "UpdateListItem",
+                [
+                  "UpdatedList.Id",
+                  "updateElementMsg"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Model",
+            "comment": " Model that contains elements with type **a**\n",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "createItemsView",
+            "comment": " Create list of views\n",
+            "type": "UpdatedList.Model a -> (UpdatedList.Id -> a -> Html.Html msg) -> (UpdatedList.Id -> a -> Html.Html msg) -> (UpdatedList.Id -> a -> Html.Html msg) -> List (Html.Html msg)"
+          },
+          {
+            "name": "getItems",
+            "comment": " Get items back from model\n",
+            "type": "UpdatedList.Model a -> List a"
+          },
+          {
+            "name": "init",
+            "comment": " Create initial model\n",
+            "type": "{ itemList : List a, emptyElement : a } -> UpdatedList.Model a"
+          },
+          {
+            "name": "updateItems",
+            "comment": " Update items in model\n",
+            "type": "UpdatedList.Model a -> List a -> UpdatedList.Model a"
+          },
+          {
+            "name": "updateList",
+            "comment": " Update internal model (add, remove, etc.)\n",
+            "type": "UpdatedList.ListItemAction updateElementMsg -> UpdatedList.Model a -> (updateElementMsg -> a -> a) -> UpdatedList.Model a"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -17290,8 +17643,28 @@
     ]
   },
   {
+    "name": "aardito2/realm",
+    "version": "1.0.5",
+    "docs": [
+      {
+        "name": "Realm",
+        "comment": " This library exposes a single helper function to help interface with the Realm npm package.\n\n# updateState\n@docs updateState\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "updateState",
+            "comment": " Given an update function and an outgoing port to send your Elm model into JavaScript, returns a new update function which automatically sends the new model to JavaScript after running the update.\n",
+            "type": "(msg -> model -> ( model, Platform.Cmd.Cmd msg )) -> Realm.SendPort msg model -> msg -> model -> ( model, Platform.Cmd.Cmd msg )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "abadi199/elm-input-extra",
-    "version": "4.0.1",
+    "version": "4.2.2",
     "docs": [
       {
         "name": "MaskedInput.Text",
@@ -17390,8 +17763,78 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
+        "name": "DatePicker",
+        "comment": " DatePicker\n\n# View\n@docs datePicker, Options, defaultOptions, NameOfDays\n\n# Initial\n@docs initialState, initialStateWithToday, initialCmd\n\n# Internal State\n@docs State\n",
+        "aliases": [
+          {
+            "name": "NameOfDays",
+            "comment": " Configuration for name of days in a week.\n\nThis will be displayed as the calendar's header.\nDefault:\n * sunday = \"Su\"\n * monday = \"Mo\"\n * tuesday = \"Tu\"\n * wednesday = \"We\"\n * thursday = \"Th\"\n * friday = \"Fr\"\n * saturday = \"Sa\"\n",
+            "args": [],
+            "type": "{ sunday : String , monday : String , tuesday : String , wednesday : String , thursday : String , friday : String , saturday : String }"
+          },
+          {
+            "name": "Options",
+            "comment": " Configuration of the DatePicker\n * `onChange` is the message for when the selected value in the multi-select is changed. (Required)\n * `toMsg` is the Msg for updating internal `State` of the DatePicker element. (Required)\n * `nameOfDays` is the configuration for name of days in a week. (Optional)\n * `firstDayOfWeek` is the first day of the week. (Optional)\n * `formatter` is the Date to String formatter for the input value. (Optional)\n * `titleFormatter` is the Date to String formatter for the dialog's title. (Optional)\n * `fullDateFormatter` is the Date to String formatter for the dialog's footer. (Optional)\n\n",
+            "args": [
+              "msg"
+            ],
+            "type": "{ onChange : Maybe.Maybe Date.Date -> msg , toMsg : DatePicker.State -> msg , nameOfDays : DatePicker.NameOfDays , firstDayOfWeek : Date.Day , formatter : Date.Date -> String , titleFormatter : Date.Date -> String , fullDateFormatter : Date.Date -> String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "State",
+            "comment": " Opaque type to keep track of the DatePicker internal state\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "datePicker",
+            "comment": " DatePicker view function.\n\nExample:\n\n    DatePicker.datePicker\n            datePickerOptions\n            [ class \"my-datepicker\" ]\n            model.datePickerState\n            model.value\n\n",
+            "type": "DatePicker.Options msg -> List (Html.Attribute msg) -> DatePicker.State -> Maybe.Maybe Date.Date -> Html.Html msg"
+          },
+          {
+            "name": "defaultOptions",
+            "comment": " Default configuration.\n\nRequires onChange and toMsg msgs.\n * `nameOfDays` see `NameOfDays` for the default values.\n * `firstDayOfWeek` Default: Sunday. (Optional)\n * `formatter` Default: `\"%m/%d/%Y\"` (Optional)\n * `titleFormatter`  Default: `\"%B %Y\"` (Optional)\n * `fullDateFormatter` Default:  `\"%A, %B %d, %Y\"` (Optional)\n\n",
+            "type": "(Maybe.Maybe Date.Date -> msg) -> (DatePicker.State -> msg) -> DatePicker.Options msg"
+          },
+          {
+            "name": "initialCmd",
+            "comment": " Initial Cmd to set the initial month to be displayed in the datepicker to the current month.\n",
+            "type": "(DatePicker.State -> msg) -> DatePicker.State -> Platform.Cmd.Cmd msg"
+          },
+          {
+            "name": "initialState",
+            "comment": " Initial state of the DatePicker\n",
+            "type": "DatePicker.State"
+          },
+          {
+            "name": "initialStateWithToday",
+            "comment": " Initial state of the DatePicker with today Date\n",
+            "type": "Date.Date -> DatePicker.State"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "DatePicker.Css",
+        "comment": " DatePicker.Css\n\nUsing [rtfeldman/elm-css](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest)\nInclude this in your elm-css port module to be included in your project's css file.\n\n# Css\n@docs css\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "css",
+            "comment": " DatePicker's Css Stylesheet\n",
+            "type": "Css.Stylesheet"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
         "name": "MultiSelect",
-        "comment": " MultiSelect\n\n`<select>` element with multiple selection.\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs multiSelect\n",
+        "comment": " MultiSelect\n\n`<select>` element with multiple selection.\nThis will properly give you the selected values for `onChange` event since the core `onChange` on `select` doesn't.\n\nOptions\n@docs Item, Options, defaultOptions\n\n# View\n@docs multiSelect\n",
         "aliases": [
           {
             "name": "Item",
@@ -17995,6 +18438,49 @@
             "name": "reverse",
             "comment": " Creates reversed `Iso b a`, exchanges functions `get` and `reverseGet`\n\n        .get (Iso.reversed someiso) == someiso.reverseGet\n        .reverseGet (Iso.reversed someiso) == someiso.get\n        Iso.compose someiso (Iso.reversed someiso) == Iso identity identity\n",
             "type": "Monocle.Iso.Iso a b -> Monocle.Iso.Iso b a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "ashelab/elm-cqrs",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "CQRS",
+        "comment": " The CQRS library provides an alternate set of methods for union routing and model updating based upon the precepts of CQRS and EventSourcing\n\n# Types\n@docs Definition\n\n# Program Bootloaders\n@docs program\n@docs programWithNav\n@docs eventBinder\n",
+        "aliases": [
+          {
+            "name": "Definition",
+            "comment": "\n\nThe goal of the Definition is to simplify bootstrapping with some assumptions about execution mode\nthat encourage the application code to maintain purity by accepting a fully initialized Model without worrying about\ndata loading or location concerns.\nAdditionally, Command and Subscription (Cmd and Sub) messages are generalized into Effects which allows the program\nto follow an Event Sourced model (messages as data) and helps centralize the concern of applying side effects to the\nmain entry point level of the app.\n\n* Serialization *\n\ndecode: Provides a method for loading the state passed into the application as start\nencode: Provides a serialization entry for persisting / memoizing component state\n\n* Runtime *\n\ninit: Merges initial state from the client with the navigator data to produce the initial app context\nview: Produces html that can initiate effect requests\ncommandMap: evaluates the validity of a request for state mutation and produces an event describing the result\neventMap: applies a declared mutation to the component's state\n\n* Side Effects *\n\neventHandler: Outbound side-effects which turn Effects into actions to be handled by the Elm Runtime\nsubscriptions: Inbound side-effects map external events into the component with it's state for context\n\n",
+            "args": [
+              "context",
+              "model",
+              "command",
+              "event",
+              "effect"
+            ],
+            "type": "{ decode : context -> model , encode : model -> context , init : model -> ( model, effect ) , view : model -> Html.Html command , commandMap : model -> command -> event , eventMap : model -> event -> ( model, effect ) , eventHandler : ( model, effect ) -> Platform.Cmd.Cmd event , subscriptions : model -> Platform.Sub.Sub command }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "eventBinder",
+            "comment": "\nEventBinder provides a simplified mapping interface for translating events across component hierarchies\n",
+            "type": "(parentModel -> childModel) -> (( parentModel, childModel ) -> parentModel) -> (childModel -> childEvent -> ( childModel, childEffect )) -> (parentModel -> childEffect -> parentEffect) -> parentModel -> childEvent -> ( parentModel, parentEffect )"
+          },
+          {
+            "name": "program",
+            "comment": "\n\n",
+            "type": "CQRS.Definition context model command event effect -> Platform.Program context model event"
+          },
+          {
+            "name": "programWithNav",
+            "comment": "\n",
+            "type": "CQRS.NavDefinition state context event -> CQRS.Definition context model command event effect -> Platform.Program state model event"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -19830,6 +20316,124 @@
     ]
   },
   {
+    "name": "ccapndave/elm-reflect",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Reflect",
+        "comment": " In your face, type system!  This module provides some very un-Elmy run-type introspection on type parameters by hacking around\nwith `toString`, regular expressions and Json decoders.\n\nIn general these functions are all very horrible and should never be used, but there are a few specialized cases (probably mostly\nbased around situations where you want to maintain type-safety for stuff that is loaded at runtime) that it can prove useful.\n\nFor a real-world example of this package being used, check out the `ccapndave/elm-translator` package.\n\n@docs typeToName, typeToParameters, typeParameterRecordToDict, typeParameterToInt\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "typeParameterRecordToDict",
+            "comment": " Turn a parameter which is a record into a Dict.\n\nFor example, if you have a type:\n\n    type Literal\n      = MyDetails { age : Int, height : Int }\n\nThen you could use this function to get the type parameter as a `Dict String Int` with:\n\n    typeParametersToDict Json.Decode.int <| MyDetails { age = 30, height = 158 }\n\nNote that this will only work when there is a single type parameter which is a record, and all the elements of the record have to\nbe of the same type.  You can choose the type using the decoder parameter, but probably only simple types will work (string, int,\nfloat, boolean).\n",
+            "type": "Json.Decode.Decoder b -> a -> Result.Result String (Dict.Dict String b)"
+          },
+          {
+            "name": "typeParameterToInt",
+            "comment": " Turn a parameter which is a record into a Int.\n\nFor example, if you have a type:\n\n    type Literal\n      = Age Int\n\nThen you could use this function to get the type parameter as a `Int` with:\n\n    typeParameterToInt <| Age 30\n",
+            "type": "a -> Result.Result String Int"
+          },
+          {
+            "name": "typeToName",
+            "comment": " Get the base name of a type as a string, discarding any type parameters.\n\n    type Literal\n      = MyDetails { age : Int, height : Int }\n\n    typeToName (MyDetails { age = 30, height = 158 }) --> \"MyDetails\"\n",
+            "type": "a -> String"
+          },
+          {
+            "name": "typeToParameters",
+            "comment": " Get the type parameters of a type as a string, discarding the identifier.\n\n    type Literal\n      = MyDetails { age : Int, height : Int }\n\n    typeToParameters (MyDetails { age = 30, height = 158 }) --> \"{ age = 30, height = 158 }\"\n",
+            "type": "a -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "ccapndave/elm-translator",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Translator",
+        "comment": " A package to provide type safe internationalisation, where translations can be loaded at\nruntime.  Default translations, substitutions and pluralization are supported.\n\nSubstitutions are implemented by surrounding the literal in braces:\n\n    \"MyNameIs\": \"Je m'appelle {name}\"\n\nPluralization is implemented by having the singular case on the left of the pipe symbol, and all\nother cases on the right.  The number can be substituted using `{count}`.\n\n    \"MyAge\": \"I am only one year old|I'm {count} years old\"\n\nSee the `example/` directory for an example of the package being used.\n\n## Building Translators\n@docs Translator, makeDefaultTranslator, updateTranslations, getTranslations, decoderFromTranslationsWithDefault\n\n## Using Translators\n@docs trans, text, placeholder\n",
+        "aliases": [
+          {
+            "name": "Translator",
+            "comment": " A Translator contains all the required information to translate strings into other languages.\n",
+            "args": [],
+            "type": "{ defaultTranslations : Translations.Translations , translations : Maybe.Maybe Translations.Translations }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "decoderFromTranslationsWithDefault",
+            "comment": " This creates a Json Decoder that will decode Json of the form:\n\n    {\n        \"Yes\": \"Oui\",\n        \"No\": \"Non\"\n    }\n\ninto a valid Translator that can be used with the translation functions in this package.  You\nneed to provide a Translations parameter which contains the default translations, in case a\ntranslation can't be matched.\n",
+            "type": "Translations.Translations -> Json.Decode.Decoder Translator.Translator"
+          },
+          {
+            "name": "getTranslations",
+            "comment": " Get the translations out of the Translator (if there are any).\n",
+            "type": "Translator.Translator -> Maybe.Maybe Translations.Translations"
+          },
+          {
+            "name": "makeDefaultTranslator",
+            "comment": " This creates a Translator with the given default Translations, but no loaded Translations.\nTypically this would be used when initializing your program's Model to make sure there are some\ntranslations on startup.\n",
+            "type": "Translations.Translations -> Translator.Translator"
+          },
+          {
+            "name": "placeholder",
+            "comment": " A translated version of Html.Attributes.placeholder for use directly in an Elm view\n",
+            "type": "Translator.Translator -> literal -> Html.Attribute msg"
+          },
+          {
+            "name": "text",
+            "comment": " A translated version of Html.text for use directly in an Elm view\n",
+            "type": "Translator.Translator -> literal -> Html.Html msg"
+          },
+          {
+            "name": "trans",
+            "comment": " Given an id and a Translator, translate to a String.  This can never fail, and in the event\nof being unable to match in either the loaded or default literals this will fall back to \"...\".\nThis supports substitutions and pluralization.\n\nSubstitutions and pluralization are supported (see the top-level package doumentation).\n",
+            "type": "literal -> Translator.Translator -> String"
+          },
+          {
+            "name": "updateTranslations",
+            "comment": " Update an existing Translator with the given loaded Translations.  Typically this would be\nused to update an existing Translator when you have loaded some Translations at runtime.\n",
+            "type": "Translations.Translations -> Translator.Translator -> Translator.Translator"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Translations",
+        "comment": " This represents a set of translations in a language.\n\n@docs Translations, decoder, encode\n",
+        "aliases": [
+          {
+            "name": "Translations",
+            "comment": "\n",
+            "args": [],
+            "type": "Dict.Dict String String"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "decoder",
+            "comment": "\n",
+            "type": "Json.Decode.Decoder Translations.Translations"
+          },
+          {
+            "name": "encode",
+            "comment": "\n",
+            "type": "Translations.Translations -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "chendrix/elm-matrix",
     "version": "3.1.2",
     "docs": [
@@ -21341,11 +21945,11 @@
   },
   {
     "name": "danielnarey/elm-toolkit",
-    "version": "4.2.0",
+    "version": "4.4.0",
     "docs": [
       {
         "name": "Toolkit.Operators",
-        "comment": "\n\n## A small set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::)\n\n# Function Application\n@docs (||>)\n\n## with Lists\n@docs (.|>), (:|>)\n\n## with Tuples\n@docs (..|>), (@@|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n",
+        "comment": "\n\n## A set of custom infix operators for maintaining a consistent, unidirectional coding style when working with lists, `Maybe` and `Result` values, and functions that take multiple arguments\n\nAt some point after I started working in Elm, it became clear to me that\ndebugging, refactoring, and extending existing code would be a lot easier if\nI conventionalized some stylistic choices so that code blocks would always be\nformatted in a consistent way. The built-in functional operators in Elm allow\nfor a lot of flexibility in how code is written, but some of that flexibility\nhas to be reined in if we want to emphasize readability as a virtue in\nfunctional programming.\n\nIn constructing some stylistic rules for my own code, the principle I decided to\nprioritize is what I call __unidirectionality__: *the idea that a programmer\nshould be able to readily discern the sequence of function calls in a code block\nby visually scanning the code from top to bottom, and then from left to right*.\n\nAccording to this principle, the \"data\" — that is, the value or set of values\nthat the function is called *on* — should always appear at the top of the code\nblock, with functions called on the data appearing on subsequent lines. A\nnested series of function calls can appear on one line, but more complex code\nchunks should be broken up into self-contained functions using `let..in`\nstatements. Nested list brackets and complex code chunks within list brackets\nshould generally be avoided.\n\nWith the above principle, the `|>` operator is used very liberally, the `>>`\noperator is used only in rare cases, and there is no use case for \"reverse\"\n(right-to-left) functional operators. In addition to liberal use of the `|>`\noperator, I have found use cases for a small set of custom operators that help\nto maintain consistent visual formatting and enhance readability of code blocks\nby reducing clutter. I have included them here in one module so that I can\neasily import them into other projects.\n\n\n# Appending Things\n@docs (|++), (|::), (:|++), (:|::)\n\n# Function Application\n@docs (||>)\n\n## with Lists\n@docs (.|>), (:|>)\n\n## with Tuples\n@docs (..|>), (@@|>)\n\n# Error Handling with `Maybe` and `Result` Values\n@docs (?=), (!=), (?|>), (!|>), (?+>), (!+>)\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -21381,6 +21985,20 @@
             "name": ".|>",
             "comment": " Forward operator for List.map\n\n    [1,4,9] .|> sqrt    --> [1,2,3]\n",
             "type": "List a -> (a -> b) -> List b",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": ":|++",
+            "comment": " Wrap LHS in a list, then append RHS list to it; equivalent to `::`, but\nleft-associative with precedence set to `0` (same as `|>`)\n\n    (\"a\" ++ \"b\") :: [\"cd\",\"ef\"]   --> [\"ab\",\"cd\",\"ef\"]\n    \"a\" ++ \"b\" :: [\"cd\",\"ef\"]     --> ERROR\n    \"a\" ++ \"b\" :|++ [\"cd\",\"ef\"]   --> [\"ab\",\"cd\",\"ef\"]\n\n",
+            "type": "a -> List a -> List a",
+            "associativity": "left",
+            "precedence": 0
+          },
+          {
+            "name": ":|::",
+            "comment": " Wrap LHS in a list, then append the item on RHS to the list\n\n    1 :|:: 2    --> [1,2]\n\n",
+            "type": "a -> a -> List a",
             "associativity": "left",
             "precedence": 0
           },
@@ -21445,7 +22063,7 @@
       },
       {
         "name": "Toolkit.Helpers",
-        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# Rounding Numbers\n@docs roundTo\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Test Functions\n@docs isOneOf, isInRange, isBetween\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
+        "comment": "\n\n## Some generic helper functions for type conversion, error handling, and working with lists, tuples, and functions\n\nThis is my personal library of helper functions for writing clean,\nunidirectional, semantically pleasing Elm code. I've included all of these\nfunctions in one module so that I can easily import them into other projects.\n\n# Rounding Numbers\n@docs roundTo\n\n# String-to-Bool Conversion\n@docs toBool\n\n# Test Functions\n@docs isOneOf, isInRange, isBetween\n\n# Error Handling with Multiple `Maybe` Values\n@docs maybe2Tuple, maybe3Tuple, maybe4Tuple, maybeList\n\n# Error Handling with Multiple `Result` Values\n@docs result2Tuple, result3Tuple, result4Tuple, resultList\n\n# Value-to-List and Value-From-List Conversions\n@docs wrapList, getNth\n\n# List-Tuple Conversions\n@docs take2Tuple, take3Tuple, take4Tuple, list2Tuple, list3Tuple, list4Tuple\n@docs unzip3, unzip4, zip, zip3, zip4\n\n# Getting Values from Tuples\n@docs first3, second3, third3, first4, second4, third4, fourth4\n\n# Mapping Functions to Tuples\n@docs map2Tuple, map3Tuple, map4Tuple\n\n# Currying and Uncurrying\n@docs curry3, curry4, uncurry3, uncurry4\n\n# Applying Multiple Functions to Data\n@docs apply2, apply3, apply4, applyList\n\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -21513,6 +22131,21 @@
             "name": "isOneOf",
             "comment": " Given a list and a test value, returns `True` if the list contains a value\nequal to the test value.\n\nEquivalent to\n[List.member](http://package.elm-lang.org/packages/elm-lang/core/latest/List#member)\nwith the arguments flipped\n",
             "type": "List a -> a -> Bool"
+          },
+          {
+            "name": "list2Tuple",
+            "comment": " Given a 2-tuple where both values are of the same type, return a list\ncontaining those values\n",
+            "type": "( a, a ) -> List a"
+          },
+          {
+            "name": "list3Tuple",
+            "comment": " Given a 3-tuple where all three values are of the same type, return a list\ncontaining those values\n",
+            "type": "( a, a, a ) -> List a"
+          },
+          {
+            "name": "list4Tuple",
+            "comment": " Given a 4-tuple where all four values are of the same type, return a list\ncontaining those values\n",
+            "type": "( a, a, a, a ) -> List a"
           },
           {
             "name": "map2Tuple",
@@ -21586,7 +22219,7 @@
           },
           {
             "name": "take2Tuple",
-            "comment": " Returns the first two items in a list as a 2-tuple, or `Nothing` if the list\ncontains fewer than two items\n\n    take2Tuple [1,2]   --> Just (1,2)\n    take2Tuple [1,2,3]    --> Just (1,2)\n    take2Tuple [1]    --> Nothing\n",
+            "comment": " Returns the first two items in a list as a 2-tuple, or `Nothing` if the list\ncontains fewer than two items\n\n    take2Tuple [1,2]    --> Just (1,2)\n    take2Tuple [1,2,3]  --> Just (1,2)\n    take2Tuple [1]      --> Nothing\n",
             "type": "List a -> Maybe.Maybe ( a, a )"
           },
           {
@@ -22879,30 +23512,47 @@
   },
   {
     "name": "eeue56/elm-html-in-elm",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "docs": [
       {
         "name": "ElmHtml.ToString",
-        "comment": " Convert ElmHtml to string\n\n@docs nodeRecordToString, nodeTypeToString\n\n",
-        "aliases": [],
+        "comment": " Convert ElmHtml to string.\n\n@docs nodeRecordToString, nodeToString, nodeToStringWithOptions\n\n@docs FormatOptions, defaultFormatOptions\n",
+        "aliases": [
+          {
+            "name": "FormatOptions",
+            "comment": " Formatting options to be used for converting to string\n",
+            "args": [],
+            "type": "{ indent : Int, newLines : Bool }"
+          }
+        ],
         "types": [],
         "values": [
           {
-            "name": "nodeRecordToString",
-            "comment": " Convert a node record to a string. This basically takes the tag name, then\n    pulls all the facts into tag declaration, then goes through the children and\n    nests them undert hsi one\n",
-            "type": "ElmHtml.InternalTypes.NodeRecord -> String"
+            "name": "defaultFormatOptions",
+            "comment": " default formatting options\n",
+            "type": "ElmHtml.ToString.FormatOptions"
           },
           {
-            "name": "nodeTypeToString",
+            "name": "nodeRecordToString",
+            "comment": " Convert a node record to a string. This basically takes the tag name, then\n    pulls all the facts into tag declaration, then goes through the children and\n    nests them under this one\n",
+            "type": "ElmHtml.ToString.FormatOptions -> ElmHtml.InternalTypes.NodeRecord -> List String"
+          },
+          {
+            "name": "nodeToString",
             "comment": " Convert a given html node to a string based on the type\n",
             "type": "ElmHtml.InternalTypes.ElmHtml -> String"
+          },
+          {
+            "name": "nodeToStringWithOptions",
+            "comment": " same as nodeToString, but with options\n",
+            "type": "ElmHtml.ToString.FormatOptions -> ElmHtml.InternalTypes.ElmHtml -> String"
           }
         ],
         "generated-with-elm-version": "0.18.0"
       },
       {
         "name": "ElmHtml.InternalTypes",
-        "comment": " Internal types used to represent Elm Html\n\n@docs ElmHtml, TextTagRecord, NodeRecord, CustomNodeRecord, MarkdownNodeRecord, Facts\n@docs decodeElmHtml, emptyFacts\n",
+        "comment": " Internal types used to represent Elm Html in pure Elm\n\n@docs ElmHtml, TextTagRecord, NodeRecord, CustomNodeRecord, MarkdownNodeRecord, Facts\n\n@docs decodeElmHtml, emptyFacts\n",
         "aliases": [
           {
             "name": "CustomNodeRecord",
@@ -22914,7 +23564,7 @@
             "name": "Facts",
             "comment": " Facts contain various dictionaries and values for a node\n- styles are a mapping of rules\n- events may be a json object containing event handlers\n- attributes are pulled out into stringAttributes and boolAttributes - things with string values go into\n  stringAttributes, things with bool values go into boolAttributes\n",
             "args": [],
-            "type": "{ styles : Dict.Dict String String , events : Maybe.Maybe Json.Decode.Value , attributes : Maybe.Maybe Json.Decode.Value , attributeNamespace : Maybe.Maybe Json.Decode.Value , stringAttributes : Dict.Dict String String , boolAttributes : Dict.Dict String Bool }"
+            "type": "{ styles : Dict.Dict String String , events : Maybe.Maybe Json.Decode.Value , attributeNamespace : Maybe.Maybe Json.Decode.Value , stringAttributes : Dict.Dict String String , boolAttributes : Dict.Dict String Bool }"
           },
           {
             "name": "MarkdownNodeRecord",
@@ -22987,15 +23637,43 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "ElmHtml.Helpers",
-        "comment": "\nInternal helpers for ElmHtml\n\n@docs filterKnownKeys\n",
-        "aliases": [],
+        "name": "ElmHtml.Markdown",
+        "comment": " Markdown helpers\n\n@docs MarkdownOptions, MarkdownModel, baseMarkdownModel\n\n@docs encodeOptions, encodeMarkdownModel, decodeMarkdownModel\n\n",
+        "aliases": [
+          {
+            "name": "MarkdownModel",
+            "comment": " An internal markdown model. Options are the things you give markdown, markdown is the string\n",
+            "args": [],
+            "type": "{ options : ElmHtml.Markdown.MarkdownOptions, markdown : String }"
+          },
+          {
+            "name": "MarkdownOptions",
+            "comment": " options markdown expects\n",
+            "args": [],
+            "type": "{ githubFlavored : Maybe.Maybe { tables : Bool, breaks : Bool } , defaultHighlighting : Maybe.Maybe String , sanitize : Bool , smartypants : Bool }"
+          }
+        ],
         "types": [],
         "values": [
           {
-            "name": "filterKnownKeys",
-            "comment": " Filter out keys that we don't know\n",
-            "type": "Dict.Dict String a -> Dict.Dict String a"
+            "name": "baseMarkdownModel",
+            "comment": " Just a default markdown model\n",
+            "type": "ElmHtml.Markdown.MarkdownModel"
+          },
+          {
+            "name": "decodeMarkdownModel",
+            "comment": " decode a markdown model\n",
+            "type": "Json.Decode.Decoder ElmHtml.Markdown.MarkdownModel"
+          },
+          {
+            "name": "encodeMarkdownModel",
+            "comment": " encode markdown model\n",
+            "type": "ElmHtml.Markdown.MarkdownModel -> Json.Decode.Value"
+          },
+          {
+            "name": "encodeOptions",
+            "comment": " We don't really care about encoding options right now\nTODO: we will if we want to represent things as we do for elm-html\n",
+            "type": "ElmHtml.Markdown.MarkdownOptions -> Json.Decode.Value"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -23033,58 +23711,16 @@
           }
         ],
         "generated-with-elm-version": "0.18.0"
-      },
-      {
-        "name": "ElmHtml.Markdown",
-        "comment": " Markdown helpers\n\n@docs baseMarkdownModel, MarkdownOptions, MarkdownModel\n\n@docs encodeOptions, encodeMarkdownModel, decodeMarkdownModel\n\n",
-        "aliases": [
-          {
-            "name": "MarkdownModel",
-            "comment": " An internal markdown model\n",
-            "args": [],
-            "type": "{ options : ElmHtml.Markdown.MarkdownOptions, markdown : String }"
-          },
-          {
-            "name": "MarkdownOptions",
-            "comment": " options markdown expects\n",
-            "args": [],
-            "type": "{ githubFlavored : Maybe.Maybe { tables : Bool, breaks : Bool } , defaultHighlighting : Maybe.Maybe String , sanitize : Bool , smartypants : Bool }"
-          }
-        ],
-        "types": [],
-        "values": [
-          {
-            "name": "baseMarkdownModel",
-            "comment": " Just a default markdown model\n",
-            "type": "ElmHtml.Markdown.MarkdownModel"
-          },
-          {
-            "name": "decodeMarkdownModel",
-            "comment": " decode a markdown model\n",
-            "type": "Json.Decode.Decoder ElmHtml.Markdown.MarkdownModel"
-          },
-          {
-            "name": "encodeMarkdownModel",
-            "comment": " encode markdown model\n",
-            "type": "ElmHtml.Markdown.MarkdownModel -> Json.Decode.Value"
-          },
-          {
-            "name": "encodeOptions",
-            "comment": " We don't really care about encoding options right now\nTODO: we will if we want to represent things as we do for elm-html\n",
-            "type": "ElmHtml.Markdown.MarkdownOptions -> Json.Decode.Value"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
       }
     ]
   },
   {
     "name": "eeue56/elm-html-query",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "ElmHtml.Query",
-        "comment": "\nQuery things using ElmHtml\n\n@docs query, queryAll, queryInNode\n@docs Selector\n@docs queryById, queryByClassName, queryByClassList, queryByTagName, queryByAttribute, queryByBoolAttribute\n",
+        "comment": "\nQuery things using ElmHtml\n\n@docs Selector\n@docs query, queryAll, queryChildren, queryChildrenAll, queryInNode\n@docs queryById, queryByClassName, queryByClassList, queryByTagName, queryByAttribute, queryByBoolAttribute\n",
         "aliases": [],
         "types": [
           {
@@ -23148,12 +23784,12 @@
         "values": [
           {
             "name": "query",
-            "comment": " Query a Html element using a selector\n",
+            "comment": " Query an ElmHtml element using a selector, searching all children.\n",
             "type": "ElmHtml.Query.Selector -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
           },
           {
             "name": "queryAll",
-            "comment": " Query to ensure a html node has all selectors given\n",
+            "comment": " Query an ElmHtml node using multiple selectors, considering both the node itself\nas well as all of its descendants.\n",
             "type": "List ElmHtml.Query.Selector -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
           },
           {
@@ -23187,9 +23823,168 @@
             "type": "String -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
           },
           {
-            "name": "queryInNode",
-            "comment": " Query a Html node using a selector\n",
+            "name": "queryChildren",
+            "comment": " Query an ElmHtml node using a selector, considering both the node itself\nas well as all of its descendants.\n",
             "type": "ElmHtml.Query.Selector -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
+          },
+          {
+            "name": "queryChildrenAll",
+            "comment": " Query to ensure an ElmHtml node has all selectors given, without considering\nany descendants lower than its immediate children.\n",
+            "type": "List ElmHtml.Query.Selector -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
+          },
+          {
+            "name": "queryInNode",
+            "comment": " Query an ElmHtml node using a selector, considering both the node itself\nas well as all of its descendants.\n",
+            "type": "ElmHtml.Query.Selector -> ElmHtml.InternalTypes.ElmHtml -> List ElmHtml.InternalTypes.ElmHtml"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "eeue56/elm-html-test",
+    "version": "1.0.0",
+    "docs": [
+      {
+        "name": "Test.Html.Query",
+        "comment": "\n\n@docs Single, Multiple, fromHtml\n\n## Querying\n\n@docs find, findAll, children, first, index\n\n## Expecting\n\n@docs count, has, each\n",
+        "aliases": [
+          {
+            "name": "Multiple",
+            "comment": " A query that may find any number of elements, including zero.\n\nContrast with [`Single`](#Single).\n",
+            "args": [],
+            "type": "Test.Html.Query.Internal.Multiple"
+          },
+          {
+            "name": "Single",
+            "comment": " A query that expects to find exactly one element.\n\nContrast with [`Multiple`](#Multiple).\n",
+            "args": [],
+            "type": "Test.Html.Query.Internal.Single"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "children",
+            "comment": " Return the matched element's immediate child elements.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The <ul> only has <li> children\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.find [ tag \"ul\" ]\n                |> Query.children []\n                |> Query.each (Query.has [ tag \"li\" ])\n",
+            "type": "List Test.Html.Selector.Internal.Selector -> Test.Html.Query.Single -> Test.Html.Query.Multiple"
+          },
+          {
+            "name": "count",
+            "comment": " Expect the number of elements matching the query fits the given expectation.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag)\n\n\n    test \"The list has three items\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.findAll [ tag \"li\" ]\n                |> Query.count (Expect.equal 3)\n",
+            "type": "(Int -> Expect.Expectation) -> Test.Html.Query.Multiple -> Expect.Expectation"
+          },
+          {
+            "name": "each",
+            "comment": " Expect that a [`Single`](#Single) expectation will hold true for each of the\n[`Multiple`](#Multiple) matched elements.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The list has both the classes 'items' and 'active'\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.findAll [ tag \"ul\" ]\n                |> Query.each\n                    [ Query.has [ tag \"ul\" ]\n                    , Query.has [ classes [ \"items\", \"active\" ] ]\n                    ]\n",
+            "type": "(Test.Html.Query.Single -> Expect.Expectation) -> Test.Html.Query.Multiple -> Expect.Expectation"
+          },
+          {
+            "name": "find",
+            "comment": " Find exactly one descendant element which matches all the given selectors.\nIf no descendants match, or if more than one matches, the test will fail.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The list has both the classes 'items' and 'active'\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.find [ tag \"ul\" ]\n                |> Query.has [ classes [ \"items\", \"active\" ] ]\n",
+            "type": "List Test.Html.Selector.Internal.Selector -> Test.Html.Query.Single -> Test.Html.Query.Single"
+          },
+          {
+            "name": "findAll",
+            "comment": " Find the descendant elements which match all the given selectors.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag)\n    import Expect\n\n\n    test \"The list has three items\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.findAll [ tag \"li\" ]\n                |> Query.count (Expect.equal 3)\n",
+            "type": "List Test.Html.Selector.Internal.Selector -> Test.Html.Query.Single -> Test.Html.Query.Multiple"
+          },
+          {
+            "name": "first",
+            "comment": " Return the first element in a match. If there were no matches, the test\nwill fail.\n\n`Query.first` is a shorthand for `Query.index 0` - they do the same thing.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The first <li> is called 'first item'\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.findAll [ tag \"li\" ]\n                |> Query.first\n                |> Query.has [ text \"first item\" ]\n",
+            "type": "Test.Html.Query.Multiple -> Test.Html.Query.Single"
+          },
+          {
+            "name": "fromHtml",
+            "comment": " Translate a `Html` value into a `Single` query. This is how queries\ntypically begin.\n\n    import Html\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (text)\n\n\n    test \"Button has the expected text\" <|\n        \\() ->\n            Html.button [] [ Html.text \"I'm a button!\" ]\n                |> Query.fromHtml\n                |> Query.has [ text \"I'm a button!\" ]\n",
+            "type": "Html.Html msg -> Test.Html.Query.Single"
+          },
+          {
+            "name": "has",
+            "comment": " Expect the element to match all of the given selectors.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The list has both the classes 'items' and 'active'\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.find [ tag \"ul\" ]\n                |> Query.has [ tag \"ul\", classes [ \"items\", \"active\" ] ]\n",
+            "type": "List Test.Html.Selector.Internal.Selector -> Test.Html.Query.Single -> Expect.Expectation"
+          },
+          {
+            "name": "index",
+            "comment": " Return the element in a match at the given index. For example,\n`Query.index 0` would match the first element, and `Query.index 1` would match\nthe second element.\n\nYou can pass negative numbers to \"wrap around\" - for example, `Query.index -1`\nwill match the last element, and `Query.index -2` will match the second-to-last.\n\nIf the index falls outside the bounds of the match, the test will fail.\n\n    import Html exposing (div, ul, li)\n    import Html.Attributes exposing (class)\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, classes)\n\n\n    test \"The second <li> is called 'second item'\" <|\n        \\() ->\n            div []\n                [ ul [ class \"items active\" ]\n                    [ li [] [ text \"first item\" ]\n                    , li [] [ text \"second item\" ]\n                    , li [] [ text \"third item\" ]\n                    ]\n                ]\n                |> Query.fromHtml\n                |> Query.findAll [ tag \"li\" ]\n                |> Query.index 1\n                |> Query.has [ text \"second item\" ]\n",
+            "type": "Int -> Test.Html.Query.Multiple -> Test.Html.Query.Single"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Test.Html.Selector",
+        "comment": "\n@docs Selector\n\n## General Selectors\n\n@docs tag, text, attribute, boolAttribute, all\n\n## Attributes\n\n@docs id, class, classes, className, checked, selected, disabled\n",
+        "aliases": [
+          {
+            "name": "Selector",
+            "comment": " A selector used to filter sets of elements.\n",
+            "args": [],
+            "type": "Test.Html.Selector.Internal.Selector"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "all",
+            "comment": " Combine the given selectors into one which requires all of them to match.\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (class, text, all, Selector)\n\n\n    replyBtnSelector : Selector\n    replyBtnSelector =\n        all [ class \"btn\", text \"Reply\" ]\n\n\n    test \"Button has the class 'btn' and the text 'Reply'\" <|\n        \\() ->\n            Html.button [ Attr.class \"btn btn-large\" ] [ Html.text \"Reply\" ]\n                |> Query.fromHtml\n                |> Query.has [ replyBtnSelector ]\n",
+            "type": "List Test.Html.Selector.Selector -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "attribute",
+            "comment": " Matches elements that have the given attribute with the given string value.\n\nFor attributes with boolean values, such as `checked`, use [`boolAttribute`](#boolAttribute).\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (attribute, text)\n\n\n    test \"the welcome <h1> says hello!\" <|\n        \\() ->\n            Html.div []\n                [ Html.h1 [ Attr.title \"greeting\" ] [ Html.text \"Hello!\" ] ]\n                |> Query.fromHtml\n                |> Query.find [ attribute \"title\" \"greeting\" ]\n                |> Query.has [ text \"Hello!\" ]\n",
+            "type": "String -> String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "boolAttribute",
+            "comment": " Matches elements that have the given attribute with the given boolean value.\n\nFor attributes with string values, such as `title`, use [`attribute`](#attribute).\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (boolAttribute, text)\n\n\n    test \"the disabled button says Reply\" <|\n        \\() ->\n            Html.div []\n                [ Html.button [ Attr.disabled True ] [ Html.text \"Reply\" ] ]\n                |> Query.fromHtml\n                |> Query.find [ boolAttribute \"disabled\" True ]\n                |> Query.has [ text \"Reply\" ]\n",
+            "type": "String -> Bool -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "checked",
+            "comment": " Matches elements that have a\n[`checked`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-Attributes#checked)\nattribute with the given value.\n",
+            "type": "Bool -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "class",
+            "comment": " Matches elements that have the given class (and possibly others as well).\n\nTo match multiple classes at once, use [`classes`](#classes) instead.\n\nTo match the element's exact class attribute string, use [`className`](#className).\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (class)\n\n\n    test \"Button has the class btn-large\" <|\n        \\() ->\n            Html.button [ Attr.class \"btn btn-large\" ] [ Html.text \"Reply\" ]\n                |> Query.fromHtml\n                |> Query.has [ class \"btn-large\" ]\n",
+            "type": "String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "className",
+            "comment": " Matches the element's exact class attribute string.\n\nThis is used less often than [`class`](#class) or [`classes`](#classes), which\ncheck for the *presence* of a class as opposed to matching the entire class\nattribute exactly.\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (className)\n\n\n    test \"Button has the exact class 'btn btn-large'\" <|\n        \\() ->\n            Html.button [ Attr.class \"btn btn-large\" ] [ Html.text \"Reply\" ]\n                |> Query.fromHtml\n                |> Query.has [ className \"btn btn-large\" ]\n",
+            "type": "String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "classes",
+            "comment": " Matches elements that have all the given classes (and possibly others as well).\n\nWhen you only care about one class instead of several, you can use\n[`class`](#class) instead of passing this function a list with one value in it.\n\nTo match the element's exact class attribute string, use [`className`](#className).\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (classes)\n\n\n    test \"Button has the classes btn and btn-large\" <|\n        \\() ->\n            Html.button [ Attr.class \"btn btn-large\" ] [ Html.text \"Reply\" ]\n                |> Query.fromHtml\n                |> Query.has [ classes [ \"btn\", \"btn-large\" ] ]\n",
+            "type": "List String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "disabled",
+            "comment": " Matches elements that have a\n[`disabled`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-Attributes#disabled)\nattribute with the given value.\n",
+            "type": "Bool -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "id",
+            "comment": " Matches elements that have the given `id` attribute.\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (id, text)\n\n\n    test \"the welcome <h1> says hello!\" <|\n        \\() ->\n            Html.div []\n                [ Html.h1 [ Attr.id \"welcome\" ] [ Html.text \"Hello!\" ] ]\n                |> Query.fromHtml\n                |> Query.find [ id \"welcome\" ]\n                |> Query.has [ text \"Hello!\" ]\n",
+            "type": "String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "selected",
+            "comment": " Matches elements that have a\n[`selected`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-Attributes#selected)\nattribute with the given value.\n",
+            "type": "Bool -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "tag",
+            "comment": " Matches elements that have the given tag.\n\n    import Html\n    import Html.Attributes as Attr\n    import Test.Html.Query as Query\n    import Test exposing (test)\n    import Test.Html.Selector exposing (tag, text)\n\n\n    test \"the welcome <h1> says hello!\" <|\n        \\() ->\n            Html.div []\n                [ Html.h1 [ Attr.id \"welcome\" ] [ Html.text \"Hello!\" ] ]\n                |> Query.fromHtml\n                |> Query.find [ tag \"h1\" ]\n                |> Query.has [ text \"Hello!\" ]\n",
+            "type": "String -> Test.Html.Selector.Selector"
+          },
+          {
+            "name": "text",
+            "comment": " Matches elements that have a\n[`text`](http://package.elm-lang.org/packages/elm-lang/html/latest/Html-Attributes#text)\nattribute with the given value.\n",
+            "type": "String -> Test.Html.Selector.Selector"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -46435,6 +47230,89 @@
     ]
   },
   {
+    "name": "jtojnar/elm-json-tape",
+    "version": "1.1.1",
+    "docs": [
+      {
+        "name": "Codec.JsonTape.Decode",
+        "comment": " This module provides JSON decoder of a directory tree.\n\n@docs dirTree\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dirTree",
+            "comment": " JSON decoder of json-tape format.\n",
+            "type": "Json.Decode.Decoder Codec.JsonTape.DirTree"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Codec.JsonTape.Encode",
+        "comment": " This module provides JSON encoder of a directory tree.\n\n@docs dirTree\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "dirTree",
+            "comment": " JSON encoder to json-tape format.\n",
+            "type": "Codec.JsonTape.DirTree -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Codec.JsonTape",
+        "comment": " This module describes data structures representing files and directories and functions for manipulating them.\n\n# Data structure\n@docs DirTree\n\n# File manipulation\n@docs getObject, readFileRaw, readFile\n\n# Helpers\n@docs getName\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "DirTree",
+            "comment": " Data structure representing a directory tree.\n",
+            "args": [],
+            "cases": [
+              [
+                "Dir",
+                [
+                  "{ name : Codec.JsonTape.FileName , contents : List Codec.JsonTape.DirTree }"
+                ]
+              ],
+              [
+                "File",
+                [
+                  "{ name : Codec.JsonTape.FileName, file : String }"
+                ]
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "getName",
+            "comment": " Auxilliary function for circumventing the type system.\n",
+            "type": "Codec.JsonTape.DirTree -> Codec.JsonTape.FileName"
+          },
+          {
+            "name": "getObject",
+            "comment": " Traverse the directory tree along path and return the seeked object.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String Codec.JsonTape.DirTree"
+          },
+          {
+            "name": "readFile",
+            "comment": " Traverse the directory tree along path and return the content of the found file after base64 decoding it.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String String"
+          },
+          {
+            "name": "readFileRaw",
+            "comment": " Traverse the directory tree along path and return the content of the found file.\n",
+            "type": "Codec.JsonTape.Path -> Codec.JsonTape.DirTree -> Result.Result String String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "justinmimbs/elm-date-extra",
     "version": "2.0.2",
     "docs": [
@@ -53430,6 +54308,196 @@
     ]
   },
   {
+    "name": "lynn/elm-arithmetic",
+    "version": "2.0.3",
+    "docs": [
+      {
+        "name": "Arithmetic",
+        "comment": " A library that provides useful number-theoretical functions for dealing\nwith integers, primes, divisibility, et cetera.\n\n# Primes\n@docs isPrime, primesBelow, primeFactors, primeExponents\n\n# Parity\n@docs isEven, isOdd\n\n# Divisors\n@docs divides, isMultipleOf, divisors, properDivisors, divisorCount\n\n# GCD and LCM\n@docs gcd, lcm, isCoprimeTo, totient, extendedGcd\n\n# Base conversion\n@docs toBase, fromBase\n\n# Squares\n@docs squareRoot, safeSquareRoot, intSquareRoot, exactIntSquareRoot, isSquare\n\n# Cubes\n@docs cubeRoot, intCubeRoot, exactIntCubeRoot, isCube\n\n# Modular arithmetic\n@docs powerMod, modularInverse, chineseRemainder\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "chineseRemainder",
+            "comment": " Given a list of residue-modulus pairs `[(r1, m1), (r2, m2), ...]`, solve\nthe system of linear congruences:\n\n    x = r1 (mod m1)\n    x = r2 (mod m2)\n    ...\n\nLet `M` be the product of all moduli in the list. The [Chinese remainder\ntheorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem) tells us that\n\n* if all of the moduli are pairwise coprime (their `gcd` is 1), there are\n  infinitely many solutions, all congruent `mod M`;\n* if there is a pair of non-coprime moduli in the list, there is no solution.\n\nThe result is a solution `Just x` with `0 <= x < M` in the first case; or\n`Nothing` if the system is unsolvable.\n\n    chineseRemainder [(10, 11), (4, 12), (12, 13)] == Just 1000\n        -- Solution to x = 10 (mod 11), x = 4 (mod 12), x = 12 (mod 13).\n\n    chineseRemainder [(2, 3), (4, 6)] == Nothing\n        -- 3 and 6 are not coprime, so there is no solution.\n\n    chineseRemainder [] == Just 0\n        -- The trivial solution, modulo M = 1.\n",
+            "type": "List ( Int, Int ) -> Maybe.Maybe Int"
+          },
+          {
+            "name": "cubeRoot",
+            "comment": " Take the cube root of a number.\n\n    cubeRoot 15.625 == 2.5\n",
+            "type": "Float -> Float"
+          },
+          {
+            "name": "divides",
+            "comment": " Test whether one number divides another.\n\n    10 `divides` 120 == True\n    10 `divides` 125 == False\n",
+            "type": "Int -> Int -> Bool"
+          },
+          {
+            "name": "divisorCount",
+            "comment": " Get the number of divisors of a number (counting itself).\n",
+            "type": "Int -> Int"
+          },
+          {
+            "name": "divisors",
+            "comment": " Get all divisors of a number, in ascending order.\n\n    divisors 20 == [1, 2, 4, 5, 10, 20]\n",
+            "type": "Int -> List Int"
+          },
+          {
+            "name": "exactIntCubeRoot",
+            "comment": " Return `Just s` if the given integer is a cube, and `s` is its cube root;\notherwise, return `Nothing`.\n\n    exactIntCubeRoot 800 == Nothing\n    exactIntCubeRoot 1000 == Just 10\n",
+            "type": "Int -> Maybe.Maybe Int"
+          },
+          {
+            "name": "exactIntSquareRoot",
+            "comment": " Return `Just s` if the given integer is a square, and `s` is its square\nroot; otherwise, return `Nothing`.\n\n    exactIntSquareRoot 20 == Nothing\n    exactIntSquareRoot 25 == Just 5\n",
+            "type": "Int -> Maybe.Maybe Int"
+          },
+          {
+            "name": "extendedGcd",
+            "comment": " Given `a` and `b`, compute integers `(d, u, v)` so that `a * u + b * v ==\nd` where `d == gcd a b`. (These are known as [Bézout coefficients](\nhttps://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity). If the inputs are both\npositive, the solution returned satisfies `abs u < b // gcd a b` and\n`abs v < a // gcd a b`.)\n\n    extendedGcd 1215 465 == (15, -13, 34)\n        -- because gcd 1215 465 == 15 == -13 * 1215 + 34 * 465\n",
+            "type": "Int -> Int -> ( Int, Int, Int )"
+          },
+          {
+            "name": "fromBase",
+            "comment": " Interpret a list of digits as a number in the given base. The input is\nexpected to consist of integers `d` for which `0 <= d < base`.\n\n    fromBase 2 [1, 0, 1, 0, 1, 0] = 42\n",
+            "type": "Int -> List Int -> Int"
+          },
+          {
+            "name": "gcd",
+            "comment": " Calculate the greatest common divisor of two integers. `gcd x 0` and\n`gcd 0 x` both return `x`. Negative arguments are made positive first.\n\n    gcd 56 80 == 8\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "intCubeRoot",
+            "comment": " Integer cube root, rounding down.\n\n    intCubeRoot 800 == 9\n    intCubeRoot 1000 == 10\n",
+            "type": "Int -> Int"
+          },
+          {
+            "name": "intSquareRoot",
+            "comment": " Take the square root, rounding down. Return `NaN` (not a number) for\nnegative arguments.\n\n    intSquareRoot 20 == 4\n    intSquareRoot 25 == 5\n",
+            "type": "Int -> Int"
+          },
+          {
+            "name": "isCoprimeTo",
+            "comment": " Test whether two integers are coprime.\n\n    56 `isCoprimeTo` 80 == False\n    5 `isCoprimeTo` 8\n",
+            "type": "Int -> Int -> Bool"
+          },
+          {
+            "name": "isCube",
+            "comment": " Test whether a number is a cube.\n\n    isCube 800 == False\n    isCube 1000 == True\n",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "isEven",
+            "comment": " Test whether an integer is even.\n\n    isEven 2 == True\n    isEven 3 == False\n",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "isMultipleOf",
+            "comment": " Test whether one number is a multiple of another.\n\n    120 `isMultipleOf` 10 == True\n    125 `isMultipleOf` 10 == False\n",
+            "type": "Int -> Int -> Bool"
+          },
+          {
+            "name": "isOdd",
+            "comment": " Test whether an integer is odd.\n\n    isOdd 2 == False\n    isOdd 3 == True\n",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "isPrime",
+            "comment": " Test whether an integer is a positive prime.\n\n    isPrime 2357 == True\n    isPrime 500 == False\n",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "isSquare",
+            "comment": " Test whether a number is a square.\n\n    isSquare 20 == False\n    isSquare 25 == True\n",
+            "type": "Int -> Bool"
+          },
+          {
+            "name": "lcm",
+            "comment": " Calculate the least common multiple of two integers. `lcm x 0` and\n`lcm 0 x` both return `0`. Negative arguments are made positive first.\n\n    lcm 56 80 == 560\n",
+            "type": "Int -> Int -> Int"
+          },
+          {
+            "name": "modularInverse",
+            "comment": " Given a number `a` and a modulus `n`, return the multiplicative inverse of\n`a` modulo `n`, if it exists. That is: try to return `Just b`, with\n`0 <= b < n`, so that `a * b == 1` modulo `n`, but return `Nothing` if no such\n`b` exists. (`b` exists precisely when `a` and the modulus `n` are coprime.)\n\n    modularInverse 3 11 == Just 4    -- 3 * 4 == 12 == 1 (mod 11)\n    modularInverse 3 15 == Nothing   -- 3 and 15 aren't coprime\n",
+            "type": "Int -> Int -> Maybe.Maybe Int"
+          },
+          {
+            "name": "powerMod",
+            "comment": " `powerMod b e m` efficiently calculates `b ^ e` (modulo `m`). It assumes\n`b >= 0`, `e >= 0` and `m >= 1`.\n\nFor example, to compute `4147 ^ 8671 % 1000` efficiently:\n\n    powerMod 4147 8671 1000 == 803\n",
+            "type": "Int -> Int -> Int -> Int"
+          },
+          {
+            "name": "primeExponents",
+            "comment": " Return a list of all prime-exponent pairs for a given positive integer's\nprime decomposition, with the primes in ascending order. If the input is less\nthan 2, the empty list is returned.\n\n    primeExponents 24 == [(2, 3), (5, 2)]                -- 2^3 * 5^2\n    primeExponents 531764 == [(2, 1), (11, 2), (13, 3)]  -- 2^1 * 11^2 * 13^3\n    primeExponents 1 == []                               -- empty product\n",
+            "type": "Int -> List ( Int, Int )"
+          },
+          {
+            "name": "primeFactors",
+            "comment": " Return a list of all prime factors for a given positive integer, in\nascending order. If the input is less than 2, the empty list is returned.\n\n    primeFactors 24 == [2, 2, 2, 3]\n    primeFactors 767 == [13, 59]\n    primeFactors 1 == []\n",
+            "type": "Int -> List Int"
+          },
+          {
+            "name": "primesBelow",
+            "comment": " Get all primes in the given range `[0..n-1]`, using the Sieve of\nEratosthenes.\n\n    primesBelow 4 == [2, 3]\n    primesBelow 17 == [2, 3, 5, 7, 11, 13]\n",
+            "type": "Int -> List Int"
+          },
+          {
+            "name": "properDivisors",
+            "comment": " Get all proper divisors (i.e., divisors less than the input) of a number,\nin ascending order.\n\n    properDivisors 20 == [1, 2, 4, 5, 10]\n",
+            "type": "Int -> List Int"
+          },
+          {
+            "name": "safeSquareRoot",
+            "comment": " Safely take the square root of a number: return `Just (squareRoot n)` if\nthe input `n` is nonnegative; otherwise, return `Nothing`.\n\n    squareRoot 5.76 == Just 2.4\n    squareRoot (-1) == Nothing\n",
+            "type": "Float -> Maybe.Maybe Float"
+          },
+          {
+            "name": "squareRoot",
+            "comment": " Take the square root of a number. Return `NaN` (not a number) for negative\narguments.\n\n    squareRoot 5.76 == 2.4\n    squareRoot (-1) |> isNaN\n",
+            "type": "Float -> Float"
+          },
+          {
+            "name": "toBase",
+            "comment": " Convert a number to a list of digits in the given base. The input number is\nmade positive first.\n\n    toBase 2 42 = [1, 0, 1, 0, 1, 0]  -- 42 in binary\n",
+            "type": "Int -> Int -> List Int"
+          },
+          {
+            "name": "totient",
+            "comment": " Compute Euler's totient function `φ(n)`: the number of positive integers\n`1 <= k <= n` for which `gcd(n, k) == 1`. The input is made positive first.\n\n    totient 99 == 60\n    totient 1450 == 560\n",
+            "type": "Int -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "lynn/elm-ordinal",
+    "version": "1.0.3",
+    "docs": [
+      {
+        "name": "Ordinal",
+        "comment": " A library for converting integers (`23`, `0`, `-2`) to English ordinal\nstrings (`\"23rd\"`, `\"0th\"`, `\"-2nd\"`).\n\n# Ordinal conversion\n@docs ordinal\n@docs ordinalSuffix\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "ordinal",
+            "comment": " Convert an integer into an English ordinal number string (like `\"4th\"`).\n\n    ordinal 42 == \"42nd\"\n    ordinal 0 == \"0th\"\n    ordinal (-1) == \"-1st\"\n",
+            "type": "Int -> String"
+          },
+          {
+            "name": "ordinalSuffix",
+            "comment": " Get the English ordinal suffix (st/nd/rd/th) for a given integer.\n\n    ordinalSuffix 42 == \"nd\"\n    ordinalSuffix 0 == \"th\"\n    ordinalSuffix (-1) == \"st\"\n",
+            "type": "Int -> String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "maksar/elm-function-extra",
     "version": "2.0.0",
     "docs": [
@@ -56372,6 +57440,50 @@
     ]
   },
   {
+    "name": "mhoare/elm-stack",
+    "version": "3.0.1",
+    "docs": [
+      {
+        "name": "Stack",
+        "comment": " This library implements a stack data structure in Elm, allowing you to worry more about your business logic and less about implementing common adts.\n\n# Definition\n@docs Stack\n\n# Initialisation\n@docs initialise\n\n# Common Helpers\n@docs pop, push, toList\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Stack",
+            "comment": " ",
+            "args": [
+              "a"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "initialise",
+            "comment": " Initialise an empty stack.\n",
+            "type": "Stack.Stack a"
+          },
+          {
+            "name": "pop",
+            "comment": " Removes the item at the top of the stack and returns it as the first item of a tuple.\n",
+            "type": "Stack.Stack a -> ( Maybe.Maybe a, Stack.Stack a )"
+          },
+          {
+            "name": "push",
+            "comment": " Pushes an item onto the stack and returns the new stack. The item must be of the same type as the stack.\n",
+            "type": "a -> Stack.Stack a -> Stack.Stack a"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a Stack type to a list data type\n",
+            "type": "Stack.Stack a -> List a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "micktwomey/elmo-8",
     "version": "2.0.2",
     "docs": [
@@ -58559,7 +59671,7 @@
   },
   {
     "name": "noahzgordon/elm-jsonapi",
-    "version": "2.0.3",
+    "version": "2.2.0",
     "docs": [
       {
         "name": "JsonApi.Decode",
@@ -58581,42 +59693,8 @@
         "generated-with-elm-version": "0.18.0"
       },
       {
-        "name": "JsonApi.Documents",
-        "comment": " Helper functions for working with a full JsonApi Document\n\n# Common Helpers\n@docs links, jsonapi, primaryResource, primaryResourceCollection, meta\n\n",
-        "aliases": [],
-        "types": [],
-        "values": [
-          {
-            "name": "jsonapi",
-            "comment": " Fetch information from the top-level 'jsonapi' object\n",
-            "type": "JsonApi.Data.Document -> Maybe.Maybe JsonApi.Data.JsonApiObject"
-          },
-          {
-            "name": "links",
-            "comment": " Fetch the top-level links object from the document.\n",
-            "type": "JsonApi.Data.Document -> JsonApi.Data.Links"
-          },
-          {
-            "name": "meta",
-            "comment": " Fetch the top-level meta object from the document.\n",
-            "type": "JsonApi.Data.Document -> JsonApi.Data.Meta"
-          },
-          {
-            "name": "primaryResource",
-            "comment": " Retrieve the primary resource from a decoded Document.\n    This function assumes a singular primary resource and will return an Err\n    if the document contains a collection of primary resources.\n",
-            "type": "JsonApi.Data.Document -> Result.Result String JsonApi.Data.Resource"
-          },
-          {
-            "name": "primaryResourceCollection",
-            "comment": " Retrieve a collection of primary resources from a decoded Document.\n    This function assumes a collection primary resources and will return an Err\n    if the document contains a singular primary resource.\n",
-            "type": "JsonApi.Data.Document -> Result.Result String (List JsonApi.Data.Resource)"
-          }
-        ],
-        "generated-with-elm-version": "0.18.0"
-      },
-      {
         "name": "JsonApi.Resources",
-        "comment": " Helper functions for working with a single JsonApi Resource\n\n# Common Helpers\n@docs id, attributes, attribute, links, relatedResource, relatedResourceCollection, meta, relatedLinks, relatedMeta\n\n",
+        "comment": " Helper functions for working with a single JsonApi Resource\n\n# Common Helpers\n@docs id, attributes, attribute, links, relatedResource, relatedResourceCollection,\n      meta, relatedLinks, relatedMeta, build, withAttributes, withRelationship, withRelationships, withUuid\n",
         "aliases": [],
         "types": [],
         "values": [
@@ -58629,6 +59707,11 @@
             "name": "attributes",
             "comment": " Serialize the attributes of a Resource. Because the attributes are unstructured,\n    you must provide a Json Decoder to convert them into a type that you define.\n",
             "type": "Json.Decode.Decoder a -> JsonApi.Data.Resource -> Result.Result String a"
+          },
+          {
+            "name": "build",
+            "comment": " Construct a ClientResource instance with the supplied type.\n    ClientResources are like Resources but without an 'id' field or related resources.\n    Use them to represent new Resources that you want to POST to a JSON API server.\n",
+            "type": "String -> JsonApi.Data.ClientResource"
           },
           {
             "name": "id",
@@ -58664,6 +59747,74 @@
             "name": "relatedResourceCollection",
             "comment": " Find a related collection of resources.\n    Will return an Err if a single resource is found.\n",
             "type": "String -> JsonApi.Data.Resource -> Result.Result String (List JsonApi.Data.Resource)"
+          },
+          {
+            "name": "withAttributes",
+            "comment": " Add a list of string-value pairs as attributes to a ClientResource\n",
+            "type": "List ( String, Json.Encode.Value ) -> JsonApi.Data.ClientResource -> JsonApi.Data.ClientResource"
+          },
+          {
+            "name": "withRelationship",
+            "comment": " Add a relationship with a single related resource to a ClientResource\n",
+            "type": "String -> JsonApi.Data.ResourceIdentifier -> JsonApi.Data.ClientResource -> JsonApi.Data.ClientResource"
+          },
+          {
+            "name": "withRelationships",
+            "comment": " Add a relationship with a collection of related resources to a ClientResource\n",
+            "type": "String -> List JsonApi.Data.ResourceIdentifier -> JsonApi.Data.ClientResource -> JsonApi.Data.ClientResource"
+          },
+          {
+            "name": "withUuid",
+            "comment": " Add a client-generated UUID to the resource. MUST be a valid Uuid in the\n    canonical representation xxxxxxxx-xxxx-Axxx-Yxxx-xxxxxxxxxxxx where A is\n    the version number between [1-5] and Y is in the range [8-B].\n\n    I recommend using http://package.elm-lang.org/packages/danyx23/elm-uuid/2.0.2/Uuid\n    to general a valid UUID.\n",
+            "type": "String -> JsonApi.Data.ClientResource -> Result.Result String JsonApi.Data.ClientResource"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "JsonApi.Encode",
+        "comment": " Functions for encoding JSON API resources to Json\n\n@docs clientResource\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "clientResource",
+            "comment": " Encode a resource constructed on the client to a JSON API-compliant value\n    see: http://jsonapi.org/format/#crud-creating\n",
+            "type": "JsonApi.Data.ClientResource -> Json.Encode.Value"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "JsonApi.Documents",
+        "comment": " Helper functions for working with a full JsonApi Document\n\n# Common Helpers\n@docs links, jsonapi, primaryResource, primaryResourceCollection, meta\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "jsonapi",
+            "comment": " Fetch information from the top-level 'jsonapi' object\n",
+            "type": "JsonApi.Data.Document -> Maybe.Maybe JsonApi.Data.JsonApiObject"
+          },
+          {
+            "name": "links",
+            "comment": " Fetch the top-level links object from the document.\n",
+            "type": "JsonApi.Data.Document -> JsonApi.Data.Links"
+          },
+          {
+            "name": "meta",
+            "comment": " Fetch the top-level meta object from the document.\n",
+            "type": "JsonApi.Data.Document -> JsonApi.Data.Meta"
+          },
+          {
+            "name": "primaryResource",
+            "comment": " Retrieve the primary resource from a decoded Document.\n    This function assumes a singular primary resource and will return an Err\n    if the document contains a collection of primary resources.\n",
+            "type": "JsonApi.Data.Document -> Result.Result String JsonApi.Data.Resource"
+          },
+          {
+            "name": "primaryResourceCollection",
+            "comment": " Retrieve a collection of primary resources from a decoded Document.\n    This function assumes a collection primary resources and will return an Err\n    if the document contains a singular primary resource.\n",
+            "type": "JsonApi.Data.Document -> Result.Result String (List JsonApi.Data.Resource)"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -59296,11 +60447,11 @@
   },
   {
     "name": "nphollon/update-clock",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "docs": [
       {
         "name": "Clock",
-        "comment": " Clock is designed to work with [elm-lang/animation-frame](package.elm-lang.org/packages/elm-lang/animation-frame/latest/AnimationFrame). Your model will get consistently-paced updates, despite fluctuations in frame diffs.\n\n@docs Clock, withPeriod, update\n",
+        "comment": " Clock is designed to work with [elm-lang/animation-frame](package.elm-lang.org/packages/elm-lang/animation-frame/latest/AnimationFrame). Your model will get consistently-paced updates, despite fluctuations in frame diffs.\n\n@docs Clock, withPeriod, lag, update\n",
         "aliases": [],
         "types": [
           {
@@ -59311,6 +60462,11 @@
           }
         ],
         "values": [
+          {
+            "name": "lag",
+            "comment": " Return the amount of lag between the animation frame and the last physics update.\n",
+            "type": "Clock.Clock -> Time.Time"
+          },
           {
             "name": "update",
             "comment": " Called like so:\n\n    update up diff clock model\n\nThe diff is a real-time diff, such as what is given by AnimationFrame.diffs. This function will pass the diff to the clock. If the diff causes the clock's counter to increment, then `up` will be called with the period and the model.\n",
@@ -60831,6 +61987,31 @@
     ]
   },
   {
+    "name": "pukkamustard/elm-identicon",
+    "version": "2.1.1",
+    "docs": [
+      {
+        "name": "Identicon",
+        "comment": " Generate an identicon from a string.\n\n# Functions\n@docs identicon, identicolor\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
+          {
+            "name": "identicolor",
+            "comment": " Generate a color from a string\n\nThis generates the same color that would be used in the identicon.\n\n",
+            "type": "String -> Color.Color"
+          },
+          {
+            "name": "identicon",
+            "comment": " Generate a identicon from a string\n\n    main =\n      identicon \"200px\" \"Hello identicon!\"\n",
+            "type": "String -> String -> Html.Html msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "pzingg/elm-navigation-extra",
     "version": "1.1.3",
     "docs": [
@@ -61093,6 +62274,380 @@
             "name": "toTaskRaw",
             "comment": " Like [`Http.toTask`](/packages/elm-lang/http/1.0.0/Http#toTask),\nbut uses a `RawRequest` instead of a\n[`Request`](/packages/elm-lang/http/1.0.0/Http#Request).\n",
             "type": "Http.Decorators.RawRequest a -> Task.Task Http.Error a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "rgrempel/elm-route-url",
+    "version": "3.0.0",
+    "docs": [
+      {
+        "name": "RouteUrl.Builder",
+        "comment": " This module provides a type which you can use to help construct a\n`UrlChange` or parse a `Location`.\n\nHowever, the `Builder` type is not really the focus of elm-route-url.\n\n* Ultimately, a `UrlChange` just requires a `String` -- you don't need to\n  use this module to construct one.\n\n* You also don't need to use this module to parse a `Location` -- there are a\n  fair number of relevant packages for that, including:\n\n    * [evancz/url-parser](http://package.elm-lang.org/packages/evancz/url-parser/latest)\n    * [Bogdanp/elm-combine](http://package.elm-lang.org/packages/Bogdanp/elm-combine/latest)\n    * [Bogdanp/elm-route](http://package.elm-lang.org/packages/Bogdanp/elm-route/latest)\n    * [etaque/elm-route-parser](http://package.elm-lang.org/packages/etaque/elm-route-parser/latest)\n    * [poyang/elm-router](http://package.elm-lang.org/packages/poying/elm-router/latest)\n    * [sporto/erl](http://package.elm-lang.org/packages/sporto/erl/latest)\n    * [sporto/hop](http://package.elm-lang.org/packages/sporto/hop/latest)\n\nSo, this module is potentially useful, but there are quite a few other\noptions you may wish to investigate.\n\nNote that you should not uri-encode anything provided to this module. That\nwill be done for you.\n\n# Initialization\n\n@docs Builder, builder\n\n# Creating or modifying history entries\n\n@docs entry, newEntry, modifyEntry\n\n# Manipulating the path\n\n@docs path, modifyPath, prependToPath, appendToPath, replacePath\n\n# Manipulating the query\n\n@docs query, modifyQuery, insertQuery, updateQuery, removeQuery, getQuery, replaceQuery\n\n# Manipulating the hash\n\n@docs hash, modifyHash, replaceHash\n\n# Conversion\n\n@docs toUrlChange, toHashChange, fromUrl, fromHash\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Builder",
+            "comment": " An opaque type which helps to build up a URL for a `URLChange`,\nor parse a `Location`.\n\nStart with [`builder`](#builder), and then use other functions to make changes.\nOr, if you have a URL, start with [`fromUrl`](#fromUrl) or [`fromHash`](#fromHash).\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "appendToPath",
+            "comment": " Add the provided list to the end of the builder's path.\n",
+            "type": "List String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "builder",
+            "comment": " Creates a default `Builder`. Start with this, then use other methods\nto build up the URL.\n\n    url : Builder\n    url =\n        builder\n        |> newEntry\n        |> appendToPath [\"home\"]\n",
+            "type": "RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "entry",
+            "comment": " Indicates whether the `Builder` will make a new entry in the browser's\nhistory, or merely modify the current entry.\n",
+            "type": "RouteUrl.Builder.Builder -> RouteUrl.HistoryEntry"
+          },
+          {
+            "name": "fromHash",
+            "comment": " Constructs a `Builder` from the hash portion of a URL.\n\n* Assumes that the hash starts with \"#!/\".\n\n* Assumes that any embedded hash is delimited with a '$' instead of a '#'.\n\n* Assumes that any embedded query parameters being with a '^' instead of\n  a '?'.\n\n",
+            "type": "String -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "fromUrl",
+            "comment": " Constructs a `Builder` from a URL.\n",
+            "type": "String -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "getQuery",
+            "comment": " Get the value for a query key.\n",
+            "type": "String -> RouteUrl.Builder.Builder -> Maybe.Maybe String"
+          },
+          {
+            "name": "hash",
+            "comment": " Gets the hash portion of the URL, without the \"#\".\n",
+            "type": "RouteUrl.Builder.Builder -> String"
+          },
+          {
+            "name": "insertQuery",
+            "comment": " Insert a key/value pair into the query. Replaces a key with the same name,\nin case of collision.\n",
+            "type": "String -> String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "modifyEntry",
+            "comment": " Modify the current entry in the browser's history.\n",
+            "type": "RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "modifyHash",
+            "comment": " Replace the hash with the result of a function applied to the current hash.\n",
+            "type": "(String -> String) -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "modifyPath",
+            "comment": " Replace the path with the result of a function which acts on\nthe current path.\n",
+            "type": "(List String -> List String) -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "modifyQuery",
+            "comment": " Replace the query with the result of a function that acts on the current query.\n",
+            "type": "(Dict.Dict String String -> Dict.Dict String String) -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "newEntry",
+            "comment": " Make a new entry in the browser's history.\n",
+            "type": "RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "path",
+            "comment": " The segments of the path. The path is represented by a list of strings.\nUltimately, they will be uri-encoded for you, and joined with a \"/\".\n",
+            "type": "RouteUrl.Builder.Builder -> List String"
+          },
+          {
+            "name": "prependToPath",
+            "comment": " Add the provided list to the beginning of the builder's path.\n",
+            "type": "List String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "query",
+            "comment": " The query portion of the URL. It is represented by a `Dict` of\nkey/value pairs.\n",
+            "type": "RouteUrl.Builder.Builder -> Dict.Dict String String"
+          },
+          {
+            "name": "removeQuery",
+            "comment": " Remove a query key.\n",
+            "type": "String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "replaceHash",
+            "comment": " Replace the hash with the provided value. Note that you should not include the \"#\".\n",
+            "type": "String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "replacePath",
+            "comment": " Sets the path to the provided list.\n",
+            "type": "List String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "replaceQuery",
+            "comment": " Replace the whole query with a different dictionary.\n",
+            "type": "Dict.Dict String String -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          },
+          {
+            "name": "toHashChange",
+            "comment": " Like [`toUrlChange`](#toUrlChange), but puts everything into the hash, prepended by \"#!\".\n\nIf your `Builder` has a hash component, we'll use '$' instead of '#' to\ndelimit the embedded hash. And, we will use '^' instead of '?' to begin\nthe query parameters.\n",
+            "type": "RouteUrl.Builder.Builder -> RouteUrl.UrlChange"
+          },
+          {
+            "name": "toUrlChange",
+            "comment": " Once you've built up your URL, use this to convert it to a `UrlChange` for use with\n`RouteUrl`.\n",
+            "type": "RouteUrl.Builder.Builder -> RouteUrl.UrlChange"
+          },
+          {
+            "name": "updateQuery",
+            "comment": " Update a particular query key using the given function.\n",
+            "type": "String -> (Maybe.Maybe String -> Maybe.Maybe String) -> RouteUrl.Builder.Builder -> RouteUrl.Builder.Builder"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "RouteHash",
+        "comment": " This module implements the old elm-route-hash API as closely as possible,\ngiven the changes required for elm-route-url.\n\nTo transition from elm-route-hash to elm-route-url, you should be able to\nuse your existing `delta2update` and `location2action` functions without\nchanges. The only required changes are in your `Main` module.\n\nEssentially, instead of using the old `start` method and sending the resulting\nsignal to a port, you would now use [`program`](#program) or\n[`programWithFlags`](#programWithFlags), and assign the resulting `Program`\nto your `main` function.\n\nAt your leisure, you should transition to the new `RouteUrl` API, which allows\nyou to use the whole URL (rather than just the hash), since this old API will\nbe removed in a future version of elm-route-url.\n\n# Configuration\n\n@docs Config, ConfigWithFlags, defaultPrefix\n\n# Helpers for `HashUpdate`\n\n@docs HashUpdate, set, replace, apply, map, extract\n\n# Simple Initialization\n\n@docs program, programWithFlags\n\n# Complicated Initialization (usually not needed)\n\n@docs app, appWithFlags\n\n",
+        "aliases": [
+          {
+            "name": "Config",
+            "comment": " Represents the configuration necessary to use this module.\n\n*  `prefix` is the initial characters that should be stripped from the hash (if\n    present) when reacting to location changes, and added to the hash when\n    generating location changes. Normally, you'll likely want to use\n    [`defaultPrefix`](#defaultPrefix), which is \"#!/\".\n\n*   `delta2update` is a function which takes two arguments and possibly\n    returns a [`HashUpdate`](#HashUpdate). The first argument is the previous\n    model. The second argument is the current model.\n\n    The reason you are provided with both the previous and current models is\n    that sometimes the nature of the location update depends on the difference\n    between the two, not just on the latest model. For instance, if the user is\n    typing in a form, you might want to use [`replace`](#replace) rather than\n    [`set`](#set). Of course, in cases where you only need to consult the\n    current model, you can ignore the first parameter.\n\n    This module will normalize the `List String` in the update in the following\n    way before setting the actual location. It will:\n\n    * uri-encode the strings\n    * join them with \"/\"\n    * add the `prefix` to the beginning\n\n    In a modular application, you may well want to use [`map`](#map) after dispatching\n    to a lower level -- see the example in the [`map` documentation](#map).\n\n    Note that this module will automatically detect cases where you return\n    a [`HashUpdate`](#HashUpdate) which would set the same location that is\n    already set, and do nothing. Thus, you don't need to try to detect that\n    yourself.\n\n    The content of the individual strings is up to you ... essentially it\n    should be something that your `location2action` function can deal with.\n\n*   `location2action` is a function which takes a `List String` and returns\n    a list of actions your app can perform.\n\n    The argument is a normalized version of the hash portion of the location.\n    First, the `prefix` is stripped from the hash, and then the result is\n    converted to a `List String` by using '/' as a delimiter. Then, each\n    `String` value is uri-deocded.\n\n    Essentially, your `location2action` should return actions that are the\n    reverse of what your `delta2update` function produced. That is, the\n    `List String` you get back in `location2action` is the `List String` that\n    your `delta2update` used to create a [`HashUpdate`](#HashUpdate). So,\n    however you encoded your state in `delta2update`, you now need to interpret\n    that in `location2action` in order to return actions which will produce the\n    desired state.\n\n    Note that the list of actions you return will often be a single action. It\n    is a `List action` so that you can return multiple actions, if your app is\n    modular in a way that requires multiple actions to produce the desired\n    state.\n\n*   The remaining functions (`init`, `update`, `subscriptions` and `view`)\n    have the same meaning as they do in\n    [`Html.program`](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html#program)\n    ... that is, you should provide what you normally provide to that function.\n",
+            "args": [
+              "model",
+              "msg"
+            ],
+            "type": "{ prefix : String , delta2update : model -> model -> Maybe.Maybe RouteHash.HashUpdate , location2action : List String -> List msg , init : ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg }"
+          },
+          {
+            "name": "ConfigWithFlags",
+            "comment": " Like [`Config`](#Config), but with flags.\n",
+            "args": [
+              "model",
+              "msg",
+              "flags"
+            ],
+            "type": "{ prefix : String , delta2update : model -> model -> Maybe.Maybe RouteHash.HashUpdate , location2action : List String -> List msg , init : flags -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg }"
+          }
+        ],
+        "types": [
+          {
+            "name": "HashUpdate",
+            "comment": " An opaque type which represents an update to the hash portion of the\nbrowser's location.\n",
+            "args": [],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "app",
+            "comment": " Takes your configuration, and turns it into an `App`.\n\nUsually you won't need this -- you can just use [`program`](#program) to\ngo directly to a `Program` instead.\n",
+            "type": "RouteHash.Config model msg -> RouteUrl.App model msg"
+          },
+          {
+            "name": "appWithFlags",
+            "comment": " Takes your configuration, and turns into into an `AppWithFlags`.\n\nUsually you won't need this -- you can just use [`programWithFlags`](#programWithFlags) to\ngo directly to a `Program` instead.\n",
+            "type": "RouteHash.ConfigWithFlags model msg flags -> RouteUrl.AppWithFlags model msg flags"
+          },
+          {
+            "name": "apply",
+            "comment": " Applies the supplied function to the [`HashUpdate`](#HashUpdate).\n",
+            "type": "(List String -> List String) -> RouteHash.HashUpdate -> RouteHash.HashUpdate"
+          },
+          {
+            "name": "defaultPrefix",
+            "comment": " The value that you will most often want to supply as the\n`prefix` in your [`Config`](#Config). It is equal to \"#!/\".\n",
+            "type": "String"
+          },
+          {
+            "name": "extract",
+            "comment": " Extracts the `List String` from the [`HashUpdate`](#HashUpdate).\n",
+            "type": "RouteHash.HashUpdate -> List String"
+          },
+          {
+            "name": "map",
+            "comment": " Applies the supplied function to the [`HashUpdate`](#HashUpdate).\n\nYou might use this function when dispatching in a modular application.\nFor instance, your [`delta2update`](#Config) function might look something like this:\n\n    delta2update : Model -> Model -> Maybe HashUpdate\n    delta2update old new =\n        case new.virtualPage of\n            PageTag1 ->\n                RouteHash.map ((::) \"page-tag-1\") PageModule1.delta2update old new\n\n            PageTag2 ->\n                RouteHash.map ((::) \"page-tag-2\") PageModule2.delta2update old new\n\nOf course, your model and modules may be set up differently. However you do it,\nthe `map` function allows you to dispatch `delta2update` to a lower-level module,\nand then modify the `Maybe HashUpdate` which it returns.\n",
+            "type": "(List String -> List String) -> Maybe.Maybe RouteHash.HashUpdate -> Maybe.Maybe RouteHash.HashUpdate"
+          },
+          {
+            "name": "program",
+            "comment": " Takes your configuration, and turns it into a `Program` that can be\nused in your `main` function.\n",
+            "type": "RouteHash.Config model msg -> RouteUrl.RouteUrlProgram Basics.Never model msg"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " Takes your configuration, and turns it into a `Program flags` that can be\nused in your `main` function.\n",
+            "type": "RouteHash.ConfigWithFlags model msg flags -> RouteUrl.RouteUrlProgram flags model msg"
+          },
+          {
+            "name": "replace",
+            "comment": " Returns a [`HashUpdate`](#HashUpdate) that will update the browser's\nlocation, replacing the current history entry.\n\nThe `List String` represents the hash portion of the location. Each element of\nthe list will be uri-encoded, and then the list will be joined using slashes\n(\"/\"). Finally, a prefix will be applied (by [default](#defaultPrefix), \"#!/\",\nbut it is configurable).\n",
+            "type": "List String -> RouteHash.HashUpdate"
+          },
+          {
+            "name": "set",
+            "comment": " Returns a [`HashUpdate`](#HashUpdate) that will update the browser's\nlocation, creating a new history entry.\n\nThe `List String` represents the hash portion of the location. Each element of\nthe list will be uri-encoded, and then the list will be joined using slashes\n(\"/\"). Finally, a prefix will be applied (by [default](#defaultPrefix), \"#!/\",\nbut it is configurable).\n",
+            "type": "List String -> RouteHash.HashUpdate"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "RouteUrl",
+        "comment": " This module provides routing for single-page apps based on changes to the\n the browser's location. The routing happens in both directions\n-- that is, changes to the browser's location are translated to messages\nyour app can respond to, and changes to your app's state are translated to\nchanges in the browser's location. The net effect is to make it possible for\nthe 'back' and 'forward' buttons in the browser to do useful things, and for\nthe state of your app to be partially bookmark-able.\n\nIt is, of course, possible to do something like this using\n[`elm-lang/navigation`](http://package.elm-lang.org/packages/elm-lang/navigation/latest)\nby itself. For a discussion of the\ndifferences between the official module and this one, see the [package documentation]\n(http://package.elm-lang.org/packages/rgrempel/elm-route-url/latest).\n\n# Configuration\n\nYou configure this module by providing the functions set out in [`App`](#App) or\n[`AppWithFlags`](#AppWithFlags), depending on what kind of `init` function you\nwant to use.\n\n@docs App, AppWithFlags\n\n# URL Changes\n\nYou use `UrlChange` and `HistoryEntry` to indicate changes to the URL to be\ndisplayed in the browser's location bar.\n\n@docs UrlChange, HistoryEntry\n\n# Initialization (the simple version)\n\nThe simplest way to use this module is to do something like this:\n\n* Define your [`App`](#App) or [`AppWithFlags`](#AppWithFlags) record.\n\n* Use [`program`](#program) or [`programWithFlags`](#programWithFlags) to\n  create your `main` function, instead of their homonymous equivalents in\n  [`Html`](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html).\n\n@docs program, programWithFlags, RouteUrlProgram\n\n# More complex initialization\n\nIf your initialization needs are more complex, you may find some of the\nremaining types and function to be of interest. You won't usually\nneed them.\n\n@docs NavigationApp, navigationApp, runNavigationApp\n@docs NavigationAppWithFlags, navigationAppWithFlags, runNavigationAppWithFlags\n@docs WrappedModel, unwrapModel, mapModel\n@docs WrappedMsg, unwrapMsg, wrapUserMsg, wrapLocation\n",
+        "aliases": [
+          {
+            "name": "App",
+            "comment": " The configuration required to use this module to create a `Program`.\n\nThe `init`, `update`, `subscriptions` and `view` fields have the same meaning\nas they do in [`Html.program`](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html#program)\n-- that is, you should provide what you normally provide to that function.\n\nSo, the \"special\" fields are the `delta2url` function and the\n`location2messages` function.\n\n* `delta2url` will be called when your model changes. The first parameter is\n  the model's previous value, and the second is the model's new value.\n\n  Your function should return a `Just UrlChange` if a new URL should be\n  displayed in the browser's location bar (or `Nothing` if no change to the URL\n  is needed). This library will check the current URL before setting a new one,\n  so you need not worry about setting duplicate URLs -- that will be\n  automatically avoided.\n\n  The reason we provide both the previous and current model for your\n  consideration is that sometimes you may want to do something differently\n  depending on the nature of the change in the model, not just the new value.\n  For instance, it might make the difference between using `NewEntry` or\n  `ModifyEntry` to make the change.\n\n  Note that this function will *not* be called when processing messages\n  returned from your `location2messages` function, since in that case the\n  URL has already been set.\n\n* `location2messages` will be called when a change in the browser's URL is\n  detected, either because the user followed a link, typed something in the\n  location bar, or used the back or forward buttons.\n\n  Note that this function will *not* be called when your `delta2url` method\n  initiates a `UrlChange` -- since in that case, the relevant change in the\n  model has already occurred.\n\n  Your function should return a list of messages that your `update` function\n  can respond to. Those messages will be fed into your app, to produce the\n  changes to the model that the new URL implies.\n",
+            "args": [
+              "model",
+              "msg"
+            ],
+            "type": "{ delta2url : model -> model -> Maybe.Maybe RouteUrl.UrlChange , location2messages : Navigation.Location -> List msg , init : ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg }"
+          },
+          {
+            "name": "AppWithFlags",
+            "comment": " The configuration needed to use this module to make a `Program flags`.\n\nThe `init`, `update`, `subscriptions` and `view` fields have the same meaning\nas they do in\n[`Html.programWithFlags`](http://package.elm-lang.org/packages/elm-lang/html/2.0.0/Html#programWithFlags)\n-- that is, you should provide what you normally provide to that function.\n\nSo, the special functions are `delta2url` and `location2messages`,\nwhich are described above, under [`App`](#App).\n",
+            "args": [
+              "model",
+              "msg",
+              "flags"
+            ],
+            "type": "{ delta2url : model -> model -> Maybe.Maybe RouteUrl.UrlChange , location2messages : Navigation.Location -> List msg , init : flags -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , subscriptions : model -> Platform.Sub.Sub msg , view : model -> Html.Html msg }"
+          },
+          {
+            "name": "NavigationApp",
+            "comment": " A type which represents the various inputs to\n[`Navigation.program`](http://package.elm-lang.org/packages/elm-lang/navigation/2.0.0/Navigation#program).\n\nYou can produce this via [`navigationApp`](#navigationApp). Then, you can supply\nthis to [`runNavigationApp`](#runNavigationApp) in order to create a `Program`.\n\nNormally you don't need this -- you can just use [`program`](#program).\nHowever, `NavigationApp` could be useful if you want to do any further wrapping\nof its functions.\n",
+            "args": [
+              "model",
+              "msg"
+            ],
+            "type": "{ locationToMessage : Navigation.Location -> msg , init : Navigation.Location -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg }"
+          },
+          {
+            "name": "NavigationAppWithFlags",
+            "comment": " A type which represents the various inputs to\n[`Navigation.programWithFlags`](http://package.elm-lang.org/packages/elm-lang/navigation/2.0.0/Navigation#programWithFlags).\n\nYou can produce this via [`navigationAppWithFlags`](#navigationAppWithFlags). Then, you can supply\nthis to [`runNavigationAppWithFlags`](#runNavigationAppWithFlags) in order to create a `Program`.\n\nNormally you don't need this -- you can just use [`programWithFlags`](#programWithFlags).\nHowever, `NavigationAppWithFlags` could be useful if you want to do any further wrapping\nof its functions.\n",
+            "args": [
+              "model",
+              "msg",
+              "flags"
+            ],
+            "type": "{ locationToMessage : Navigation.Location -> msg , init : flags -> Navigation.Location -> ( model, Platform.Cmd.Cmd msg ) , update : msg -> model -> ( model, Platform.Cmd.Cmd msg ) , view : model -> Html.Html msg , subscriptions : model -> Platform.Sub.Sub msg }"
+          },
+          {
+            "name": "RouteUrlProgram",
+            "comment": " A convenient alias for the `Program` type that lets you specify your\ntype for the `model` and `msg` ... the alias takes care of the wrapping\nthat `RouteUrl` supplies.\n\nFor instance, suppose your `main` function would normally be typed like this:\n\n```\nmain : Program Never Model Msg\n```\n\nNow, once you use `RouteUrl.program` to set things up, `RouteUrl` wraps your\nmodel and msg types, so that the signature for your `main` function would\nnow be:\n\n```\nmain : Program Never (WrappedModel Model) (WrappedMsg Msg)\n```\n\nBut that's a little ugly. So, if you like, you can use the `RouteUrlProgram`\nalias like this:\n\n```\nmain : RouteUrlProgram Never Model Msg\n```\n\nIt's exactly the same type, but looks a little nicer.\n",
+            "args": [
+              "flags",
+              "model",
+              "msg"
+            ],
+            "type": "Platform.Program flags (RouteUrl.WrappedModel model) (RouteUrl.WrappedMsg msg)"
+          },
+          {
+            "name": "UrlChange",
+            "comment": " Indicates a change to be made in the URL, either creating\na new entry in the browser's history (`NewEntry`), or merely replacing the\ncurrent URL (`ModifyEntry`).\n\nThis is ultimately implemented via\n[`Navigation.newUrl`](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#newUrl) or\n[`Navigation.modifyUrl`](http://package.elm-lang.org/packages/elm-lang/navigation/1.0.0/Navigation#modifyUrl).\nThe reason we use this intermediate type is so that we can check whether the\nprovided string already corresponds to the current URL. In that case, we can\navoid creating a spurious duplicate entry in the browser's history.\n\nThe reason we take a `String` (rather than a more structured type) is that\nthere may be several ways you might want to build up the required URL. We\ndon't want to be prescriptive about that. However, the `String` you provide\nmust follow a couple of rules.\n\n* The `String` must already be uri-encoded.\n\n* The `String` must either start with a '/', a `?' or a '#'.\n\n    * If it starts with a '/', it will be interpreted as a full path, including\n      optional query parameters and hash.\n\n    * If it starts with a '?', then we'll assume that you want the current\n      path to stay the same -- only the query parameters and hash will change.\n\n    * If it starts with a '#', then we'll assume that you want the current\n      path and query parameters (if any) to stay the same -- only the\n      hash will change.\n\nSo, what you should *not* provide is the scheme, host, or authentication\nmethod -- that is, no \"http://elm-lang.org\". You should also not use relative\nURLs. (Let me know if you'd like relative URLs -- we might be able to do\nsomething sensible with them, but we don't yet in this version).\n\nOne way to construct a `UrlChange` in a modular way is to use the\n`RouteUrl.Builder` module. However, a variety of approaches are possible.\n",
+            "args": [],
+            "type": "{ entry : RouteUrl.HistoryEntry, url : String }"
+          }
+        ],
+        "types": [
+          {
+            "name": "HistoryEntry",
+            "comment": " Indicates whether to create a new entry in the browser's history, or merely\nmodify the current entry.\n\nOne could have used a `Bool` for this instead, but I hate remembering what\n`True` actually means.\n",
+            "args": [],
+            "cases": [
+              [
+                "NewEntry",
+                []
+              ],
+              [
+                "ModifyEntry",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "WrappedModel",
+            "comment": " This is the model used by `RouteUrl`. In part, it is composed of the client's\nmodel, and in part it is composed of things which `RouteUrl` wants to keep track of.\n",
+            "args": [
+              "user"
+            ],
+            "cases": []
+          },
+          {
+            "name": "WrappedMsg",
+            "comment": " This is the wrapper for RouteUrl's messages. Some messages are handled\ninternally by RouteUrl, and others are passed on to the application.\n",
+            "args": [
+              "user"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "mapModel",
+            "comment": " Given the wrapped model that `RouteUrl` uses, and a function that modifies\nthe part which your program provided, produce a new wrapped model.\n",
+            "type": "(user -> user) -> RouteUrl.WrappedModel user -> RouteUrl.WrappedModel user"
+          },
+          {
+            "name": "navigationApp",
+            "comment": " Given your configuration, this function does some wrapping and produces\nthe functions which\n[`Navigation.program`](http://package.elm-lang.org/packages/elm-lang/navigation/2.0.0/Navigation#program)\nrequires.\n\nNormally, you don't need this -- you can just use [`program`](#program).\n",
+            "type": "RouteUrl.App model msg -> RouteUrl.NavigationApp (RouteUrl.WrappedModel model) (RouteUrl.WrappedMsg msg)"
+          },
+          {
+            "name": "navigationAppWithFlags",
+            "comment": " Given your configuration, this function does some wrapping and produces\nthe functions which\n[`Navigation.programWithFlags`](http://package.elm-lang.org/packages/elm-lang/navigation/2.0.0/Navigation#programWithFlags)\nrequires.\n\nNormally, you don't need this -- you can just use [`programWithFlags`](#programWithFlags).\n",
+            "type": "RouteUrl.AppWithFlags model msg flags -> RouteUrl.NavigationAppWithFlags (RouteUrl.WrappedModel model) (RouteUrl.WrappedMsg msg) flags"
+          },
+          {
+            "name": "program",
+            "comment": " Turns your configuration into a `Program` that you can assign to your\n`main` function.\n",
+            "type": "RouteUrl.App model msg -> RouteUrl.RouteUrlProgram Basics.Never model msg"
+          },
+          {
+            "name": "programWithFlags",
+            "comment": " Turns your configuration into a `Program flags` that you can assign to your\n`main` function.\n",
+            "type": "RouteUrl.AppWithFlags model msg flags -> RouteUrl.RouteUrlProgram flags model msg"
+          },
+          {
+            "name": "runNavigationApp",
+            "comment": " Turns the output from [`navigationApp`](#navigationApp)\ninto a `Program` that you can assign to your `main` function.\n\nFor convenience, you will usually want to just use [`program`](#program),\nwhich goes directly from the required\nconfiguration to a `Program`. You would only want `runNavigationApp` for the\nsake of composability -- that is, in case there is something further you want\nto do with the `NavigationApp` structure before turning it into a `Program`.\n",
+            "type": "RouteUrl.NavigationApp model msg -> Platform.Program Basics.Never model msg"
+          },
+          {
+            "name": "runNavigationAppWithFlags",
+            "comment": " Turns the output from [`navigationApp`](#navigationApp)\ninto a `Program` that you can assign to your `main` function.\n\nFor convenience, you will usually want to just use [`program`](#program),\nwhich goes directly from the required\nconfiguration to a `Program`. You would only want `runNavigationApp` for the\nsake of composability -- that is, in case there is something further you want\nto do with the `NavigationApp` structure before turning it into a `Program`.\n",
+            "type": "RouteUrl.NavigationAppWithFlags model msg flags -> Platform.Program flags model msg"
+          },
+          {
+            "name": "unwrapModel",
+            "comment": " Given the wrapped model that `RouteUrl` uses, extract the part of the model\nthat your program provided.\n",
+            "type": "RouteUrl.WrappedModel user -> user"
+          },
+          {
+            "name": "unwrapMsg",
+            "comment": " Given the wrapped msg type that `RouteUrl` uses, either apply a function\nthat works on a `Location`, or apply a function that works on the msg type\nthat your program uses.\n",
+            "type": "(Navigation.Location -> a) -> (user -> a) -> RouteUrl.WrappedMsg user -> a"
+          },
+          {
+            "name": "wrapLocation",
+            "comment": " Given a location, make the kind of message that `RouteUrl` uses.\n\nI'm not sure you'll ever need this ... perhaps for testing?\n",
+            "type": "Navigation.Location -> RouteUrl.WrappedMsg user"
+          },
+          {
+            "name": "wrapUserMsg",
+            "comment": " Given the kind of message your program uses, wrap it in the kind of msg\n`RouteUrl` uses.\n",
+            "type": "user -> RouteUrl.WrappedMsg user"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -62496,6 +64051,239 @@
             "name": "valueCount",
             "comment": " Return number of values stored at Trie location.\n",
             "type": "String -> Trie.Trie a -> Int"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "robertjlooby/elm-generic-dict",
+    "version": "1.0.2",
+    "docs": [
+      {
+        "name": "GenericSet",
+        "comment": " A set of unique values. The values can be any type. The builder functions\ntake a comparer function that takes two values and returns an Order.\n\nInsert, remove, and query operations all take *O(log n)* time. GenericSet equality with\n`(==)` is unreliable and should not be used.\n\n# Sets\n@docs GenericSet\n\n# Build\n@docs empty, singleton, insert, remove\n\n# Query\n@docs isEmpty, member, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "GenericSet",
+            "comment": " Represents a set of unique values. So `(GenericSet Int)` is a set of integers and\n`(GenericSet String)` is a set of strings.\n",
+            "args": [
+              "t"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Get the difference between the first set and the second. Keeps values\nthat do not appear in the second set. Keeps the comparer from the first set.\n",
+            "type": "GenericSet.GenericSet a -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty set using the given comparer.\n",
+            "type": "(a -> a -> Basics.Order) -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "filter",
+            "comment": " Create a new set consisting only of elements which satisfy a predicate.\n",
+            "type": "(a -> Bool) -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the values in a set, in order from lowest to highest (by the\ncomparer).\n",
+            "type": "(a -> b -> b) -> b -> GenericSet.GenericSet a -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the values in a set, in order from highest to lowest (by the\ncomparer).\n",
+            "type": "(a -> b -> b) -> b -> GenericSet.GenericSet a -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert a list into a set, removing any duplicates, using the given\ncomparer.\n",
+            "type": "(a -> a -> Basics.Order) -> List a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a value into a set.\n",
+            "type": "a -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "intersect",
+            "comment": " Get the intersection of two sets. Keeps values that appear in both sets.\nKeeps the comparer from the first set.\n",
+            "type": "GenericSet.GenericSet a -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a set is empty.\n",
+            "type": "GenericSet.GenericSet a -> Bool"
+          },
+          {
+            "name": "map",
+            "comment": " Map a function onto a set, creating a new set with no duplicates and a new\ncomparer.\n",
+            "type": "(b -> b -> Basics.Order) -> (a -> b) -> GenericSet.GenericSet a -> GenericSet.GenericSet b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a value is in a set.\n",
+            "type": "a -> GenericSet.GenericSet a -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Create two new sets; the first consisting of elements which satisfy a\npredicate, the second consisting of elements which do not.\n",
+            "type": "(a -> Bool) -> GenericSet.GenericSet a -> ( GenericSet.GenericSet a, GenericSet.GenericSet a )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a value from a set. If the value is not found, no changes are made.\n",
+            "type": "a -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a set with one value using the given comparer.\n",
+            "type": "(a -> a -> Basics.Order) -> a -> GenericSet.GenericSet a"
+          },
+          {
+            "name": "size",
+            "comment": " Determine the number of elements in a set.\n",
+            "type": "GenericSet.GenericSet a -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a set into a list, sorted by the comparer.\n",
+            "type": "GenericSet.GenericSet a -> List a"
+          },
+          {
+            "name": "union",
+            "comment": " Get the union of two sets. Keep all values. Keep the comparer from the\nfirst set.\n",
+            "type": "GenericSet.GenericSet a -> GenericSet.GenericSet a -> GenericSet.GenericSet a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "GenericDict",
+        "comment": " A dictionary mapping unique keys to values. The keys can be any type. The\nbuilder functions take a comparer function that takes two keys and returns an\nOrder.\n\nInsert, remove, and query operations all take *O(log n)* time. Dictionary\nequality with `(==)` is unreliable and should not be used.\n\n# Dictionaries\n@docs GenericDict\n\n# Build\n@docs empty, singleton, insert, update, remove\n\n# Query\n@docs isEmpty, member, get, size\n\n# Combine\n@docs union, intersect, diff\n\n# Lists\n@docs keys, values, toList, fromList\n\n# Transform\n@docs map, foldl, foldr, filter, partition\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "GenericDict",
+            "comment": " A dictionary of keys and values. So a `(GenericDict String User)` is a dictionary\nthat lets you look up a `String` (such as user names) and find the associated\n`User`.\n",
+            "args": [
+              "k",
+              "v"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "diff",
+            "comment": " Keep a key-value pair when its key does not appear in the second\ndictionary. Keep the comparer from the first dictionary.\n",
+            "type": "GenericDict.GenericDict k v -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "empty",
+            "comment": " Create an empty dictionary using the given comparer.\n",
+            "type": "(k -> k -> Basics.Order) -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "filter",
+            "comment": " Keep a key-value pair when it satisfies a predicate.\n",
+            "type": "(k -> v -> Bool) -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "foldl",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from lowest\nkey to highest key (by the comparer).\n",
+            "type": "(k -> v -> b -> b) -> b -> GenericDict.GenericDict k v -> b"
+          },
+          {
+            "name": "foldr",
+            "comment": " Fold over the key-value pairs in a dictionary, in order from highest\nkey to lowest key (by the comparer).\n",
+            "type": "(k -> v -> b -> b) -> b -> GenericDict.GenericDict k v -> b"
+          },
+          {
+            "name": "fromList",
+            "comment": " Convert an association list into a dictionary using the given comparer.\n",
+            "type": "(k -> k -> Basics.Order) -> List ( k, v ) -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "get",
+            "comment": " Get the value associated with a key. If the key is not found, return\n`Nothing`. This is useful when you are not sure if a key will be in the\ndictionary.\n\n    animals = fromList compare [ (\"Tom\", Cat), (\"Jerry\", Mouse) ]\n\n    get \"Tom\"   animals == Just Cat\n    get \"Jerry\" animals == Just Mouse\n    get \"Spike\" animals == Nothing\n\n",
+            "type": "k -> GenericDict.GenericDict k v -> Maybe.Maybe v"
+          },
+          {
+            "name": "insert",
+            "comment": " Insert a key-value pair into a dictionary. Replaces value when there is\na collision.\n",
+            "type": "k -> v -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "intersect",
+            "comment": " Keep a key-value pair when its key appears in the second dictionary.\nPreference is given to values in the first dictionary. Keep the comparer from\nthe first dictionary.\n",
+            "type": "GenericDict.GenericDict k v -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "isEmpty",
+            "comment": " Determine if a dictionary is empty.\n\n    isEmpty (empty compare) == True\n",
+            "type": "GenericDict.GenericDict k v -> Bool"
+          },
+          {
+            "name": "keys",
+            "comment": " Get all of the keys in a dictionary, sorted from lowest to highest.\n\n    keys (fromList [(0,\"Alice\"),(1,\"Bob\")]) == [0,1]\n",
+            "type": "GenericDict.GenericDict k v -> List k"
+          },
+          {
+            "name": "map",
+            "comment": " Apply a function to all values in a dictionary.\n",
+            "type": "(k -> a -> b) -> GenericDict.GenericDict k a -> GenericDict.GenericDict k b"
+          },
+          {
+            "name": "member",
+            "comment": " Determine if a key is in a dictionary.\n",
+            "type": "k -> GenericDict.GenericDict k v -> Bool"
+          },
+          {
+            "name": "partition",
+            "comment": " Partition a dictionary according to a predicate. The first dictionary\ncontains all key-value pairs which satisfy the predicate, and the second\ncontains the rest.\n",
+            "type": "(k -> v -> Bool) -> GenericDict.GenericDict k v -> ( GenericDict.GenericDict k v, GenericDict.GenericDict k v )"
+          },
+          {
+            "name": "remove",
+            "comment": " Remove a key-value pair from a dictionary. If the key is not found,\nno changes are made.\n",
+            "type": "k -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "singleton",
+            "comment": " Create a dictionary with one key-value pair, using the given comparer.\n",
+            "type": "(k -> k -> Basics.Order) -> k -> v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "size",
+            "comment": " Determine the number of key-value pairs in the dictionary.\n",
+            "type": "GenericDict.GenericDict k v -> Int"
+          },
+          {
+            "name": "toList",
+            "comment": " Convert a dictionary into an association list of key-value pairs, sorted by keys.\n",
+            "type": "GenericDict.GenericDict k v -> List ( k, v )"
+          },
+          {
+            "name": "union",
+            "comment": " Combine two dictionaries. If there is a collision, preference is given\nto the first dictionary. Keep the comparer from the first dictionary.\n",
+            "type": "GenericDict.GenericDict k v -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "update",
+            "comment": " Update the value of a dictionary for a specific key with a given function.\n",
+            "type": "k -> (Maybe.Maybe v -> Maybe.Maybe v) -> GenericDict.GenericDict k v -> GenericDict.GenericDict k v"
+          },
+          {
+            "name": "values",
+            "comment": " Get all of the values in a dictionary, in the order of their keys.\n\n    values (fromList [(0,\"Alice\"),(1,\"Bob\")]) == [\"Alice\", \"Bob\"]\n",
+            "type": "GenericDict.GenericDict k v -> List v"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -66087,7 +67875,7 @@
   },
   {
     "name": "sanichi/elm-md5",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "docs": [
       {
         "name": "MD5",
@@ -71202,6 +72990,325 @@
             "name": "solve",
             "comment": " This function is heart and the only public function\nthis library provides. It calculates grid layout\nfor given number of columns and items with dimmensions.\nYou can then use result (List of tuples with `Position` and `Item`)\nin you're views to simply render layout as you wish.\nOrder of items is guaranteed to stay same.\n\n- `(a -> Size)` Function from item to Size\n- `Int` - number of Columns\n- `List` - Grid items\n\n## Four column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|A|A|\n    -- 1 |A|A|A|A|\n    -- 2 |B|B|C|C|\n    -- 3 | | |C|C|\n\n    solve identity 4\n        [ { width = 4, height = 2 }\n        , { width = 2, height = 1 }\n        , { width = 2, height = 2 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 4, height = 2 } )\n    , ( { x = 0, y = 2 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 2 }, { width = 2, height = 2 } )\n    ]\n\n\n## Two column example:\n\n    -- Expected result:\n    -- ================\n    --    0 1\n    -- 0 |A|A|\n    -- 1 |B| |\n    -- 2 |B| |\n    -- 3 |C|C|\n\n    solve identity 2\n        [ { width = 2, height = 1 }\n        , { width = 1, height = 2 }\n        , { width = 2, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 1 }, { width = 1, height = 2 } )\n    , ( { x = 0, y = 3 }, { width = 2, height = 1 } )\n    ]\n\n## More complex layout:\n\n    -- Expected result:\n    -- ================\n    --    0 1 2 3\n    -- 0 |A|A|B|B|\n    -- 1 |C|C|B|B|\n    -- 2 | | |B|B|\n    -- 3 |D|D|D|D|\n\n    solve identity 4\n        [ { width = 2, height = 1 }\n        , { width = 2, height = 3 }\n        , { width = 2, height = 1 }\n        , { width = 4, height = 1 }\n        ]\n    ==\n    [ ( { x = 0, y = 0 }, { width = 2, height = 1 } )\n    , ( { x = 2, y = 0 }, { width = 2, height = 3 } )\n    , ( { x = 0, y = 1 }, { width = 2, height = 1 } )\n    , ( { x = 0, y = 3 }, { width = 4, height = 1 } )\n    ]\n",
             "type": "(a -> Grid.Size) -> Int -> List a -> List ( Grid.Position, a )"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "vito/elm-ansi",
+    "version": "8.0.2",
+    "docs": [
+      {
+        "name": "Ansi.Log",
+        "comment": " Log interprets a stream of text and ANSI escape codes.\n\n@docs init, update, view\n\n@docs Model, LineDiscipline, Line, Chunk, CursorPosition, Style\n",
+        "aliases": [
+          {
+            "name": "Chunk",
+            "comment": " A blob of text paired with the style that was configured at the time.\n",
+            "args": [],
+            "type": "{ text : String, style : Ansi.Log.Style }"
+          },
+          {
+            "name": "CursorPosition",
+            "comment": " The coordinate in the window where text will be printed.\n",
+            "args": [],
+            "type": "{ row : Int, column : Int }"
+          },
+          {
+            "name": "Line",
+            "comment": " A list of arbitrarily-sized chunks of output.\n",
+            "args": [],
+            "type": "( List Ansi.Log.Chunk, Int )"
+          },
+          {
+            "name": "Model",
+            "comment": " Model is populated by parsing ANSI character sequences and escape codes\nvia `update`.\n\n* `lines` contains all of the output that's been parsed\n* `position` is the current position of the cursor\n* `style` is the style to be applied to any text that's printed\n* `remainder` is a partial ANSI escape sequence left around from an incomplete\n  segment from the stream\n",
+            "args": [],
+            "type": "{ lineDiscipline : Ansi.Log.LineDiscipline , lines : Array.Array Ansi.Log.Line , position : Ansi.Log.CursorPosition , savedPosition : Maybe.Maybe Ansi.Log.CursorPosition , style : Ansi.Log.Style , remainder : String }"
+          },
+          {
+            "name": "Style",
+            "comment": " The current presentation state for any text that's printed.\n",
+            "args": [],
+            "type": "{ foreground : Maybe.Maybe Ansi.Color , background : Maybe.Maybe Ansi.Color , bold : Bool , faint : Bool , italic : Bool , underline : Bool , blink : Bool , inverted : Bool }"
+          }
+        ],
+        "types": [
+          {
+            "name": "LineDiscipline",
+            "comment": " How to interpret linebreaks.\n\n* `Raw`: interpret `\\n` as just `\\n`, i.e. move down a line, retaining the\n  cursor column\n* `Cooked`: interpret `\\n` as `\\r\\n`, i.e. move down a line and go to the first\n  column\n",
+            "args": [],
+            "cases": [
+              [
+                "Raw",
+                []
+              ],
+              [
+                "Cooked",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "init",
+            "comment": " Construct an empty model.\n",
+            "type": "Ansi.Log.LineDiscipline -> Ansi.Log.Model"
+          },
+          {
+            "name": "update",
+            "comment": " Parse and interpret a chunk of ANSI output.\n\nTrailing partial ANSI escape codes will be prepended to the chunk in the next\ncall to `update`.\n",
+            "type": "String -> Ansi.Log.Model -> Ansi.Log.Model"
+          },
+          {
+            "name": "view",
+            "comment": " Render the model's logs as HTML.\n\nWraps everything in <pre>, with a <div> for each Line, and <span> with styling\nand classes for each Chunk.\n\nThe `span` elements will have the following attributes:\n\n* `style=\"font-weight: bold|normal\"`\n* `class=\"ansi-COLOR-fg ansi-COLOR-bg ansi-bold\"`\n\n...where each class is optional, and `COLOR` is one of:\n\n* `black`\n* `red`\n* `green`\n* `yellow`\n* `blue`\n* `magenta`\n* `cyan`\n* `white`\n* `bright-black`\n* `bright-red`\n* `bright-green`\n* `bright-yellow`\n* `bright-blue`\n* `bright-magenta`\n* `bright-cyan`\n* `bright-white`\n\nIf the chunk is inverted, the `-fg` and `-bg` classes will have their colors\nswapped. If the chunk is bold, the `ansi-bold` class will be present.\n",
+            "type": "Ansi.Log.Model -> Html.Html x"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Ansi",
+        "comment": " This library primarily exposes the `parse` function and the types that it\nwill yield.\n\n@docs parse, parseInto\n\n@docs Action, Color, EraseMode\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Action",
+            "comment": " The events relevant to interpreting the stream.\n\n* `Print` is a chunk of text which should be interpreted with the style implied\n  by the preceding actions (i.e. `[SetBold True, Print \"foo\"]`) should yield a\n  bold `foo`\n* `Remainder` is a partial ANSI escape sequence, returned at the end of the\n  actions if it was cut off. The next string passed to `parse` should have this\n  prepended to it.\n* The rest are derived from their respective ANSI escape sequences.\n",
+            "args": [],
+            "cases": [
+              [
+                "Print",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "Remainder",
+                [
+                  "String"
+                ]
+              ],
+              [
+                "SetForeground",
+                [
+                  "Maybe.Maybe Ansi.Color"
+                ]
+              ],
+              [
+                "SetBackground",
+                [
+                  "Maybe.Maybe Ansi.Color"
+                ]
+              ],
+              [
+                "SetBold",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetFaint",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetItalic",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetUnderline",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetBlink",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "SetInverted",
+                [
+                  "Bool"
+                ]
+              ],
+              [
+                "Linebreak",
+                []
+              ],
+              [
+                "CarriageReturn",
+                []
+              ],
+              [
+                "CursorUp",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorDown",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorForward",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorBack",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "CursorPosition",
+                [
+                  "Int",
+                  "Int"
+                ]
+              ],
+              [
+                "CursorColumn",
+                [
+                  "Int"
+                ]
+              ],
+              [
+                "EraseDisplay",
+                [
+                  "Ansi.EraseMode"
+                ]
+              ],
+              [
+                "EraseLine",
+                [
+                  "Ansi.EraseMode"
+                ]
+              ],
+              [
+                "SaveCursorPosition",
+                []
+              ],
+              [
+                "RestoreCursorPosition",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "Color",
+            "comment": " The colors applied to the foreground/background.\n",
+            "args": [],
+            "cases": [
+              [
+                "Black",
+                []
+              ],
+              [
+                "Red",
+                []
+              ],
+              [
+                "Green",
+                []
+              ],
+              [
+                "Yellow",
+                []
+              ],
+              [
+                "Blue",
+                []
+              ],
+              [
+                "Magenta",
+                []
+              ],
+              [
+                "Cyan",
+                []
+              ],
+              [
+                "White",
+                []
+              ],
+              [
+                "BrightBlack",
+                []
+              ],
+              [
+                "BrightRed",
+                []
+              ],
+              [
+                "BrightGreen",
+                []
+              ],
+              [
+                "BrightYellow",
+                []
+              ],
+              [
+                "BrightBlue",
+                []
+              ],
+              [
+                "BrightMagenta",
+                []
+              ],
+              [
+                "BrightCyan",
+                []
+              ],
+              [
+                "BrightWhite",
+                []
+              ]
+            ]
+          },
+          {
+            "name": "EraseMode",
+            "comment": " Method to erase the display or line.\n",
+            "args": [],
+            "cases": [
+              [
+                "EraseToBeginning",
+                []
+              ],
+              [
+                "EraseToEnd",
+                []
+              ],
+              [
+                "EraseAll",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "parse",
+            "comment": " Convert an arbitrary String of text into a sequence of actions.\n\nIf the input string ends with a partial ANSI escape sequence, it will be\nyielded as a `Remainder` action, which should then be prepended to the next\ncall to `parse`.\n",
+            "type": "String -> List Ansi.Action"
+          },
+          {
+            "name": "parseInto",
+            "comment": " Update a structure with actions parsed out of the given string.\n",
+            "type": "a -> (Ansi.Action -> a -> a) -> String -> a"
           }
         ],
         "generated-with-elm-version": "0.18.0"
