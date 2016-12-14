@@ -12325,7 +12325,7 @@
   },
   {
     "name": "Kinto/elm-kinto",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "docs": [
       {
         "name": "Kinto",
@@ -12355,7 +12355,7 @@
         "types": [
           {
             "name": "Auth",
-            "comment": " A type for authentication\n\n    Basic \"username\" \"password\"\n",
+            "comment": " A type for authentication\n\n    Basic \"username\" \"password\"\n    Bearer \"<token>\"\n    Custom \"customType\" \"customString\"\n",
             "args": [],
             "cases": [
               [
@@ -12372,6 +12372,13 @@
               [
                 "Bearer",
                 [
+                  "String"
+                ]
+              ],
+              [
+                "Custom",
+                [
+                  "String",
                   "String"
                 ]
               ]
@@ -22638,6 +22645,252 @@
             "name": "uuidStringGenerator",
             "comment": " Random.PCG Generator for Uuid Strings. Using this Generator instead of the generate\nfunction lets you use the full power of the Random.PCG library to create lists of Uuids,\nmap them to other types etc.\n",
             "type": "Random.Pcg.Generator String"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "debois/elm-dom",
+    "version": "1.2.3",
+    "docs": [
+      {
+        "name": "DOM",
+        "comment": " You read values off the DOM by constructing a JSON decoder.\nSee the `target` value for example use.\n\n# Traversing the DOM\n@docs target, offsetParent, parentElement, nextSibling, previousSibling, childNode, childNodes\n\n# Geometry\nDecoders for reading sizing etc. properties off the DOM. All decoders return\nmeasurements in pixels.\n\nRefer to, e.g.,\n[the Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model/Determining_the_dimensions_of_elements)\nfor the precise semantics of these measurements. See also\n[this stackoverflow answer](https://stackoverflow.com/questions/294250/how-do-i-retrieve-an-html-elements-actual-width-and-height).\n\n@docs offsetWidth, offsetHeight\n@docs offsetLeft, offsetTop\n@docs Rectangle, boundingClientRect\n\n# Scroll\n@docs scrollLeft, scrollTop\n\n# Miscellanous\n@docs className\n",
+        "aliases": [
+          {
+            "name": "Rectangle",
+            "comment": " Types for rectangles.\n",
+            "args": [],
+            "type": "{ top : Float, left : Float, width : Float, height : Float }"
+          }
+        ],
+        "types": [],
+        "values": [
+          {
+            "name": "boundingClientRect",
+            "comment": " Approximation of the method\n[getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Floaterface/nsIDOMClientRect),\nbased off\n[this stackoverflow answer](https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element).\n\nNB! This decoder produces wrong results if a parent element is scrolled and\ndoes not have explicit positioning (e.g., `position: relative;`); see\n[this issue](https://github.com/debois/elm-dom/issues/4).\n\nAlso note that this decoder is likely computationally expensive and may produce\nresults that differ slightly from `getBoundingClientRect` in browser-dependent\nways.\n\n(I don't get to call getBoundingClientRect directly from Elm without going\nnative or using ports; my packages don't get to go native and I can find no\nsolution with ports. So we do it like in the bad old days with an O(lg n)\ntraversal of the DOM, browser-dependencies and CSS quirks, only now through\npresumably expensive JSON decoders.  It's 2007 forever, baby!)\n",
+            "type": "Json.Decode.Decoder DOM.Rectangle"
+          },
+          {
+            "name": "childNode",
+            "comment": " Find the ith child of an element.\n",
+            "type": "Int -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "childNodes",
+            "comment": " Get the children of an element.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder (List a)"
+          },
+          {
+            "name": "className",
+            "comment": " Get the class name(s) of an element.\n",
+            "type": "Json.Decode.Decoder String"
+          },
+          {
+            "name": "nextSibling",
+            "comment": " Get the next sibling of an element.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "offsetHeight",
+            "comment": " Get the heigh of an element in pixels. Underlying implementation\nreads `.offsetHeight`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "offsetLeft",
+            "comment": " Get the left-offset of the element in the parent element in pixels.\nUnderlying implementation reads `.offsetLeft`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "offsetParent",
+            "comment": " Get the offsetParent of the current element. Returns first argument if the current\nelement is already the root; applies the second argument to the parent element\nif not.\n\nTo do traversals of the DOM, exploit that Elm allows recursive values.\n",
+            "type": "a -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "offsetTop",
+            "comment": " Get the top-offset of the element in the parent element in pixels.\nUnderlying implementation reads `.offsetTop`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "offsetWidth",
+            "comment": " Get the width of an element in pixels; underlying implementation\nreads `.offsetWidth`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "parentElement",
+            "comment": " Get the parent of an element.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "previousSibling",
+            "comment": " Get the previous sibling of an element.\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          },
+          {
+            "name": "scrollLeft",
+            "comment": " Get the amount of left scroll of the element in pixels.\nUnderlying implementation reads `.scrollLeft`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "scrollTop",
+            "comment": " Get the amount of top scroll of the element in pixels.\nUnderlying implementation reads `.scrollTop`.\n",
+            "type": "Json.Decode.Decoder Float"
+          },
+          {
+            "name": "target",
+            "comment": " Get the target DOM element of an event. You will usually start with this\ndecoder. E.g., to make a button which when clicked emit an Action that carries\nthe width of the button:\n\n  import DOM exposing (target, offsetWidth)\n\n  myButton : Html Float\n  myButton =\n    button\n    [ on \"click\" (target offsetWidth) ]\n    [ text \"Click me!\" ]\n",
+            "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
+    "name": "debois/elm-parts",
+    "version": "6.0.0",
+    "docs": [
+      {
+        "name": "Parts",
+        "comment": "\n\nGiven a TEA component with model type `model` and message type `msg`, we construct\na variant component which knows how to extract its model from a c model\n`c` and produces generic messages `Msg c`. The consuming component is assumed\nto have message type `obs` (for \"observation\").\n\n# Lazyness\n\nRecall that `Html.Lazy` avoids re-computing views when the model doesn't change\nacross updates. However, \"doesn't change\" does not mean `model == model'` but rather\nthe stricter `model === model'` (in Javascript terms). That is, the old and new model\nmust not only be structurally the same, they must be literally the same\ndata-structure in memory.\n\nParts generally do not achieve referential equality of no-op updates, since we\nare wrapping updates conceptually like this:\n\n  let (submodel, submsgs) = SubComponent.update msg model.submodel\n    model' = { model | submodel = submodel }\n  in\n    ...\nIn the second line, even if `submodel == model.submodel` and so `model ==\nmodel'`, we won't have (in Javascript terms) `model === model'`.\n\nFor this reason, the result of `update` functions used in parts should be\n`Maybe (model, Cmd msg)` rather than the usual `(model, Cmd msg)`; the\n`Nothing` case signifies a no-op.\n\n# Communicating to the parent component\n\nBecause parts wrap messages in an opaque type, the parent component loses the\nability to inspect and maybe react to messages of the part. We recover this\nability by requiring the `update` function to take as parameter a lifting\nfunction which lifts the parts messages to that of its parent.\n\n@docs Update, View\n\n# Model embeddings\n@docs Get, Set, embedView, embedUpdate\n@docs accessors, Accessors\n\n## Indexed model embeddings\n@docs Index, Indexed, indexed\n\n# Message embeddings\n@docs Msg, update, update_, partial\n\n# Part construction\n@docs create, create1, generalize, pack, pack1\n",
+        "aliases": [
+          {
+            "name": "Accessors",
+            "comment": " For components where consumers do care about the model of the\ncomponent, use the `accessors` function below to generate suitable,\nwell, accessors.\n",
+            "args": [
+              "model",
+              "c"
+            ],
+            "type": "{ get : Parts.Get model c , set : Parts.Set model c , map : (model -> model) -> c -> c , reset : c -> c }"
+          },
+          {
+            "name": "Get",
+            "comment": " Type of \"getter\": fetch component model `m` from c model `c`.\n",
+            "args": [
+              "model",
+              "c"
+            ],
+            "type": "c -> model"
+          },
+          {
+            "name": "Index",
+            "comment": " Type of indices. An index has to be `comparable`\n\nFor example:\nAn index can be a list of `Int` rather than just an `Int` to\nsupport nested dynamically constructed elements: Use indices `[0]`, `[1]`, ...\nfor statically known top-level components, then use `[0,0]`, `[0,1]`, ...\nfor a dynamically generated list of components.\n",
+            "args": [
+              "comparable"
+            ],
+            "type": "comparable"
+          },
+          {
+            "name": "Indexed",
+            "comment": " Indexed families of things.\n",
+            "args": [
+              "comparable",
+              "a"
+            ],
+            "type": "Dict.Dict (Parts.Index comparable) a"
+          },
+          {
+            "name": "Set",
+            "comment": " Type of \"setter\": update component model `m` in c `c`.\n",
+            "args": [
+              "model",
+              "c"
+            ],
+            "type": "model -> c -> c"
+          },
+          {
+            "name": "Update",
+            "comment": " Update functions.\n\nTEA update function with explicit message lifting and no-op. You should have:\n\n  fst (update f msg model) == Nothing     -- No change to model\n  fst (update f msg model) == Just model'   -- Change to model'\n",
+            "args": [
+              "model",
+              "msg",
+              "obs"
+            ],
+            "type": "(msg -> obs) -> msg -> model -> ( Maybe.Maybe model, Platform.Cmd.Cmd obs )"
+          },
+          {
+            "name": "View",
+            "comment": " Standard TEA view function type.\n",
+            "args": [
+              "model",
+              "a"
+            ],
+            "type": "model -> a"
+          }
+        ],
+        "types": [
+          {
+            "name": "Msg",
+            "comment": " Similar to how embeddings enable collecting models of different type\nin a single model c, we collect messages in a single \"master\nmessage\" type. Messages exist exclusively to be dispatched by a corresponding\n`update` function; we can avoid distinguishing between different types of\nmessages by dispatching not the `Msg` itself, but a partially applied update\nfunction `update msg`.\n\nIt's instructive to compare `Msg` to the type of `update` partially applied to\nan actual carried message `m`:\n\n  update : m -> c -> (c, Cmd m)\n  (update m) : c -> (c, Cmd m)\n",
+            "args": [
+              "c",
+              "obs"
+            ],
+            "cases": []
+          }
+        ],
+        "values": [
+          {
+            "name": "accessors",
+            "comment": " Generate accessors.\n",
+            "type": "Parts.Get (Dict.Dict comparable model) c -> Parts.Set (Dict.Dict comparable model) c -> model -> Parts.Index comparable -> Parts.Accessors model c"
+          },
+          {
+            "name": "create",
+            "comment": " From `update` and `view` functions, produce a `view` function which (a)\nfetches its model from a `c` model, and (b) dispatches generic `Msg`\nmessages.\n\nIts instructive to compare the types of the input `view` and `update` for a\ntypical case. Notice that `create` transforms `model` -> `c` and\n`Html m` -> `Html obs`.\n\n  {- Input -}\n  view : (m -> obs) -> model -> List (Attributes obs) -> List (Html obs) -> Html obs\n  update : (m -> obs) -> model -> (Maybe model, Cmd obs)\n\n  {- Output -}\n  view : Index comparable -> c -> List (Attributes obs) -> List (Html obs) -> Html obs\n\nNote that the input `view` function is assumed to take a function lifting its\nmessages.\n",
+            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg obs -> Parts.Get (Parts.Indexed comparable model) c -> Parts.Set (Parts.Indexed comparable model) c -> model -> (Parts.Msg c obs -> obs) -> Parts.Index comparable -> Parts.View c a"
+          },
+          {
+            "name": "create1",
+            "comment": " Like `create`, but for components that are assumed to have only one\ninstance.\n",
+            "type": "((msg -> obs) -> Parts.View model a) -> Parts.Update model msg obs -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c obs -> obs) -> Parts.View c a"
+          },
+          {
+            "name": "embedUpdate",
+            "comment": " Lift an `Update` from operating on `model` to a c model `c`.\n",
+            "type": "Parts.Get model c -> Parts.Set model c -> Parts.Update model msg obs -> Parts.Update c msg obs"
+          },
+          {
+            "name": "embedView",
+            "comment": " Lift a `view` to one which knows how to retrieve its `model` from\na c model `c`.\n",
+            "type": "Parts.Get model c -> Parts.View model a -> Parts.View c a"
+          },
+          {
+            "name": "generalize",
+            "comment": " Generalise a standard TEA `update` function to one fitting with\nparts (explicit lifter, explicit no-op).\n",
+            "type": "(msg -> model -> ( model, Platform.Cmd.Cmd msg )) -> Parts.Update model msg obs"
+          },
+          {
+            "name": "indexed",
+            "comment": " Fix a getter and setter for an `Indexed comparable model` to a particular `Index comparable`.\n",
+            "type": "Parts.Get (Parts.Indexed comparable model) c -> Parts.Set (Parts.Indexed comparable model) c -> model -> ( Parts.Index comparable -> Parts.Get model c , Parts.Index comparable -> Parts.Set model c )"
+          },
+          {
+            "name": "pack",
+            "comment": " Pack up a an indexed component message `msg` in an `obs`.\n",
+            "type": "Parts.Update model msg obs -> Parts.Get (Parts.Indexed comparable model) c -> Parts.Set (Parts.Indexed comparable model) c -> model -> (Parts.Msg c obs -> obs) -> Parts.Index comparable -> msg -> obs"
+          },
+          {
+            "name": "pack1",
+            "comment": " Pack up a singleton component message `msg` in an `obs`.\n",
+            "type": "Parts.Update model msg obs -> Parts.Get model c -> Parts.Set model c -> (Parts.Msg c obs -> obs) -> msg -> obs"
+          },
+          {
+            "name": "partial",
+            "comment": " Partially apply an `Update` function to a `msg`, producing\na generic Msg.\n",
+            "type": "(Parts.Msg c obs -> obs) -> Parts.Update c msg obs -> msg -> Parts.Msg c obs"
+          },
+          {
+            "name": "update",
+            "comment": " Generic update function for `Msg`.\n",
+            "type": "Parts.Msg c obs -> c -> ( c, Platform.Cmd.Cmd obs )"
+          },
+          {
+            "name": "update_",
+            "comment": " Generic update function for `Msg`, explicit no-op\n",
+            "type": "Parts.Msg c obs -> c -> ( Maybe.Maybe c, Platform.Cmd.Cmd obs )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -54293,22 +54546,22 @@
   },
   {
     "name": "lukewestby/elm-http-builder",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "docs": [
       {
         "name": "HttpBuilder",
-        "comment": " Extra helpers for more easily building Http requests that require greater\nconfiguration than what is provided by `elm-http` out of the box.\n\n# Start a request\n@docs RequestBuilder, get, post, put, patch, delete, options, trace, head\n\n# Configure request properties\n@docs withHeader, withHeaders, withStringBody, withJsonBody, withMultipartStringBody, withUrlEncodedBody, withTimeout, withCredentials, withQueryParams, withExpect\n\n# Make the request\n@docs toRequest, send\n",
-        "aliases": [],
-        "types": [
+        "comment": " Extra helpers for more easily building Http requests that require greater\nconfiguration than what is provided by `elm-http` out of the box.\n\n# Start a request\n@docs RequestBuilder, get, post, put, patch, delete, options, trace, head\n\n# Configure request properties\n@docs withHeader, withHeaders, withStringBody, withJsonBody, withMultipartStringBody, withUrlEncodedBody, withTimeout, withCredentials, withQueryParams, withExpect, withCacheBuster\n\n# Make the request\n@docs toRequest, toTask, send\n",
+        "aliases": [
           {
             "name": "RequestBuilder",
             "comment": " A type for chaining request configuration\n",
             "args": [
               "a"
             ],
-            "cases": []
+            "type": "{ method : String , headers : List Http.Header , url : String , body : Http.Body , expect : Http.Expect a , timeout : Maybe.Maybe Time.Time , withCredentials : Bool , queryParams : List ( String, String ) , cacheBuster : Maybe.Maybe String }"
           }
         ],
+        "types": [],
         "values": [
           {
             "name": "delete",
@@ -54347,18 +54600,28 @@
           },
           {
             "name": "send",
-            "comment": " Send the request using Http.send\n",
+            "comment": " Send the request\n",
             "type": "(Result.Result Http.Error a -> msg) -> HttpBuilder.RequestBuilder a -> Platform.Cmd.Cmd msg"
           },
           {
             "name": "toRequest",
-            "comment": " Extract the Http.Request component of the builder, for introspection and\ntesting\n",
+            "comment": " Extract the Http.Request component of the builder in case you want to use it\ndirectly. **This function is lossy** and will discard some of the extra stuff\nthat HttpBuilder allows you to do.\n\nThings that will be lost:\n- Attaching a cache buster to requests using `withCacheBuster`\n",
             "type": "HttpBuilder.RequestBuilder a -> Http.Request a"
+          },
+          {
+            "name": "toTask",
+            "comment": " Convert the RequestBuilder to a Task with all options applied. `toTask`\ndiffers from `toRequest` in that it retains all extra behavior allowed by\nHttpBuilder, including\n\n- Attaching a cache buster to requests using `withCacheBuster`\n",
+            "type": "HttpBuilder.RequestBuilder a -> Task.Task Http.Error a"
           },
           {
             "name": "trace",
             "comment": " Start building a TRACE request with a given URL\n\n    trace \"https://example.com/api/items/1\"\n",
             "type": "String -> HttpBuilder.RequestBuilder ()"
+          },
+          {
+            "name": "withCacheBuster",
+            "comment": " Send the request with a Time based cache buster added to the URL.\nYou provide a key for an extra query param, and when the request is sent that\nquery param will be given a value with the current timestamp.\n\n    type Msg\n        = Items (Result Http.Error String)\n\n    get \"https://example.com/api/items\"\n        |> withExpect (Http.expectString)\n        |> withCacheBuster \"cache_buster\"\n        |> send Items\n\n    -- makes a request to https://example.com/api/items?cache_buster=1481633217383\n",
+            "type": "String -> HttpBuilder.RequestBuilder a -> HttpBuilder.RequestBuilder a"
           },
           {
             "name": "withCredentials",
@@ -57811,72 +58074,96 @@
   },
   {
     "name": "mpizenberg/elm-debounce",
-    "version": "2.0.0",
+    "version": "3.0.1",
     "docs": [
       {
-        "name": "MsgControl",
-        "comment": " Control messages.\n\n# Different strategies available\n\n@docs debouncing, throttling, Strategy\n\n# Modification of the model\n\n@docs State, init\n\n# Modification of the update\n\n@docs Msg, update, MsgWrapper\n\n# Modification of the view\n\n@docs wrap\n\n",
-        "aliases": [
+        "name": "Control.Debounce",
+        "comment": " Debounce messages.\n\nDebounced messages are grouped together.\nMeaning if a message is emitted every second,\nbut with a debounced delay of 2s,\nthey will be all grouped together and only one\nof these messages will be triggered.\n\nDebouncing on leading edge will trigger the first message\nof the group (so immediately) whereas trailing edge will\ntrigger the last of the group (later).\n\nIf the `both` strategy is selected, and the group of messages\ncontains at least 2 messages, both the first message (immediately)\nand the last one (later) of the group will be triggered.\n\nFor complete minimalist examples,\nplease refer to the files:\n\n* examples/DebounceTextTrailing.elm\n* examples/DebounceButtonBoth.elm\n\n@docs leading, trailing, both\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
           {
-            "name": "MsgWrapper",
-            "comment": " A wrapper for the internal controlled messages.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "MsgControl.Msg msg -> msg"
+            "name": "both",
+            "comment": " Debounce on both leading and trailing edges.\n\nThe trailing edge happen only if at least 2 messages are captured.\nWe don't want to trigger two times the same event.\n\n    debounce : Msg -> Msg\n    debounce = Control.Debounce.both Deb (1 * Time.second)\n\n    view model =\n        button\n            [ map debounce <| onClick Increment ]\n            [ text \"Click Fast!\" ]\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
           },
           {
-            "name": "Strategy",
-            "comment": " The controlling strategy.\n",
-            "args": [
-              "msg"
-            ],
-            "type": "MsgControl.MsgWrapper msg -> msg -> MsgControl.State msg -> ( MsgControl.State msg, Platform.Cmd.Cmd msg )"
+            "name": "leading",
+            "comment": " Debounce on leading edge (\"immediate\").\n\n    debounce : Msg -> Msg\n    debounce = Control.Debounce.leading Deb (1 * Time.second)\n\n    view model =\n        button\n            [ map debounce <| onClick Increment ]\n            [ text \"Click Fast!\" ]\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
+          },
+          {
+            "name": "trailing",
+            "comment": " Debounce on trailing edge (\"later\").\n\n    debounce : Msg -> Msg\n    debounce = Control.Debounce.trailing Deb (1 * Time.second)\n\n    view model = input [map debounce <| onInput Text] []\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
           }
         ],
-        "types": [
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Control.Throttle",
+        "comment": " Throttle messages.\n\nThrottling is similar to debouncing,\nexcept that instead of triggering only 1 message of a group of messages,\nit triggers one every certain amount of time.\n\nFor a complete minimalist example,\nplease refer to the file: examples/ThrottleButton.elm\n\n@docs leading, trailing, both\n\n",
+        "aliases": [],
+        "types": [],
+        "values": [
           {
-            "name": "Msg",
-            "comment": " Internal messages.\n",
+            "name": "both",
+            "comment": " Throttle on both leading and trailing edges.\n\nThe trailing edge happen only if at least 2 messages are captured.\nWe don't want to trigger two times the same event.\n\n    throttle : Msg -> Msg\n    throttle = Control.Throttle.both Throttle (1 * Time.second)\n\n    view model =\n        button\n            [ map throttle <| onClick Increment ]\n            [ text \"Click Fast!\" ]\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
+          },
+          {
+            "name": "leading",
+            "comment": " Throttle on leading edge (\"immediate\").\n\n    throttle : Msg -> Msg\n    throttle = Control.Throttle.leading Throttle (1 * Time.second)\n\n    view model =\n        button\n            [ map throttle <| onClick Increment ]\n            [ text \"Click Fast!\" ]\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
+          },
+          {
+            "name": "trailing",
+            "comment": " Throttle on trailing edge (\"later\").\n\n    throttle : Msg -> Msg\n    throttle = Control.Throttle.trailing Throttle (1 * Time.second)\n\n    view model =\n        button\n            [ map throttle <| onClick Increment ]\n            [ text \"Click Fast!\" ]\n",
+            "type": "Control.Wrapper msg -> Time.Time -> msg -> msg"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      },
+      {
+        "name": "Control",
+        "comment": " Common types and functions shared by Debounce and Throttle.\n\n# Initialize the state of the message controller\n\n@docs State, initialState\n\n# Types aliases used in all the library\n\n@docs Control, Wrapper\n\n# Update your model\n\n@docs update\n\n",
+        "aliases": [
+          {
+            "name": "Control",
+            "comment": " An alias for the specific \"State Monad\"\nused internally for controlling the messages.\n",
             "args": [
               "msg"
             ],
-            "cases": []
+            "type": "Control.State msg -> ( Control.State msg, Platform.Cmd.Cmd msg )"
           },
           {
             "name": "State",
-            "comment": " Control state to be stored in the model.\n\n    type alias Model = { ... , state : MsgControl.State Msg }\n",
+            "comment": " Internal state used for controlling the messages.\n\n    type alias Model = { ... , state : Control.State Msg }\n",
             "args": [
               "msg"
             ],
-            "cases": []
+            "type": "State.State msg"
+          },
+          {
+            "name": "Wrapper",
+            "comment": " Type alias for a user defined message wrapper,\ntransforming `Control msg` into user `msg`.\n\nThis is usually the type constructor (`Deb` here)\nyou used in your Msg definition.\n\n    type Msg = ... | Deb (Control Msg)\n",
+            "args": [
+              "msg"
+            ],
+            "type": "Control.Control msg -> msg"
           }
         ],
+        "types": [],
         "values": [
           {
-            "name": "debouncing",
-            "comment": " Create a debouncing strategy.\n\n    strategy = MsgControl.debouncing <| 1 * Time.second\n",
-            "type": "Time.Time -> MsgControl.Strategy msg"
-          },
-          {
-            "name": "init",
-            "comment": " Initial state.\n\n    initialModel = { ... , state = MsgControl.init }\n",
-            "type": "MsgControl.State msg"
-          },
-          {
-            "name": "throttling",
-            "comment": " Create a throttling strategy.\n\n    strategy = MsgControl.throttling <| 50 * Time.millisecond\n",
-            "type": "Time.Time -> MsgControl.Strategy msg"
+            "name": "initialState",
+            "comment": " Initialisation of the internal state.\n\n    initialModel = { ... , state = Control.initialState }\n",
+            "type": "Control.State msg"
           },
           {
             "name": "update",
-            "comment": " Update the controlled state of a message.\n\n    update msg model = case msg of\n        ...\n        Throttle controlMsg ->\n            let\n                ( newState, cmd ) =\n                    MsgControl.update\n                        (Throttle) -- The message wrapper\n                        (MsgControl.throttling <| 1 * Time.second) -- The strategy\n                        (controlMsg) -- The internal message\n                        (model.state) -- The current state\n            in\n                ( { model | state = newState }, cmd )\n",
-            "type": "MsgControl.MsgWrapper msg -> MsgControl.Strategy msg -> MsgControl.Msg msg -> MsgControl.State msg -> ( MsgControl.State msg, Platform.Cmd.Cmd msg )"
-          },
-          {
-            "name": "wrap",
-            "comment": " Inverse wrapper, wrap an outside raw message into an internal message.\nKey helper to control raw messages.\n\n    view model = ... button [ HA.map debounce <| onClick Clicked ] ...\n\n    debounce : Msg -> Msg\n    debounce =\n        Debounce << MsgControl.wrap\n",
-            "type": "msg -> MsgControl.Msg msg"
+            "comment": " Update your model.\n\nIt needs a user defined State setter to be able to\nupdate the state inside the model.\n\n    update msg model =\n        case msg of\n            ... -> ...\n            Deb debMsg ->\n                Control.update (\\s -> { model | state = s }) model.state debMsg\n",
+            "type": "(Control.State msg -> model) -> Control.State msg -> Control.Control msg -> ( model, Platform.Cmd.Cmd msg )"
           }
         ],
         "generated-with-elm-version": "0.18.0"
@@ -68927,11 +69214,11 @@
   },
   {
     "name": "sporto/elm-select",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "docs": [
       {
         "name": "Select",
-        "comment": " Select input with auto-complete\n\n# Types\n@docs Config, Model, Msg\n\n# Configuration\n@docs newConfig, withInputClass, withMenuClass, withItemClass, withCutoff\n\n# State\n@docs newState\n\n# view\n@docs view\n\n# Update\n@docs update\n",
+        "comment": " Select input with auto-complete\n\n# Types\n@docs Config, Model, Msg\n\n# Configuration\n@docs newConfig\n\n# Styling\n@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withCutoff\n\n# State\n@docs newState\n\n# view\n@docs view\n\n# Update\n@docs update\n",
         "aliases": [],
         "types": [
           {
@@ -68990,14 +69277,29 @@
             "type": "String -> Select.Config msg item -> Select.Config msg item"
           },
           {
+            "name": "withInputStyles",
+            "comment": "\nAdd styles to the input\n\n    Select.withInputStyles [(\"color\", \"red\")] config\n",
+            "type": "List ( String, String ) -> Select.Config msg item -> Select.Config msg item"
+          },
+          {
             "name": "withItemClass",
             "comment": "\nAdd classes to the items\n\n    Select.withItemClass \"border-bottom\" config\n",
             "type": "String -> Select.Config msg item -> Select.Config msg item"
           },
           {
+            "name": "withItemStyles",
+            "comment": "\nAdd styles to the items\n\n    Select.withItemStyles [(\"color\", \"peru\")] config\n",
+            "type": "List ( String, String ) -> Select.Config msg item -> Select.Config msg item"
+          },
+          {
             "name": "withMenuClass",
             "comment": "\nAdd classes to the menu\n\n    Select.withMenuClass \"bg-white\" config\n",
             "type": "String -> Select.Config msg item -> Select.Config msg item"
+          },
+          {
+            "name": "withMenuStyles",
+            "comment": "\nAdd styles to the menu\n\n    Select.withMenuStyles [(\"padding\", \"1rem\")] config\n",
+            "type": "List ( String, String ) -> Select.Config msg item -> Select.Config msg item"
           }
         ],
         "generated-with-elm-version": "0.18.0"
