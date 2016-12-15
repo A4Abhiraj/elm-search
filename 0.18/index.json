@@ -16383,6 +16383,257 @@
     ]
   },
   {
+    "name": "SwiftsNamesake/proper-keyboard",
+    "version": "1.0.1",
+    "docs": [
+      {
+        "name": "Keyboard.Key",
+        "comment": " Readable key names\n\n# Definition\n@docs Key, Side\n\n#\n@docs fromCode\n\n",
+        "aliases": [],
+        "types": [
+          {
+            "name": "Key",
+            "comment": " Represents a Key ",
+            "args": [],
+            "cases": [
+              [
+                "A",
+                []
+              ],
+              [
+                "B",
+                []
+              ],
+              [
+                "C",
+                []
+              ],
+              [
+                "D",
+                []
+              ],
+              [
+                "E",
+                []
+              ],
+              [
+                "F",
+                []
+              ],
+              [
+                "G",
+                []
+              ],
+              [
+                "H",
+                []
+              ],
+              [
+                "I",
+                []
+              ],
+              [
+                "J",
+                []
+              ],
+              [
+                "K",
+                []
+              ],
+              [
+                "L",
+                []
+              ],
+              [
+                "M",
+                []
+              ],
+              [
+                "N",
+                []
+              ],
+              [
+                "O",
+                []
+              ],
+              [
+                "P",
+                []
+              ],
+              [
+                "Q",
+                []
+              ],
+              [
+                "R",
+                []
+              ],
+              [
+                "S",
+                []
+              ],
+              [
+                "T",
+                []
+              ],
+              [
+                "U",
+                []
+              ],
+              [
+                "V",
+                []
+              ],
+              [
+                "W",
+                []
+              ],
+              [
+                "X",
+                []
+              ],
+              [
+                "Y",
+                []
+              ],
+              [
+                "Z",
+                []
+              ],
+              [
+                "Left",
+                []
+              ],
+              [
+                "Right",
+                []
+              ],
+              [
+                "Up",
+                []
+              ],
+              [
+                "Down",
+                []
+              ],
+              [
+                "Shift",
+                [
+                  "Maybe.Maybe Keyboard.Key.Side"
+                ]
+              ],
+              [
+                "Ctrl",
+                [
+                  "Maybe.Maybe Keyboard.Key.Side"
+                ]
+              ],
+              [
+                "Alt",
+                []
+              ],
+              [
+                "Tab",
+                []
+              ],
+              [
+                "CapsLock",
+                []
+              ],
+              [
+                "Enter",
+                []
+              ],
+              [
+                "Backspace",
+                []
+              ],
+              [
+                "Delete",
+                []
+              ],
+              [
+                "PageUp",
+                []
+              ],
+              [
+                "PageDown",
+                []
+              ],
+              [
+                "End",
+                []
+              ],
+              [
+                "Home",
+                []
+              ],
+              [
+                "Insert",
+                []
+              ],
+              [
+                "PrintScreen",
+                []
+              ],
+              [
+                "PauseBreak",
+                []
+              ],
+              [
+                "Windows",
+                []
+              ],
+              [
+                "Command",
+                []
+              ],
+              [
+                "ChromeSearch",
+                []
+              ],
+              [
+                "Ambiguous",
+                [
+                  "List Keyboard.Key.Key"
+                ]
+              ],
+              [
+                "Unknown",
+                [
+                  "Keyboard.KeyCode"
+                ]
+              ]
+            ]
+          },
+          {
+            "name": "Side",
+            "comment": " Type used to distinguish between multiple instances of the same key (such as Left Ctrl and Right Ctrl) ",
+            "args": [],
+            "cases": [
+              [
+                "LeftHand",
+                []
+              ],
+              [
+                "RightHand",
+                []
+              ]
+            ]
+          }
+        ],
+        "values": [
+          {
+            "name": "fromCode",
+            "comment": " Transform a KeyCode to a Key ",
+            "type": "Keyboard.KeyCode -> Keyboard.Key.Key"
+          }
+        ],
+        "generated-with-elm-version": "0.18.0"
+      }
+    ]
+  },
+  {
     "name": "VerbalExpressions/elm-verbal-expressions",
     "version": "1.2.2",
     "docs": [
@@ -69214,11 +69465,11 @@
   },
   {
     "name": "sporto/elm-select",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "docs": [
       {
         "name": "Select",
-        "comment": " Select input with auto-complete\n\n# Types\n@docs Config, Model, Msg\n\n# Configuration\n@docs newConfig\n\n# Styling\n@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles, withCutoff\n\n# State\n@docs newState\n\n# view\n@docs view\n\n# Update\n@docs update\n",
+        "comment": " Select input with auto-complete\n\n# Types\n@docs Config, Model, Msg\n\n# Configuration\n@docs newConfig, withCutoff, withOnQuery\n\n# Styling\n@docs withInputClass, withInputStyles, withMenuClass, withMenuStyles, withItemClass, withItemStyles\n\n# State\n@docs newState\n\n# view\n@docs view\n\n# Update\n@docs update\n",
         "aliases": [],
         "types": [
           {
@@ -69300,6 +69551,11 @@
             "name": "withMenuStyles",
             "comment": "\nAdd styles to the menu\n\n    Select.withMenuStyles [(\"padding\", \"1rem\")] config\n",
             "type": "List ( String, String ) -> Select.Config msg item -> Select.Config msg item"
+          },
+          {
+            "name": "withOnQuery",
+            "comment": "\nAdd a callback for when the query changes\n\n    Select.withOnQuery OnQuery\n",
+            "type": "(String -> msg) -> Select.Config msg item -> Select.Config msg item"
           }
         ],
         "generated-with-elm-version": "0.18.0"
