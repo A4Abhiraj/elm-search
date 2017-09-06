@@ -10713,6 +10713,1661 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _elm_tools$parser_primitives$Native_ParserPrimitives = function() {
+
+
+// STRINGS
+
+function isSubString(smallString, offset, row, col, bigString)
+{
+	var smallLength = smallString.length;
+	var bigLength = bigString.length - offset;
+
+	if (bigLength < smallLength)
+	{
+		return tuple3(-1, row, col);
+	}
+
+	for (var i = 0; i < smallLength; i++)
+	{
+		var char = smallString[i];
+
+		if (char !== bigString[offset + i])
+		{
+			return tuple3(-1, row, col);
+		}
+
+		// if it is a two word character
+		if ((bigString.charCodeAt(offset) & 0xF800) === 0xD800)
+		{
+			i++
+			if (smallString[i] !== bigString[offset + i])
+			{
+				return tuple3(-1, row, col);
+			}
+			col++;
+			continue;
+		}
+
+		// if it is a newline
+		if (char === '\n')
+		{
+			row++;
+			col = 1;
+			continue;
+		}
+
+		// if it is a one word character
+		col++
+	}
+
+	return tuple3(offset + smallLength, row, col);
+}
+
+function tuple3(a, b, c)
+{
+	return { ctor: '_Tuple3', _0: a, _1: b, _2: c };
+}
+
+
+// CHARS
+
+var mkChar = _elm_lang$core$Native_Utils.chr;
+
+function isSubChar(predicate, offset, string)
+{
+	if (offset >= string.length)
+	{
+		return -1;
+	}
+
+	if ((string.charCodeAt(offset) & 0xF800) === 0xD800)
+	{
+		return predicate(mkChar(string.substr(offset, 2)))
+			? offset + 2
+			: -1;
+	}
+
+	var char = string[offset];
+
+	return predicate(mkChar(char))
+		? ((char === '\n') ? -2 : (offset + 1))
+		: -1;
+}
+
+
+// FIND STRING
+
+function findSubString(before, smallString, offset, row, col, bigString)
+{
+	var newOffset = bigString.indexOf(smallString, offset);
+
+	if (newOffset === -1)
+	{
+		return tuple3(-1, row, col);
+	}
+
+	var scanTarget = before ? newOffset	: newOffset + smallString.length;
+
+	while (offset < scanTarget)
+	{
+		var char = bigString[offset];
+
+		if (char === '\n')
+		{
+			offset++;
+			row++;
+			col = 1;
+			continue;
+		}
+
+		if ((bigString.charCodeAt(offset) & 0xF800) === 0xD800)
+		{
+			offset += 2;
+			col++;
+			continue;
+		}
+
+		offset++;
+		col++;
+	}
+
+	return tuple3(offset, row, col);
+}
+
+
+return {
+	isSubString: F5(isSubString),
+	isSubChar: F3(isSubChar),
+	findSubString: F6(findSubString)
+};
+
+}();
+
+var _elm_tools$parser_primitives$ParserPrimitives$findSubString = _elm_tools$parser_primitives$Native_ParserPrimitives.findSubString;
+var _elm_tools$parser_primitives$ParserPrimitives$isSubChar = _elm_tools$parser_primitives$Native_ParserPrimitives.isSubChar;
+var _elm_tools$parser_primitives$ParserPrimitives$isSubString = _elm_tools$parser_primitives$Native_ParserPrimitives.isSubString;
+
+var _elm_tools$parser$Parser_Internal$isPlusOrMinus = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('+')) || _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('-'));
+};
+var _elm_tools$parser$Parser_Internal$isZero = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('0'));
+};
+var _elm_tools$parser$Parser_Internal$isE = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('e')) || _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('E'));
+};
+var _elm_tools$parser$Parser_Internal$isDot = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('.'));
+};
+var _elm_tools$parser$Parser_Internal$isBadIntEnd = function ($char) {
+	return _elm_lang$core$Char$isDigit($char) || (_elm_lang$core$Char$isUpper($char) || (_elm_lang$core$Char$isLower($char) || _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('.'))));
+};
+var _elm_tools$parser$Parser_Internal$chomp = F3(
+	function (isGood, offset, source) {
+		chomp:
+		while (true) {
+			var newOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, isGood, offset, source);
+			if (_elm_lang$core$Native_Utils.cmp(newOffset, 0) < 0) {
+				return offset;
+			} else {
+				var _v0 = isGood,
+					_v1 = newOffset,
+					_v2 = source;
+				isGood = _v0;
+				offset = _v1;
+				source = _v2;
+				continue chomp;
+			}
+		}
+	});
+var _elm_tools$parser$Parser_Internal$chompDigits = F3(
+	function (isValidDigit, offset, source) {
+		var newOffset = A3(_elm_tools$parser$Parser_Internal$chomp, isValidDigit, offset, source);
+		return _elm_lang$core$Native_Utils.eq(newOffset, offset) ? _elm_lang$core$Result$Err(newOffset) : ((!_elm_lang$core$Native_Utils.eq(
+			A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isBadIntEnd, newOffset, source),
+			-1)) ? _elm_lang$core$Result$Err(newOffset) : _elm_lang$core$Result$Ok(newOffset));
+	});
+var _elm_tools$parser$Parser_Internal$chompExp = F2(
+	function (offset, source) {
+		var eOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isE, offset, source);
+		if (_elm_lang$core$Native_Utils.eq(eOffset, -1)) {
+			return _elm_lang$core$Result$Ok(offset);
+		} else {
+			var opOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isPlusOrMinus, eOffset, source);
+			var expOffset = _elm_lang$core$Native_Utils.eq(opOffset, -1) ? eOffset : opOffset;
+			return (!_elm_lang$core$Native_Utils.eq(
+				A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isZero, expOffset, source),
+				-1)) ? _elm_lang$core$Result$Err(expOffset) : (_elm_lang$core$Native_Utils.eq(
+				A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_lang$core$Char$isDigit, expOffset, source),
+				-1) ? _elm_lang$core$Result$Err(expOffset) : A3(_elm_tools$parser$Parser_Internal$chompDigits, _elm_lang$core$Char$isDigit, expOffset, source));
+		}
+	});
+var _elm_tools$parser$Parser_Internal$chompDotAndExp = F2(
+	function (offset, source) {
+		var dotOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isDot, offset, source);
+		return _elm_lang$core$Native_Utils.eq(dotOffset, -1) ? A2(_elm_tools$parser$Parser_Internal$chompExp, offset, source) : A2(
+			_elm_tools$parser$Parser_Internal$chompExp,
+			A3(_elm_tools$parser$Parser_Internal$chomp, _elm_lang$core$Char$isDigit, dotOffset, source),
+			source);
+	});
+var _elm_tools$parser$Parser_Internal$State = F6(
+	function (a, b, c, d, e, f) {
+		return {source: a, offset: b, indent: c, context: d, row: e, col: f};
+	});
+var _elm_tools$parser$Parser_Internal$Parser = function (a) {
+	return {ctor: 'Parser', _0: a};
+};
+var _elm_tools$parser$Parser_Internal$Bad = F2(
+	function (a, b) {
+		return {ctor: 'Bad', _0: a, _1: b};
+	});
+var _elm_tools$parser$Parser_Internal$Good = F2(
+	function (a, b) {
+		return {ctor: 'Good', _0: a, _1: b};
+	});
+
+var _elm_tools$parser$Parser$changeContext = F2(
+	function (newContext, _p0) {
+		var _p1 = _p0;
+		return {source: _p1.source, offset: _p1.offset, indent: _p1.indent, context: newContext, row: _p1.row, col: _p1.col};
+	});
+var _elm_tools$parser$Parser$sourceMap = F2(
+	function (func, _p2) {
+		var _p3 = _p2;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (_p4) {
+				var _p5 = _p4;
+				var _p6 = _p3._0(_p5);
+				if (_p6.ctor === 'Bad') {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p6._0, _p6._1);
+				} else {
+					var _p7 = _p6._1;
+					var subString = A3(_elm_lang$core$String$slice, _p5.offset, _p7.offset, _p5.source);
+					return A2(
+						_elm_tools$parser$Parser_Internal$Good,
+						A2(func, subString, _p6._0),
+						_p7);
+				}
+			});
+	});
+var _elm_tools$parser$Parser$source = function (parser) {
+	return A2(_elm_tools$parser$Parser$sourceMap, _elm_lang$core$Basics$always, parser);
+};
+var _elm_tools$parser$Parser$badFloatMsg = 'The `Parser.float` parser seems to have a bug.\nPlease report an SSCCE to <https://github.com/elm-tools/parser/issues>.';
+var _elm_tools$parser$Parser$floatHelp = F3(
+	function (offset, zeroOffset, source) {
+		if (_elm_lang$core$Native_Utils.cmp(zeroOffset, 0) > -1) {
+			return A2(_elm_tools$parser$Parser_Internal$chompDotAndExp, zeroOffset, source);
+		} else {
+			var dotOffset = A3(_elm_tools$parser$Parser_Internal$chomp, _elm_lang$core$Char$isDigit, offset, source);
+			var result = A2(_elm_tools$parser$Parser_Internal$chompDotAndExp, dotOffset, source);
+			var _p8 = result;
+			if (_p8.ctor === 'Err') {
+				return result;
+			} else {
+				var _p9 = _p8._0;
+				return _elm_lang$core$Native_Utils.eq(_p9, offset) ? _elm_lang$core$Result$Err(_p9) : result;
+			}
+		}
+	});
+var _elm_tools$parser$Parser$badIntMsg = 'The `Parser.int` parser seems to have a bug.\nPlease report an SSCCE to <https://github.com/elm-tools/parser/issues>.';
+var _elm_tools$parser$Parser$isX = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('x'));
+};
+var _elm_tools$parser$Parser$isO = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('o'));
+};
+var _elm_tools$parser$Parser$isZero = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('0'));
+};
+var _elm_tools$parser$Parser$intHelp = F3(
+	function (offset, zeroOffset, source) {
+		return _elm_lang$core$Native_Utils.eq(zeroOffset, -1) ? A3(_elm_tools$parser$Parser_Internal$chompDigits, _elm_lang$core$Char$isDigit, offset, source) : ((!_elm_lang$core$Native_Utils.eq(
+			A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser$isX, zeroOffset, source),
+			-1)) ? A3(_elm_tools$parser$Parser_Internal$chompDigits, _elm_lang$core$Char$isHexDigit, offset + 2, source) : (_elm_lang$core$Native_Utils.eq(
+			A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser_Internal$isBadIntEnd, zeroOffset, source),
+			-1) ? _elm_lang$core$Result$Ok(zeroOffset) : _elm_lang$core$Result$Err(zeroOffset)));
+	});
+var _elm_tools$parser$Parser$token = F2(
+	function (makeProblem, str) {
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (_p10) {
+				var _p11 = _p10;
+				var _p13 = _p11.source;
+				var _p12 = A5(_elm_tools$parser_primitives$ParserPrimitives$isSubString, str, _p11.offset, _p11.row, _p11.col, _p13);
+				var newOffset = _p12._0;
+				var newRow = _p12._1;
+				var newCol = _p12._2;
+				return _elm_lang$core$Native_Utils.eq(newOffset, -1) ? A2(
+					_elm_tools$parser$Parser_Internal$Bad,
+					makeProblem(str),
+					_p11) : A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					{ctor: '_Tuple0'},
+					{source: _p13, offset: newOffset, indent: _p11.indent, context: _p11.context, row: newRow, col: newCol});
+			});
+	});
+var _elm_tools$parser$Parser$delayedCommitMap = F3(
+	function (func, _p15, _p14) {
+		var _p16 = _p15;
+		var _p17 = _p14;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (state1) {
+				var _p18 = _p16._0(state1);
+				if (_p18.ctor === 'Bad') {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p18._0, state1);
+				} else {
+					var _p22 = _p18._1;
+					var _p19 = _p17._0(_p22);
+					if (_p19.ctor === 'Good') {
+						return A2(
+							_elm_tools$parser$Parser_Internal$Good,
+							A2(func, _p18._0, _p19._0),
+							_p19._1);
+					} else {
+						var _p21 = _p19._0;
+						var _p20 = _p19._1;
+						return (_elm_lang$core$Native_Utils.eq(_p22.row, _p20.row) && _elm_lang$core$Native_Utils.eq(_p22.col, _p20.col)) ? A2(_elm_tools$parser$Parser_Internal$Bad, _p21, state1) : A2(_elm_tools$parser$Parser_Internal$Bad, _p21, _p20);
+					}
+				}
+			});
+	});
+var _elm_tools$parser$Parser$delayedCommit = F2(
+	function (filler, realStuff) {
+		return A3(
+			_elm_tools$parser$Parser$delayedCommitMap,
+			F2(
+				function (_p23, v) {
+					return v;
+				}),
+			filler,
+			realStuff);
+	});
+var _elm_tools$parser$Parser$lazy = function (thunk) {
+	return _elm_tools$parser$Parser_Internal$Parser(
+		function (state) {
+			var _p24 = thunk(
+				{ctor: '_Tuple0'});
+			var parse = _p24._0;
+			return parse(state);
+		});
+};
+var _elm_tools$parser$Parser$andThen = F2(
+	function (callback, _p25) {
+		var _p26 = _p25;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (state1) {
+				var _p27 = _p26._0(state1);
+				if (_p27.ctor === 'Bad') {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p27._0, _p27._1);
+				} else {
+					var _p28 = callback(_p27._0);
+					var parseB = _p28._0;
+					return parseB(_p27._1);
+				}
+			});
+	});
+var _elm_tools$parser$Parser$apply = F2(
+	function (f, a) {
+		return f(a);
+	});
+var _elm_tools$parser$Parser$map2 = F3(
+	function (func, _p30, _p29) {
+		var _p31 = _p30;
+		var _p32 = _p29;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (state1) {
+				var _p33 = _p31._0(state1);
+				if (_p33.ctor === 'Bad') {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p33._0, _p33._1);
+				} else {
+					var _p34 = _p32._0(_p33._1);
+					if (_p34.ctor === 'Bad') {
+						return A2(_elm_tools$parser$Parser_Internal$Bad, _p34._0, _p34._1);
+					} else {
+						return A2(
+							_elm_tools$parser$Parser_Internal$Good,
+							A2(func, _p33._0, _p34._0),
+							_p34._1);
+					}
+				}
+			});
+	});
+var _elm_tools$parser$Parser_ops = _elm_tools$parser$Parser_ops || {};
+_elm_tools$parser$Parser_ops['|='] = F2(
+	function (parseFunc, parseArg) {
+		return A3(_elm_tools$parser$Parser$map2, _elm_tools$parser$Parser$apply, parseFunc, parseArg);
+	});
+var _elm_tools$parser$Parser_ops = _elm_tools$parser$Parser_ops || {};
+_elm_tools$parser$Parser_ops['|.'] = F2(
+	function (keepParser, ignoreParser) {
+		return A3(_elm_tools$parser$Parser$map2, _elm_lang$core$Basics$always, keepParser, ignoreParser);
+	});
+var _elm_tools$parser$Parser$map = F2(
+	function (func, _p35) {
+		var _p36 = _p35;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (state1) {
+				var _p37 = _p36._0(state1);
+				if (_p37.ctor === 'Good') {
+					return A2(
+						_elm_tools$parser$Parser_Internal$Good,
+						func(_p37._0),
+						_p37._1);
+				} else {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p37._0, _p37._1);
+				}
+			});
+	});
+var _elm_tools$parser$Parser$succeed = function (a) {
+	return _elm_tools$parser$Parser_Internal$Parser(
+		function (state) {
+			return A2(_elm_tools$parser$Parser_Internal$Good, a, state);
+		});
+};
+var _elm_tools$parser$Parser$run = F2(
+	function (_p38, source) {
+		var _p39 = _p38;
+		var initialState = {
+			source: source,
+			offset: 0,
+			indent: 1,
+			context: {ctor: '[]'},
+			row: 1,
+			col: 1
+		};
+		var _p40 = _p39._0(initialState);
+		if (_p40.ctor === 'Good') {
+			return _elm_lang$core$Result$Ok(_p40._0);
+		} else {
+			return _elm_lang$core$Result$Err(
+				{row: _p40._1.row, col: _p40._1.col, source: source, problem: _p40._0, context: _p40._1.context});
+		}
+	});
+var _elm_tools$parser$Parser$Error = F5(
+	function (a, b, c, d, e) {
+		return {row: a, col: b, source: c, problem: d, context: e};
+	});
+var _elm_tools$parser$Parser$Context = F3(
+	function (a, b, c) {
+		return {row: a, col: b, description: c};
+	});
+var _elm_tools$parser$Parser$inContext = F2(
+	function (ctx, _p41) {
+		var _p42 = _p41;
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (_p43) {
+				var _p44 = _p43;
+				var _p46 = _p44.context;
+				var state1 = A2(
+					_elm_tools$parser$Parser$changeContext,
+					{
+						ctor: '::',
+						_0: A3(_elm_tools$parser$Parser$Context, _p44.row, _p44.col, ctx),
+						_1: _p46
+					},
+					_p44);
+				var _p45 = _p42._0(state1);
+				if (_p45.ctor === 'Good') {
+					return A2(
+						_elm_tools$parser$Parser_Internal$Good,
+						_p45._0,
+						A2(_elm_tools$parser$Parser$changeContext, _p46, _p45._1));
+				} else {
+					return _p45;
+				}
+			});
+	});
+var _elm_tools$parser$Parser$Fail = function (a) {
+	return {ctor: 'Fail', _0: a};
+};
+var _elm_tools$parser$Parser$fail = function (message) {
+	return _elm_tools$parser$Parser_Internal$Parser(
+		function (state) {
+			return A2(
+				_elm_tools$parser$Parser_Internal$Bad,
+				_elm_tools$parser$Parser$Fail(message),
+				state);
+		});
+};
+var _elm_tools$parser$Parser$ExpectingClosing = function (a) {
+	return {ctor: 'ExpectingClosing', _0: a};
+};
+var _elm_tools$parser$Parser$ignoreUntil = function (str) {
+	return _elm_tools$parser$Parser_Internal$Parser(
+		function (_p47) {
+			var _p48 = _p47;
+			var _p50 = _p48.source;
+			var _p49 = A6(_elm_tools$parser_primitives$ParserPrimitives$findSubString, false, str, _p48.offset, _p48.row, _p48.col, _p50);
+			var newOffset = _p49._0;
+			var newRow = _p49._1;
+			var newCol = _p49._2;
+			return _elm_lang$core$Native_Utils.eq(newOffset, -1) ? A2(
+				_elm_tools$parser$Parser_Internal$Bad,
+				_elm_tools$parser$Parser$ExpectingClosing(str),
+				_p48) : A2(
+				_elm_tools$parser$Parser_Internal$Good,
+				{ctor: '_Tuple0'},
+				{source: _p50, offset: newOffset, indent: _p48.indent, context: _p48.context, row: newRow, col: newCol});
+		});
+};
+var _elm_tools$parser$Parser$ExpectingVariable = {ctor: 'ExpectingVariable'};
+var _elm_tools$parser$Parser$ExpectingKeyword = function (a) {
+	return {ctor: 'ExpectingKeyword', _0: a};
+};
+var _elm_tools$parser$Parser$keyword = function (str) {
+	return A2(_elm_tools$parser$Parser$token, _elm_tools$parser$Parser$ExpectingKeyword, str);
+};
+var _elm_tools$parser$Parser$ExpectingSymbol = function (a) {
+	return {ctor: 'ExpectingSymbol', _0: a};
+};
+var _elm_tools$parser$Parser$symbol = function (str) {
+	return A2(_elm_tools$parser$Parser$token, _elm_tools$parser$Parser$ExpectingSymbol, str);
+};
+var _elm_tools$parser$Parser$ExpectingEnd = {ctor: 'ExpectingEnd'};
+var _elm_tools$parser$Parser$end = _elm_tools$parser$Parser_Internal$Parser(
+	function (state) {
+		return _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$String$length(state.source),
+			state.offset) ? A2(
+			_elm_tools$parser$Parser_Internal$Good,
+			{ctor: '_Tuple0'},
+			state) : A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$ExpectingEnd, state);
+	});
+var _elm_tools$parser$Parser$BadRepeat = {ctor: 'BadRepeat'};
+var _elm_tools$parser$Parser$repeatExactly = F4(
+	function (n, parse, revList, state1) {
+		repeatExactly:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					_elm_lang$core$List$reverse(revList),
+					state1);
+			} else {
+				var _p51 = parse(state1);
+				if (_p51.ctor === 'Good') {
+					var _p52 = _p51._1;
+					if (_elm_lang$core$Native_Utils.eq(state1.row, _p52.row) && _elm_lang$core$Native_Utils.eq(state1.col, _p52.col)) {
+						return A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$BadRepeat, _p52);
+					} else {
+						var _v25 = n - 1,
+							_v26 = parse,
+							_v27 = {ctor: '::', _0: _p51._0, _1: revList},
+							_v28 = _p52;
+						n = _v25;
+						parse = _v26;
+						revList = _v27;
+						state1 = _v28;
+						continue repeatExactly;
+					}
+				} else {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _p51._0, _p51._1);
+				}
+			}
+		}
+	});
+var _elm_tools$parser$Parser$repeatAtLeast = F4(
+	function (n, parse, revList, state1) {
+		repeatAtLeast:
+		while (true) {
+			var _p53 = parse(state1);
+			if (_p53.ctor === 'Good') {
+				var _p54 = _p53._1;
+				if (_elm_lang$core$Native_Utils.eq(state1.row, _p54.row) && _elm_lang$core$Native_Utils.eq(state1.col, _p54.col)) {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$BadRepeat, _p54);
+				} else {
+					var _v30 = n - 1,
+						_v31 = parse,
+						_v32 = {ctor: '::', _0: _p53._0, _1: revList},
+						_v33 = _p54;
+					n = _v30;
+					parse = _v31;
+					revList = _v32;
+					state1 = _v33;
+					continue repeatAtLeast;
+				}
+			} else {
+				var _p55 = _p53._1;
+				return (_elm_lang$core$Native_Utils.eq(state1.row, _p55.row) && (_elm_lang$core$Native_Utils.eq(state1.col, _p55.col) && (_elm_lang$core$Native_Utils.cmp(n, 0) < 1))) ? A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					_elm_lang$core$List$reverse(revList),
+					state1) : A2(_elm_tools$parser$Parser_Internal$Bad, _p53._0, _p55);
+			}
+		}
+	});
+var _elm_tools$parser$Parser$repeat = F2(
+	function (count, _p56) {
+		var _p57 = _p56;
+		var _p59 = _p57._0;
+		var _p58 = count;
+		if (_p58.ctor === 'Exactly') {
+			return _elm_tools$parser$Parser_Internal$Parser(
+				function (state) {
+					return A4(
+						_elm_tools$parser$Parser$repeatExactly,
+						_p58._0,
+						_p59,
+						{ctor: '[]'},
+						state);
+				});
+		} else {
+			return _elm_tools$parser$Parser_Internal$Parser(
+				function (state) {
+					return A4(
+						_elm_tools$parser$Parser$repeatAtLeast,
+						_p58._0,
+						_p59,
+						{ctor: '[]'},
+						state);
+				});
+		}
+	});
+var _elm_tools$parser$Parser$ignoreExactly = F8(
+	function (n, predicate, source, offset, indent, context, row, col) {
+		ignoreExactly:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					{ctor: '_Tuple0'},
+					{source: source, offset: offset, indent: indent, context: context, row: row, col: col});
+			} else {
+				var newOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, predicate, offset, source);
+				if (_elm_lang$core$Native_Utils.eq(newOffset, -1)) {
+					return A2(
+						_elm_tools$parser$Parser_Internal$Bad,
+						_elm_tools$parser$Parser$BadRepeat,
+						{source: source, offset: offset, indent: indent, context: context, row: row, col: col});
+				} else {
+					if (_elm_lang$core$Native_Utils.eq(newOffset, -2)) {
+						var _v36 = n - 1,
+							_v37 = predicate,
+							_v38 = source,
+							_v39 = offset + 1,
+							_v40 = indent,
+							_v41 = context,
+							_v42 = row + 1,
+							_v43 = 1;
+						n = _v36;
+						predicate = _v37;
+						source = _v38;
+						offset = _v39;
+						indent = _v40;
+						context = _v41;
+						row = _v42;
+						col = _v43;
+						continue ignoreExactly;
+					} else {
+						var _v44 = n - 1,
+							_v45 = predicate,
+							_v46 = source,
+							_v47 = newOffset,
+							_v48 = indent,
+							_v49 = context,
+							_v50 = row,
+							_v51 = col + 1;
+						n = _v44;
+						predicate = _v45;
+						source = _v46;
+						offset = _v47;
+						indent = _v48;
+						context = _v49;
+						row = _v50;
+						col = _v51;
+						continue ignoreExactly;
+					}
+				}
+			}
+		}
+	});
+var _elm_tools$parser$Parser$ignoreAtLeast = F8(
+	function (n, predicate, source, offset, indent, context, row, col) {
+		ignoreAtLeast:
+		while (true) {
+			var newOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, predicate, offset, source);
+			if (_elm_lang$core$Native_Utils.eq(newOffset, -1)) {
+				var state = {source: source, offset: offset, indent: indent, context: context, row: row, col: col};
+				return (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) ? A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					{ctor: '_Tuple0'},
+					state) : A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$BadRepeat, state);
+			} else {
+				if (_elm_lang$core$Native_Utils.eq(newOffset, -2)) {
+					var _v52 = n - 1,
+						_v53 = predicate,
+						_v54 = source,
+						_v55 = offset + 1,
+						_v56 = indent,
+						_v57 = context,
+						_v58 = row + 1,
+						_v59 = 1;
+					n = _v52;
+					predicate = _v53;
+					source = _v54;
+					offset = _v55;
+					indent = _v56;
+					context = _v57;
+					row = _v58;
+					col = _v59;
+					continue ignoreAtLeast;
+				} else {
+					var _v60 = n - 1,
+						_v61 = predicate,
+						_v62 = source,
+						_v63 = newOffset,
+						_v64 = indent,
+						_v65 = context,
+						_v66 = row,
+						_v67 = col + 1;
+					n = _v60;
+					predicate = _v61;
+					source = _v62;
+					offset = _v63;
+					indent = _v64;
+					context = _v65;
+					row = _v66;
+					col = _v67;
+					continue ignoreAtLeast;
+				}
+			}
+		}
+	});
+var _elm_tools$parser$Parser$ignore = F2(
+	function (count, predicate) {
+		var _p60 = count;
+		if (_p60.ctor === 'Exactly') {
+			return _elm_tools$parser$Parser_Internal$Parser(
+				function (_p61) {
+					var _p62 = _p61;
+					return A8(_elm_tools$parser$Parser$ignoreExactly, _p60._0, predicate, _p62.source, _p62.offset, _p62.indent, _p62.context, _p62.row, _p62.col);
+				});
+		} else {
+			return _elm_tools$parser$Parser_Internal$Parser(
+				function (_p63) {
+					var _p64 = _p63;
+					return A8(_elm_tools$parser$Parser$ignoreAtLeast, _p60._0, predicate, _p64.source, _p64.offset, _p64.indent, _p64.context, _p64.row, _p64.col);
+				});
+		}
+	});
+var _elm_tools$parser$Parser$keep = F2(
+	function (count, predicate) {
+		return _elm_tools$parser$Parser$source(
+			A2(_elm_tools$parser$Parser$ignore, count, predicate));
+	});
+var _elm_tools$parser$Parser$BadFloat = {ctor: 'BadFloat'};
+var _elm_tools$parser$Parser$float = _elm_tools$parser$Parser_Internal$Parser(
+	function (_p65) {
+		var _p66 = _p65;
+		var _p77 = _p66.source;
+		var _p76 = _p66.row;
+		var _p75 = _p66.offset;
+		var _p74 = _p66.indent;
+		var _p73 = _p66.context;
+		var _p72 = _p66.col;
+		var _p67 = A3(
+			_elm_tools$parser$Parser$floatHelp,
+			_p75,
+			A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser$isZero, _p75, _p77),
+			_p77);
+		if (_p67.ctor === 'Err') {
+			var _p68 = _p67._0;
+			return A2(
+				_elm_tools$parser$Parser_Internal$Bad,
+				_elm_tools$parser$Parser$BadFloat,
+				{source: _p77, offset: _p68, indent: _p74, context: _p73, row: _p76, col: _p72 + (_p68 - _p75)});
+		} else {
+			var _p71 = _p67._0;
+			var _p69 = _elm_lang$core$String$toFloat(
+				A3(_elm_lang$core$String$slice, _p75, _p71, _p77));
+			if (_p69.ctor === 'Err') {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Parser',
+					{
+						start: {line: 733, column: 9},
+						end: {line: 745, column: 16}
+					},
+					_p69)(_elm_tools$parser$Parser$badFloatMsg);
+			} else {
+				return A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					_p69._0,
+					{source: _p77, offset: _p71, indent: _p74, context: _p73, row: _p76, col: _p72 + (_p71 - _p75)});
+			}
+		}
+	});
+var _elm_tools$parser$Parser$BadInt = {ctor: 'BadInt'};
+var _elm_tools$parser$Parser$int = _elm_tools$parser$Parser_Internal$Parser(
+	function (_p78) {
+		var _p79 = _p78;
+		var _p90 = _p79.source;
+		var _p89 = _p79.row;
+		var _p88 = _p79.offset;
+		var _p87 = _p79.indent;
+		var _p86 = _p79.context;
+		var _p85 = _p79.col;
+		var _p80 = A3(
+			_elm_tools$parser$Parser$intHelp,
+			_p88,
+			A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, _elm_tools$parser$Parser$isZero, _p88, _p90),
+			_p90);
+		if (_p80.ctor === 'Err') {
+			var _p81 = _p80._0;
+			return A2(
+				_elm_tools$parser$Parser_Internal$Bad,
+				_elm_tools$parser$Parser$BadInt,
+				{source: _p90, offset: _p81, indent: _p87, context: _p86, row: _p89, col: _p85 + (_p81 - _p88)});
+		} else {
+			var _p84 = _p80._0;
+			var _p82 = _elm_lang$core$String$toInt(
+				A3(_elm_lang$core$String$slice, _p88, _p84, _p90));
+			if (_p82.ctor === 'Err') {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Parser',
+					{
+						start: {line: 638, column: 9},
+						end: {line: 650, column: 16}
+					},
+					_p82)(_elm_tools$parser$Parser$badIntMsg);
+			} else {
+				return A2(
+					_elm_tools$parser$Parser_Internal$Good,
+					_p82._0,
+					{source: _p90, offset: _p84, indent: _p87, context: _p86, row: _p89, col: _p85 + (_p84 - _p88)});
+			}
+		}
+	});
+var _elm_tools$parser$Parser$BadOneOf = function (a) {
+	return {ctor: 'BadOneOf', _0: a};
+};
+var _elm_tools$parser$Parser$oneOfHelp = F3(
+	function (state, problems, parsers) {
+		oneOfHelp:
+		while (true) {
+			var _p91 = parsers;
+			if (_p91.ctor === '[]') {
+				return A2(
+					_elm_tools$parser$Parser_Internal$Bad,
+					_elm_tools$parser$Parser$BadOneOf(
+						_elm_lang$core$List$reverse(problems)),
+					state);
+			} else {
+				var _p92 = _p91._0._0(state);
+				if (_p92.ctor === 'Good') {
+					return _p92;
+				} else {
+					if (_elm_lang$core$Native_Utils.eq(state.row, _p92._1.row) && _elm_lang$core$Native_Utils.eq(state.col, _p92._1.col)) {
+						var _v79 = state,
+							_v80 = {ctor: '::', _0: _p92._0, _1: problems},
+							_v81 = _p91._1;
+						state = _v79;
+						problems = _v80;
+						parsers = _v81;
+						continue oneOfHelp;
+					} else {
+						return _p92;
+					}
+				}
+			}
+		}
+	});
+var _elm_tools$parser$Parser$oneOf = function (parsers) {
+	return _elm_tools$parser$Parser_Internal$Parser(
+		function (state) {
+			return A3(
+				_elm_tools$parser$Parser$oneOfHelp,
+				state,
+				{ctor: '[]'},
+				parsers);
+		});
+};
+var _elm_tools$parser$Parser$Exactly = function (a) {
+	return {ctor: 'Exactly', _0: a};
+};
+var _elm_tools$parser$Parser$AtLeast = function (a) {
+	return {ctor: 'AtLeast', _0: a};
+};
+var _elm_tools$parser$Parser$zeroOrMore = _elm_tools$parser$Parser$AtLeast(0);
+var _elm_tools$parser$Parser$oneOrMore = _elm_tools$parser$Parser$AtLeast(1);
+
+var _elm_tools$parser$Parser_LanguageKit$isChar = function ($char) {
+	return true;
+};
+var _elm_tools$parser$Parser_LanguageKit$isTab = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('\t'));
+};
+var _elm_tools$parser$Parser_LanguageKit$isSpace = function ($char) {
+	return _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr(' ')) || (_elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('\n')) || _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('\r')));
+};
+var _elm_tools$parser$Parser_LanguageKit$chompSpaces = A2(_elm_tools$parser$Parser$ignore, _elm_tools$parser$Parser$zeroOrMore, _elm_tools$parser$Parser_LanguageKit$isSpace);
+var _elm_tools$parser$Parser_LanguageKit$revAlways = F2(
+	function (_p0, keep) {
+		return keep;
+	});
+var _elm_tools$parser$Parser_LanguageKit$ignore = F2(
+	function (ignoreParser, keepParser) {
+		return A3(_elm_tools$parser$Parser$map2, _elm_tools$parser$Parser_LanguageKit$revAlways, ignoreParser, keepParser);
+	});
+var _elm_tools$parser$Parser_LanguageKit_ops = _elm_tools$parser$Parser_LanguageKit_ops || {};
+_elm_tools$parser$Parser_LanguageKit_ops['|-'] = _elm_tools$parser$Parser_LanguageKit$ignore;
+var _elm_tools$parser$Parser_LanguageKit$sequenceEndMandatory = F5(
+	function (end, spaces, parseItem, sep, revItems) {
+		var chompRest = function (item) {
+			return A5(
+				_elm_tools$parser$Parser_LanguageKit$sequenceEndMandatory,
+				end,
+				spaces,
+				parseItem,
+				sep,
+				{ctor: '::', _0: item, _1: revItems});
+		};
+		return _elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_tools$parser$Parser$andThen,
+					chompRest,
+					A2(
+						_elm_tools$parser$Parser_ops['|.'],
+						A2(
+							_elm_tools$parser$Parser_ops['|.'],
+							A2(_elm_tools$parser$Parser_ops['|.'], parseItem, spaces),
+							_elm_tools$parser$Parser$symbol(sep)),
+						spaces)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+						_elm_tools$parser$Parser$symbol(end),
+						_elm_tools$parser$Parser$succeed(
+							_elm_lang$core$List$reverse(revItems))),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_tools$parser$Parser_LanguageKit$sequenceEndForbidden = F5(
+	function (end, spaces, parseItem, sep, revItems) {
+		var chompRest = function (item) {
+			return A5(
+				_elm_tools$parser$Parser_LanguageKit$sequenceEndForbidden,
+				end,
+				spaces,
+				parseItem,
+				sep,
+				{ctor: '::', _0: item, _1: revItems});
+		};
+		return A2(
+			_elm_tools$parser$Parser_LanguageKit$ignore,
+			spaces,
+			_elm_tools$parser$Parser$oneOf(
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+						A2(
+							_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+							_elm_tools$parser$Parser$symbol(sep),
+							spaces),
+						A2(_elm_tools$parser$Parser$andThen, chompRest, parseItem)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+							_elm_tools$parser$Parser$symbol(end),
+							_elm_tools$parser$Parser$succeed(
+								_elm_lang$core$List$reverse(revItems))),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _elm_tools$parser$Parser_LanguageKit$sequenceEndOptional = F5(
+	function (end, spaces, parseItem, sep, revItems) {
+		var chompRest = function (item) {
+			return A5(
+				_elm_tools$parser$Parser_LanguageKit$sequenceEndOptional,
+				end,
+				spaces,
+				parseItem,
+				sep,
+				{ctor: '::', _0: item, _1: revItems});
+		};
+		var parseEnd = A2(
+			_elm_tools$parser$Parser$andThen,
+			function (_p1) {
+				return _elm_tools$parser$Parser$succeed(
+					_elm_lang$core$List$reverse(revItems));
+			},
+			_elm_tools$parser$Parser$symbol(end));
+		return A2(
+			_elm_tools$parser$Parser_LanguageKit$ignore,
+			spaces,
+			_elm_tools$parser$Parser$oneOf(
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+						A2(
+							_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+							_elm_tools$parser$Parser$symbol(sep),
+							spaces),
+						_elm_tools$parser$Parser$oneOf(
+							{
+								ctor: '::',
+								_0: A2(_elm_tools$parser$Parser$andThen, chompRest, parseItem),
+								_1: {
+									ctor: '::',
+									_0: parseEnd,
+									_1: {ctor: '[]'}
+								}
+							})),
+					_1: {
+						ctor: '::',
+						_0: parseEnd,
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _elm_tools$parser$Parser_LanguageKit$sequenceEnd = F5(
+	function (end, spaces, parseItem, sep, trailing) {
+		var chompRest = function (item) {
+			var _p2 = trailing;
+			switch (_p2.ctor) {
+				case 'Forbidden':
+					return A5(
+						_elm_tools$parser$Parser_LanguageKit$sequenceEndForbidden,
+						end,
+						spaces,
+						parseItem,
+						sep,
+						{
+							ctor: '::',
+							_0: item,
+							_1: {ctor: '[]'}
+						});
+				case 'Optional':
+					return A5(
+						_elm_tools$parser$Parser_LanguageKit$sequenceEndOptional,
+						end,
+						spaces,
+						parseItem,
+						sep,
+						{
+							ctor: '::',
+							_0: item,
+							_1: {ctor: '[]'}
+						});
+				default:
+					return A2(
+						_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+						A2(
+							_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+							A2(
+								_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+								spaces,
+								_elm_tools$parser$Parser$symbol(sep)),
+							spaces),
+						A5(
+							_elm_tools$parser$Parser_LanguageKit$sequenceEndMandatory,
+							end,
+							spaces,
+							parseItem,
+							sep,
+							{
+								ctor: '::',
+								_0: item,
+								_1: {ctor: '[]'}
+							}));
+			}
+		};
+		return _elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(_elm_tools$parser$Parser$andThen, chompRest, parseItem),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+						_elm_tools$parser$Parser$symbol(end),
+						_elm_tools$parser$Parser$succeed(
+							{ctor: '[]'})),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_tools$parser$Parser_LanguageKit$whitespaceHelp = function (parser) {
+	return A2(
+		_elm_tools$parser$Parser_LanguageKit$ignore,
+		_elm_tools$parser$Parser_LanguageKit$chompSpaces,
+		_elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_tools$parser$Parser$andThen,
+					function (_p3) {
+						return _elm_tools$parser$Parser_LanguageKit$whitespaceHelp(parser);
+					},
+					parser),
+				_1: {
+					ctor: '::',
+					_0: _elm_tools$parser$Parser$succeed(
+						{ctor: '_Tuple0'}),
+					_1: {ctor: '[]'}
+				}
+			}));
+};
+var _elm_tools$parser$Parser_LanguageKit$nestableCommentHelp = F4(
+	function (isNotRelevant, start, end, nestLevel) {
+		return _elm_tools$parser$Parser$lazy(
+			function (_p4) {
+				return A2(
+					_elm_tools$parser$Parser_LanguageKit$ignore,
+					A2(_elm_tools$parser$Parser$ignore, _elm_tools$parser$Parser$zeroOrMore, isNotRelevant),
+					_elm_tools$parser$Parser$oneOf(
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_tools$parser$Parser_LanguageKit$ignore,
+								_elm_tools$parser$Parser$symbol(end),
+								_elm_lang$core$Native_Utils.eq(nestLevel, 1) ? _elm_tools$parser$Parser$succeed(
+									{ctor: '_Tuple0'}) : A4(_elm_tools$parser$Parser_LanguageKit$nestableCommentHelp, isNotRelevant, start, end, nestLevel - 1)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_tools$parser$Parser_LanguageKit$ignore,
+									_elm_tools$parser$Parser$symbol(start),
+									A4(_elm_tools$parser$Parser_LanguageKit$nestableCommentHelp, isNotRelevant, start, end, nestLevel + 1)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_tools$parser$Parser_LanguageKit$ignore,
+										A2(
+											_elm_tools$parser$Parser$ignore,
+											_elm_tools$parser$Parser$Exactly(1),
+											_elm_tools$parser$Parser_LanguageKit$isChar),
+										A4(_elm_tools$parser$Parser_LanguageKit$nestableCommentHelp, isNotRelevant, start, end, nestLevel)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}));
+			});
+	});
+var _elm_tools$parser$Parser_LanguageKit$nestableComment = F2(
+	function (start, end) {
+		var _p5 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$String$uncons(start),
+			_1: _elm_lang$core$String$uncons(end)
+		};
+		if (_p5._0.ctor === 'Nothing') {
+			return _elm_tools$parser$Parser$fail('Trying to parse a multi-line comment, but the start token cannot be the empty string!');
+		} else {
+			if (_p5._1.ctor === 'Nothing') {
+				return _elm_tools$parser$Parser$fail('Trying to parse a multi-line comment, but the end token cannot be the empty string!');
+			} else {
+				var isNotRelevant = function ($char) {
+					return (!_elm_lang$core$Native_Utils.eq($char, _p5._0._0._0)) && (!_elm_lang$core$Native_Utils.eq($char, _p5._1._0._0));
+				};
+				return A2(
+					_elm_tools$parser$Parser_ops['|.'],
+					_elm_tools$parser$Parser$symbol(start),
+					A4(_elm_tools$parser$Parser_LanguageKit$nestableCommentHelp, isNotRelevant, start, end, 1));
+			}
+		}
+	});
+var _elm_tools$parser$Parser_LanguageKit$whitespace = function (_p6) {
+	var _p7 = _p6;
+	var multiParser = function () {
+		var _p8 = _p7.multiComment;
+		switch (_p8.ctor) {
+			case 'NoMultiComment':
+				return {ctor: '[]'};
+			case 'UnnestableComment':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_ops['|.'],
+						_elm_tools$parser$Parser$symbol(_p8._0),
+						_elm_tools$parser$Parser$ignoreUntil(_p8._1)),
+					_1: {ctor: '[]'}
+				};
+			default:
+				return {
+					ctor: '::',
+					_0: A2(_elm_tools$parser$Parser_LanguageKit$nestableComment, _p8._0, _p8._1),
+					_1: {ctor: '[]'}
+				};
+		}
+	}();
+	var lineParser = function () {
+		var _p9 = _p7.lineComment;
+		if (_p9.ctor === 'NoLineComment') {
+			return {ctor: '[]'};
+		} else {
+			return {
+				ctor: '::',
+				_0: A2(
+					_elm_tools$parser$Parser_ops['|.'],
+					_elm_tools$parser$Parser$symbol(_p9._0),
+					_elm_tools$parser$Parser$ignoreUntil('\n')),
+				_1: {ctor: '[]'}
+			};
+		}
+	}();
+	var tabParser = _p7.allowTabs ? {
+		ctor: '::',
+		_0: A2(_elm_tools$parser$Parser$ignore, _elm_tools$parser$Parser$zeroOrMore, _elm_tools$parser$Parser_LanguageKit$isTab),
+		_1: {ctor: '[]'}
+	} : {ctor: '[]'};
+	return _elm_tools$parser$Parser_LanguageKit$whitespaceHelp(
+		_elm_tools$parser$Parser$oneOf(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				tabParser,
+				A2(_elm_lang$core$Basics_ops['++'], lineParser, multiParser))));
+};
+var _elm_tools$parser$Parser_LanguageKit$sequence = function (_p10) {
+	var _p11 = _p10;
+	var _p12 = _p11.spaces;
+	return A2(
+		_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+		A2(
+			_elm_tools$parser$Parser_LanguageKit_ops['|-'],
+			_elm_tools$parser$Parser$symbol(_p11.start),
+			_p12),
+		A5(_elm_tools$parser$Parser_LanguageKit$sequenceEnd, _p11.end, _p12, _p11.item, _p11.separator, _p11.trailing));
+};
+var _elm_tools$parser$Parser_LanguageKit$varHelp = F7(
+	function (isGood, offset, row, col, source, indent, context) {
+		varHelp:
+		while (true) {
+			var newOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, isGood, offset, source);
+			if (_elm_lang$core$Native_Utils.eq(newOffset, -1)) {
+				return {source: source, offset: offset, indent: indent, context: context, row: row, col: col};
+			} else {
+				if (_elm_lang$core$Native_Utils.eq(newOffset, -2)) {
+					var _v6 = isGood,
+						_v7 = offset + 1,
+						_v8 = row + 1,
+						_v9 = 1,
+						_v10 = source,
+						_v11 = indent,
+						_v12 = context;
+					isGood = _v6;
+					offset = _v7;
+					row = _v8;
+					col = _v9;
+					source = _v10;
+					indent = _v11;
+					context = _v12;
+					continue varHelp;
+				} else {
+					var _v13 = isGood,
+						_v14 = newOffset,
+						_v15 = row,
+						_v16 = col + 1,
+						_v17 = source,
+						_v18 = indent,
+						_v19 = context;
+					isGood = _v13;
+					offset = _v14;
+					row = _v15;
+					col = _v16;
+					source = _v17;
+					indent = _v18;
+					context = _v19;
+					continue varHelp;
+				}
+			}
+		}
+	});
+var _elm_tools$parser$Parser_LanguageKit$variable = F3(
+	function (isFirst, isOther, keywords) {
+		return _elm_tools$parser$Parser_Internal$Parser(
+			function (_p13) {
+				var _p14 = _p13;
+				var _p20 = _p14;
+				var _p19 = _p14.source;
+				var _p18 = _p14.row;
+				var _p17 = _p14.offset;
+				var _p16 = _p14.indent;
+				var _p15 = _p14.context;
+				var firstOffset = A3(_elm_tools$parser_primitives$ParserPrimitives$isSubChar, isFirst, _p17, _p19);
+				if (_elm_lang$core$Native_Utils.eq(firstOffset, -1)) {
+					return A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$ExpectingVariable, _p20);
+				} else {
+					var state2 = _elm_lang$core$Native_Utils.eq(firstOffset, -2) ? A7(_elm_tools$parser$Parser_LanguageKit$varHelp, isOther, _p17 + 1, _p18 + 1, 1, _p19, _p16, _p15) : A7(_elm_tools$parser$Parser_LanguageKit$varHelp, isOther, firstOffset, _p18, _p14.col + 1, _p19, _p16, _p15);
+					var name = A3(_elm_lang$core$String$slice, _p17, state2.offset, _p19);
+					return A2(_elm_lang$core$Set$member, name, keywords) ? A2(_elm_tools$parser$Parser_Internal$Bad, _elm_tools$parser$Parser$ExpectingVariable, _p20) : A2(_elm_tools$parser$Parser_Internal$Good, name, state2);
+				}
+			});
+	});
+var _elm_tools$parser$Parser_LanguageKit$Mandatory = {ctor: 'Mandatory'};
+var _elm_tools$parser$Parser_LanguageKit$Optional = {ctor: 'Optional'};
+var _elm_tools$parser$Parser_LanguageKit$Forbidden = {ctor: 'Forbidden'};
+var _elm_tools$parser$Parser_LanguageKit$list = F2(
+	function (spaces, item) {
+		return _elm_tools$parser$Parser_LanguageKit$sequence(
+			{start: '[', separator: ',', end: ']', spaces: spaces, item: item, trailing: _elm_tools$parser$Parser_LanguageKit$Forbidden});
+	});
+var _elm_tools$parser$Parser_LanguageKit$record = F2(
+	function (spaces, item) {
+		return _elm_tools$parser$Parser_LanguageKit$sequence(
+			{start: '{', separator: ',', end: '}', spaces: spaces, item: item, trailing: _elm_tools$parser$Parser_LanguageKit$Forbidden});
+	});
+var _elm_tools$parser$Parser_LanguageKit$tuple = F2(
+	function (spaces, item) {
+		return _elm_tools$parser$Parser_LanguageKit$sequence(
+			{start: '(', separator: ',', end: ')', spaces: spaces, item: item, trailing: _elm_tools$parser$Parser_LanguageKit$Forbidden});
+	});
+var _elm_tools$parser$Parser_LanguageKit$LineComment = function (a) {
+	return {ctor: 'LineComment', _0: a};
+};
+var _elm_tools$parser$Parser_LanguageKit$NoLineComment = {ctor: 'NoLineComment'};
+var _elm_tools$parser$Parser_LanguageKit$UnnestableComment = F2(
+	function (a, b) {
+		return {ctor: 'UnnestableComment', _0: a, _1: b};
+	});
+var _elm_tools$parser$Parser_LanguageKit$NestableComment = F2(
+	function (a, b) {
+		return {ctor: 'NestableComment', _0: a, _1: b};
+	});
+var _elm_tools$parser$Parser_LanguageKit$NoMultiComment = {ctor: 'NoMultiComment'};
+
+var _elm_tools$documentation$Elm_Documentation_Type$comma = _elm_tools$parser$Parser$symbol(',');
+var _elm_tools$documentation$Elm_Documentation_Type$spaces = A2(
+	_elm_tools$parser$Parser$ignore,
+	_elm_tools$parser$Parser$zeroOrMore,
+	function ($char) {
+		return _elm_lang$core$Native_Utils.eq(
+			$char,
+			_elm_lang$core$Native_Utils.chr(' '));
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$commaAnd = function (parser) {
+	return A2(
+		_elm_tools$parser$Parser$delayedCommit,
+		_elm_tools$documentation$Elm_Documentation_Type$spaces,
+		A2(
+			_elm_tools$parser$Parser_ops['|='],
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				A2(
+					_elm_tools$parser$Parser_ops['|.'],
+					_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
+					_elm_tools$documentation$Elm_Documentation_Type$comma),
+				_elm_tools$documentation$Elm_Documentation_Type$spaces),
+			parser));
+};
+var _elm_tools$documentation$Elm_Documentation_Type$commaSepHelp = F2(
+	function (parser, revList) {
+		return _elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_tools$parser$Parser$andThen,
+					function (a) {
+						return A2(
+							_elm_tools$documentation$Elm_Documentation_Type$commaSepHelp,
+							parser,
+							{ctor: '::', _0: a, _1: revList});
+					},
+					_elm_tools$documentation$Elm_Documentation_Type$commaAnd(parser)),
+				_1: {
+					ctor: '::',
+					_0: _elm_tools$parser$Parser$succeed(
+						_elm_lang$core$List$reverse(revList)),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$commaSep = function (parser) {
+	return A2(
+		_elm_tools$parser$Parser$andThen,
+		function (first) {
+			return A2(
+				_elm_tools$documentation$Elm_Documentation_Type$commaSepHelp,
+				parser,
+				{
+					ctor: '::',
+					_0: first,
+					_1: {ctor: '[]'}
+				});
+		},
+		parser);
+};
+var _elm_tools$documentation$Elm_Documentation_Type$isInnerVarChar = function ($char) {
+	return _elm_lang$core$Char$isLower($char) || (_elm_lang$core$Char$isUpper($char) || (_elm_lang$core$Char$isDigit($char) || _elm_lang$core$Native_Utils.eq(
+		$char,
+		_elm_lang$core$Native_Utils.chr('_'))));
+};
+var _elm_tools$documentation$Elm_Documentation_Type$variable = function (isFirst) {
+	return A3(_elm_tools$parser$Parser_LanguageKit$variable, isFirst, _elm_tools$documentation$Elm_Documentation_Type$isInnerVarChar, _elm_lang$core$Set$empty);
+};
+var _elm_tools$documentation$Elm_Documentation_Type$capVar = _elm_tools$documentation$Elm_Documentation_Type$variable(_elm_lang$core$Char$isUpper);
+var _elm_tools$documentation$Elm_Documentation_Type$qualifiedCapVar = _elm_tools$parser$Parser$source(
+	A2(
+		_elm_tools$parser$Parser_ops['|.'],
+		_elm_tools$documentation$Elm_Documentation_Type$capVar,
+		A2(
+			_elm_tools$parser$Parser$repeat,
+			_elm_tools$parser$Parser$zeroOrMore,
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				_elm_tools$parser$Parser$symbol('.'),
+				_elm_tools$documentation$Elm_Documentation_Type$capVar))));
+var _elm_tools$documentation$Elm_Documentation_Type$lowVar = _elm_tools$documentation$Elm_Documentation_Type$variable(_elm_lang$core$Char$isLower);
+var _elm_tools$documentation$Elm_Documentation_Type$ext = A2(
+	_elm_tools$parser$Parser_ops['|.'],
+	A2(
+		_elm_tools$parser$Parser_ops['|.'],
+		A2(
+			_elm_tools$parser$Parser_ops['|.'],
+			A2(
+				_elm_tools$parser$Parser_ops['|='],
+				_elm_tools$parser$Parser$succeed(_elm_lang$core$Maybe$Just),
+				_elm_tools$documentation$Elm_Documentation_Type$lowVar),
+			_elm_tools$documentation$Elm_Documentation_Type$spaces),
+		_elm_tools$parser$Parser$symbol('|')),
+	_elm_tools$documentation$Elm_Documentation_Type$spaces);
+var _elm_tools$documentation$Elm_Documentation_Type$extension = _elm_tools$parser$Parser$oneOf(
+	{
+		ctor: '::',
+		_0: A3(
+			_elm_tools$parser$Parser$delayedCommitMap,
+			_elm_lang$core$Basics$always,
+			_elm_tools$documentation$Elm_Documentation_Type$ext,
+			_elm_tools$parser$Parser$succeed(
+				{ctor: '_Tuple0'})),
+		_1: {
+			ctor: '::',
+			_0: _elm_tools$parser$Parser$succeed(_elm_lang$core$Maybe$Nothing),
+			_1: {ctor: '[]'}
+		}
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$arrow = _elm_tools$parser$Parser$symbol('->');
+var _elm_tools$documentation$Elm_Documentation_Type$Record = F2(
+	function (a, b) {
+		return {ctor: 'Record', _0: a, _1: b};
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$Type = F2(
+	function (a, b) {
+		return {ctor: 'Type', _0: a, _1: b};
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$Tuple = function (a) {
+	return {ctor: 'Tuple', _0: a};
+};
+var _elm_tools$documentation$Elm_Documentation_Type$tuplize = function (args) {
+	var _p0 = args;
+	if ((_p0.ctor === '::') && (_p0._1.ctor === '[]')) {
+		return _p0._0;
+	} else {
+		return _elm_tools$documentation$Elm_Documentation_Type$Tuple(args);
+	}
+};
+var _elm_tools$documentation$Elm_Documentation_Type$Lambda = F2(
+	function (a, b) {
+		return {ctor: 'Lambda', _0: a, _1: b};
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$Var = function (a) {
+	return {ctor: 'Var', _0: a};
+};
+var _elm_tools$documentation$Elm_Documentation_Type$term = _elm_tools$parser$Parser$lazy(
+	function (_p1) {
+		return _elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(_elm_tools$parser$Parser$map, _elm_tools$documentation$Elm_Documentation_Type$Var, _elm_tools$documentation$Elm_Documentation_Type$lowVar),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser$map,
+						A2(
+							_elm_lang$core$Basics$flip,
+							_elm_tools$documentation$Elm_Documentation_Type$Type,
+							{ctor: '[]'}),
+						_elm_tools$documentation$Elm_Documentation_Type$qualifiedCapVar),
+					_1: {
+						ctor: '::',
+						_0: _elm_tools$documentation$Elm_Documentation_Type$record,
+						_1: {
+							ctor: '::',
+							_0: _elm_tools$documentation$Elm_Documentation_Type$tuple,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$record = _elm_tools$parser$Parser$lazy(
+	function (_p2) {
+		return A2(
+			_elm_tools$parser$Parser_ops['|.'],
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				A2(
+					_elm_tools$parser$Parser_ops['|='],
+					A2(
+						_elm_tools$parser$Parser_ops['|='],
+						A2(
+							_elm_tools$parser$Parser_ops['|.'],
+							A2(
+								_elm_tools$parser$Parser_ops['|.'],
+								_elm_tools$parser$Parser$succeed(
+									_elm_lang$core$Basics$flip(_elm_tools$documentation$Elm_Documentation_Type$Record)),
+								_elm_tools$parser$Parser$symbol('{')),
+							_elm_tools$documentation$Elm_Documentation_Type$spaces),
+						_elm_tools$documentation$Elm_Documentation_Type$extension),
+					_elm_tools$documentation$Elm_Documentation_Type$commaSep(_elm_tools$documentation$Elm_Documentation_Type$field)),
+				_elm_tools$documentation$Elm_Documentation_Type$spaces),
+			_elm_tools$parser$Parser$symbol('}'));
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$field = _elm_tools$parser$Parser$lazy(
+	function (_p3) {
+		return A2(
+			_elm_tools$parser$Parser_ops['|='],
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				A2(
+					_elm_tools$parser$Parser_ops['|.'],
+					A2(
+						_elm_tools$parser$Parser_ops['|.'],
+						A2(
+							_elm_tools$parser$Parser_ops['|='],
+							_elm_tools$parser$Parser$succeed(
+								F2(
+									function (v0, v1) {
+										return {ctor: '_Tuple2', _0: v0, _1: v1};
+									})),
+							_elm_tools$documentation$Elm_Documentation_Type$lowVar),
+						_elm_tools$documentation$Elm_Documentation_Type$spaces),
+					_elm_tools$parser$Parser$symbol(':')),
+				_elm_tools$documentation$Elm_Documentation_Type$spaces),
+			_elm_tools$documentation$Elm_Documentation_Type$tipe);
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$tipe = _elm_tools$parser$Parser$lazy(
+	function (_p4) {
+		return A2(_elm_tools$parser$Parser$andThen, _elm_tools$documentation$Elm_Documentation_Type$tipeHelp, _elm_tools$documentation$Elm_Documentation_Type$tipeTerm);
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$tipeHelp = function (t) {
+	return _elm_tools$parser$Parser$oneOf(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_tools$parser$Parser$map,
+				_elm_tools$documentation$Elm_Documentation_Type$Lambda(t),
+				_elm_tools$documentation$Elm_Documentation_Type$arrowAndType),
+			_1: {
+				ctor: '::',
+				_0: _elm_tools$parser$Parser$succeed(t),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _elm_tools$documentation$Elm_Documentation_Type$arrowAndType = A2(
+	_elm_tools$parser$Parser$delayedCommit,
+	_elm_tools$documentation$Elm_Documentation_Type$spaces,
+	A2(
+		_elm_tools$parser$Parser_ops['|='],
+		A2(
+			_elm_tools$parser$Parser_ops['|.'],
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
+				_elm_tools$documentation$Elm_Documentation_Type$arrow),
+			_elm_tools$documentation$Elm_Documentation_Type$spaces),
+		_elm_tools$documentation$Elm_Documentation_Type$tipe));
+var _elm_tools$documentation$Elm_Documentation_Type$tipeTerm = _elm_tools$parser$Parser$lazy(
+	function (_p5) {
+		return _elm_tools$parser$Parser$oneOf(
+			{
+				ctor: '::',
+				_0: A2(_elm_tools$parser$Parser$map, _elm_tools$documentation$Elm_Documentation_Type$Var, _elm_tools$documentation$Elm_Documentation_Type$lowVar),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_tools$parser$Parser_ops['|='],
+						A2(
+							_elm_tools$parser$Parser_ops['|='],
+							_elm_tools$parser$Parser$succeed(_elm_tools$documentation$Elm_Documentation_Type$Type),
+							_elm_tools$documentation$Elm_Documentation_Type$qualifiedCapVar),
+						_elm_tools$documentation$Elm_Documentation_Type$chompArgs(
+							{ctor: '[]'})),
+					_1: {
+						ctor: '::',
+						_0: _elm_tools$documentation$Elm_Documentation_Type$record,
+						_1: {
+							ctor: '::',
+							_0: _elm_tools$documentation$Elm_Documentation_Type$tuple,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _elm_tools$documentation$Elm_Documentation_Type$chompArgs = function (revArgs) {
+	return _elm_tools$parser$Parser$oneOf(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_tools$parser$Parser$andThen,
+				function (arg) {
+					return _elm_tools$documentation$Elm_Documentation_Type$chompArgs(
+						{ctor: '::', _0: arg, _1: revArgs});
+				},
+				A2(_elm_tools$parser$Parser$delayedCommit, _elm_tools$documentation$Elm_Documentation_Type$spaces, _elm_tools$documentation$Elm_Documentation_Type$term)),
+			_1: {
+				ctor: '::',
+				_0: _elm_tools$parser$Parser$succeed(
+					_elm_lang$core$List$reverse(revArgs)),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _elm_tools$documentation$Elm_Documentation_Type$tuple = A2(
+	_elm_tools$parser$Parser$map,
+	_elm_tools$documentation$Elm_Documentation_Type$tuplize,
+	A2(_elm_tools$parser$Parser_LanguageKit$tuple, _elm_tools$documentation$Elm_Documentation_Type$spaces, _elm_tools$documentation$Elm_Documentation_Type$tipe));
+var _elm_tools$documentation$Elm_Documentation_Type$parse = function (source) {
+	return A2(_elm_tools$parser$Parser$run, _elm_tools$documentation$Elm_Documentation_Type$tipe, source);
+};
+var _elm_tools$documentation$Elm_Documentation_Type$decoderHelp = function (string) {
+	var _p6 = _elm_tools$documentation$Elm_Documentation_Type$parse(string);
+	if (_p6.ctor === 'Err') {
+		return _elm_lang$core$Json_Decode$fail('TODO');
+	} else {
+		return _elm_lang$core$Json_Decode$succeed(_p6._0);
+	}
+};
+var _elm_tools$documentation$Elm_Documentation_Type$decoder = A2(_elm_lang$core$Json_Decode$andThen, _elm_tools$documentation$Elm_Documentation_Type$decoderHelp, _elm_lang$core$Json_Decode$string);
+
 var _evancz$elm_markdown$Native_Markdown = function() {
 
 
@@ -10921,467 +12576,6 @@ var _klaftertief$elm_search$Docs_Name$fromString = function (str) {
 };
 var _klaftertief$elm_search$Docs_Name$decoder = A2(_klaftertief$elm_search$Utils_Json$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Name$fromString);
 
-var _klaftertief$elm_search$Native_Parse = function()
-{
-
-// HELPERS
-
-function ok(index, value)
-{
-	return { ctor: 'Ok', _0: { index: index, value: value } };
-}
-
-function err(msg)
-{
-	return { ctor: 'Err', _0: msg };
-}
-
-
-// BASICS
-
-function succeed(value)
-{
-	return function(input, index)
-	{
-		return ok(index, value);
-	};
-}
-
-function fail(msg)
-{
-	return function(input, index)
-	{
-		return err(msg);
-	};
-}
-
-
-// SATISFY
-
-function satisfy(isOk)
-{
-	return function(input, index)
-	{
-		if (input.length <= index)
-		{
-			return err('ran out of characters');
-		}
-		var chr = _elm_lang$core$Native_Utils.chr(input[index]);
-		return isOk(chr)
-			? ok(index + 1, chr)
-			: err("char '" + input[index] + "' at index " + index + " is not okay.");
-	};
-}
-
-function string(expected)
-{
-	return function(input, index)
-	{
-		var nextIndex = index + expected.length;
-		var actual = input.slice(index, nextIndex);
-		return expected === actual
-			? ok(nextIndex, actual)
-			: err("expecting '" + expected + "' at index " + index + " but instead saw '" + actual + "'.");
-	};
-}
-
-
-// ONE OF
-
-function oneOf(parserList)
-{
-	var parsers = _elm_lang$core$Native_List.toArray(parserList);
-
-	return function(input, index)
-	{
-		var len = parsers.length;
-		for (var i = 0; i < len; ++i)
-		{
-			var result = parsers[i](input, index);
-			if (result.ctor === 'Ok')
-			{
-				return result;
-			}
-		}
-		return err('none of the parsers given to oneOf worked');
-	};
-}
-
-
-// AND THEN
-
-function andThen(parser, callback)
-{
-	return function(input, index)
-	{
-		var result = parser(input, index);
-		if (result.ctor === 'Ok')
-		{
-			var newData = result._0;
-			return callback(newData.value)(input, newData.index);
-		}
-		else
-		{
-			return result;
-		}
-	};
-}
-
-
-// RUN
-
-function run(parser, input)
-{
-	var result = parser(input, 0);
-	if (result.ctor === 'Ok')
-	{
-		return { ctor: 'Ok', _0: result._0.value };
-	}
-	else
-	{
-		return result;
-	}
-}
-
-
-return {
-	succeed: succeed,
-	fail: fail,
-	satisfy: satisfy,
-	string: string,
-	oneOf: oneOf,
-	andThen: F2(andThen),
-	run: F2(run)
-};
-
-}();
-
-var _klaftertief$elm_search$Parse_Combinators$andThen = F2(
-	function (parser, f) {
-		return A2(_klaftertief$elm_search$Native_Parse.andThen, f, parser);
-	});
-var _klaftertief$elm_search$Parse_Combinators$fail = _klaftertief$elm_search$Native_Parse.fail;
-var _klaftertief$elm_search$Parse_Combinators$succeed = _klaftertief$elm_search$Native_Parse.succeed;
-var _klaftertief$elm_search$Parse_Combinators$map = F2(
-	function (func, parser) {
-		return A2(
-			_klaftertief$elm_search$Parse_Combinators$andThen,
-			function (a) {
-				return _klaftertief$elm_search$Parse_Combinators$succeed(
-					func(a));
-			},
-			parser);
-	});
-var _klaftertief$elm_search$Parse_Combinators$map2 = F3(
-	function (func, parserA, parserB) {
-		return A2(
-			_klaftertief$elm_search$Parse_Combinators$andThen,
-			function (a) {
-				return A2(
-					_klaftertief$elm_search$Parse_Combinators$andThen,
-					function (b) {
-						return _klaftertief$elm_search$Parse_Combinators$succeed(
-							A2(func, a, b));
-					},
-					parserB);
-			},
-			parserA);
-	});
-var _klaftertief$elm_search$Parse_Combinators$ignore1 = F2(
-	function (x, parser) {
-		return A3(
-			_klaftertief$elm_search$Parse_Combinators$map2,
-			F2(
-				function (_p0, a) {
-					return a;
-				}),
-			x,
-			parser);
-	});
-var _klaftertief$elm_search$Parse_Combinators$map3 = F4(
-	function (func, parserA, parserB, parserC) {
-		return A2(
-			_klaftertief$elm_search$Parse_Combinators$andThen,
-			function (a) {
-				return A2(
-					_klaftertief$elm_search$Parse_Combinators$andThen,
-					function (b) {
-						return A2(
-							_klaftertief$elm_search$Parse_Combinators$andThen,
-							function (c) {
-								return _klaftertief$elm_search$Parse_Combinators$succeed(
-									A3(func, a, b, c));
-							},
-							parserC);
-					},
-					parserB);
-			},
-			parserA);
-	});
-var _klaftertief$elm_search$Parse_Combinators$ignore2 = F3(
-	function (x, y, parser) {
-		return A4(
-			_klaftertief$elm_search$Parse_Combinators$map3,
-			F3(
-				function (_p2, _p1, a) {
-					return a;
-				}),
-			x,
-			y,
-			parser);
-	});
-var _klaftertief$elm_search$Parse_Combinators$middle = F3(
-	function (x, parser, y) {
-		return A4(
-			_klaftertief$elm_search$Parse_Combinators$map3,
-			F3(
-				function (_p4, a, _p3) {
-					return a;
-				}),
-			x,
-			parser,
-			y);
-	});
-var _klaftertief$elm_search$Parse_Combinators$map4 = F5(
-	function (func, parserA, parserB, parserC, parserD) {
-		return A2(
-			_klaftertief$elm_search$Parse_Combinators$andThen,
-			function (a) {
-				return A2(
-					_klaftertief$elm_search$Parse_Combinators$andThen,
-					function (b) {
-						return A2(
-							_klaftertief$elm_search$Parse_Combinators$andThen,
-							function (c) {
-								return A2(
-									_klaftertief$elm_search$Parse_Combinators$andThen,
-									function (d) {
-										return _klaftertief$elm_search$Parse_Combinators$succeed(
-											A4(func, a, b, c, d));
-									},
-									parserD);
-							},
-							parserC);
-					},
-					parserB);
-			},
-			parserA);
-	});
-var _klaftertief$elm_search$Parse_Combinators$ignore3 = F4(
-	function (x, y, z, parser) {
-		return A5(
-			_klaftertief$elm_search$Parse_Combinators$map4,
-			F4(
-				function (_p7, _p6, _p5, a) {
-					return a;
-				}),
-			x,
-			y,
-			z,
-			parser);
-	});
-var _klaftertief$elm_search$Parse_Combinators$lazy = function (thunk) {
-	return A2(
-		_klaftertief$elm_search$Parse_Combinators$andThen,
-		thunk,
-		_klaftertief$elm_search$Parse_Combinators$succeed(
-			{ctor: '_Tuple0'}));
-};
-var _klaftertief$elm_search$Parse_Combinators$try = function (parser) {
-	return parser;
-};
-var _klaftertief$elm_search$Parse_Combinators$oneOf = _klaftertief$elm_search$Native_Parse.oneOf;
-var _klaftertief$elm_search$Parse_Combinators$zeroOrMore = function (parser) {
-	return _klaftertief$elm_search$Parse_Combinators$oneOf(
-		{
-			ctor: '::',
-			_0: A2(
-				_klaftertief$elm_search$Parse_Combinators$andThen,
-				function (a) {
-					return A2(
-						_klaftertief$elm_search$Parse_Combinators$map,
-						F2(
-							function (x, y) {
-								return {ctor: '::', _0: x, _1: y};
-							})(a),
-						_klaftertief$elm_search$Parse_Combinators$zeroOrMore(parser));
-				},
-				parser),
-			_1: {
-				ctor: '::',
-				_0: _klaftertief$elm_search$Parse_Combinators$succeed(
-					{ctor: '[]'}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _klaftertief$elm_search$Parse_Combinators$oneOrMore = function (parser) {
-	return A3(
-		_klaftertief$elm_search$Parse_Combinators$map2,
-		F2(
-			function (x, y) {
-				return {ctor: '::', _0: x, _1: y};
-			}),
-		parser,
-		_klaftertief$elm_search$Parse_Combinators$zeroOrMore(parser));
-};
-var _klaftertief$elm_search$Parse_Combinators$string = _klaftertief$elm_search$Native_Parse.string;
-var _klaftertief$elm_search$Parse_Combinators$satisfy = _klaftertief$elm_search$Native_Parse.satisfy;
-var _klaftertief$elm_search$Parse_Combinators$lower = _klaftertief$elm_search$Parse_Combinators$satisfy(_elm_lang$core$Char$isLower);
-var _klaftertief$elm_search$Parse_Combinators$upper = _klaftertief$elm_search$Parse_Combinators$satisfy(_elm_lang$core$Char$isUpper);
-var _klaftertief$elm_search$Parse_Combinators$letter = _klaftertief$elm_search$Parse_Combinators$satisfy(
-	function (c) {
-		return _elm_lang$core$Char$isLower(c) || _elm_lang$core$Char$isUpper(c);
-	});
-var _klaftertief$elm_search$Parse_Combinators$digit = _klaftertief$elm_search$Parse_Combinators$satisfy(_elm_lang$core$Char$isDigit);
-var _klaftertief$elm_search$Parse_Combinators$char = function (c) {
-	return _klaftertief$elm_search$Parse_Combinators$satisfy(
-		F2(
-			function (x, y) {
-				return _elm_lang$core$Native_Utils.eq(x, y);
-			})(c));
-};
-var _klaftertief$elm_search$Parse_Combinators$run = _klaftertief$elm_search$Native_Parse.run;
-var _klaftertief$elm_search$Parse_Combinators$P = {ctor: 'P'};
-
-var _klaftertief$elm_search$Utils_Code$equals = A2(
-	_elm_lang$html$Html$span,
-	{ctor: '[]'},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('='),
-		_1: {ctor: '[]'}
-	});
-var _klaftertief$elm_search$Utils_Code$colon = A2(
-	_elm_lang$html$Html$span,
-	{ctor: '[]'},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text(':'),
-		_1: {ctor: '[]'}
-	});
-var _klaftertief$elm_search$Utils_Code$arrow = A2(
-	_elm_lang$html$Html$span,
-	{ctor: '[]'},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('->'),
-		_1: {ctor: '[]'}
-	});
-var _klaftertief$elm_search$Utils_Code$space = _elm_lang$html$Html$text(' ');
-var _klaftertief$elm_search$Utils_Code$padded = function (html) {
-	return {
-		ctor: '::',
-		_0: _klaftertief$elm_search$Utils_Code$space,
-		_1: {
-			ctor: '::',
-			_0: html,
-			_1: {
-				ctor: '::',
-				_0: _klaftertief$elm_search$Utils_Code$space,
-				_1: {ctor: '[]'}
-			}
-		}
-	};
-};
-var _klaftertief$elm_search$Utils_Code$addParens = function (list) {
-	return {
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('('),
-		_1: A2(
-			_elm_lang$core$Basics_ops['++'],
-			list,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(')'),
-				_1: {ctor: '[]'}
-			})
-	};
-};
-var _klaftertief$elm_search$Utils_Code$keyword = function (kw) {
-	return A2(
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('hljs-keyword'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(kw),
-			_1: {ctor: '[]'}
-		});
-};
-
-var _klaftertief$elm_search$Docs_Type$spaces = A2(
-	_klaftertief$elm_search$Parse_Combinators$map,
-	_elm_lang$core$Basics$always(
-		{ctor: '_Tuple0'}),
-	_klaftertief$elm_search$Parse_Combinators$zeroOrMore(
-		_klaftertief$elm_search$Parse_Combinators$char(
-			_elm_lang$core$Native_Utils.chr(' '))));
-var _klaftertief$elm_search$Docs_Type$commasLeading = function (parser) {
-	return _klaftertief$elm_search$Parse_Combinators$zeroOrMore(
-		A4(
-			_klaftertief$elm_search$Parse_Combinators$ignore3,
-			_klaftertief$elm_search$Docs_Type$spaces,
-			_klaftertief$elm_search$Parse_Combinators$char(
-				_elm_lang$core$Native_Utils.chr(',')),
-			_klaftertief$elm_search$Docs_Type$spaces,
-			parser));
-};
-var _klaftertief$elm_search$Docs_Type$varChar = _klaftertief$elm_search$Parse_Combinators$satisfy(
-	function (c) {
-		return _elm_lang$core$Char$isLower(c) || (_elm_lang$core$Char$isUpper(c) || (_elm_lang$core$Native_Utils.eq(
-			c,
-			_elm_lang$core$Native_Utils.chr('_')) || (_elm_lang$core$Native_Utils.eq(
-			c,
-			_elm_lang$core$Native_Utils.chr('\'')) || _elm_lang$core$Char$isDigit(c))));
-	});
-var _klaftertief$elm_search$Docs_Type$elmVarWith = function (starter) {
-	return A2(
-		_klaftertief$elm_search$Parse_Combinators$map,
-		_elm_lang$core$String$fromList,
-		A3(
-			_klaftertief$elm_search$Parse_Combinators$map2,
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			starter,
-			_klaftertief$elm_search$Parse_Combinators$zeroOrMore(_klaftertief$elm_search$Docs_Type$varChar)));
-};
-var _klaftertief$elm_search$Docs_Type$nameHelp = function (seen) {
-	return A2(
-		_klaftertief$elm_search$Parse_Combinators$andThen,
-		function (str) {
-			return _klaftertief$elm_search$Parse_Combinators$oneOf(
-				{
-					ctor: '::',
-					_0: A2(
-						_klaftertief$elm_search$Parse_Combinators$ignore1,
-						_klaftertief$elm_search$Parse_Combinators$char(
-							_elm_lang$core$Native_Utils.chr('.')),
-						_klaftertief$elm_search$Docs_Type$nameHelp(
-							{ctor: '::', _0: str, _1: seen})),
-					_1: {
-						ctor: '::',
-						_0: _klaftertief$elm_search$Parse_Combinators$succeed(
-							A2(
-								_klaftertief$elm_search$Docs_Name$Name,
-								A2(
-									_elm_lang$core$String$join,
-									'.',
-									_elm_lang$core$List$reverse(seen)),
-								str)),
-						_1: {ctor: '[]'}
-					}
-				});
-		},
-		_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$upper));
-};
-var _klaftertief$elm_search$Docs_Type$name = _klaftertief$elm_search$Docs_Type$nameHelp(
-	{ctor: '[]'});
 var _klaftertief$elm_search$Docs_Type$reserverdVars = A3(
 	_elm_lang$core$Dict$insert,
 	'appendable',
@@ -11487,20 +12681,18 @@ var _klaftertief$elm_search$Docs_Type$updateMapping = F2(
 						_p0._0));
 		}
 	});
+var _klaftertief$elm_search$Docs_Type$toName = function (str) {
+	return A2(
+		_elm_lang$core$Result$withDefault,
+		{name: str, home: ''},
+		_klaftertief$elm_search$Docs_Name$fromString(str));
+};
 var _klaftertief$elm_search$Docs_Type$Record = F2(
 	function (a, b) {
 		return {ctor: 'Record', _0: a, _1: b};
 	});
 var _klaftertief$elm_search$Docs_Type$Tuple = function (a) {
 	return {ctor: 'Tuple', _0: a};
-};
-var _klaftertief$elm_search$Docs_Type$tuplize = function (args) {
-	var _p3 = args;
-	if ((_p3.ctor === '::') && (_p3._1.ctor === '[]')) {
-		return _p3._0;
-	} else {
-		return _klaftertief$elm_search$Docs_Type$Tuple(args);
-	}
 };
 var _klaftertief$elm_search$Docs_Type$Apply = F2(
 	function (a, b) {
@@ -11509,58 +12701,138 @@ var _klaftertief$elm_search$Docs_Type$Apply = F2(
 var _klaftertief$elm_search$Docs_Type$Var = function (a) {
 	return {ctor: 'Var', _0: a};
 };
-var _klaftertief$elm_search$Docs_Type$var = A2(
-	_klaftertief$elm_search$Parse_Combinators$map,
-	_klaftertief$elm_search$Docs_Type$Var,
-	_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower));
 var _klaftertief$elm_search$Docs_Type$Function = F2(
 	function (a, b) {
 		return {ctor: 'Function', _0: a, _1: b};
 	});
+var _klaftertief$elm_search$Docs_Type$toInternal = F2(
+	function (functionArgs, elmType) {
+		toInternal:
+		while (true) {
+			var _p3 = elmType;
+			switch (_p3.ctor) {
+				case 'Var':
+					return _klaftertief$elm_search$Docs_Type$Var(_p3._0);
+				case 'Lambda':
+					if (_p3._1.ctor === 'Lambda') {
+						var _v3 = {
+							ctor: '::',
+							_0: A2(
+								_klaftertief$elm_search$Docs_Type$toInternal,
+								{ctor: '[]'},
+								_p3._0),
+							_1: functionArgs
+						},
+							_v4 = _p3._1;
+						functionArgs = _v3;
+						elmType = _v4;
+						continue toInternal;
+					} else {
+						return A2(
+							_klaftertief$elm_search$Docs_Type$Function,
+							_elm_lang$core$List$reverse(
+								{
+									ctor: '::',
+									_0: A2(
+										_klaftertief$elm_search$Docs_Type$toInternal,
+										{ctor: '[]'},
+										_p3._0),
+									_1: functionArgs
+								}),
+							A2(
+								_klaftertief$elm_search$Docs_Type$toInternal,
+								{ctor: '[]'},
+								_p3._1));
+					}
+				case 'Tuple':
+					return _klaftertief$elm_search$Docs_Type$Tuple(
+						A2(
+							_elm_lang$core$List$map,
+							_klaftertief$elm_search$Docs_Type$toInternal(
+								{ctor: '[]'}),
+							_p3._0));
+				case 'Type':
+					return A2(
+						_klaftertief$elm_search$Docs_Type$Apply,
+						_klaftertief$elm_search$Docs_Type$toName(_p3._0),
+						A2(
+							_elm_lang$core$List$map,
+							_klaftertief$elm_search$Docs_Type$toInternal(
+								{ctor: '[]'}),
+							_p3._1));
+				default:
+					return A2(
+						_klaftertief$elm_search$Docs_Type$Record,
+						A2(
+							_elm_lang$core$List$map,
+							_elm_lang$core$Tuple$mapSecond(
+								_klaftertief$elm_search$Docs_Type$toInternal(
+									{ctor: '[]'})),
+							_p3._0),
+						_p3._1);
+			}
+		}
+	});
+var _klaftertief$elm_search$Docs_Type$decoder = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (_p4) {
+		return _elm_lang$core$Json_Decode$succeed(
+			A2(
+				_klaftertief$elm_search$Docs_Type$toInternal,
+				{ctor: '[]'},
+				_p4));
+	},
+	_elm_tools$documentation$Elm_Documentation_Type$decoder);
+var _klaftertief$elm_search$Docs_Type$parse = function (_p5) {
+	return A2(
+		_elm_lang$core$Json_Decode$decodeValue,
+		_klaftertief$elm_search$Docs_Type$decoder,
+		_elm_lang$core$Json_Encode$string(_p5));
+};
 var _klaftertief$elm_search$Docs_Type$normalizeWithMapping = F2(
 	function (mapping, tipe) {
 		var normalize_ = _klaftertief$elm_search$Docs_Type$normalizeWithMapping(mapping);
-		var _p4 = tipe;
-		switch (_p4.ctor) {
+		var _p6 = tipe;
+		switch (_p6.ctor) {
 			case 'Function':
 				return A2(
 					_klaftertief$elm_search$Docs_Type$Function,
-					A2(_elm_lang$core$List$map, normalize_, _p4._0),
-					normalize_(_p4._1));
+					A2(_elm_lang$core$List$map, normalize_, _p6._0),
+					normalize_(_p6._1));
 			case 'Var':
-				var _p6 = _p4._0;
+				var _p8 = _p6._0;
 				var name_ = function () {
-					var _p5 = A2(_elm_lang$core$Dict$get, _p6, mapping);
-					if (_p5.ctor === 'Just') {
-						return _p5._0;
+					var _p7 = A2(_elm_lang$core$Dict$get, _p8, mapping);
+					if (_p7.ctor === 'Just') {
+						return _p7._0;
 					} else {
-						return _p6;
+						return _p8;
 					}
 				}();
 				return _klaftertief$elm_search$Docs_Type$Var(name_);
 			case 'Apply':
 				return A2(
 					_klaftertief$elm_search$Docs_Type$Apply,
-					_p4._0,
-					A2(_elm_lang$core$List$map, normalize_, _p4._1));
+					_p6._0,
+					A2(_elm_lang$core$List$map, normalize_, _p6._1));
 			case 'Tuple':
 				return _klaftertief$elm_search$Docs_Type$Tuple(
-					A2(_elm_lang$core$List$map, normalize_, _p4._0));
+					A2(_elm_lang$core$List$map, normalize_, _p6._0));
 			default:
 				return A2(
 					_klaftertief$elm_search$Docs_Type$Record,
 					A2(
 						_elm_lang$core$List$map,
-						function (_p7) {
-							var _p8 = _p7;
+						function (_p9) {
+							var _p10 = _p9;
 							return {
 								ctor: '_Tuple2',
-								_0: _p8._0,
-								_1: normalize_(_p8._1)
+								_0: _p10._0,
+								_1: normalize_(_p10._1)
 							};
 						},
-						_p4._0),
-					_p4._1);
+						_p6._0),
+					_p6._1);
 		}
 	});
 var _klaftertief$elm_search$Docs_Type$normalize = function (tipe) {
@@ -11569,495 +12841,6 @@ var _klaftertief$elm_search$Docs_Type$normalize = function (tipe) {
 		A2(_klaftertief$elm_search$Docs_Type$updateMapping, tipe, _klaftertief$elm_search$Docs_Type$defaultMapping),
 		tipe);
 };
-var _klaftertief$elm_search$Docs_Type$buildFunction = F3(
-	function (args, currentType, remainingTypes) {
-		buildFunction:
-		while (true) {
-			var _p9 = remainingTypes;
-			if (_p9.ctor === '[]') {
-				if (_elm_lang$core$List$isEmpty(args)) {
-					return currentType;
-				} else {
-					var _p10 = currentType;
-					if (_p10.ctor === 'Function') {
-						return A2(
-							_klaftertief$elm_search$Docs_Type$Function,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$List$reverse(args),
-								_p10._0),
-							_p10._1);
-					} else {
-						return A2(
-							_klaftertief$elm_search$Docs_Type$Function,
-							_elm_lang$core$List$reverse(args),
-							currentType);
-					}
-				}
-			} else {
-				var _v8 = {ctor: '::', _0: currentType, _1: args},
-					_v9 = _p9._0,
-					_v10 = _p9._1;
-				args = _v8;
-				currentType = _v9;
-				remainingTypes = _v10;
-				continue buildFunction;
-			}
-		}
-	});
-var _klaftertief$elm_search$Docs_Type$tipe = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p11) {
-		return A3(
-			_klaftertief$elm_search$Parse_Combinators$map2,
-			_klaftertief$elm_search$Docs_Type$buildFunction(
-				{ctor: '[]'}),
-			_klaftertief$elm_search$Docs_Type$tipeTerm,
-			_klaftertief$elm_search$Docs_Type$arrowTerms);
-	});
-var _klaftertief$elm_search$Docs_Type$arrowTerms = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p12) {
-		return _klaftertief$elm_search$Parse_Combinators$zeroOrMore(
-			A4(
-				_klaftertief$elm_search$Parse_Combinators$ignore3,
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Parse_Combinators$string('->'),
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Docs_Type$tipeTerm));
-	});
-var _klaftertief$elm_search$Docs_Type$tipeTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p13) {
-		return _klaftertief$elm_search$Parse_Combinators$oneOf(
-			{
-				ctor: '::',
-				_0: _klaftertief$elm_search$Docs_Type$var,
-				_1: {
-					ctor: '::',
-					_0: _klaftertief$elm_search$Docs_Type$apply,
-					_1: {
-						ctor: '::',
-						_0: _klaftertief$elm_search$Docs_Type$record,
-						_1: {
-							ctor: '::',
-							_0: _klaftertief$elm_search$Docs_Type$parenTipe,
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
-var _klaftertief$elm_search$Docs_Type$apply = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p14) {
-		return A3(
-			_klaftertief$elm_search$Parse_Combinators$map2,
-			_klaftertief$elm_search$Docs_Type$Apply,
-			_klaftertief$elm_search$Docs_Type$name,
-			_klaftertief$elm_search$Parse_Combinators$zeroOrMore(
-				A2(_klaftertief$elm_search$Parse_Combinators$ignore1, _klaftertief$elm_search$Docs_Type$spaces, _klaftertief$elm_search$Docs_Type$applyTerm)));
-	});
-var _klaftertief$elm_search$Docs_Type$applyTerm = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p15) {
-		return _klaftertief$elm_search$Parse_Combinators$oneOf(
-			{
-				ctor: '::',
-				_0: _klaftertief$elm_search$Docs_Type$var,
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_klaftertief$elm_search$Parse_Combinators$map,
-						function (n) {
-							return A2(
-								_klaftertief$elm_search$Docs_Type$Apply,
-								n,
-								{ctor: '[]'});
-						},
-						_klaftertief$elm_search$Docs_Type$name),
-					_1: {
-						ctor: '::',
-						_0: _klaftertief$elm_search$Docs_Type$record,
-						_1: {
-							ctor: '::',
-							_0: _klaftertief$elm_search$Docs_Type$parenTipe,
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
-var _klaftertief$elm_search$Docs_Type$parenTipe = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p16) {
-		return A2(
-			_klaftertief$elm_search$Parse_Combinators$map,
-			_klaftertief$elm_search$Docs_Type$tuplize,
-			A3(
-				_klaftertief$elm_search$Parse_Combinators$middle,
-				A2(
-					_klaftertief$elm_search$Parse_Combinators$ignore1,
-					_klaftertief$elm_search$Parse_Combinators$char(
-						_elm_lang$core$Native_Utils.chr('(')),
-					_klaftertief$elm_search$Docs_Type$spaces),
-				_klaftertief$elm_search$Parse_Combinators$oneOf(
-					{
-						ctor: '::',
-						_0: A3(
-							_klaftertief$elm_search$Parse_Combinators$map2,
-							F2(
-								function (x, y) {
-									return {ctor: '::', _0: x, _1: y};
-								}),
-							_klaftertief$elm_search$Docs_Type$tipe,
-							_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$tipe)),
-						_1: {
-							ctor: '::',
-							_0: _klaftertief$elm_search$Parse_Combinators$succeed(
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				A2(
-					_klaftertief$elm_search$Parse_Combinators$ignore1,
-					_klaftertief$elm_search$Docs_Type$spaces,
-					_klaftertief$elm_search$Parse_Combinators$char(
-						_elm_lang$core$Native_Utils.chr(')')))));
-	});
-var _klaftertief$elm_search$Docs_Type$record = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p17) {
-		return A3(
-			_klaftertief$elm_search$Parse_Combinators$middle,
-			A2(
-				_klaftertief$elm_search$Parse_Combinators$ignore1,
-				_klaftertief$elm_search$Parse_Combinators$char(
-					_elm_lang$core$Native_Utils.chr('{')),
-				_klaftertief$elm_search$Docs_Type$spaces),
-			_klaftertief$elm_search$Parse_Combinators$oneOf(
-				{
-					ctor: '::',
-					_0: A2(
-						_klaftertief$elm_search$Parse_Combinators$andThen,
-						_klaftertief$elm_search$Docs_Type$recordHelp,
-						_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower)),
-					_1: {
-						ctor: '::',
-						_0: _klaftertief$elm_search$Parse_Combinators$succeed(
-							A2(
-								_klaftertief$elm_search$Docs_Type$Record,
-								{ctor: '[]'},
-								_elm_lang$core$Maybe$Nothing)),
-						_1: {ctor: '[]'}
-					}
-				}),
-			A2(
-				_klaftertief$elm_search$Parse_Combinators$ignore1,
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Parse_Combinators$char(
-					_elm_lang$core$Native_Utils.chr('}'))));
-	});
-var _klaftertief$elm_search$Docs_Type$recordHelp = function (lowerName) {
-	return _klaftertief$elm_search$Parse_Combinators$lazy(
-		function (_p18) {
-			return A2(
-				_klaftertief$elm_search$Parse_Combinators$ignore1,
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Parse_Combinators$oneOf(
-					{
-						ctor: '::',
-						_0: A3(
-							_klaftertief$elm_search$Parse_Combinators$map2,
-							F2(
-								function (t, rest) {
-									return A2(
-										_klaftertief$elm_search$Docs_Type$Record,
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: lowerName, _1: t},
-											_1: rest
-										},
-										_elm_lang$core$Maybe$Nothing);
-								}),
-							A3(
-								_klaftertief$elm_search$Parse_Combinators$ignore2,
-								_klaftertief$elm_search$Parse_Combinators$char(
-									_elm_lang$core$Native_Utils.chr(':')),
-								_klaftertief$elm_search$Docs_Type$spaces,
-								_klaftertief$elm_search$Docs_Type$tipe),
-							_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$field)),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_klaftertief$elm_search$Parse_Combinators$map,
-								function (fields) {
-									return A2(
-										_klaftertief$elm_search$Docs_Type$Record,
-										fields,
-										_elm_lang$core$Maybe$Just(lowerName));
-								},
-								A3(
-									_klaftertief$elm_search$Parse_Combinators$ignore2,
-									_klaftertief$elm_search$Parse_Combinators$char(
-										_elm_lang$core$Native_Utils.chr('|')),
-									_klaftertief$elm_search$Docs_Type$spaces,
-									A3(
-										_klaftertief$elm_search$Parse_Combinators$map2,
-										F2(
-											function (x, y) {
-												return {ctor: '::', _0: x, _1: y};
-											}),
-										_klaftertief$elm_search$Docs_Type$field,
-										_klaftertief$elm_search$Docs_Type$commasLeading(_klaftertief$elm_search$Docs_Type$field)))),
-							_1: {ctor: '[]'}
-						}
-					}));
-		});
-};
-var _klaftertief$elm_search$Docs_Type$field = _klaftertief$elm_search$Parse_Combinators$lazy(
-	function (_p19) {
-		return A3(
-			_klaftertief$elm_search$Parse_Combinators$map2,
-			F2(
-				function (v0, v1) {
-					return {ctor: '_Tuple2', _0: v0, _1: v1};
-				}),
-			_klaftertief$elm_search$Docs_Type$elmVarWith(_klaftertief$elm_search$Parse_Combinators$lower),
-			A4(
-				_klaftertief$elm_search$Parse_Combinators$ignore3,
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Parse_Combinators$char(
-					_elm_lang$core$Native_Utils.chr(':')),
-				_klaftertief$elm_search$Docs_Type$spaces,
-				_klaftertief$elm_search$Docs_Type$tipe));
-	});
-var _klaftertief$elm_search$Docs_Type$parse = function (tipeString) {
-	return A2(_klaftertief$elm_search$Parse_Combinators$run, _klaftertief$elm_search$Docs_Type$tipe, tipeString);
-};
-var _klaftertief$elm_search$Docs_Type$decoder = A2(_klaftertief$elm_search$Utils_Json$customDecoder, _elm_lang$core$Json_Decode$string, _klaftertief$elm_search$Docs_Type$parse);
-var _klaftertief$elm_search$Docs_Type$Other = {ctor: 'Other'};
-var _klaftertief$elm_search$Docs_Type$App = {ctor: 'App'};
-var _klaftertief$elm_search$Docs_Type$Func = {ctor: 'Func'};
-var _klaftertief$elm_search$Docs_Type$toHtml = F2(
-	function (context, tipe) {
-		var _p20 = tipe;
-		switch (_p20.ctor) {
-			case 'Function':
-				var argsHtml = A2(
-					_elm_lang$core$List$concatMap,
-					function (arg) {
-						return A2(
-							_elm_lang$core$Basics_ops['++'],
-							A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, arg),
-							_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$arrow));
-					},
-					_p20._0);
-				var maybeAddParens = function () {
-					var _p21 = context;
-					switch (_p21.ctor) {
-						case 'Func':
-							return _klaftertief$elm_search$Utils_Code$addParens;
-						case 'App':
-							return _klaftertief$elm_search$Utils_Code$addParens;
-						default:
-							return _elm_lang$core$Basics$identity;
-					}
-				}();
-				return maybeAddParens(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						argsHtml,
-						A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Func, _p20._1)));
-			case 'Var':
-				return {
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p20._0),
-					_1: {ctor: '[]'}
-				};
-			case 'Apply':
-				if (_p20._1.ctor === '[]') {
-					return {
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p20._0.name),
-						_1: {ctor: '[]'}
-					};
-				} else {
-					var argsHtml = A2(
-						_elm_lang$core$List$concatMap,
-						function (arg) {
-							return {
-								ctor: '::',
-								_0: _klaftertief$elm_search$Utils_Code$space,
-								_1: A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$App, arg)
-							};
-						},
-						_p20._1);
-					var maybeAddParens = function () {
-						var _p22 = context;
-						switch (_p22.ctor) {
-							case 'Func':
-								return _elm_lang$core$Basics$identity;
-							case 'App':
-								return _klaftertief$elm_search$Utils_Code$addParens;
-							default:
-								return _elm_lang$core$Basics$identity;
-						}
-					}();
-					return maybeAddParens(
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p20._0.name),
-							_1: argsHtml
-						});
-				}
-			case 'Tuple':
-				return _klaftertief$elm_search$Utils_Code$addParens(
-					_elm_lang$core$List$concat(
-						A2(
-							_elm_lang$core$List$intersperse,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(', '),
-								_1: {ctor: '[]'}
-							},
-							A2(
-								_elm_lang$core$List$map,
-								_klaftertief$elm_search$Docs_Type$toHtml(_klaftertief$elm_search$Docs_Type$Other),
-								_p20._0))));
-			default:
-				var fieldsHtml = _elm_lang$core$List$concat(
-					A2(
-						_elm_lang$core$List$intersperse,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(', '),
-							_1: {ctor: '[]'}
-						},
-						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Docs_Type$fieldToHtml, _p20._0)));
-				var recordInsides = function () {
-					var _p23 = _p20._1;
-					if (_p23.ctor === 'Nothing') {
-						return fieldsHtml;
-					} else {
-						return {
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p23._0),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(' | '),
-								_1: fieldsHtml
-							}
-						};
-					}
-				}();
-				return {
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('{ '),
-					_1: A2(
-						_elm_lang$core$Basics_ops['++'],
-						recordInsides,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(' }'),
-							_1: {ctor: '[]'}
-						})
-				};
-		}
-	});
-var _klaftertief$elm_search$Docs_Type$fieldToHtml = function (_p24) {
-	var _p25 = _p24;
-	return {
-		ctor: '::',
-		_0: _elm_lang$html$Html$text(_p25._0),
-		_1: {
-			ctor: '::',
-			_0: _klaftertief$elm_search$Utils_Code$space,
-			_1: {
-				ctor: '::',
-				_0: _klaftertief$elm_search$Utils_Code$colon,
-				_1: {
-					ctor: '::',
-					_0: _klaftertief$elm_search$Utils_Code$space,
-					_1: A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, _p25._1)
-				}
-			}
-		}
-	};
-};
-var _klaftertief$elm_search$Docs_Type$length = F2(
-	function (context, tipe) {
-		var _p26 = tipe;
-		switch (_p26.ctor) {
-			case 'Function':
-				var argLengths = A2(
-					_elm_lang$core$List$map,
-					function (t) {
-						return 4 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, t);
-					},
-					_p26._0);
-				var parens = function () {
-					var _p27 = context;
-					switch (_p27.ctor) {
-						case 'Func':
-							return 2;
-						case 'App':
-							return 2;
-						default:
-							return 0;
-					}
-				}();
-				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Func, _p26._1);
-			case 'Var':
-				return _elm_lang$core$String$length(_p26._0);
-			case 'Apply':
-				if (_p26._1.ctor === '[]') {
-					return _elm_lang$core$String$length(_p26._0.name);
-				} else {
-					var argsLength = _elm_lang$core$List$sum(
-						A2(
-							_elm_lang$core$List$map,
-							function (t) {
-								return 1 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$App, t);
-							},
-							_p26._1));
-					var parens = function () {
-						var _p28 = context;
-						switch (_p28.ctor) {
-							case 'Func':
-								return 0;
-							case 'App':
-								return 2;
-							default:
-								return 0;
-						}
-					}();
-					return (parens + _elm_lang$core$String$length(_p26._0.name)) + argsLength;
-				}
-			case 'Tuple':
-				return _elm_lang$core$List$sum(
-					A2(
-						_elm_lang$core$List$map,
-						function (t) {
-							return 2 + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, t);
-						},
-						_p26._0));
-			default:
-				var extLength = function () {
-					var _p29 = _p26._1;
-					if (_p29.ctor === 'Nothing') {
-						return 0;
-					} else {
-						return 2 + _elm_lang$core$String$length(_p29._0);
-					}
-				}();
-				var fieldLength = function (_p30) {
-					var _p31 = _p30;
-					return (_elm_lang$core$String$length(_p31._0) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, _p31._1);
-				};
-				var recordLength = 2 + _elm_lang$core$List$sum(
-					A2(
-						_elm_lang$core$List$map,
-						function (ft) {
-							return 2 + fieldLength(ft);
-						},
-						_p26._0));
-				return recordLength + extLength;
-		}
-	});
 
 var _klaftertief$elm_search$Docs_Entry$Entry = F3(
 	function (a, b, c) {
@@ -13099,6 +13882,75 @@ var _klaftertief$elm_search$Search_Update$init = F2(
 		}
 	});
 
+var _klaftertief$elm_search$Utils_Code$equals = A2(
+	_elm_lang$html$Html$span,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('='),
+		_1: {ctor: '[]'}
+	});
+var _klaftertief$elm_search$Utils_Code$colon = A2(
+	_elm_lang$html$Html$span,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(':'),
+		_1: {ctor: '[]'}
+	});
+var _klaftertief$elm_search$Utils_Code$arrow = A2(
+	_elm_lang$html$Html$span,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('->'),
+		_1: {ctor: '[]'}
+	});
+var _klaftertief$elm_search$Utils_Code$space = _elm_lang$html$Html$text(' ');
+var _klaftertief$elm_search$Utils_Code$padded = function (html) {
+	return {
+		ctor: '::',
+		_0: _klaftertief$elm_search$Utils_Code$space,
+		_1: {
+			ctor: '::',
+			_0: html,
+			_1: {
+				ctor: '::',
+				_0: _klaftertief$elm_search$Utils_Code$space,
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+};
+var _klaftertief$elm_search$Utils_Code$addParens = function (list) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('('),
+		_1: A2(
+			_elm_lang$core$Basics_ops['++'],
+			list,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(')'),
+				_1: {ctor: '[]'}
+			})
+	};
+};
+var _klaftertief$elm_search$Utils_Code$keyword = function (kw) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('hljs-keyword'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(kw),
+			_1: {ctor: '[]'}
+		});
+};
+
 var _klaftertief$elm_search$Utils_Markdown$myOptions = function () {
 	var options = _evancz$elm_markdown$Markdown$defaultOptions;
 	return _elm_lang$core$Native_Utils.update(
@@ -13115,6 +13967,423 @@ var _klaftertief$elm_search$Utils_Markdown$block = function (raw) {
 		raw);
 };
 
+var _klaftertief$elm_search$Search_View$annotationName = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1.context;
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$href(
+				_klaftertief$elm_search$Search_Chunk$pathToValue(_p2)),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(_p2.name),
+			_1: {ctor: '[]'}
+		});
+};
+var _klaftertief$elm_search$Search_View$annotationBlock = function (bits) {
+	return A2(
+		_elm_lang$html$Html$pre,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$code,
+				{ctor: '[]'},
+				_elm_lang$core$List$concat(
+					A2(
+						_elm_lang$core$List$intersperse,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('\n'),
+							_1: {ctor: '[]'}
+						},
+						bits))),
+			_1: {ctor: '[]'}
+		});
+};
+var _klaftertief$elm_search$Search_View$viewSearchIntro = function () {
+	var exampleSearchItem = function (query) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'pointer'},
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_klaftertief$elm_search$Search_Model$SetFilterQueryStringAndRunFilter(query)),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(query),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	};
+	var exampleQueries = {
+		ctor: '::',
+		_0: 'map',
+		_1: {
+			ctor: '::',
+			_0: '(a -> b -> b) -> b -> List a -> b',
+			_1: {
+				ctor: '::',
+				_0: 'Result x a -> (a -> Result x b) -> Result x b',
+				_1: {
+					ctor: '::',
+					_0: 'String -> Int',
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('searchIntro'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Welcome to Elm Search'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Search the modules of the latest Elm packages by either function name or by approximate type signature.'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h2,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Example queries'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$ul,
+							{ctor: '[]'},
+							A2(_elm_lang$core$List$map, exampleSearchItem, exampleQueries)),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+}();
+var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p3) {
+	var _p4 = _p3;
+	var isDisabled = _elm_lang$core$List$isEmpty(_p4.index.chunks);
+	return A2(
+		_elm_lang$html$Html$form,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$classList(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'searchForm', _1: true},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'searchFormDisabled', _1: isDisabled},
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$action('.'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onSubmit(_klaftertief$elm_search$Search_Model$RunFilter),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$name('q'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('search'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_klaftertief$elm_search$Search_Model$SetFilterQueryString),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$defaultValue(_p4.filter.queryString),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$autofocus(true),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('submit'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$disabled(isDisabled),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Search'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _klaftertief$elm_search$Search_View$viewLogo = A2(
+	_elm_lang$html$Html$span,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('searchLogo'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _klaftertief$elm_search$Logo$viewWithSize(64),
+		_1: {ctor: '[]'}
+	});
+var _klaftertief$elm_search$Search_View$viewSearchBranding = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('searchBranding'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _klaftertief$elm_search$Search_View$viewLogo,
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('searchTitle'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Elm Search'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _klaftertief$elm_search$Search_View$viewSearchHeader = function (search) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('searchHeader'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _klaftertief$elm_search$Search_View$viewSearchBranding,
+			_1: {
+				ctor: '::',
+				_0: _klaftertief$elm_search$Search_View$viewSearchForm(search),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _klaftertief$elm_search$Search_View$Other = {ctor: 'Other'};
+var _klaftertief$elm_search$Search_View$App = {ctor: 'App'};
+var _klaftertief$elm_search$Search_View$Func = {ctor: 'Func'};
+var _klaftertief$elm_search$Search_View$viewType = F2(
+	function (context, tipe) {
+		var _p5 = tipe;
+		switch (_p5.ctor) {
+			case 'Function':
+				var argsHtml = A2(
+					_elm_lang$core$List$concatMap,
+					function (arg) {
+						return A2(
+							_elm_lang$core$Basics_ops['++'],
+							A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$Func, arg),
+							_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$arrow));
+					},
+					_p5._0);
+				var maybeAddParens = function () {
+					var _p6 = context;
+					switch (_p6.ctor) {
+						case 'Func':
+							return _klaftertief$elm_search$Utils_Code$addParens;
+						case 'App':
+							return _klaftertief$elm_search$Utils_Code$addParens;
+						default:
+							return _elm_lang$core$Basics$identity;
+					}
+				}();
+				return maybeAddParens(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						argsHtml,
+						A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$Func, _p5._1)));
+			case 'Var':
+				return {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(_p5._0),
+					_1: {ctor: '[]'}
+				};
+			case 'Apply':
+				if (_p5._1.ctor === '[]') {
+					return {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p5._0.name),
+						_1: {ctor: '[]'}
+					};
+				} else {
+					var argsHtml = A2(
+						_elm_lang$core$List$concatMap,
+						function (arg) {
+							return {
+								ctor: '::',
+								_0: _klaftertief$elm_search$Utils_Code$space,
+								_1: A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$App, arg)
+							};
+						},
+						_p5._1);
+					var maybeAddParens = function () {
+						var _p7 = context;
+						switch (_p7.ctor) {
+							case 'Func':
+								return _elm_lang$core$Basics$identity;
+							case 'App':
+								return _klaftertief$elm_search$Utils_Code$addParens;
+							default:
+								return _elm_lang$core$Basics$identity;
+						}
+					}();
+					return maybeAddParens(
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p5._0.name),
+							_1: argsHtml
+						});
+				}
+			case 'Tuple':
+				return _klaftertief$elm_search$Utils_Code$addParens(
+					_elm_lang$core$List$concat(
+						A2(
+							_elm_lang$core$List$intersperse,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(', '),
+								_1: {ctor: '[]'}
+							},
+							A2(
+								_elm_lang$core$List$map,
+								_klaftertief$elm_search$Search_View$viewType(_klaftertief$elm_search$Search_View$Other),
+								_p5._0))));
+			default:
+				var fieldsHtml = _elm_lang$core$List$concat(
+					A2(
+						_elm_lang$core$List$intersperse,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(', '),
+							_1: {ctor: '[]'}
+						},
+						A2(_elm_lang$core$List$map, _klaftertief$elm_search$Search_View$viewField, _p5._0)));
+				var recordInsides = function () {
+					var _p8 = _p5._1;
+					if (_p8.ctor === 'Nothing') {
+						return fieldsHtml;
+					} else {
+						return {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p8._0),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' | '),
+								_1: fieldsHtml
+							}
+						};
+					}
+				}();
+				return {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('{ '),
+					_1: A2(
+						_elm_lang$core$Basics_ops['++'],
+						recordInsides,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(' }'),
+							_1: {ctor: '[]'}
+						})
+				};
+		}
+	});
+var _klaftertief$elm_search$Search_View$viewField = function (_p9) {
+	var _p10 = _p9;
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html$text(_p10._0),
+		_1: {
+			ctor: '::',
+			_0: _klaftertief$elm_search$Utils_Code$space,
+			_1: {
+				ctor: '::',
+				_0: _klaftertief$elm_search$Utils_Code$colon,
+				_1: {
+					ctor: '::',
+					_0: _klaftertief$elm_search$Utils_Code$space,
+					_1: A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$Other, _p10._1)
+				}
+			}
+		}
+	};
+};
 var _klaftertief$elm_search$Search_View$longFunctionAnnotation = F2(
 	function (args, result) {
 		var starters = {
@@ -13151,7 +14420,7 @@ var _klaftertief$elm_search$Search_View$longFunctionAnnotation = F2(
 		};
 		var tipeHtml = A2(
 			_elm_lang$core$List$map,
-			_klaftertief$elm_search$Docs_Type$toHtml(_klaftertief$elm_search$Docs_Type$Func),
+			_klaftertief$elm_search$Search_View$viewType(_klaftertief$elm_search$Search_View$Func),
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				args,
@@ -13169,28 +14438,91 @@ var _klaftertief$elm_search$Search_View$longFunctionAnnotation = F2(
 			starters,
 			tipeHtml);
 	});
-var _klaftertief$elm_search$Search_View$annotationName = function (_p0) {
-	var _p1 = _p0;
-	var _p2 = _p1.context;
-	return A2(
-		_elm_lang$html$Html$a,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$href(
-				_klaftertief$elm_search$Search_Chunk$pathToValue(_p2)),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p2.name),
-			_1: {ctor: '[]'}
-		});
-};
+var _klaftertief$elm_search$Search_View$typeLength = F2(
+	function (context, tipe) {
+		var _p11 = tipe;
+		switch (_p11.ctor) {
+			case 'Function':
+				var argLengths = A2(
+					_elm_lang$core$List$map,
+					function (t) {
+						return 4 + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$Func, t);
+					},
+					_p11._0);
+				var parens = function () {
+					var _p12 = context;
+					switch (_p12.ctor) {
+						case 'Func':
+							return 2;
+						case 'App':
+							return 2;
+						default:
+							return 0;
+					}
+				}();
+				return (parens + _elm_lang$core$List$sum(argLengths)) + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$Func, _p11._1);
+			case 'Var':
+				return _elm_lang$core$String$length(_p11._0);
+			case 'Apply':
+				if (_p11._1.ctor === '[]') {
+					return _elm_lang$core$String$length(_p11._0.name);
+				} else {
+					var argsLength = _elm_lang$core$List$sum(
+						A2(
+							_elm_lang$core$List$map,
+							function (t) {
+								return 1 + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$App, t);
+							},
+							_p11._1));
+					var parens = function () {
+						var _p13 = context;
+						switch (_p13.ctor) {
+							case 'Func':
+								return 0;
+							case 'App':
+								return 2;
+							default:
+								return 0;
+						}
+					}();
+					return (parens + _elm_lang$core$String$length(_p11._0.name)) + argsLength;
+				}
+			case 'Tuple':
+				return _elm_lang$core$List$sum(
+					A2(
+						_elm_lang$core$List$map,
+						function (t) {
+							return 2 + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$Other, t);
+						},
+						_p11._0));
+			default:
+				var extLength = function () {
+					var _p14 = _p11._1;
+					if (_p14.ctor === 'Nothing') {
+						return 0;
+					} else {
+						return 2 + _elm_lang$core$String$length(_p14._0);
+					}
+				}();
+				var fieldLength = function (_p15) {
+					var _p16 = _p15;
+					return (_elm_lang$core$String$length(_p16._0) + 3) + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$Other, _p16._1);
+				};
+				var recordLength = 2 + _elm_lang$core$List$sum(
+					A2(
+						_elm_lang$core$List$map,
+						function (ft) {
+							return 2 + fieldLength(ft);
+						},
+						_p11._0));
+				return recordLength + extLength;
+		}
+	});
 var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
-	var _p3 = chunk.tipe;
-	if (_p3.ctor === 'Function') {
+	var _p17 = chunk.tipe;
+	if (_p17.ctor === 'Function') {
 		return (_elm_lang$core$Native_Utils.cmp(
-			(_elm_lang$core$String$length(chunk.context.name) + 3) + A2(_klaftertief$elm_search$Docs_Type$length, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe),
+			(_elm_lang$core$String$length(chunk.context.name) + 3) + A2(_klaftertief$elm_search$Search_View$typeLength, _klaftertief$elm_search$Search_View$Other, chunk.tipe),
 			64) > 0) ? {
 			ctor: '::',
 			_0: {
@@ -13198,7 +14530,7 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 				_0: _klaftertief$elm_search$Search_View$annotationName(chunk),
 				_1: {ctor: '[]'}
 			},
-			_1: A2(_klaftertief$elm_search$Search_View$longFunctionAnnotation, _p3._0, _p3._1)
+			_1: A2(_klaftertief$elm_search$Search_View$longFunctionAnnotation, _p17._0, _p17._1)
 		} : {
 			ctor: '::',
 			_0: {
@@ -13207,7 +14539,7 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 				_1: A2(
 					_elm_lang$core$Basics_ops['++'],
 					_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$colon),
-					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe))
+					A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$Other, chunk.tipe))
 			},
 			_1: {ctor: '[]'}
 		};
@@ -13220,32 +14552,11 @@ var _klaftertief$elm_search$Search_View$annotation = function (chunk) {
 				_1: A2(
 					_elm_lang$core$Basics_ops['++'],
 					_klaftertief$elm_search$Utils_Code$padded(_klaftertief$elm_search$Utils_Code$colon),
-					A2(_klaftertief$elm_search$Docs_Type$toHtml, _klaftertief$elm_search$Docs_Type$Other, chunk.tipe))
+					A2(_klaftertief$elm_search$Search_View$viewType, _klaftertief$elm_search$Search_View$Other, chunk.tipe))
 			},
 			_1: {ctor: '[]'}
 		};
 	}
-};
-var _klaftertief$elm_search$Search_View$annotationBlock = function (bits) {
-	return A2(
-		_elm_lang$html$Html$pre,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$code,
-				{ctor: '[]'},
-				_elm_lang$core$List$concat(
-					A2(
-						_elm_lang$core$List$intersperse,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('\n'),
-							_1: {ctor: '[]'}
-						},
-						bits))),
-			_1: {ctor: '[]'}
-		});
 };
 var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 	return A2(
@@ -13357,10 +14668,10 @@ var _klaftertief$elm_search$Search_View$viewChunk = function (chunk) {
 			}
 		});
 };
-var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p4) {
-	var _p5 = _p4;
-	var _p6 = _p5.result;
-	var viewChunks = (!_elm_lang$core$List$isEmpty(_p6.chunks)) ? A2(_elm_lang$core$List$map, _klaftertief$elm_search$Search_View$viewChunk, _p6.chunks) : {
+var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p18) {
+	var _p19 = _p18;
+	var _p20 = _p19.result;
+	var viewChunks = (!_elm_lang$core$List$isEmpty(_p20.chunks)) ? A2(_elm_lang$core$List$map, _klaftertief$elm_search$Search_View$viewChunk, _p20.chunks) : {
 		ctor: '::',
 		_0: A2(
 			_elm_lang$html$Html$p,
@@ -13389,7 +14700,7 @@ var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p4) {
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p5.filter.lastQuery),
+						_0: _elm_lang$html$Html$text(_p19.filter.lastQuery),
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
@@ -13404,104 +14715,6 @@ var _klaftertief$elm_search$Search_View$viewSearchResults = function (_p4) {
 		},
 		{ctor: '::', _0: viewQuery, _1: viewChunks});
 };
-var _klaftertief$elm_search$Search_View$viewSearchIntro = function () {
-	var exampleSearchItem = function (query) {
-		return A2(
-			_elm_lang$html$Html$li,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$a,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'pointer'},
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_klaftertief$elm_search$Search_Model$SetFilterQueryStringAndRunFilter(query)),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(query),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			});
-	};
-	var exampleQueries = {
-		ctor: '::',
-		_0: 'map',
-		_1: {
-			ctor: '::',
-			_0: '(a -> b -> b) -> b -> List a -> b',
-			_1: {
-				ctor: '::',
-				_0: 'Result x a -> (a -> Result x b) -> Result x b',
-				_1: {
-					ctor: '::',
-					_0: 'String -> Int',
-					_1: {ctor: '[]'}
-				}
-			}
-		}
-	};
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('searchIntro'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h1,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Welcome to Elm Search'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$p,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Search the modules of the latest Elm packages by either function name or by approximate type signature.'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h2,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Example queries'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$ul,
-							{ctor: '[]'},
-							A2(_elm_lang$core$List$map, exampleSearchItem, exampleQueries)),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		});
-}();
 var _klaftertief$elm_search$Search_View$viewSearchBody = function (model) {
 	var searchBody = _elm_lang$core$String$isEmpty(model.filter.lastQuery) ? _klaftertief$elm_search$Search_View$viewSearchIntro : _klaftertief$elm_search$Search_View$viewSearchResults(model);
 	return A2(
@@ -13515,138 +14728,6 @@ var _klaftertief$elm_search$Search_View$viewSearchBody = function (model) {
 			ctor: '::',
 			_0: searchBody,
 			_1: {ctor: '[]'}
-		});
-};
-var _klaftertief$elm_search$Search_View$viewSearchForm = function (_p7) {
-	var _p8 = _p7;
-	var isDisabled = _elm_lang$core$List$isEmpty(_p8.index.chunks);
-	return A2(
-		_elm_lang$html$Html$form,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$classList(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'searchForm', _1: true},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'searchFormDisabled', _1: isDisabled},
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$action('.'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onSubmit(_klaftertief$elm_search$Search_Model$RunFilter),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$input,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$name('q'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('search'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onInput(_klaftertief$elm_search$Search_Model$SetFilterQueryString),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$defaultValue(_p8.filter.queryString),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$autofocus(true),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$button,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('submit'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$disabled(isDisabled),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Search'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _klaftertief$elm_search$Search_View$viewLogo = A2(
-	_elm_lang$html$Html$span,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('searchLogo'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: _klaftertief$elm_search$Logo$viewWithSize(64),
-		_1: {ctor: '[]'}
-	});
-var _klaftertief$elm_search$Search_View$viewSearchBranding = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('searchBranding'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: _klaftertief$elm_search$Search_View$viewLogo,
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$span,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('searchTitle'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Elm Search'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
-	});
-var _klaftertief$elm_search$Search_View$viewSearchHeader = function (search) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('searchHeader'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _klaftertief$elm_search$Search_View$viewSearchBranding,
-			_1: {
-				ctor: '::',
-				_0: _klaftertief$elm_search$Search_View$viewSearchForm(search),
-				_1: {ctor: '[]'}
-			}
 		});
 };
 
